@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tekerleme Köşesi</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@600;700;800;900&display=swap');
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Nunito',sans-serif; background:#fff3e0; min-height:100vh; }
+
+.header {
+  background:linear-gradient(135deg,#e53935,#c62828);
+  color:white; padding:22px 20px 36px; text-align:center;
+  position:relative; overflow:hidden;
+}
+.header::after {
+  content:''; position:absolute; bottom:0; left:0;
+  width:100%; height:24px; background:#fff3e0;
+  clip-path:ellipse(55% 100% at 50% 100%);
+}
+.header h1 { font-family:'Baloo 2',cursive; font-size:26px; font-weight:800; }
+.header p { font-size:13px; opacity:0.85; margin-top:4px; font-weight:600; }
+
+.speed-bar {
+  display:flex; gap:8px; padding:14px 16px;
+  justify-content:center; align-items:center;
+  background:white; border-bottom:2px solid #ffe0b2;
+  flex-wrap:wrap;
+}
+.speed-bar label { font-size:13px; font-weight:800; color:#e65100; }
+.speed-btn {
+  padding:6px 14px; border-radius:20px;
+  border:2px solid #ffb74d;
+  background:white; color:#e65100;
+  font-family:'Nunito',sans-serif;
+  font-size:12px; font-weight:800;
+  cursor:pointer; transition:all 0.2s;
+}
+.speed-btn:hover,.speed-btn.active { background:#e65100; color:white; border-color:#e65100; }
+
+.tekerleme-grid {
+  display:flex; flex-direction:column; gap:14px;
+  padding:16px; max-width:700px; margin:0 auto;
+}
+
+.tk-card {
+  background:white; border-radius:20px;
+  box-shadow:0 4px 18px rgba(0,0,0,0.08);
+  overflow:hidden; border-left:6px solid;
+  transition:transform 0.2s;
+}
+.tk-card:hover { transform:translateY(-3px); }
+
+.tk-head {
+  padding:14px 18px 10px;
+  display:flex; align-items:center; gap:10px;
+}
+.tk-num {
+  width:32px; height:32px; border-radius:50%;
+  color:white; display:flex; align-items:center; justify-content:center;
+  font-size:14px; font-weight:800; flex-shrink:0;
+}
+.tk-title { font-family:'Baloo 2',cursive; font-size:16px; font-weight:800; }
+.tk-diff {
+  margin-left:auto; font-size:11px; font-weight:700;
+  padding:3px 10px; border-radius:20px;
+  background:rgba(0,0,0,0.06);
+}
+
+.tk-text {
+  padding:12px 18px 16px;
+  font-size:15px; font-weight:700;
+  line-height:1.9; color:#333;
+  background:#fafafa;
+  border-top:1.5px dashed #f0f0f0;
+}
+.tk-text .highlight { 
+  font-weight:900; font-size:16px;
+}
+
+.tk-actions {
+  padding:10px 18px 14px;
+  display:flex; gap:8px;
+}
+.tk-btn {
+  flex:1; padding:9px;
+  border-radius:12px; border:none;
+  font-family:'Nunito',sans-serif;
+  font-size:13px; font-weight:800;
+  cursor:pointer; transition:all 0.2s;
+}
+.btn-listen { background:#e8f5e9; color:#2e7d32; }
+.btn-listen:hover { background:#2e7d32; color:white; }
+.btn-practice { background:#e3f2fd; color:#1565c0; }
+.btn-practice:hover { background:#1565c0; color:white; }
+.btn-challenge { background:#fff3e0; color:#e65100; }
+.btn-challenge:hover { background:#e65100; color:white; }
+
+/* PRACTICE MODAL */
+.overlay {
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,0.5); z-index:100;
+  backdrop-filter:blur(4px);
+}
+.overlay.open { display:flex; align-items:center; justify-content:center; padding:20px; }
+.prac-modal {
+  background:white; border-radius:24px;
+  padding:28px 24px; width:100%; max-width:480px;
+  text-align:center;
+  animation:pop 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes pop { from{transform:scale(0.8);opacity:0} to{transform:scale(1);opacity:1} }
+.prac-modal h3 { font-family:'Baloo 2',cursive; font-size:20px; font-weight:800; margin-bottom:6px; }
+.prac-modal .prac-text {
+  font-size:20px; font-weight:800; color:#e53935;
+  line-height:1.8; margin:16px 0; padding:16px;
+  background:#fff3e0; border-radius:14px;
+}
+.prac-speed {
+  display:flex; gap:8px; justify-content:center; margin:12px 0;
+  flex-wrap:wrap;
+}
+.prac-close {
+  padding:11px 28px; border-radius:30px;
+  border:none; background:#e53935; color:white;
+  font-family:'Nunito',sans-serif; font-size:14px; font-weight:800;
+  cursor:pointer; margin-top:6px;
+}
+
+/* TIMER */
+.timer-display {
+  font-size:32px; font-weight:900; color:#e53935;
+  margin:10px 0; font-family:'Baloo 2',cursive;
+}
+.timer-btns { display:flex; gap:8px; justify-content:center; margin-top:8px; }
+.tbtn {
+  padding:8px 20px; border-radius:20px; border:none;
+  font-family:'Nunito',sans-serif; font-size:13px; font-weight:800;
+  cursor:pointer;
+}
+.tbtn-start { background:#2e7d32; color:white; }
+.tbtn-reset { background:#f5f5f5; color:#555; }
+
+.c1{border-color:#e53935;} .c1 .tk-num{background:#e53935;} .c1 .tk-title{color:#c62828;}
+.c2{border-color:#1e88e5;} .c2 .tk-num{background:#1e88e5;} .c2 .tk-title{color:#1565c0;}
+.c3{border-color:#43a047;} .c3 .tk-num{background:#43a047;} .c3 .tk-title{color:#2e7d32;}
+.c4{border-color:#fb8c00;} .c4 .tk-num{background:#fb8c00;} .c4 .tk-title{color:#e65100;}
+.c5{border-color:#8e24aa;} .c5 .tk-num{background:#8e24aa;} .c5 .tk-title{color:#6a1b9a;}
+.c6{border-color:#00897b;} .c6 .tk-num{background:#00897b;} .c6 .tk-title{color:#00695c;}
+.c7{border-color:#c0392b;} .c7 .tk-num{background:#c0392b;} .c7 .tk-title{color:#922b21;}
+.c8{border-color:#2980b9;} .c8 .tk-num{background:#2980b9;} .c8 .tk-title{color:#1a5276;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🎯 Tekerleme Köşesi</h1>
+  <p>Türkçe • Okuma & Telaffuz Etkinliği • 2. Sınıf</p>
+</div>
+
+<div class="speed-bar">
+  <label>⚡ Hız:</label>
+  <button class="speed-btn active" onclick="setSpeed(this,'yavaş')">🐢 Yavaş</button>
+  <button class="speed-btn" onclick="setSpeed(this,'normal')">🚶 Normal</button>
+  <button class="speed-btn" onclick="setSpeed(this,'hızlı')">🏃 Hızlı</button>
+  <button class="speed-btn" onclick="setSpeed(this,'çok hızlı')">🚀 Çok Hızlı</button>
+</div>
+
+<div class="tekerleme-grid">
+
+  <div class="tk-card c1">
+    <div class="tk-head">
+      <div class="tk-num">1</div>
+      <div class="tk-title">Kartal</div>
+      <span class="tk-diff">⭐ Kolay</span>
+    </div>
+    <div class="tk-text">
+      Kartal kalkar dal dal,<br>
+      Dal da kartal kalkar.<br>
+      Kartal dalda kalkar mı,<br>
+      Dal da kartal kalkar mı?
+    </div>
+    <div class="tk-actions">
+      <button class="tk-btn btn-practice" onclick="pratikYap(this)">🎤 Pratik Yap</button>
+      <button class="tk-btn btn-challenge" onclick="challengeYap(this)">⏱️ Süre Yarışması</button>
+    </div>
+  </div>
+
+  <div class="tk-card c2">
+    <div class="tk-head">
+      <div class="tk-num">2</div>
+      <div class="tk-title">Şu Köşe</div>
+      <span class="tk-diff">⭐ Kolay</span>
+    </div>
+    <div class="tk-text">
+      Şu köşe yaz köşesi,<br>
+      Öbür köşe yaz köşesi.<br>
+      Ortadaki köşe<br>
+      Hiç yaz köşesi mi?
+    </div>
+    <div class="tk-actions">
+      <button class="tk-btn btn-practice" onclick="pratikYap(this)">🎤 Pratik Yap</button>
+      <button class="tk-btn btn-challenge" onclick="challengeYap(this)">⏱️ Süre Yarışması</button>
+    </div>
+  </div>
+
+  <div class="tk-card c3">
+    <div class="tk-head">
+      <div class="tk-num">3</div>
+      <div class="tk-title">Bir Berber</div>
+      <span class="tk-diff">⭐⭐ Orta</span>
+    </div>
+    <div class="tk-text">
+      Bir berber bir berbere<br>
+      "Bre berber beri gel,<br>
+      Beraber bir berber dükkanı<br>
+      Açalım" demiş.
+    </div>
+    <div class="tk-actions">
+      <button class="tk-btn btn-practice" onclick="pratikYap(this)">🎤 Pratik Yap</button>
+      <button class="tk-btn btn-challenge" onclick="challengeYap(this)">⏱️ Süre Yarışması</button>
+    </div>
+  </div>
+
+  <div class="tk-card c4">
+    <div class="tk-head">
+      <div class="tk-num">4</div>
+      <div class="tk-title">Kırk Küp</div>
+      <span class="tk-diff">⭐⭐ Orta</span>
+    </div>
+    <div class="tk-text">
+      Kırk küpün içinde kırk küp,<br>
+      Kırk küpün dışında kırk küp.<br>
+      Toplam kaç küp var?
+    </div>
+    <div class="tk-actions">
+      <button class="tk-btn btn-practice" onclick="pratikYap(this)">🎤 Pratik Yap</button>
+      <button class="tk-btn btn-challenge" onclick="challengeYap(this)">⏱️ Süre Yarışması</button>
+    </div>
+  </div>
+
+  <div class="tk-card c5">
+    <div class="tk-head">
+      <div class="tk-num">5</div>
+      <div class="tk-title">Pirpirim</div>
+      <span class="tk-diff">⭐⭐ Orta</span>
+    </div>
+    <div class="tk-text">
+      Pirpiri pirpiriye,<br>
+      Pirpiri pirpiriye.<br>
+      Pirpiri pirpiriye<br>
+      Pirpiriye pirpiri.
+    </div>
+    <div class="tk-actions">
+      <button class="tk-btn btn-practice" onclick="pratikYap(this)">🎤 Pratik Yap</button>
+      <button class="tk-btn btn-challenge" onclick="challengeYap(this)">⏱️ Süre Yarışması</button>
+    </div>
+  </div>
+
+  <div class="tk-card c6">
+    <div class="tk-head">
+      <div class="tk-num">6</div>
+      <div class="tk-title">Şalvar</div>
+      <span class="tk-diff">⭐⭐⭐ Zor</span>
+    </div>
+    <div class="tk-text">
+      Şu yalı halı alır mı,<br>
+      Halı alırsa sarı halı alır mı?<br>
+      Şu yalı sarı halı alırsa<br>
+      Şalvar alır mı?
+    </div>
+    <div class="tk-actions">
+      <button class="tk-btn btn-practice" onclick="pratikYap(this)">🎤 Pratik Yap</button>
+      <button class="tk-btn btn-challenge" onclick="challengeYap(this)">⏱️ Süre Yarışması</button>
+    </div>
+  </div>
+
+  <div class="tk-card c7">
+    <div class="tk-head">
+      <div class="tk-num">7</div>
+      <div class="tk-title">Al Gülü</div>
+      <span class="tk-diff">⭐⭐⭐ Zor</span>
+    </div>
+    <div class="tk-text">
+      Al gülü, al gülü,<br>
+      Ver bülbüle al gülü.<br>
+      Bülbül öter gül kokar,<br>
+      Al gülü, al gülü.
+    </div>
+    <div class="tk-actions">
+      <button class="tk-btn btn-practice" onclick="pratikYap(this)">🎤 Pratik Yap</button>
+      <button class="tk-btn btn-challenge" onclick="challengeYap(this)">⏱️ Süre Yarışması</button>
+    </div>
+  </div>
+
+  <div class="tk-card c8">
+    <div class="tk-head">
+      <div class="tk-num">8</div>
+      <div class="tk-title">Kapı</div>
+      <span class="tk-diff">⭐ Kolay</span>
+    </div>
+    <div class="tk-text">
+      Kapı kapıya karşı,<br>
+      Kapıda karşı kapı.<br>
+      Hangi kapı karşı kapı,<br>
+      Hangi kapı bu kapı?
+    </div>
+    <div class="tk-actions">
+      <button class="tk-btn btn-practice" onclick="pratikYap(this)">🎤 Pratik Yap</button>
+      <button class="tk-btn btn-challenge" onclick="challengeYap(this)">⏱️ Süre Yarışması</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- PRATIK MODAL -->
+<div class="overlay" id="overlay" onclick="kapatModal(event)">
+  <div class="prac-modal">
+    <h3 id="modalTitle">🎤 Pratik Yap!</h3>
+    <div class="prac-text" id="modalText"></div>
+    <div style="font-size:12px;color:#999;font-weight:700;margin-bottom:8px">
+      Hız: <b id="speedLabel">Yavaş</b> — Tekrarlayarak oku!
+    </div>
+    <div class="timer-display" id="timerDisplay">00:00</div>
+    <div class="timer-btns">
+      <button class="tbtn tbtn-start" onclick="startTimer()">▶️ Başlat</button>
+      <button class="tbtn tbtn-reset" onclick="resetTimer()">🔄 Sıfırla</button>
+    </div>
+    <button class="prac-close" onclick="kapatBtn()">✕ Kapat</button>
+  </div>
+</div>
+
+<script>
+let currentSpeed = 'yavaş';
+let timerInterval = null;
+let timerSec = 0;
+let timerRunning = false;
+
+function setSpeed(btn, speed) {
+  currentSpeed = speed;
+  document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function pratikYap(btn) {
+  const card = btn.closest('.tk-card');
+  const text = card.querySelector('.tk-text').innerText;
+  const title = card.querySelector('.tk-title').textContent;
+  document.getElementById('modalTitle').textContent = '🎤 ' + title + ' Tekerlemesi';
+  document.getElementById('modalText').innerHTML = text.replace(/\n/g,'<br>');
+  document.getElementById('speedLabel').textContent = currentSpeed.charAt(0).toUpperCase() + currentSpeed.slice(1);
+  resetTimer();
+  document.getElementById('overlay').classList.add('open');
+}
+
+function challengeYap(btn) {
+  pratikYap(btn);
+  startTimer();
+}
+
+function kapatModal(e) {
+  if (e.target === document.getElementById('overlay')) {
+    stopTimer();
+    document.getElementById('overlay').classList.remove('open');
+  }
+}
+function kapatBtn() {
+  stopTimer();
+  document.getElementById('overlay').classList.remove('open');
+}
+
+function startTimer() {
+  if (timerRunning) return;
+  timerRunning = true;
+  timerInterval = setInterval(() => {
+    timerSec++;
+    const m = String(Math.floor(timerSec/60)).padStart(2,'0');
+    const s = String(timerSec%60).padStart(2,'0');
+    document.getElementById('timerDisplay').textContent = m + ':' + s;
+  }, 1000);
+}
+function stopTimer() {
+  clearInterval(timerInterval);
+  timerRunning = false;
+}
+function resetTimer() {
+  stopTimer();
+  timerSec = 0;
+  document.getElementById('timerDisplay').textContent = '00:00';
+}
+</script>
+</body>
+</html>

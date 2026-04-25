@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sınıfın Öğretmeni</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Nunito', sans-serif; background: #f0f7ff; min-height: 100vh; }
+
+/* TOP BAR */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: white;
+  border-bottom: 2px solid #e3f2fd;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+.logo {
+  font-family: 'Baloo 2', cursive;
+  font-size: 17px;
+  font-weight: 800;
+  color: #1565c0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.teacher-badge {
+  font-size: 12px;
+  font-weight: 700;
+  color: #555;
+  background: #e3f2fd;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #1565c0, #0d47a1 40%, #1b5e20);
+  color: white;
+  padding: 28px 20px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%;
+  height: 28px;
+  background: #f0f7ff;
+  clip-path: ellipse(55% 100% at 50% 100%);
+}
+.header-icon { font-size: 56px; display: block; margin-bottom: 8px; }
+.header h1 {
+  font-family: 'Baloo 2', cursive;
+  font-size: 28px;
+  font-weight: 800;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  margin-bottom: 4px;
+}
+.header p { font-size: 14px; opacity: 0.85; font-weight: 600; }
+
+/* SEARCH */
+.search-wrap { padding: 16px; max-width: 640px; margin: 0 auto; }
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 50px;
+  padding: 11px 20px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.09);
+  gap: 10px;
+}
+.search-bar input {
+  flex: 1; border: none; outline: none;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px; font-weight: 600; color: #333;
+  background: transparent;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  padding: 4px 14px 32px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* CATEGORY CARD */
+.cat-card {
+  background: white;
+  border-radius: 20px;
+  padding: 20px 14px;
+  text-align: center;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+  cursor: pointer;
+  transition: transform 0.25s, box-shadow 0.25s;
+  border-bottom: 5px solid;
+  position: relative;
+  overflow: hidden;
+}
+.cat-card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(0,0,0,0.13); }
+.cat-card:active { transform: scale(0.97); }
+.cat-card.full { grid-column: 1 / -1; }
+
+.cat-emoji { font-size: 42px; display: block; margin-bottom: 8px; }
+.cat-title { font-family: 'Baloo 2', cursive; font-size: 15px; font-weight: 800; margin-bottom: 3px; }
+.cat-desc { font-size: 10.5px; font-weight: 600; opacity: 0.65; line-height: 1.4; }
+.cat-badge {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 800;
+  background: rgba(0,0,0,0.06);
+}
+
+.c-kirmizi { border-color: #e53935; color: #c62828; }
+.c-mavi { border-color: #1e88e5; color: #1565c0; }
+.c-yesil { border-color: #43a047; color: #2e7d32; }
+.c-turuncu { border-color: #fb8c00; color: #e65100; }
+.c-mor { border-color: #8e24aa; color: #6a1b9a; }
+.c-teal { border-color: #00897b; color: #00695c; }
+
+/* MODAL */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+  backdrop-filter: blur(3px);
+}
+.overlay.open { display: flex; align-items: flex-end; }
+
+.modal {
+  background: white;
+  border-radius: 24px 24px 0 0;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 22px 18px 40px;
+  animation: slideUp 0.3s ease;
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.modal-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 2px dashed #eee;
+}
+.modal-head .mh-emoji { font-size: 32px; }
+.modal-head h2 { font-family: 'Baloo 2', cursive; font-size: 20px; font-weight: 800; flex: 1; }
+.modal-close {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: #f0f0f0;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.mat-list { display: flex; flex-direction: column; gap: 8px; }
+
+.mat-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  background: #f8f9fa;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+  text-decoration: none;
+}
+.mat-item:hover { background: #e3f2fd; border-color: #90caf9; }
+.mat-item .mi-icon { font-size: 26px; flex-shrink: 0; }
+.mat-item .mi-info { flex: 1; }
+.mat-item .mi-name { font-size: 13px; font-weight: 800; color: #222; line-height: 1.3; }
+.mat-item .mi-tag { font-size: 10px; color: #999; font-weight: 600; margin-top: 2px; }
+.mat-item .mi-arr { color: #ccc; font-size: 20px; }
+
+.empty-box {
+  text-align: center;
+  padding: 36px 20px;
+  color: #ccc;
+}
+.empty-box span { font-size: 44px; display: block; margin-bottom: 8px; }
+.empty-box p { font-size: 13px; font-weight: 600; }
+
+/* FOOTER */
+.footer {
+  text-align: center;
+  padding: 18px;
+  font-size: 11.5px;
+  color: #bbb;
+  font-weight: 600;
+}
+.footer b { color: #1565c0; }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="logo">🍎 Sınıfın Öğretmeni</div>
+  <div class="teacher-badge">Hasan Tutuş</div>
+</div>
+
+<div class="header">
+  <span class="header-icon">👨‍🏫</span>
+  <h1>Sınıfın Öğretmeni</h1>
+  <p>2. Sınıf • Eğitim Materyalleri Portalı</p>
+</div>
+
+<div class="search-wrap">
+  <div class="search-bar">
+    <span>🔍</span>
+    <input type="text" placeholder="Materyal ara..." oninput="araKart(this.value)">
+  </div>
+</div>
+
+<div class="grid" id="mainGrid">
+
+  <div class="cat-card c-kirmizi" data-cat="turkce" onclick="ac('turkce')">
+    <span class="cat-emoji">📚</span>
+    <div class="cat-title">Türkçe</div>
+    <div class="cat-desc">Okuma, yazma, dil bilgisi, tekerleme</div>
+    <span class="cat-badge">Materyaller</span>
+  </div>
+
+  <div class="cat-card c-mavi" data-cat="matematik" onclick="ac('matematik')">
+    <span class="cat-emoji">🔢</span>
+    <div class="cat-title">Matematik</div>
+    <div class="cat-desc">Sayılar, işlemler, çarpım tablosu</div>
+    <span class="cat-badge">Materyaller</span>
+  </div>
+
+  <div class="cat-card c-yesil" data-cat="hayat" onclick="ac('hayat')">
+    <span class="cat-emoji">🌍</span>
+    <div class="cat-title">Hayat Bilgisi</div>
+    <div class="cat-desc">Doğa, afetler, tasarruf, sağlık</div>
+    <span class="cat-badge">Materyaller</span>
+  </div>
+
+  <div class="cat-card c-turuncu" data-cat="gunler" onclick="ac('gunler')">
+    <span class="cat-emoji">📅</span>
+    <div class="cat-title">Belirli Gün & Haftalar</div>
+    <div class="cat-desc">Özel günler ve kutlamalar</div>
+    <span class="cat-badge">Materyaller</span>
+  </div>
+
+  <div class="cat-card c-mor full" data-cat="degerler" onclick="ac('degerler')">
+    <span class="cat-emoji">💛</span>
+    <div class="cat-title">Değerler Köşesi</div>
+    <div class="cat-desc">Saygı, sevgi, sabır, vatanseverlik, tasarruf, duyarlılık...</div>
+    <span class="cat-badge">Materyaller</span>
+  </div>
+
+  <div class="cat-card c-teal full" data-cat="etkinlik" onclick="ac('etkinlik')">
+    <span class="cat-emoji">🎮</span>
+    <div class="cat-title">İnteraktif Etkinlikler</div>
+    <div class="cat-desc">Akıllı tahta oyunları, çarklar ve eğlenceli etkinlikler</div>
+    <span class="cat-badge">Materyaller</span>
+  </div>
+
+</div>
+
+<div class="footer">Hazırlayan: <b>Hasan Tutuş</b> • 2025–2026 Eğitim Öğretim Yılı</div>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="kapat(event)">
+  <div class="modal" id="modal">
+    <div class="modal-head">
+      <span class="mh-emoji" id="mEmoji"></span>
+      <h2 id="mTitle"></h2>
+      <button class="modal-close" onclick="kapatBtn()">✕</button>
+    </div>
+    <div class="mat-list" id="matList"></div>
+  </div>
+</div>
+
+<script>
+const data = {
+  turkce: {
+    emoji: '📚', title: 'Türkçe', color: '#c62828',
+    items: [
+      { icon: '🎯', name: 'Tekerleme Köşesi', tag: 'Okuma & Telaffuz Etkinliği', url: 'tekerleme.html' },
+    ]
+  },
+  matematik: {
+    emoji: '🔢', title: 'Matematik', color: '#1565c0',
+    items: [
+      { icon: '✖️', name: 'Çarpım Tablosu Etkinliği', tag: 'İnteraktif Akıllı Tahta', url: 'carpim-tablosu.html' },
+      { icon: '🎡', name: 'Eğlenceli Kese Çarkı', tag: 'Sınıf Oyunu', url: '1_Eglenece_Kesesi_Carki-1.html' },
+    ]
+  },
+  hayat: {
+    emoji: '🌍', title: 'Hayat Bilgisi', color: '#2e7d32',
+    items: [
+      { icon: '⚠️', name: 'Doğal Afetler Oyunu', tag: 'Akıllı Tahta Etkinliği', url: 'dogal_afetler_2sinif.html' },
+      { icon: '🎒', name: 'Deprem Çantası – Çalışma Sayfası', tag: 'Baskıya Hazır A4', url: 'deprem-cantasi-calisma-sayfasi.html' },
+      { icon: '📝', name: 'Deprem Çantası – Etkinlik Sayfası', tag: 'Baskıya Hazır A4', url: 'deprem-cantasi-etkinlik.html' },
+      { icon: '✂️', name: 'Deprem Çantası – 3D Şablon', tag: 'Kes & Katla', url: 'deprem-cantasi-3d-sablon.html' },
+      { icon: '♻️', name: 'Tasarruf Bizim İşimiz', tag: 'Akıllı Tahta Etkinliği', url: 'tasarruf-akilli-tahta-etkinligi.html' },
+    ]
+  },
+  gunler: {
+    emoji: '📅', title: 'Belirli Gün & Haftalar', color: '#e65100',
+    items: [
+      { icon: '🇹🇷', name: '23 Nisan Etkinlik Uygulaması', tag: 'İnteraktif PWA', url: '23nisan.html' },
+    ]
+  },
+  degerler: {
+    emoji: '💛', title: 'Değerler Köşesi', color: '#6a1b9a',
+    items: []
+  },
+  etkinlik: {
+    emoji: '🎮', title: 'İnteraktif Etkinlikler', color: '#00695c',
+    items: [
+      { icon: '🎡', name: 'Eğlenceli Kese Çarkı', tag: 'Sınıf Oyunu', url: '1_Eglenece_Kesesi_Carki-1.html' },
+      { icon: '⚠️', name: 'Doğal Afetler Oyunu', tag: 'Akıllı Tahta', url: 'dogal_afetler_2sinif.html' },
+      { icon: '♻️', name: 'Tasarruf Bizim İşimiz', tag: 'Akıllı Tahta', url: 'tasarruf-akilli-tahta-etkinligi.html' },
+      { icon: '✖️', name: 'Çarpım Tablosu', tag: 'İnteraktif Etkinlik', url: 'carpim-tablosu.html' },
+      { icon: '🇹🇷', name: '23 Nisan Etkinliği', tag: 'İnteraktif PWA', url: '23nisan.html' },
+    ]
+  }
+};
+
+function ac(cat) {
+  const c = data[cat];
+  document.getElementById('mEmoji').textContent = c.emoji;
+  const t = document.getElementById('mTitle');
+  t.textContent = c.title;
+  t.style.color = c.color;
+
+  const list = document.getElementById('matList');
+  if (!c.items.length) {
+    list.innerHTML = `<div class="empty-box"><span>🚧</span><p>Yakında yeni materyaller eklenecek!</p></div>`;
+  } else {
+    list.innerHTML = c.items.map(i => `
+      <a class="mat-item" href="${i.url}" target="_blank">
+        <span class="mi-icon">${i.icon}</span>
+        <div class="mi-info">
+          <div class="mi-name">${i.name}</div>
+          <div class="mi-tag">${i.tag}</div>
+        </div>
+        <span class="mi-arr">›</span>
+      </a>
+    `).join('');
+  }
+  document.getElementById('overlay').classList.add('open');
+}
+
+function kapat(e) {
+  if (e.target === document.getElementById('overlay'))
+    document.getElementById('overlay').classList.remove('open');
+}
+function kapatBtn() {
+  document.getElementById('overlay').classList.remove('open');
+}
+
+function araKart(val) {
+  document.querySelectorAll('.cat-card').forEach(c => {
+    c.style.display = c.textContent.toLowerCase().includes(val.toLowerCase()) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>

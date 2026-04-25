@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Çarpım Tablosu</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@600;700;800;900&display=swap');
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Nunito',sans-serif; background:#e8f5e9; min-height:100vh; }
+
+.header {
+  background: linear-gradient(135deg,#2e7d32,#1b5e20);
+  color:white; padding:20px; text-align:center;
+}
+.header h1 { font-family:'Baloo 2',cursive; font-size:26px; font-weight:800; }
+.header p { font-size:13px; opacity:0.85; margin-top:4px; font-weight:600; }
+
+/* TAB SELECTOR */
+.tabs {
+  display:flex; gap:8px; padding:16px; flex-wrap:wrap;
+  justify-content:center; background:white;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);
+  position:sticky; top:0; z-index:10;
+}
+.tab-btn {
+  padding:8px 16px; border-radius:30px;
+  border:2.5px solid #a5d6a7;
+  background:white; color:#2e7d32;
+  font-family:'Nunito',sans-serif;
+  font-size:13px; font-weight:800;
+  cursor:pointer; transition:all 0.2s;
+}
+.tab-btn:hover, .tab-btn.active {
+  background:#2e7d32; color:white;
+  border-color:#2e7d32;
+  transform:translateY(-2px);
+}
+
+/* TABLE VIEW */
+.table-section {
+  padding:20px 16px;
+  max-width:600px; margin:0 auto;
+}
+.table-title {
+  font-family:'Baloo 2',cursive;
+  font-size:22px; font-weight:800;
+  color:#2e7d32; text-align:center;
+  margin-bottom:16px;
+}
+.mult-table { display:flex; flex-direction:column; gap:8px; }
+.mult-row {
+  display:flex; align-items:center;
+  background:white; border-radius:14px;
+  padding:12px 16px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.07);
+  font-size:16px; font-weight:800;
+  gap:10px; cursor:pointer;
+  transition:all 0.2s;
+  border-left:5px solid #a5d6a7;
+}
+.mult-row:hover { transform:translateX(6px); border-color:#2e7d32; }
+.mult-num { color:#2e7d32; font-size:18px; min-width:80px; }
+.mult-eq { color:#666; font-size:14px; }
+.mult-result {
+  margin-left:auto;
+  background:#e8f5e9; color:#2e7d32;
+  padding:4px 14px; border-radius:20px;
+  font-size:18px; font-weight:900;
+  min-width:50px; text-align:center;
+  border:2px solid #a5d6a7;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.mult-result.hidden { background:#f5f5f5; color:#f5f5f5; border-color:#e0e0e0; }
+.mult-result.revealed { background:#2e7d32; color:white; border-color:#2e7d32; }
+
+/* QUIZ MODE */
+.quiz-section { padding:20px 16px; max-width:500px; margin:0 auto; }
+.quiz-card {
+  background:white; border-radius:24px;
+  padding:32px 24px; text-align:center;
+  box-shadow:0 8px 32px rgba(0,0,0,0.12);
+  margin-bottom:16px;
+}
+.quiz-question {
+  font-family:'Baloo 2',cursive;
+  font-size:36px; font-weight:800;
+  color:#1b5e20; margin-bottom:24px;
+}
+.quiz-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.quiz-opt {
+  padding:16px; border-radius:16px;
+  border:3px solid #a5d6a7;
+  background:#f9f9f9;
+  font-family:'Nunito',sans-serif;
+  font-size:22px; font-weight:900;
+  cursor:pointer; transition:all 0.2s;
+  color:#333;
+}
+.quiz-opt:hover { border-color:#2e7d32; background:#e8f5e9; }
+.quiz-opt.correct { background:#2e7d32; color:white; border-color:#2e7d32; }
+.quiz-opt.wrong { background:#e53935; color:white; border-color:#e53935; }
+.quiz-score {
+  text-align:center; font-size:15px; font-weight:800;
+  color:#2e7d32; margin-bottom:12px;
+  background:#e8f5e9; padding:10px; border-radius:12px;
+}
+.next-btn {
+  width:100%; padding:14px;
+  background:linear-gradient(135deg,#2e7d32,#1b5e20);
+  color:white; border:none; border-radius:16px;
+  font-family:'Nunito',sans-serif;
+  font-size:16px; font-weight:800;
+  cursor:pointer; transition:all 0.2s;
+  margin-top:10px;
+}
+.next-btn:hover { transform:translateY(-2px); }
+
+/* REVEAL ALL */
+.reveal-btn {
+  display:block; margin:0 auto 16px;
+  padding:11px 28px; border-radius:30px;
+  border:2.5px solid #a5d6a7;
+  background:white; color:#2e7d32;
+  font-family:'Nunito',sans-serif;
+  font-size:14px; font-weight:800;
+  cursor:pointer; transition:all 0.2s;
+}
+.reveal-btn:hover { background:#2e7d32; color:white; }
+
+.hidden-section { display:none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>✖️ Çarpım Tablosu</h1>
+  <p>2. Sınıf Matematik • İnteraktif Etkinlik</p>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('tablo',this)">📋 Tablo Görünümü</button>
+  <button class="tab-btn" onclick="showTab('quiz',this)">🎯 Test Et!</button>
+</div>
+
+<!-- TABLO SECTION -->
+<div id="tablo" class="table-section">
+  <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:16px;">
+    <select id="tableSelect" onchange="showTable(this.value)"
+      style="padding:10px 16px;border-radius:30px;border:2.5px solid #a5d6a7;
+      font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;color:#2e7d32;
+      background:white;outline:none;">
+      <option value="2">2'nin Çarpım Tablosu</option>
+      <option value="3">3'ün Çarpım Tablosu</option>
+      <option value="4">4'ün Çarpım Tablosu</option>
+      <option value="5">5'in Çarpım Tablosu</option>
+      <option value="6">6'nın Çarpım Tablosu</option>
+      <option value="7">7'nin Çarpım Tablosu</option>
+      <option value="8">8'in Çarpım Tablosu</option>
+      <option value="9">9'un Çarpım Tablosu</option>
+      <option value="10">10'un Çarpım Tablosu</option>
+    </select>
+  </div>
+
+  <button class="reveal-btn" onclick="toggleAll()">👁️ Tümünü Göster / Gizle</button>
+
+  <div class="table-title" id="tableTitle">2'nin Çarpım Tablosu</div>
+  <div class="mult-table" id="multTable"></div>
+</div>
+
+<!-- QUIZ SECTION -->
+<div id="quiz" class="hidden-section quiz-section">
+  <div class="quiz-score" id="quizScore">🏆 Puan: 0 | ❓ Soru: 1</div>
+  <div class="quiz-card">
+    <div class="quiz-question" id="quizQ">2 × 3 = ?</div>
+    <div class="quiz-options" id="quizOpts"></div>
+    <button class="next-btn" id="nextBtn" onclick="nextQ()" style="display:none">
+      Sonraki Soru ➡️
+    </button>
+  </div>
+</div>
+
+<script>
+let allRevealed = false;
+let quizScore = 0;
+let quizNum = 1;
+let quizAnswer = 0;
+let answered = false;
+
+function showTable(n) {
+  n = parseInt(n);
+  document.getElementById('tableTitle').textContent = n + "'nın Çarpım Tablosu";
+  const table = document.getElementById('multTable');
+  table.innerHTML = '';
+  for (let i = 1; i <= 10; i++) {
+    const row = document.createElement('div');
+    row.className = 'mult-row';
+    row.innerHTML = `
+      <span class="mult-num">${n} × ${i}</span>
+      <span class="mult-eq">=</span>
+      <span class="mult-result hidden" onclick="this.classList.toggle('hidden');this.classList.toggle('revealed')">${n*i}</span>
+    `;
+    table.appendChild(row);
+  }
+  allRevealed = false;
+}
+
+function toggleAll() {
+  const results = document.querySelectorAll('.mult-result');
+  allRevealed = !allRevealed;
+  results.forEach(r => {
+    if (allRevealed) { r.classList.remove('hidden'); r.classList.add('revealed'); }
+    else { r.classList.remove('revealed'); r.classList.add('hidden'); }
+  });
+}
+
+function showTab(id, btn) {
+  document.getElementById('tablo').classList.add('hidden-section');
+  document.getElementById('quiz').classList.add('hidden-section');
+  document.getElementById(id).classList.remove('hidden-section');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (id === 'quiz') generateQ();
+}
+
+function generateQ() {
+  answered = false;
+  const a = Math.floor(Math.random()*9)+2;
+  const b = Math.floor(Math.random()*10)+1;
+  quizAnswer = a * b;
+  document.getElementById('quizQ').textContent = a + ' × ' + b + ' = ?';
+  document.getElementById('nextBtn').style.display = 'none';
+
+  const opts = [quizAnswer];
+  while (opts.length < 4) {
+    const wrong = quizAnswer + (Math.floor(Math.random()*10)-5);
+    if (wrong > 0 && !opts.includes(wrong)) opts.push(wrong);
+  }
+  opts.sort(() => Math.random()-0.5);
+
+  const optsEl = document.getElementById('quizOpts');
+  optsEl.innerHTML = opts.map(o => `
+    <button class="quiz-opt" onclick="checkAns(this,${o})">${o}</button>
+  `).join('');
+}
+
+function checkAns(btn, val) {
+  if (answered) return;
+  answered = true;
+  if (val === quizAnswer) {
+    btn.classList.add('correct');
+    quizScore++;
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.quiz-opt').forEach(b => {
+      if (parseInt(b.textContent) === quizAnswer) b.classList.add('correct');
+    });
+  }
+  document.querySelectorAll('.quiz-opt').forEach(b => b.disabled = true);
+  document.getElementById('nextBtn').style.display = 'block';
+  document.getElementById('quizScore').textContent = '🏆 Puan: ' + quizScore + ' | ❓ Soru: ' + quizNum;
+}
+
+function nextQ() {
+  quizNum++;
+  document.getElementById('quizScore').textContent = '🏆 Puan: ' + quizScore + ' | ❓ Soru: ' + quizNum;
+  generateQ();
+}
+
+// Init
+showTable(2);
+</script>
+</body>
+</html>
