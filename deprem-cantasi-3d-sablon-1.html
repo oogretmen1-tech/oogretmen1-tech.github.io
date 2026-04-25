@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Deprem Çantası – 3D Şablon</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Nunito', sans-serif; background: #fff; }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 7mm 8mm;
+    background: #fff;
+    position: relative;
+  }
+
+  .page-header {
+    background: linear-gradient(135deg, #ff6f00 0%, #e65100 100%);
+    border-radius: 14px;
+    padding: 8px 14px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .page-header .icon { font-size: 36px; }
+  .page-header h1 { font-family: 'Baloo 2'; font-size: 18px; font-weight: 800; line-height: 1.2; }
+  .page-header p { font-size: 10px; opacity: 0.9; font-weight: 600; }
+
+  .instructions {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+  .inst-item {
+    flex: 1;
+    border-radius: 8px;
+    padding: 5px 8px;
+    font-size: 9.5px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .inst-item .step-num {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 800; flex-shrink: 0;
+  }
+  .inst-a { background: #fff3e0; color: #e65100; }
+  .inst-a .step-num { background: #ff6f00; }
+  .inst-b { background: #fce4ec; color: #c62828; }
+  .inst-b .step-num { background: #e53935; }
+  .inst-c { background: #e8f5e9; color: #1b5e20; }
+  .inst-c .step-num { background: #43a047; }
+  .inst-d { background: #e3f2fd; color: #0d47a1; }
+  .inst-d .step-num { background: #1976d2; }
+
+  .legend-row {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 5px;
+    padding: 4px 10px;
+    background: #f5f5f5;
+    border-radius: 8px;
+  }
+  .leg { display: flex; align-items: center; gap: 6px; font-size: 9.5px; font-weight: 700; color: #333; }
+  .leg-line-cut { width: 28px; height: 0; border-top: 2px solid #c0392b; }
+  .leg-line-fold { width: 28px; height: 0; border-top: 2.5px dashed #1565c0; }
+  .leg-line-glue { width: 16px; height: 12px; background: #fff59d; border: 1.5px dashed #f9a825; border-radius: 2px; }
+
+  /* THE SVG TEMPLATE AREA */
+  .template-area {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .student-bar-bottom {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .sfield { flex: 1; border: 2px solid #e0e0e0; border-radius: 8px; padding: 4px 8px; font-size: 9px; color: #999; font-weight: 700; }
+  .sfield span { display: block; border-bottom: 1.5px dashed #ccc; height: 14px; margin-top: 2px; }
+
+  @media print {
+    body { margin: 0; }
+    .page { margin: 0; padding: 7mm 8mm; }
+    @page { size: A4; margin: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div class="icon">✂️</div>
+    <div>
+      <h1>3D DEPREM ÇANTASI YAPIMI – KES & KATLA ŞABLonu</h1>
+      <p>Kesip katlayarak kendi deprem çantanı yap! • 2. Sınıf Hayat Bilgisi</p>
+    </div>
+  </div>
+
+  <!-- INSTRUCTIONS -->
+  <div class="instructions">
+    <div class="inst-item inst-a"><div class="step-num">1</div>Kırmızı çizgiler boyunca <b>kes</b></div>
+    <div class="inst-item inst-b"><div class="step-num">2</div>Mavi kesikli çizgileri <b>katla</b></div>
+    <div class="inst-item inst-c"><div class="step-num">3</div>Sarı alanları <b>yapıştır</b></div>
+    <div class="inst-item inst-d"><div class="step-num">4</div>Kulpları tak, çantanı <b>hazırla!</b></div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend-row">
+    <div class="leg"><div class="leg-line-cut"></div> Kesim çizgisi (kırmızı)</div>
+    <div class="leg"><div class="leg-line-fold"></div> Katlama çizgisi (mavi kesikli)</div>
+    <div class="leg"><div class="leg-line-glue"></div> Yapıştırma alanı (sarı)</div>
+  </div>
+
+  <!-- SVG TEMPLATE -->
+  <div class="template-area">
+  <svg xmlns="http://www.w3.org/2000/svg" 
+       viewBox="0 0 194 228" 
+       width="194mm" height="228mm"
+       style="display:block;">
+
+    <defs>
+      <!-- Hatching pattern for glue areas -->
+      <pattern id="glue" patternUnits="userSpaceOnUse" width="4" height="4">
+        <rect width="4" height="4" fill="#fffde7"/>
+        <line x1="0" y1="4" x2="4" y2="0" stroke="#f9a825" stroke-width="0.5"/>
+      </pattern>
+      <!-- Light pattern for decorative front -->
+      <pattern id="bagdeco" patternUnits="userSpaceOnUse" width="8" height="8">
+        <rect width="8" height="8" fill="#fff8f0"/>
+        <circle cx="4" cy="4" r="1" fill="#ffe0b2" opacity="0.5"/>
+      </pattern>
+    </defs>
+
+    <!-- ================================================
+         NET LAYOUT (all units in mm → viewBox units)
+         
+         Page offset: starts at x=8, y=2
+         
+         BACK FACE:   x=38..112, y=4..88  (74w × 84h)
+         TOP GLUE:    x=38..112, y=2..4   (74w × 2h... actually make it bigger)
+         
+         Full net:
+         TOP GLUE:    x=38, y=0,   w=74, h=8
+         BACK FACE:   x=38, y=8,   w=74, h=80
+         ---FOLD LINE y=88---
+         FRONT FACE:  x=38, y=88,  w=74, h=80
+         LEFT SIDE:   x=14, y=88,  w=24, h=80
+         RIGHT SIDE:  x=112,y=88,  w=24, h=80
+         LEFT GLUE:   x=7,  y=88,  w=7,  h=80
+         RIGHT GLUE:  x=136,y=88,  w=7,  h=80
+         BOTTOM:      x=38, y=168, w=74, h=24
+         BOT GLUE:    x=38, y=192, w=74, h=8
+         
+         HANDLES:     left x=15,y=204 / right x=119,y=204   w=25 h=60 each
+         HANDLE SLITS note
+         
+         ================================================ -->
+
+    <!-- ============ GLUE AREAS (draw first, under everything) ============ -->
+    <!-- Top glue (back face top) -->
+    <rect x="38" y="0" width="74" height="8" fill="url(#glue)" />
+    <!-- Bottom glue -->
+    <rect x="38" y="192" width="74" height="8" fill="url(#glue)" />
+    <!-- Left outer glue -->
+    <rect x="7" y="88" width="7" height="80" fill="url(#glue)" />
+    <!-- Right outer glue -->
+    <rect x="136" y="88" width="7" height="80" fill="url(#glue)" />
+    <!-- Back face left/right glue flaps (thin) -->
+    <rect x="30" y="8" width="8" height="80" fill="url(#glue)" opacity="0.7"/>
+    <rect x="112" y="8" width="8" height="80" fill="url(#glue)" opacity="0.7"/>
+
+    <!-- ============ MAIN FACES ============ -->
+    <!-- BACK FACE -->
+    <rect x="38" y="8" width="74" height="80" fill="#fff8f0" stroke="#c0392b" stroke-width="1.2"/>
+    <!-- FRONT FACE -->
+    <rect x="38" y="88" width="74" height="80" fill="url(#bagdeco)" stroke="#c0392b" stroke-width="1.2"/>
+    <!-- LEFT SIDE -->
+    <rect x="14" y="88" width="24" height="80" fill="#fff3e0" stroke="#c0392b" stroke-width="1.2"/>
+    <!-- RIGHT SIDE -->
+    <rect x="112" y="88" width="24" height="80" fill="#fff3e0" stroke="#c0392b" stroke-width="1.2"/>
+    <!-- BOTTOM -->
+    <rect x="38" y="168" width="74" height="24" fill="#ffe0b2" stroke="#c0392b" stroke-width="1.2"/>
+
+    <!-- ============ OUTER SILHOUETTE – thick red cut line ============ -->
+    <!-- The complete outer cut path of the net -->
+    <!-- Top glue top edge -->
+    <line x1="38" y1="0" x2="112" y2="0" stroke="#c0392b" stroke-width="1.6"/>
+    <!-- Top glue sides -->
+    <line x1="38" y1="0" x2="38" y2="8" stroke="#c0392b" stroke-width="1.6"/>
+    <line x1="112" y1="0" x2="112" y2="8" stroke="#c0392b" stroke-width="1.6"/>
+
+    <!-- Back face left flap outer -->
+    <line x1="30" y1="8" x2="30" y2="88" stroke="#c0392b" stroke-width="1.6"/>
+    <line x1="30" y1="8" x2="38" y2="8" stroke="#c0392b" stroke-width="1.6"/>
+    <line x1="30" y1="88" x2="38" y2="88" stroke="#c0392b" stroke-width="1.6"/>
+
+    <!-- Back face right flap outer -->
+    <line x1="120" y1="8" x2="120" y2="88" stroke="#c0392b" stroke-width="1.6"/>
+    <line x1="112" y1="8" x2="120" y2="8" stroke="#c0392b" stroke-width="1.6"/>
+    <line x1="112" y1="88" x2="120" y2="88" stroke="#c0392b" stroke-width="1.6"/>
+
+    <!-- Left outer glue outer edge -->
+    <line x1="7" y1="88" x2="7" y2="168" stroke="#c0392b" stroke-width="1.6"/>
+    <line x1="7" y1="88" x2="14" y2="88" stroke="#c0392b" stroke-width="1.6"/>
+    <line x1="7" y1="168" x2="14" y2="168" stroke="#c0392b" stroke-width="1.6"/>
+
+    <!-- Right outer glue outer edge -->
+    <line x1="143" y1="88" x2="143" y2="168" stroke="#c0392b" stroke-width="1.6"/>
+    <line x1="136" y1="88" x2="143" y2="88" stroke="#c0392b" stroke-width="1.6"/>
+    <line x1="136" y1="168" x2="143" y2="168" stroke="#c0392b" stroke-width="1.6"/>
+
+    <!-- Bottom glue outer -->
+    <line x1="38" y1="200" x2="112" y2="200" stroke="#c0392b" stroke-width="1.6"/>
+    <line x1="38" y1="192" x2="38" y2="200" stroke="#c0392b" stroke-width="1.6"/>
+    <line x1="112" y1="192" x2="112" y2="200" stroke="#c0392b" stroke-width="1.6"/>
+
+    <!-- Left side top/bottom cut lines -->
+    <line x1="14" y1="88" x2="14" y2="168" stroke="#c0392b" stroke-width="1.6"/>
+    <line x1="14" y1="88" x2="38" y2="88" stroke="#c0392b" stroke-width="1.4" stroke-dasharray="none"/>
+    <!-- Actually sides outer top/bottom are cut lines -->
+    <line x1="14" y1="168" x2="38" y2="168" stroke="#c0392b" stroke-width="1.4"/>
+    <line x1="112" y1="168" x2="136" y2="168" stroke="#c0392b" stroke-width="1.4"/>
+    <line x1="136" y1="88" x2="112" y2="88" stroke="#c0392b" stroke-width="1.4"/>
+    <line x1="136" y1="88" x2="136" y2="168" stroke="#c0392b" stroke-width="1.6"/>
+
+    <!-- Bottom top line (between front & bottom - this is a fold) -->
+    <!-- Actually bottom of front to top of bottom is fold -->
+
+    <!-- ============ FOLD LINES (blue dashed) ============ -->
+    <!-- Main fold between back and front -->
+    <line x1="7" y1="88" x2="143" y2="88" stroke="#1565c0" stroke-width="1.8" stroke-dasharray="4,2.5"/>
+    <!-- Fold between front and bottom -->
+    <line x1="38" y1="168" x2="112" y2="168" stroke="#1565c0" stroke-width="1.8" stroke-dasharray="4,2.5"/>
+    <!-- Fold between bottom and bottom glue -->
+    <line x1="38" y1="192" x2="112" y2="192" stroke="#1565c0" stroke-width="1.8" stroke-dasharray="4,2.5"/>
+    <!-- Fold between top glue and back face -->
+    <line x1="38" y1="8" x2="112" y2="8" stroke="#1565c0" stroke-width="1.8" stroke-dasharray="4,2.5"/>
+    <!-- Folds between front & side panels -->
+    <line x1="38" y1="88" x2="38" y2="168" stroke="#1565c0" stroke-width="1.8" stroke-dasharray="4,2.5"/>
+    <line x1="112" y1="88" x2="112" y2="168" stroke="#1565c0" stroke-width="1.8" stroke-dasharray="4,2.5"/>
+    <!-- Folds between sides & outer glue -->
+    <line x1="14" y1="88" x2="14" y2="168" stroke="#1565c0" stroke-width="1.4" stroke-dasharray="3,2"/>
+    <line x1="136" y1="88" x2="136" y2="168" stroke="#1565c0" stroke-width="1.4" stroke-dasharray="3,2"/>
+    <!-- Back face side flap folds -->
+    <line x1="38" y1="8" x2="38" y2="88" stroke="#1565c0" stroke-width="1.4" stroke-dasharray="3,2"/>
+    <line x1="112" y1="8" x2="112" y2="88" stroke="#1565c0" stroke-width="1.4" stroke-dasharray="3,2"/>
+
+    <!-- ============ LABELS ============ -->
+    <!-- BACK FACE label -->
+    <text x="75" y="44" text-anchor="middle" font-family="Nunito" font-size="8" font-weight="800" fill="#5d4037">ARKA YÜZ</text>
+    <text x="75" y="54" text-anchor="middle" font-family="Nunito" font-size="6.5" fill="#8d6e63">↕ 80 mm</text>
+    <!-- Decorative bag image on back face -->
+    <text x="75" y="72" text-anchor="middle" font-size="14" opacity="0.3">🎒</text>
+
+    <!-- FRONT FACE label -->
+    <text x="75" y="122" text-anchor="middle" font-family="Nunito" font-size="8" font-weight="800" fill="#bf360c">ÖN YÜZ</text>
+    <text x="75" y="133" text-anchor="middle" font-family="Nunito" font-size="6.5" fill="#8d6e63">Çantana resim çizebilirsin!</text>
+    <!-- Dotted drawing guide on front -->
+    <rect x="50" y="139" width="50" height="24" rx="3" fill="none" stroke="#ffccbc" stroke-width="0.8" stroke-dasharray="2,1.5"/>
+    <text x="75" y="153" text-anchor="middle" font-family="Nunito" font-size="6" fill="#ffccbc" font-weight="700">✏️ Buraya çiz</text>
+
+    <!-- LEFT SIDE label -->
+    <text x="26" y="125" text-anchor="middle" font-family="Nunito" font-size="6.5" font-weight="800" fill="#5d4037" transform="rotate(-90, 26, 128)">SOL YAN</text>
+
+    <!-- RIGHT SIDE label -->
+    <text x="124" y="125" text-anchor="middle" font-family="Nunito" font-size="6.5" font-weight="800" fill="#5d4037" transform="rotate(90, 124, 128)">SAĞ YAN</text>
+
+    <!-- BOTTOM label -->
+    <text x="75" y="182" text-anchor="middle" font-family="Nunito" font-size="7" font-weight="800" fill="#5d4037">ALT</text>
+
+    <!-- GLUE labels -->
+    <text x="75" y="5" text-anchor="middle" font-family="Nunito" font-size="5.5" font-weight="700" fill="#f57f17">YAPIŞTIR ↑</text>
+    <text x="75" y="198" text-anchor="middle" font-family="Nunito" font-size="5.5" font-weight="700" fill="#f57f17">↓ YAPIŞTIR</text>
+    <text x="10.5" y="128" text-anchor="middle" font-family="Nunito" font-size="5" font-weight="700" fill="#f57f17" transform="rotate(-90, 10.5, 128)">YAPIŞTIR</text>
+    <text x="139.5" y="128" text-anchor="middle" font-family="Nunito" font-size="5" font-weight="700" fill="#f57f17" transform="rotate(90, 139.5, 128)">YAPIŞTIR</text>
+    <text x="34" y="50" text-anchor="middle" font-family="Nunito" font-size="5" font-weight="700" fill="#f57f17" transform="rotate(-90, 34, 50)">YAP.</text>
+    <text x="116" y="50" text-anchor="middle" font-family="Nunito" font-size="5" font-weight="700" fill="#f57f17" transform="rotate(90, 116, 50)">YAP.</text>
+
+    <!-- ARROW indicators for folding -->
+    <!-- Fold arrows at main fold line -->
+    <text x="3" y="90" font-family="Nunito" font-size="6" fill="#1565c0" font-weight="800">↑</text>
+    <text x="3" y="87" font-family="Nunito" font-size="6" fill="#1565c0" font-weight="800">↓</text>
+    <text x="146" y="90" font-family="Nunito" font-size="6" fill="#1565c0" font-weight="800">↑</text>
+    <text x="146" y="87" font-family="Nunito" font-size="6" fill="#1565c0" font-weight="800">↓</text>
+
+    <!-- ============ HANDLE STRIPS ============ -->
+    <!-- Two handles at bottom -->
+    <!-- Left handle -->
+    <rect x="8" y="205" width="22" height="58" rx="3" fill="#ffecb3" stroke="#c0392b" stroke-width="1.6"/>
+    <!-- Handle hole left -->
+    <rect x="11" y="208" width="16" height="8" rx="4" fill="white" stroke="#c0392b" stroke-width="1.2"/>
+    <!-- Handle body left decoration -->
+    <line x1="14" y1="220" x2="26" y2="220" stroke="#f9a825" stroke-width="1" stroke-dasharray="2,1"/>
+    <line x1="14" y1="224" x2="26" y2="224" stroke="#f9a825" stroke-width="1" stroke-dasharray="2,1"/>
+    <line x1="14" y1="228" x2="26" y2="228" stroke="#f9a825" stroke-width="1" stroke-dasharray="2,1"/>
+    <line x1="14" y1="232" x2="26" y2="232" stroke="#f9a825" stroke-width="1" stroke-dasharray="2,1"/>
+    <line x1="14" y1="236" x2="26" y2="236" stroke="#f9a825" stroke-width="1" stroke-dasharray="2,1"/>
+    <line x1="14" y1="240" x2="26" y2="240" stroke="#f9a825" stroke-width="1" stroke-dasharray="2,1"/>
+    <line x1="14" y1="244" x2="26" y2="244" stroke="#f9a825" stroke-width="1" stroke-dasharray="2,1"/>
+    <!-- Handle bottom glue area left -->
+    <rect x="8" y="255" width="22" height="8" rx="0" fill="url(#glue)"/>
+    <line x1="8" y1="255" x2="30" y2="255" stroke="#1565c0" stroke-width="1.4" stroke-dasharray="3,2"/>
+    <text x="19" y="260" text-anchor="middle" font-family="Nunito" font-size="4.5" font-weight="700" fill="#f57f17">YAPIŞTIR</text>
+    <text x="19" y="200" text-anchor="middle" font-family="Nunito" font-size="6.5" font-weight="800" fill="#bf360c">KULP 1</text>
+
+    <!-- Hole detail indicator left -->
+    <text x="19" y="215" text-anchor="middle" font-family="Nunito" font-size="5" fill="#555" font-weight="700">← Kesik →</text>
+
+    <!-- Right handle -->
+    <rect x="120" y="205" width="22" height="58" rx="3" fill="#ffecb3" stroke="#c0392b" stroke-width="1.6"/>
+    <!-- Handle hole right -->
+    <rect x="123" y="208" width="16" height="8" rx="4" fill="white" stroke="#c0392b" stroke-width="1.2"/>
+    <!-- Handle body right decoration -->
+    <line x1="126" y1="220" x2="138" y2="220" stroke="#f9a825" stroke-width="1" stroke-dasharray="2,1"/>
+    <line x1="126" y1="224" x2="138" y2="224" stroke="#f9a825" stroke-width="1" stroke-dasharray="2,1"/>
+    <line x1="126" y1="228" x2="138" y2="228" stroke="#f9a825" stroke-width="1" stroke-dasharray="2,1"/>
+    <line x1="126" y1="232" x2="138" y2="232" stroke="#f9a825" stroke-width="1" stroke-dasharray="2,1"/>
+    <line x1="126" y1="236" x2="138" y2="236" stroke="#f9a825" stroke-width="1" stroke-dasharray="2,1"/>
+    <line x1="126" y1="240" x2="138" y2="240" stroke="#f9a825" stroke-width="1" stroke-dasharray="2,1"/>
+    <line x1="126" y1="244" x2="138" y2="244" stroke="#f9a825" stroke-width="1" stroke-dasharray="2,1"/>
+    <!-- Handle bottom glue area right -->
+    <rect x="120" y="255" width="22" height="8" rx="0" fill="url(#glue)"/>
+    <line x1="120" y1="255" x2="142" y2="255" stroke="#1565c0" stroke-width="1.4" stroke-dasharray="3,2"/>
+    <text x="131" y="260" text-anchor="middle" font-family="Nunito" font-size="4.5" font-weight="700" fill="#f57f17">YAPIŞTIR</text>
+    <text x="131" y="200" text-anchor="middle" font-family="Nunito" font-size="6.5" font-weight="800" fill="#bf360c">KULP 2</text>
+    <text x="131" y="215" text-anchor="middle" font-family="Nunito" font-size="5" fill="#555" font-weight="700">← Kesik →</text>
+
+    <!-- Separator line between net and handles -->
+    <line x1="0" y1="202" x2="194" y2="202" stroke="#e0e0e0" stroke-width="0.8" stroke-dasharray="3,3"/>
+    <text x="97" y="200" text-anchor="middle" font-family="Nunito" font-size="6" fill="#bbb" font-weight="700">— KULPLAR AYRI KES —</text>
+
+    <!-- Dimension arrows -->
+    <!-- Width arrow at top -->
+    <line x1="38" y1="2" x2="112" y2="2" stroke="#999" stroke-width="0.6" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+    <text x="75" y="2.5" text-anchor="middle" font-family="Nunito" font-size="4.5" fill="#999">74 mm</text>
+  </svg>
+  </div>
+
+  <!-- STUDENT BAR -->
+  <div class="student-bar-bottom">
+    <div class="sfield">AD SOYAD <span></span></div>
+    <div class="sfield">TARİH <span></span></div>
+    <div class="sfield">SINIF <span></span></div>
+  </div>
+
+</div>
+</body>
+</html>
