@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deprem Çantam</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Segoe UI', sans-serif; background: #1a1a2e; min-height: 100vh; }
+
+/* EKRANLAR */
+.screen { display:none; min-height:100vh; flex-direction:column; align-items:center; justify-content:center; padding:20px; }
+.screen.active { display:flex; }
+
+/* BAŞLANGIÇ */
+#start { background: linear-gradient(135deg, #e74c3c, #c0392b); text-align:center; }
+#start .logo { font-size:80px; animation: shake 2s infinite; }
+@keyframes shake {
+  0%,100%{transform:rotate(0)} 10%,30%,50%,70%,90%{transform:rotate(-5deg)} 20%,40%,60%,80%{transform:rotate(5deg)}
+}
+#start h1 { color:white; font-size:clamp(28px,6vw,48px); margin:20px 0 10px; text-shadow:2px 4px 10px rgba(0,0,0,0.3); }
+#start p { color:rgba(255,255,255,0.85); font-size:18px; margin-bottom:30px; }
+.btn-start { background:white; color:#e74c3c; border:none; padding:18px 40px; border-radius:50px; font-size:20px; font-weight:800; cursor:pointer; box-shadow:0 8px 25px rgba(0,0,0,0.2); transition:transform 0.2s; }
+.btn-start:hover { transform:scale(1.05); }
+
+/* OYUN */
+#game { background:#f8f9fa; flex-direction:column; justify-content:flex-start; padding-top:20px; }
+
+.game-header { width:100%; max-width:800px; display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:10px; }
+.game-header h2 { font-size:18px; color:#333; }
+.score-box { background:#e74c3c; color:white; padding:8px 18px; border-radius:50px; font-weight:800; font-size:16px; }
+.progress-bar { width:100%; max-width:800px; height:10px; background:#ddd; border-radius:10px; margin-bottom:20px; }
+.progress-fill { height:100%; background:linear-gradient(90deg,#e74c3c,#f39c12); border-radius:10px; transition:width 0.4s; }
+
+.question-box { background:white; border-radius:24px; padding:24px; max-width:800px; width:100%; box-shadow:0 4px 20px rgba(0,0,0,0.1); margin-bottom:20px; text-align:center; }
+.question-emoji { font-size:60px; margin-bottom:12px; }
+.question-text { font-size:clamp(16px,3vw,22px); font-weight:700; color:#333; line-height:1.4; }
+
+.options { display:grid; grid-template-columns:1fr 1fr; gap:12px; max-width:800px; width:100%; }
+.opt-btn { background:white; border:3px solid #ddd; border-radius:18px; padding:16px 12px; font-size:clamp(14px,2.5vw,18px); font-weight:700; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; gap:10px; }
+.opt-btn:hover { border-color:#e74c3c; background:#fff5f5; transform:translateY(-2px); }
+.opt-btn.correct { background:#d4edda; border-color:#28a745; color:#155724; }
+.opt-btn.wrong { background:#f8d7da; border-color:#dc3545; color:#721c24; }
+.opt-btn.show-correct { background:#d4edda; border-color:#28a745; }
+.opt-btn .opt-emoji { font-size:28px; }
+
+.feedback { max-width:800px; width:100%; text-align:center; padding:14px; border-radius:16px; font-size:18px; font-weight:700; margin-top:10px; display:none; }
+.feedback.correct { background:#d4edda; color:#155724; display:block; }
+.feedback.wrong { background:#f8d7da; color:#721c24; display:block; }
+
+.next-btn { margin-top:14px; background:#e74c3c; color:white; border:none; padding:14px 36px; border-radius:50px; font-size:18px; font-weight:800; cursor:pointer; display:none; }
+.next-btn.show { display:block; }
+
+/* SONUÇ */
+#result { background:linear-gradient(135deg, #2ecc71, #27ae60); text-align:center; }
+#result .trophy { font-size:80px; animation:bounce 1s infinite; }
+@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
+#result h2 { color:white; font-size:36px; margin:20px 0 10px; }
+#result .final-score { background:rgba(255,255,255,0.2); color:white; padding:16px 32px; border-radius:20px; font-size:28px; font-weight:800; margin:10px 0 20px; }
+#result .message { color:rgba(255,255,255,0.9); font-size:18px; margin-bottom:30px; line-height:1.6; }
+.btn-restart { background:white; color:#27ae60; border:none; padding:16px 36px; border-radius:50px; font-size:20px; font-weight:800; cursor:pointer; }
+
+/* SÜRÜKLE BIRAKMAK OYUNU */
+#drag-game { background:#e8f4fd; flex-direction:column; align-items:center; padding:20px; }
+#drag-game h2 { font-size:clamp(20px,4vw,30px); color:#2c3e50; margin-bottom:8px; text-align:center; }
+#drag-game p { color:#666; margin-bottom:20px; font-size:15px; text-align:center; }
+
+.drag-area { display:flex; gap:20px; width:100%; max-width:900px; flex-wrap:wrap; justify-content:center; }
+
+.items-pool { flex:1; min-width:250px; background:white; border-radius:20px; padding:16px; box-shadow:0 4px 15px rgba(0,0,0,0.1); }
+.items-pool h3 { font-size:16px; color:#666; margin-bottom:12px; text-align:center; }
+.item-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+
+.drag-item { background:#f8f9fa; border:2px solid #dee2e6; border-radius:12px; padding:10px 8px; text-align:center; cursor:grab; transition:all 0.2s; user-select:none; }
+.drag-item:hover { border-color:#e74c3c; background:#fff5f5; transform:scale(1.05); }
+.drag-item.dragging { opacity:0.5; }
+.drag-item .di-emoji { font-size:28px; display:block; }
+.drag-item .di-name { font-size:11px; font-weight:700; color:#555; margin-top:4px; }
+
+.bag-zone { flex:1; min-width:250px; background:white; border-radius:20px; padding:16px; box-shadow:0 4px 15px rgba(0,0,0,0.1); min-height:300px; }
+.bag-zone h3 { font-size:16px; color:#666; margin-bottom:12px; text-align:center; }
+.bag-icon { font-size:48px; text-align:center; margin-bottom:10px; }
+.drop-zone { min-height:200px; border:3px dashed #dee2e6; border-radius:16px; padding:10px; display:grid; grid-template-columns:1fr 1fr; gap:6px; align-content:start; transition:border-color 0.2s; }
+.drop-zone.over { border-color:#e74c3c; background:#fff5f5; }
+.dropped-item { background:#d4edda; border:2px solid #28a745; border-radius:10px; padding:8px; text-align:center; }
+.dropped-item.wrong-item { background:#f8d7da; border-color:#dc3545; }
+.dropped-item .di-emoji { font-size:24px; display:block; }
+.dropped-item .di-name { font-size:10px; font-weight:700; }
+
+.check-btn { margin-top:16px; background:#e74c3c; color:white; border:none; padding:14px 32px; border-radius:50px; font-size:16px; font-weight:800; cursor:pointer; }
+</style>
+</head>
+<body>
+
+<!-- BAŞLANGIÇ EKRANI -->
+<div class="screen active" id="start">
+  <div class="logo">🎒</div>
+  <h1>Deprem Çantam</h1>
+  <p>Deprem çantasına ne koymalıyız?<br>Öğrenerek eğlenelim! 🌟</p>
+  <button class="btn-start" onclick="startQuiz()">OYUNU BAŞLAT ▶</button>
+</div>
+
+<!-- SORU OYUNU -->
+<div class="screen" id="game">
+  <div class="game-header">
+    <h2 id="q-counter">Soru 1 / 10</h2>
+    <div class="score-box">⭐ <span id="score">0</span> Puan</div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
+  
+  <div class="question-box">
+    <div class="question-emoji" id="q-emoji">🎒</div>
+    <div class="question-text" id="q-text">Soru yükleniyor...</div>
+  </div>
+  
+  <div class="options" id="options"></div>
+  <div class="feedback" id="feedback"></div>
+  <button class="next-btn" id="next-btn" onclick="nextQuestion()">Sonraki Soru ➡</button>
+</div>
+
+<!-- SONUÇ EKRANI -->
+<div class="screen" id="result">
+  <div class="trophy" id="trophy">🏆</div>
+  <h2 id="result-title">Harika!</h2>
+  <div class="final-score" id="final-score">0 / 10</div>
+  <div class="message" id="result-msg"></div>
+  <button class="btn-restart" onclick="restart()">🔄 Tekrar Oyna</button>
+</div>
+
+<script>
+const questions = [
+  {
+    emoji: "💧",
+    text: "Deprem çantasına SU koymalı mıyız?",
+    options: ["✅ Evet, mutlaka!", "❌ Hayır, gerek yok", "🤔 Belki", "😕 Bilmiyorum"],
+    correct: 0,
+    explain: "Su çok önemli! Deprem çantasında kişi başı en az 1.5 litre su olmalı."
+  },
+  {
+    emoji: "📱",
+    text: "Deprem çantasına ne koymamalıyız?",
+    options: ["🔦 El feneri", "🎮 Oyun konsolu", "💊 İlaçlar", "🍫 Atıştırmalık"],
+    correct: 1,
+    explain: "Oyun konsoluna gerek yok! Çantada işe yarar şeyler olmalı."
+  },
+  {
+    emoji: "🔦",
+    text: "Elektrikler kesilirse ne işe yarar?",
+    options: ["📺 Televizyon", "💡 Avize", "🔦 El feneri", "🕯️ Mum (tehlikeli!)"],
+    correct: 2,
+    explain: "El feneri karanlıkta yolumuzu görmemizi sağlar. Pilli olmalı!"
+  },
+  {
+    emoji: "💊",
+    text: "Deprem çantasında ilaç olmalı mı?",
+    options: ["✅ Evet, temel ilaçlar", "❌ Hayır, çok ağır", "🤔 Sadece baş ağrısı hapı", "😕 İlaç gerekmez"],
+    correct: 0,
+    explain: "Ailede kullanılan ilaçlar ve temel sağlık malzemeleri çantada olmalı!"
+  },
+  {
+    emoji: "📄",
+    text: "Hangi belgeyi çantaya koymalıyız?",
+    options: ["📝 Ödev kâğıdı", "🎨 Boyama kitabı", "🪪 Kimlik fotokopisi", "📖 Roman kitabı"],
+    correct: 2,
+    explain: "Kimlik ve önemli belgelerin kopyaları çantada olmalı!"
+  },
+  {
+    emoji: "🥫",
+    text: "Deprem çantasına hangi yiyecek konur?",
+    options: ["🍕 Sıcak pizza", "🥫 Konserve yiyecek", "🍦 Dondurma", "🎂 Pasta"],
+    correct: 1,
+    explain: "Konserve yiyecekler bozulmaz ve uzun süre dayanır!"
+  },
+  {
+    emoji: "🩹",
+    text: "İlk yardım çantası neden önemlidir?",
+    options: ["Güzel göründüğü için", "Küçük yaraları tedavi etmek için", "Ağır olduğu için", "Pahalı olduğu için"],
+    correct: 1,
+    explain: "İlk yardım çantası ile küçük kesimleri ve yaraları tedavi edebiliriz!"
+  },
+  {
+    emoji: "📻",
+    text: "Depremde haberdar olmak için ne gerekir?",
+    options: ["📺 Televizyon", "🎵 Müzik kutusu", "📻 Pilli radyo", "📞 Sabit telefon"],
+    correct: 2,
+    explain: "Pilli radyo ile elektrik olmasa da haberler dinlenebilir!"
+  },
+  {
+    emoji: "🕯️",
+    text: "Deprem çantasında mum olmalı mı?",
+    options: ["✅ Evet, her zaman", "❌ Hayır, yangın tehlikesi", "🤔 Sadece büyük mum", "😕 Fark etmez"],
+    correct: 1,
+    explain: "Mum yangın çıkarabilir! Bunun yerine el feneri veya kafa lambası kullanın."
+  },
+  {
+    emoji: "🎒",
+    text: "Deprem çantası nerede durmalıdır?",
+    options: ["🏖️ Tatilde", "🚪 Kolayca alınabilecek yerde", "🏗️ Bodrum katta", "🚗 Arabanın bagajında"],
+    correct: 1,
+    explain: "Deprem çantası kapıya yakın, kolayca alınabilecek bir yerde durmalı!"
+  }
+];
+
+let currentQ = 0;
+let score = 0;
+let answered = false;
+
+function startQuiz() {
+  document.getElementById('start').classList.remove('active');
+  document.getElementById('game').classList.add('active');
+  loadQuestion();
+}
+
+function loadQuestion() {
+  answered = false;
+  const q = questions[currentQ];
+  document.getElementById('q-counter').textContent = `Soru ${currentQ+1} / ${questions.length}`;
+  document.getElementById('score').textContent = score;
+  document.getElementById('progress').style.width = `${(currentQ/questions.length)*100}%`;
+  document.getElementById('q-emoji').textContent = q.emoji;
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('next-btn').className = 'next-btn';
+
+  const opts = document.getElementById('options');
+  opts.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.innerHTML = `<span>${opt}</span>`;
+    btn.onclick = () => answer(i, btn);
+    opts.appendChild(btn);
+  });
+}
+
+function answer(idx, btn) {
+  if (answered) return;
+  answered = true;
+  const q = questions[currentQ];
+  const allBtns = document.querySelectorAll('.opt-btn');
+  
+  allBtns.forEach(b => b.style.cursor = 'default');
+  allBtns[q.correct].classList.add('show-correct');
+
+  const fb = document.getElementById('feedback');
+  if (idx === q.correct) {
+    btn.classList.add('correct');
+    score += 10;
+    fb.className = 'feedback correct';
+    fb.textContent = '✅ Doğru! ' + q.explain;
+  } else {
+    btn.classList.add('wrong');
+    fb.className = 'feedback wrong';
+    fb.textContent = '❌ Yanlış. ' + q.explain;
+  }
+  document.getElementById('score').textContent = score;
+  document.getElementById('next-btn').className = 'next-btn show';
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= questions.length) {
+    showResult();
+  } else {
+    loadQuestion();
+  }
+}
+
+function showResult() {
+  document.getElementById('game').classList.remove('active');
+  document.getElementById('result').classList.add('active');
+  document.getElementById('final-score').textContent = `${score} / ${questions.length * 10} Puan`;
+  
+  let trophy, title, msg;
+  if (score >= 90) {
+    trophy = '🏆'; title = 'Muhteşem!';
+    msg = 'Deprem çantası konusunda uzman oldun! Ailenle paylaş, birlikte hazırlayın! 🎉';
+  } else if (score >= 70) {
+    trophy = '🥇'; title = 'Çok İyi!';
+    msg = 'Deprem çantası hakkında çok şey biliyorsun! Biraz daha çalışırsan uzman olursun!';
+  } else if (score >= 50) {
+    trophy = '🥈'; title = 'İyi!';
+    msg = 'Güzel! Deprem çantası hakkında daha fazla bilgi edinmek için tekrar oyna!';
+  } else {
+    trophy = '🎯'; title = 'Tekrar Dene!';
+    msg = 'Deprem çantası çok önemli! Tekrar oyna ve öğren. Güvenliğimiz için!';
+  }
+  
+  document.getElementById('trophy').textContent = trophy;
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-msg').textContent = msg;
+  document.getElementById('result').style.background = score >= 70 
+    ? 'linear-gradient(135deg, #2ecc71, #27ae60)'
+    : 'linear-gradient(135deg, #3498db, #2980b9)';
+}
+
+function restart() {
+  currentQ = 0; score = 0;
+  document.getElementById('result').classList.remove('active');
+  document.getElementById('game').classList.add('active');
+  loadQuestion();
+}
+</script>
+</body>
+</html>

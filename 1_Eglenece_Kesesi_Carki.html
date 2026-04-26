@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>23 Nisan – Eğlence Kesesi Çarkı</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: linear-gradient(135deg, #c0392b 0%, #922b21 50%, #7b241c 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    overflow: hidden;
+  }
+  h1 {
+    color: #fff;
+    font-size: 2rem;
+    margin-bottom: 8px;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+    letter-spacing: 2px;
+  }
+  .subtitle {
+    color: #f5b7b1;
+    font-size: 1rem;
+    margin-bottom: 24px;
+  }
+  .wheel-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .pointer {
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 18px solid transparent;
+    border-right: 18px solid transparent;
+    border-top: 36px solid #fff;
+    z-index: 10;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
+  }
+  canvas {
+    border-radius: 50%;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+  canvas:hover { transform: scale(1.01); }
+  .center-btn {
+    position: absolute;
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: #fff;
+    color: #c0392b;
+    font-size: 1.1rem;
+    font-weight: 900;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    transition: all 0.2s;
+    z-index: 10;
+    letter-spacing: 1px;
+  }
+  .center-btn:hover { background: #f8d7da; transform: scale(1.05); }
+  .center-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .result-box {
+    margin-top: 28px;
+    background: rgba(255,255,255,0.97);
+    border-radius: 20px;
+    padding: 22px 40px;
+    text-align: center;
+    min-width: 500px;
+    max-width: 600px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    animation: popIn 0.4s ease;
+    min-height: 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  @keyframes popIn {
+    from { transform: scale(0.85); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .result-emoji { font-size: 2.4rem; margin-bottom: 6px; }
+  .result-text {
+    font-size: 1.3rem;
+    color: #922b21;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+  .result-hint {
+    font-size: 0.9rem;
+    color: #888;
+    margin-top: 4px;
+  }
+  .stars {
+    position: fixed;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .star {
+    position: absolute;
+    font-size: 1.2rem;
+    animation: float 6s ease-in-out infinite;
+    opacity: 0.3;
+  }
+  @keyframes float {
+    0%,100%{ transform: translateY(0) rotate(0deg); }
+    50%{ transform: translateY(-20px) rotate(180deg); }
+  }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<h1>🎉 Eğlence Kesesi Çarkı</h1>
+<p class="subtitle">23 Nisan Ulusal Egemenlik ve Çocuk Bayramı</p>
+
+<div class="wheel-wrapper">
+  <div class="pointer"></div>
+  <canvas id="wheel" width="460" height="460"></canvas>
+  <button class="center-btn" id="spinBtn" onclick="spin()">ÇEVİR!</button>
+</div>
+
+<div class="result-box" id="resultBox">
+  <div class="result-emoji">🎯</div>
+  <div class="result-text">Çarkı çevirerek görevini bul!</div>
+  <div class="result-hint">Ortadaki butona ya da çarka tıkla</div>
+</div>
+
+<script>
+const tasks = [
+  { text: "Bir hayvan gibi yürü ve sesini çıkar 🐸", hint: "Sınıf tahmin etsin!" },
+  { text: "Sadece yüzünle bir duyguyu anlat 😮", hint: "Kelime kullanma!" },
+  { text: "Ellerini kullanmadan bir nesneyi taşı 🎒", hint: "Yaratıcı ol!" },
+  { text: "Bir enstrüman sesini taklit et 🎸", hint: "Arkadaşların tahmin etsin" },
+  { text: "Zıplayarak şarkı söyle 🎵", hint: "Bir kıta söyle!" },
+  { text: "23 Nisan için bir slogan bul 🇹🇷", hint: "Yüksek sesle söyle!" },
+  { text: "Bir Türk yemeği tarif et 🍽️", hint: "3 malzeme söyle!" },
+  { text: "Atatürk hakkında bir şey anlat 🌟", hint: "Bildiğin bir şeyi paylaş" },
+  { text: "10 saniyede 5 ülke say 🌍", hint: "Saydır bakalım!" },
+  { text: "Sessizce bir nesneyi tarif et 🤫", hint: "Mim gibi göster!" },
+  { text: "Bayrak renklerinin anlamını anlat 🔴⚪", hint: "Kırmızı ve beyaz..." },
+  { text: "Arkadaşına 23 Nisan dileğini söyle 🎈", hint: "Güzel bir dilek!" },
+];
+
+const colors = [
+  "#c0392b","#e74c3c","#922b21","#d35400",
+  "#c0392b","#e74c3c","#922b21","#d35400",
+  "#c0392b","#e74c3c","#922b21","#d35400",
+];
+const textColor = "#fff";
+
+const canvas = document.getElementById('wheel');
+const ctx = canvas.getContext('2d');
+const cx = canvas.width / 2;
+const cy = canvas.height / 2;
+const radius = 220;
+let currentAngle = 0;
+let spinning = false;
+
+function drawWheel(angle) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const slice = (2 * Math.PI) / tasks.length;
+
+  tasks.forEach((task, i) => {
+    const start = angle + i * slice;
+    const end = start + slice;
+    // Slice
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, radius, start, end);
+    ctx.closePath();
+    ctx.fillStyle = colors[i];
+    ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,0.3)";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Text
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(start + slice / 2);
+    ctx.textAlign = "right";
+    ctx.fillStyle = textColor;
+    ctx.font = "bold 13px Segoe UI";
+
+    // Wrap text
+    const maxW = radius - 60;
+    const words = task.text.replace(/[🐸😮🎒🎸🎵🇹🇷🍽️🌟🌍🤫🔴⚪🎈]/gu, '').trim().split(' ');
+    let lines = [];
+    let line = '';
+    words.forEach(w => {
+      const test = line ? line + ' ' + w : w;
+      if (ctx.measureText(test).width < maxW) { line = test; }
+      else { if (line) lines.push(line); line = w; }
+    });
+    if (line) lines.push(line);
+    lines = lines.slice(0, 3);
+
+    const lineH = 16;
+    const totalH = lines.length * lineH;
+    lines.forEach((l, li) => {
+      ctx.fillText(l, radius - 18, -totalH/2 + li * lineH + lineH/2);
+    });
+    ctx.restore();
+  });
+
+  // Center circle
+  ctx.beginPath();
+  ctx.arc(cx, cy, 44, 0, 2 * Math.PI);
+  ctx.fillStyle = "#fff";
+  ctx.fill();
+  ctx.strokeStyle = "#c0392b";
+  ctx.lineWidth = 3;
+  ctx.stroke();
+}
+
+function spin() {
+  if (spinning) return;
+  spinning = true;
+  document.getElementById('spinBtn').disabled = true;
+  document.getElementById('resultBox').innerHTML = `<div class="result-emoji">🌀</div><div class="result-text">Çark dönüyor...</div>`;
+
+  const extraSpins = (5 + Math.random() * 5) * 2 * Math.PI;
+  const randomStop = Math.random() * 2 * Math.PI;
+  const target = currentAngle + extraSpins + randomStop;
+  const duration = 3500 + Math.random() * 1000;
+  const start = performance.now();
+  const startAngle = currentAngle;
+
+  function animate(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 4);
+    currentAngle = startAngle + (target - startAngle) * ease;
+    drawWheel(currentAngle);
+
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      currentAngle = target % (2 * Math.PI);
+      spinning = false;
+      document.getElementById('spinBtn').disabled = false;
+      showResult();
+    }
+  }
+  requestAnimationFrame(animate);
+}
+
+function showResult() {
+  const slice = (2 * Math.PI) / tasks.length;
+  // Pointer is at top (angle = -PI/2 from horizontal = 3PI/2)
+  const pointer = (3 * Math.PI / 2);
+  let normalized = ((pointer - currentAngle) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+  const idx = Math.floor(normalized / slice) % tasks.length;
+  const task = tasks[idx];
+  
+  const emojis = ['🎉','⭐','🌟','🏆','✨','🎊'];
+  const e = emojis[Math.floor(Math.random() * emojis.length)];
+  
+  document.getElementById('resultBox').innerHTML = `
+    <div class="result-emoji">${e}</div>
+    <div class="result-text">${task.text}</div>
+    <div class="result-hint">💡 ${task.hint}</div>
+  `;
+}
+
+// Canvas click = spin
+canvas.addEventListener('click', spin);
+
+// Stars background
+const starsEl = document.getElementById('stars');
+['⭐','🌟','✨','🎈','🎀'].forEach((s, i) => {
+  for (let j = 0; j < 4; j++) {
+    const el = document.createElement('div');
+    el.className = 'star';
+    el.textContent = s;
+    el.style.left = Math.random() * 100 + '%';
+    el.style.top = Math.random() * 100 + '%';
+    el.style.animationDelay = (Math.random() * 4) + 's';
+    el.style.animationDuration = (4 + Math.random() * 4) + 's';
+    starsEl.appendChild(el);
+  }
+});
+
+drawWheel(0);
+</script>
+</body>
+</html>
