@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yazım Kuralları - 2. Sınıf Türkçe</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #DC2626; --green: #10B981; --red: #EF4444;
+  --yellow: #F59E0B; --blue: #3B82F6; --purple: #7C3AED;
+  --orange: #F97316; --bg: #FFF5F5; --text: #1F2937; --muted: #6B7280;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+header { background:linear-gradient(135deg,#DC2626,#7C3AED); padding:28px 20px 44px; text-align:center; }
+.header-emoji { font-size:2rem; margin-bottom:8px; }
+header h1 { font-family:'Baloo 2',cursive; font-size:clamp(1.5rem,5vw,2.3rem); font-weight:800; color:white; }
+header p { color:rgba(255,255,255,0.88); font-weight:600; margin-top:6px; }
+
+.tabs { display:flex; justify-content:center; gap:6px; padding:16px 12px 0; flex-wrap:wrap; max-width:860px; margin:0 auto; }
+.tab-btn { font-family:'Baloo 2',cursive; font-size:.82rem; font-weight:700; padding:8px 13px; border-radius:50px; border:3px solid transparent; cursor:pointer; transition:all .2s; background:white; color:var(--muted); box-shadow:0 3px 10px rgba(0,0,0,0.08); }
+.tab-btn.active { background:var(--primary); color:white; border-color:var(--primary); transform:translateY(-2px); }
+
+.section { display:none; padding:22px 16px 60px; max-width:820px; margin:0 auto; }
+.section.active { display:block; }
+.sec-baslik { font-family:'Baloo 2',cursive; font-size:1.3rem; font-weight:800; color:var(--primary); margin-bottom:6px; }
+.sec-desc { color:var(--muted); font-size:.92rem; font-weight:600; margin-bottom:18px; }
+
+.kural { background:white; border-radius:18px; padding:18px 20px; margin-bottom:16px; box-shadow:0 4px 16px rgba(0,0,0,0.07); border-left:6px solid var(--primary); }
+.kural h3 { font-family:'Baloo 2',cursive; font-size:1rem; font-weight:800; color:var(--primary); margin-bottom:10px; }
+.kural p { font-size:.92rem; line-height:2; font-weight:600; color:#374151; }
+.ob { display:inline-block; background:#DCFCE7; color:#166534; padding:2px 8px; border-radius:7px; font-weight:700; margin:2px; font-size:.87rem; }
+.yb { display:inline-block; background:#FEE2E2; color:#991B1B; padding:2px 8px; border-radius:7px; font-weight:700; margin:2px; font-size:.87rem; text-decoration:line-through; }
+
+/* DOĞRU YAZIM */
+.kelime-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; margin-bottom:16px; }
+.kelime-cift { background:white; border-radius:14px; padding:12px; box-shadow:0 3px 10px rgba(0,0,0,0.07); display:flex; flex-direction:column; gap:8px; }
+.kelime-sec { padding:8px 12px; border-radius:10px; border:3px solid #e2e8f0; background:#f8fafc; font-size:.95rem; font-weight:700; cursor:pointer; transition:all .2s; text-align:center; font-family:'Baloo 2',cursive; }
+.kelime-sec:hover:not(.locked) { border-color:var(--blue); background:#EFF6FF; }
+.kelime-sec.dogru { background:#DCFCE7 !important; border-color:var(--green) !important; color:#166534 !important; }
+.kelime-sec.yanlis { background:#FEE2E2 !important; border-color:var(--red) !important; color:#991B1B !important; }
+.kelime-sec.locked { cursor:default; }
+
+/* ÇOKTAN SEÇMELİ */
+.soru-kart { background:white; border-radius:18px; padding:20px; margin-bottom:14px; box-shadow:0 3px 12px rgba(0,0,0,0.07); }
+.soru-metin { font-family:'Baloo 2',cursive; font-size:1rem; font-weight:700; color:var(--text); margin-bottom:14px; line-height:1.5; }
+.vurgu { background:var(--yellow); padding:2px 8px; border-radius:6px; }
+.secenekler { display:flex; flex-direction:column; gap:8px; }
+.secenek { padding:11px 16px; border-radius:12px; border:3px solid #e2e8f0; background:#f8fafc; font-size:.93rem; font-weight:600; cursor:pointer; transition:all .2s; text-align:left; font-family:'Nunito',sans-serif; }
+.secenek:hover:not(:disabled) { border-color:var(--primary); background:#FEE2E2; color:var(--primary); }
+.secenek.dogru { background:#DCFCE7 !important; border-color:var(--green) !important; color:#166534 !important; }
+.secenek.yanlis { background:#FEE2E2 !important; border-color:var(--red) !important; color:#991B1B !important; }
+.secenek:disabled { cursor:default; }
+
+/* PUAN */
+.puan-kart { background:linear-gradient(135deg,var(--primary),var(--purple)); border-radius:20px; padding:22px; text-align:center; color:white; margin-top:16px; display:none; }
+.puan-kart .sayi { font-family:'Baloo 2',cursive; font-size:3rem; font-weight:800; line-height:1; }
+.puan-kart p { font-size:.95rem; font-weight:600; opacity:.9; margin-top:4px; }
+
+.ilerleme { height:8px; background:#e2e8f0; border-radius:100px; margin-bottom:6px; overflow:hidden; }
+.ilerleme-dolu { height:100%; background:linear-gradient(90deg,var(--primary),var(--purple)); border-radius:100px; transition:width .4s; }
+.ilerleme-yazi { font-size:.83rem; font-weight:700; color:var(--muted); margin-bottom:14px; text-align:right; }
+
+.btn-row { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:20px; }
+.btn { padding:12px 24px; border-radius:50px; border:none; font-family:'Baloo 2',cursive; font-size:1rem; font-weight:700; cursor:pointer; transition:all .2s; box-shadow:0 4px 14px rgba(0,0,0,0.1); }
+.btn:hover { transform:translateY(-2px); }
+.btn-yaz { background:#7C3AED; color:white; }
+.btn-indir { background:#F97316; color:white; }
+.btn-tekrar { background:white; color:var(--primary); border:3px solid var(--primary); }
+
+.confetti-wrap { position:fixed; inset:0; pointer-events:none; z-index:999; }
+.confetti-piece { position:absolute; border-radius:2px; animation:fall linear forwards; }
+@keyframes fall { 0%{opacity:1;transform:translateY(-20px) rotate(0deg)} 100%{opacity:0;transform:translateY(100vh) rotate(720deg)} }
+
+@media print {
+  .tabs,.btn-row { display:none !important; }
+  .section { display:block !important; padding:10px 0; }
+  header { background:#DC2626 !important; -webkit-print-color-adjust:exact; }
+}
+</style>
+</head>
+<body>
+<div id="confetti-wrap" class="confetti-wrap"></div>
+
+<header>
+  <div class="header-emoji">✏️</div>
+  <h1>Yazım Kuralları</h1>
+  <p>2. Sınıf · Türkçe Dersi</p>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="goster('dogru',this)">🔤 Doğru Yazım</button>
+  <button class="tab-btn" onclick="goster('buyuk',this)">🅰️ Büyük Harf</button>
+  <button class="tab-btn" onclick="goster('sayi',this)">🔢 Sayılar</button>
+  <button class="tab-btn" onclick="goster('mi',this)">❓ "mi"nin Yazımı</button>
+  <button class="tab-btn" onclick="goster('kisaltma',this)">✂️ Kısaltmalar</button>
+</div>
+
+<!-- ══ DOĞRU YAZIM ══ -->
+<div id="dogru" class="section active">
+  <p class="sec-baslik">🔤 Kelimelerin Doğru Yazımı</p>
+  <p class="sec-desc">Her çiftten doğru yazılanı seç!</p>
+
+  <div class="kural">
+    <h3>📌 Hatırlayalım!</h3>
+    <p>Kelimeleri doğru yazmak çok önemlidir. Yanlış yazılan kelimeler anlamı bozar.<br>
+    Doğru: <span class="ob">öğretmen</span> <span class="ob">eğlenmek</span> <span class="ob">matematik</span> <span class="ob">bisiklet</span><br>
+    Yanlış: <span class="yb">öretmen</span> <span class="yb">eylenmek</span> <span class="yb">matamatik</span> <span class="yb">pisiklet</span></p>
+  </div>
+
+  <div class="kelime-grid" id="kelime-grid"></div>
+
+  <div id="dogru-puan" class="puan-kart">
+    <div class="sayi" id="dogru-sayi"></div>
+    <p id="dogru-msg"></p>
+    <button class="btn btn-tekrar" onclick="kelimeleriBaşlat()">🔄 Tekrar</button>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-yaz" onclick="window.print()">🖨️ Yazdır</button>
+    <button class="btn btn-indir" onclick="indir()">⬇️ İndir</button>
+  </div>
+</div>
+
+<!-- ══ BÜYÜK HARF ══ -->
+<div id="buyuk" class="section">
+  <p class="sec-baslik">🅰️ Büyük Harflerin Yazımı</p>
+  <p class="sec-desc">Doğru seçeneği tıkla!</p>
+
+  <div class="kural">
+    <h3>📌 Kural</h3>
+    <p>
+      • Cümle büyük harfle başlar: <span class="ob">Dün sinemaya gittik.</span><br>
+      • Ülke, şehir, insan adları büyük harfle başlar: <span class="ob">Ankara</span> <span class="ob">Türkiye</span> <span class="ob">Ahmet</span><br>
+      • Bayram adları büyük harfle başlar: <span class="ob">Kurban Bayramı</span> <span class="ob">Zafer Bayramı</span><br>
+      • Ay ve gün adları sayıyla kullanılınca büyük başlar: <span class="ob">23 Nisan</span> <span class="ob">29 Ekim</span>
+    </p>
+  </div>
+
+  <div class="ilerleme"><div class="ilerleme-dolu" id="ilerleme-b" style="width:0%"></div></div>
+  <div class="ilerleme-yazi" id="ilerleme-yazi-b">0 / 6 cevaplandı</div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">1. Aşağıdakilerden hangisi doğru yazılmıştır?</div>
+    <div class="secenekler" data-dogru="1" data-grup="b" data-id="0">
+      <button class="secenek" onclick="cevapla(this)">A) ahmet ankara'ya gitti.</button>
+      <button class="secenek" onclick="cevapla(this)">B) Ahmet Ankara'ya gitti.</button>
+      <button class="secenek" onclick="cevapla(this)">C) Ahmet ankara'ya Gitti.</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">2. <span class="vurgu">kurban bayramı</span> nasıl yazılmalıdır?</div>
+    <div class="secenekler" data-dogru="2" data-grup="b" data-id="1">
+      <button class="secenek" onclick="cevapla(this)">A) kurban bayramı</button>
+      <button class="secenek" onclick="cevapla(this)">B) Kurban bayramı</button>
+      <button class="secenek" onclick="cevapla(this)">C) Kurban Bayramı</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">3. Hangi cümle doğru yazılmıştır?</div>
+    <div class="secenekler" data-dogru="0" data-grup="b" data-id="2">
+      <button class="secenek" onclick="cevapla(this)">A) Türkiye'nin başkenti Ankara'dır.</button>
+      <button class="secenek" onclick="cevapla(this)">B) türkiye'nin başkenti ankara'dır.</button>
+      <button class="secenek" onclick="cevapla(this)">C) Türkiye'nin başkenti ankara'dır.</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">4. <span class="vurgu">23 nisan</span> nasıl yazılmalıdır?</div>
+    <div class="secenekler" data-dogru="1" data-grup="b" data-id="3">
+      <button class="secenek" onclick="cevapla(this)">A) 23 nisan</button>
+      <button class="secenek" onclick="cevapla(this)">B) 23 Nisan</button>
+      <button class="secenek" onclick="cevapla(this)">C) 23 NİSAN</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">5. Hangi seçenekte büyük harf yanlış kullanılmıştır?</div>
+    <div class="secenekler" data-dogru="2" data-grup="b" data-id="4">
+      <button class="secenek" onclick="cevapla(this)">A) Mustafa Kemal Atatürk</button>
+      <button class="secenek" onclick="cevapla(this)">B) Ramazan Bayramı</button>
+      <button class="secenek" onclick="cevapla(this)">C) istanbul güzel bir şehirdir.</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">6. Adreslerde sözcükler nasıl yazılır?</div>
+    <div class="secenekler" data-dogru="0" data-grup="b" data-id="5">
+      <button class="secenek" onclick="cevapla(this)">A) Her sözcük büyük harfle başlar.</button>
+      <button class="secenek" onclick="cevapla(this)">B) Her sözcük küçük harfle başlar.</button>
+      <button class="secenek" onclick="cevapla(this)">C) Sadece ilk sözcük büyük harfle başlar.</button>
+    </div>
+  </div>
+
+  <div class="puan-kart" id="puan-b">
+    <div class="sayi" id="sayi-b"></div>
+    <p id="msg-b"></p>
+    <button class="btn btn-tekrar" onclick="tekrar('b',6)">🔄 Tekrar</button>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-yaz" onclick="window.print()">🖨️ Yazdır</button>
+    <button class="btn btn-indir" onclick="indir()">⬇️ İndir</button>
+  </div>
+</div>
+
+<!-- ══ SAYILAR ══ -->
+<div id="sayi" class="section">
+  <p class="sec-baslik">🔢 Sayıların Yazımı</p>
+  <p class="sec-desc">Sayılarla ilgili doğru kuralı seç!</p>
+
+  <div class="kural">
+    <h3>📌 Kural</h3>
+    <p>
+      • Sayılar rakamla veya yazıyla yazılabilir: <span class="ob">iki tane kalem</span> veya <span class="ob">2 tane kalem</span><br>
+      • Birden fazla kelimeden oluşan sayılar ayrı yazılır: <span class="ob">on altı</span> <span class="ob">yirmi beş</span><br>
+      • Tarihler rakamla yazılınca nokta veya eğik çizgi ile ayrılır: <span class="ob">23.04.1920</span> <span class="ob">29/10/1923</span><br>
+      • Saat yazımı: <span class="ob">Saat 08.30'da uyandım.</span>
+    </p>
+  </div>
+
+  <div class="ilerleme"><div class="ilerleme-dolu" id="ilerleme-s" style="width:0%"></div></div>
+  <div class="ilerleme-yazi" id="ilerleme-yazi-s">0 / 5 cevaplandı</div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">1. Aşağıdakilerden hangisi doğru yazılmıştır?</div>
+    <div class="secenekler" data-dogru="1" data-grup="s" data-id="0">
+      <button class="secenek" onclick="cevapla(this)">A) onaltı yaşındayım</button>
+      <button class="secenek" onclick="cevapla(this)">B) on altı yaşındayım</button>
+      <button class="secenek" onclick="cevapla(this)">C) On Altı yaşındayım</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">2. Tarih rakamla yazıldığında nasıl ayrılır?</div>
+    <div class="secenekler" data-dogru="2" data-grup="s" data-id="1">
+      <button class="secenek" onclick="cevapla(this)">A) 23 04 1920</button>
+      <button class="secenek" onclick="cevapla(this)">B) 23-04-1920</button>
+      <button class="secenek" onclick="cevapla(this)">C) 23.04.1920</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">3. <span class="vurgu">yirmibir</span> sayısı nasıl yazılmalıdır?</div>
+    <div class="secenekler" data-dogru="0" data-grup="s" data-id="2">
+      <button class="secenek" onclick="cevapla(this)">A) yirmi bir</button>
+      <button class="secenek" onclick="cevapla(this)">B) yirmibir</button>
+      <button class="secenek" onclick="cevapla(this)">C) Yirmi Bir</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">4. Hangi cümle doğrudur?</div>
+    <div class="secenekler" data-dogru="1" data-grup="s" data-id="3">
+      <button class="secenek" onclick="cevapla(this)">A) Kantinden ikikalem aldım.</button>
+      <button class="secenek" onclick="cevapla(this)">B) Kantinden iki kalem aldım.</button>
+      <button class="secenek" onclick="cevapla(this)">C) Kantinden İki kalem aldım.</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">5. Cumhuriyet Bayramı'nın tarihi nasıl yazılır?</div>
+    <div class="secenekler" data-dogru="2" data-grup="s" data-id="4">
+      <button class="secenek" onclick="cevapla(this)">A) 29 ekim 1923</button>
+      <button class="secenek" onclick="cevapla(this)">B) 29 ekim</button>
+      <button class="secenek" onclick="cevapla(this)">C) 29 Ekim 1923</button>
+    </div>
+  </div>
+
+  <div class="puan-kart" id="puan-s">
+    <div class="sayi" id="sayi-s"></div>
+    <p id="msg-s"></p>
+    <button class="btn btn-tekrar" onclick="tekrar('s',5)">🔄 Tekrar</button>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-yaz" onclick="window.print()">🖨️ Yazdır</button>
+    <button class="btn btn-indir" onclick="indir()">⬇️ İndir</button>
+  </div>
+</div>
+
+<!-- ══ "mi"NİN YAZIMI ══ -->
+<div id="mi" class="section">
+  <p class="sec-baslik">❓ "mi"nin Yazımı</p>
+  <p class="sec-desc">Soru eki "mi" hep ayrı yazılır! Doğru olanı seç.</p>
+
+  <div class="kural">
+    <h3>📌 Kural</h3>
+    <p>
+      Soru eki <b>"mi"</b> her zaman kendinden önce gelen kelimeden <b>ayrı</b> yazılır.<br>
+      Doğru: <span class="ob">Geldi mi?</span> <span class="ob">Gördün mü?</span> <span class="ob">Koştu mu?</span> <span class="ob">Yaptın mı?</span><br>
+      Yanlış: <span class="yb">Geldimi?</span> <span class="yb">Gördünmü?</span> <span class="yb">Koştumu?</span>
+    </p>
+  </div>
+
+  <div class="ilerleme"><div class="ilerleme-dolu" id="ilerleme-m" style="width:0%"></div></div>
+  <div class="ilerleme-yazi" id="ilerleme-yazi-m">0 / 6 cevaplandı</div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">1. Hangi cümle doğru yazılmıştır?</div>
+    <div class="secenekler" data-dogru="1" data-grup="m" data-id="0">
+      <button class="secenek" onclick="cevapla(this)">A) Akşam yemek yedimi?</button>
+      <button class="secenek" onclick="cevapla(this)">B) Akşam yemek yedin mi?</button>
+      <button class="secenek" onclick="cevapla(this)">C) Akşam yemek yedinmi?</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">2. <span class="vurgu">Geldimi</span> kelimesi doğru mu?</div>
+    <div class="secenekler" data-dogru="1" data-grup="m" data-id="1">
+      <button class="secenek" onclick="cevapla(this)">A) Evet, doğru.</button>
+      <button class="secenek" onclick="cevapla(this)">B) Hayır, "geldi mi" ayrı yazılmalı.</button>
+      <button class="secenek" onclick="cevapla(this)">C) Bazen bitişik bazen ayrı yazılır.</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">3. Hangisi doğru yazılmıştır?</div>
+    <div class="secenekler" data-dogru="2" data-grup="m" data-id="2">
+      <button class="secenek" onclick="cevapla(this)">A) Koştumu?</button>
+      <button class="secenek" onclick="cevapla(this)">B) Koştu mu ?</button>
+      <button class="secenek" onclick="cevapla(this)">C) Koştu mu?</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">4. "Gördün mü?" cümlesinde "mü" neden "mü" olmuş?</div>
+    <div class="secenekler" data-dogru="0" data-grup="m" data-id="3">
+      <button class="secenek" onclick="cevapla(this)">A) "Gördün" kelimesindeki ince sese uyum sağladığı için.</button>
+      <button class="secenek" onclick="cevapla(this)">B) Rastgele seçildiği için.</button>
+      <button class="secenek" onclick="cevapla(this)">C) Her zaman "mü" yazılır.</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">5. Boşluğa ne gelmelidir? "Ödevini yaptın ___?"</div>
+    <div class="secenekler" data-dogru="1" data-grup="m" data-id="4">
+      <button class="secenek" onclick="cevapla(this)">A) mı?</button>
+      <button class="secenek" onclick="cevapla(this)">B) mı</button>
+      <button class="secenek" onclick="cevapla(this)">C) Mi</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">6. Hangisi yanlış yazılmıştır?</div>
+    <div class="secenekler" data-dogru="2" data-grup="m" data-id="5">
+      <button class="secenek" onclick="cevapla(this)">A) Geldi mi?</button>
+      <button class="secenek" onclick="cevapla(this)">B) Yaptın mı?</button>
+      <button class="secenek" onclick="cevapla(this)">C) Gördünmü?</button>
+    </div>
+  </div>
+
+  <div class="puan-kart" id="puan-m">
+    <div class="sayi" id="sayi-m"></div>
+    <p id="msg-m"></p>
+    <button class="btn btn-tekrar" onclick="tekrar('m',6)">🔄 Tekrar</button>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-yaz" onclick="window.print()">🖨️ Yazdır</button>
+    <button class="btn btn-indir" onclick="indir()">⬇️ İndir</button>
+  </div>
+</div>
+
+<!-- ══ KISALTMALAR ══ -->
+<div id="kisaltma" class="section">
+  <p class="sec-baslik">✂️ Kısaltmaların Yazımı</p>
+  <p class="sec-desc">Kısaltmalarla ilgili doğru seçeneği bul!</p>
+
+  <div class="kural">
+    <h3>📌 Kural</h3>
+    <p>
+      • Kuruluş adlarının kısaltması her kelimenin ilk harfiyle yapılır:<br>
+      <span class="ob">MEB</span> = Millî Eğitim Bakanlığı &nbsp; <span class="ob">TBMM</span> = Türkiye Büyük Millet Meclisi<br>
+      • Bazı kısaltmalar kelimenin temel harfleriyle yapılır:<br>
+      <span class="ob">Dr.</span> = Doktor &nbsp; <span class="ob">Av.</span> = Avukat &nbsp; <span class="ob">Sok.</span> = Sokak<br>
+      • Büyük harfli kısaltmalara ek gelince kesme işareti kullanılır:<br>
+      <span class="ob">MEB'de</span> &nbsp; <span class="ob">TBMM'ye</span> &nbsp; <span class="ob">TRT'de</span>
+    </p>
+  </div>
+
+  <div class="ilerleme"><div class="ilerleme-dolu" id="ilerleme-k" style="width:0%"></div></div>
+  <div class="ilerleme-yazi" id="ilerleme-yazi-k">0 / 6 cevaplandı</div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">1. "Millî Eğitim Bakanlığı"nın kısaltması nedir?</div>
+    <div class="secenekler" data-dogru="1" data-grup="k" data-id="0">
+      <button class="secenek" onclick="cevapla(this)">A) Meb</button>
+      <button class="secenek" onclick="cevapla(this)">B) MEB</button>
+      <button class="secenek" onclick="cevapla(this)">C) M.E.B.</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">2. "Doktor" kelimesinin kısaltması hangisidir?</div>
+    <div class="secenekler" data-dogru="0" data-grup="k" data-id="1">
+      <button class="secenek" onclick="cevapla(this)">A) Dr.</button>
+      <button class="secenek" onclick="cevapla(this)">B) Do.</button>
+      <button class="secenek" onclick="cevapla(this)">C) Dok.</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">3. "MEB'de çalışıyor." cümlesinde kesme işareti neden kullanılmıştır?</div>
+    <div class="secenekler" data-dogru="2" data-grup="k" data-id="2">
+      <button class="secenek" onclick="cevapla(this)">A) Cümle sona erdiği için.</button>
+      <button class="secenek" onclick="cevapla(this)">B) Özel isim olduğu için.</button>
+      <button class="secenek" onclick="cevapla(this)">C) Büyük harfli kısaltmaya ek geldiği için.</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">4. "TBMM" neyin kısaltmasıdır?</div>
+    <div class="secenekler" data-dogru="1" data-grup="k" data-id="3">
+      <button class="secenek" onclick="cevapla(this)">A) Türk Büyük Millet Meclisi</button>
+      <button class="secenek" onclick="cevapla(this)">B) Türkiye Büyük Millet Meclisi</button>
+      <button class="secenek" onclick="cevapla(this)">C) Türkiye Büyük Muhtarlar Meclisi</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">5. "Sokak" kelimesinin kısaltması nasıl yazılır?</div>
+    <div class="secenekler" data-dogru="2" data-grup="k" data-id="4">
+      <button class="secenek" onclick="cevapla(this)">A) SO.</button>
+      <button class="secenek" onclick="cevapla(this)">B) sk.</button>
+      <button class="secenek" onclick="cevapla(this)">C) Sok.</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">6. Hangisi doğru yazılmıştır?</div>
+    <div class="secenekler" data-dogru="0" data-grup="k" data-id="5">
+      <button class="secenek" onclick="cevapla(this)">A) TBMM'ye gittik.</button>
+      <button class="secenek" onclick="cevapla(this)">B) TBMMye gittik.</button>
+      <button class="secenek" onclick="cevapla(this)">C) TBMM'Ye gittik.</button>
+    </div>
+  </div>
+
+  <div class="puan-kart" id="puan-k">
+    <div class="sayi" id="sayi-k"></div>
+    <p id="msg-k"></p>
+    <button class="btn btn-tekrar" onclick="tekrar('k',6)">🔄 Tekrar</button>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-yaz" onclick="window.print()">🖨️ Yazdır</button>
+    <button class="btn btn-indir" onclick="indir()">⬇️ İndir</button>
+  </div>
+</div>
+
+<script>
+// ── TAB ──
+function goster(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── DOĞRU YAZIM KELİMELERİ ──
+const kelimeVerisi = [
+  {dogru:'öğretmen', yanlis:'öretmen'},
+  {dogru:'eğlenmek', yanlis:'eylenmek'},
+  {dogru:'düğme', yanlis:'düyme'},
+  {dogru:'soğan', yanlis:'sovan'},
+  {dogru:'tren', yanlis:'tiren'},
+  {dogru:'meyve', yanlis:'meyva'},
+  {dogru:'şarj', yanlis:'şarz'},
+  {dogru:'pembe', yanlis:'penbe'},
+  {dogru:'kirpik', yanlis:'kiprik'},
+  {dogru:'perşembe', yanlis:'perşenbe'},
+  {dogru:'dinozor', yanlis:'dinazor'},
+  {dogru:'herkes', yanlis:'herkez'},
+  {dogru:'bisiklet', yanlis:'pisiklet'},
+  {dogru:'mutfak', yanlis:'mutvak'},
+  {dogru:'ekşi', yanlis:'eşki'},
+  {dogru:'patates', yanlis:'patatez'},
+  {dogru:'yağmur', yanlis:'yamur'},
+  {dogru:'matematik', yanlis:'matamatik'},
+  {dogru:'sürpriz', yanlis:'süpriz'},
+  {dogru:'şemsiye', yanlis:'şemşiye'},
+];
+
+let kelimeSkor = 0, kelimeSayac = 0;
+
+function kelimeleriBaşlat() {
+  kelimeSkor = 0; kelimeSayac = 0;
+  document.getElementById('dogru-puan').style.display = 'none';
+  const grid = document.getElementById('kelime-grid');
+  grid.innerHTML = '';
+  const karisik = [...kelimeVerisi].sort(() => Math.random() - 0.5);
+  karisik.forEach((k, i) => {
+    const cift = document.createElement('div');
+    cift.className = 'kelime-cift';
+    const ilk = Math.random() > 0.5;
+    const a = ilk ? k.dogru : k.yanlis;
+    const b = ilk ? k.yanlis : k.dogru;
+    const aDogru = ilk;
+    cift.innerHTML = `
+      <div class="kelime-sec" onclick="kelimeSec(this, ${aDogru}, ${i})">${a}</div>
+      <div class="kelime-sec" onclick="kelimeSec(this, ${!aDogru}, ${i})">${b}</div>
+    `;
+    grid.appendChild(cift);
+  });
+}
+
+function kelimeSec(el, dogru, idx) {
+  const cift = el.parentElement;
+  if (cift.dataset.answered) return;
+  cift.dataset.answered = '1';
+  cift.querySelectorAll('.kelime-sec').forEach(k => k.classList.add('locked'));
+  if (dogru) { el.classList.add('dogru'); kelimeSkor++; }
+  else { el.classList.add('yanlis'); }
+  kelimeSayac++;
+  if (kelimeSayac === kelimeVerisi.length) {
+    setTimeout(() => {
+      const pct = Math.round(kelimeSkor / kelimeVerisi.length * 100);
+      document.getElementById('dogru-sayi').textContent = kelimeSkor + ' / ' + kelimeVerisi.length;
+      document.getElementById('dogru-msg').textContent = pct >= 80 ? '🌟 Harika! Kelimeleri çok iyi biliyorsun!' : pct >= 50 ? '👍 İyi iş! Biraz daha çalışabilirsin.' : '💪 Tekrar dene!';
+      document.getElementById('dogru-puan').style.display = 'block';
+      if (pct >= 80) konfeti();
+    }, 400);
+  }
+}
+
+kelimeleriBaşlat();
+
+// ── ÇOKTAN SEÇMELİ ──
+const skorlar = { b:0, s:0, m:0, k:0 };
+const sayaclar = { b:0, s:0, m:0, k:0 };
+const toplamlar = { b:6, s:5, m:6, k:6 };
+
+function cevapla(btn) {
+  const grup = btn.parentElement;
+  if (grup.dataset.answered) return;
+  grup.dataset.answered = '1';
+  const secenekler = grup.querySelectorAll('.secenek');
+  const dogruIdx = parseInt(grup.dataset.dogru);
+  const g = grup.dataset.grup;
+  secenekler.forEach(s => s.disabled = true);
+  const secilen = Array.from(secenekler).indexOf(btn);
+  if (secilen === dogruIdx) { btn.classList.add('dogru'); skorlar[g]++; }
+  else { btn.classList.add('yanlis'); secenekler[dogruIdx].classList.add('dogru'); }
+  sayaclar[g]++;
+  const top = toplamlar[g];
+  const pct = Math.round(sayaclar[g] / top * 100);
+  document.getElementById('ilerleme-' + g).style.width = pct + '%';
+  document.getElementById('ilerleme-yazi-' + g).textContent = sayaclar[g] + ' / ' + top + ' cevaplandı';
+  if (sayaclar[g] === top) setTimeout(() => sonuc(g), 400);
+}
+
+function sonuc(g) {
+  const pct = Math.round(skorlar[g] / toplamlar[g] * 100);
+  document.getElementById('sayi-' + g).textContent = skorlar[g] + ' / ' + toplamlar[g];
+  document.getElementById('msg-' + g).textContent = pct >= 80 ? '🌟 Harika!' : pct >= 50 ? '👍 İyi iş!' : '💪 Tekrar dene!';
+  document.getElementById('puan-' + g).style.display = 'block';
+  if (pct >= 80) konfeti();
+}
+
+function tekrar(g, top) {
+  skorlar[g] = 0; sayaclar[g] = 0;
+  document.getElementById('ilerleme-' + g).style.width = '0%';
+  document.getElementById('ilerleme-yazi-' + g).textContent = '0 / ' + top + ' cevaplandı';
+  document.getElementById('puan-' + g).style.display = 'none';
+  document.querySelectorAll('[data-grup="' + g + '"]').forEach(grup => {
+    delete grup.dataset.answered;
+    grup.querySelectorAll('.secenek').forEach(s => { s.disabled=false; s.classList.remove('dogru','yanlis'); });
+  });
+}
+
+// ── İNDİR ──
+function indir() {
+  const html = document.documentElement.outerHTML;
+  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'yazim-yanlislari.html';
+  a.click();
+}
+
+// ── KONFETİ ──
+function konfeti() {
+  const colors = ['#DC2626','#7C3AED','#F59E0B','#10B981','#3B82F6','#F97316'];
+  const wrap = document.getElementById('confetti-wrap');
+  wrap.innerHTML = '';
+  for (let i = 0; i < 60; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.cssText = `left:${Math.random()*100}vw;top:-20px;width:${8+Math.random()*8}px;height:${8+Math.random()*8}px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*.8}s`;
+    wrap.appendChild(p);
+    p.addEventListener('animationend', () => p.remove());
+  }
+}
+</script>
+</body>
+</html>

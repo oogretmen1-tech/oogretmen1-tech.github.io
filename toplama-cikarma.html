@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toplama ve Çıkarma İşlemi - 2. Sınıf</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #7C3AED;
+  --toplama: #10B981;
+  --cikarma: #EF4444;
+  --yellow: #F59E0B;
+  --blue: #3B82F6;
+  --bg: #FAF5FF;
+  --text: #1F2937;
+  --muted: #6B7280;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+header { background:linear-gradient(135deg,#10B981,#7C3AED); padding:28px 20px 44px; text-align:center; }
+.header-emoji { font-size:2rem; margin-bottom:8px; }
+header h1 { font-family:'Baloo 2',cursive; font-size:clamp(1.5rem,5vw,2.3rem); font-weight:800; color:white; }
+header p { color:rgba(255,255,255,0.88); font-weight:600; margin-top:6px; }
+
+.tabs { display:flex; justify-content:center; gap:6px; padding:16px 12px 0; flex-wrap:wrap; max-width:900px; margin:0 auto; }
+.tab-btn { font-family:'Baloo 2',cursive; font-size:.82rem; font-weight:700; padding:8px 13px; border-radius:50px; border:3px solid transparent; cursor:pointer; transition:all .2s; background:white; color:var(--muted); box-shadow:0 3px 10px rgba(0,0,0,0.08); }
+.tab-btn.active { background:var(--primary); color:white; border-color:var(--primary); transform:translateY(-2px); }
+
+.section { display:none; padding:22px 16px 60px; max-width:860px; margin:0 auto; }
+.section.active { display:block; }
+.sec-baslik { font-family:'Baloo 2',cursive; font-size:1.3rem; font-weight:800; margin-bottom:6px; }
+.sec-desc { color:var(--muted); font-size:.92rem; font-weight:600; margin-bottom:18px; }
+
+/* KURAL KUTUSU */
+.kural { border-radius:20px; padding:20px 22px; margin-bottom:18px; box-shadow:0 4px 16px rgba(0,0,0,0.08); }
+.kural h3 { font-family:'Baloo 2',cursive; font-size:1.05rem; font-weight:800; margin-bottom:10px; }
+.kural p { font-size:.95rem; line-height:2; font-weight:600; }
+.ob { display:inline-block; padding:2px 10px; border-radius:8px; font-weight:700; margin:2px; font-size:.9rem; }
+
+/* GÖRSEL SAYMA */
+.gorsel-kutu { background:white; border-radius:20px; padding:20px; margin-bottom:16px; box-shadow:0 4px 16px rgba(0,0,0,0.08); }
+.gorsel-kutu h3 { font-family:'Baloo 2',cursive; font-size:1rem; font-weight:800; margin-bottom:12px; color:var(--text); }
+.nesne-grup { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:10px; }
+.nesneler { display:flex; flex-wrap:wrap; gap:4px; }
+.nesne { font-size:1.6rem; transition:all .3s; }
+.nesne.cikarilan { opacity:.25; text-decoration:line-through; }
+.islem-sembol { font-family:'Baloo 2',cursive; font-size:2rem; font-weight:800; padding:0 8px; }
+.sonuc-kutu { background:#F5F3FF; border:3px solid var(--primary); border-radius:14px; padding:10px 20px; font-family:'Baloo 2',cursive; font-size:1.4rem; font-weight:800; color:var(--primary); }
+
+/* BASAMAKLI İŞLEM */
+.basamak-kutu { background:white; border-radius:20px; padding:20px; margin-bottom:14px; box-shadow:0 3px 12px rgba(0,0,0,0.07); }
+.basamak-islem { font-family:'Baloo 2',cursive; font-size:1.8rem; font-weight:800; text-align:right; line-height:1.6; color:var(--text); border-right:none; }
+.basamak-cizgi { border-top:3px solid var(--text); margin:4px 0; }
+.baslik-row { display:flex; gap:6px; justify-content:flex-end; margin-bottom:2px; }
+.b-label { font-size:.72rem; font-weight:700; color:var(--muted); width:36px; text-align:center; }
+
+/* ALIŞTIRMA */
+.alistirma-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; margin-bottom:20px; }
+.alistirma-kart { background:white; border-radius:16px; padding:18px; box-shadow:0 3px 12px rgba(0,0,0,0.07); text-align:center; }
+.soru-ifade { font-family:'Baloo 2',cursive; font-size:1.4rem; font-weight:800; color:var(--text); margin-bottom:12px; }
+.cevap-input { width:70px; border:3px solid #e2e8f0; border-radius:10px; padding:8px; font-family:'Baloo 2',cursive; font-size:1.3rem; font-weight:800; text-align:center; outline:none; color:var(--text); }
+.cevap-input:focus { border-color:var(--primary); }
+.cevap-input.dogru { border-color:var(--toplama); background:#DCFCE7; color:#166534; }
+.cevap-input.yanlis { border-color:var(--cikarma); background:#FEE2E2; color:#991B1B; }
+.mini-feedback { font-size:.8rem; font-weight:700; margin-top:6px; height:18px; }
+
+/* PROBLEM */
+.problem-kart { background:white; border-radius:18px; padding:20px; margin-bottom:14px; box-shadow:0 3px 12px rgba(0,0,0,0.07); border-left:5px solid var(--primary); }
+.problem-metin { font-size:1rem; font-weight:700; line-height:1.8; margin-bottom:14px; color:var(--text); }
+.problem-metin .sayi { font-family:'Baloo 2',cursive; font-size:1.1rem; background:#EDE9FE; padding:1px 8px; border-radius:6px; }
+.secenekler { display:flex; flex-direction:column; gap:8px; }
+.secenek { padding:11px 16px; border-radius:12px; border:3px solid #e2e8f0; background:#f8fafc; font-size:.95rem; font-weight:600; cursor:pointer; transition:all .2s; text-align:left; font-family:'Nunito',sans-serif; }
+.secenek:hover:not(:disabled) { border-color:var(--primary); background:#EDE9FE; }
+.secenek.dogru { background:#DCFCE7 !important; border-color:var(--toplama) !important; color:#166534 !important; }
+.secenek.yanlis { background:#FEE2E2 !important; border-color:var(--cikarma) !important; color:#991B1B !important; }
+.secenek:disabled { cursor:default; }
+
+/* OYUN */
+.oyun-alan { background:white; border-radius:24px; padding:28px; box-shadow:0 6px 24px rgba(0,0,0,0.1); text-align:center; }
+.oyun-skor { font-family:'Baloo 2',cursive; font-size:1rem; font-weight:700; color:var(--muted); margin-bottom:16px; }
+.oyun-soru { font-family:'Baloo 2',cursive; font-size:3rem; font-weight:800; color:var(--text); margin-bottom:20px; }
+.oyun-secenekler { display:grid; grid-template-columns:1fr 1fr; gap:12px; max-width:360px; margin:0 auto 16px; }
+.oyun-btn { padding:16px; border-radius:16px; border:3px solid #e2e8f0; background:#f8fafc; font-family:'Baloo 2',cursive; font-size:1.6rem; font-weight:800; cursor:pointer; transition:all .2s; }
+.oyun-btn:hover { transform:scale(1.05); border-color:var(--primary); background:#EDE9FE; }
+.oyun-btn.dogru { background:#DCFCE7 !important; border-color:var(--toplama) !important; color:#166534 !important; }
+.oyun-btn.yanlis { background:#FEE2E2 !important; border-color:var(--cikarma) !important; color:#991B1B !important; }
+.oyun-ilerleme { display:flex; gap:6px; justify-content:center; margin-bottom:16px; }
+.oyun-dot { width:14px; height:14px; border-radius:50%; background:#e2e8f0; transition:background .3s; }
+.oyun-dot.aktif { background:var(--yellow); }
+.oyun-dot.dogru-dot { background:var(--toplama); }
+.oyun-dot.yanlis-dot { background:var(--cikarma); }
+.sure-bar { height:8px; background:#e2e8f0; border-radius:100px; margin-bottom:16px; overflow:hidden; }
+.sure-dolu { height:100%; background:linear-gradient(90deg,var(--toplama),var(--yellow)); border-radius:100px; transition:width .1s linear; }
+
+/* PUAN */
+.puan-kart { background:linear-gradient(135deg,var(--toplama),var(--primary)); border-radius:20px; padding:22px; text-align:center; color:white; margin-top:16px; display:none; }
+.puan-kart .sayi { font-family:'Baloo 2',cursive; font-size:3rem; font-weight:800; line-height:1; }
+.puan-kart p { font-size:.95rem; font-weight:600; opacity:.9; margin-top:4px; }
+
+.ilerleme { height:8px; background:#e2e8f0; border-radius:100px; margin-bottom:6px; overflow:hidden; }
+.ilerleme-dolu { height:100%; background:linear-gradient(90deg,var(--toplama),var(--primary)); border-radius:100px; transition:width .4s; }
+.ilerleme-yazi { font-size:.83rem; font-weight:700; color:var(--muted); margin-bottom:14px; text-align:right; }
+
+.btn-row { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:20px; }
+.btn { padding:12px 24px; border-radius:50px; border:none; font-family:'Baloo 2',cursive; font-size:1rem; font-weight:700; cursor:pointer; transition:all .2s; box-shadow:0 4px 14px rgba(0,0,0,0.1); }
+.btn:hover { transform:translateY(-2px); }
+.btn-yaz { background:#7C3AED; color:white; }
+.btn-indir { background:#F97316; color:white; }
+.btn-tekrar { background:white; color:var(--primary); border:3px solid var(--primary); }
+.btn-kontrol { background:var(--toplama); color:white; }
+.btn-oyun { background:var(--yellow); color:#1F2937; }
+
+.confetti-wrap { position:fixed; inset:0; pointer-events:none; z-index:999; }
+.confetti-piece { position:absolute; border-radius:2px; animation:fall linear forwards; }
+@keyframes fall { 0%{opacity:1;transform:translateY(-20px) rotate(0deg)} 100%{opacity:0;transform:translateY(100vh) rotate(720deg)} }
+
+@media print {
+  .tabs,.btn-row,.oyun-alan { display:none !important; }
+  .section { display:block !important; padding:10px 0; }
+  header { background:#10B981 !important; -webkit-print-color-adjust:exact; }
+}
+</style>
+</head>
+<body>
+<div id="confetti-wrap" class="confetti-wrap"></div>
+
+<header>
+  <div class="header-emoji">➕➖</div>
+  <h1>Toplama ve Çıkarma İşlemi</h1>
+  <p>2. Sınıf · Matematik</p>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="goster('kural',this)">📖 Kural & Örnekler</button>
+  <button class="tab-btn" onclick="goster('gorsel',this)">🍎 Görsel İşlem</button>
+  <button class="tab-btn" onclick="goster('alistirma',this)">✍️ Alıştırma</button>
+  <button class="tab-btn" onclick="goster('problem',this)">📝 Problemler</button>
+  <button class="tab-btn" onclick="goster('oyun',this)">🎮 Hız Oyunu</button>
+</div>
+
+<!-- ══ KURAL VE ÖRNEKLER ══ -->
+<div id="kural" class="section active">
+  <p class="sec-baslik" style="color:var(--toplama);">➕ Toplama İşlemi</p>
+  <div class="kural" style="background:#F0FDF4;border-left:6px solid var(--toplama);">
+    <h3 style="color:var(--toplama);">📌 Kural</h3>
+    <p>
+      İki veya daha fazla sayıyı bir araya getirmeye <b>toplama</b> denir.<br>
+      Toplama işleminde <b>+ (artı)</b> işareti kullanılır.<br>
+      Toplanan sayılara <b>toplanan</b>, sonuca <b>toplam</b> denir.<br><br>
+      <span class="ob" style="background:#DCFCE7;color:#166534;">23 + 14 = 37</span>
+      <span class="ob" style="background:#DCFCE7;color:#166534;">45 + 32 = 77</span>
+      <span class="ob" style="background:#DCFCE7;color:#166534;">56 + 21 = 77</span>
+    </p>
+  </div>
+
+  <!-- Basamaklı toplama -->
+  <div class="gorsel-kutu">
+    <h3 style="color:var(--toplama);">📐 Basamaklı Toplama</h3>
+    <p style="font-size:.9rem;color:var(--muted);font-weight:600;margin-bottom:14px;">Birler basamağından başlayarak topla!</p>
+    <div style="display:flex;gap:20px;flex-wrap:wrap;">
+
+      <div class="basamak-kutu" style="border-top:4px solid var(--toplama);">
+        <div class="baslik-row"><span class="b-label">ON</span><span class="b-label">BİR</span></div>
+        <div class="basamak-islem" style="color:var(--toplama);">
+          <div>3 4</div>
+          <div>+ 2 3</div>
+          <div class="basamak-cizgi"></div>
+          <div>5 7</div>
+        </div>
+        <p style="font-size:.78rem;color:var(--muted);font-weight:600;margin-top:6px;">4+3=7, 3+2=5 → 57</p>
+      </div>
+
+      <div class="basamak-kutu" style="border-top:4px solid var(--toplama);">
+        <div class="baslik-row"><span class="b-label">ON</span><span class="b-label">BİR</span></div>
+        <div class="basamak-islem" style="color:var(--toplama);">
+          <div>4 7</div>
+          <div>+ 3 5</div>
+          <div class="basamak-cizgi"></div>
+          <div style="font-size:1.2rem;color:var(--muted);">8 2</div>
+        </div>
+        <p style="font-size:.78rem;color:var(--muted);font-weight:600;margin-top:6px;">7+5=12 (elde 1), 4+3+1=8 → 82</p>
+      </div>
+
+      <div class="basamak-kutu" style="border-top:4px solid var(--toplama);">
+        <div class="baslik-row"><span class="b-label">ON</span><span class="b-label">BİR</span></div>
+        <div class="basamak-islem" style="color:var(--toplama);">
+          <div>6 3</div>
+          <div>+ 2 5</div>
+          <div class="basamak-cizgi"></div>
+          <div>8 8</div>
+        </div>
+        <p style="font-size:.78rem;color:var(--muted);font-weight:600;margin-top:6px;">3+5=8, 6+2=8 → 88</p>
+      </div>
+
+    </div>
+  </div>
+
+  <p class="sec-baslik" style="color:var(--cikarma);margin-top:24px;">➖ Çıkarma İşlemi</p>
+  <div class="kural" style="background:#FFF5F5;border-left:6px solid var(--cikarma);">
+    <h3 style="color:var(--cikarma);">📌 Kural</h3>
+    <p>
+      Bir sayıdan başka bir sayıyı almaya <b>çıkarma</b> denir.<br>
+      Çıkarma işleminde <b>- (eksi)</b> işareti kullanılır.<br>
+      Büyük sayıdan küçük sayı çıkarılır.<br><br>
+      <span class="ob" style="background:#FEE2E2;color:#991B1B;">48 - 23 = 25</span>
+      <span class="ob" style="background:#FEE2E2;color:#991B1B;">76 - 34 = 42</span>
+      <span class="ob" style="background:#FEE2E2;color:#991B1B;">95 - 51 = 44</span>
+    </p>
+  </div>
+
+  <div class="gorsel-kutu">
+    <h3 style="color:var(--cikarma);">📐 Basamaklı Çıkarma</h3>
+    <p style="font-size:.9rem;color:var(--muted);font-weight:600;margin-bottom:14px;">Birler basamağından başlayarak çıkar!</p>
+    <div style="display:flex;gap:20px;flex-wrap:wrap;">
+
+      <div class="basamak-kutu" style="border-top:4px solid var(--cikarma);">
+        <div class="baslik-row"><span class="b-label">ON</span><span class="b-label">BİR</span></div>
+        <div class="basamak-islem" style="color:var(--cikarma);">
+          <div>5 8</div>
+          <div>- 3 4</div>
+          <div class="basamak-cizgi"></div>
+          <div>2 4</div>
+        </div>
+        <p style="font-size:.78rem;color:var(--muted);font-weight:600;margin-top:6px;">8-4=4, 5-3=2 → 24</p>
+      </div>
+
+      <div class="basamak-kutu" style="border-top:4px solid var(--cikarma);">
+        <div class="baslik-row"><span class="b-label">ON</span><span class="b-label">BİR</span></div>
+        <div class="basamak-islem" style="color:var(--cikarma);">
+          <div>7 3</div>
+          <div>- 4 8</div>
+          <div class="basamak-cizgi"></div>
+          <div>2 5</div>
+        </div>
+        <p style="font-size:.78rem;color:var(--muted);font-weight:600;margin-top:6px;">3&lt;8 → onluktan al, 13-8=5, 6-4=2 → 25</p>
+      </div>
+
+      <div class="basamak-kutu" style="border-top:4px solid var(--cikarma);">
+        <div class="baslik-row"><span class="b-label">ON</span><span class="b-label">BİR</span></div>
+        <div class="basamak-islem" style="color:var(--cikarma);">
+          <div>9 0</div>
+          <div>- 4 5</div>
+          <div class="basamak-cizgi"></div>
+          <div>4 5</div>
+        </div>
+        <p style="font-size:.78rem;color:var(--muted);font-weight:600;margin-top:6px;">0&lt;5 → onluktan al, 10-5=5, 8-4=4 → 45</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-yaz" onclick="window.print()">🖨️ Yazdır</button>
+    <button class="btn btn-indir" onclick="indir()">⬇️ İndir</button>
+  </div>
+</div>
+
+<!-- ══ GÖRSEL İŞLEM ══ -->
+<div id="gorsel" class="section">
+  <p class="sec-baslik" style="color:var(--toplama);">🍎 Görsel Sayma ile İşlem</p>
+  <p class="sec-desc">Nesneleri sayarak işlemi anla!</p>
+
+  <!-- TOPLAMA GÖRSELLERİ -->
+  <div class="gorsel-kutu" style="border-top:4px solid var(--toplama);">
+    <h3 style="color:var(--toplama);">➕ Toplama Örnekleri</h3>
+
+    <div class="nesne-grup">
+      <div class="nesneler">🍎🍎🍎</div>
+      <div class="islem-sembol" style="color:var(--toplama);">+</div>
+      <div class="nesneler">🍎🍎</div>
+      <div class="islem-sembol" style="color:var(--muted);">=</div>
+      <div class="sonuc-kutu">5 elma</div>
+    </div>
+    <p style="font-size:.85rem;color:var(--muted);font-weight:600;margin-bottom:14px;">3 + 2 = 5</p>
+
+    <div class="nesne-grup">
+      <div class="nesneler">⭐⭐⭐⭐</div>
+      <div class="islem-sembol" style="color:var(--toplama);">+</div>
+      <div class="nesneler">⭐⭐⭐</div>
+      <div class="islem-sembol" style="color:var(--muted);">=</div>
+      <div class="sonuc-kutu">7 yıldız</div>
+    </div>
+    <p style="font-size:.85rem;color:var(--muted);font-weight:600;margin-bottom:14px;">4 + 3 = 7</p>
+
+    <div class="nesne-grup">
+      <div class="nesneler">🦋🦋🦋🦋🦋</div>
+      <div class="islem-sembol" style="color:var(--toplama);">+</div>
+      <div class="nesneler">🦋🦋🦋🦋</div>
+      <div class="islem-sembol" style="color:var(--muted);">=</div>
+      <div class="sonuc-kutu">9 kelebek</div>
+    </div>
+    <p style="font-size:.85rem;color:var(--muted);font-weight:600;">5 + 4 = 9</p>
+  </div>
+
+  <!-- ÇIKARMA GÖRSELLERİ -->
+  <div class="gorsel-kutu" style="border-top:4px solid var(--cikarma);">
+    <h3 style="color:var(--cikarma);">➖ Çıkarma Örnekleri</h3>
+
+    <div class="nesne-grup">
+      <div class="nesneler">
+        <span class="nesne">🍪</span><span class="nesne">🍪</span><span class="nesne">🍪</span>
+        <span class="nesne cikarilan">🍪</span><span class="nesne cikarilan">🍪</span>
+      </div>
+      <div class="islem-sembol" style="color:var(--cikarma);">-</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:1.4rem;font-weight:800;color:var(--cikarma);">2</div>
+      <div class="islem-sembol" style="color:var(--muted);">=</div>
+      <div class="sonuc-kutu">3 kurabiye</div>
+    </div>
+    <p style="font-size:.85rem;color:var(--muted);font-weight:600;margin-bottom:14px;">5 - 2 = 3</p>
+
+    <div class="nesne-grup">
+      <div class="nesneler">
+        <span class="nesne">🐢</span><span class="nesne">🐢</span><span class="nesne">🐢</span><span class="nesne">🐢</span>
+        <span class="nesne cikarilan">🐢</span><span class="nesne cikarilan">🐢</span><span class="nesne cikarilan">🐢</span>
+      </div>
+      <div class="islem-sembol" style="color:var(--cikarma);">-</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:1.4rem;font-weight:800;color:var(--cikarma);">3</div>
+      <div class="islem-sembol" style="color:var(--muted);">=</div>
+      <div class="sonuc-kutu">4 kaplumbağa</div>
+    </div>
+    <p style="font-size:.85rem;color:var(--muted);font-weight:600;margin-bottom:14px;">7 - 3 = 4</p>
+
+    <div class="nesne-grup">
+      <div class="nesneler">
+        <span class="nesne">🌸</span><span class="nesne">🌸</span><span class="nesne">🌸</span><span class="nesne">🌸</span><span class="nesne">🌸</span><span class="nesne">🌸</span>
+        <span class="nesne cikarilan">🌸</span><span class="nesne cikarilan">🌸</span><span class="nesne cikarilan">🌸</span><span class="nesne cikarilan">🌸</span>
+      </div>
+      <div class="islem-sembol" style="color:var(--cikarma);">-</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:1.4rem;font-weight:800;color:var(--cikarma);">4</div>
+      <div class="islem-sembol" style="color:var(--muted);">=</div>
+      <div class="sonuc-kutu">6 çiçek</div>
+    </div>
+    <p style="font-size:.85rem;color:var(--muted);font-weight:600;">10 - 4 = 6</p>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-yaz" onclick="window.print()">🖨️ Yazdır</button>
+    <button class="btn btn-indir" onclick="indir()">⬇️ İndir</button>
+  </div>
+</div>
+
+<!-- ══ ALIŞTIRMA ══ -->
+<div id="alistirma" class="section">
+  <p class="sec-baslik" style="color:var(--primary);">✍️ Alıştırma</p>
+  <p class="sec-desc">Boşluklara doğru sayıyı yaz, sonra kontrol et!</p>
+
+  <p style="font-family:'Baloo 2',cursive;font-weight:800;color:var(--toplama);margin-bottom:10px;">➕ Toplama</p>
+  <div class="alistirma-grid" id="toplama-grid"></div>
+
+  <p style="font-family:'Baloo 2',cursive;font-weight:800;color:var(--cikarma);margin-bottom:10px;margin-top:10px;">➖ Çıkarma</p>
+  <div class="alistirma-grid" id="cikarma-grid"></div>
+
+  <div style="text-align:center;margin-top:16px;">
+    <button class="btn btn-kontrol" onclick="kontrolEt()">✅ Kontrol Et</button>
+    <button class="btn btn-tekrar" onclick="temizle()">🔄 Temizle</button>
+  </div>
+
+  <div class="puan-kart" id="puan-a" style="display:none;">
+    <div class="sayi" id="sayi-a"></div>
+    <p id="msg-a"></p>
+    <button class="btn btn-tekrar" onclick="temizle()">🔄 Tekrar</button>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-yaz" onclick="window.print()">🖨️ Yazdır</button>
+    <button class="btn btn-indir" onclick="indir()">⬇️ İndir</button>
+  </div>
+</div>
+
+<!-- ══ PROBLEMLER ══ -->
+<div id="problem" class="section">
+  <p class="sec-baslik" style="color:var(--primary);">📝 Sözel Problemler</p>
+  <p class="sec-desc">Problemi oku, doğru işlemi bul!</p>
+
+  <div class="ilerleme"><div class="ilerleme-dolu" id="ilerleme-p" style="width:0%"></div></div>
+  <div class="ilerleme-yazi" id="ilerleme-yazi-p">0 / 8 cevaplandı</div>
+
+  <div class="problem-kart" style="border-left-color:var(--toplama);">
+    <div class="problem-metin">🍎 Ayşe'nin <span class="sayi">24</span> elması vardı. Annesi ona <span class="sayi">13</span> elma daha verdi. Ayşe'nin toplam kaç elması oldu?</div>
+    <div class="secenekler" data-dogru="1" data-id="p0">
+      <button class="secenek" onclick="problemCevapla(this)">A) 11</button>
+      <button class="secenek" onclick="problemCevapla(this)">B) 37</button>
+      <button class="secenek" onclick="problemCevapla(this)">C) 27</button>
+      <button class="secenek" onclick="problemCevapla(this)">D) 34</button>
+    </div>
+  </div>
+
+  <div class="problem-kart" style="border-left-color:var(--cikarma);">
+    <div class="problem-metin">🚗 Otoparkta <span class="sayi">56</span> araba vardı. <span class="sayi">23</span> araba çıktı. Otoparkta kaç araba kaldı?</div>
+    <div class="secenekler" data-dogru="2" data-id="p1">
+      <button class="secenek" onclick="problemCevapla(this)">A) 79</button>
+      <button class="secenek" onclick="problemCevapla(this)">B) 36</button>
+      <button class="secenek" onclick="problemCevapla(this)">C) 33</button>
+      <button class="secenek" onclick="problemCevapla(this)">D) 43</button>
+    </div>
+  </div>
+
+  <div class="problem-kart" style="border-left-color:var(--toplama);">
+    <div class="problem-metin">📚 Kütüphanede <span class="sayi">45</span> Türkçe, <span class="sayi">32</span> matematik kitabı var. Toplam kaç kitap vardır?</div>
+    <div class="secenekler" data-dogru="0" data-id="p2">
+      <button class="secenek" onclick="problemCevapla(this)">A) 77</button>
+      <button class="secenek" onclick="problemCevapla(this)">B) 13</button>
+      <button class="secenek" onclick="problemCevapla(this)">C) 67</button>
+      <button class="secenek" onclick="problemCevapla(this)">D) 87</button>
+    </div>
+  </div>
+
+  <div class="problem-kart" style="border-left-color:var(--cikarma);">
+    <div class="problem-metin">🌹 Bahçede <span class="sayi">78</span> gül vardı. <span class="sayi">35</span> gül kesildi. Bahçede kaç gül kaldı?</div>
+    <div class="secenekler" data-dogru="3" data-id="p3">
+      <button class="secenek" onclick="problemCevapla(this)">A) 113</button>
+      <button class="secenek" onclick="problemCevapla(this)">B) 53</button>
+      <button class="secenek" onclick="problemCevapla(this)">C) 47</button>
+      <button class="secenek" onclick="problemCevapla(this)">D) 43</button>
+    </div>
+  </div>
+
+  <div class="problem-kart" style="border-left-color:var(--toplama);">
+    <div class="problem-metin">🐔 Çiftlikte <span class="sayi">38</span> tavuk ve <span class="sayi">27</span> hindi var. Toplam kaç hayvan vardır?</div>
+    <div class="secenekler" data-dogru="1" data-id="p4">
+      <button class="secenek" onclick="problemCevapla(this)">A) 11</button>
+      <button class="secenek" onclick="problemCevapla(this)">B) 65</button>
+      <button class="secenek" onclick="problemCevapla(this)">C) 55</button>
+      <button class="secenek" onclick="problemCevapla(this)">D) 75</button>
+    </div>
+  </div>
+
+  <div class="problem-kart" style="border-left-color:var(--cikarma);">
+    <div class="problem-metin">🍬 Ali'nin <span class="sayi">63</span> şekeri vardı. Arkadaşlarına <span class="sayi">28</span> şeker verdi. Ali'de kaç şeker kaldı?</div>
+    <div class="secenekler" data-dogru="2" data-id="p5">
+      <button class="secenek" onclick="problemCevapla(this)">A) 91</button>
+      <button class="secenek" onclick="problemCevapla(this)">B) 45</button>
+      <button class="secenek" onclick="problemCevapla(this)">C) 35</button>
+      <button class="secenek" onclick="problemCevapla(this)">D) 25</button>
+    </div>
+  </div>
+
+  <div class="problem-kart" style="border-left-color:var(--toplama);">
+    <div class="problem-metin">🎈 Parti için <span class="sayi">46</span> kırmızı ve <span class="sayi">37</span> mavi balon alındı. Toplam kaç balon var?</div>
+    <div class="secenekler" data-dogru="3" data-id="p6">
+      <button class="secenek" onclick="problemCevapla(this)">A) 9</button>
+      <button class="secenek" onclick="problemCevapla(this)">B) 73</button>
+      <button class="secenek" onclick="problemCevapla(this)">C) 83</button>
+      <button class="secenek" onclick="problemCevapla(this)">D) 83</button>
+    </div>
+  </div>
+
+  <div class="problem-kart" style="border-left-color:var(--cikarma);">
+    <div class="problem-metin">🏀 Spor salonunda <span class="sayi">94</span> top vardı. <span class="sayi">47</span> top dışarı çıkarıldı. Kaç top kaldı?</div>
+    <div class="secenekler" data-dogru="0" data-id="p7">
+      <button class="secenek" onclick="problemCevapla(this)">A) 47</button>
+      <button class="secenek" onclick="problemCevapla(this)">B) 57</button>
+      <button class="secenek" onclick="problemCevapla(this)">C) 141</button>
+      <button class="secenek" onclick="problemCevapla(this)">D) 37</button>
+    </div>
+  </div>
+
+  <div class="puan-kart" id="puan-p">
+    <div class="sayi" id="sayi-p"></div>
+    <p id="msg-p"></p>
+    <button class="btn btn-tekrar" onclick="tekrarProblem()">🔄 Tekrar</button>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-yaz" onclick="window.print()">🖨️ Yazdır</button>
+    <button class="btn btn-indir" onclick="indir()">⬇️ İndir</button>
+  </div>
+</div>
+
+<!-- ══ HIZ OYUNU ══ -->
+<div id="oyun" class="section">
+  <p class="sec-baslik" style="color:var(--yellow);">🎮 Hız Oyunu</p>
+  <p class="sec-desc">10 saniye içinde cevapla! Ne kadar hızlısın? ⚡</p>
+
+  <div class="oyun-alan">
+    <div class="oyun-skor" id="oyun-skor">Puan: 0 | Soru: 0 / 10</div>
+    <div class="sure-bar"><div class="sure-dolu" id="sure-dolu" style="width:100%"></div></div>
+    <div class="oyun-ilerleme" id="oyun-ilerleme"></div>
+    <div class="oyun-soru" id="oyun-soru">Hazır mısın?</div>
+    <div class="oyun-secenekler" id="oyun-secenekler">
+      <button class="oyun-btn" style="grid-column:1/-1;" onclick="oyunBaslat()" id="baslat-btn">🚀 Başla!</button>
+    </div>
+    <div id="oyun-bitti" style="display:none;">
+      <div style="font-family:'Baloo 2',cursive;font-size:2.5rem;font-weight:800;color:var(--primary);" id="oyun-final-skor"></div>
+      <p style="font-weight:700;color:var(--muted);margin:8px 0 16px;" id="oyun-final-msg"></p>
+      <button class="btn btn-oyun" onclick="oyunBaslat()">🔄 Tekrar Oyna</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function goster(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── ALIŞTIRMA ──
+const toplamaSorular = [
+  {a:23,b:14,tip:'+'},{a:41,b:25,tip:'+'},{a:36,b:42,tip:'+'},
+  {a:54,b:27,tip:'+'},{a:18,b:63,tip:'+'},{a:47,b:35,tip:'+'},
+];
+const cikarmaSorular = [
+  {a:58,b:34,tip:'-'},{a:76,b:23,tip:'-'},{a:95,b:47,tip:'-'},
+  {a:83,b:56,tip:'-'},{a:62,b:38,tip:'-'},{a:90,b:45,tip:'-'},
+];
+
+function renderAlistirma() {
+  const tGrid = document.getElementById('toplama-grid');
+  const cGrid = document.getElementById('cikarma-grid');
+  tGrid.innerHTML = toplamaSorular.map((s,i) => `
+    <div class="alistirma-kart" style="border-top:4px solid var(--toplama);">
+      <div class="soru-ifade">${s.a} + ${s.b} =</div>
+      <input class="cevap-input" type="number" id="t${i}" placeholder="?">
+      <div class="mini-feedback" id="tf${i}"></div>
+    </div>`).join('');
+  cGrid.innerHTML = cikarmaSorular.map((s,i) => `
+    <div class="alistirma-kart" style="border-top:4px solid var(--cikarma);">
+      <div class="soru-ifade">${s.a} - ${s.b} =</div>
+      <input class="cevap-input" type="number" id="c${i}" placeholder="?">
+      <div class="mini-feedback" id="cf${i}"></div>
+    </div>`).join('');
+}
+
+function kontrolEt() {
+  let dogru = 0, toplam = 0;
+  toplamaSorular.forEach((s,i) => {
+    const inp = document.getElementById('t'+i);
+    const fb = document.getElementById('tf'+i);
+    const val = parseInt(inp.value);
+    const dogrus = s.a + s.b;
+    if (inp.value === '') return;
+    toplam++;
+    if (val === dogrus) { inp.classList.add('dogru'); inp.classList.remove('yanlis'); fb.textContent='✅'; fb.style.color='var(--toplama)'; dogru++; }
+    else { inp.classList.add('yanlis'); inp.classList.remove('dogru'); fb.textContent=`❌ ${dogrus}`; fb.style.color='var(--cikarma)'; }
+  });
+  cikarmaSorular.forEach((s,i) => {
+    const inp = document.getElementById('c'+i);
+    const fb = document.getElementById('cf'+i);
+    const val = parseInt(inp.value);
+    const dogrus = s.a - s.b;
+    if (inp.value === '') return;
+    toplam++;
+    if (val === dogrus) { inp.classList.add('dogru'); inp.classList.remove('yanlis'); fb.textContent='✅'; fb.style.color='var(--toplama)'; dogru++; }
+    else { inp.classList.add('yanlis'); inp.classList.remove('dogru'); fb.textContent=`❌ ${dogrus}`; fb.style.color='var(--cikarma)'; }
+  });
+  if (toplam > 0) {
+    const pct = Math.round(dogru/toplam*100);
+    document.getElementById('sayi-a').textContent = dogru + ' / ' + toplam;
+    document.getElementById('msg-a').textContent = pct>=80?'🌟 Harika!':pct>=50?'👍 İyi iş!':'💪 Tekrar dene!';
+    document.getElementById('puan-a').style.display='block';
+    if (pct>=80) konfeti();
+  }
+}
+
+function temizle() {
+  [...toplamaSorular,...cikarmaSorular].forEach((_,i) => {
+    const prefix = i < toplamaSorular.length ? 't' : 'c';
+    const idx = i < toplamaSorular.length ? i : i - toplamaSorular.length;
+    const inp = document.getElementById(prefix+idx);
+    const fb = document.getElementById(prefix+'f'+idx);
+    if (inp) { inp.value=''; inp.classList.remove('dogru','yanlis'); }
+    if (fb) { fb.textContent=''; }
+  });
+  document.getElementById('puan-a').style.display='none';
+}
+
+renderAlistirma();
+
+// ── PROBLEMLER ──
+let pSkor = 0, pSayac = 0;
+function problemCevapla(btn) {
+  const grup = btn.parentElement;
+  if (grup.dataset.answered) return;
+  grup.dataset.answered = '1';
+  const secenekler = grup.querySelectorAll('.secenek');
+  const dogruIdx = parseInt(grup.dataset.dogru);
+  secenekler.forEach(s => s.disabled = true);
+  const secilen = Array.from(secenekler).indexOf(btn);
+  if (secilen === dogruIdx) { btn.classList.add('dogru'); pSkor++; }
+  else { btn.classList.add('yanlis'); secenekler[dogruIdx].classList.add('dogru'); }
+  pSayac++;
+  const pct = Math.round(pSayac/8*100);
+  document.getElementById('ilerleme-p').style.width = pct+'%';
+  document.getElementById('ilerleme-yazi-p').textContent = pSayac+' / 8 cevaplandı';
+  if (pSayac===8) setTimeout(()=>{
+    const p = Math.round(pSkor/8*100);
+    document.getElementById('sayi-p').textContent = pSkor+' / 8';
+    document.getElementById('msg-p').textContent = p>=75?'🌟 Harika!':p>=50?'👍 İyi iş!':'💪 Tekrar dene!';
+    document.getElementById('puan-p').style.display='block';
+    if (p>=75) konfeti();
+  },400);
+}
+function tekrarProblem() {
+  pSkor=0; pSayac=0;
+  document.getElementById('ilerleme-p').style.width='0%';
+  document.getElementById('ilerleme-yazi-p').textContent='0 / 8 cevaplandı';
+  document.getElementById('puan-p').style.display='none';
+  document.querySelectorAll('#problem .secenekler').forEach(g=>{
+    delete g.dataset.answered;
+    g.querySelectorAll('.secenek').forEach(s=>{s.disabled=false;s.classList.remove('dogru','yanlis');});
+  });
+}
+
+// ── HIZ OYUNU ──
+let oyunSoru=0, oyunSkor=0, surTimer=null, surVal=100;
+const sorular = [];
+function sorularUret() {
+  sorular.length=0;
+  for(let i=0;i<10;i++) {
+    const tip = Math.random()>0.5?'+':'-';
+    let a,b;
+    if(tip==='+') { a=Math.floor(Math.random()*50)+10; b=Math.floor(Math.random()*30)+5; }
+    else { a=Math.floor(Math.random()*50)+30; b=Math.floor(Math.random()*a); }
+    const dogru = tip==='+'?a+b:a-b;
+    const yanlis1 = dogru + (Math.random()>0.5?1:-1)*(Math.floor(Math.random()*10)+1);
+    const yanlis2 = dogru + (Math.random()>0.5?1:-1)*(Math.floor(Math.random()*10)+1);
+    const yanlis3 = dogru + (Math.random()>0.5?1:-1)*(Math.floor(Math.random()*15)+1);
+    const seçenekler = [dogru,yanlis1,yanlis2,yanlis3].sort(()=>Math.random()-0.5);
+    sorular.push({soru:`${a} ${tip} ${b}`,dogru,seçenekler});
+  }
+}
+
+function oyunBaslat() {
+  sorularUret();
+  oyunSoru=0; oyunSkor=0;
+  document.getElementById('baslat-btn')?.remove();
+  document.getElementById('oyun-bitti').style.display='none';
+  const prog = document.getElementById('oyun-ilerleme');
+  prog.innerHTML = Array(10).fill(0).map((_,i)=>`<div class="oyun-dot" id="dot-${i}"></div>`).join('');
+  oyunSoruGoster();
+}
+
+function oyunSoruGoster() {
+  if(surTimer) clearInterval(surTimer);
+  if(oyunSoru>=10) { oyunBit(); return; }
+  document.getElementById('dot-'+oyunSoru).classList.add('aktif');
+  const s = sorular[oyunSoru];
+  document.getElementById('oyun-soru').textContent = s.soru + ' = ?';
+  document.getElementById('oyun-skor').textContent = `Puan: ${oyunSkor} | Soru: ${oyunSoru+1} / 10`;
+  const sec = document.getElementById('oyun-secenekler');
+  sec.innerHTML = s.seçenekler.map(v=>`<button class="oyun-btn" onclick="oyunCevapla(this,${v},${s.dogru})">${v}</button>`).join('');
+  surVal=100;
+  document.getElementById('sure-dolu').style.width='100%';
+  surTimer = setInterval(()=>{
+    surVal -= 1;
+    document.getElementById('sure-dolu').style.width=surVal+'%';
+    if(surVal<=0) {
+      clearInterval(surTimer);
+      const d = document.getElementById('dot-'+oyunSoru);
+      d.classList.remove('aktif'); d.classList.add('yanlis-dot');
+      oyunSoru++;
+      setTimeout(oyunSoruGoster, 600);
+    }
+  },100);
+}
+
+function oyunCevapla(btn, val, dogru) {
+  clearInterval(surTimer);
+  document.querySelectorAll('.oyun-btn').forEach(b=>b.disabled=true);
+  const d = document.getElementById('dot-'+oyunSoru);
+  d.classList.remove('aktif');
+  if(val===dogru) { btn.classList.add('dogru'); d.classList.add('dogru-dot'); oyunSkor++; }
+  else { btn.classList.add('yanlis'); d.classList.add('yanlis-dot'); }
+  oyunSoru++;
+  document.getElementById('oyun-skor').textContent = `Puan: ${oyunSkor} | Soru: ${oyunSoru} / 10`;
+  setTimeout(oyunSoruGoster,700);
+}
+
+function oyunBit() {
+  document.getElementById('oyun-soru').textContent = '🎉 Oyun Bitti!';
+  document.getElementById('oyun-secenekler').innerHTML='';
+  const bitti = document.getElementById('oyun-bitti');
+  bitti.style.display='block';
+  const pct = Math.round(oyunSkor/10*100);
+  document.getElementById('oyun-final-skor').textContent = oyunSkor+' / 10';
+  document.getElementById('oyun-final-msg').textContent = pct>=80?'🌟 Süpersin! Matematik dehası!':pct>=50?'👍 İyi iş! Biraz daha pratik yap.':'💪 Tekrar dene, daha iyi yapabilirsin!';
+  document.getElementById('sure-dolu').style.width='0%';
+  if(pct>=80) konfeti();
+}
+
+function indir() {
+  const html = document.documentElement.outerHTML;
+  const blob = new Blob([html],{type:'text/html;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'toplama-cikarma.html';
+  a.click();
+}
+
+function konfeti() {
+  const colors=['#10B981','#7C3AED','#F59E0B','#EF4444','#3B82F6','#EC4899'];
+  const wrap=document.getElementById('confetti-wrap');
+  wrap.innerHTML='';
+  for(let i=0;i<60;i++){
+    const p=document.createElement('div');
+    p.className='confetti-piece';
+    p.style.cssText=`left:${Math.random()*100}vw;top:-20px;width:${8+Math.random()*8}px;height:${8+Math.random()*8}px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*.8}s`;
+    wrap.appendChild(p);
+    p.addEventListener('animationend',()=>p.remove());
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yerel Yönetimler - 2. Sınıf Hayat Bilgisi</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #7C3AED;
+  --green: #10B981;
+  --red: #EF4444;
+  --yellow: #F59E0B;
+  --blue: #3B82F6;
+  --orange: #F97316;
+  --bg: #F5F3FF;
+  --text: #1F2937;
+  --muted: #6B7280;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+header { background:linear-gradient(135deg,#7C3AED,#3B82F6); padding:28px 20px 44px; text-align:center; }
+.header-emoji { font-size:2rem; margin-bottom:8px; }
+header h1 { font-family:'Baloo 2',cursive; font-size:clamp(1.5rem,5vw,2.3rem); font-weight:800; color:white; }
+header p { color:rgba(255,255,255,0.88); font-weight:600; margin-top:6px; }
+
+.tabs { display:flex; justify-content:center; gap:6px; padding:16px 12px 0; flex-wrap:wrap; max-width:860px; margin:0 auto; }
+.tab-btn { font-family:'Baloo 2',cursive; font-size:.82rem; font-weight:700; padding:8px 13px; border-radius:50px; border:3px solid transparent; cursor:pointer; transition:all .2s; background:white; color:var(--muted); box-shadow:0 3px 10px rgba(0,0,0,0.08); }
+.tab-btn.active { background:var(--primary); color:white; border-color:var(--primary); transform:translateY(-2px); }
+
+.section { display:none; padding:22px 16px 60px; max-width:860px; margin:0 auto; }
+.section.active { display:block; }
+.sec-baslik { font-family:'Baloo 2',cursive; font-size:1.3rem; font-weight:800; color:var(--primary); margin-bottom:6px; }
+.sec-desc { color:var(--muted); font-size:.92rem; font-weight:600; margin-bottom:18px; }
+
+/* KARİKATÜR KARTLAR */
+.karakter-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:16px; margin-bottom:20px; }
+.karakter-kart { background:white; border-radius:24px; padding:20px 16px; box-shadow:0 4px 18px rgba(0,0,0,0.09); text-align:center; border-top:5px solid var(--primary); transition:all .2s; }
+.karakter-kart:hover { transform:translateY(-4px); box-shadow:0 10px 28px rgba(0,0,0,0.13); }
+.karakter-svg { width:120px; height:140px; margin:0 auto 12px; display:block; }
+.karakter-unvan { font-family:'Baloo 2',cursive; font-size:1.1rem; font-weight:800; color:var(--primary); margin-bottom:4px; }
+.karakter-yer { font-size:.82rem; font-weight:700; color:var(--muted); margin-bottom:8px; }
+.karakter-bilgi { font-size:.88rem; font-weight:600; color:#374151; line-height:1.6; }
+.karakter-rozet { display:inline-block; padding:3px 10px; border-radius:20px; font-size:.75rem; font-weight:700; margin-top:8px; }
+
+/* GÖREV KARTLARI */
+.gorev-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:12px; margin-bottom:20px; }
+.gorev-kart { background:white; border-radius:16px; padding:16px; box-shadow:0 3px 12px rgba(0,0,0,0.07); display:flex; align-items:flex-start; gap:12px; }
+.gorev-ikon { font-size:1.8rem; flex-shrink:0; }
+.gorev-baslik { font-family:'Baloo 2',cursive; font-size:.95rem; font-weight:800; color:var(--text); margin-bottom:3px; }
+.gorev-metin { font-size:.85rem; font-weight:600; color:var(--muted); line-height:1.5; }
+
+/* OKUMA METNİ */
+.metin-kart { background:white; border-radius:20px; padding:24px; box-shadow:0 4px 18px rgba(0,0,0,0.08); border-top:5px solid var(--primary); margin-bottom:16px; line-height:2; font-size:1rem; }
+.metin-baslik { font-family:'Baloo 2',cursive; font-size:1.3rem; font-weight:800; color:var(--primary); margin-bottom:14px; }
+.metin-kart p { margin-bottom:10px; }
+.vurgu { background:#EDE9FE; color:var(--primary); padding:2px 8px; border-radius:6px; font-weight:700; }
+.diyalog { background:#F5F3FF; border-left:4px solid var(--primary); padding:10px 16px; border-radius:0 12px 12px 0; margin:6px 0; font-style:italic; }
+
+/* SORULAR */
+.soru-kart { background:white; border-radius:18px; padding:20px; margin-bottom:14px; box-shadow:0 3px 12px rgba(0,0,0,0.07); }
+.soru-metin { font-family:'Baloo 2',cursive; font-size:1rem; font-weight:700; color:var(--text); margin-bottom:14px; line-height:1.5; }
+.secenekler { display:flex; flex-direction:column; gap:8px; }
+.secenek { padding:11px 16px; border-radius:12px; border:3px solid #e2e8f0; background:#f8fafc; font-size:.93rem; font-weight:600; cursor:pointer; transition:all .2s; text-align:left; font-family:'Nunito',sans-serif; }
+.secenek:hover:not(:disabled) { border-color:var(--primary); background:#EDE9FE; }
+.secenek.dogru { background:#DCFCE7 !important; border-color:var(--green) !important; color:#166534 !important; }
+.secenek.yanlis { background:#FEE2E2 !important; border-color:var(--red) !important; color:#991B1B !important; }
+.secenek:disabled { cursor:default; }
+
+/* EŞLEŞTİRME */
+.e-col-label { font-family:'Baloo 2',cursive; font-weight:700; font-size:.85rem; color:var(--muted); text-align:center; margin-bottom:8px; }
+.e-item { padding:10px 14px; border-radius:12px; border:3px solid #e2e8f0; background:#f8fafc; font-weight:700; font-size:.88rem; cursor:pointer; transition:all .2s; text-align:center; font-family:'Baloo 2',cursive; margin-bottom:8px; }
+.e-item:hover:not(.locked) { border-color:var(--primary); background:#EDE9FE; }
+.e-item.selected { background:#EDE9FE; border-color:var(--primary); color:var(--primary); }
+.e-item.dogru { background:#DCFCE7 !important; border-color:var(--green) !important; color:#166534 !important; cursor:default; }
+.e-item.yanlis { background:#FEE2E2 !important; border-color:var(--red) !important; animation:shake .3s; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+
+/* PUAN */
+.puan-kart { background:linear-gradient(135deg,var(--primary),var(--blue)); border-radius:20px; padding:22px; text-align:center; color:white; margin-top:16px; display:none; }
+.puan-kart .sayi { font-family:'Baloo 2',cursive; font-size:3rem; font-weight:800; line-height:1; }
+.puan-kart p { font-size:.95rem; font-weight:600; opacity:.9; margin-top:4px; }
+
+.ilerleme { height:8px; background:#e2e8f0; border-radius:100px; margin-bottom:6px; overflow:hidden; }
+.ilerleme-dolu { height:100%; background:linear-gradient(90deg,var(--primary),var(--blue)); border-radius:100px; transition:width .4s; }
+.ilerleme-yazi { font-size:.83rem; font-weight:700; color:var(--muted); margin-bottom:14px; text-align:right; }
+
+.btn-row { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:20px; }
+.btn { padding:12px 24px; border-radius:50px; border:none; font-family:'Baloo 2',cursive; font-size:1rem; font-weight:700; cursor:pointer; transition:all .2s; box-shadow:0 4px 14px rgba(0,0,0,0.1); }
+.btn:hover { transform:translateY(-2px); }
+.btn-yaz { background:#7C3AED; color:white; }
+.btn-indir { background:#F97316; color:white; }
+.btn-tekrar { background:white; color:var(--primary); border:3px solid var(--primary); }
+
+.confetti-wrap { position:fixed; inset:0; pointer-events:none; z-index:999; }
+.confetti-piece { position:absolute; border-radius:2px; animation:fall linear forwards; }
+@keyframes fall { 0%{opacity:1;transform:translateY(-20px) rotate(0deg)} 100%{opacity:0;transform:translateY(100vh) rotate(720deg)} }
+
+@media print {
+  .tabs,.btn-row { display:none !important; }
+  .section { display:block !important; padding:10px 0; }
+  header { background:#7C3AED !important; -webkit-print-color-adjust:exact; }
+}
+</style>
+</head>
+<body>
+<div id="confetti-wrap" class="confetti-wrap"></div>
+
+<header>
+  <div class="header-emoji">🏛️</div>
+  <h1>Yerel Yönetimler</h1>
+  <p>2. Sınıf · Hayat Bilgisi</p>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="goster('karakterler',this)">👤 Kimler Yönetir?</button>
+  <button class="tab-btn" onclick="goster('gorevler',this)">📋 Görevler</button>
+  <button class="tab-btn" onclick="goster('metin',this)">📖 Okuma Metni</button>
+  <button class="tab-btn" onclick="goster('sorular',this)">❓ Sorular</button>
+  <button class="tab-btn" onclick="goster('eslestirme',this)">🔗 Eşleştirme</button>
+</div>
+
+<!-- ══ KİMLER YÖNETİR ══ -->
+<div id="karakterler" class="section active">
+  <p class="sec-baslik">👤 Yerimizi Kimler Yönetir?</p>
+  <p class="sec-desc">Mahallemizden ilimize kadar her yeri birileri yönetir!</p>
+
+  <div class="karakter-grid">
+
+    <!-- MUHTAR -->
+    <div class="karakter-kart" style="border-top-color:#10B981;">
+      <svg class="karakter-svg" viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+        <!-- Vücut -->
+        <rect x="30" y="75" width="60" height="55" rx="10" fill="#10B981"/>
+        <!-- Kravat -->
+        <polygon points="60,78 55,95 60,100 65,95" fill="#065F46"/>
+        <!-- Gömlek -->
+        <rect x="45" y="78" width="30" height="10" rx="3" fill="white"/>
+        <!-- Kol sol -->
+        <rect x="15" y="75" width="16" height="35" rx="8" fill="#10B981"/>
+        <!-- El sol -->
+        <ellipse cx="23" cy="113" rx="8" ry="7" fill="#FBBF24"/>
+        <!-- Kol sağ -->
+        <rect x="89" y="75" width="16" height="35" rx="8" fill="#10B981"/>
+        <!-- El sağ - evrak tutuyor -->
+        <ellipse cx="97" cy="113" rx="8" ry="7" fill="#FBBF24"/>
+        <rect x="93" y="100" width="14" height="18" rx="2" fill="white" stroke="#ccc" stroke-width="1"/>
+        <!-- Baş -->
+        <ellipse cx="60" cy="48" rx="28" ry="30" fill="#FBBF24"/>
+        <!-- Saç -->
+        <ellipse cx="60" cy="22" rx="28" ry="12" fill="#92400E"/>
+        <!-- Gözler -->
+        <ellipse cx="50" cy="46" rx="5" ry="6" fill="white"/>
+        <ellipse cx="70" cy="46" rx="5" ry="6" fill="white"/>
+        <circle cx="51" cy="47" r="3" fill="#1F2937"/>
+        <circle cx="71" cy="47" r="3" fill="#1F2937"/>
+        <!-- Kaşlar -->
+        <path d="M45,40 Q50,37 55,40" stroke="#92400E" stroke-width="2" fill="none"/>
+        <path d="M65,40 Q70,37 75,40" stroke="#92400E" stroke-width="2" fill="none"/>
+        <!-- Gülümseme -->
+        <path d="M50,58 Q60,66 70,58" stroke="#92400E" stroke-width="2" fill="none"/>
+        <!-- Bıyık -->
+        <path d="M52,55 Q60,57 68,55" stroke="#92400E" stroke-width="2" fill="none"/>
+        <!-- Bacaklar -->
+        <rect x="38" y="128" width="18" height="12" rx="6" fill="#374151"/>
+        <rect x="64" y="128" width="18" height="12" rx="6" fill="#374151"/>
+        <!-- Ayaklar -->
+        <ellipse cx="47" cy="140" rx="10" ry="5" fill="#1F2937"/>
+        <ellipse cx="73" cy="140" rx="10" ry="5" fill="#1F2937"/>
+        <!-- Rozet -->
+        <circle cx="42" cy="88" r="6" fill="#F59E0B"/>
+        <text x="42" y="91" text-anchor="middle" font-size="5" fill="white" font-weight="bold">M</text>
+      </svg>
+      <div class="karakter-unvan">Muhtar</div>
+      <div class="karakter-yer">📍 Mahalle / Köy</div>
+      <div class="karakter-bilgi">Mahalle ve köyleri yönetir. Vatandaşların sorunlarını dinler ve çözüm bulmaya çalışır.</div>
+      <span class="karakter-rozet" style="background:#DCFCE7;color:#166534;">En yakın yönetici</span>
+    </div>
+
+    <!-- KAYMAKAm -->
+    <div class="karakter-kart" style="border-top-color:#3B82F6;">
+      <svg class="karakter-svg" viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+        <!-- Vücut - Takım Elbise -->
+        <rect x="30" y="75" width="60" height="55" rx="10" fill="#1D4ED8"/>
+        <!-- Ceket yaka -->
+        <polygon points="55,75 60,90 50,75" fill="#1E40AF"/>
+        <polygon points="65,75 60,90 70,75" fill="#1E40AF"/>
+        <!-- Gömlek -->
+        <rect x="52" y="75" width="16" height="30" fill="white"/>
+        <!-- Kravat -->
+        <polygon points="60,78 57,93 60,96 63,93" fill="#EF4444"/>
+        <!-- Kol sol -->
+        <rect x="14" y="75" width="17" height="38" rx="8" fill="#1D4ED8"/>
+        <!-- El sol -->
+        <ellipse cx="22" cy="115" rx="8" ry="7" fill="#FBBF24"/>
+        <!-- Kol sağ -->
+        <rect x="89" y="75" width="17" height="38" rx="8" fill="#1D4ED8"/>
+        <!-- El sağ -->
+        <ellipse cx="98" cy="115" rx="8" ry="7" fill="#FBBF24"/>
+        <!-- Baş -->
+        <ellipse cx="60" cy="46" rx="26" ry="28" fill="#FBBF24"/>
+        <!-- Saç -->
+        <ellipse cx="60" cy="20" rx="26" ry="11" fill="#1F2937"/>
+        <!-- Gözler -->
+        <ellipse cx="51" cy="44" rx="5" ry="5.5" fill="white"/>
+        <ellipse cx="69" cy="44" rx="5" ry="5.5" fill="white"/>
+        <circle cx="52" cy="45" r="3" fill="#1F2937"/>
+        <circle cx="70" cy="45" r="3" fill="#1F2937"/>
+        <!-- Kaşlar -->
+        <rect x="46" y="37" width="10" height="2.5" rx="1.5" fill="#1F2937"/>
+        <rect x="64" y="37" width="10" height="2.5" rx="1.5" fill="#1F2937"/>
+        <!-- Gülümseme -->
+        <path d="M51,56 Q60,63 69,56" stroke="#92400E" stroke-width="2" fill="none"/>
+        <!-- Gözlük -->
+        <rect x="44" y="41" width="13" height="9" rx="4" fill="none" stroke="#374151" stroke-width="1.5"/>
+        <rect x="63" y="41" width="13" height="9" rx="4" fill="none" stroke="#374151" stroke-width="1.5"/>
+        <line x1="57" y1="45" x2="63" y2="45" stroke="#374151" stroke-width="1.5"/>
+        <!-- Bacaklar -->
+        <rect x="37" y="128" width="18" height="12" rx="6" fill="#1D4ED8"/>
+        <rect x="65" y="128" width="18" height="12" rx="6" fill="#1D4ED8"/>
+        <ellipse cx="46" cy="140" rx="10" ry="5" fill="#1F2937"/>
+        <ellipse cx="74" cy="140" rx="10" ry="5" fill="#1F2937"/>
+        <!-- Rozet -->
+        <circle cx="42" cy="88" r="6" fill="#F59E0B"/>
+        <text x="42" y="91" text-anchor="middle" font-size="4" fill="white" font-weight="bold">KAY</text>
+      </svg>
+      <div class="karakter-unvan">Kaymakam</div>
+      <div class="karakter-yer">📍 İlçe</div>
+      <div class="karakter-bilgi">İlçeyi yönetir. Devletin ilçedeki temsilcisidir. Devlet tarafından atanır.</div>
+      <span class="karakter-rozet" style="background:#DBEAFE;color:#1E40AF;">İlçe yöneticisi</span>
+    </div>
+
+    <!-- VALİ -->
+    <div class="karakter-kart" style="border-top-color:#EF4444;">
+      <svg class="karakter-svg" viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+        <!-- Vücut -->
+        <rect x="28" y="73" width="64" height="57" rx="10" fill="#7C3AED"/>
+        <!-- Ceket yaka -->
+        <polygon points="54,73 60,92 48,73" fill="#6D28D9"/>
+        <polygon points="66,73 60,92 72,73" fill="#6D28D9"/>
+        <!-- Gömlek beyaz -->
+        <rect x="52" y="73" width="16" height="32" fill="white"/>
+        <!-- Kravat kırmızı -->
+        <polygon points="60,76 57,94 60,97 63,94" fill="#DC2626"/>
+        <!-- Omuz apoletleri -->
+        <rect x="28" y="73" width="18" height="7" rx="3" fill="#F59E0B"/>
+        <rect x="74" y="73" width="18" height="7" rx="3" fill="#F59E0B"/>
+        <!-- Kol sol -->
+        <rect x="12" y="73" width="17" height="40" rx="8" fill="#7C3AED"/>
+        <ellipse cx="20" cy="115" rx="8" ry="7" fill="#FBBF24"/>
+        <!-- Kol sağ - bayrak tutuyor -->
+        <rect x="91" y="73" width="17" height="40" rx="8" fill="#7C3AED"/>
+        <ellipse cx="99" cy="115" rx="8" ry="7" fill="#FBBF24"/>
+        <!-- Bayrak -->
+        <line x1="99" y1="80" x2="99" y2="58" stroke="#92400E" stroke-width="2"/>
+        <rect x="99" y="58" width="16" height="10" fill="#EF4444"/>
+        <!-- Baş -->
+        <ellipse cx="60" cy="44" rx="27" ry="29" fill="#FBBF24"/>
+        <!-- Saç gri/beyaz -->
+        <ellipse cx="60" cy="17" rx="27" ry="10" fill="#9CA3AF"/>
+        <!-- Gözler -->
+        <ellipse cx="50" cy="42" rx="5" ry="5.5" fill="white"/>
+        <ellipse cx="70" cy="42" rx="5" ry="5.5" fill="white"/>
+        <circle cx="51" cy="43" r="3" fill="#1F2937"/>
+        <circle cx="71" cy="43" r="3" fill="#1F2937"/>
+        <!-- Kaşlar kalın -->
+        <rect x="44" y="35" width="12" height="3" rx="1.5" fill="#374151"/>
+        <rect x="64" y="35" width="12" height="3" rx="1.5" fill="#374151"/>
+        <!-- Bıyık -->
+        <path d="M52,54 Q60,56 68,54" stroke="#374151" stroke-width="2.5" fill="none"/>
+        <!-- Gülümseme -->
+        <path d="M51,58 Q60,65 69,58" stroke="#92400E" stroke-width="2" fill="none"/>
+        <!-- Bacaklar -->
+        <rect x="35" y="128" width="20" height="12" rx="6" fill="#6D28D9"/>
+        <rect x="65" y="128" width="20" height="12" rx="6" fill="#6D28D9"/>
+        <ellipse cx="45" cy="140" rx="11" ry="5" fill="#1F2937"/>
+        <ellipse cx="75" cy="140" rx="11" ry="5" fill="#1F2937"/>
+        <!-- Madalya -->
+        <circle cx="42" cy="90" r="7" fill="#F59E0B"/>
+        <text x="42" y="93" text-anchor="middle" font-size="5" fill="white" font-weight="bold">VAL</text>
+      </svg>
+      <div class="karakter-unvan">Vali</div>
+      <div class="karakter-yer">📍 İl</div>
+      <div class="karakter-bilgi">İli yönetir. Devletin ildeki en üst temsilcisidir. Hükümet tarafından atanır.</div>
+      <span class="karakter-rozet" style="background:#FEE2E2;color:#991B1B;">İl yöneticisi</span>
+    </div>
+
+    <!-- BELEDİYE BAŞKANI -->
+    <div class="karakter-kart" style="border-top-color:#F59E0B;">
+      <svg class="karakter-svg" viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+        <!-- Vücut -->
+        <rect x="29" y="74" width="62" height="56" rx="10" fill="#D97706"/>
+        <!-- Ceket -->
+        <polygon points="54,74 60,91 48,74" fill="#B45309"/>
+        <polygon points="66,74 60,91 72,74" fill="#B45309"/>
+        <rect x="52" y="74" width="16" height="28" fill="white"/>
+        <!-- Kravat -->
+        <polygon points="60,77 57,90 60,93 63,90" fill="#7C3AED"/>
+        <!-- Kol sol - mikrofon tutuyor -->
+        <rect x="13" y="74" width="17" height="36" rx="8" fill="#D97706"/>
+        <ellipse cx="21" cy="112" rx="8" ry="7" fill="#FBBF24"/>
+        <rect x="15" y="95" width="10" height="18" rx="5" fill="#374151"/>
+        <ellipse cx="20" cy="95" rx="6" ry="7" fill="#1F2937"/>
+        <!-- Kol sağ -->
+        <rect x="90" y="74" width="17" height="36" rx="8" fill="#D97706"/>
+        <ellipse cx="98" cy="112" rx="8" ry="7" fill="#FBBF24"/>
+        <!-- Baş -->
+        <ellipse cx="60" cy="45" rx="26" ry="28" fill="#FCD34D"/>
+        <!-- Saç -->
+        <ellipse cx="60" cy="19" rx="26" ry="11" fill="#92400E"/>
+        <!-- Gözler -->
+        <ellipse cx="51" cy="43" rx="5" ry="5.5" fill="white"/>
+        <ellipse cx="69" cy="43" rx="5" ry="5.5" fill="white"/>
+        <circle cx="52" cy="44" r="3" fill="#1F2937"/>
+        <circle cx="70" cy="44" r="3" fill="#1F2937"/>
+        <path d="M46,37 Q51,34 56,37" stroke="#92400E" stroke-width="2" fill="none"/>
+        <path d="M64,37 Q69,34 74,37" stroke="#92400E" stroke-width="2" fill="none"/>
+        <path d="M51,57 Q60,64 69,57" stroke="#92400E" stroke-width="2" fill="none"/>
+        <!-- Bacaklar -->
+        <rect x="36" y="128" width="18" height="12" rx="6" fill="#92400E"/>
+        <rect x="66" y="128" width="18" height="12" rx="6" fill="#92400E"/>
+        <ellipse cx="45" cy="140" rx="10" ry="5" fill="#1F2937"/>
+        <ellipse cx="75" cy="140" rx="10" ry="5" fill="#1F2937"/>
+        <!-- Rozet -->
+        <circle cx="42" cy="87" r="7" fill="#7C3AED"/>
+        <text x="42" y="90" text-anchor="middle" font-size="4" fill="white" font-weight="bold">BB</text>
+      </svg>
+      <div class="karakter-unvan">Belediye Başkanı</div>
+      <div class="karakter-yer">📍 Şehir / İlçe</div>
+      <div class="karakter-bilgi">Şehrin hizmetlerini yönetir. Park, yol, temizlik, su işlerini düzenler. Halk tarafından seçilir.</div>
+      <span class="karakter-rozet" style="background:#FEF3C7;color:#92400E;">Halk seçer</span>
+    </div>
+
+  </div>
+
+  <!-- Hiyerarşi -->
+  <div style="background:white;border-radius:20px;padding:20px;box-shadow:0 4px 16px rgba(0,0,0,0.08);text-align:center;margin-bottom:16px;">
+    <p style="font-family:'Baloo 2',cursive;font-size:1.1rem;font-weight:800;color:var(--primary);margin-bottom:14px;">📊 Yönetim Kademeleri</p>
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;font-family:'Baloo 2',cursive;font-weight:700;font-size:.9rem;">
+      <div style="background:#DCFCE7;color:#166534;padding:8px 16px;border-radius:12px;">🏘️ Mahalle/Köy<br><small>Muhtar</small></div>
+      <div style="font-size:1.5rem;color:var(--muted);">→</div>
+      <div style="background:#DBEAFE;color:#1E40AF;padding:8px 16px;border-radius:12px;">🏙️ İlçe<br><small>Kaymakam</small></div>
+      <div style="font-size:1.5rem;color:var(--muted);">→</div>
+      <div style="background:#FEE2E2;color:#991B1B;padding:8px 16px;border-radius:12px;">🏛️ İl<br><small>Vali</small></div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-yaz" onclick="window.print()">🖨️ Yazdır</button>
+    <button class="btn btn-indir" onclick="indir()">⬇️ İndir</button>
+  </div>
+</div>
+
+<!-- ══ GÖREVLER ══ -->
+<div id="gorevler" class="section">
+  <p class="sec-baslik">📋 Kim Ne Yapar?</p>
+  <p class="sec-desc">Her yöneticinin farklı görevleri vardır!</p>
+
+  <p style="font-family:'Baloo 2',cursive;font-size:1.1rem;font-weight:800;color:#10B981;margin-bottom:10px;">🏘️ Muhtarın Görevleri</p>
+  <div class="gorev-grid" style="margin-bottom:20px;">
+    <div class="gorev-kart"><div class="gorev-ikon">📝</div><div><div class="gorev-baslik">Belge Düzenler</div><div class="gorev-metin">İkametgah ve nüfus belgesi düzenler.</div></div></div>
+    <div class="gorev-kart"><div class="gorev-ikon">🤝</div><div><div class="gorev-baslik">Sorun Dinler</div><div class="gorev-metin">Vatandaşların sorunlarını dinler, çözüm arar.</div></div></div>
+    <div class="gorev-kart"><div class="gorev-ikon">📢</div><div><div class="gorev-baslik">Duyuru Yapar</div><div class="gorev-metin">Devletin duyurularını halka iletir.</div></div></div>
+    <div class="gorev-kart"><div class="gorev-ikon">🏠</div><div><div class="gorev-baslik">Mahalleyi Tanır</div><div class="gorev-metin">Mahalle sakinlerini ve ihtiyaçlarını bilir.</div></div></div>
+  </div>
+
+  <p style="font-family:'Baloo 2',cursive;font-size:1.1rem;font-weight:800;color:#3B82F6;margin-bottom:10px;">🏙️ Kaymakamın Görevleri</p>
+  <div class="gorev-grid" style="margin-bottom:20px;">
+    <div class="gorev-kart"><div class="gorev-ikon">🏢</div><div><div class="gorev-baslik">İlçeyi Yönetir</div><div class="gorev-metin">İlçedeki devlet kurumlarını denetler.</div></div></div>
+    <div class="gorev-kart"><div class="gorev-ikon">⚖️</div><div><div class="gorev-baslik">Düzeni Sağlar</div><div class="gorev-metin">İlçede güvenlik ve düzeni korur.</div></div></div>
+    <div class="gorev-kart"><div class="gorev-ikon">📊</div><div><div class="gorev-baslik">Rapor Hazırlar</div><div class="gorev-metin">İlçeyle ilgili raporları valiye iletir.</div></div></div>
+    <div class="gorev-kart"><div class="gorev-ikon">🎗️</div><div><div class="gorev-baslik">Törenlere Katılır</div><div class="gorev-metin">Milli bayram törenlerinde ilçeyi temsil eder.</div></div></div>
+  </div>
+
+  <p style="font-family:'Baloo 2',cursive;font-size:1.1rem;font-weight:800;color:#EF4444;margin-bottom:10px;">🏛️ Valinin Görevleri</p>
+  <div class="gorev-grid" style="margin-bottom:20px;">
+    <div class="gorev-kart"><div class="gorev-ikon">🗺️</div><div><div class="gorev-baslik">İli Yönetir</div><div class="gorev-metin">İldeki tüm devlet hizmetlerini koordine eder.</div></div></div>
+    <div class="gorev-kart"><div class="gorev-ikon">🚔</div><div><div class="gorev-baslik">Güvenliği Sağlar</div><div class="gorev-metin">İl genelinde güvenlik ve asayişi yönetir.</div></div></div>
+    <div class="gorev-kart"><div class="gorev-ikon">🏥</div><div><div class="gorev-baslik">Hizmetleri Denetler</div><div class="gorev-metin">Sağlık, eğitim, ulaşım hizmetlerini takip eder.</div></div></div>
+    <div class="gorev-kart"><div class="gorev-ikon">🇹🇷</div><div><div class="gorev-baslik">Devleti Temsil Eder</div><div class="gorev-metin">Resmi törenlerde devleti temsil eder.</div></div></div>
+  </div>
+
+  <p style="font-family:'Baloo 2',cursive;font-size:1.1rem;font-weight:800;color:#F59E0B;margin-bottom:10px;">🏙️ Belediye Başkanının Görevleri</p>
+  <div class="gorev-grid" style="margin-bottom:16px;">
+    <div class="gorev-kart"><div class="gorev-ikon">🌳</div><div><div class="gorev-baslik">Park ve Bahçe</div><div class="gorev-metin">Şehirdeki park ve yeşil alanları düzenler.</div></div></div>
+    <div class="gorev-kart"><div class="gorev-ikon">🚮</div><div><div class="gorev-baslik">Temizlik</div><div class="gorev-metin">Şehrin temizliğini ve çöp toplama hizmetini yürütür.</div></div></div>
+    <div class="gorev-kart"><div class="gorev-ikon">🚌</div><div><div class="gorev-baslik">Ulaşım</div><div class="gorev-metin">Şehir içi ulaşımı ve yolları düzenler.</div></div></div>
+    <div class="gorev-kart"><div class="gorev-ikon">💧</div><div><div class="gorev-baslik">Su Hizmeti</div><div class="gorev-metin">Şehre temiz su sağlar ve kanalizasyonu yönetir.</div></div></div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-yaz" onclick="window.print()">🖨️ Yazdır</button>
+    <button class="btn btn-indir" onclick="indir()">⬇️ İndir</button>
+  </div>
+</div>
+
+<!-- ══ OKUMA METNİ ══ -->
+<div id="metin" class="section">
+  <div class="metin-kart">
+    <div class="metin-baslik">📖 Muhtarımız Amca</div>
+    <p>Elif'in köyünde herkes <span class="vurgu">Muhtarımız Amca</span> diye çağırırdı onu. Her sabah muhtarlık odasının kapısını açar, çayını koyar ve kapısına gelen herkesi dinlerdi.</p>
+    <p>Bir gün köyün yolu bozuldu. Yaşlılar doktora gidemiyor, çocuklar okula geçte kalıyordu. Herkes muhtarın kapısına koştu.</p>
+    <div class="diyalog">— Muhtarımız, yolumuzu yaptıramazsak çok zor olacak, dedi Elif'in babası.</div>
+    <div class="diyalog">— Haklısınız, dedi muhtar. Ben bu işi <span class="vurgu">kaymakam beye</span> ileteyim. O da <span class="vurgu">valiye</span> bildirir. Birlikte çözeriz.</div>
+    <p>Muhtar hemen ilçeye gitti. Kaymakam durumu öğrenince valiye bildirdi. Vali de en kısa sürede yolun yapılması için gerekli kararı aldı.</p>
+    <p>Üç hafta sonra köyün yolu yenilendi. Çocuklar artık zamanında okula gidebiliyordu. Elif, muhtarın elini sıkıp dedi ki:</p>
+    <div class="diyalog">— Muhtarımız Amca, sen olmasan ne yapardık!</div>
+    <div class="diyalog">— Ben sadece sizin sesinizi yetkililere taşıdım, dedi muhtar gülümseyerek. Asıl güç sizin birliğinizdedir.</div>
+    <p>Elif o gün anladı: <strong>Muhtar, kaymakam ve vali birlikte çalışınca vatandaşların sorunları çözülür!</strong></p>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-yaz" onclick="window.print()">🖨️ Yazdır</button>
+    <button class="btn btn-indir" onclick="indir()">⬇️ İndir</button>
+  </div>
+</div>
+
+<!-- ══ SORULAR ══ -->
+<div id="sorular" class="section">
+  <p class="sec-baslik">❓ Anlama Soruları</p>
+  <p class="sec-desc">Doğru şıkkı seç!</p>
+
+  <div class="ilerleme"><div class="ilerleme-dolu" id="ilerleme-s" style="width:0%"></div></div>
+  <div class="ilerleme-yazi" id="ilerleme-yazi-s">0 / 8 cevaplandı</div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">1. Mahalle ve köyleri kim yönetir?</div>
+    <div class="secenekler" data-dogru="2" data-id="0">
+      <button class="secenek" onclick="cevapla(this)">A) Vali</button>
+      <button class="secenek" onclick="cevapla(this)">B) Kaymakam</button>
+      <button class="secenek" onclick="cevapla(this)">C) Muhtar</button>
+      <button class="secenek" onclick="cevapla(this)">D) Belediye Başkanı</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">2. İlçeyi kim yönetir?</div>
+    <div class="secenekler" data-dogru="1" data-id="1">
+      <button class="secenek" onclick="cevapla(this)">A) Muhtar</button>
+      <button class="secenek" onclick="cevapla(this)">B) Kaymakam</button>
+      <button class="secenek" onclick="cevapla(this)">C) Vali</button>
+      <button class="secenek" onclick="cevapla(this)">D) Cumhurbaşkanı</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">3. Devletin ildeki en üst temsilcisi kimdir?</div>
+    <div class="secenekler" data-dogru="0" data-id="2">
+      <button class="secenek" onclick="cevapla(this)">A) Vali</button>
+      <button class="secenek" onclick="cevapla(this)">B) Muhtar</button>
+      <button class="secenek" onclick="cevapla(this)">C) Kaymakam</button>
+      <button class="secenek" onclick="cevapla(this)">D) Belediye Başkanı</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">4. Belediye Başkanı nasıl göreve gelir?</div>
+    <div class="secenekler" data-dogru="1" data-id="3">
+      <button class="secenek" onclick="cevapla(this)">A) Devlet tarafından atanır</button>
+      <button class="secenek" onclick="cevapla(this)">B) Halk tarafından seçilir</button>
+      <button class="secenek" onclick="cevapla(this)">C) Vali tarafından atanır</button>
+      <button class="secenek" onclick="cevapla(this)">D) Muhtar seçer</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">5. Şehrin temizlik ve çöp hizmetini kim düzenler?</div>
+    <div class="secenekler" data-dogru="3" data-id="4">
+      <button class="secenek" onclick="cevapla(this)">A) Vali</button>
+      <button class="secenek" onclick="cevapla(this)">B) Kaymakam</button>
+      <button class="secenek" onclick="cevapla(this)">C) Muhtar</button>
+      <button class="secenek" onclick="cevapla(this)">D) Belediye Başkanı</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">6. Hikayede yolu bozulan kim başvurdu?</div>
+    <div class="secenekler" data-dogru="2" data-id="5">
+      <button class="secenek" onclick="cevapla(this)">A) Doğrudan valiye</button>
+      <button class="secenek" onclick="cevapla(this)">B) Doğrudan kaymakama</button>
+      <button class="secenek" onclick="cevapla(this)">C) Muhtara</button>
+      <button class="secenek" onclick="cevapla(this)">D) Belediyeye</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">7. Kaymakam ve vali nasıl göreve gelir?</div>
+    <div class="secenekler" data-dogru="0" data-id="6">
+      <button class="secenek" onclick="cevapla(this)">A) Devlet tarafından atanır</button>
+      <button class="secenek" onclick="cevapla(this)">B) Halk tarafından seçilir</button>
+      <button class="secenek" onclick="cevapla(this)">C) Muhtar seçer</button>
+      <button class="secenek" onclick="cevapla(this)">D) Belediye başkanı atar</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">8. Muhtarın görevi nedir?</div>
+    <div class="secenekler" data-dogru="1" data-id="7">
+      <button class="secenek" onclick="cevapla(this)">A) İli yönetmek</button>
+      <button class="secenek" onclick="cevapla(this)">B) Mahalle sorunlarını dinleyip çözüm aramak</button>
+      <button class="secenek" onclick="cevapla(this)">C) Park ve bahçe düzenlemek</button>
+      <button class="secenek" onclick="cevapla(this)">D) Okul açmak</button>
+    </div>
+  </div>
+
+  <div class="puan-kart" id="puan-s">
+    <div class="sayi" id="sayi-s"></div>
+    <p id="msg-s"></p>
+    <button class="btn btn-tekrar" onclick="tekrar()">🔄 Tekrar</button>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-yaz" onclick="window.print()">🖨️ Yazdır</button>
+    <button class="btn btn-indir" onclick="indir()">⬇️ İndir</button>
+  </div>
+</div>
+
+<!-- ══ EŞLEŞTİRME ══ -->
+<div id="eslestirme" class="section">
+  <p class="sec-baslik">🔗 Eşleştirme Etkinliği</p>
+  <p class="sec-desc">Yöneticiyi yönettiği yerle eşleştir!</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+    <div>
+      <p class="e-col-label">YÖNETİCİ</p>
+      <div class="e-item" data-id="1" onclick="esolSec(this)">Muhtar</div>
+      <div class="e-item" data-id="2" onclick="esolSec(this)">Kaymakam</div>
+      <div class="e-item" data-id="3" onclick="esolSec(this)">Vali</div>
+      <div class="e-item" data-id="4" onclick="esolSec(this)">Belediye Başkanı</div>
+    </div>
+    <div>
+      <p class="e-col-label">YÖNETTİĞİ YER</p>
+      <div class="e-item" data-id="3" onclick="esagSec(this)">İl</div>
+      <div class="e-item" data-id="1" onclick="esagSec(this)">Mahalle / Köy</div>
+      <div class="e-item" data-id="4" onclick="esagSec(this)">Şehir (Hizmetler)</div>
+      <div class="e-item" data-id="2" onclick="esagSec(this)">İlçe</div>
+    </div>
+  </div>
+
+  <p class="sec-baslik" style="margin-top:24px;">🔗 Görevi Kim Yapar?</p>
+  <p class="sec-desc">Görevi yapan kişiyle eşleştir!</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+    <div>
+      <p class="e-col-label">GÖREV</p>
+      <div class="e-item" data-id="5" onclick="esolSec(this)">Park ve temizlik</div>
+      <div class="e-item" data-id="6" onclick="esolSec(this)">İkametgah belgesi</div>
+      <div class="e-item" data-id="7" onclick="esolSec(this)">İl güvenliği</div>
+      <div class="e-item" data-id="8" onclick="esolSec(this)">İlçe denetimi</div>
+    </div>
+    <div>
+      <p class="e-col-label">YÖNETİCİ</p>
+      <div class="e-item" data-id="7" onclick="esagSec(this)">Vali</div>
+      <div class="e-item" data-id="5" onclick="esagSec(this)">Belediye Başkanı</div>
+      <div class="e-item" data-id="8" onclick="esagSec(this)">Kaymakam</div>
+      <div class="e-item" data-id="6" onclick="esagSec(this)">Muhtar</div>
+    </div>
+  </div>
+
+  <div id="e-sonuc" style="display:none;" class="puan-kart">
+    <div class="sayi" id="e-sayi"></div>
+    <p id="e-msg"></p>
+    <button class="btn btn-tekrar" onclick="eslestirmeReset()">🔄 Tekrar</button>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-yaz" onclick="window.print()">🖨️ Yazdır</button>
+    <button class="btn btn-indir" onclick="indir()">⬇️ İndir</button>
+  </div>
+</div>
+
+<script>
+function goster(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// SORULAR
+let sSkor = 0, sSayac = 0;
+function cevapla(btn) {
+  const grup = btn.parentElement;
+  if (grup.dataset.answered) return;
+  grup.dataset.answered = '1';
+  const secenekler = grup.querySelectorAll('.secenek');
+  const dogruIdx = parseInt(grup.dataset.dogru);
+  secenekler.forEach(s => s.disabled = true);
+  const secilen = Array.from(secenekler).indexOf(btn);
+  if (secilen === dogruIdx) { btn.classList.add('dogru'); sSkor++; }
+  else { btn.classList.add('yanlis'); secenekler[dogruIdx].classList.add('dogru'); }
+  sSayac++;
+  const pct = Math.round(sSayac / 8 * 100);
+  document.getElementById('ilerleme-s').style.width = pct + '%';
+  document.getElementById('ilerleme-yazi-s').textContent = sSayac + ' / 8 cevaplandı';
+  if (sSayac === 8) setTimeout(() => {
+    const p = Math.round(sSkor / 8 * 100);
+    document.getElementById('sayi-s').textContent = sSkor + ' / 8';
+    document.getElementById('msg-s').textContent = p >= 75 ? '🌟 Harika! Yerel yönetimleri çok iyi biliyorsun!' : p >= 50 ? '👍 İyi iş! Biraz daha çalışabilirsin.' : '💪 Tekrar dene!';
+    document.getElementById('puan-s').style.display = 'block';
+    if (p >= 75) konfeti();
+  }, 400);
+}
+function tekrar() {
+  sSkor = 0; sSayac = 0;
+  document.getElementById('ilerleme-s').style.width = '0%';
+  document.getElementById('ilerleme-yazi-s').textContent = '0 / 8 cevaplandı';
+  document.getElementById('puan-s').style.display = 'none';
+  document.querySelectorAll('#sorular .secenekler').forEach(g => {
+    delete g.dataset.answered;
+    g.querySelectorAll('.secenek').forEach(s => { s.disabled=false; s.classList.remove('dogru','yanlis'); });
+  });
+}
+
+// EŞLEŞTİRME
+let secilenSol = null, eSkor = 0, eToplam = 0;
+function esolSec(el) {
+  if (el.classList.contains('dogru') || el.classList.contains('locked')) return;
+  document.querySelectorAll('.e-item.selected').forEach(e => e.classList.remove('selected'));
+  secilenSol = el;
+  el.classList.add('selected');
+}
+function esagSec(el) {
+  if (!secilenSol || el.classList.contains('dogru')) return;
+  if (secilenSol.dataset.id === el.dataset.id) {
+    secilenSol.classList.remove('selected'); secilenSol.classList.add('dogru','locked');
+    el.classList.add('dogru','locked');
+    eSkor++; eToplam++; secilenSol = null;
+    if (eToplam === 8) setTimeout(() => {
+      document.getElementById('e-sayi').textContent = eSkor + ' / 8';
+      document.getElementById('e-msg').textContent = eSkor === 8 ? '🌟 Tüm eşleştirmeleri doğru yaptın!' : '👍 İyi iş!';
+      document.getElementById('e-sonuc').style.display = 'block';
+      if (eSkor >= 6) konfeti();
+    }, 300);
+  } else {
+    const s = secilenSol; secilenSol = null;
+    s.classList.remove('selected'); s.classList.add('yanlis'); el.classList.add('yanlis');
+    eToplam++;
+    setTimeout(() => { s.classList.remove('yanlis'); el.classList.remove('yanlis'); }, 700);
+  }
+}
+function eslestirmeReset() {
+  eSkor = 0; eToplam = 0; secilenSol = null;
+  document.getElementById('e-sonuc').style.display = 'none';
+  document.querySelectorAll('.e-item').forEach(e => e.classList.remove('dogru','yanlis','selected','locked'));
+}
+
+function indir() {
+  const html = document.documentElement.outerHTML;
+  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'yerel-yonetimler.html';
+  a.click();
+}
+
+function konfeti() {
+  const colors = ['#7C3AED','#3B82F6','#10B981','#F59E0B','#EF4444','#F97316'];
+  const wrap = document.getElementById('confetti-wrap');
+  wrap.innerHTML = '';
+  for (let i = 0; i < 60; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.cssText = `left:${Math.random()*100}vw;top:-20px;width:${8+Math.random()*8}px;height:${8+Math.random()*8}px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*.8}s`;
+    wrap.appendChild(p);
+    p.addEventListener('animationend', () => p.remove());
+  }
+}
+</script>
+</body>
+</html>

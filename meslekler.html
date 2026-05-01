@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meslekler - 2. Sınıf Hayat Bilgisi</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #0EA5E9;
+  --green: #10B981;
+  --red: #EF4444;
+  --yellow: #F59E0B;
+  --purple: #7C3AED;
+  --orange: #F97316;
+  --pink: #EC4899;
+  --bg: #F0F9FF;
+  --text: #1F2937;
+  --muted: #6B7280;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+header { background:linear-gradient(135deg,#0EA5E9,#7C3AED); padding:28px 20px 44px; text-align:center; }
+.header-emoji { font-size:2rem; margin-bottom:8px; }
+header h1 { font-family:'Baloo 2',cursive; font-size:clamp(1.5rem,5vw,2.3rem); font-weight:800; color:white; }
+header p { color:rgba(255,255,255,0.88); font-weight:600; margin-top:6px; }
+
+.tabs { display:flex; justify-content:center; gap:6px; padding:16px 12px 0; flex-wrap:wrap; max-width:900px; margin:0 auto; }
+.tab-btn { font-family:'Baloo 2',cursive; font-size:.82rem; font-weight:700; padding:8px 13px; border-radius:50px; border:3px solid transparent; cursor:pointer; transition:all .2s; background:white; color:var(--muted); box-shadow:0 3px 10px rgba(0,0,0,0.08); }
+.tab-btn.active { background:var(--primary); color:white; border-color:var(--primary); transform:translateY(-2px); }
+
+.section { display:none; padding:22px 16px 60px; max-width:900px; margin:0 auto; }
+.section.active { display:block; }
+.sec-baslik { font-family:'Baloo 2',cursive; font-size:1.3rem; font-weight:800; color:var(--primary); margin-bottom:6px; }
+.sec-desc { color:var(--muted); font-size:.92rem; font-weight:600; margin-bottom:18px; }
+
+/* KARİKATÜR KARTLAR */
+.meslek-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:14px; margin-bottom:20px; }
+.meslek-kart { background:white; border-radius:20px; padding:16px 12px; box-shadow:0 4px 16px rgba(0,0,0,0.08); text-align:center; border-top:5px solid var(--primary); transition:all .22s; cursor:pointer; }
+.meslek-kart:hover { transform:translateY(-4px); box-shadow:0 10px 26px rgba(0,0,0,0.13); }
+.meslek-svg { width:90px; height:110px; margin:0 auto 10px; display:block; }
+.meslek-ad { font-family:'Baloo 2',cursive; font-size:1rem; font-weight:800; color:var(--text); margin-bottom:4px; }
+.meslek-bilgi { font-size:.8rem; font-weight:600; color:var(--muted); line-height:1.5; }
+.meslek-tur { display:inline-block; padding:2px 8px; border-radius:20px; font-size:.72rem; font-weight:700; margin-top:6px; }
+.arac-ikonu { font-size:1.6rem; margin:8px 0 4px; display:flex; justify-content:center; gap:6px; }
+
+/* ARAÇ KARTLARI */
+.arac-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; margin-bottom:20px; }
+.arac-kart { background:white; border-radius:16px; padding:16px; box-shadow:0 3px 12px rgba(0,0,0,0.07); display:flex; align-items:center; gap:12px; }
+.arac-emoji { font-size:2rem; flex-shrink:0; }
+.arac-baslik { font-family:'Baloo 2',cursive; font-size:.95rem; font-weight:800; color:var(--text); margin-bottom:2px; }
+.arac-metin { font-size:.82rem; font-weight:600; color:var(--muted); }
+
+/* SORULAR */
+.soru-kart { background:white; border-radius:18px; padding:20px; margin-bottom:14px; box-shadow:0 3px 12px rgba(0,0,0,0.07); }
+.soru-metin { font-family:'Baloo 2',cursive; font-size:1rem; font-weight:700; color:var(--text); margin-bottom:14px; line-height:1.5; }
+.vurgu { background:#E0F2FE; padding:2px 8px; border-radius:6px; font-weight:700; }
+.secenekler { display:flex; flex-direction:column; gap:8px; }
+.secenek { padding:11px 16px; border-radius:12px; border:3px solid #e2e8f0; background:#f8fafc; font-size:.93rem; font-weight:600; cursor:pointer; transition:all .2s; text-align:left; font-family:'Nunito',sans-serif; }
+.secenek:hover:not(:disabled) { border-color:var(--primary); background:#E0F2FE; }
+.secenek.dogru { background:#DCFCE7 !important; border-color:var(--green) !important; color:#166534 !important; }
+.secenek.yanlis { background:#FEE2E2 !important; border-color:var(--red) !important; color:#991B1B !important; }
+.secenek:disabled { cursor:default; }
+
+/* EŞLEŞTİRME */
+.e-col-label { font-family:'Baloo 2',cursive; font-weight:700; font-size:.85rem; color:var(--muted); text-align:center; margin-bottom:8px; }
+.e-item { padding:10px 14px; border-radius:12px; border:3px solid #e2e8f0; background:#f8fafc; font-weight:700; font-size:.88rem; cursor:pointer; transition:all .2s; text-align:center; font-family:'Baloo 2',cursive; margin-bottom:8px; }
+.e-item:hover:not(.locked) { border-color:var(--primary); background:#E0F2FE; }
+.e-item.selected { background:#E0F2FE; border-color:var(--primary); color:var(--primary); }
+.e-item.dogru { background:#DCFCE7 !important; border-color:var(--green) !important; color:#166534 !important; cursor:default; }
+.e-item.yanlis { background:#FEE2E2 !important; border-color:var(--red) !important; animation:shake .3s; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+
+/* PUAN */
+.puan-kart { background:linear-gradient(135deg,var(--primary),var(--purple)); border-radius:20px; padding:22px; text-align:center; color:white; margin-top:16px; display:none; }
+.puan-kart .sayi { font-family:'Baloo 2',cursive; font-size:3rem; font-weight:800; line-height:1; }
+.puan-kart p { font-size:.95rem; font-weight:600; opacity:.9; margin-top:4px; }
+
+.ilerleme { height:8px; background:#e2e8f0; border-radius:100px; margin-bottom:6px; overflow:hidden; }
+.ilerleme-dolu { height:100%; background:linear-gradient(90deg,var(--primary),var(--purple)); border-radius:100px; transition:width .4s; }
+.ilerleme-yazi { font-size:.83rem; font-weight:700; color:var(--muted); margin-bottom:14px; text-align:right; }
+
+.btn-row { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:20px; }
+.btn { padding:12px 24px; border-radius:50px; border:none; font-family:'Baloo 2',cursive; font-size:1rem; font-weight:700; cursor:pointer; transition:all .2s; box-shadow:0 4px 14px rgba(0,0,0,0.1); }
+.btn:hover { transform:translateY(-2px); }
+.btn-yaz { background:#7C3AED; color:white; }
+.btn-indir { background:#F97316; color:white; }
+.btn-tekrar { background:white; color:var(--primary); border:3px solid var(--primary); }
+
+.confetti-wrap { position:fixed; inset:0; pointer-events:none; z-index:999; }
+.confetti-piece { position:absolute; border-radius:2px; animation:fall linear forwards; }
+@keyframes fall { 0%{opacity:1;transform:translateY(-20px) rotate(0deg)} 100%{opacity:0;transform:translateY(100vh) rotate(720deg)} }
+
+@media print {
+  .tabs,.btn-row { display:none !important; }
+  .section { display:block !important; padding:10px 0; }
+  header { background:#0EA5E9 !important; -webkit-print-color-adjust:exact; }
+}
+</style>
+</head>
+<body>
+<div id="confetti-wrap" class="confetti-wrap"></div>
+
+<header>
+  <div class="header-emoji">👷</div>
+  <h1>Meslekler</h1>
+  <p>2. Sınıf · Hayat Bilgisi</p>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="goster('karakterler',this)">👤 Meslekler</button>
+  <button class="tab-btn" onclick="goster('araclar',this)">🔧 Araç-Gereçler</button>
+  <button class="tab-btn" onclick="goster('sorular',this)">❓ Sorular</button>
+  <button class="tab-btn" onclick="goster('eslestirme',this)">🔗 Eşleştirme</button>
+</div>
+
+<!-- ══ MESLEKLER ══ -->
+<div id="karakterler" class="section active">
+  <p class="sec-baslik">👤 Meslekleri Tanıyalım!</p>
+  <p class="sec-desc">Her meslek toplum için önemlidir. Hepsine saygı gösterelim!</p>
+
+  <div class="meslek-grid">
+
+    <!-- ÖĞRETMEN -->
+    <div class="meslek-kart" style="border-top-color:#0EA5E9;">
+      <svg class="meslek-svg" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="58" width="46" height="42" rx="8" fill="#0EA5E9"/>
+        <rect x="37" y="58" width="16" height="22" fill="white"/>
+        <rect x="8" y="58" width="15" height="28" rx="7" fill="#0EA5E9"/>
+        <ellipse cx="15" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <rect x="67" y="58" width="15" height="28" rx="7" fill="#0EA5E9"/>
+        <ellipse cx="74" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <!-- kitap -->
+        <rect x="66" y="70" width="14" height="18" rx="2" fill="white" stroke="#ccc" stroke-width="1"/>
+        <line x1="73" y1="70" x2="73" y2="88" stroke="#ccc" stroke-width="1"/>
+        <ellipse cx="45" cy="34" rx="22" ry="24" fill="#FBBF24"/>
+        <ellipse cx="45" cy="12" rx="22" ry="10" fill="#92400E"/>
+        <ellipse cx="38" cy="32" rx="4" ry="4.5" fill="white"/>
+        <ellipse cx="52" cy="32" rx="4" ry="4.5" fill="white"/>
+        <circle cx="39" cy="33" r="2.5" fill="#1F2937"/>
+        <circle cx="53" cy="33" r="2.5" fill="#1F2937"/>
+        <path d="M38,43 Q45,49 52,43" stroke="#92400E" stroke-width="1.5" fill="none"/>
+        <rect x="28" y="100" width="14" height="10" rx="5" fill="#1E40AF"/>
+        <rect x="48" y="100" width="14" height="10" rx="5" fill="#1E40AF"/>
+      </svg>
+      <div class="arac-ikonu">📚 ✏️ 🖊️</div>
+      <div class="meslek-ad">Öğretmen</div>
+      <div class="meslek-bilgi">Çocuklara bilgi öğretir, gelecek nesilleri yetiştirir.</div>
+      <span class="meslek-tur" style="background:#DBEAFE;color:#1E40AF;">Eğitim</span>
+    </div>
+
+    <!-- DOKTOR -->
+    <div class="meslek-kart" style="border-top-color:#EF4444;">
+      <svg class="meslek-svg" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="58" width="46" height="42" rx="8" fill="white" stroke="#E5E7EB" stroke-width="1"/>
+        <rect x="36" y="58" width="18" height="20" fill="#EF4444" opacity="0.2"/>
+        <!-- Steteskop -->
+        <path d="M15,75 Q10,85 15,92 Q22,98 28,92" stroke="#374151" stroke-width="2" fill="none"/>
+        <circle cx="28" cy="90" r="5" fill="#374151"/>
+        <line x1="15" y1="75" x2="22" y2="68" stroke="#374151" stroke-width="2"/>
+        <line x1="22" y1="68" x2="30" y2="75" stroke="#374151" stroke-width="2"/>
+        <rect x="8" y="58" width="15" height="28" rx="7" fill="white" stroke="#E5E7EB" stroke-width="1"/>
+        <ellipse cx="15" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <rect x="67" y="58" width="15" height="28" rx="7" fill="white" stroke="#E5E7EB" stroke-width="1"/>
+        <ellipse cx="74" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <!-- Haç işareti -->
+        <rect x="41" y="63" width="8" height="18" rx="2" fill="#EF4444"/>
+        <rect x="37" y="68" width="16" height="8" rx="2" fill="#EF4444"/>
+        <ellipse cx="45" cy="34" rx="22" ry="24" fill="#FBBF24"/>
+        <ellipse cx="45" cy="12" rx="22" ry="9" fill="#1F2937"/>
+        <ellipse cx="38" cy="32" rx="4" ry="4.5" fill="white"/>
+        <ellipse cx="52" cy="32" rx="4" ry="4.5" fill="white"/>
+        <circle cx="39" cy="33" r="2.5" fill="#1F2937"/>
+        <circle cx="53" cy="33" r="2.5" fill="#1F2937"/>
+        <path d="M38,43 Q45,49 52,43" stroke="#92400E" stroke-width="1.5" fill="none"/>
+        <rect x="28" y="100" width="14" height="10" rx="5" fill="#374151"/>
+        <rect x="48" y="100" width="14" height="10" rx="5" fill="#374151"/>
+      </svg>
+      <div class="arac-ikonu">🩺 💉 🩻</div>
+      <div class="meslek-ad">Doktor</div>
+      <div class="meslek-bilgi">Hastaları muayene eder, hastalıkları tedavi eder.</div>
+      <span class="meslek-tur" style="background:#FEE2E2;color:#991B1B;">Sağlık</span>
+    </div>
+
+    <!-- POLİS -->
+    <div class="meslek-kart" style="border-top-color:#1D4ED8;">
+      <svg class="meslek-svg" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="58" width="46" height="42" rx="8" fill="#1D4ED8"/>
+        <rect x="36" y="58" width="18" height="20" fill="#1E40AF"/>
+        <rect x="8" y="58" width="15" height="28" rx="7" fill="#1D4ED8"/>
+        <ellipse cx="15" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <rect x="67" y="58" width="15" height="28" rx="7" fill="#1D4ED8"/>
+        <ellipse cx="74" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <!-- rozet -->
+        <circle cx="35" cy="68" r="6" fill="#F59E0B"/>
+        <text x="35" y="71" text-anchor="middle" font-size="5" fill="white" font-weight="bold">★</text>
+        <ellipse cx="45" cy="34" rx="22" ry="24" fill="#FBBF24"/>
+        <!-- şapka -->
+        <rect x="23" y="14" width="44" height="10" rx="3" fill="#1D4ED8"/>
+        <ellipse cx="45" cy="14" rx="26" ry="5" fill="#1D4ED8"/>
+        <rect x="35" y="9" width="20" height="10" rx="3" fill="#1D4ED8"/>
+        <circle cx="45" cy="12" r="4" fill="#F59E0B"/>
+        <ellipse cx="38" cy="32" rx="4" ry="4.5" fill="white"/>
+        <ellipse cx="52" cy="32" rx="4" ry="4.5" fill="white"/>
+        <circle cx="39" cy="33" r="2.5" fill="#1F2937"/>
+        <circle cx="53" cy="33" r="2.5" fill="#1F2937"/>
+        <path d="M38,43 Q45,49 52,43" stroke="#92400E" stroke-width="1.5" fill="none"/>
+        <rect x="28" y="100" width="14" height="10" rx="5" fill="#1E3A8A"/>
+        <rect x="48" y="100" width="14" height="10" rx="5" fill="#1E3A8A"/>
+      </svg>
+      <div class="arac-ikonu">🚔 🚨 📻</div>
+      <div class="meslek-ad">Polis</div>
+      <div class="meslek-bilgi">Toplumun güvenliğini ve huzurunu korur.</div>
+      <span class="meslek-tur" style="background:#DBEAFE;color:#1E40AF;">Güvenlik</span>
+    </div>
+
+    <!-- İTFAİYECİ -->
+    <div class="meslek-kart" style="border-top-color:#F97316;">
+      <svg class="meslek-svg" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="58" width="46" height="42" rx="8" fill="#F97316"/>
+        <rect x="8" y="58" width="15" height="28" rx="7" fill="#F97316"/>
+        <ellipse cx="15" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <rect x="67" y="58" width="15" height="28" rx="7" fill="#F97316"/>
+        <ellipse cx="74" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <!-- Hortum -->
+        <path d="M67,75 Q80,70 82,80" stroke="#374151" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <ellipse cx="45" cy="34" rx="22" ry="24" fill="#FBBF24"/>
+        <!-- Baret -->
+        <ellipse cx="45" cy="13" rx="26" ry="8" fill="#F59E0B"/>
+        <rect x="30" y="13" width="30" height="8" rx="2" fill="#F59E0B"/>
+        <rect x="19" y="17" width="52" height="5" rx="2" fill="#D97706"/>
+        <ellipse cx="38" cy="32" rx="4" ry="4.5" fill="white"/>
+        <ellipse cx="52" cy="32" rx="4" ry="4.5" fill="white"/>
+        <circle cx="39" cy="33" r="2.5" fill="#1F2937"/>
+        <circle cx="53" cy="33" r="2.5" fill="#1F2937"/>
+        <path d="M38,43 Q45,49 52,43" stroke="#92400E" stroke-width="1.5" fill="none"/>
+        <rect x="28" y="100" width="14" height="10" rx="5" fill="#C2410C"/>
+        <rect x="48" y="100" width="14" height="10" rx="5" fill="#C2410C"/>
+      </svg>
+      <div class="arac-ikonu">🚒 🪣 🧯</div>
+      <div class="meslek-ad">İtfaiyeci</div>
+      <div class="meslek-bilgi">Yangınları söndürür, insanları ve hayvanları kurtarır.</div>
+      <span class="meslek-tur" style="background:#FFEDD5;color:#C2410C;">Güvenlik</span>
+    </div>
+
+    <!-- ÇIFTÇI -->
+    <div class="meslek-kart" style="border-top-color:#10B981;">
+      <svg class="meslek-svg" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="58" width="46" height="42" rx="8" fill="#10B981"/>
+        <rect x="36" y="58" width="18" height="20" fill="#059669"/>
+        <rect x="8" y="58" width="15" height="28" rx="7" fill="#10B981"/>
+        <ellipse cx="15" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <!-- çapa -->
+        <line x1="67" y1="58" x2="76" y2="90" stroke="#92400E" stroke-width="3" stroke-linecap="round"/>
+        <rect x="63" y="58" width="16" height="6" rx="3" fill="#92400E"/>
+        <rect x="67" y="58" width="15" height="28" rx="7" fill="#10B981"/>
+        <ellipse cx="74" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <ellipse cx="45" cy="34" rx="22" ry="24" fill="#D97706"/>
+        <!-- hasır şapka -->
+        <ellipse cx="45" cy="14" rx="28" ry="7" fill="#F59E0B"/>
+        <ellipse cx="45" cy="12" rx="18" ry="10" fill="#D97706"/>
+        <ellipse cx="38" cy="33" rx="4" ry="4.5" fill="white"/>
+        <ellipse cx="52" cy="33" rx="4" ry="4.5" fill="white"/>
+        <circle cx="39" cy="34" r="2.5" fill="#1F2937"/>
+        <circle cx="53" cy="34" r="2.5" fill="#1F2937"/>
+        <path d="M38,44 Q45,50 52,44" stroke="#92400E" stroke-width="1.5" fill="none"/>
+        <!-- bıyık -->
+        <path d="M40,41 Q45,43 50,41" stroke="#92400E" stroke-width="2" fill="none"/>
+        <rect x="28" y="100" width="14" height="10" rx="5" fill="#065F46"/>
+        <rect x="48" y="100" width="14" height="10" rx="5" fill="#065F46"/>
+      </svg>
+      <div class="arac-ikonu">🚜 🌾 🪛</div>
+      <div class="meslek-ad">Çiftçi</div>
+      <div class="meslek-bilgi">Tarla ve bahçede çalışır, yiyecekleri yetiştirir.</div>
+      <span class="meslek-tur" style="background:#DCFCE7;color:#166534;">Tarım</span>
+    </div>
+
+    <!-- MÜHENDİS -->
+    <div class="meslek-kart" style="border-top-color:#7C3AED;">
+      <svg class="meslek-svg" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="58" width="46" height="42" rx="8" fill="#7C3AED"/>
+        <rect x="36" y="58" width="18" height="20" fill="#6D28D9"/>
+        <rect x="8" y="58" width="15" height="28" rx="7" fill="#7C3AED"/>
+        <ellipse cx="15" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <!-- cetvel -->
+        <rect x="66" y="60" width="6" height="26" rx="2" fill="#F59E0B"/>
+        <line x1="67" y1="65" x2="71" y2="65" stroke="white" stroke-width="1"/>
+        <line x1="67" y1="70" x2="71" y2="70" stroke="white" stroke-width="1"/>
+        <line x1="67" y1="75" x2="71" y2="75" stroke="white" stroke-width="1"/>
+        <line x1="67" y1="80" x2="71" y2="80" stroke="white" stroke-width="1"/>
+        <rect x="67" y="58" width="15" height="28" rx="7" fill="#7C3AED"/>
+        <ellipse cx="74" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <ellipse cx="45" cy="34" rx="22" ry="24" fill="#FBBF24"/>
+        <ellipse cx="45" cy="12" rx="22" ry="9" fill="#374151"/>
+        <!-- baret -->
+        <rect x="23" y="14" width="44" height="8" rx="3" fill="#F59E0B"/>
+        <ellipse cx="45" cy="14" rx="26" ry="5" fill="#F59E0B"/>
+        <ellipse cx="38" cy="32" rx="4" ry="4.5" fill="white"/>
+        <ellipse cx="52" cy="32" rx="4" ry="4.5" fill="white"/>
+        <circle cx="39" cy="33" r="2.5" fill="#1F2937"/>
+        <circle cx="53" cy="33" r="2.5" fill="#1F2937"/>
+        <path d="M38,43 Q45,49 52,43" stroke="#92400E" stroke-width="1.5" fill="none"/>
+        <rect x="28" y="100" width="14" height="10" rx="5" fill="#5B21B6"/>
+        <rect x="48" y="100" width="14" height="10" rx="5" fill="#5B21B6"/>
+      </svg>
+      <div class="arac-ikonu">📐 📏 🔧</div>
+      <div class="meslek-ad">Mühendis</div>
+      <div class="meslek-bilgi">Binalar, köprüler, makineler tasarlar ve inşa eder.</div>
+      <span class="meslek-tur" style="background:#EDE9FE;color:#6D28D9;">Teknik</span>
+    </div>
+
+    <!-- AŞÇI -->
+    <div class="meslek-kart" style="border-top-color:#EC4899;">
+      <svg class="meslek-svg" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="58" width="46" height="42" rx="8" fill="white" stroke="#E5E7EB" stroke-width="1.5"/>
+        <rect x="36" y="58" width="18" height="20" fill="#F9FAFB" stroke="#E5E7EB" stroke-width="1"/>
+        <rect x="8" y="58" width="15" height="28" rx="7" fill="white" stroke="#E5E7EB" stroke-width="1.5"/>
+        <ellipse cx="15" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <!-- tava -->
+        <ellipse cx="74" cy="75" rx="9" ry="6" fill="#374151"/>
+        <line x1="65" y1="75" x2="55" y2="78" stroke="#374151" stroke-width="3" stroke-linecap="round"/>
+        <rect x="67" y="58" width="15" height="28" rx="7" fill="white" stroke="#E5E7EB" stroke-width="1.5"/>
+        <ellipse cx="74" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <!-- aşçı şapkası -->
+        <ellipse cx="45" cy="14" rx="20" ry="12" fill="white" stroke="#E5E7EB" stroke-width="1"/>
+        <rect x="28" y="14" width="34" height="14" rx="2" fill="white" stroke="#E5E7EB" stroke-width="1"/>
+        <rect x="25" y="24" width="40" height="6" rx="2" fill="#E5E7EB"/>
+        <ellipse cx="45" cy="34" rx="22" ry="24" fill="#FBBF24"/>
+        <ellipse cx="38" cy="32" rx="4" ry="4.5" fill="white"/>
+        <ellipse cx="52" cy="32" rx="4" ry="4.5" fill="white"/>
+        <circle cx="39" cy="33" r="2.5" fill="#1F2937"/>
+        <circle cx="53" cy="33" r="2.5" fill="#1F2937"/>
+        <path d="M38,43 Q45,49 52,43" stroke="#92400E" stroke-width="1.5" fill="none"/>
+        <rect x="28" y="100" width="14" height="10" rx="5" fill="#374151"/>
+        <rect x="48" y="100" width="14" height="10" rx="5" fill="#374151"/>
+      </svg>
+      <div class="arac-ikonu">🍳 🥄 🫕</div>
+      <div class="meslek-ad">Aşçı</div>
+      <div class="meslek-bilgi">Lezzetli yemekler pişirir, insanları doyurur.</div>
+      <span class="meslek-tur" style="background:#FDF2F8;color:#BE185D;">Hizmet</span>
+    </div>
+
+    <!-- PILOT -->
+    <div class="meslek-kart" style="border-top-color:#0EA5E9;">
+      <svg class="meslek-svg" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="58" width="46" height="42" rx="8" fill="#0C4A6E"/>
+        <rect x="36" y="58" width="18" height="20" fill="#075985"/>
+        <!-- omuz apolet -->
+        <rect x="22" y="58" width="16" height="6" rx="2" fill="#F59E0B"/>
+        <rect x="52" y="58" width="16" height="6" rx="2" fill="#F59E0B"/>
+        <rect x="8" y="58" width="15" height="28" rx="7" fill="#0C4A6E"/>
+        <ellipse cx="15" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <rect x="67" y="58" width="15" height="28" rx="7" fill="#0C4A6E"/>
+        <ellipse cx="74" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <ellipse cx="45" cy="34" rx="22" ry="24" fill="#FBBF24"/>
+        <!-- pilot şapkası -->
+        <ellipse cx="45" cy="14" rx="24" ry="8" fill="#0C4A6E"/>
+        <rect x="28" y="14" width="34" height="10" rx="3" fill="#0C4A6E"/>
+        <rect x="22" y="20" width="46" height="5" rx="2" fill="#075985"/>
+        <circle cx="45" cy="17" r="4" fill="#F59E0B"/>
+        <ellipse cx="38" cy="32" rx="4" ry="4.5" fill="white"/>
+        <ellipse cx="52" cy="32" rx="4" ry="4.5" fill="white"/>
+        <circle cx="39" cy="33" r="2.5" fill="#1F2937"/>
+        <circle cx="53" cy="33" r="2.5" fill="#1F2937"/>
+        <path d="M38,43 Q45,49 52,43" stroke="#92400E" stroke-width="1.5" fill="none"/>
+        <rect x="28" y="100" width="14" height="10" rx="5" fill="#0C4A6E"/>
+        <rect x="48" y="100" width="14" height="10" rx="5" fill="#0C4A6E"/>
+      </svg>
+      <div class="arac-ikonu">✈️ 🛫 🎧</div>
+      <div class="meslek-ad">Pilot</div>
+      <div class="meslek-bilgi">Uçakları kullanır, yolcuları güvenle taşır.</div>
+      <span class="meslek-tur" style="background:#E0F2FE;color:#075985;">Ulaşım</span>
+    </div>
+
+    <!-- HEMŞİRE -->
+    <div class="meslek-kart" style="border-top-color:#EC4899;">
+      <svg class="meslek-svg" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="58" width="46" height="42" rx="8" fill="white" stroke="#FBCFE8" stroke-width="2"/>
+        <rect x="36" y="58" width="18" height="20" fill="#FDF2F8"/>
+        <!-- haç -->
+        <rect x="41" y="62" width="8" height="18" rx="2" fill="#EC4899"/>
+        <rect x="36" y="67" width="18" height="8" rx="2" fill="#EC4899"/>
+        <rect x="8" y="58" width="15" height="28" rx="7" fill="white" stroke="#FBCFE8" stroke-width="2"/>
+        <ellipse cx="15" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <rect x="67" y="58" width="15" height="28" rx="7" fill="white" stroke="#FBCFE8" stroke-width="2"/>
+        <ellipse cx="74" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <ellipse cx="45" cy="36" rx="22" ry="24" fill="#FBBF24"/>
+        <!-- uzun saç -->
+        <ellipse cx="45" cy="14" rx="22" ry="10" fill="#92400E"/>
+        <rect x="23" y="14" width="9" height="30" rx="5" fill="#92400E"/>
+        <rect x="58" y="14" width="9" height="30" rx="5" fill="#92400E"/>
+        <!-- bone -->
+        <ellipse cx="45" cy="17" rx="18" ry="10" fill="white" stroke="#FBCFE8" stroke-width="1"/>
+        <rect x="27" y="17" width="36" height="6" rx="2" fill="white" stroke="#FBCFE8" stroke-width="1"/>
+        <rect x="31" y="14" width="6" height="4" rx="1" fill="#EC4899"/>
+        <rect x="53" y="14" width="6" height="4" rx="1" fill="#EC4899"/>
+        <ellipse cx="38" cy="34" rx="4" ry="4.5" fill="white"/>
+        <ellipse cx="52" cy="34" rx="4" ry="4.5" fill="white"/>
+        <circle cx="39" cy="35" r="2.5" fill="#1F2937"/>
+        <circle cx="53" cy="35" r="2.5" fill="#1F2937"/>
+        <path d="M38,45 Q45,51 52,45" stroke="#92400E" stroke-width="1.5" fill="none"/>
+        <rect x="28" y="100" width="14" height="10" rx="5" fill="#BE185D"/>
+        <rect x="48" y="100" width="14" height="10" rx="5" fill="#BE185D"/>
+      </svg>
+      <div class="arac-ikonu">💉 🩹 💊</div>
+      <div class="meslek-ad">Hemşire</div>
+      <div class="meslek-bilgi">Hastalara bakar, ilaçlarını verir, iyileşmelerine yardım eder.</div>
+      <span class="meslek-tur" style="background:#FDF2F8;color:#BE185D;">Sağlık</span>
+    </div>
+
+    <!-- MİMAR -->
+    <div class="meslek-kart" style="border-top-color:#F59E0B;">
+      <svg class="meslek-svg" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="58" width="46" height="42" rx="8" fill="#F59E0B"/>
+        <rect x="36" y="58" width="18" height="20" fill="#D97706"/>
+        <rect x="8" y="58" width="15" height="28" rx="7" fill="#F59E0B"/>
+        <ellipse cx="15" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <!-- rulo kağıt -->
+        <rect x="66" y="62" width="16" height="22" rx="3" fill="white" stroke="#E5E7EB" stroke-width="1"/>
+        <line x1="70" y1="67" x2="78" y2="67" stroke="#9CA3AF" stroke-width="1"/>
+        <line x1="70" y1="71" x2="78" y2="71" stroke="#9CA3AF" stroke-width="1"/>
+        <line x1="70" y1="75" x2="78" y2="75" stroke="#9CA3AF" stroke-width="1"/>
+        <rect x="67" y="58" width="15" height="28" rx="7" fill="#F59E0B"/>
+        <ellipse cx="74" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <ellipse cx="45" cy="34" rx="22" ry="24" fill="#FBBF24"/>
+        <ellipse cx="45" cy="12" rx="22" ry="9" fill="#374151"/>
+        <ellipse cx="38" cy="32" rx="4" ry="4.5" fill="white"/>
+        <ellipse cx="52" cy="32" rx="4" ry="4.5" fill="white"/>
+        <circle cx="39" cy="33" r="2.5" fill="#1F2937"/>
+        <circle cx="53" cy="33" r="2.5" fill="#1F2937"/>
+        <path d="M38,43 Q45,49 52,43" stroke="#92400E" stroke-width="1.5" fill="none"/>
+        <rect x="28" y="100" width="14" height="10" rx="5" fill="#92400E"/>
+        <rect x="48" y="100" width="14" height="10" rx="5" fill="#92400E"/>
+      </svg>
+      <div class="arac-ikonu">📐 🏗️ 📋</div>
+      <div class="meslek-ad">Mimar</div>
+      <div class="meslek-bilgi">Binaları ve yapıları tasarlar, planlarını çizer.</div>
+      <span class="meslek-tur" style="background:#FEF3C7;color:#92400E;">Teknik</span>
+    </div>
+
+    <!-- ECZACI -->
+    <div class="meslek-kart" style="border-top-color:#10B981;">
+      <svg class="meslek-svg" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="58" width="46" height="42" rx="8" fill="white" stroke="#A7F3D0" stroke-width="2"/>
+        <rect x="36" y="58" width="18" height="20" fill="#F0FDF4"/>
+        <!-- ilaç kutuları -->
+        <rect x="8" y="65" width="14" height="10" rx="2" fill="#10B981"/>
+        <rect x="9" y="69" width="12" height="2" fill="white"/>
+        <rect x="67" y="65" width="14" height="10" rx="2" fill="#10B981"/>
+        <rect x="68" y="69" width="12" height="2" fill="white"/>
+        <rect x="8" y="58" width="15" height="28" rx="7" fill="white" stroke="#A7F3D0" stroke-width="2"/>
+        <ellipse cx="15" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <rect x="67" y="58" width="15" height="28" rx="7" fill="white" stroke="#A7F3D0" stroke-width="2"/>
+        <ellipse cx="74" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <ellipse cx="45" cy="34" rx="22" ry="24" fill="#FBBF24"/>
+        <ellipse cx="45" cy="12" rx="22" ry="9" fill="#10B981" opacity="0.8"/>
+        <ellipse cx="38" cy="32" rx="4" ry="4.5" fill="white"/>
+        <ellipse cx="52" cy="32" rx="4" ry="4.5" fill="white"/>
+        <circle cx="39" cy="33" r="2.5" fill="#1F2937"/>
+        <circle cx="53" cy="33" r="2.5" fill="#1F2937"/>
+        <path d="M38,43 Q45,49 52,43" stroke="#92400E" stroke-width="1.5" fill="none"/>
+        <rect x="28" y="100" width="14" height="10" rx="5" fill="#065F46"/>
+        <rect x="48" y="100" width="14" height="10" rx="5" fill="#065F46"/>
+      </svg>
+      <div class="arac-ikonu">💊 🧪 ⚖️</div>
+      <div class="meslek-ad">Eczacı</div>
+      <div class="meslek-bilgi">İlaçları hazırlar ve insanlara doğru kullanımı anlatır.</div>
+      <span class="meslek-tur" style="background:#DCFCE7;color:#166534;">Sağlık</span>
+    </div>
+
+    <!-- GAZETECI -->
+    <div class="meslek-kart" style="border-top-color:#6B7280;">
+      <svg class="meslek-svg" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="58" width="46" height="42" rx="8" fill="#374151"/>
+        <rect x="36" y="58" width="18" height="20" fill="#4B5563"/>
+        <rect x="8" y="58" width="15" height="28" rx="7" fill="#374151"/>
+        <ellipse cx="15" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <!-- mikrofon -->
+        <rect x="69" y="60" width="8" height="14" rx="4" fill="#1F2937"/>
+        <ellipse cx="73" cy="60" rx="5" ry="6" fill="#374151" stroke="#6B7280" stroke-width="1"/>
+        <line x1="73" y1="74" x2="73" y2="82" stroke="#6B7280" stroke-width="2"/>
+        <line x1="68" y1="82" x2="78" y2="82" stroke="#6B7280" stroke-width="2"/>
+        <rect x="67" y="58" width="15" height="28" rx="7" fill="#374151"/>
+        <ellipse cx="74" cy="88" rx="7" ry="6" fill="#FBBF24"/>
+        <ellipse cx="45" cy="34" rx="22" ry="24" fill="#FBBF24"/>
+        <ellipse cx="45" cy="12" rx="22" ry="9" fill="#1F2937"/>
+        <ellipse cx="38" cy="32" rx="4" ry="4.5" fill="white"/>
+        <ellipse cx="52" cy="32" rx="4" ry="4.5" fill="white"/>
+        <circle cx="39" cy="33" r="2.5" fill="#1F2937"/>
+        <circle cx="53" cy="33" r="2.5" fill="#1F2937"/>
+        <path d="M38,43 Q45,49 52,43" stroke="#92400E" stroke-width="1.5" fill="none"/>
+        <rect x="28" y="100" width="14" height="10" rx="5" fill="#1F2937"/>
+        <rect x="48" y="100" width="14" height="10" rx="5" fill="#1F2937"/>
+      </svg>
+      <div class="arac-ikonu">🎙️ 📰 📸</div>
+      <div class="meslek-ad">Gazeteci</div>
+      <div class="meslek-bilgi">Haberleri toplar, yazar ve insanlara duyurur.</div>
+      <span class="meslek-tur" style="background:#F3F4F6;color:#374151;">Medya</span>
+    </div>
+
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-yaz" onclick="window.print()">🖨️ Yazdır</button>
+    <button class="btn btn-indir" onclick="indir()">⬇️ İndir</button>
+  </div>
+</div>
+
+<!-- ══ ARAÇ GEREÇLER ══ -->
+<div id="araclar" class="section">
+  <p class="sec-baslik">🔧 Mesleklerin Araç-Gereçleri</p>
+  <p class="sec-desc">Her mesleğin kendine özgü araçları vardır!</p>
+
+  <div class="arac-grid">
+    <div class="arac-kart"><div class="arac-emoji">📚</div><div><div class="arac-baslik">Öğretmen</div><div class="arac-metin">Kitap, kalem, tahta, tebeşir</div></div></div>
+    <div class="arac-kart"><div class="arac-emoji">🩺</div><div><div class="arac-baslik">Doktor</div><div class="arac-metin">Steteskop, iğne, röntgen cihazı</div></div></div>
+    <div class="arac-kart"><div class="arac-emoji">🚒</div><div><div class="arac-baslik">İtfaiyeci</div><div class="arac-metin">Hortum, baret, yangın söndürücü</div></div></div>
+    <div class="arac-kart"><div class="arac-emoji">🚔</div><div><div class="arac-baslik">Polis</div><div class="arac-metin">Telsiz, polis arabası, cop</div></div></div>
+    <div class="arac-kart"><div class="arac-emoji">🌾</div><div><div class="arac-baslik">Çiftçi</div><div class="arac-metin">Çapa, traktör, kürek, sulama</div></div></div>
+    <div class="arac-kart"><div class="arac-emoji">📐</div><div><div class="arac-baslik">Mühendis</div><div class="arac-metin">Cetvel, hesap makinesi, çizim araçları</div></div></div>
+    <div class="arac-kart"><div class="arac-emoji">🍳</div><div><div class="arac-baslik">Aşçı</div><div class="arac-metin">Tava, bıçak, önlük, fırın</div></div></div>
+    <div class="arac-kart"><div class="arac-emoji">✈️</div><div><div class="arac-baslik">Pilot</div><div class="arac-metin">Uçak, radar, kulaklık, kumanda paneli</div></div></div>
+    <div class="arac-kart"><div class="arac-emoji">💉</div><div><div class="arac-baslik">Hemşire</div><div class="arac-metin">Enjektör, tansiyon aleti, ilaç</div></div></div>
+    <div class="arac-kart"><div class="arac-emoji">📏</div><div><div class="arac-baslik">Mimar</div><div class="arac-metin">Çizim kalemi, maket, plan kağıdı</div></div></div>
+    <div class="arac-kart"><div class="arac-emoji">💊</div><div><div class="arac-baslik">Eczacı</div><div class="arac-metin">Terazi, ilaç dolabı, reçete</div></div></div>
+    <div class="arac-kart"><div class="arac-emoji">🎙️</div><div><div class="arac-baslik">Gazeteci</div><div class="arac-metin">Mikrofon, kamera, defter, kalem</div></div></div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-yaz" onclick="window.print()">🖨️ Yazdır</button>
+    <button class="btn btn-indir" onclick="indir()">⬇️ İndir</button>
+  </div>
+</div>
+
+<!-- ══ SORULAR ══ -->
+<div id="sorular" class="section">
+  <p class="sec-baslik">❓ Anlama Soruları</p>
+  <p class="sec-desc">Doğru şıkkı seç!</p>
+
+  <div class="ilerleme"><div class="ilerleme-dolu" id="ilerleme-s" style="width:0%"></div></div>
+  <div class="ilerleme-yazi" id="ilerleme-yazi-s">0 / 8 cevaplandı</div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">1. Yangınları söndüren meslek hangisidir?</div>
+    <div class="secenekler" data-dogru="2" data-id="0">
+      <button class="secenek" onclick="cevapla(this)">A) Polis</button>
+      <button class="secenek" onclick="cevapla(this)">B) Doktor</button>
+      <button class="secenek" onclick="cevapla(this)">C) İtfaiyeci</button>
+      <button class="secenek" onclick="cevapla(this)">D) Mühendis</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">2. Hastaları tedavi eden kimdir?</div>
+    <div class="secenekler" data-dogru="0" data-id="1">
+      <button class="secenek" onclick="cevapla(this)">A) Doktor</button>
+      <button class="secenek" onclick="cevapla(this)">B) Eczacı</button>
+      <button class="secenek" onclick="cevapla(this)">C) Hemşire</button>
+      <button class="secenek" onclick="cevapla(this)">D) Gazeteci</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">3. Uçakları kim kullanır?</div>
+    <div class="secenekler" data-dogru="1" data-id="2">
+      <button class="secenek" onclick="cevapla(this)">A) Mühendis</button>
+      <button class="secenek" onclick="cevapla(this)">B) Pilot</button>
+      <button class="secenek" onclick="cevapla(this)">C) Polis</button>
+      <button class="secenek" onclick="cevapla(this)">D) Mimar</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">4. Binaları ve yapıları tasarlayan kimdir?</div>
+    <div class="secenekler" data-dogru="3" data-id="3">
+      <button class="secenek" onclick="cevapla(this)">A) Çiftçi</button>
+      <button class="secenek" onclick="cevapla(this)">B) Aşçı</button>
+      <button class="secenek" onclick="cevapla(this)">C) Gazeteci</button>
+      <button class="secenek" onclick="cevapla(this)">D) Mimar</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">5. Tarla ve bahçede çalışan kimdir?</div>
+    <div class="secenekler" data-dogru="2" data-id="4">
+      <button class="secenek" onclick="cevapla(this)">A) Hemşire</button>
+      <button class="secenek" onclick="cevapla(this)">B) Pilot</button>
+      <button class="secenek" onclick="cevapla(this)">C) Çiftçi</button>
+      <button class="secenek" onclick="cevapla(this)">D) Eczacı</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">6. Öğretmenin temel görevi nedir?</div>
+    <div class="secenekler" data-dogru="1" data-id="5">
+      <button class="secenek" onclick="cevapla(this)">A) Yemek pişirmek</button>
+      <button class="secenek" onclick="cevapla(this)">B) Çocuklara bilgi öğretmek</button>
+      <button class="secenek" onclick="cevapla(this)">C) Bina tasarlamak</button>
+      <button class="secenek" onclick="cevapla(this)">D) Haber yazmak</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">7. İlaçları hazırlayan kimdir?</div>
+    <div class="secenekler" data-dogru="0" data-id="6">
+      <button class="secenek" onclick="cevapla(this)">A) Eczacı</button>
+      <button class="secenek" onclick="cevapla(this)">B) Hemşire</button>
+      <button class="secenek" onclick="cevapla(this)">C) Doktor</button>
+      <button class="secenek" onclick="cevapla(this)">D) Aşçı</button>
+    </div>
+  </div>
+
+  <div class="soru-kart">
+    <div class="soru-metin">8. Haberleri toplayıp insanlara duyuran kimdir?</div>
+    <div class="secenekler" data-dogru="3" data-id="7">
+      <button class="secenek" onclick="cevapla(this)">A) Pilot</button>
+      <button class="secenek" onclick="cevapla(this)">B) Polis</button>
+      <button class="secenek" onclick="cevapla(this)">C) Mühendis</button>
+      <button class="secenek" onclick="cevapla(this)">D) Gazeteci</button>
+    </div>
+  </div>
+
+  <div class="puan-kart" id="puan-s">
+    <div class="sayi" id="sayi-s"></div>
+    <p id="msg-s"></p>
+    <button class="btn btn-tekrar" onclick="tekrar()">🔄 Tekrar</button>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-yaz" onclick="window.print()">🖨️ Yazdır</button>
+    <button class="btn btn-indir" onclick="indir()">⬇️ İndir</button>
+  </div>
+</div>
+
+<!-- ══ EŞLEŞTİRME ══ -->
+<div id="eslestirme" class="section">
+  <p class="sec-baslik">🔗 Meslek - Araç Eşleştirme</p>
+  <p class="sec-desc">Mesleği kullandığı araçla eşleştir!</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+    <div>
+      <p class="e-col-label">MESLEK</p>
+      <div class="e-item" data-id="1" onclick="esolSec(this)">👩‍🏫 Öğretmen</div>
+      <div class="e-item" data-id="2" onclick="esolSec(this)">👨‍⚕️ Doktor</div>
+      <div class="e-item" data-id="3" onclick="esolSec(this)">🧑‍🚒 İtfaiyeci</div>
+      <div class="e-item" data-id="4" onclick="esolSec(this)">👨‍🍳 Aşçı</div>
+      <div class="e-item" data-id="5" onclick="esolSec(this)">✈️ Pilot</div>
+      <div class="e-item" data-id="6" onclick="esolSec(this)">🌾 Çiftçi</div>
+    </div>
+    <div>
+      <p class="e-col-label">ARAÇ</p>
+      <div class="e-item" data-id="4" onclick="esagSec(this)">🍳 Tava ve bıçak</div>
+      <div class="e-item" data-id="1" onclick="esagSec(this)">📚 Kitap ve tahta</div>
+      <div class="e-item" data-id="6" onclick="esagSec(this)">🚜 Traktör ve çapa</div>
+      <div class="e-item" data-id="2" onclick="esagSec(this)">🩺 Steteskop</div>
+      <div class="e-item" data-id="3" onclick="esagSec(this)">🚒 Hortum ve baret</div>
+      <div class="e-item" data-id="5" onclick="esagSec(this)">🛫 Uçak ve radar</div>
+    </div>
+  </div>
+
+  <div id="e-sonuc" style="display:none;" class="puan-kart">
+    <div class="sayi" id="e-sayi"></div>
+    <p id="e-msg"></p>
+    <button class="btn btn-tekrar" onclick="eslestirmeReset()">🔄 Tekrar</button>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-yaz" onclick="window.print()">🖨️ Yazdır</button>
+    <button class="btn btn-indir" onclick="indir()">⬇️ İndir</button>
+  </div>
+</div>
+
+<script>
+function goster(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+let sSkor = 0, sSayac = 0;
+function cevapla(btn) {
+  const grup = btn.parentElement;
+  if (grup.dataset.answered) return;
+  grup.dataset.answered = '1';
+  const secenekler = grup.querySelectorAll('.secenek');
+  const dogruIdx = parseInt(grup.dataset.dogru);
+  secenekler.forEach(s => s.disabled = true);
+  const secilen = Array.from(secenekler).indexOf(btn);
+  if (secilen === dogruIdx) { btn.classList.add('dogru'); sSkor++; }
+  else { btn.classList.add('yanlis'); secenekler[dogruIdx].classList.add('dogru'); }
+  sSayac++;
+  const pct = Math.round(sSayac / 8 * 100);
+  document.getElementById('ilerleme-s').style.width = pct + '%';
+  document.getElementById('ilerleme-yazi-s').textContent = sSayac + ' / 8 cevaplandı';
+  if (sSayac === 8) setTimeout(() => {
+    const p = Math.round(sSkor / 8 * 100);
+    document.getElementById('sayi-s').textContent = sSkor + ' / 8';
+    document.getElementById('msg-s').textContent = p >= 75 ? '🌟 Harika! Meslekleri çok iyi biliyorsun!' : p >= 50 ? '👍 İyi iş!' : '💪 Tekrar dene!';
+    document.getElementById('puan-s').style.display = 'block';
+    if (p >= 75) konfeti();
+  }, 400);
+}
+function tekrar() {
+  sSkor = 0; sSayac = 0;
+  document.getElementById('ilerleme-s').style.width = '0%';
+  document.getElementById('ilerleme-yazi-s').textContent = '0 / 8 cevaplandı';
+  document.getElementById('puan-s').style.display = 'none';
+  document.querySelectorAll('#sorular .secenekler').forEach(g => {
+    delete g.dataset.answered;
+    g.querySelectorAll('.secenek').forEach(s => { s.disabled=false; s.classList.remove('dogru','yanlis'); });
+  });
+}
+
+let secilenSol = null, eSkor = 0, eToplam = 0;
+function esolSec(el) {
+  if (el.classList.contains('dogru') || el.classList.contains('locked')) return;
+  document.querySelectorAll('.e-item.selected').forEach(e => e.classList.remove('selected'));
+  secilenSol = el; el.classList.add('selected');
+}
+function esagSec(el) {
+  if (!secilenSol || el.classList.contains('dogru')) return;
+  if (secilenSol.dataset.id === el.dataset.id) {
+    secilenSol.classList.remove('selected'); secilenSol.classList.add('dogru','locked');
+    el.classList.add('dogru','locked');
+    eSkor++; eToplam++; secilenSol = null;
+    if (eToplam === 6) setTimeout(() => {
+      document.getElementById('e-sayi').textContent = eSkor + ' / 6';
+      document.getElementById('e-msg').textContent = eSkor === 6 ? '🌟 Tüm eşleştirmeleri doğru yaptın!' : '👍 İyi iş!';
+      document.getElementById('e-sonuc').style.display = 'block';
+      if (eSkor >= 5) konfeti();
+    }, 300);
+  } else {
+    const s = secilenSol; secilenSol = null;
+    s.classList.remove('selected'); s.classList.add('yanlis'); el.classList.add('yanlis');
+    eToplam++;
+    setTimeout(() => { s.classList.remove('yanlis'); el.classList.remove('yanlis'); }, 700);
+  }
+}
+function eslestirmeReset() {
+  eSkor = 0; eToplam = 0; secilenSol = null;
+  document.getElementById('e-sonuc').style.display = 'none';
+  document.querySelectorAll('.e-item').forEach(e => e.classList.remove('dogru','yanlis','selected','locked'));
+}
+
+function indir() {
+  const html = document.documentElement.outerHTML;
+  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'meslekler.html';
+  a.click();
+}
+
+function konfeti() {
+  const colors = ['#0EA5E9','#7C3AED','#10B981','#F59E0B','#EF4444','#EC4899'];
+  const wrap = document.getElementById('confetti-wrap');
+  wrap.innerHTML = '';
+  for (let i = 0; i < 60; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.cssText = `left:${Math.random()*100}vw;top:-20px;width:${8+Math.random()*8}px;height:${8+Math.random()*8}px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*.8}s`;
+    wrap.appendChild(p);
+    p.addEventListener('animationend', () => p.remove());
+  }
+}
+</script>
+</body>
+</html>
