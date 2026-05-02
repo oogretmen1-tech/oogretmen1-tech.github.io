@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doğal Sayılar – 2. Sınıf Matematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #1565c0; --blue-l: #e3f2fd;
+  --green: #2e7d32; --green-l: #e8f5e9;
+  --orange: #e65100; --orange-l: #fff3e0;
+  --purple: #6a1b9a; --purple-l: #f3e5f5;
+  --red: #c62828; --red-l: #ffebee;
+  --teal: #00695c; --teal-l: #e0f2f1;
+  --bg: #f0f4ff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); font-family: 'Nunito', sans-serif; color: #1a1a2e; }
+
+/* ── NAV ── */
+.topnav {
+  background: var(--blue);
+  padding: 10px 16px;
+  position: sticky; top: 0; z-index: 100;
+  display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
+  box-shadow: 0 3px 14px rgba(21,101,192,.35);
+}
+.topnav a {
+  color: rgba(255,255,255,.85); text-decoration: none;
+  font-size: 12px; font-weight: 800; padding: 5px 12px;
+  border-radius: 20px; border: 1.5px solid rgba(255,255,255,.3);
+  transition: all .2s; white-space: nowrap;
+}
+.topnav a:hover { background: rgba(255,255,255,.2); color: #fff; }
+
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(135deg, #0d47a1, #1565c0, #1976d2);
+  padding: 36px 20px 50px; text-align: center; color: #fff;
+}
+.hero h1 { font-family: 'Fredoka One', cursive; font-size: clamp(2rem,6vw,3.2rem); margin-bottom: 8px; }
+.hero p { font-size: 15px; opacity: .82; font-weight: 600; }
+.hero-chips { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+.hero-chip { background: rgba(255,255,255,.18); border: 1.5px solid rgba(255,255,255,.3); border-radius: 20px; padding: 5px 14px; font-size: 12px; font-weight: 800; }
+
+/* ── SECTION ── */
+.section { max-width: 900px; margin: 28px auto; padding: 0 16px; }
+.sec-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 22px; border-radius: 18px 18px 0 0; color: #fff;
+  margin-bottom: 0;
+}
+.sec-header .sec-num {
+  background: rgba(255,255,255,.25); border-radius: 50%;
+  width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+  font-family: 'Fredoka One', cursive; font-size: 18px; flex-shrink: 0;
+}
+.sec-header h2 { font-family: 'Fredoka One', cursive; font-size: 22px; }
+.sec-body { background: #fff; border-radius: 0 0 18px 18px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,.07); margin-bottom: 8px; }
+
+.sh1 { background: linear-gradient(135deg, var(--blue), #1976d2); }
+.sh2 { background: linear-gradient(135deg, var(--green), #388e3c); }
+.sh3 { background: linear-gradient(135deg, var(--orange), #f57c00); }
+.sh4 { background: linear-gradient(135deg, var(--purple), #7b1fa2); }
+.sh5 { background: linear-gradient(135deg, var(--teal), #00796b); }
+.sh6 { background: linear-gradient(135deg, var(--red), #d32f2f); }
+.sh7 { background: linear-gradient(135deg, #4527a0, #5e35b1); }
+.sh8 { background: linear-gradient(135deg, #00838f, #0097a7); }
+.sh9 { background: linear-gradient(135deg, #558b2f, #689f38); }
+.sh10 { background: linear-gradient(135deg, #ad1457, #c2185b); }
+
+/* ── NESNE SAYMA ── */
+.objects-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.obj-group { background: var(--blue-l); border: 2px solid #90caf9; border-radius: 14px; padding: 14px; display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 120px; }
+.obj-emojis { font-size: 24px; line-height: 1.4; text-align: center; }
+.obj-q { font-size: 13px; font-weight: 700; color: var(--blue); }
+.obj-input { border: 2px solid var(--blue); border-radius: 8px; padding: 6px 10px; font-family: 'Nunito',sans-serif; font-size: 18px; font-weight: 800; width: 64px; text-align: center; color: var(--blue); outline: none; }
+.obj-result { font-size: 12px; font-weight: 800; min-height: 18px; }
+
+/* ── RAKAMLAR ── */
+.digits-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 18px; }
+.digit-card {
+  background: linear-gradient(135deg, var(--blue-l), #fff);
+  border: 2.5px solid #90caf9; border-radius: 16px; padding: 16px 8px;
+  text-align: center; cursor: pointer; transition: all .15s;
+  position: relative; user-select: none;
+}
+.digit-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(21,101,192,.2); border-color: var(--blue); }
+.digit-big { font-family: 'Fredoka One', cursive; font-size: 48px; color: var(--blue); line-height: 1; }
+.digit-name { font-size: 13px; font-weight: 800; color: #555; margin-top: 4px; }
+.digit-dots { font-size: 11px; color: #888; margin-top: 2px; }
+
+/* Parmak görseli */
+.finger-display {
+  background: var(--blue-l); border-radius: 14px; padding: 16px;
+  display: none; align-items: center; gap: 16px; margin-top: 12px;
+  border: 2px solid #90caf9;
+}
+.finger-display.show { display: flex; }
+.finger-hands { display: flex; gap: 12px; align-items: flex-end; }
+.hand { display: flex; gap: 3px; align-items: flex-end; }
+.finger {
+  width: 18px; border-radius: 6px 6px 3px 3px;
+  background: #ffcc80; border: 2px solid #ef6c00;
+  transition: height .3s;
+}
+.finger.up { height: 44px; background: #ff9800; border-color: #e65100; }
+.finger.down { height: 24px; background: #ffe0b2; border-color: #ffb74d; }
+.finger-info { flex: 1; }
+.finger-num { font-family: 'Fredoka One', cursive; font-size: 36px; color: var(--blue); }
+.finger-name { font-size: 16px; font-weight: 800; color: #333; }
+
+/* ── SAYILARDAN SAYMA ── */
+.number-line { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.nl-num {
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fredoka One', cursive; font-size: 16px;
+  background: #e3f2fd; border: 2px solid #90caf9; color: var(--blue);
+  cursor: pointer; transition: all .15s;
+}
+.nl-num:hover { background: var(--blue); color: #fff; transform: scale(1.1); }
+.nl-num.highlight { background: var(--orange); color: #fff; border-color: var(--orange); transform: scale(1.15); }
+.nl-num.spoken { background: var(--green); color: #fff; border-color: var(--green); }
+
+/* ── RİTMİK SAYMA ── */
+.rhythmic-controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+.rhy-btn {
+  background: var(--blue-l); border: 2px solid #90caf9; border-radius: 20px;
+  padding: 8px 18px; font-family: 'Nunito',sans-serif; font-size: 14px; font-weight: 800;
+  color: var(--blue); cursor: pointer; transition: all .15s;
+}
+.rhy-btn:hover, .rhy-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+.rhythmic-display { display: flex; flex-wrap: wrap; gap: 8px; min-height: 54px; }
+.rhy-num {
+  padding: 8px 14px; border-radius: 12px; font-family: 'Fredoka One', cursive; font-size: 18px;
+  background: #e3f2fd; border: 2px solid #90caf9; color: var(--blue);
+  transition: all .3s; cursor: pointer;
+}
+.rhy-num.lit { background: var(--orange); color: #fff; border-color: var(--orange); transform: scale(1.2); }
+.rhy-num.said { background: var(--green); color: #fff; border-color: var(--green); }
+
+/* ── KARŞILAŞTIRMA ── */
+.compare-box { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+.cmp-num { font-family: 'Fredoka One', cursive; font-size: 52px; color: var(--blue); background: var(--blue-l); border: 3px solid #90caf9; border-radius: 16px; padding: 10px 20px; cursor: pointer; transition: all .2s; }
+.cmp-num:hover { transform: scale(1.05); }
+.cmp-sign { font-family: 'Fredoka One', cursive; font-size: 48px; color: #aaa; }
+.cmp-sign.gt { color: var(--red); }
+.cmp-sign.lt { color: var(--green); }
+.cmp-sign.eq { color: var(--orange); }
+.cmp-result { font-size: 15px; font-weight: 800; padding: 10px 18px; border-radius: 12px; }
+.cmp-result.correct { background: var(--green-l); color: var(--green); }
+.cmp-result.wrong { background: var(--red-l); color: var(--red); }
+
+/* ── ONLUK BİRLİK ── */
+.place-value-wrap { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 18px; align-items: flex-end; }
+.pv-column { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.pv-label { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+.pv-label.tens { color: var(--blue); }
+.pv-label.ones { color: var(--orange); }
+.pv-blocks { display: flex; flex-direction: column; gap: 4px; align-items: center; min-height: 160px; justify-content: flex-end; }
+.ten-block {
+  width: 28px; background: linear-gradient(135deg, var(--blue), #1976d2);
+  border-radius: 4px; border: 2px solid #0d47a1;
+  display: flex; flex-direction: column; justify-content: space-around;
+  padding: 2px; cursor: pointer; transition: all .2s;
+}
+.ten-block .unit-line { height: 8px; background: rgba(255,255,255,.4); border-radius: 2px; margin: 1px; }
+.one-block {
+  width: 28px; height: 28px; background: linear-gradient(135deg, var(--orange), #f57c00);
+  border-radius: 6px; border: 2px solid #e65100; cursor: pointer; transition: all .2s;
+}
+.ten-block:hover, .one-block:hover { transform: scale(1.1); }
+.pv-number { font-family: 'Fredoka One', cursive; font-size: 48px; }
+.pv-number.tens { color: var(--blue); }
+.pv-number.ones { color: var(--orange); }
+
+/* Abakus */
+.abacus { display: inline-flex; gap: 2px; background: #8d6e63; padding: 10px 8px; border-radius: 10px; border: 3px solid #5d4037; margin-bottom: 14px; }
+.abacus-rod { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.abacus-bead {
+  width: 22px; height: 22px; border-radius: 50%; cursor: pointer;
+  transition: all .2s; border: 2px solid rgba(0,0,0,.2);
+}
+.abacus-bead.on { background: #f44336; box-shadow: 0 2px 6px rgba(244,67,54,.5); }
+.abacus-bead.off { background: #bdbdbd; }
+.abacus-label { font-size: 10px; font-weight: 800; color: #fff; margin-top: 4px; }
+
+/* ── BASAMAK ── */
+.digit-place { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.dp-card { border-radius: 14px; padding: 16px; text-align: center; flex: 1; min-width: 120px; }
+.dp-card.hundreds { background: linear-gradient(135deg, var(--purple-l), #f8f0ff); border: 2px solid #ce93d8; }
+.dp-card.tens { background: linear-gradient(135deg, var(--blue-l), #e8f4ff); border: 2px solid #90caf9; }
+.dp-card.ones { background: linear-gradient(135deg, var(--orange-l), #fff8f0); border: 2px solid #ffcc80; }
+.dp-name { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.dp-card.hundreds .dp-name { color: var(--purple); }
+.dp-card.tens .dp-name { color: var(--blue); }
+.dp-card.ones .dp-name { color: var(--orange); }
+.dp-digit { font-family: 'Fredoka One', cursive; font-size: 42px; }
+.dp-card.hundreds .dp-digit { color: var(--purple); }
+.dp-card.tens .dp-digit { color: var(--blue); }
+.dp-card.ones .dp-digit { color: var(--orange); }
+.dp-value { font-size: 13px; font-weight: 700; color: #666; margin-top: 4px; }
+
+/* ── YUVARLAMA ── */
+.rounding-line { display: flex; align-items: center; gap: 0; flex-wrap: wrap; margin-bottom: 16px; }
+.rl-num {
+  width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;
+  font-family: 'Fredoka One', cursive; font-size: 15px; border-top: 3px solid #90caf9;
+  border-bottom: 3px solid #90caf9; color: var(--blue); background: var(--blue-l);
+  transition: all .2s;
+}
+.rl-num:first-child { border-left: 3px solid #90caf9; border-radius: 12px 0 0 12px; }
+.rl-num:last-child { border-right: 3px solid #90caf9; border-radius: 0 12px 12px 0; }
+.rl-num.anchor { background: var(--blue); color: #fff; transform: scale(1.15); border-color: var(--blue); }
+.rl-num.target { background: var(--green); color: #fff; border-color: var(--green); transform: scale(1.2); }
+.rl-num.skip { opacity: .4; }
+
+/* Ortak buton stili */
+.act-btn {
+  background: var(--blue); color: #fff; border: none; border-radius: 22px;
+  padding: 10px 22px; font-family: 'Nunito',sans-serif; font-size: 14px; font-weight: 800;
+  cursor: pointer; transition: all .15s; margin-top: 10px;
+}
+.act-btn:hover { background: #0d47a1; transform: translateY(-2px); }
+.act-btn.green { background: var(--green); }
+.act-btn.green:hover { background: #1b5e20; }
+.act-btn.orange { background: var(--orange); }
+.act-btn.orange:hover { background: #bf360c; }
+
+/* Info kutusu */
+.info-box { background: var(--blue-l); border-left: 4px solid var(--blue); border-radius: 10px; padding: 13px 16px; font-size: 14px; font-weight: 700; color: #1a237e; line-height: 1.7; margin-bottom: 14px; }
+.info-box.green { background: var(--green-l); border-color: var(--green); color: #1b5e20; }
+.info-box.orange { background: var(--orange-l); border-color: var(--orange); color: #bf360c; }
+
+/* Geri mesaj */
+.feedback { font-size: 14px; font-weight: 800; padding: 8px 14px; border-radius: 10px; display: inline-block; margin-top: 8px; }
+.feedback.ok { background: var(--green-l); color: var(--green); }
+.feedback.no { background: var(--red-l); color: var(--red); }
+
+@media (max-width: 580px) {
+  .digits-grid { grid-template-columns: repeat(3,1fr); }
+  .compare-box { justify-content: center; }
+  .pv-number { font-size: 36px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="topnav">
+  <a href="#s1">🔢 Nesne Sayma</a>
+  <a href="#s2">0️⃣ Rakamlar</a>
+  <a href="#s3">📢 Sayı Oluştur</a>
+  <a href="#s4">🎵 Ritmik Sayma</a>
+  <a href="#s5">⚖️ Karşılaştırma</a>
+  <a href="#s6">🧱 Onluk-Birlik</a>
+  <a href="#s7">📊 Basamak</a>
+  <a href="#s8">〰️ Yuvarlama</a><a href="#s9">🖐️ Deste &amp; Düzine</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>🔢 Doğal Sayılar</h1>
+  <p>2. Sınıf Matematik · Görsel · İnteraktif · Eğlenceli</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🔊 Sesli Söyleme</span>
+    <span class="hero-chip">🖐️ Parmak Görseli</span>
+    <span class="hero-chip">🧱 Onluk-Birlik Blokları</span>
+    <span class="hero-chip">🎰 Abakus</span>
+    <span class="hero-chip">🎮 İnteraktif Etkinlikler</span>
+  </div>
+</div>
+
+<!-- ══════════ 1. NESNE SAYMA ══════════ -->
+<div class="section" id="s1">
+  <div class="sec-header sh1">
+    <div class="sec-num">1</div>
+    <h2>🔢 Nesne Sayısını Belirleme</h2>
+  </div>
+  <div class="sec-body">
+    <div class="info-box">Bir gruptaki nesneleri teker teker say ve kaç tane olduğunu bul!</div>
+
+    <div class="objects-grid" id="objGrid"></div>
+
+    <button class="act-btn" onclick="checkObjects()">✅ Kontrol Et</button>
+    <button class="act-btn orange" onclick="newObjects()" style="margin-left:8px">🔄 Yeni Grup</button>
+    <div id="objFeedback" class="feedback" style="display:none"></div>
+  </div>
+</div>
+
+<!-- ══════════ 2. RAKAMLAR ══════════ -->
+<div class="section" id="s2">
+  <div class="sec-header sh2">
+    <div class="sec-num">2</div>
+    <h2>0️⃣ Rakamları Tanıyalım (0–9)</h2>
+  </div>
+  <div class="sec-body">
+    <div class="info-box green">Rakama tıkla — sesini duyalım ve parmaklarına bak! 🖐️</div>
+
+    <div class="digits-grid" id="digitsGrid"></div>
+
+    <div class="finger-display" id="fingerDisplay">
+      <div class="finger-hands" id="fingerHands"></div>
+      <div class="finger-info">
+        <div class="finger-num" id="fingerNum">-</div>
+        <div class="finger-name" id="fingerName">-</div>
+        <div style="font-size:13px;color:#888;margin-top:4px;" id="fingerDesc"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ 3. SAYI OLUŞTURMA & OKUMA ══════════ -->
+<div class="section" id="s3">
+  <div class="sec-header sh3">
+    <div class="sec-num">3</div>
+    <h2>🔗 Rakamlardan Sayı Oluşturma & Okunuşu</h2>
+  </div>
+  <div class="sec-body">
+    <div class="info-box orange">Rakamları seçerek sayı oluştur, sonra sesi dinle!</div>
+
+    <div style="margin-bottom:14px;">
+      <div style="font-size:13px;font-weight:800;color:var(--orange);margin-bottom:8px;">Rakam Seç:</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+        <button class="rhy-btn" id="d1" onclick="selectDigit(0)">–</button>
+        <button class="rhy-btn" id="d2" onclick="selectDigit(1)">–</button>
+        <div style="font-family:'Fredoka One',cursive;font-size:14px;color:#aaa;margin:auto 4px;line-height:40px;">→ Sayı:</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:42px;color:var(--orange);min-width:80px;text-align:center;line-height:1;" id="builtNumber">–</div>
+        <button class="act-btn orange" onclick="speakBuilt()" style="margin-top:0">🔊 Dinle</button>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;" id="digitPicker"></div>
+    </div>
+
+    <div style="border-top:1.5px dashed #ffd180;padding-top:14px;margin-top:4px;">
+      <div style="font-size:13px;font-weight:800;color:var(--orange);margin-bottom:10px;">1'den 100'e kadar — tıkla, sesini duy!</div>
+      <div class="number-line" id="numLine100"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ 4. RİTMİK SAYMA ══════════ -->
+<div class="section" id="s4">
+  <div class="sec-header sh4">
+    <div class="sec-num">4</div>
+    <h2>🎵 Ritmik Sayma</h2>
+  </div>
+  <div class="sec-body">
+    <div class="info-box" style="background:var(--purple-l);border-color:var(--purple);color:#4a148c;">Kaçar kaçar saymak istiyorsun? Seç ve izle!</div>
+
+    <div class="rhythmic-controls" id="rhyControls"></div>
+    <div style="margin-bottom:10px;">
+      <button class="act-btn" style="background:var(--purple)" onclick="playRhythmic()">▶️ Animasyon</button>
+      <button class="act-btn" onclick="stopRhythmic()" style="background:#888;margin-left:8px">⏹ Dur</button>
+      <button class="act-btn" style="background:var(--purple);margin-left:8px" onclick="speakRhythmic()">🔊 Söyle</button>
+    </div>
+    <div class="rhythmic-display" id="rhyDisplay"></div>
+  </div>
+</div>
+
+<!-- ══════════ 5. KARŞILAŞTIRMA ══════════ -->
+<div class="section" id="s5">
+  <div class="sec-header sh5">
+    <div class="sec-num">5</div>
+    <h2>⚖️ Sayıları Karşılaştırma</h2>
+  </div>
+  <div class="sec-body">
+    <div class="info-box" style="background:var(--teal-l);border-color:var(--teal);color:#004d40;">
+      İki sayıyı karşılaştır! <strong>&gt;</strong> büyüktür · <strong>&lt;</strong> küçüktür · <strong>=</strong> eşittir
+    </div>
+
+    <div class="compare-box" id="compareBox">
+      <div class="cmp-num" id="cmpA" onclick="randomCmp()">?</div>
+      <div class="cmp-sign" id="cmpSign">?</div>
+      <div class="cmp-num" id="cmpB" onclick="randomCmp()">?</div>
+    </div>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+      <button class="act-btn" style="background:var(--red)" onclick="answerCmp('>')">  &gt;  Büyüktür</button>
+      <button class="act-btn" style="background:var(--green)" onclick="answerCmp('=')">  =  Eşittir</button>
+      <button class="act-btn" style="background:var(--blue)" onclick="answerCmp('<')">  &lt;  Küçüktür</button>
+      <button class="act-btn orange" onclick="randomCmp()">🔄 Yeni Soru</button>
+    </div>
+    <div id="cmpFeedback" class="feedback" style="display:none"></div>
+
+    <div style="border-top:1.5px dashed #80cbc4;padding-top:14px;margin-top:10px;">
+      <div style="font-size:13px;font-weight:800;color:var(--teal);margin-bottom:8px;">Sayı sırala: En küçükten en büyüğe sürükle</div>
+      <div id="sortNums" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+      <div id="sortTarget" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;min-height:52px;border:2px dashed #80cbc4;border-radius:12px;padding:8px;"></div>
+      <button class="act-btn" style="background:var(--teal);margin-top:8px" onclick="checkSort()">✅ Kontrol</button>
+      <button class="act-btn orange" style="margin-left:8px;margin-top:8px" onclick="newSort()">🔄 Yeni</button>
+      <div id="sortFeedback" class="feedback" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ 6. ONLUK BİRLİK ══════════ -->
+<div class="section" id="s6">
+  <div class="sec-header sh6">
+    <div class="sec-num">6</div>
+    <h2>🧱 Onluk ve Birlik</h2>
+  </div>
+  <div class="sec-body">
+    <div class="info-box" style="background:var(--red-l);border-color:var(--red);color:#b71c1c;">
+      10 tane birlik → 1 onluk yapar! Bloklara tıklayarak ekle veya çıkar.
+    </div>
+
+    <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start;margin-bottom:16px;">
+      <div class="place-value-wrap" id="pvWrap">
+        <div class="pv-column">
+          <div class="pv-label tens">Onluklar</div>
+          <div class="pv-blocks" id="tensBlocks"></div>
+          <div class="pv-number tens" id="tensNum">0</div>
+        </div>
+        <div style="font-family:'Fredoka One',cursive;font-size:36px;color:#aaa;padding-bottom:8px;">+</div>
+        <div class="pv-column">
+          <div class="pv-label ones">Birlikler</div>
+          <div class="pv-blocks" id="onesBlocks"></div>
+          <div class="pv-number ones" id="onesNum">0</div>
+        </div>
+        <div style="font-family:'Fredoka One',cursive;font-size:36px;color:#aaa;padding-bottom:8px;">=</div>
+        <div class="pv-column">
+          <div class="pv-label" style="color:#333">Sayı</div>
+          <div class="pv-number" id="totalNum" style="color:#333;font-size:52px;padding-bottom:8px;">0</div>
+          <button class="act-btn" onclick="speakPV()">🔊</button>
+        </div>
+      </div>
+
+      <!-- Abakus -->
+      <div>
+        <div style="font-size:13px;font-weight:800;color:#5d4037;margin-bottom:8px;">🎰 Abakus</div>
+        <div class="abacus" id="abacus"></div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="act-btn" onclick="addTen()">+1 Onluk</button>
+      <button class="act-btn" style="background:var(--red)" onclick="removeTen()">–1 Onluk</button>
+      <button class="act-btn orange" onclick="addOne()">+1 Birlik</button>
+      <button class="act-btn" style="background:var(--orange);opacity:.7" onclick="removeOne()">–1 Birlik</button>
+      <button class="act-btn" style="background:#888" onclick="resetPV()">🔄 Sıfırla</button>
+      <button class="act-btn" style="background:var(--purple)" onclick="randomPV()">🎲 Rastgele</button>
+    </div>
+
+    <div style="border-top:1.5px dashed #ef9a9a;padding-top:14px;margin-top:14px;">
+      <div style="font-size:13px;font-weight:800;color:var(--red);margin-bottom:8px;">Tahmin Et: Bu sayı kaç onluk, kaç birlik?</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:48px;color:var(--red);margin-bottom:12px;" id="pvQuizNum">?</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <label style="font-weight:700;">Onluk: <input type="number" id="pvTensAns" style="width:60px;border:2px solid var(--blue);border-radius:8px;padding:6px;font-size:18px;font-family:'Fredoka One',cursive;color:var(--blue);outline:none;" min="0" max="9"></label>
+        <label style="font-weight:700;">Birlik: <input type="number" id="pvOnesAns" style="width:60px;border:2px solid var(--orange);border-radius:8px;padding:6px;font-size:18px;font-family:'Fredoka One',cursive;color:var(--orange);outline:none;" min="0" max="9"></label>
+        <button class="act-btn" onclick="checkPVQuiz()">✅ Kontrol</button>
+        <button class="act-btn orange" onclick="newPVQuiz()">🔄 Yeni</button>
+      </div>
+      <div id="pvFeedback" class="feedback" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ 7. BASAMAK ══════════ -->
+<div class="section" id="s7">
+  <div class="sec-header sh7">
+    <div class="sec-num">7</div>
+    <h2>📊 Basamak Adı ve Basamak Değeri</h2>
+  </div>
+  <div class="sec-body">
+    <div class="info-box" style="background:var(--purple-l);border-color:var(--purple);color:#4a148c;">
+      Her rakamın bir <strong>basamak adı</strong> (yüzler, onlar, birler) ve bir <strong>basamak değeri</strong> var!
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px;">
+      <span style="font-size:13px;font-weight:800;color:var(--purple);">Basamak sayısı:</span>
+      <button class="rhy-btn" id="p2btn" style="border-color:var(--purple);color:var(--purple);" onclick="setPlaceMode(2)">2 Basamaklı</button>
+      <button class="rhy-btn" id="p3btn" style="border-color:var(--purple);color:var(--purple);" onclick="setPlaceMode(3)">3 Basamaklı</button>
+    </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:16px;">
+      <label style="font-weight:800;">Sayıyı gir: </label>
+      <input type="number" id="placeInput" style="border:2px solid var(--purple);border-radius:10px;padding:8px 14px;font-family:'Fredoka One',cursive;font-size:28px;width:130px;color:var(--purple);outline:none;" min="10" max="99" value="47" oninput="updatePlace()">
+      <button class="act-btn" style="background:var(--purple)" onclick="speakPlace()">🔊 Dinle</button>
+      <button class="act-btn" style="background:var(--purple)" onclick="randomPlace()">🎲 Rastgele</button>
+    </div>
+
+    <div class="digit-place" id="placeCards"></div>
+
+    <div id="placeDecomp" style="background:var(--purple-l);border-radius:12px;padding:14px;font-size:15px;font-weight:700;color:#4a148c;margin-top:10px;"></div>
+
+    <div style="border-top:1.5px dashed #ce93d8;padding-top:14px;margin-top:14px;">
+      <div style="font-size:13px;font-weight:800;color:var(--purple);margin-bottom:10px;">Basamak değerini bul!</div>
+      <div id="placeQuiz" style="font-size:15px;font-weight:700;margin-bottom:8px;"></div>
+      <input type="number" id="placeAns" style="border:2px solid var(--purple);border-radius:8px;padding:6px 12px;font-size:20px;font-family:'Fredoka One',cursive;width:120px;outline:none;" placeholder="?">
+      <button class="act-btn" style="background:var(--purple);margin-left:8px" onclick="checkPlaceQ()">✅ Kontrol</button>
+      <button class="act-btn" style="background:var(--purple);margin-left:8px" onclick="newPlaceQ()">🔄 Yeni</button>
+      <div id="placeFeedback" class="feedback" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ 8. YUVARLAMA ══════════ -->
+<div class="section" id="s8" style="margin-bottom:50px;">
+  <div class="sec-header sh8">
+    <div class="sec-num">8</div>
+    <h2>〰️ Sayıları Yuvarlama</h2>
+  </div>
+  <div class="sec-body">
+    <div class="info-box" style="background:#e0f7fa;border-color:#00838f;color:#004d40;">
+      Sayıyı <strong>onlar basamağına</strong> yuvarlıyoruz. Birler hanesi <strong>0–4</strong> ise aşağı, <strong>5–9</strong> ise yukarı!
+    </div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:16px;">
+      <label style="font-weight:800;">Sayıyı gir (0-99): </label>
+      <input type="number" id="roundInput" style="border:2px solid #00838f;border-radius:10px;padding:8px 14px;font-family:'Fredoka One',cursive;font-size:28px;width:120px;color:#00838f;outline:none;" min="0" max="99" value="37" oninput="updateRound()">
+      <button class="act-btn" style="background:#00838f" onclick="randomRound()">🎲 Rastgele</button>
+      <button class="act-btn" style="background:#00838f" onclick="speakRound()">🔊 Dinle</button>
+    </div>
+
+    <div style="font-size:13px;font-weight:800;color:#00838f;margin-bottom:8px;">Sayı doğrusu:</div>
+    <div class="rounding-line" id="roundLine"></div>
+    <div id="roundResult" style="font-size:16px;font-weight:800;margin-top:12px;padding:12px 18px;border-radius:12px;display:none;"></div>
+
+    <div style="border-top:1.5px dashed #80deea;padding-top:14px;margin-top:14px;">
+      <div style="font-size:13px;font-weight:800;color:#00838f;margin-bottom:10px;">Yuvarla bakalım!</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:42px;color:#00838f;margin-bottom:10px;" id="roundQuizNum">?</div>
+      <div style="font-size:14px;font-weight:700;margin-bottom:8px;" id="roundQuizQ"></div>
+      <input type="number" id="roundAns" style="border:2px solid #00838f;border-radius:8px;padding:6px 12px;font-size:20px;font-family:'Fredoka One',cursive;width:120px;outline:none;" placeholder="?">
+      <button class="act-btn" style="background:#00838f;margin-left:8px" onclick="checkRound()">✅ Kontrol</button>
+      <button class="act-btn orange" style="margin-left:8px" onclick="newRoundQ()">🔄 Yeni</button>
+      <div id="roundFeedback" class="feedback" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════
+// YARDIMCI: SESLI SÖYLEME
+// ══════════════════════════════
+var sayilar = ['sıfır','bir','iki','üç','dört','beş','altı','yedi','sekiz','dokuz','on',
+  'on bir','on iki','on üç','on dört','on beş','on altı','on yedi','on sekiz','on dokuz',
+  'yirmi','yirmi bir','yirmi iki','yirmi üç','yirmi dört','yirmi beş','yirmi altı','yirmi yedi','yirmi sekiz','yirmi dokuz',
+  'otuz','otuz bir','otuz iki','otuz üç','otuz dört','otuz beş','otuz altı','otuz yedi','otuz sekiz','otuz dokuz',
+  'kırk','kırk bir','kırk iki','kırk üç','kırk dört','kırk beş','kırk altı','kırk yedi','kırk sekiz','kırk dokuz',
+  'elli','elli bir','elli iki','elli üç','elli dört','elli beş','elli altı','elli yedi','elli sekiz','elli dokuz',
+  'altmış','altmış bir','altmış iki','altmış üç','altmış dört','altmış beş','altmış altı','altmış yedi','altmış sekiz','altmış dokuz',
+  'yetmiş','yetmiş bir','yetmiş iki','yetmiş üç','yetmiş dört','yetmiş beş','yetmiş altı','yetmiş yedi','yetmiş sekiz','yetmiş dokuz',
+  'seksen','seksen bir','seksen iki','seksen üç','seksen dört','seksen beş','seksen altı','seksen yedi','seksen sekiz','seksen dokuz',
+  'doksan','doksan bir','doksan iki','doksan üç','doksan dört','doksan beş','doksan altı','doksan yedi','doksan sekiz','doksan dokuz','yüz'];
+
+function speak(text) {
+  if(!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = 'tr-TR'; u.rate = 0.85;
+  window.speechSynthesis.speak(u);
+}
+
+function numToText(n) {
+  if(n >= 0 && n <= 100) return sayilar[n];
+  if(n >= 101 && n < 1000) {
+    var y = Math.floor(n/100);
+    var k = n % 100;
+    var yy = y === 1 ? 'yüz' : sayilar[y] + ' yüz';
+    return k === 0 ? yy : yy + ' ' + sayilar[k];
+  }
+  return String(n);
+}
+
+// ══════════════════════════════
+// 1. NESNE SAYMA
+// ══════════════════════════════
+var emojis = ['🍎','🌟','🐶','🌸','🎈','⚽','🍕','🦋','🌈','🐟','🎀','🍓','🌻','🐱','🎵'];
+var objGroups = [];
+
+function newObjects() {
+  objGroups = [];
+  var grid = document.getElementById('objGrid');
+  grid.innerHTML = '';
+  var count = Math.floor(Math.random()*4)+2;
+  for(var i=0;i<count;i++) {
+    var n = Math.floor(Math.random()*8)+1;
+    var e = emojis[Math.floor(Math.random()*emojis.length)];
+    objGroups.push({n:n, e:e});
+    var div = document.createElement('div');
+    div.className = 'obj-group';
+    var ems = ''; for(var j=0;j<n;j++) ems += e + (j%4===3?'\n':'');
+    div.innerHTML = '<div class="obj-emojis">'+ems+'</div><div class="obj-q">Kaç tane '+e+'?</div><input class="obj-input" id="oi'+i+'" type="number" min="0" max="20" placeholder="?">';
+    grid.appendChild(div);
+  }
+  document.getElementById('objFeedback').style.display='none';
+}
+
+function checkObjects() {
+  var all=true, correct=0;
+  objGroups.forEach(function(g,i){
+    var v = parseInt(document.getElementById('oi'+i).value);
+    if(v===g.n) correct++;
+    else all=false;
+  });
+  var fb = document.getElementById('objFeedback');
+  fb.style.display='inline-block';
+  if(all){ fb.className='feedback ok'; fb.textContent='🎉 Harika! Hepsi doğru!'; speak('Harika! Hepsi doğru!'); }
+  else { fb.className='feedback no'; fb.textContent='❌ '+correct+'/'+objGroups.length+' doğru. Tekrar say!'; }
+}
+
+newObjects();
+
+// ══════════════════════════════
+// 2. RAKAMLAR & PARMAK
+// ══════════════════════════════
+var digitNames = ['Sıfır','Bir','İki','Üç','Dört','Beş','Altı','Yedi','Sekiz','Dokuz'];
+var digitDots = ['','•','••','•••','••••','•••••','••••••','•••••••','••••••••','•••••••••'];
+
+function buildDigits() {
+  var g = document.getElementById('digitsGrid');
+  for(var i=0;i<10;i++){
+    (function(n){
+      var d = document.createElement('div');
+      d.className = 'digit-card';
+      d.innerHTML = '<div class="digit-big">'+n+'</div><div class="digit-name">'+digitNames[n]+'</div><div class="digit-dots">'+digitDots[n]+'</div>';
+      d.onclick = function(){ showFinger(n); speak(digitNames[n]); };
+      g.appendChild(d);
+    })(i);
+  }
+}
+
+function showFinger(n) {
+  var fd = document.getElementById('fingerDisplay');
+  fd.classList.add('show');
+  document.getElementById('fingerNum').textContent = n;
+  document.getElementById('fingerName').textContent = digitNames[n];
+  document.getElementById('fingerDesc').textContent = n + ' parmak kaldırılıyor';
+
+  var hands = document.getElementById('fingerHands');
+  hands.innerHTML = '';
+
+  // Sol el (0-5 arası)
+  var leftHand = document.createElement('div');
+  leftHand.className = 'hand';
+  for(var i=0;i<5;i++){
+    var f = document.createElement('div');
+    f.className = 'finger ' + (i < n ? 'up' : 'down');
+    f.style.height = (i < n ? '44' : '24') + 'px';
+    leftHand.appendChild(f);
+  }
+  hands.appendChild(leftHand);
+
+  if(n > 5) {
+    var rightHand = document.createElement('div');
+    rightHand.className = 'hand';
+    for(var j=0;j<5;j++){
+      var f2 = document.createElement('div');
+      f2.className = 'finger ' + (j < n-5 ? 'up' : 'down');
+      f2.style.height = (j < n-5 ? '44' : '24') + 'px';
+      rightHand.appendChild(f2);
+    }
+    hands.appendChild(rightHand);
+  }
+}
+
+buildDigits();
+
+// ══════════════════════════════
+// 3. SAYI OLUŞTURMA
+// ══════════════════════════════
+var pickedDigits = [null, null];
+
+function buildDigitPicker() {
+  var p = document.getElementById('digitPicker');
+  for(var i=0;i<10;i++){
+    (function(n){
+      var b = document.createElement('button');
+      b.className = 'rhy-btn';
+      b.textContent = n;
+      b.onclick = function(){
+        if(pickedDigits[0]===null){ pickedDigits[0]=n; document.getElementById('d1').textContent=n; }
+        else if(pickedDigits[1]===null){ pickedDigits[1]=n; document.getElementById('d2').textContent=n; }
+        else { pickedDigits=[n,null]; document.getElementById('d1').textContent=n; document.getElementById('d2').textContent='–'; }
+        var num = pickedDigits[1]!==null ? pickedDigits[0]*10+pickedDigits[1] : pickedDigits[0];
+        document.getElementById('builtNumber').textContent = num;
+      };
+      p.appendChild(b);
+    })(i);
+  }
+}
+
+function selectDigit(pos) {}
+function speakBuilt() {
+  var t = document.getElementById('builtNumber').textContent;
+  if(t==='–') return;
+  speak(numToText(parseInt(t)));
+}
+
+buildDigitPicker();
+
+// 1-100 sayı doğrusu
+function build100() {
+  var nl = document.getElementById('numLine100');
+  for(var i=1;i<=100;i++){
+    (function(n){
+      var d = document.createElement('div');
+      d.className = 'nl-num';
+      d.textContent = n;
+      d.onclick = function(){
+        document.querySelectorAll('.nl-num').forEach(function(x){x.classList.remove('spoken');});
+        d.classList.add('spoken');
+        speak(numToText(n));
+      };
+      nl.appendChild(d);
+    })(i);
+  }
+}
+build100();
+
+// ══════════════════════════════
+// 4. RİTMİK SAYMA
+// ══════════════════════════════
+var rhyStep = 2, rhyTimer = null, rhyIdx = 0, rhyNums = [];
+
+function buildRhythmic() {
+  var ctrl = document.getElementById('rhyControls');
+  [2,3,4,5,6,7,8,9,10].forEach(function(s){
+    var b = document.createElement('button');
+    b.className = 'rhy-btn' + (s===2?' active':'');
+    b.textContent = s+'\'şer';
+    if(s===3||s===6) b.textContent=s+'\'er';
+    if(s===7) b.textContent='7\'şer';
+    if(s===10) b.textContent='10\'ar';
+    b.dataset.step = s;
+    b.onclick = function(){
+      stopRhythmic();
+      document.querySelectorAll('.rhy-btn').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active');
+      rhyStep = s;
+      buildRhyDisplay();
+    };
+    ctrl.appendChild(b);
+  });
+  buildRhyDisplay();
+}
+
+function buildRhyDisplay() {
+  var d = document.getElementById('rhyDisplay');
+  d.innerHTML = '';
+  rhyNums = [];
+  for(var i=rhyStep;i<=100;i+=rhyStep){
+    rhyNums.push(i);
+    var span = document.createElement('span');
+    span.className = 'rhy-num';
+    span.id = 'rn'+i;
+    span.textContent = i;
+    span.onclick = (function(n){return function(){ speak(numToText(n)); };})(i);
+    d.appendChild(span);
+  }
+}
+
+function playRhythmic() {
+  stopRhythmic();
+  rhyIdx = 0;
+  rhyTimer = setInterval(function(){
+    document.querySelectorAll('.rhy-num').forEach(function(x){x.classList.remove('lit');});
+    if(rhyIdx>=rhyNums.length){ stopRhythmic(); return; }
+    var el = document.getElementById('rn'+rhyNums[rhyIdx]);
+    if(el){ el.classList.add('lit'); }
+    rhyIdx++;
+  }, 600);
+}
+
+function stopRhythmic() {
+  if(rhyTimer){ clearInterval(rhyTimer); rhyTimer=null; }
+  document.querySelectorAll('.rhy-num').forEach(function(x){x.classList.remove('lit');});
+}
+
+function speakRhythmic() {
+  var words = rhyNums.map(function(n){ return numToText(n); }).join(', ');
+  speak(words);
+}
+
+buildRhythmic();
+
+// ══════════════════════════════
+// 5. KARŞILAŞTIRMA
+// ══════════════════════════════
+var cmpA=0, cmpB=0, cmpAnswered=false;
+
+function randomCmp() {
+  cmpA = Math.floor(Math.random()*99)+1;
+  cmpB = Math.floor(Math.random()*99)+1;
+  while(cmpA===cmpB) cmpB=Math.floor(Math.random()*99)+1;
+  document.getElementById('cmpA').textContent=cmpA;
+  document.getElementById('cmpB').textContent=cmpB;
+  var s=document.getElementById('cmpSign');
+  s.textContent='?'; s.className='cmp-sign';
+  document.getElementById('cmpFeedback').style.display='none';
+  cmpAnswered=false;
+}
+
+function answerCmp(sign) {
+  if(cmpAnswered) return;
+  cmpAnswered=true;
+  var correct = (cmpA>cmpB&&sign==='>')||(cmpA<cmpB&&sign==='<')||(cmpA===cmpB&&sign==='=');
+  var s=document.getElementById('cmpSign');
+  s.textContent=sign;
+  s.className='cmp-sign'+(sign==='>'?' gt':sign==='<'?' lt':' eq');
+  var fb=document.getElementById('cmpFeedback');
+  fb.style.display='inline-block';
+  if(correct){
+    fb.className='feedback ok';
+    fb.textContent='🎉 Doğru! '+cmpA+' '+sign+' '+cmpB;
+    speak(numToText(cmpA)+', '+numToText(cmpB)+"'den "+{'>':'büyüktür','<':'küçüktür','=':'eşittir'}[sign]);
+  } else {
+    var real=(cmpA>cmpB?'>':cmpA<cmpB?'<':'=');
+    fb.className='feedback no';
+    fb.textContent='❌ Hayır! Doğrusu: '+cmpA+' '+real+' '+cmpB;
+  }
+}
+
+randomCmp();
+
+// Sıralama
+var sortData=[], sortPlaced=[];
+function newSort(){
+  sortData=[]; sortPlaced=[];
+  var count=Math.floor(Math.random()*2)+3;
+  var used=[];
+  while(sortData.length<count){
+    var n=Math.floor(Math.random()*50)+1;
+    if(!used.includes(n)){used.push(n);sortData.push(n);}
+  }
+  var src=document.getElementById('sortNums');
+  var tgt=document.getElementById('sortTarget');
+  src.innerHTML=''; tgt.innerHTML='';
+  document.getElementById('sortFeedback').style.display='none';
+  var shuffled=sortData.slice().sort(function(){return Math.random()-.5;});
+  shuffled.forEach(function(n){
+    var b=document.createElement('button');
+    b.className='rhy-num';
+    b.textContent=n; b.dataset.n=n;
+    b.style.cursor='pointer';
+    b.onclick=function(){
+      if(sortPlaced.includes(n))return;
+      sortPlaced.push(n);
+      b.style.opacity='.3'; b.disabled=true;
+      var s=document.createElement('span');
+      s.className='rhy-num said'; s.textContent=n;
+      s.onclick=function(){
+        sortPlaced=sortPlaced.filter(function(x){return x!==n;});
+        tgt.removeChild(s);
+        b.style.opacity=''; b.disabled=false;
+      };
+      tgt.appendChild(s);
+    };
+    src.appendChild(b);
+  });
+}
+
+function checkSort(){
+  var sorted=sortData.slice().sort(function(a,b){return a-b;});
+  var ok=JSON.stringify(sortPlaced)===JSON.stringify(sorted);
+  var fb=document.getElementById('sortFeedback');
+  fb.style.display='inline-block';
+  if(ok){fb.className='feedback ok';fb.textContent='🎉 Doğru sıralama!';}
+  else{fb.className='feedback no';fb.textContent='❌ Sıralama yanlış. Doğrusu: '+sorted.join(' < ');}
+}
+newSort();
+
+// ══════════════════════════════
+// 6. ONLUK BİRLİK
+// ══════════════════════════════
+var tens=0, ones=0;
+
+function renderPV(){
+  var t=document.getElementById('tensBlocks');
+  var o=document.getElementById('onesBlocks');
+  t.innerHTML=''; o.innerHTML='';
+  for(var i=0;i<tens;i++){
+    var b=document.createElement('div');
+    b.className='ten-block';
+    b.style.height='120px';
+    for(var j=0;j<10;j++){var l=document.createElement('div');l.className='unit-line';b.appendChild(l);}
+    b.title='1 onluk = 10 birlik';
+    b.onclick=function(){removeTen();};
+    t.appendChild(b);
+  }
+  for(var k=0;k<ones;k++){
+    var ob=document.createElement('div');
+    ob.className='one-block';
+    ob.title='1 birlik';
+    ob.onclick=function(){removeOne();};
+    o.appendChild(ob);
+  }
+  var total=tens*10+ones;
+  document.getElementById('tensNum').textContent=tens;
+  document.getElementById('onesNum').textContent=ones;
+  document.getElementById('totalNum').textContent=total;
+  renderAbacus();
+}
+
+function renderAbacus(){
+  var ab=document.getElementById('abacus');
+  ab.innerHTML='';
+  var total=tens*10+ones;
+  var t=Math.floor(total/10), o=total%10;
+  // Onlar çubuğu
+  var rod1=document.createElement('div'); rod1.className='abacus-rod';
+  for(var i=9;i>=0;i--){
+    var bead=document.createElement('div');
+    bead.className='abacus-bead '+(i<t?'on':'off');
+    rod1.appendChild(bead);
+  }
+  var lbl1=document.createElement('div'); lbl1.className='abacus-label'; lbl1.textContent='On';
+  rod1.appendChild(lbl1);
+  ab.appendChild(rod1);
+  // Birler çubuğu
+  var rod2=document.createElement('div'); rod2.className='abacus-rod';
+  for(var j=9;j>=0;j--){
+    var bead2=document.createElement('div');
+    bead2.className='abacus-bead '+(j<o?'on':'off');
+    rod2.appendChild(bead2);
+  }
+  var lbl2=document.createElement('div'); lbl2.className='abacus-label'; lbl2.textContent='Bir';
+  rod2.appendChild(lbl2);
+  ab.appendChild(rod2);
+}
+
+function addTen(){if(tens<9){tens++;renderPV();}}
+function removeTen(){if(tens>0){tens--;renderPV();}}
+function addOne(){
+  if(ones<9){ones++;renderPV();}
+  else if(tens<9){tens++;ones=0;renderPV();speak('On tane birlik, bir onluk yaptı!');}
+}
+function removeOne(){if(ones>0){ones--;renderPV();}else if(tens>0){tens--;ones=9;renderPV();}}
+function resetPV(){tens=0;ones=0;renderPV();}
+function randomPV(){tens=Math.floor(Math.random()*9)+1;ones=Math.floor(Math.random()*10);renderPV();}
+function speakPV(){speak(numToText(tens*10+ones));}
+
+renderPV();
+
+// PV Quiz
+var pvQuizNum=0;
+function newPVQuiz(){
+  pvQuizNum=Math.floor(Math.random()*89)+11;
+  document.getElementById('pvQuizNum').textContent=pvQuizNum;
+  document.getElementById('pvTensAns').value='';
+  document.getElementById('pvOnesAns').value='';
+  document.getElementById('pvFeedback').style.display='none';
+  speak(numToText(pvQuizNum)+'! Kaç onluk, kaç birlik?');
+}
+function checkPVQuiz(){
+  var t=parseInt(document.getElementById('pvTensAns').value)||0;
+  var o=parseInt(document.getElementById('pvOnesAns').value)||0;
+  var fb=document.getElementById('pvFeedback');
+  fb.style.display='inline-block';
+  if(t===Math.floor(pvQuizNum/10)&&o===pvQuizNum%10){
+    fb.className='feedback ok'; fb.textContent='🎉 Doğru! '+pvQuizNum+' = '+t+' onluk + '+o+' birlik';
+    speak('Doğru!');
+  } else {
+    fb.className='feedback no'; fb.textContent='❌ Hayır! '+pvQuizNum+' = '+Math.floor(pvQuizNum/10)+' onluk + '+pvQuizNum%10+' birlik';
+  }
+}
+newPVQuiz();
+
+// ══════════════════════════════
+// 7. BASAMAK
+// ══════════════════════════════
+var placeNum=47, placeQNum=0, placeQDigit='', placeMode=2;
+
+function setPlaceMode(m){
+  placeMode=m;
+  var inp=document.getElementById('placeInput');
+  if(m===2){inp.min=10;inp.max=99;inp.value=47;}
+  else{inp.min=100;inp.max=999;inp.value=364;}
+  document.getElementById('p2btn').style.background=(m===2?'var(--purple)':'');
+  document.getElementById('p2btn').style.color=(m===2?'#fff':'var(--purple)');
+  document.getElementById('p3btn').style.background=(m===3?'var(--purple)':'');
+  document.getElementById('p3btn').style.color=(m===3?'#fff':'var(--purple)');
+  setPlaceMode(2);
+}
+
+function updatePlace(){
+  var v=parseInt(document.getElementById('placeInput').value)||0;
+  if(placeMode===2){if(v<10)v=10;if(v>99)v=99;}else{if(v<100)v=100;if(v>999)v=999;}
+  placeNum=v;
+  renderPlace();
+}
+
+function renderPlace(){
+  var cards=document.getElementById('placeCards');
+  cards.innerHTML='';
+  var s=String(placeNum).padStart(3,'0');
+  var names=['Yüzler','Onlar','Birler'];
+  var cls=['hundreds','tens','ones'];
+  var vals=[100,10,1];
+  var startIdx=placeMode===2?1:0;
+  for(var i=startIdx;i<3;i++){
+    var d=document.createElement('div');
+    d.className='dp-card '+cls[i];
+    var digit=parseInt(s[i]);
+    var value=digit*vals[i];
+    d.innerHTML='<div class="dp-name">'+names[i]+' basamağı</div><div class="dp-digit">'+digit+'</div><div class="dp-value">Değeri: '+value+'</div>';
+    cards.appendChild(d);
+  }
+  // Çözümleme
+  var parts=[];
+  if(placeNum>=100) parts.push(parseInt(s[0])+'×100');
+  if(placeNum>=10) parts.push(parseInt(s[1])+'×10');
+  parts.push(parseInt(s[2])+'×1');
+  var text=placeNum+' = '+parts.join(' + ')+' = '+placeNum;
+  document.getElementById('placeDecomp').textContent='📊 Çözümleme: '+text;
+}
+
+function speakPlace(){
+  speak(numToText(placeNum));
+}
+function randomPlace(){
+  if(placeMode===2) document.getElementById('placeInput').value=Math.floor(Math.random()*89)+10;
+  else document.getElementById('placeInput').value=Math.floor(Math.random()*899)+100;
+  updatePlace();
+}
+updatePlace();
+
+// Place Quiz
+function newPlaceQ(){
+  if(placeMode===2){placeQNum=Math.floor(Math.random()*89)+10;}
+  else{placeQNum=Math.floor(Math.random()*899)+100;}
+  var digits=placeMode===2?['onlar','birler']:['yüzler','onlar','birler'];
+  var idx=Math.floor(Math.random()*digits.length);
+  placeQDigit=digits[idx];
+  var vals=[100,10,1];
+  document.getElementById('placeQuiz').textContent=placeQNum+' sayısında '+placeQDigit+' basamağının değeri nedir?';
+  document.getElementById('placeAns').value='';
+  document.getElementById('placeFeedback').style.display='none';
+  speak(placeQNum+' sayısında '+placeQDigit+' basamağının değeri nedir?');
+}
+function checkPlaceQ(){
+  var s=String(placeQNum).padStart(3,'0');
+  var idxMap={'yüzler':0,'onlar':1,'birler':2};
+  var valMap={'yüzler':100,'onlar':10,'birler':1};
+  var idx=idxMap[placeQDigit];
+  var correct=parseInt(s[idx])*valMap[placeQDigit];
+  var ans=parseInt(document.getElementById('placeAns').value)||0;
+  var fb=document.getElementById('placeFeedback');
+  fb.style.display='inline-block';
+  if(ans===correct){fb.className='feedback ok';fb.textContent='🎉 Doğru! Değeri: '+correct;speak('Doğru!');}
+  else{fb.className='feedback no';fb.textContent='❌ Hayır! Doğrusu: '+correct;}
+}
+newPlaceQ();
+
+// ══════════════════════════════
+// 8. YUVARLAMA
+// ══════════════════════════════
+var roundNum=37, roundQNum=0;
+
+function updateRound(){
+  var v=parseInt(document.getElementById('roundInput').value)||0;
+  if(v<0)v=0; if(v>99)v=99;
+  roundNum=v;
+  renderRound();
+}
+
+function renderRound(){
+  var lower=Math.floor(roundNum/10)*10;
+  var upper=lower+10;
+  if(upper>100)upper=100;
+  var line=document.getElementById('roundLine');
+  line.innerHTML='';
+  for(var i=lower;i<=upper;i++){
+    var d=document.createElement('div');
+    d.className='rl-num';
+    if(i===lower||i===upper) d.className+=' anchor';
+    if(i===roundNum) d.className+=' target';
+    d.textContent=i;
+    line.appendChild(d);
+  }
+  var ones=roundNum%10;
+  var rounded=ones<5?lower:upper;
+  var res=document.getElementById('roundResult');
+  res.style.display='block';
+  if(ones<5){
+    res.style.background='#e3f2fd'; res.style.color='#1565c0';
+    res.textContent='⬇️ '+roundNum+' sayısı '+lower+'e yuvarlanır (birler hanesi '+ones+' < 5)';
+    speak(roundNum+' sayısı '+lower+' ya yuvarlanır.');
+  } else {
+    res.style.background='#e8f5e9'; res.style.color='#2e7d32';
+    res.textContent='⬆️ '+roundNum+' sayısı '+upper+'e yuvarlanır (birler hanesi '+ones+' ≥ 5)';
+    speak(roundNum+' sayısı '+upper+' ya yuvarlanır.');
+  }
+}
+
+// CSS var helper removed
+
+function randomRound(){document.getElementById('roundInput').value=Math.floor(Math.random()*90)+10;updateRound();}
+function speakRound(){speak(numToText(roundNum));}
+
+updateRound();
+
+// Round Quiz
+function newRoundQ(){
+  roundQNum=Math.floor(Math.random()*90)+10;
+  document.getElementById('roundQuizNum').textContent=roundQNum;
+  document.getElementById('roundQuizQ').textContent=roundQNum+' sayısını onlar basamağına yuvarla:';
+  document.getElementById('roundAns').value='';
+  document.getElementById('roundFeedback').style.display='none';
+  speak(roundQNum+' sayısını yuvarla!');
+}
+function checkRound(){
+  var ones=roundQNum%10;
+  var lower=Math.floor(roundQNum/10)*10;
+  var correct=ones<5?lower:lower+10;
+  var ans=parseInt(document.getElementById('roundAns').value)||0;
+  var fb=document.getElementById('roundFeedback');
+  fb.style.display='inline-block';
+  if(ans===correct){fb.className='feedback ok';fb.textContent='🎉 Doğru! '+roundQNum+' → '+correct;speak('Doğru!');}
+  else{fb.className='feedback no';fb.textContent='❌ Hayır! Doğrusu: '+correct;}
+}
+newRoundQ();
+
+// ══════════════════════════════
+// 9. DESTE & DÜZİNE
+// ══════════════════════════════
+function makeHand(id, count, total) {
+  var el = document.getElementById(id);
+  if(!el) return;
+  el.innerHTML = '';
+  for(var i=0;i<total;i++){
+    var f = document.createElement('div');
+    f.style.cssText = 'width:16px;border-radius:6px 6px 3px 3px;border:2px solid;transition:height .4s;display:inline-block;';
+    if(i<count){
+      f.style.height='44px'; f.style.background='#ff9800'; f.style.borderColor='#e65100';
+    } else {
+      f.style.height='24px'; f.style.background='#ffe0b2'; f.style.borderColor='#ffb74d';
+    }
+    el.appendChild(f);
+  }
+}
+
+function initDesteVis(){
+  makeHand('desteHand1',5,5);
+  makeHand('desteHand2',5,5);
+}
+function initDuzineVis(){
+  makeHand('duzineHand1',5,5);
+  makeHand('duzineHand2',5,5);
+  makeHand('duzineHand3',2,5);
+}
+
+function animateDeste(){
+  // sırayla göster
+  makeHand('desteHand1',0,5);
+  makeHand('desteHand2',0,5);
+  speak('des');
+  setTimeout(function(){makeHand('desteHand1',5,5);speak('des — beş');},500);
+  setTimeout(function(){speak('te');},1800);
+  setTimeout(function(){makeHand('desteHand2',5,5);speak('te — beş');},2200);
+  setTimeout(function(){speak('des te — on — bir deste!');},3500);
+}
+
+function animateDuzine(){
+  makeHand('duzineHand1',0,5);
+  makeHand('duzineHand2',0,5);
+  makeHand('duzineHand3',0,5);
+  speak('dü');
+  setTimeout(function(){makeHand('duzineHand1',5,5);speak('dü — beş');},500);
+  setTimeout(function(){speak('zi');},1800);
+  setTimeout(function(){makeHand('duzineHand2',5,5);speak('zi — beş');},2200);
+  setTimeout(function(){speak('ne');},3500);
+  setTimeout(function(){makeHand('duzineHand3',2,5);speak('ne — iki');},3900);
+  setTimeout(function(){speak('dü zi ne — on iki — bir düzine!');},5200);
+}
+
+function speakDeste(){ speak('Deste. Des... Te. Beş artı beş. On tane. Bir deste!'); }
+function speakDuzine(){ speak('Düzine. Dü... Zi... Ne. Beş artı beş artı iki. On iki tane. Bir düzine!'); }
+
+// Deste/Düzine Quiz
+var desteQData = null;
+var desteQuestions = [
+  {q:'1 deste kaç tanedir?', a:10, hint:'DES + TE = 5 + 5 = ?'},
+  {q:'1 düzine kaç tanedir?', a:12, hint:'DÜ + Zİ + NE = 5 + 5 + 2 = ?'},
+  {q:'2 deste kaç tanedir?', a:20, hint:'2 × 10 = ?'},
+  {q:'2 düzine kaç tanedir?', a:24, hint:'2 × 12 = ?'},
+  {q:'3 deste kaç tanedir?', a:30, hint:'3 × 10 = ?'},
+  {q:'Bir markette 1 deste yumurta var. Kaç yumurta var?', a:10, hint:'1 deste = ?'},
+  {q:'Bir kutu 1 düzine çikolata içeriyor. Kaç çikolata var?', a:12, hint:'1 düzine = ?'},
+  {q:'10 tane elma kaç destedir?', a:1, hint:'10 = kaç deste?'},
+  {q:'12 tane top kaç düzinedir?', a:1, hint:'12 = kaç düzine?'},
+  {q:'20 tane kalem kaç destedir?', a:2, hint:'20 ÷ 10 = ?'},
+  {q:'Deste kelimesi kaç heceden oluşur?', a:2, hint:'Des - te = kaç hece?'},
+  {q:'Düzine kelimesi kaç heceden oluşur?', a:3, hint:'Dü - zi - ne = kaç hece?'},
+];
+
+function newDesteQ(){
+  desteQData = desteQuestions[Math.floor(Math.random()*desteQuestions.length)];
+  document.getElementById('desteQ').textContent = desteQData.q + ' (İpucu: ' + desteQData.hint + ')';
+  document.getElementById('desteAns').value='';
+  document.getElementById('desteFeedback').style.display='none';
+  speak(desteQData.q);
+}
+
+function checkDesteQ(){
+  var ans = parseInt(document.getElementById('desteAns').value)||0;
+  var fb = document.getElementById('desteFeedback');
+  fb.style.display='inline-block';
+  if(ans===desteQData.a){
+    fb.className='feedback ok'; fb.textContent='🎉 Doğru! Cevap: '+desteQData.a;
+    speak('Doğru! Bravo!');
+  } else {
+    fb.className='feedback no'; fb.textContent='❌ Hayır! Doğrusu: '+desteQData.a;
+  }
+}
+
+initDesteVis();
+initDuzineVis();
+newDesteQ();
+
+</script>
+
+<!-- ══════════ 9. DESTE & DÜZİNE ══════════ -->
+<div class="section" id="s9" style="margin-bottom:50px;">
+  <div class="sec-header sh9">
+    <div class="sec-num">9</div>
+    <h2>🖐️ Deste ve Düzine</h2>
+  </div>
+  <div class="sec-body">
+    <div class="info-box green">
+      <strong>Deste = 10</strong> &nbsp;·&nbsp; <strong>Düzine = 12</strong><br>
+      Hece sayısı = parmak sayısı! Parmaklarla öğren!
+    </div>
+
+    <!-- DESTE -->
+    <div style="background:#e8f5e9;border-radius:16px;padding:20px;margin-bottom:20px;border:2px solid #a5d6a7;">
+      <div style="font-family:'Fredoka One',cursive;font-size:22px;color:var(--green);margin-bottom:14px;">🖐️🖐️ DESTE = 10</div>
+
+      <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start;margin-bottom:14px;">
+        <!-- Sol el - DES -->
+        <div style="text-align:center;">
+          <div style="font-size:13px;font-weight:800;color:var(--green);margin-bottom:6px;letter-spacing:2px;">DES</div>
+          <div id="desteHand1" style="display:flex;gap:4px;justify-content:center;align-items:flex-end;"></div>
+          <div style="font-size:12px;font-weight:700;color:#666;margin-top:6px;">5 parmak</div>
+        </div>
+        <div style="font-family:'Fredoka One',cursive;font-size:36px;color:#a5d6a7;margin-top:20px;">+</div>
+        <!-- Sağ el - TE -->
+        <div style="text-align:center;">
+          <div style="font-size:13px;font-weight:800;color:var(--green);margin-bottom:6px;letter-spacing:2px;">TE</div>
+          <div id="desteHand2" style="display:flex;gap:4px;justify-content:center;align-items:flex-end;"></div>
+          <div style="font-size:12px;font-weight:700;color:#666;margin-top:6px;">5 parmak</div>
+        </div>
+        <div style="font-family:'Fredoka One',cursive;font-size:36px;color:#a5d6a7;margin-top:20px;">=</div>
+        <!-- Sonuç -->
+        <div style="text-align:center;margin-top:10px;">
+          <div style="font-family:'Fredoka One',cursive;font-size:52px;color:var(--green);">10</div>
+          <div style="font-size:14px;font-weight:800;color:var(--green);">1 DESTE</div>
+        </div>
+      </div>
+
+      <div style="background:#fff;border-radius:12px;padding:12px 16px;font-size:14px;font-weight:700;color:#1b5e20;line-height:1.8;margin-bottom:12px;">
+        📌 <strong>DES</strong> = 5 parmak &nbsp;·&nbsp; <strong>TE</strong> = 5 parmak &nbsp;·&nbsp; 5 + 5 = <strong>10 = 1 deste</strong><br>
+        🖐️ İki elimdeki parmaklar = 1 deste!
+      </div>
+
+      <button class="act-btn green" onclick="speakDeste()">🔊 Deste'yi Dinle</button>
+      <button class="act-btn" onclick="animateDeste()" style="margin-left:8px">▶️ Göster</button>
+    </div>
+
+    <!-- DÜZİNE -->
+    <div style="background:#e3f2fd;border-radius:16px;padding:20px;margin-bottom:20px;border:2px solid #90caf9;">
+      <div style="font-family:'Fredoka One',cursive;font-size:22px;color:var(--blue);margin-bottom:14px;">🖐️🖐️✌️ DÜZİNE = 12</div>
+
+      <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start;margin-bottom:14px;">
+        <!-- Dü -->
+        <div style="text-align:center;">
+          <div style="font-size:13px;font-weight:800;color:var(--blue);margin-bottom:6px;letter-spacing:2px;">DÜ</div>
+          <div id="duzineHand1" style="display:flex;gap:4px;justify-content:center;align-items:flex-end;"></div>
+          <div style="font-size:12px;font-weight:700;color:#666;margin-top:6px;">5 parmak</div>
+        </div>
+        <div style="font-family:'Fredoka One',cursive;font-size:30px;color:#90caf9;margin-top:20px;">+</div>
+        <!-- Zi -->
+        <div style="text-align:center;">
+          <div style="font-size:13px;font-weight:800;color:var(--blue);margin-bottom:6px;letter-spacing:2px;">Zİ</div>
+          <div id="duzineHand2" style="display:flex;gap:4px;justify-content:center;align-items:flex-end;"></div>
+          <div style="font-size:12px;font-weight:700;color:#666;margin-top:6px;">5 parmak</div>
+        </div>
+        <div style="font-family:'Fredoka One',cursive;font-size:30px;color:#90caf9;margin-top:20px;">+</div>
+        <!-- Ne -->
+        <div style="text-align:center;">
+          <div style="font-size:13px;font-weight:800;color:var(--blue);margin-bottom:6px;letter-spacing:2px;">NE</div>
+          <div id="duzineHand3" style="display:flex;gap:4px;justify-content:center;align-items:flex-end;"></div>
+          <div style="font-size:12px;font-weight:700;color:#666;margin-top:6px;">2 parmak</div>
+        </div>
+        <div style="font-family:'Fredoka One',cursive;font-size:30px;color:#90caf9;margin-top:20px;">=</div>
+        <!-- Sonuç -->
+        <div style="text-align:center;margin-top:10px;">
+          <div style="font-family:'Fredoka One',cursive;font-size:52px;color:var(--blue);">12</div>
+          <div style="font-size:14px;font-weight:800;color:var(--blue);">1 DÜZİNE</div>
+        </div>
+      </div>
+
+      <div style="background:#fff;border-radius:12px;padding:12px 16px;font-size:14px;font-weight:700;color:#0d47a1;line-height:1.8;margin-bottom:12px;">
+        📌 <strong>DÜ</strong> = 5 parmak &nbsp;·&nbsp; <strong>Zİ</strong> = 5 parmak &nbsp;·&nbsp; <strong>NE</strong> = 2 parmak<br>
+        5 + 5 + 2 = <strong>12 = 1 düzine</strong>
+      </div>
+
+      <button class="act-btn" onclick="speakDuzine()">🔊 Düzine'yi Dinle</button>
+      <button class="act-btn orange" onclick="animateDuzine()" style="margin-left:8px">▶️ Göster</button>
+    </div>
+
+    <!-- ETKİNLİKLER -->
+    <div style="border-top:2px dashed #a5d6a7;padding-top:16px;">
+      <div style="font-size:14px;font-weight:800;color:var(--green);margin-bottom:14px;">🎯 Problem ve Sorular</div>
+      <div id="desteQuiz" style="background:#f1f8e9;border-radius:14px;padding:16px;margin-bottom:12px;">
+        <div style="font-size:15px;font-weight:700;color:#33691e;margin-bottom:10px;" id="desteQ"></div>
+        <input type="number" id="desteAns" style="border:2px solid var(--green);border-radius:8px;padding:7px 12px;font-size:20px;font-family:'Fredoka One',cursive;width:120px;outline:none;color:var(--green);" placeholder="?">
+        <button class="act-btn green" style="margin-left:8px" onclick="checkDesteQ()">✅ Kontrol</button>
+        <button class="act-btn" style="background:#888;margin-left:8px" onclick="newDesteQ()">🔄 Yeni Soru</button>
+        <div id="desteFeedback" class="feedback" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
