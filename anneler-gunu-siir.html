@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anneler Günü – Şiir ve Çalışma Sayfası</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+  :root { --rose: #c0415a; --blush: #f7d6de; --cream: #fffaf7; --warm: #7a3a4a; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #e8e8e8; font-family: 'Nunito', sans-serif; color: #3a2a2a; }
+
+  /* Buton barı */
+  .print-bar {
+    background: var(--rose); padding: 14px 24px; position: sticky; top: 0; z-index: 99;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  }
+  .print-bar span { color: #fff; font-weight: 700; font-size: 15px; }
+  .btn-dl {
+    background: #fff; color: var(--rose); border: none; border-radius: 30px;
+    padding: 10px 28px; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; gap: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,.15); transition: transform .15s;
+  }
+  .btn-dl:hover { transform: translateY(-2px); }
+  .btn-dl:disabled { opacity: .6; cursor: wait; }
+
+  /* Her sayfa bir A4 kutu gibi görünür ekranda */
+  .a4 {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 20px auto;
+    background: #fff;
+    padding: 18mm 16mm;
+    box-shadow: 0 4px 24px rgba(0,0,0,.18);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ─── SAYFA 1: ŞİİR ─── */
+  .header { text-align: center; margin-bottom: 18px; }
+  .flowers { font-size: 28px; letter-spacing: 6px; margin-bottom: 6px; }
+  .header h1 { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--rose); margin-bottom: 3px; }
+  .header .subtitle { font-size: 11px; color: #888; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+  .divider { width: 60px; height: 3px; background: linear-gradient(90deg, var(--blush), var(--rose), var(--blush)); border-radius: 2px; margin: 10px auto; }
+
+  .info-band {
+    background: var(--blush); border-radius: 10px; padding: 10px 16px;
+    display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; align-items: center;
+  }
+  .info-field { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--warm); }
+  .info-field .line { border-bottom: 1.5px solid var(--rose); width: 120px; height: 18px; }
+
+  .poem-box {
+    background: #fff; border: 2px solid var(--blush); border-radius: 16px;
+    padding: 24px 28px; flex: 1; position: relative;
+    box-shadow: 0 3px 14px rgba(192,65,90,.08);
+  }
+  .poem-box::before {
+    content: '\201C'; position: absolute; top: 4px; left: 12px;
+    font-family: 'Playfair Display', serif; font-size: 56px; color: var(--blush); line-height: 1;
+  }
+  .poem-title { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--rose); text-align: center; margin-bottom: 4px; }
+  .poem-author { text-align: center; font-size: 11px; color: #bbb; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 20px; }
+  .poem-text { line-height: 2.3; font-size: 16px; text-align: center; }
+  .poem-stanza { margin-bottom: 18px; }
+  .poem-stanza:last-child { margin-bottom: 0; }
+
+  /* ─── SAYFA 2: SORULAR ─── */
+  .page2-header { text-align: center; margin-bottom: 16px; }
+  .page2-header h2 { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--rose); margin-bottom: 3px; }
+  .page2-header .sub2 { font-size: 11px; color: #888; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+
+  .section-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--rose); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1.5px; background: var(--blush); }
+
+  .questions { display: flex; flex-direction: column; gap: 18px; }
+  .q-text {
+    font-size: 13.5px; font-weight: 700; color: var(--warm); margin-bottom: 9px;
+    display: flex; align-items: flex-start; gap: 7px;
+  }
+  .q-number {
+    display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+    width: 21px; height: 21px; background: var(--rose); color: #fff; border-radius: 50%; font-size: 11px; font-weight: 700;
+  }
+  .answer-lines { display: flex; flex-direction: column; gap: 8px; margin-left: 28px; }
+  .answer-line { border-bottom: 1.5px solid #e0cdd0; height: 26px; width: 100%; }
+  .options { display: flex; flex-direction: column; gap: 7px; margin-left: 28px; }
+  .opt { display: flex; align-items: center; gap: 9px; font-size: 13.5px; }
+  .opt .box { width: 16px; height: 16px; border: 2px solid var(--rose); border-radius: 4px; flex-shrink: 0; }
+  .fill-q { font-size: 13.5px; margin-left: 28px; line-height: 2.8; }
+  .fill-line { border-bottom: 1.5px solid var(--rose); display: inline-block; width: 100px; margin: 0 3px; vertical-align: bottom; }
+  .dy-list { display: flex; flex-direction: column; gap: 7px; margin-left: 28px; }
+  .dy-item {
+    display: flex; align-items: center; gap: 10px;
+    background: #fafafa; border: 1.5px solid #e0cdd0; border-radius: 8px; padding: 8px 12px;
+  }
+  .dy-sentence { flex: 1; font-size: 13.5px; color: #3a2a2a; font-weight: 600; line-height: 1.35; }
+  .dy-answer { font-size: 13px; font-weight: 800; color: var(--rose); white-space: nowrap; border: 1.5px solid var(--rose); border-radius: 6px; padding: 2px 10px; }
+  .yapi-rows { display: flex; flex-direction: column; gap: 0; margin-left: 28px; border: 1.5px solid #e0cdd0; border-radius: 10px; overflow: hidden; }
+  .yapi-row { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-bottom: 1.5px solid #f0dde2; background: #fafafa; }
+  .yapi-row:last-child { border-bottom: none; }
+  .yapi-label { flex: 1; font-size: 13.5px; font-weight: 600; color: #555; }
+  .yapi-box { border: 1.5px solid var(--rose); border-radius: 6px; width: 40px; height: 28px; background: #fff; }
+  .yapi-unit { font-size: 12px; color: #888; }
+
+  /* ─── BASKI ─── */
+  @media print {
+    body { background: #fff; }
+    .print-bar { display: none !important; }
+    .a4 { width: 100%; margin: 0; padding: 14mm 12mm; min-height: 0; box-shadow: none; page-break-after: always; }
+    .a4:last-child { page-break-after: auto; }
+    @page { margin: 0; size: A4 portrait; }
+  }
+</style>
+</head>
+<body>
+
+<div class="print-bar">
+  <span>🌸 Anneler Günü – Şiir ve Çalışma Sayfası</span>
+  <button class="btn-dl" id="dlBtn" onclick="indir()">⬇️ PDF İndir</button>
+</div>
+
+<!-- ══════════════ SAYFA 1: ŞİİR ══════════════ -->
+<div class="a4" id="sayfa1">
+
+  <div class="header">
+    <div class="flowers">🌺 🌸 🌹</div>
+    <h1>Anneler Günü</h1>
+    <p class="subtitle">Şiir Çalışması · 2. Sınıf</p>
+    <div class="divider"></div>
+  </div>
+
+  <div class="info-band">
+    <div class="info-field">Adı Soyadı: <div class="line"></div></div>
+    <div class="info-field">Sınıfı: <div class="line" style="width:50px"></div></div>
+    <div class="info-field">Tarih: <div class="line" style="width:70px"></div></div>
+  </div>
+
+  <div class="poem-box">
+    <div class="poem-title">Annem</div>
+    <div class="poem-author">2. Sınıf Anneler Günü Şiiri</div>
+    <div class="poem-text">
+      <div class="poem-stanza">
+        Sabah erken kalkar,<br>
+        Sevgiyle hazırlar.<br>
+        Elindeki sıcaklık<br>
+        Kalbimi ısıtır.
+      </div>
+      <div class="poem-stanza">
+        Yorulsa da güler,<br>
+        Hiç şikâyet etmez.<br>
+        Dünyada bir tane,<br>
+        Annem gibisi olmaz.
+      </div>
+      <div class="poem-stanza">
+        Sarılırım boynuna,<br>
+        "Seni seviyorum" derim.<br>
+        Gözlerinde parlar bir ışık,<br>
+        O ışık benim için.
+      </div>
+      <div class="poem-stanza">
+        Bugün Anneler Günü,<br>
+        Söylüyorum yüksek sesle:<br>
+        <em>"İyi ki varsın anneciğim,<br>
+        Sevgim seninle!"</em>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /sayfa1 -->
+
+<!-- ══════════════ SAYFA 2: SORULAR ══════════════ -->
+<div class="a4" id="sayfa2">
+
+  <div class="page2-header">
+    <div class="flowers" style="font-size:22px; margin-bottom:4px;">🌸 🌺 🌸</div>
+    <h2>Anlama Soruları</h2>
+    <p class="sub2">Annem Şiiri · 2. Sınıf</p>
+    <div class="divider"></div>
+  </div>
+
+  <div class="info-band">
+    <div class="info-field">Adı Soyadı: <div class="line"></div></div>
+    <div class="info-field">Sınıfı: <div class="line" style="width:50px"></div></div>
+    <div class="info-field">Tarih: <div class="line" style="width:70px"></div></div>
+  </div>
+
+  <div class="questions">
+
+    <div class="q-item">
+      <div class="q-text"><span class="q-number">1</span><span>Şiirde anne için neler söyleniyor? İki özellik yaz.</span></div>
+      <div class="answer-lines">
+        <div class="answer-line"></div>
+        <div class="answer-line"></div>
+      </div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-text"><span class="q-number">2</span><span>Şiire göre annenin gözlerinde ne parlar?</span></div>
+      <div class="options">
+        <div class="opt"><div class="box"></div> Gözyaşı</div>
+        <div class="opt"><div class="box"></div> Bir ışık</div>
+        <div class="opt"><div class="box"></div> Sevinç</div>
+        <div class="opt"><div class="box"></div> Hüzün</div>
+      </div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-text"><span class="q-number">3</span><span>Şiirden yararlanarak boşlukları doldur.</span></div>
+      <div class="fill-q">
+        Dünyada bir tane, <span class="fill-line"></span> gibisi olmaz.<br>
+        Bugün <span class="fill-line"></span> Günü, söylüyorum yüksek sesle.
+      </div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-text"><span class="q-number">4</span><span>Aşağıdaki cümlelerin yanına doğruysa <strong>D</strong>, yanlışsa <strong>Y</strong> yaz.</span></div>
+      <div class="dy-list">
+        <div class="dy-item">
+          <span class="dy-sentence">Şiirde anne hiç şikâyet etmez.</span>
+          <span class="dy-answer">( &nbsp;&nbsp;&nbsp; )</span>
+        </div>
+        <div class="dy-item">
+          <span class="dy-sentence">Çocuk annesine sarılır ve "Seni seviyorum" der.</span>
+          <span class="dy-answer">( &nbsp;&nbsp;&nbsp; )</span>
+        </div>
+        <div class="dy-item">
+          <span class="dy-sentence">Şiirde annenin elinin sıcaklığından söz edilir.</span>
+          <span class="dy-answer">( &nbsp;&nbsp;&nbsp; )</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-text"><span class="q-number">5</span><span>Şiirimizin yapısını inceleyelim.</span></div>
+      <div class="yapi-rows">
+        <div class="yapi-row">
+          <span class="yapi-label">Şiirimizde kaç kıta vardır?</span>
+          <div class="yapi-box"></div>
+          <span class="yapi-unit">kıta</span>
+        </div>
+        <div class="yapi-row">
+          <span class="yapi-label">Her kıtada kaç dize vardır?</span>
+          <div class="yapi-box"></div>
+          <span class="yapi-unit">dize</span>
+        </div>
+        <div class="yapi-row">
+          <span class="yapi-label">Şiirimizde toplam kaç dize vardır?</span>
+          <div class="yapi-box"></div>
+          <span class="yapi-unit">dize</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-text"><span class="q-number">6</span><span>Sen annen için ne söylemek isterdin? İki cümle yaz.</span></div>
+      <div class="answer-lines">
+        <div class="answer-line"></div>
+        <div class="answer-line"></div>
+        <div class="answer-line"></div>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /sayfa2 -->
+
+<script>
+function indir() {
+  var btn = document.getElementById('dlBtn');
+  btn.disabled = true;
+  btn.textContent = 'Hazırlanıyor...';
+
+  var sayfa1 = document.getElementById('sayfa1');
+  var sayfa2 = document.getElementById('sayfa2');
+  var opt = {
+    margin: 0,
+    filename: 'anneler-gunu-siir-calisma-sayfasi.pdf',
+    image: { type: 'jpeg', quality: 0.97 },
+    html2canvas: { scale: 2, useCORS: true, windowWidth: 794 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+
+  html2pdf().set(opt).from(sayfa1).toCanvas().then(function() {
+    return html2pdf().set(opt).from(sayfa1).toPdf()
+      .get('pdf').then(function(pdf) {
+        pdf.addPage();
+        return html2pdf().set(opt).from(sayfa2).toCanvas().then(function(canvas) {
+          var imgData = canvas.toDataURL('image/jpeg', 0.97);
+          pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+          pdf.save('anneler-gunu-siir-calisma-sayfasi.pdf');
+        });
+      });
+  }).then(function() {
+    btn.disabled = false;
+    btn.innerHTML = '⬇️ PDF İndir';
+  }).catch(function() {
+    // Fallback: tek seferde render et
+    var wrapper = document.createElement('div');
+    wrapper.style.cssText = 'background:#fff;';
+    var s1 = sayfa1.cloneNode(true);
+    var s2 = sayfa2.cloneNode(true);
+    s1.style.cssText = 'width:210mm;padding:14mm 12mm;min-height:297mm;background:#fff;page-break-after:always;';
+    s2.style.cssText = 'width:210mm;padding:14mm 12mm;min-height:297mm;background:#fff;';
+    wrapper.appendChild(s1);
+    wrapper.appendChild(s2);
+    document.body.appendChild(wrapper);
+    html2pdf().set({
+      margin: 0,
+      filename: 'anneler-gunu-siir-calisma-sayfasi.pdf',
+      image: { type: 'jpeg', quality: 0.97 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: 'css', before: '.a4' }
+    }).from(wrapper).save().then(function() {
+      document.body.removeChild(wrapper);
+      btn.disabled = false;
+      btn.innerHTML = '⬇️ PDF İndir';
+    });
+  });
+}
+</script>
+</body>
+</html>

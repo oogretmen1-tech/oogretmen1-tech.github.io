@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anneler Günü – Kes Yapıştır Etkinliği</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+  :root { --rose: #c0415a; --blush: #f7d6de; --cream: #fffaf7; --warm: #7a3a4a; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #e8e8e8; font-family: 'Nunito', sans-serif; color: #3a2a2a; }
+
+  .print-bar {
+    background: var(--rose); padding: 14px 24px; position: sticky; top: 0; z-index: 99;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  }
+  .print-bar span { color: #fff; font-weight: 700; font-size: 15px; }
+  .btn-dl {
+    background: #fff; color: var(--rose); border: none; border-radius: 30px;
+    padding: 10px 28px; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 700;
+    cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,.15); transition: transform .15s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .btn-dl:hover { transform: translateY(-2px); }
+  .btn-dl:disabled { opacity: .6; cursor: wait; }
+
+  .a4 {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 20px auto;
+    background: #fff;
+    padding: 14mm 12mm;
+    box-shadow: 0 4px 24px rgba(0,0,0,.18);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── SAYFA 1: ÇİÇEK ── */
+  .page-header {
+    text-align: center;
+    padding: 18px 16px;
+    background: linear-gradient(135deg, var(--rose), #e06680);
+    border-radius: 16px;
+    color: #fff;
+    margin-bottom: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-header::before { content: '✂'; position: absolute; font-size: 60px; opacity: .1; top: -5px; right: 8px; transform: rotate(20deg); }
+  .page-header h1 { font-family: 'Fredoka One', cursive; font-size: 26px; letter-spacing: 2px; margin-bottom: 3px; }
+  .page-header .sub { font-size: 13px; opacity: .9; font-weight: 600; }
+
+  .info-band {
+    background: var(--blush); border-radius: 10px; padding: 10px 16px;
+    display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; align-items: center;
+  }
+  .info-field { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--warm); }
+  .info-field .line { border-bottom: 1.5px solid var(--rose); width: 110px; height: 18px; }
+
+  .instruction-box {
+    background: #fff3e0; border-left: 4px solid #d4965a; border-radius: 10px;
+    padding: 10px 14px; font-size: 13px; font-weight: 700; color: #5a3a1a;
+    margin-bottom: 14px; display: flex; align-items: flex-start; gap: 9px;
+  }
+  .instruction-box .ei { font-size: 18px; flex-shrink: 0; }
+
+  .cut-section {
+    border: 2.5px dashed var(--rose);
+    border-radius: 14px;
+    padding: 16px;
+    background: #f7f0ff;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .cut-label {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;
+    color: var(--rose); margin-bottom: 14px;
+  }
+
+  .petal-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    flex: 1;
+    align-items: center;
+  }
+
+  .petal {
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; text-align: center; padding: 10px 6px;
+    font-size: 12px; font-weight: 700; color: var(--warm);
+    min-height: 90px;
+  }
+  .petal.p1 { background: linear-gradient(160deg, #fce4ec, #f8bbd9); border: 2px solid #f48fb1; }
+  .petal.p2 { background: linear-gradient(160deg, #fff3e0, #ffe0b2); border: 2px solid #ffcc80; }
+  .petal.p3 { background: linear-gradient(160deg, #e8f5e9, #c8e6c9); border: 2px solid #a5d6a7; }
+  .petal.p4 { background: linear-gradient(160deg, #f3e5f5, #e1bee7); border: 2px solid #ce93d8; }
+  .petal.p5 { background: linear-gradient(160deg, #e3f2fd, #bbdefb); border: 2px solid #90caf9; }
+  .petal.p6 { background: linear-gradient(160deg, #fffde7, #fff9c4); border: 2px solid #ffe082; }
+  .petal.p7 { background: linear-gradient(160deg, #fce4ec, #f8bbd9); border: 2px solid #f48fb1; }
+  .petal.center {
+    background: linear-gradient(135deg, var(--rose), #e06680);
+    color: #fff; border-radius: 50%; font-size: 11px; font-weight: 800; border: none;
+    min-height: 90px;
+  }
+  .petal .pe { font-size: 22px; margin-bottom: 4px; }
+  .petal-line { border-bottom: 1.5px solid rgba(0,0,0,.18); width: 55px; height: 14px; margin-top: 4px; }
+
+  /* ── SAYFA 2: ANNEM HAKKINDA ── */
+  .page2-header {
+    text-align: center; margin-bottom: 16px;
+  }
+  .page2-header h2 { font-family: 'Fredoka One', cursive; font-size: 26px; color: var(--rose); margin-bottom: 3px; }
+  .page2-header .sub2 { font-size: 12px; color: #888; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+  .divider { width: 60px; height: 3px; background: linear-gradient(90deg, var(--blush), var(--rose), var(--blush)); border-radius: 2px; margin: 10px auto; }
+
+  .complete-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    flex: 1;
+    align-content: start;
+  }
+  .complete-item {
+    background: #fff; border: 2px solid var(--blush); border-radius: 12px;
+    padding: 14px 14px; display: flex; align-items: flex-start; gap: 10px;
+  }
+  .ci-emoji { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+  .ci-content { flex: 1; }
+  .ci-prompt { font-size: 12px; font-weight: 700; color: #888; margin-bottom: 5px; }
+  .ci-line { border-bottom: 1.5px solid #e0cdd0; height: 24px; width: 100%; }
+  .ci-line + .ci-line { margin-top: 6px; }
+
+  @media print {
+    body { background: #fff; }
+    .print-bar { display: none !important; }
+    .a4 { width: 100%; margin: 0; padding: 12mm 10mm; min-height: 0; box-shadow: none; page-break-after: always; }
+    .a4:last-child { page-break-after: auto; }
+    @page { margin: 0; size: A4 portrait; }
+  }
+</style>
+</head>
+<body>
+
+<div class="print-bar">
+  <span>✂️ Anneler Günü – Kes Yapıştır Etkinliği</span>
+  <button class="btn-dl" id="dlBtn" onclick="indir()">⬇️ PDF İndir</button>
+</div>
+
+<!-- ══════════════ SAYFA 1: ÇİÇEK KES-YAPISTIR ══════════════ -->
+<div class="a4" id="sayfa1">
+
+  <div class="page-header">
+    <h1>✂️ KES – YAPISTIR ETKİNLİĞİ</h1>
+    <div class="sub">Anneler Günü · 2. Sınıf</div>
+  </div>
+
+  <div class="info-band">
+    <div class="info-field">Adı Soyadı: <div class="line"></div></div>
+    <div class="info-field">Sınıfı: <div class="line" style="width:50px"></div></div>
+    <div class="info-field">Tarih: <div class="line" style="width:70px"></div></div>
+  </div>
+
+  <div class="instruction-box">
+    <span class="ei">✂️</span>
+    <div>Aşağıdaki yaprak kartlarını kes. Her yaprağa annen için bir güzel özellik yaz. Ortadaki kalbi de kes. Hepsini bir kağıda yapıştırarak annen için çiçek oluştur!</div>
+  </div>
+
+  <div class="cut-section">
+    <div class="cut-label"><span>✂️</span> Buradan Kes!</div>
+    <div class="petal-grid">
+      <div class="petal p1"><div class="pe">🌸</div><div>Annem...</div><div class="petal-line"></div></div>
+      <div class="petal p2"><div class="pe">💛</div><div>Annem...</div><div class="petal-line"></div></div>
+      <div class="petal p3"><div class="pe">🍀</div><div>Annem...</div><div class="petal-line"></div></div>
+      <div class="petal center"><div style="font-size:28px">❤️</div><div>ANNEM</div></div>
+      <div class="petal p4"><div class="pe">🦋</div><div>Annem...</div><div class="petal-line"></div></div>
+      <div class="petal p5"><div class="pe">⭐</div><div>Annem...</div><div class="petal-line"></div></div>
+      <div class="petal p6"><div class="pe">🌈</div><div>Annem...</div><div class="petal-line"></div></div>
+      <div class="petal p7"><div class="pe">🎀</div><div>Annem...</div><div class="petal-line"></div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════ SAYFA 2: ANNEM HAKKINDA ══════════════ -->
+<div class="a4" id="sayfa2">
+
+  <div class="info-band">
+    <div class="info-field">Adı Soyadı: <div class="line"></div></div>
+    <div class="info-field">Sınıfı: <div class="line" style="width:50px"></div></div>
+    <div class="info-field">Tarih: <div class="line" style="width:70px"></div></div>
+  </div>
+
+  <div class="page2-header">
+    <div style="font-size:26px; margin-bottom:4px;">🌺 🌸 🌺</div>
+    <h2>Annem Hakkında</h2>
+    <p class="sub2">Boşlukları kendi annen hakkında düşünerek doldur</p>
+    <div class="divider"></div>
+  </div>
+
+  <div class="complete-grid">
+    <div class="complete-item">
+      <span class="ci-emoji">🌺</span>
+      <div class="ci-content">
+        <div class="ci-prompt">Annemin adı:</div>
+        <div class="ci-line"></div>
+      </div>
+    </div>
+    <div class="complete-item">
+      <span class="ci-emoji">😊</span>
+      <div class="ci-content">
+        <div class="ci-prompt">Annem güldüğünde:</div>
+        <div class="ci-line"></div>
+      </div>
+    </div>
+    <div class="complete-item">
+      <span class="ci-emoji">🍽️</span>
+      <div class="ci-content">
+        <div class="ci-prompt">Annemin en güzel yemeği:</div>
+        <div class="ci-line"></div>
+      </div>
+    </div>
+    <div class="complete-item">
+      <span class="ci-emoji">💪</span>
+      <div class="ci-content">
+        <div class="ci-prompt">Annem çok iyi bilir:</div>
+        <div class="ci-line"></div>
+      </div>
+    </div>
+    <div class="complete-item">
+      <span class="ci-emoji">❤️</span>
+      <div class="ci-content">
+        <div class="ci-prompt">Annemi en çok sevdiren şey:</div>
+        <div class="ci-line"></div>
+        <div class="ci-line"></div>
+      </div>
+    </div>
+    <div class="complete-item">
+      <span class="ci-emoji">🌟</span>
+      <div class="ci-content">
+        <div class="ci-prompt">Annem beni mutlu eder çünkü:</div>
+        <div class="ci-line"></div>
+        <div class="ci-line"></div>
+      </div>
+    </div>
+    <div class="complete-item">
+      <span class="ci-emoji">🎁</span>
+      <div class="ci-content">
+        <div class="ci-prompt">Anneme vermek istediğim hediye:</div>
+        <div class="ci-line"></div>
+        <div class="ci-line"></div>
+      </div>
+    </div>
+    <div class="complete-item">
+      <span class="ci-emoji">💌</span>
+      <div class="ci-content">
+        <div class="ci-prompt">Anneme söylemek istediğim:</div>
+        <div class="ci-line"></div>
+        <div class="ci-line"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function indir() {
+  var btn = document.getElementById('dlBtn');
+  btn.disabled = true;
+  btn.textContent = 'Hazırlanıyor...';
+
+  var sayfalar = document.querySelectorAll('.a4');
+  var opt = {
+    margin: 0,
+    filename: 'anneler-gunu-kes-yapistir.pdf',
+    image: { type: 'jpeg', quality: 0.97 },
+    html2canvas: { scale: 2, useCORS: true, windowWidth: 794 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+
+  var worker = html2pdf().set(opt).from(sayfalar[0]).toPdf();
+
+  worker = worker.get('pdf').then(function(pdf) {
+    pdf.addPage();
+    return html2pdf().set(opt).from(sayfalar[1]).toCanvas().then(function(canvas) {
+      var img = canvas.toDataURL('image/jpeg', 0.97);
+      pdf.addImage(img, 'JPEG', 0, 0, 210, 297);
+    });
+  });
+
+  worker.save().then(function() {
+    btn.disabled = false;
+    btn.innerHTML = '⬇️ PDF İndir';
+  }).catch(function(e) {
+    console.error(e);
+    btn.disabled = false;
+    btn.innerHTML = '⬇️ PDF İndir';
+  });
+}
+</script>
+</body>
+</html>

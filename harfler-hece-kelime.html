@@ -3,585 +3,1214 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Harfler, Hece ve Kelime Oluşturma</title>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<title>Harf · Hece · Kelime · Sözcük Bilgisi</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
 :root {
-  --primary: #7C3AED;
-  --secondary: #EC4899;
-  --accent: #F59E0B;
-  --green: #10B981;
-  --red: #EF4444;
-  --blue: #3B82F6;
-  --bg: #FAF5FF;
-  --white: #ffffff;
-  --text: #1E1B4B;
-  --muted: #6B7280;
+  --harf: #e63946; --harf-l: #fdecea;
+  --hece: #1976d2; --hece-l: #e3f2fd;
+  --kelime: #2e7d32; --kelime-l: #e8f5e9;
+  --sozluk: #7b1fa2; --sozluk-l: #f3e5f5;
+  --bg: #f0f4ff;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); font-family: 'Nunito', sans-serif; color: #1a1a2e; }
 
-/* HEADER */
-header {
-  background: linear-gradient(135deg, #7C3AED 0%, #EC4899 100%);
-  padding: 28px 20px 44px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
+/* NAV */
+.nav {
+  background: #1a1a2e; padding: 11px 18px; position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  box-shadow: 0 3px 16px rgba(0,0,0,.3);
 }
-header::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='white' fill-opacity='0.06'%3E%3Ccircle cx='20' cy='20' r='15'/%3E%3C/g%3E%3C/svg%3E");
+.nav-title { font-family: 'Fredoka One', cursive; font-size: 17px; color: #fff; }
+.nav-links { display: flex; gap: 6px; flex-wrap: wrap; }
+.nav-link {
+  font-size: 12px; font-weight: 800; padding: 5px 13px; border-radius: 20px;
+  text-decoration: none; color: #fff; transition: transform .15s;
 }
-header h1 { font-family: 'Baloo 2', cursive; font-size: clamp(1.6rem,5vw,2.4rem); font-weight: 800; color: white; text-shadow: 0 3px 10px rgba(0,0,0,0.2); position: relative; }
-header p { color: rgba(255,255,255,0.88); font-weight: 600; margin-top: 6px; font-size: 1rem; position: relative; }
-.header-emoji { font-size: 2rem; margin-bottom: 8px; position: relative; }
-
-/* TABS */
-.tabs { display: flex; justify-content: center; gap: 8px; padding: 18px 16px 0; flex-wrap: wrap; }
-.tab-btn { font-family: 'Baloo 2', cursive; font-size: .95rem; font-weight: 700; padding: 10px 20px; border-radius: 50px; border: 3px solid transparent; cursor: pointer; transition: all .2s; background: white; color: var(--muted); box-shadow: 0 3px 10px rgba(0,0,0,0.08); }
-.tab-btn.active, .tab-btn:hover { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(124,58,237,0.35); }
-
-/* SECTIONS */
-.section { display: none; padding: 24px 16px 60px; max-width: 820px; margin: 0 auto; }
-.section.active { display: block; }
-
-.section-title { font-family: 'Baloo 2', cursive; font-size: 1.4rem; font-weight: 800; color: var(--primary); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
-.section-desc { color: var(--muted); font-size: .95rem; font-weight: 600; margin-bottom: 22px; }
-
-/* ── BÖLÜM 1: HARF TANIMA ── */
-.alfabe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 10px; margin-bottom: 24px; }
-.harf-kart {
-  background: white;
-  border-radius: 16px;
-  padding: 14px 8px;
-  text-align: center;
-  cursor: pointer;
-  transition: all .2s;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.07);
-  border: 3px solid transparent;
-  user-select: none;
+.nav-link:hover { transform: translateY(-2px); }
+.nl1 { background: var(--harf); }
+.nl2 { background: var(--hece); }
+.nl3 { background: var(--kelime); }
+.nl4 { background: var(--sozluk); }
+.btn-dl {
+  background: #fff; color: #1a1a2e; border: none; border-radius: 20px;
+  padding: 6px 16px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800;
+  cursor: pointer; transition: transform .15s;
 }
-.harf-kart:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 8px 20px rgba(124,58,237,0.2); border-color: var(--primary); }
-.harf-kart.selected { background: var(--primary); color: white; border-color: var(--primary); transform: scale(1.1); }
-.harf-kart .buyuk { font-family: 'Baloo 2', cursive; font-size: 1.5rem; font-weight: 800; display: block; }
-.harf-kart .kucuk { font-size: .8rem; font-weight: 600; opacity: .7; }
+.btn-dl:hover { transform: translateY(-2px); }
+.btn-dl:disabled { opacity: .6; cursor: wait; }
 
-.harf-bilgi {
-  background: white;
-  border-radius: 20px;
-  padding: 24px;
-  text-align: center;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  border-left: 6px solid var(--primary);
-  min-height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 10px;
+/* HERO */
+.hero {
+  background: linear-gradient(135deg, #1a1a2e, #0f3460);
+  padding: 36px 20px 44px; text-align: center; position: relative; overflow: hidden;
 }
-.harf-bilgi .big-harf { font-family: 'Baloo 2', cursive; font-size: 4rem; font-weight: 800; color: var(--primary); line-height: 1; }
-.harf-bilgi .ornekler { font-size: 1rem; font-weight: 700; color: var(--text); }
-.harf-bilgi .ornek-badge { display: inline-block; background: #EDE9FE; color: var(--primary); padding: 4px 12px; border-radius: 50px; margin: 3px; font-weight: 700; font-size: .9rem; }
-
-/* ── BÖLÜM 2: HECE OLUŞTURMA ── */
-.hece-oyun { background: white; border-radius: 20px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 16px; }
-.hece-soru { font-family: 'Baloo 2', cursive; font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 16px; }
-.hece-soru span { background: var(--accent); padding: 2px 10px; border-radius: 8px; font-size: 1.3rem; }
-.harf-secenekler { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
-.hece-harf {
-  font-family: 'Baloo 2', cursive;
-  font-size: 1.4rem;
-  font-weight: 800;
-  padding: 12px 18px;
-  border-radius: 14px;
-  border: 3px solid #e2e8f0;
-  background: #f8fafc;
-  cursor: pointer;
-  transition: all .2s;
-  user-select: none;
-  min-width: 52px;
-  text-align: center;
+.hero h1 { font-family: 'Fredoka One', cursive; font-size: clamp(1.8rem,5vw,2.8rem); color: #fff; margin-bottom: 8px; }
+.hero h1 span { color: #ffd700; }
+.hero p { color: rgba(255,255,255,.7); font-size: 14px; font-weight: 600; }
+.hero-chips { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 14px; }
+.chip {
+  padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 800;
+  color: #fff; border: 1.5px solid rgba(255,255,255,.3);
 }
-.hece-harf:hover { border-color: var(--primary); background: #EDE9FE; color: var(--primary); transform: scale(1.05); }
-.hece-harf.used { opacity: .35; pointer-events: none; }
-.hece-harf.correct { background: #D1FAE5; border-color: var(--green); color: #065F46; }
-.hece-harf.wrong { background: #FEE2E2; border-color: var(--red); color: #991B1B; animation: shake .3s; }
 
-.hece-cevap-alan {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  min-height: 56px;
-  border: 3px dashed #e2e8f0;
-  border-radius: 16px;
-  padding: 10px;
-  background: #f8fafc;
-  align-items: center;
-  margin-bottom: 12px;
+/* SECTION */
+.section { max-width: 900px; margin: 28px auto; padding: 0 16px; }
+.sec-header {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 18px;
+  padding: 14px 20px; border-radius: 16px; color: #fff;
 }
-.hece-cevap-harf {
-  font-family: 'Baloo 2', cursive;
-  font-size: 1.4rem;
-  font-weight: 800;
-  padding: 8px 14px;
-  border-radius: 10px;
-  background: var(--primary);
-  color: white;
-  cursor: pointer;
-  transition: all .2s;
+.sec-header h2 { font-family: 'Fredoka One', cursive; font-size: 22px; }
+.sec-header .sec-num {
+  background: rgba(255,255,255,.2); font-size: 12px; font-weight: 800;
+  padding: 3px 10px; border-radius: 20px; margin-left: auto;
 }
-.hece-cevap-harf:hover { background: var(--secondary); transform: scale(1.05); }
+.sh1 { background: linear-gradient(135deg, var(--harf), #c1121f); }
+.sh2 { background: linear-gradient(135deg, var(--hece), #1565c0); }
+.sh3 { background: linear-gradient(135deg, var(--kelime), #1b5e20); }
+.sh4 { background: linear-gradient(135deg, var(--sozluk), #4a148c); }
 
-.hece-progress { display: flex; gap: 8px; margin-bottom: 16px; }
-.hece-dot { width: 12px; height: 12px; border-radius: 50%; background: #e2e8f0; transition: background .3s; }
-.hece-dot.done { background: var(--green); }
-.hece-dot.active { background: var(--primary); }
-
-/* ── BÖLÜM 3: KELİME OLUŞTURMA ── */
-.kelime-oyun { background: white; border-radius: 20px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 16px; }
-.kelime-ipucu { font-family: 'Baloo 2', cursive; font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
-.kelime-emoji { font-size: 3rem; text-align: center; margin-bottom: 12px; display: block; }
-.hece-kutular { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 16px; }
-.hece-kutu {
-  font-family: 'Baloo 2', cursive;
-  font-size: 1.2rem;
-  font-weight: 800;
-  padding: 12px 18px;
-  border-radius: 14px;
-  border: 3px solid #e2e8f0;
-  background: #f8fafc;
-  cursor: pointer;
-  transition: all .2s;
-  user-select: none;
+.card-box {
+  background: #fff; border-radius: 18px; padding: 22px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.07); margin-bottom: 16px;
 }
-.hece-kutu:hover { border-color: var(--secondary); background: #FDF2F8; color: var(--secondary); transform: scale(1.05); }
-.hece-kutu.secili { background: var(--secondary); color: white; border-color: var(--secondary); }
-.hece-kutu.correct { background: #D1FAE5; border-color: var(--green); color: #065F46; }
-.hece-kutu.wrong { background: #FEE2E2; border-color: var(--red); color: #991B1B; animation: shake .3s; }
-.hece-kutu.used { opacity: .35; pointer-events: none; }
-
-.kelime-alani {
-  min-height: 56px;
-  border: 3px dashed #e2e8f0;
-  border-radius: 16px;
-  padding: 10px 14px;
-  background: #f8fafc;
-  font-family: 'Baloo 2', cursive;
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: var(--primary);
-  text-align: center;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 6px;
-  cursor: pointer;
+.sub-title {
+  font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+  margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
 }
-.kelime-alani span { background: var(--primary); color: white; padding: 4px 12px; border-radius: 8px; }
-.kelime-alani:hover { border-color: var(--primary); }
+.sub-title::after { content: ''; flex: 1; height: 1.5px; background: #f0f0f0; }
 
-/* PUAN TAHTASI */
-.skor { text-align: center; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 20px; padding: 20px; color: white; margin-top: 16px; }
-.skor .num { font-family: 'Baloo 2', cursive; font-size: 2.8rem; font-weight: 800; line-height: 1; }
-.skor p { font-size: .95rem; font-weight: 600; opacity: .9; margin-top: 4px; }
+/* ════════════════════════
+   BÖLÜM 1 — HARF BİLGİSİ
+════════════════════════ */
 
-/* BUTONLAR */
-.btn { padding: 12px 26px; border-radius: 50px; border: none; font-family: 'Baloo 2', cursive; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all .2s; margin: 5px 4px; box-shadow: 0 4px 14px rgba(0,0,0,0.1); }
-.btn:hover { transform: translateY(-2px); }
-.btn-check { background: var(--green); color: white; }
-.btn-clear { background: var(--accent); color: #1e1b4b; }
-.btn-next { background: var(--primary); color: white; }
-.btn-retry { background: var(--secondary); color: white; }
+/* Alfabe grid */
+.alfabe-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(52px,1fr)); gap: 8px;
+}
+.harf-btn {
+  background: var(--harf-l); border: 2px solid #f4b8bc; border-radius: 12px;
+  padding: 10px 4px; text-align: center; cursor: pointer;
+  font-family: 'Fredoka One', cursive; font-size: 20px; color: var(--harf);
+  transition: all .15s; position: relative; user-select: none;
+}
+.harf-btn:hover { background: var(--harf); color: #fff; transform: translateY(-3px); box-shadow: 0 6px 14px rgba(230,57,70,.3); }
+.harf-btn.unlu { background: #fff3e0; border-color: #ffcc80; color: #e65100; }
+.harf-btn.unlu:hover { background: #ff9800; color: #fff; }
+.harf-btn .harf-type { font-family: 'Nunito', sans-serif; font-size: 8px; font-weight: 800; display: block; opacity: .6; margin-top: 2px; }
+.harf-info-box {
+  background: var(--harf-l); border-radius: 12px; padding: 14px 18px;
+  border-left: 4px solid var(--harf); margin-top: 12px; min-height: 54px;
+  font-size: 15px; font-weight: 700; display: none;
+}
+.harf-info-box.show { display: block; }
 
-/* CONFETTI */
-.confetti-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 999; }
-.confetti-piece { position: absolute; width: 10px; height: 10px; border-radius: 2px; animation: fall linear forwards; }
-@keyframes fall { 0% { opacity:1; transform: translateY(-20px) rotate(0deg); } 100% { opacity:0; transform: translateY(100vh) rotate(720deg); } }
-@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+/* Ünlü/Ünsüz tablo */
+.unlu-tablo { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.unlu-card { border-radius: 14px; padding: 16px; }
+.unlu-card.u1 { background: linear-gradient(135deg, #fff3e0, #ffe0b2); border: 2px solid #ffcc80; }
+.unlu-card.u2 { background: linear-gradient(135deg, var(--harf-l), #ffd0d3); border: 2px solid #f4b8bc; }
+.unlu-card h4 { font-family: 'Fredoka One', cursive; font-size: 16px; margin-bottom: 8px; }
+.unlu-card.u1 h4 { color: #e65100; }
+.unlu-card.u2 h4 { color: var(--harf); }
+.unlu-card p { font-size: 13px; font-weight: 700; color: #555; margin-bottom: 8px; }
+.unlu-harfler { display: flex; flex-wrap: wrap; gap: 6px; }
+.uh {
+  padding: 5px 10px; border-radius: 8px; font-family: 'Fredoka One', cursive;
+  font-size: 16px; font-weight: 700;
+}
+.u1 .uh { background: #ff9800; color: #fff; }
+.u2 .uh { background: var(--harf); color: #fff; }
 
-/* BUTONLAR */
-.btn-row { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:24px; }
-.btn-yaz { padding:12px 24px; border-radius:50px; border:none; font-family:'Baloo 2',cursive; font-size:1rem; font-weight:700; cursor:pointer; background:#7C3AED; color:white; box-shadow:0 4px 14px rgba(0,0,0,0.1); transition:all .2s; }
-.btn-indir { padding:12px 24px; border-radius:50px; border:none; font-family:'Baloo 2',cursive; font-size:1rem; font-weight:700; cursor:pointer; background:#F97316; color:white; box-shadow:0 4px 14px rgba(0,0,0,0.1); transition:all .2s; }
-.btn-yaz:hover, .btn-indir:hover { transform:translateY(-2px); }
+/* Kalın/İnce */
+.kalin-ince { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.ki-card { border-radius: 14px; padding: 14px; }
+.ki-card.kalin { background: #e8f5e9; border: 2px solid #a5d6a7; }
+.ki-card.ince  { background: #f3e5f5; border: 2px solid #ce93d8; }
+.ki-card h4 { font-family: 'Fredoka One', cursive; font-size: 15px; margin-bottom: 8px; }
+.ki-card.kalin h4 { color: #2e7d32; }
+.ki-card.ince  h4 { color: #7b1fa2; }
+.ki-harfler { display: flex; flex-wrap: wrap; gap: 5px; }
+.kh { padding: 4px 9px; border-radius: 7px; font-size: 15px; font-weight: 800; }
+.kalin .kh { background: #4caf50; color: #fff; }
+.ince  .kh { background: #9c27b0; color: #fff; }
 
-/* PRINT */
-@media print {
-  .tabs, .tab-btn { display: none !important; }
-  .section { display: block !important; }
-  header { background: var(--primary) !important; -webkit-print-color-adjust: exact; }
+/* ════════════════════════
+   BÖLÜM 2 — HECE BİLGİSİ
+════════════════════════ */
+.hece-builder {
+  display: flex; flex-direction: column; gap: 14px;
+}
+.hece-alfabe {
+  display: flex; flex-wrap: wrap; gap: 7px;
+}
+.hb {
+  background: var(--hece-l); border: 2px solid #90caf9; border-radius: 10px;
+  padding: 8px 10px; font-family: 'Fredoka One', cursive; font-size: 18px;
+  color: var(--hece); cursor: pointer; transition: all .15s; min-width: 42px; text-align: center;
+}
+.hb:hover { background: var(--hece); color: #fff; transform: translateY(-2px); }
+.hb.unlu-h { background: #fff3e0; border-color: #ffcc80; color: #e65100; }
+.hb.unlu-h:hover { background: #ff9800; color: #fff; }
+
+.hece-display {
+  background: var(--hece-l); border: 2.5px dashed #90caf9; border-radius: 14px;
+  padding: 16px; min-height: 64px; display: flex; align-items: center;
+  flex-wrap: wrap; gap: 8px;
+}
+.hece-display .ph { font-size: 13px; color: #aaa; font-weight: 700; font-style: italic; }
+.placed-h {
+  background: var(--hece); color: #fff; padding: 8px 14px; border-radius: 10px;
+  font-family: 'Fredoka One', cursive; font-size: 22px; cursor: pointer;
+  transition: opacity .15s;
+}
+.placed-h:hover { opacity: .7; }
+
+.hece-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-hece-ok {
+  background: var(--hece); color: #fff; border: none; border-radius: 20px;
+  padding: 9px 20px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer;
+}
+.btn-hece-reset {
+  background: #eee; color: #666; border: none; border-radius: 20px;
+  padding: 9px 16px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer;
+}
+.hece-result { font-size: 14px; font-weight: 800; padding: 8px 14px; border-radius: 10px; display: none; }
+.hece-result.ok { background: #e8f5e9; color: var(--kelime); display: block; }
+.hece-result.no { background: var(--harf-l); color: var(--harf); display: block; }
+
+.hece-list { display: flex; flex-wrap: wrap; gap: 8px; min-height: 40px; }
+.hece-made {
+  background: #fff; border: 2px solid var(--hece); color: var(--hece);
+  padding: 6px 14px; border-radius: 10px; font-family: 'Fredoka One', cursive; font-size: 18px;
+}
+
+/* ════════════════════════
+   BÖLÜM 3 — KELİME BİLGİSİ
+════════════════════════ */
+
+/* Görsel + Kelime Yaz */
+.gorsel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px,1fr)); gap: 12px; }
+.gorsel-card {
+  background: var(--kelime-l); border: 2px solid #a5d6a7; border-radius: 14px;
+  padding: 14px 10px; text-align: center;
+}
+.gorsel-emoji { font-size: 40px; margin-bottom: 8px; display: block; }
+.gorsel-input {
+  width: 100%; border: none; border-bottom: 2px solid #81c784; background: transparent;
+  font-family: 'Fredoka One', cursive; font-size: 15px; color: var(--kelime); text-align: center;
+  outline: none; padding: 4px 0;
+}
+.gorsel-input::placeholder { color: #c8e6c9; }
+.gorsel-check { font-size: 11px; font-weight: 800; margin-top: 5px; min-height: 16px; }
+.gorsel-check.dogru { color: var(--kelime); }
+.gorsel-check.yanlis { color: var(--harf); }
+
+/* Karışık Harf → Kelime */
+.karisik-list { display: flex; flex-direction: column; gap: 14px; }
+.karisik-item { background: var(--kelime-l); border: 2px solid #a5d6a7; border-radius: 12px; padding: 14px; }
+.karisik-harfler { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.kh-tile {
+  background: var(--kelime); color: #fff; padding: 7px 10px; border-radius: 8px;
+  font-family: 'Fredoka One', cursive; font-size: 18px; cursor: pointer;
+  transition: all .12s; user-select: none;
+}
+.kh-tile:hover { transform: translateY(-2px); }
+.kh-tile.used { opacity: .3; cursor: not-allowed; }
+.karisik-answer {
+  border: 2px dashed #81c784; border-radius: 10px; padding: 8px; min-height: 42px;
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px; background: #fff;
+}
+.karisik-answer .kph { color: #ccc; font-size: 13px; font-style: italic; font-weight: 700; }
+.placed-kh {
+  background: #fff; border: 2px solid var(--kelime); color: var(--kelime);
+  padding: 5px 9px; border-radius: 7px; font-family: 'Fredoka One', cursive; font-size: 16px; cursor: pointer;
+}
+.placed-kh:hover { background: var(--kelime-l); }
+.karisik-btns { display: flex; gap: 7px; }
+.btn-k-check { background: var(--kelime); color: #fff; border: none; border-radius: 20px; padding: 7px 16px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800; cursor: pointer; }
+.btn-k-reset { background: #eee; color: #666; border: none; border-radius: 20px; padding: 7px 14px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800; cursor: pointer; }
+.karisik-msg { font-size: 13px; font-weight: 800; padding: 7px 12px; border-radius: 8px; display: none; margin-top: 6px; }
+.karisik-msg.ok { background: #e8f5e9; color: var(--kelime); display: block; }
+.karisik-msg.no { background: var(--harf-l); color: var(--harf); display: block; }
+
+/* Hece Birleştir */
+.hece-birlestir-list { display: flex; flex-direction: column; gap: 14px; }
+.hb-item { background: #e8f5e9; border: 2px solid #a5d6a7; border-radius: 12px; padding: 14px; }
+.hb-heceler { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.hb-hece {
+  background: var(--kelime); color: #fff; padding: 8px 14px; border-radius: 10px;
+  font-family: 'Fredoka One', cursive; font-size: 18px; cursor: pointer; transition: all .12s;
+}
+.hb-hece:hover { transform: translateY(-2px); }
+.hb-hece.used { opacity: .3; cursor: not-allowed; }
+.hb-answer {
+  border: 2px dashed #81c784; border-radius: 10px; padding: 8px; min-height: 42px;
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center; background: #fff; margin-bottom: 8px;
+}
+.hb-ph { color: #ccc; font-size: 13px; font-style: italic; font-weight: 700; }
+.placed-hb {
+  background: #fff; border: 2px solid var(--kelime); color: var(--kelime);
+  padding: 6px 11px; border-radius: 8px; font-family: 'Fredoka One', cursive; font-size: 17px; cursor: pointer;
+}
+.placed-hb:hover { background: #e8f5e9; }
+
+/* Hecele */
+.hecele-list { display: flex; flex-direction: column; gap: 12px; }
+.hecele-item { background: #f1f8e9; border: 2px solid #aed581; border-radius: 12px; padding: 14px; }
+.hecele-kelime { font-family: 'Fredoka One', cursive; font-size: 22px; color: var(--kelime); margin-bottom: 10px; }
+.hecele-input {
+  border: 2px solid #81c784; border-radius: 10px; padding: 8px 14px;
+  font-family: 'Fredoka One', cursive; font-size: 18px; color: var(--kelime);
+  width: 100%; outline: none; background: #fff; margin-bottom: 8px;
+}
+.hecele-btn { background: var(--kelime); color: #fff; border: none; border-radius: 20px; padding: 7px 18px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800; cursor: pointer; margin-right: 6px; }
+.hecele-msg { font-size: 13px; font-weight: 800; padding: 7px 12px; border-radius: 8px; display: none; margin-top: 6px; }
+.hecele-msg.ok { background: #e8f5e9; color: var(--kelime); display: block; }
+.hecele-msg.no { background: var(--harf-l); color: var(--harf); display: block; }
+
+/* Alfabetik Sıralama */
+.alfa-words { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.alfa-word {
+  background: var(--kelime); color: #fff; padding: 8px 16px; border-radius: 10px;
+  font-family: 'Fredoka One', cursive; font-size: 17px; cursor: grab;
+  transition: all .15s;
+}
+.alfa-word:hover { transform: scale(1.05); }
+.alfa-word.dragging { opacity: .5; }
+.alfa-drop { 
+  min-height: 56px; border: 2.5px dashed #81c784; border-radius: 12px;
+  padding: 8px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  background: #f1f8e9; margin-bottom: 10px;
+}
+.alfa-drop .aph { color: #ccc; font-size: 13px; font-style: italic; font-weight: 700; }
+.btn-alfa-check { background: var(--kelime); color: #fff; border: none; border-radius: 20px; padding: 8px 20px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; }
+.btn-alfa-reset { background: #eee; color: #666; border: none; border-radius: 20px; padding: 8px 16px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; margin-left: 8px; }
+
+/* ════════════════════════
+   BÖLÜM 4 — SÖZCÜK BİLGİSİ
+════════════════════════ */
+
+/* — ÇARK (Zıt Anlam) — */
+.cark-wrap { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+.cark-container { position: relative; width: 280px; height: 280px; }
+.cark-svg { width: 280px; height: 280px; transition: transform 1s cubic-bezier(.17,.67,.35,1); cursor: pointer; }
+.cark-center {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 56px; height: 56px; background: #1a1a2e; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; box-shadow: 0 4px 12px rgba(0,0,0,.4); cursor: pointer;
+  z-index: 10; border: 3px solid #fff;
+}
+.cark-arrow {
+  width: 0; height: 0;
+  border-left: 14px solid transparent; border-right: 14px solid transparent;
+  border-bottom: 28px solid #1a1a2e;
+  position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.3));
+}
+.cark-soru {
+  background: var(--sozluk-l); border: 2px solid #ce93d8; border-radius: 16px;
+  padding: 18px 24px; text-align: center; min-height: 100px; width: 100%; max-width: 360px;
+}
+.cark-soru .cs-label { font-size: 11px; font-weight: 800; color: var(--sozluk); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
+.cark-soru .cs-kelime { font-family: 'Fredoka One', cursive; font-size: 28px; color: var(--sozluk); margin-bottom: 8px; }
+.cark-soru .cs-secenekler { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.cark-opt {
+  background: #fff; border: 2px solid #ce93d8; border-radius: 20px;
+  padding: 7px 16px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800;
+  color: var(--sozluk); cursor: pointer; transition: all .15s;
+}
+.cark-opt:hover { background: var(--sozluk); color: #fff; }
+.cark-opt.correct { background: var(--kelime); border-color: var(--kelime); color: #fff; }
+.cark-opt.wrong   { background: var(--harf);   border-color: var(--harf);   color: #fff; }
+.btn-cark {
+  background: var(--sozluk); color: #fff; border: none; border-radius: 30px;
+  padding: 11px 28px; font-family: 'Fredoka One', cursive; font-size: 18px;
+  cursor: pointer; box-shadow: 0 4px 14px rgba(123,31,162,.35); transition: transform .15s;
+}
+.btn-cark:hover { transform: scale(1.05); }
+
+/* — KART ÇEVİRMECE (Eş Anlam) — */
+.memory-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+.mem-card {
+  height: 80px; border-radius: 14px; cursor: pointer;
+  perspective: 600px; position: relative;
+}
+.mem-inner {
+  width: 100%; height: 100%; position: relative;
+  transform-style: preserve-3d; transition: transform .5s;
+}
+.mem-card.flipped .mem-inner { transform: rotateY(180deg); }
+.mem-card.matched .mem-inner { transform: rotateY(180deg); }
+.mem-card.matched .mem-back { background: var(--kelime); border-color: var(--kelime); }
+.mem-front, .mem-back {
+  position: absolute; inset: 0; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  backface-visibility: hidden; font-weight: 800;
+}
+.mem-front { background: var(--sozluk); color: #fff; font-size: 28px; border: 3px solid var(--sozluk); }
+.mem-back {
+  background: var(--sozluk-l); border: 2px solid #ce93d8;
+  transform: rotateY(180deg); font-family: 'Fredoka One', cursive;
+  font-size: 15px; color: var(--sozluk); text-align: center; padding: 6px;
+}
+.memory-info { text-align: center; font-size: 13px; font-weight: 700; color: #666; margin-top: 10px; }
+.memory-win { background: #e8f5e9; border-radius: 14px; padding: 14px; text-align: center; display: none; }
+.memory-win.show { display: block; }
+.memory-win p { font-family: 'Fredoka One', cursive; font-size: 20px; color: var(--kelime); }
+.btn-mem-reset { background: var(--sozluk); color: #fff; border: none; border-radius: 20px; padding: 9px 20px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; margin-top: 10px; }
+
+/* Eş Sesli */
+.esesli-list { display: flex; flex-direction: column; gap: 14px; }
+.esesli-item { background: var(--sozluk-l); border: 2px solid #ce93d8; border-radius: 14px; padding: 16px; }
+.esesli-kelime { font-family: 'Fredoka One', cursive; font-size: 22px; color: var(--sozluk); margin-bottom: 10px; }
+.esesli-cumle { font-size: 14px; font-weight: 700; color: #555; line-height: 1.7; }
+.esesli-cumle select {
+  background: #fff; border: 2px solid #ce93d8; border-radius: 8px;
+  padding: 3px 8px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700;
+  color: var(--sozluk); cursor: pointer; outline: none;
+}
+.esesli-cumle select.correct { border-color: var(--kelime); color: var(--kelime); background: #e8f5e9; }
+.esesli-cumle select.wrong   { border-color: var(--harf);   color: var(--harf);   background: var(--harf-l); }
+.btn-esesli { background: var(--sozluk); color: #fff; border: none; border-radius: 20px; padding: 8px 18px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800; cursor: pointer; margin-top: 10px; }
+
+/* Responsive */
+@media (max-width: 580px) {
+  .unlu-tablo, .kalin-ince { grid-template-columns: 1fr; }
+  .memory-grid { grid-template-columns: repeat(3,1fr); }
+  .cark-container { width: 240px; height: 240px; }
+  .cark-svg { width: 240px; height: 240px; }
 }
 </style>
 </head>
 <body>
-<div id="confetti-wrap" class="confetti-wrap"></div>
 
-<header>
-  <div class="header-emoji">🔤</div>
-  <h1>Harfler, Hece ve Kelime</h1>
-  <p>2. Sınıf · Türkçe Dersi</p>
-</header>
-
-<div class="tabs">
-  <button class="tab-btn active" onclick="switchTab('harf', this)">🔤 Harf Tanıma</button>
-  <button class="tab-btn" onclick="switchTab('hece', this)">🔡 Hece Oluşturma</button>
-  <button class="tab-btn" onclick="switchTab('kelime', this)">📝 Kelime Oluşturma</button>
-</div>
-
-<!-- ══ BÖLÜM 1: HARF TANIMA ══ -->
-<div id="harf" class="section active">
-  <p class="section-title">🔤 Harf Tanıma</p>
-  <p class="section-desc">Bir harfe tıkla, büyük-küçük yazılışını ve örneklerini gör!</p>
-
-  <div class="alfabe-grid" id="alfabe-grid"></div>
-
-  <div class="harf-bilgi" id="harf-bilgi">
-    <p style="color:var(--muted);font-weight:700;">👆 Yukarıdan bir harfe tıkla!</p>
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-title">📚 Harf · Hece · Kelime · Sözcük</div>
+  <div class="nav-links">
+    <a class="nav-link nl1" href="#harf">🔤 Harf</a>
+    <a class="nav-link nl2" href="#hece">🧩 Hece</a>
+    <a class="nav-link nl3" href="#kelime">📖 Kelime</a>
+    <a class="nav-link nl4" href="#sozluk">💡 Sözcük</a>
+    <button class="btn-dl" id="dlBtn" onclick="indir()">⬇️ PDF</button>
   </div>
-  <div class="btn-row">
-    <button class="btn-yaz" onclick="window.print()">🖨️ Yazdır</button>
-    <button class="btn-indir" onclick="indir()">⬇️ İndir</button>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="icerik">
+  <h1>🔤 Harf · Hece · <span>Kelime</span> · Sözcük</h1>
+  <p>Oyunlarla öğren, eğlenerek keşfet!</p>
+  <div class="hero-chips">
+    <span class="chip" style="background:var(--harf)">🔤 Harf Bilgisi</span>
+    <span class="chip" style="background:var(--hece)">🧩 Hece Bilgisi</span>
+    <span class="chip" style="background:var(--kelime)">📖 Kelime Bilgisi</span>
+    <span class="chip" style="background:var(--sozluk)">💡 Sözcük Bilgisi</span>
   </div>
 </div>
 
-<!-- ══ BÖLÜM 2: HECE OLUŞTURMA ══ -->
-<div id="hece" class="section">
-  <p class="section-title">🔡 Hece Oluşturma</p>
-  <p class="section-desc">Verilen harfleri doğru sıraya koyarak heceyi oluştur!</p>
-
-  <div class="hece-progress" id="hece-progress"></div>
-
-  <div class="hece-oyun" id="hece-oyun"></div>
-
-  <div style="text-align:center;">
-    <button class="btn btn-clear" onclick="hece_temizle()">🔄 Temizle</button>
-    <button class="btn btn-check" onclick="hece_kontrol()">✅ Kontrol Et</button>
+<!-- ══════════════════════════════
+     BÖLÜM 1 — HARF BİLGİSİ
+══════════════════════════════ -->
+<div class="section" id="harf">
+  <div class="sec-header sh1">
+    <span style="font-size:26px">🔤</span>
+    <h2>Harf Bilgisi</h2>
+    <span class="sec-num">Bölüm 1</span>
   </div>
 
-  <div id="hece-skor" style="display:none" class="skor">
-    <div class="num" id="hece-skor-num"></div>
-    <p id="hece-skor-msg"></p>
-    <button class="btn btn-retry" onclick="heceBaslat()">🔄 Tekrar</button>
+  <!-- Alfabe -->
+  <div class="card-box">
+    <div class="sub-title" style="color:var(--harf)">🎵 Türk Alfabesi — Harfe Tıkla, Sesini Duy!</div>
+    <div class="alfabe-grid" id="alfabeGrid"></div>
+    <div class="harf-info-box" id="harfInfo"></div>
   </div>
 
-  <div class="btn-row">
-    <button class="btn-yaz" onclick="window.print()">🖨️ Yazdır</button>
-    <button class="btn-indir" onclick="indir()">⬇️ İndir</button>
+  <!-- Ünlü / Ünsüz -->
+  <div class="card-box">
+    <div class="sub-title" style="color:var(--harf)">📊 Ünlü – Ünsüz Harfler</div>
+    <div class="unlu-tablo">
+      <div class="unlu-card u1">
+        <h4>🔊 Ünlü (Sesli) Harfler</h4>
+        <p>Tek başına sesletilir. Ağız açık kalır. <strong>8 tane</strong> vardır.</p>
+        <div class="unlu-harfler">
+          <span class="uh">a</span><span class="uh">e</span><span class="uh">ı</span>
+          <span class="uh">i</span><span class="uh">o</span><span class="uh">ö</span>
+          <span class="uh">u</span><span class="uh">ü</span>
+        </div>
+      </div>
+      <div class="unlu-card u2">
+        <h4>🔇 Ünsüz (Sessiz) Harfler</h4>
+        <p>Tek başına tam sesletilemez. <strong>21 tane</strong> vardır.</p>
+        <div class="unlu-harfler" style="gap:4px;">
+          <span class="uh" style="background:var(--harf);font-size:13px;padding:4px 7px;">b</span>
+          <span class="uh" style="background:var(--harf);font-size:13px;padding:4px 7px;">c</span>
+          <span class="uh" style="background:var(--harf);font-size:13px;padding:4px 7px;">ç</span>
+          <span class="uh" style="background:var(--harf);font-size:13px;padding:4px 7px;">d</span>
+          <span class="uh" style="background:var(--harf);font-size:13px;padding:4px 7px;">f</span>
+          <span class="uh" style="background:var(--harf);font-size:13px;padding:4px 7px;">g</span>
+          <span class="uh" style="background:var(--harf);font-size:13px;padding:4px 7px;">ğ</span>
+          <span class="uh" style="background:var(--harf);font-size:13px;padding:4px 7px;">h</span>
+          <span class="uh" style="background:var(--harf);font-size:13px;padding:4px 7px;">j</span>
+          <span class="uh" style="background:var(--harf);font-size:13px;padding:4px 7px;">k</span>
+          <span class="uh" style="background:var(--harf);font-size:13px;padding:4px 7px;">l</span>
+          <span class="uh" style="background:var(--harf);font-size:13px;padding:4px 7px;">m</span>
+          <span class="uh" style="background:var(--harf);font-size:13px;padding:4px 7px;">n</span>
+          <span class="uh" style="background:var(--harf);font-size:13px;padding:4px 7px;">p</span>
+          <span class="uh" style="background:var(--harf);font-size:13px;padding:4px 7px;">r</span>
+          <span class="uh" style="background:var(--harf);font-size:13px;padding:4px 7px;">s</span>
+          <span class="uh" style="background:var(--harf);font-size:13px;padding:4px 7px;">ş</span>
+          <span class="uh" style="background:var(--harf);font-size:13px;padding:4px 7px;">t</span>
+          <span class="uh" style="background:var(--harf);font-size:13px;padding:4px 7px;">v</span>
+          <span class="uh" style="background:var(--harf);font-size:13px;padding:4px 7px;">y</span>
+          <span class="uh" style="background:var(--harf);font-size:13px;padding:4px 7px;">z</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kalın / İnce -->
+  <div class="card-box">
+    <div class="sub-title" style="color:var(--harf)">📏 Kalın – İnce Ünlüler</div>
+    <div class="kalin-ince">
+      <div class="ki-card kalin">
+        <h4>🔵 Kalın Ünlüler</h4>
+        <p style="font-size:13px;color:#555;margin-bottom:8px;">Dil geri çekilir, ağız geniş açılır.</p>
+        <div class="ki-harfler">
+          <span class="kh">a</span><span class="kh">ı</span><span class="kh">o</span><span class="kh">u</span>
+        </div>
+        <p style="font-size:12px;color:#666;margin-top:8px;">Örnek: <strong>kara, toprak, okul</strong></p>
+      </div>
+      <div class="ki-card ince">
+        <h4>🟣 İnce Ünlüler</h4>
+        <p style="font-size:13px;color:#555;margin-bottom:8px;">Dil öne gelir, ağız dar açılır.</p>
+        <div class="ki-harfler">
+          <span class="kh">e</span><span class="kh">i</span><span class="kh">ö</span><span class="kh">ü</span>
+        </div>
+        <p style="font-size:12px;color:#666;margin-top:8px;">Örnek: <strong>gelin, köprü, üzüm</strong></p>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- ══ BÖLÜM 3: KELİME OLUŞTURMA ══ -->
-<div id="kelime" class="section">
-  <p class="section-title">📝 Kelime Oluşturma</p>
-  <p class="section-desc">Heceleri birleştirerek kelimeyi oluştur!</p>
-
-  <div class="hece-progress" id="kelime-progress"></div>
-
-  <div class="kelime-oyun" id="kelime-oyun"></div>
-
-  <div style="text-align:center;">
-    <button class="btn btn-clear" onclick="kelime_temizle()">🔄 Temizle</button>
-    <button class="btn btn-check" onclick="kelime_kontrol()">✅ Kontrol Et</button>
+<!-- ══════════════════════════════
+     BÖLÜM 2 — HECE BİLGİSİ
+══════════════════════════════ -->
+<div class="section" id="hece">
+  <div class="sec-header sh2">
+    <span style="font-size:26px">🧩</span>
+    <h2>Hece Bilgisi</h2>
+    <span class="sec-num">Bölüm 2</span>
   </div>
 
-  <div id="kelime-skor" style="display:none" class="skor">
-    <div class="num" id="kelime-skor-num"></div>
-    <p id="kelime-skor-msg"></p>
-    <button class="btn btn-retry" onclick="kelimeBaslat()">🔄 Tekrar</button>
+  <div class="card-box">
+    <div class="sub-title" style="color:var(--hece)">🔨 Hece Oluştur!</div>
+    <p style="font-size:13px;color:#666;font-weight:700;margin-bottom:12px;">Harflere tıklayarak hece oluştur. Her hece en az bir ünlü içermeli!</p>
+    <div class="hece-builder">
+      <div class="hece-alfabe" id="heceAlfabe"></div>
+      <div class="hece-display" id="heceDisplay">
+        <span class="ph">Harflere tıkla...</span>
+      </div>
+      <div class="hece-btns">
+        <button class="btn-hece-ok" onclick="heceEkle()">✅ Hece Ekle</button>
+        <button class="btn-hece-reset" onclick="heceTemizle()">🔄 Temizle</button>
+      </div>
+      <div class="hece-result" id="heceResult"></div>
+      <div>
+        <div style="font-size:12px;font-weight:800;color:var(--hece);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">Oluşturduğun Heceler:</div>
+        <div class="hece-list" id="heceList"><span style="color:#ccc;font-size:13px;">Henüz hece yok...</span></div>
+      </div>
+    </div>
   </div>
 
-  <div class="btn-row">
-    <button class="btn-yaz" onclick="window.print()">🖨️ Yazdır</button>
-    <button class="btn-indir" onclick="indir()">⬇️ İndir</button>
+  <div class="card-box">
+    <div class="sub-title" style="color:var(--hece)">📌 Hece Nedir?</div>
+    <div style="background:var(--hece-l);border-radius:12px;padding:14px;border-left:4px solid var(--hece);">
+      <p style="font-size:14px;font-weight:700;color:#333;line-height:1.8;">
+        Hece, <strong>bir ünlü harf</strong> ya da <strong>ünlü + ünsüz harf grubu</strong>ndan oluşan ses birimidir.<br>
+        Her hecede <strong>mutlaka bir ünlü</strong> bulunur.<br><br>
+        <span style="background:var(--hece);color:#fff;padding:2px 8px;border-radius:5px;">a-ra-ba</span>&nbsp;
+        <span style="background:var(--hece);color:#fff;padding:2px 8px;border-radius:5px;">ka-lem</span>&nbsp;
+        <span style="background:var(--hece);color:#fff;padding:2px 8px;border-radius:5px;">öğ-ret-men</span>
+      </p>
+    </div>
   </div>
 </div>
+
+<!-- ══════════════════════════════
+     BÖLÜM 3 — KELİME BİLGİSİ
+══════════════════════════════ -->
+<div class="section" id="kelime">
+  <div class="sec-header sh3">
+    <span style="font-size:26px">📖</span>
+    <h2>Kelime Bilgisi</h2>
+    <span class="sec-num">Bölüm 3</span>
+  </div>
+
+  <!-- Görsel → Kelime -->
+  <div class="card-box">
+    <div class="sub-title" style="color:var(--kelime)">🖼️ Görseli Gör, Kelimeyi Yaz!</div>
+    <div class="gorsel-grid" id="gorselGrid"></div>
+    <button onclick="gorselKontrol()" style="margin-top:14px;background:var(--kelime);color:#fff;border:none;border-radius:20px;padding:9px 22px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;">✅ Kontrol Et</button>
+  </div>
+
+  <!-- Karışık Harf → Kelime -->
+  <div class="card-box">
+    <div class="sub-title" style="color:var(--kelime)">🔀 Karışık Harflerden Kelime Bul!</div>
+    <div class="karisik-list" id="karisikList"></div>
+  </div>
+
+  <!-- Hece Birleştir -->
+  <div class="card-box">
+    <div class="sub-title" style="color:var(--kelime)">🧩 Heceleri Birleştir, Kelime Yap!</div>
+    <div class="hece-birlestir-list" id="hbList"></div>
+  </div>
+
+  <!-- Hecele -->
+  <div class="card-box">
+    <div class="sub-title" style="color:var(--kelime)">✂️ Kelimeyi Hecele!</div>
+    <p style="font-size:13px;color:#666;font-weight:700;margin-bottom:12px;">Heceleri tire (-) ile ayır. Örnek: a-ra-ba</p>
+    <div class="hecele-list" id="heceleList"></div>
+  </div>
+
+  <!-- Alfabetik Sıralama -->
+  <div class="card-box">
+    <div class="sub-title" style="color:var(--kelime)">🔤 Kelimeleri Alfabetik Sıraya Diz!</div>
+    <p style="font-size:13px;color:#666;font-weight:700;margin-bottom:12px;">Kelimelere tıklayarak alfabetik sıraya koy.</p>
+    <div class="alfa-words" id="alfaWords"></div>
+    <div class="alfa-drop" id="alfaDrop"><span class="aph">Kelime eklemek için yukarıdan tıkla...</span></div>
+    <div>
+      <button class="btn-alfa-check" onclick="alfaKontrol()">✅ Kontrol Et</button>
+      <button class="btn-alfa-reset" onclick="alfaSifirla()">🔄 Sıfırla</button>
+    </div>
+    <div id="alfaMsg" style="margin-top:10px;font-size:13px;font-weight:800;display:none;padding:8px 12px;border-radius:8px;"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     BÖLÜM 4 — SÖZCÜK BİLGİSİ
+══════════════════════════════ -->
+<div class="section" id="sozluk">
+  <div class="sec-header sh4">
+    <span style="font-size:26px">💡</span>
+    <h2>Sözcük Bilgisi</h2>
+    <span class="sec-num">Bölüm 4</span>
+  </div>
+
+  <!-- ÇARK — Zıt Anlam -->
+  <div class="card-box">
+    <div class="sub-title" style="color:var(--sozluk)">🎡 Zıt Anlam Çarkı! — Çevir ve Bul!</div>
+    <div class="cark-wrap">
+      <div class="cark-container">
+        <div class="cark-arrow"></div>
+        <svg class="cark-svg" id="carkSvg" viewBox="0 0 280 280" onclick="carkCevir()"></svg>
+        <div class="cark-center" onclick="carkCevir()">🎡</div>
+      </div>
+      <button class="btn-cark" onclick="carkCevir()">🎡 Çevir!</button>
+      <div class="cark-soru" id="carkSoru">
+        <div class="cs-label">Zıt Anlam</div>
+        <div class="cs-kelime" id="csSoru">Çarkı çevir!</div>
+        <div class="cs-secenekler" id="csSecenekler"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KART ÇEVİRMECE — Eş Anlam -->
+  <div class="card-box">
+    <div class="sub-title" style="color:var(--sozluk)">🃏 Eş Anlam Kart Çevirmece!</div>
+    <p style="font-size:13px;color:#666;font-weight:700;margin-bottom:14px;">Eş anlamlı kelime çiftlerini bul! Kartlara tıkla, eşleşenleri bul.</p>
+    <div class="memory-grid" id="memGrid"></div>
+    <div class="memory-info" id="memInfo">Hamle: 0</div>
+    <div class="memory-win" id="memWin">
+      <p>🎉 Tebrikler! Tüm çiftleri buldun!</p>
+      <button class="btn-mem-reset" onclick="memBaslat()">🔄 Tekrar Oyna</button>
+    </div>
+  </div>
+
+  <!-- Eş Sesli Kelimeler -->
+  <div class="card-box">
+    <div class="sub-title" style="color:var(--sozluk)">🔊 Eş Sesli Kelimeler</div>
+    <p style="font-size:13px;color:#666;font-weight:700;margin-bottom:12px;">Yazılışları aynı, anlamları farklı kelimeler. Doğru anlamı seç!</p>
+    <div class="esesli-list" id="esesliList"></div>
+    <button class="btn-esesli" onclick="esesliKontrol()">✅ Kontrol Et</button>
+  </div>
+</div>
+
+<div style="height:40px;"></div>
 
 <script>
-// ── TAB ──
-function switchTab(id, btn) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  btn.classList.add('active');
-}
+// ═══════════════ VERİLER ═══════════════
 
-// ── HARF VERİLERİ ──
-const harfler = [
-  { h: 'A', ornek: ['arı', 'at', 'anne'] },
-  { h: 'B', ornek: ['bal', 'baba', 'balon'] },
-  { h: 'C', ornek: ['cam', 'cep', 'ceviz'] },
-  { h: 'Ç', ornek: ['çiçek', 'çanta', 'çay'] },
-  { h: 'D', ornek: ['dal', 'dil', 'deve'] },
-  { h: 'E', ornek: ['el', 'ev', 'ekmek'] },
-  { h: 'F', ornek: ['fare', 'fener', 'fıstık'] },
-  { h: 'G', ornek: ['gül', 'göz', 'gemi'] },
-  { h: 'Ğ', ornek: ['dağ', 'bağ', 'yağmur'] },
-  { h: 'H', ornek: ['hava', 'hal', 'horoz'] },
-  { h: 'I', ornek: ['ışık', 'ırmak', 'ısı'] },
-  { h: 'İ', ornek: ['ip', 'inek', 'iğne'] },
-  { h: 'J', ornek: ['jilet', 'jeton', 'jöle'] },
-  { h: 'K', ornek: ['kedi', 'kuş', 'kale'] },
-  { h: 'L', ornek: ['lale', 'limon', 'lokum'] },
-  { h: 'M', ornek: ['masa', 'mavi', 'meyve'] },
-  { h: 'N', ornek: ['nar', 'nehir', 'nine'] },
-  { h: 'O', ornek: ['ot', 'okul', 'oyun'] },
-  { h: 'Ö', ornek: ['ördek', 'ödev', 'öğretmen'] },
-  { h: 'P', ornek: ['pul', 'palto', 'portakal'] },
-  { h: 'R', ornek: ['rüzgar', 'renk', 'resim'] },
-  { h: 'S', ornek: ['su', 'sepet', 'saç'] },
-  { h: 'Ş', ornek: ['şeker', 'şapka', 'şehir'] },
-  { h: 'T', ornek: ['top', 'taş', 'tavuk'] },
-  { h: 'U', ornek: ['uçak', 'uzay', 'uyku'] },
-  { h: 'Ü', ornek: ['üzüm', 'ütü', 'ülke'] },
-  { h: 'V', ornek: ['vapur', 'vişne', 'vücut'] },
-  { h: 'Y', ornek: ['yılan', 'yol', 'yumurta'] },
-  { h: 'Z', ornek: ['zeytin', 'zil', 'zebra'] },
+var alfabe = ['a','b','c','ç','d','e','f','g','ğ','h','ı','i','j','k','l','m','n','o','ö','p','r','s','ş','t','u','ü','v','y','z'];
+var unlular = ['a','e','ı','i','o','ö','u','ü'];
+var harfBilgi = {
+  'a':'Ünlü · Kalın · A harfi',  'e':'Ünlü · İnce · E harfi',
+  'ı':'Ünlü · Kalın · I harfi',  'i':'Ünlü · İnce · İ harfi',
+  'o':'Ünlü · Kalın · O harfi',  'ö':'Ünlü · İnce · Ö harfi',
+  'u':'Ünlü · Kalın · U harfi',  'ü':'Ünlü · İnce · Ü harfi',
+  'b':'Ünsüz · Yumuşak','c':'Ünsüz · Sert','ç':'Ünsüz · Sert',
+  'd':'Ünsüz · Yumuşak','f':'Ünsüz · Sert','g':'Ünsüz · Yumuşak',
+  'ğ':'Ünsüz · Yumuşak (Yumuşak G)','h':'Ünsüz · Sert',
+  'j':'Ünsüz · Yumuşak','k':'Ünsüz · Sert','l':'Ünsüz · Yumuşak',
+  'm':'Ünsüz · Yumuşak','n':'Ünsüz · Yumuşak','p':'Ünsüz · Sert',
+  'r':'Ünsüz · Yumuşak','s':'Ünsüz · Sert','ş':'Ünsüz · Sert',
+  't':'Ünsüz · Sert','v':'Ünsüz · Yumuşak','y':'Ünsüz · Yumuşak','z':'Ünsüz · Yumuşak'
+};
+
+var gorselData = [
+  {emoji:'🍎', kelime:'elma'},{emoji:'🏠', kelime:'ev'},
+  {emoji:'🌳', kelime:'ağaç'},{emoji:'🐱', kelime:'kedi'},
+  {emoji:'📚', kelime:'kitap'},{emoji:'✏️', kelime:'kalem'},
+  {emoji:'🌸', kelime:'çiçek'},{emoji:'🐦', kelime:'kuş'},
 ];
 
-// Alfabe grid
-const grid = document.getElementById('alfabe-grid');
-harfler.forEach(harf => {
-  const div = document.createElement('div');
-  div.className = 'harf-kart';
-  div.innerHTML = `<span class="buyuk">${harf.h}</span><span class="kucuk">${harf.h.toLowerCase()}</span>`;
-  div.onclick = () => harfSec(harf, div);
-  grid.appendChild(div);
-});
-
-function harfSec(harf, el) {
-  document.querySelectorAll('.harf-kart').forEach(k => k.classList.remove('selected'));
-  el.classList.add('selected');
-  const bilgi = document.getElementById('harf-bilgi');
-  bilgi.innerHTML = `
-    <div class="big-harf">${harf.h} ${harf.h.toLowerCase()}</div>
-    <div class="ornekler">
-      ${harf.ornek.map(o => `<span class="ornek-badge">🔹 ${o}</span>`).join('')}
-    </div>
-  `;
-}
-
-// ── HECE OYUNU ──
-const heceler = [
-  { hece: 'MA', harfler: ['M','A','L','T'] },
-  { hece: 'BA', harfler: ['B','A','R','K'] },
-  { hece: 'EV', harfler: ['E','V','Z','P'] },
-  { hece: 'GÜL', harfler: ['G','Ü','L','K'] },
-  { hece: 'KAR', harfler: ['K','A','R','S'] },
-  { hece: 'SU', harfler: ['S','U','T','N'] },
-  { hece: 'AT', harfler: ['A','T','Y','P'] },
-  { hece: 'DAL', harfler: ['D','A','L','M'] },
+var karisikData = [
+  {harfler:['m','a','s','e'], kelime:'masa'},
+  {harfler:['p','a','t','l','o'], kelime:'talop', dogru:'topla'},
+  {harfler:['r','a','a','b','a'], kelime:'araba', dogru:'araba'},
+  {harfler:['k','p','i','a'], kelime:'kapi', dogru:'kapı'},
+];
+// Düzeltilmiş karışık veri
+var karisikDataDuzgun = [
+  {harfler:['m','a','s','e'], dogru:'masa'},
+  {harfler:['l','a','k','e','m'], dogru:'kalem'},
+  {harfler:['ş','a','k','o','l'], dogru:'okşal', fixedDogru:'okula'},
+  {harfler:['n','e','z','i'], dogru:'zeni', fixedDogru:'inek'},
+];
+// Temiz veri kullanalım
+var karisikTemiz = [
+  {harfler:['a','m','s','e'], dogru:'masa', ipucu:'Üzerinde yazı yazılan şey'},
+  {harfler:['e','m','k','a','l'], dogru:'kalem', ipucu:'Yazı yazmak için kullanırız'},
+  {harfler:['p','a','k','ı'], dogru:'kapı', ipucu:'Eve girerken açtığımız şey'},
+  {harfler:['s','a','t','e','b'], dogru:'tabse', fixedDogru:'tabak', ipucu:'Yemek yediğimiz kap'},
+];
+// En doğru veri
+var karisikFinal = [
+  {harfler:['a','m','s','e'], dogru:'masa'},
+  {harfler:['l','e','m','a','k'], dogru:'kalem'},
+  {harfler:['ı','k','a','p'], dogru:'kapı'},
+  {harfler:['e','k','p','ö','r'], dogru:'köpek'},
 ];
 
-let heceSoru = 0, heceSkor = 0, heceSec = [];
+var hbData = [
+  {heceler:['a','ra','ba'], dogru:'araba'},
+  {heceler:['ka','lem'], dogru:'kalem'},
+  {heceler:['öğ','ret','men'], dogru:'öğretmen'},
+  {heceler:['çi','çek'], dogru:'çiçek'},
+];
 
-function heceBaslat() {
-  heceSoru = 0; heceSkor = 0; heceSec = [];
-  document.getElementById('hece-skor').style.display = 'none';
-  heceRender();
+var heceleData = [
+  {kelime:'araba', dogru:'a-ra-ba'},
+  {kelime:'kalem', dogru:'ka-lem'},
+  {kelime:'okul', dogru:'o-kul'},
+  {kelime:'çiçek', dogru:'çi-çek'},
+  {kelime:'öğretmen', dogru:'öğ-ret-men'},
+];
+
+var alfaData = ['elma','armut','ayva','bal','ceviz','çilek'];
+
+// Zıt Anlam
+var zatData = [
+  {kelime:'büyük', secenekler:['küçük','uzun','güzel'], dogru:'küçük'},
+  {kelime:'sıcak', secenekler:['soğuk','renkli','hızlı'], dogru:'soğuk'},
+  {kelime:'açık', secenekler:['kapalı','yeni','eski'], dogru:'kapalı'},
+  {kelime:'hızlı', secenekler:['yavaş','güçlü','tatlı'], dogru:'yavaş'},
+  {kelime:'güzel', secenekler:['çirkin','mutlu','sessiz'], dogru:'çirkin'},
+  {kelime:'zengin', secenekler:['fakir','genç','zeki'], dogru:'fakir'},
+  {kelime:'uzun', secenekler:['kısa','dar','yumuşak'], dogru:'kısa'},
+  {kelime:'mutlu', secenekler:['üzgün','yorgun','hasta'], dogru:'üzgün'},
+];
+
+// Eş Anlam çiftleri
+var esData = [
+  {a:'güzel', b:'hoş'},{a:'büyük', b:'iri'},
+  {a:'hızlı', b:'çabuk'},{a:'mutlu', b:'sevinçli'},
+  {a:'korku', b:'ürküntü'},{a:'uyku', b:'uyuklama'},
+];
+
+// Eş Sesli
+var esesliData = [
+  {kelime:'yüz',
+   c1:'Havuzda çok iyi ___ atıyor. (yüzmek / sayı)',
+   c1dogru:'yüzmek',
+   c2:'Sınıfta ___ öğrenci var.',
+   c2dogru:'sayı',
+   secA:['yüzmek','sayı'], secB:['yüzmek','sayı']},
+  {kelime:'bak',
+   c1:'Pencereden dışarı ___.',
+   c1dogru:'bak (bakmak)',
+   c2:'Bu ders çok ___ olmaz.',
+   c2dogru:'bak değil',
+   secA:['bak (bakmak)','bak (ünlem)'],
+   secB:['bak (bakmak)','bak (ünlem)']},
+  {kelime:'el',
+   c1:'___ sıkışmak nezaket göstergesidir.',
+   c1dogru:'El (organ)',
+   c2:'___ ülkelerle ticaret yapılır.',
+   c2dogru:'El (yabancı)',
+   secA:['El (organ)','El (yabancı)'],
+   secB:['El (organ)','El (yabancı)']},
+];
+
+// ═══════════════ HARF BİLGİSİ ═══════════════
+
+function buildAlfabe(){
+  var g = document.getElementById('alfabeGrid');
+  alfabe.forEach(function(h){
+    var btn = document.createElement('button');
+    var isUnlu = unlular.includes(h);
+    btn.className = 'harf-btn' + (isUnlu ? ' unlu' : '');
+    btn.innerHTML = h.toUpperCase() + '<span class="harf-type">' + (isUnlu?'ünlü':'ünsüz') + '</span>';
+    btn.onclick = function(){
+      // Ses
+      if('speechSynthesis' in window){
+        var u = new SpeechSynthesisUtterance(h);
+        u.lang = 'tr-TR'; u.rate = 0.8;
+        speechSynthesis.speak(u);
+      }
+      // Bilgi
+      var box = document.getElementById('harfInfo');
+      box.className = 'harf-info-box show';
+      box.innerHTML = '<strong style="font-size:28px;font-family:Fredoka One,cursive;color:var(--harf)">' + h.toUpperCase() + ' / ' + h + '</strong> &nbsp;·&nbsp; ' + (harfBilgi[h]||'');
+    };
+    g.appendChild(btn);
+  });
 }
 
-function heceRender() {
-  const progress = document.getElementById('hece-progress');
-  progress.innerHTML = heceler.map((_, i) => `<div class="hece-dot ${i < heceSoru ? 'done' : i === heceSoru ? 'active' : ''}"></div>`).join('');
+// Hece alfabe
+function buildHeceAlfabe(){
+  var g = document.getElementById('heceAlfabe');
+  alfabe.forEach(function(h){
+    var btn = document.createElement('button');
+    var isUnlu = unlular.includes(h);
+    btn.className = 'hb' + (isUnlu ? ' unlu-h' : '');
+    btn.textContent = h;
+    btn.onclick = function(){ heceHarfEkle(h); };
+    g.appendChild(btn);
+  });
+}
 
-  if (heceSoru >= heceler.length) {
-    document.getElementById('hece-oyun').innerHTML = '';
-    const pct = Math.round(heceSkor / heceler.length * 100);
-    document.getElementById('hece-skor-num').textContent = heceSkor + ' / ' + heceler.length;
-    document.getElementById('hece-skor-msg').textContent = pct >= 80 ? '🌟 Harika! Heceleri çok iyi biliyorsun!' : pct >= 50 ? '👍 İyi iş! Biraz daha pratik yapabilirsin.' : '💪 Tekrar dene, başarabilirsin!';
-    document.getElementById('hece-skor').style.display = 'block';
-    if (pct >= 80) konfeti();
+var heceGecici = [];
+var heceler = [];
+
+function heceHarfEkle(h){
+  heceGecici.push(h);
+  renderHeceDisplay();
+}
+
+function renderHeceDisplay(){
+  var d = document.getElementById('heceDisplay');
+  d.innerHTML = '';
+  if(!heceGecici.length){
+    d.innerHTML = '<span class="ph">Harflere tıkla...</span>';
     return;
   }
-
-  const q = heceler[heceSoru];
-  heceSec = [];
-  const karisik = [...q.harfler].sort(() => Math.random() - 0.5);
-
-  document.getElementById('hece-oyun').innerHTML = `
-    <div class="hece-soru">Bu harflerle bir hece oluştur: <span>${q.hece.length} harf</span></div>
-    <div class="hece-cevap-alan" id="hece-cevap" onclick="heceSil()"></div>
-    <div class="harf-secenekler" id="harf-secenekler">
-      ${karisik.map((h, i) => `<div class="hece-harf" id="hh-${i}" onclick="heceEkle('${h}', ${i})">${h}</div>`).join('')}
-    </div>
-  `;
+  heceGecici.forEach(function(h,i){
+    var sp = document.createElement('span');
+    sp.className = 'placed-h';
+    sp.textContent = h;
+    sp.title = 'Kaldır';
+    sp.onclick = function(){ heceGecici.splice(i,1); renderHeceDisplay(); };
+    d.appendChild(sp);
+  });
 }
 
-function heceEkle(harf, idx) {
-  const el = document.getElementById('hh-' + idx);
-  if (el.classList.contains('used')) return;
-  el.classList.add('used');
-  heceSec.push({ harf, idx });
-  renderCevap();
+function heceEkle(){
+  var res = document.getElementById('heceResult');
+  if(!heceGecici.length){ res.className='hece-result no'; res.textContent='Önce harf seç!'; return; }
+  var hece = heceGecici.join('');
+  var hasUnlu = heceGecici.some(function(h){ return unlular.includes(h); });
+  if(!hasUnlu){
+    res.className='hece-result no'; res.textContent='❌ Hece en az bir ünlü içermeli! (a,e,ı,i,o,ö,u,ü)'; return;
+  }
+  heceler.push(hece);
+  renderHeceler();
+  heceGecici = [];
+  renderHeceDisplay();
+  res.className='hece-result ok'; res.textContent='✅ "' + hece + '" hecesi eklendi!';
 }
 
-function renderCevap() {
-  const alan = document.getElementById('hece-cevap');
-  alan.innerHTML = heceSec.map(s => `<div class="hece-cevap-harf">${s.harf}</div>`).join('');
+function heceTemizle(){
+  heceGecici = [];
+  renderHeceDisplay();
+  document.getElementById('heceResult').className='hece-result';
 }
 
-function heceSil() {
-  if (heceSec.length === 0) return;
-  const son = heceSec.pop();
-  document.getElementById('hh-' + son.idx).classList.remove('used');
-  renderCevap();
+function renderHeceler(){
+  var list = document.getElementById('heceList');
+  list.innerHTML = '';
+  if(!heceler.length){ list.innerHTML='<span style="color:#ccc;font-size:13px;">Henüz hece yok...</span>'; return; }
+  heceler.forEach(function(h){
+    var sp = document.createElement('span');
+    sp.className = 'hece-made'; sp.textContent = h;
+    list.appendChild(sp);
+  });
 }
 
-function hece_temizle() {
-  heceSec.forEach(s => document.getElementById('hh-' + s.idx)?.classList.remove('used'));
-  heceSec = [];
-  renderCevap();
+// ═══════════════ GÖRSEL + KELİME ═══════════════
+function buildGorsel(){
+  var g = document.getElementById('gorselGrid');
+  gorselData.forEach(function(item,i){
+    var div = document.createElement('div');
+    div.className = 'gorsel-card';
+    div.innerHTML = '<span class="gorsel-emoji">' + item.emoji + '</span>' +
+      '<input class="gorsel-input" id="gi'+i+'" placeholder="Yaz..." />' +
+      '<div class="gorsel-check" id="gc'+i+'"></div>';
+    g.appendChild(div);
+  });
 }
 
-function hece_kontrol() {
-  const q = heceler[heceSoru];
-  const cevap = heceSec.map(s => s.harf).join('');
-  if (cevap === q.hece) {
-    heceSkor++;
-    heceSoru++;
-    setTimeout(heceRender, 500);
+function gorselKontrol(){
+  gorselData.forEach(function(item,i){
+    var v = (document.getElementById('gi'+i).value||'').trim().toLowerCase();
+    var msg = document.getElementById('gc'+i);
+    if(!v){ msg.textContent=''; return; }
+    if(v === item.kelime){ msg.className='gorsel-check dogru'; msg.textContent='✅ Doğru!'; }
+    else { msg.className='gorsel-check yanlis'; msg.textContent='❌ ' + item.kelime; }
+  });
+}
+
+// ═══════════════ KARISIK HARF ═══════════════
+var karisikStates = karisikFinal.map(function(d){ return { placed:[], sh: shuffleArr(d.harfler.slice()) }; });
+
+function shuffleArr(a){
+  for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}
+  return a;
+}
+
+function buildKarisik(){
+  var list = document.getElementById('karisikList');
+  karisikFinal.forEach(function(item,i){
+    var div = document.createElement('div');
+    div.className = 'karisik-item';
+    div.innerHTML = '<div style="font-size:12px;font-weight:800;color:var(--kelime);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">Kelime '+(i+1)+'</div>' +
+      '<div class="karisik-harfler" id="kh'+i+'"></div>' +
+      '<div class="karisik-answer" id="ka'+i+'"><span class="kph">Harflere tıkla...</span></div>' +
+      '<div class="karisik-btns">' +
+        '<button class="btn-k-check" onclick="karisikCheck('+i+')">✅ Kontrol</button>' +
+        '<button class="btn-k-reset" onclick="karisikReset('+i+')">🔄 Sıfırla</button>' +
+      '</div>' +
+      '<div class="karisik-msg" id="km'+i+'"></div>';
+    list.appendChild(div);
+    renderKarisik(i);
+  });
+}
+
+function renderKarisik(i){
+  var st = karisikStates[i];
+  var bh = document.getElementById('kh'+i);
+  var ba = document.getElementById('ka'+i);
+  bh.innerHTML=''; ba.innerHTML='';
+  st.sh.forEach(function(h,hi){
+    var btn = document.createElement('button');
+    btn.className='kh-tile'+(st.placed.includes(hi)?' used':'');
+    btn.textContent=h;
+    btn.onclick=function(){ if(!st.placed.includes(hi)){ st.placed.push(hi); renderKarisik(i); } };
+    bh.appendChild(btn);
+  });
+  if(!st.placed.length){ ba.innerHTML='<span class="kph">Harflere tıkla...</span>'; }
+  else {
+    st.placed.forEach(function(hi){
+      var sp=document.createElement('span'); sp.className='placed-kh'; sp.textContent=st.sh[hi];
+      sp.onclick=function(){ st.placed=st.placed.filter(function(x){return x!==hi;}); renderKarisik(i); };
+      ba.appendChild(sp);
+    });
+  }
+}
+
+function karisikCheck(i){
+  var cevap = karisikStates[i].placed.map(function(hi){ return karisikStates[i].sh[hi]; }).join('');
+  var msg = document.getElementById('km'+i);
+  if(cevap.toLowerCase()===karisikFinal[i].dogru){
+    msg.className='karisik-msg ok'; msg.textContent='🎉 Doğru! "'+karisikFinal[i].dogru+'"';
   } else {
-    document.getElementById('hece-cevap').style.border = '3px solid var(--red)';
-    setTimeout(() => {
-      document.getElementById('hece-cevap').style.border = '';
-      hece_temizle();
-    }, 700);
+    msg.className='karisik-msg no'; msg.textContent='❌ Tekrar dene!';
   }
 }
 
-heceBaslat();
-
-// ── KELİME OYUNU ──
-const kelimeler = [
-  { kelime: 'anne', heceler: ['an', 'ne'], sahte: ['ma', 'li', 'bu'], emoji: '👩' },
-  { kelime: 'okul', heceler: ['o', 'kul'], sahte: ['ma', 'da'], emoji: '🏫' },
-  { kelime: 'elma', heceler: ['el', 'ma'], sahte: ['ra', 'bu'], emoji: '🍎' },
-  { kelime: 'kitap', heceler: ['ki', 'tap'], sahte: ['ma', 'li'], emoji: '📚' },
-  { kelime: 'araba', heceler: ['a', 'ra', 'ba'], sahte: ['mi', 'lu'], emoji: '🚗' },
-  { kelime: 'kelebek', heceler: ['ke', 'le', 'bek'], sahte: ['ma', 'bu'], emoji: '🦋' },
-  { kelime: 'çiçek', heceler: ['çi', 'çek'], sahte: ['ma', 'li'], emoji: '🌸' },
-  { kelime: 'sepet', heceler: ['se', 'pet'], sahte: ['ma', 'bu'], emoji: '🧺' },
-];
-
-let kelimeSoru = 0, kelimeSkor = 0, kelimeSec = [];
-
-function kelimeBaslat() {
-  kelimeSoru = 0; kelimeSkor = 0; kelimeSec = [];
-  document.getElementById('kelime-skor').style.display = 'none';
-  kelimeRender();
+function karisikReset(i){
+  karisikStates[i].placed=[];
+  document.getElementById('km'+i).className='karisik-msg';
+  renderKarisik(i);
 }
 
-function kelimeRender() {
-  const progress = document.getElementById('kelime-progress');
-  progress.innerHTML = kelimeler.map((_, i) => `<div class="hece-dot ${i < kelimeSoru ? 'done' : i === kelimeSoru ? 'active' : ''}"></div>`).join('');
+// ═══════════════ HECE BİRLEŞTİR ═══════════════
+var hbStates = hbData.map(function(d){ return { placed:[], sh: shuffleArr(d.heceler.slice()) }; });
 
-  if (kelimeSoru >= kelimeler.length) {
-    document.getElementById('kelime-oyun').innerHTML = '';
-    const pct = Math.round(kelimeSkor / kelimeler.length * 100);
-    document.getElementById('kelime-skor-num').textContent = kelimeSkor + ' / ' + kelimeler.length;
-    document.getElementById('kelime-skor-msg').textContent = pct >= 80 ? '🌟 Mükemmel! Kelimeleri çok iyi oluşturdun!' : pct >= 50 ? '👍 Güzel! Biraz daha çalışırsan harika olacak.' : '💪 Tekrar dene, başarabilirsin!';
-    document.getElementById('kelime-skor').style.display = 'block';
-    if (pct >= 80) konfeti();
-    return;
+function buildHB(){
+  var list = document.getElementById('hbList');
+  hbData.forEach(function(item,i){
+    var div=document.createElement('div');
+    div.className='hb-item';
+    div.innerHTML='<div style="font-size:12px;font-weight:800;color:var(--kelime);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">Kelime '+(i+1)+'</div>' +
+      '<div class="hb-heceler" id="hbh'+i+'"></div>' +
+      '<div class="hb-answer" id="hba'+i+'"><span class="hb-ph">Hecelere tıkla...</span></div>' +
+      '<div class="karisik-btns">' +
+        '<button class="btn-k-check" onclick="hbCheck('+i+')">✅ Kontrol</button>' +
+        '<button class="btn-k-reset" onclick="hbReset('+i+')">🔄 Sıfırla</button>' +
+      '</div><div class="karisik-msg" id="hbm'+i+'"></div>';
+    list.appendChild(div);
+    renderHB(i);
+  });
+}
+
+function renderHB(i){
+  var st=hbStates[i];
+  var bh=document.getElementById('hbh'+i); var ba=document.getElementById('hba'+i);
+  bh.innerHTML=''; ba.innerHTML='';
+  st.sh.forEach(function(h,hi){
+    var btn=document.createElement('button');
+    btn.className='hb-hece'+(st.placed.includes(hi)?' used':'');
+    btn.textContent=h;
+    btn.onclick=function(){if(!st.placed.includes(hi)){st.placed.push(hi);renderHB(i);}};
+    bh.appendChild(btn);
+  });
+  if(!st.placed.length){ba.innerHTML='<span class="hb-ph">Hecelere tıkla...</span>';}
+  else {
+    st.placed.forEach(function(hi){
+      var sp=document.createElement('span'); sp.className='placed-hb'; sp.textContent=st.sh[hi];
+      sp.onclick=function(){st.placed=st.placed.filter(function(x){return x!==hi;});renderHB(i);};
+      ba.appendChild(sp);
+    });
   }
-
-  const q = kelimeler[kelimeSoru];
-  kelimeSec = [];
-  const tumHeceler = [...q.heceler, ...q.sahte].sort(() => Math.random() - 0.5);
-
-  document.getElementById('kelime-oyun').innerHTML = `
-    <div class="kelime-ipucu">Bu resme bakarak kelimeyi oluştur:</div>
-    <span class="kelime-emoji">${q.emoji}</span>
-    <div class="kelime-alani" id="kelime-alan" onclick="kelimeSonSil()">
-      <span style="color:var(--muted);font-size:.9rem;font-family:'Nunito';font-weight:600;" id="placeholder">Hecelere tıkla...</span>
-    </div>
-    <div class="hece-kutular" id="hece-kutular">
-      ${tumHeceler.map((h, i) => `<div class="hece-kutu" id="hk-${i}" onclick="kelimeEkle('${h}', ${i})">${h}</div>`).join('')}
-    </div>
-  `;
 }
 
-function kelimeEkle(hece, idx) {
-  const el = document.getElementById('hk-' + idx);
-  if (el.classList.contains('used')) return;
-  el.classList.add('used');
-  kelimeSec.push({ hece, idx });
-  renderKelimeAlan();
+function hbCheck(i){
+  var cevap=hbStates[i].placed.map(function(hi){return hbStates[i].sh[hi];}).join('');
+  var msg=document.getElementById('hbm'+i);
+  if(cevap===hbData[i].dogru){msg.className='karisik-msg ok';msg.textContent='🎉 Doğru! "'+hbData[i].dogru+'"';}
+  else {msg.className='karisik-msg no';msg.textContent='❌ Tekrar dene! İpucu: '+hbData[i].dogru.length+' harfli kelime';}
+}
+function hbReset(i){hbStates[i].placed=[];document.getElementById('hbm'+i).className='karisik-msg';renderHB(i);}
+
+// ═══════════════ HECELE ═══════════════
+function buildHecele(){
+  var list=document.getElementById('heceleList');
+  heceleData.forEach(function(item,i){
+    var div=document.createElement('div'); div.className='hecele-item';
+    div.innerHTML='<div class="hecele-kelime">'+item.kelime+'</div>' +
+      '<input class="hecele-input" id="hi'+i+'" placeholder="Heceleri tire ile ayır: örn. ka-lem" />' +
+      '<div><button class="hecele-btn" onclick="heceleKontrol('+i+')">✅ Kontrol</button>' +
+        '<button class="hecele-btn" style="background:#eee;color:#666;" onclick="document.getElementById(\'hi'+i+'\').value=\'\';document.getElementById(\'hm'+i+'\').className=\'hecele-msg\';">🔄</button>' +
+      '</div><div class="hecele-msg" id="hm'+i+'"></div>';
+    list.appendChild(div);
+  });
 }
 
-function kelimeSonSil() {
-  if (kelimeSec.length === 0) return;
-  const son = kelimeSec.pop();
-  document.getElementById('hk-' + son.idx)?.classList.remove('used');
-  renderKelimeAlan();
+function heceleKontrol(i){
+  var v=(document.getElementById('hi'+i).value||'').trim().toLowerCase();
+  var msg=document.getElementById('hm'+i);
+  if(v===heceleData[i].dogru){msg.className='hecele-msg ok';msg.textContent='🎉 Doğru! '+heceleData[i].dogru;}
+  else {msg.className='hecele-msg no';msg.textContent='❌ Doğrusu: '+heceleData[i].dogru;}
 }
 
-function renderKelimeAlan() {
-  const alan = document.getElementById('kelime-alan');
-  if (kelimeSec.length === 0) {
-    alan.innerHTML = `<span style="color:var(--muted);font-size:.9rem;font-family:'Nunito';font-weight:600;">Hecelere tıkla...</span>`;
+// ═══════════════ ALFABETİK SIRALAMA ═══════════════
+var alfaPlaced = [];
+
+function buildAlfa(){
+  var wr = document.getElementById('alfaWords');
+  var sh = shuffleArr(alfaData.slice());
+  sh.forEach(function(w){
+    var btn=document.createElement('button'); btn.className='alfa-word'; btn.textContent=w;
+    btn.onclick=function(){alfaEkle(w,btn);};
+    wr.appendChild(btn);
+  });
+}
+
+function alfaEkle(w,btn){
+  if(alfaPlaced.includes(w)) return;
+  alfaPlaced.push(w);
+  btn.style.opacity='.3'; btn.style.cursor='not-allowed';
+  var drop=document.getElementById('alfaDrop');
+  drop.querySelector('.aph') && (drop.querySelector('.aph').style.display='none');
+  var sp=document.createElement('span'); sp.className='alfa-word'; sp.textContent=w;
+  sp.style.cursor='pointer';
+  sp.onclick=function(){
+    alfaPlaced=alfaPlaced.filter(function(x){return x!==w;});
+    sp.remove();
+    btn.style.opacity=''; btn.style.cursor='';
+  };
+  drop.appendChild(sp);
+}
+
+function alfaKontrol(){
+  var msg=document.getElementById('alfaMsg');
+  var sorted=alfaData.slice().sort(function(a,b){return a.localeCompare(b,'tr')});
+  if(JSON.stringify(alfaPlaced)===JSON.stringify(sorted)){
+    msg.style.display='block'; msg.style.background='#e8f5e9'; msg.style.color='var(--kelime)'; msg.textContent='🎉 Tebrikler! Alfabetik sıralama doğru!';
   } else {
-    alan.innerHTML = kelimeSec.map(s => `<span>${s.hece}</span>`).join('');
+    msg.style.display='block'; msg.style.background='var(--harf-l)'; msg.style.color='var(--harf)'; msg.textContent='❌ Sıralama yanlış. Doğrusu: '+sorted.join(' → ');
   }
 }
 
-function kelime_temizle() {
-  kelimeSec.forEach(s => document.getElementById('hk-' + s.idx)?.classList.remove('used'));
-  kelimeSec = [];
-  renderKelimeAlan();
+function alfaSifirla(){
+  alfaPlaced=[];
+  document.getElementById('alfaDrop').innerHTML='<span class="aph">Kelime eklemek için yukarıdan tıkla...</span>';
+  document.getElementById('alfaMsg').style.display='none';
+  document.querySelectorAll('#alfaWords .alfa-word').forEach(function(b){b.style.opacity='';b.style.cursor='';});
 }
 
-function kelime_kontrol() {
-  const q = kelimeler[kelimeSoru];
-  const cevap = kelimeSec.map(s => s.hece).join('');
-  if (cevap === q.kelime) {
-    kelimeSkor++;
-    kelimeSoru++;
-    setTimeout(kelimeRender, 600);
-  } else {
-    document.getElementById('kelime-alan').style.border = '3px solid var(--red)';
-    setTimeout(() => {
-      document.getElementById('kelime-alan').style.border = '3px dashed #e2e8f0';
-      kelime_temizle();
-    }, 700);
+// ═══════════════ ÇARK ═══════════════
+var carkDonuyor=false; var carkAcik=-1; var carkRotasyon=0;
+var carkRenkler=['#e63946','#f77f00','#2196f3','#4caf50','#9c27b0','#ff5722','#00bcd4','#8bc34a'];
+
+function buildCark(){
+  var svg=document.getElementById('carkSvg');
+  var n=zatData.length; var slice=360/n;
+  var html='';
+  zatData.forEach(function(item,i){
+    var start=i*slice; var end=start+slice;
+    var r=130; var cx=140; var cy=140;
+    var a1=((start-90)*Math.PI/180); var a2=((end-90)*Math.PI/180);
+    var x1=cx+r*Math.cos(a1); var y1=cy+r*Math.sin(a1);
+    var x2=cx+r*Math.cos(a2); var y2=cy+r*Math.sin(a2);
+    var large=slice>180?1:0;
+    var mid=(start+end)/2-90; var mr=85;
+    var tx=cx+mr*Math.cos(mid*Math.PI/180);
+    var ty=cy+mr*Math.sin(mid*Math.PI/180);
+    var c=carkRenkler[i%carkRenkler.length];
+    html+='<path d="M'+cx+','+cy+' L'+x1+','+y1+' A'+r+','+r+' 0 '+large+',1 '+x2+','+y2+' Z" fill="'+c+'" stroke="#fff" stroke-width="2"/>';
+    html+='<text x="'+tx+'" y="'+ty+'" text-anchor="middle" dominant-baseline="middle" fill="#fff" font-family="Fredoka One,cursive" font-size="14">'+item.kelime+'</text>';
+  });
+  svg.innerHTML=html;
+}
+
+function carkCevir(){
+  if(carkDonuyor) return;
+  carkDonuyor=true;
+  document.getElementById('csSoru').textContent='Dönüyor...';
+  document.getElementById('csSecenekler').innerHTML='';
+  var ekstra=720+Math.floor(Math.random()*360);
+  carkRotasyon+=ekstra;
+  document.getElementById('carkSvg').style.transform='rotate('+carkRotasyon+'deg)';
+  setTimeout(function(){
+    carkDonuyor=false;
+    var n=zatData.length; var slice=360/n;
+    var aci=((carkRotasyon%360));
+    var idx=Math.floor(((360-aci)%360)/slice)%n;
+    carkAcik=idx;
+    var item=zatData[idx];
+    document.getElementById('csSoru').textContent='🔤 "'+item.kelime+'" kelimesinin zıt anlamı nedir?';
+    var sec=document.getElementById('csSecenekler');
+    sec.innerHTML='';
+    item.secenekler.forEach(function(s){
+      var btn=document.createElement('button'); btn.className='cark-opt'; btn.textContent=s;
+      btn.onclick=function(){
+        sec.querySelectorAll('.cark-opt').forEach(function(b){b.disabled=true;});
+        if(s===item.dogru){btn.classList.add('correct');btn.textContent='✅ '+s;}
+        else{btn.classList.add('wrong');btn.textContent='❌ '+s;
+          sec.querySelectorAll('.cark-opt').forEach(function(b){if(b.textContent.replace('❌ ','')===item.dogru){b.classList.add('correct');b.textContent='✅ '+item.dogru;}});
+        }
+      };
+      sec.appendChild(btn);
+    });
+  },1100);
+}
+
+// ═══════════════ MEMORY ═══════════════
+var memFlipped=[]; var memMatched=[]; var memHamle=0; var memLock=false;
+
+function memBaslat(){
+  memFlipped=[]; memMatched=[]; memHamle=0; memLock=false;
+  document.getElementById('memWin').className='memory-win';
+  document.getElementById('memInfo').textContent='Hamle: 0';
+  var pairs=[];
+  esData.slice(0,6).forEach(function(p){pairs.push({val:p.a,pair:p.b});pairs.push({val:p.b,pair:p.a});});
+  pairs=shuffleArr(pairs);
+  var g=document.getElementById('memGrid'); g.innerHTML='';
+  pairs.forEach(function(item,i){
+    var div=document.createElement('div'); div.className='mem-card'; div.dataset.val=item.val; div.dataset.idx=i;
+    div.innerHTML='<div class="mem-inner"><div class="mem-front">🌟</div><div class="mem-back">'+item.val+'</div></div>';
+    div.onclick=function(){memTikla(div,item.val,item.pair);};
+    g.appendChild(div);
+  });
+}
+
+function memTikla(card,val,pair){
+  if(memLock||card.classList.contains('flipped')||card.classList.contains('matched')) return;
+  card.classList.add('flipped');
+  memFlipped.push({card:card,val:val,pair:pair});
+  if(memFlipped.length===2){
+    memLock=true; memHamle++;
+    document.getElementById('memInfo').textContent='Hamle: '+memHamle;
+    var a=memFlipped[0]; var b=memFlipped[1];
+    if(a.val===b.pair && b.val===a.pair){
+      a.card.classList.add('matched'); b.card.classList.add('matched');
+      memMatched.push(a.val,b.val);
+      memFlipped=[]; memLock=false;
+      if(memMatched.length===esData.slice(0,6).length*2){
+        setTimeout(function(){document.getElementById('memWin').className='memory-win show';},400);
+      }
+    } else {
+      setTimeout(function(){
+        a.card.classList.remove('flipped'); b.card.classList.remove('flipped');
+        memFlipped=[]; memLock=false;
+      },900);
+    }
   }
 }
 
-kelimeBaslat();
-
-// ── İNDİR ──
-function indir() {
-  const html = document.documentElement.outerHTML;
-  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'harfler-hece-kelime.html';
-  a.click();
+// ═══════════════ EŞ SESLİ ═══════════════
+function buildEsesli(){
+  var list=document.getElementById('esesliList');
+  var basitData=[
+    {kelime:'yaz', c1:'Bu ___\'da çok sıcak oldu.', c1dogru:'mevsim', c2:'Tahtaya adını ___.',c2dogru:'yazmak', sec1:['mevsim','yazmak'], sec2:['mevsim','yazmak']},
+    {kelime:'kır', c1:'Dağın ___larında koştuk.', c1dogru:'alan', c2:'Cam düşünce ___ıldı.',c2dogru:'kırmak', sec1:['alan','kırmak'], sec2:['alan','kırmak']},
+    {kelime:'dil', c1:'Türkçe güzel bir ___dir.', c1dogru:'dil (lisan)', c2:'___imle bal tattım.',c2dogru:'dil (organ)', sec1:['dil (lisan)','dil (organ)'], sec2:['dil (lisan)','dil (organ)']},
+  ];
+  basitData.forEach(function(item,i){
+    var div=document.createElement('div'); div.className='esesli-item';
+    div.innerHTML='<div class="esesli-kelime">🔊 "'+item.kelime+'"</div>' +
+      '<div class="esesli-cumle">'+
+        item.c1.replace('___','<select id="es'+i+'a"><option value="">Seç</option>'+item.sec1.map(function(s){return'<option>'+s+'</option>';}).join('')+'</select>')+
+        '<br><br>'+
+        item.c2.replace('___','<select id="es'+i+'b"><option value="">Seç</option>'+item.sec2.map(function(s){return'<option>'+s+'</option>';}).join('')+'</select>')+
+      '</div>';
+    list.appendChild(div);
+    window['esesliDogru'+i]=[item.c1dogru,item.c2dogru];
+  });
 }
 
-// ── KONFETİ ──
-function konfeti() {
-  const colors = ['#7C3AED','#EC4899','#F59E0B','#10B981','#3B82F6','#EF4444'];
-  const wrap = document.getElementById('confetti-wrap');
-  wrap.innerHTML = '';
-  for (let i = 0; i < 60; i++) {
-    const p = document.createElement('div');
-    p.className = 'confetti-piece';
-    p.style.left = Math.random() * 100 + 'vw';
-    p.style.background = colors[Math.floor(Math.random() * colors.length)];
-    p.style.width = (8 + Math.random() * 8) + 'px';
-    p.style.height = (8 + Math.random() * 8) + 'px';
-    p.style.animationDuration = (1.5 + Math.random() * 2) + 's';
-    p.style.animationDelay = Math.random() * 0.8 + 's';
-    wrap.appendChild(p);
-    p.addEventListener('animationend', () => p.remove());
+function esesliKontrol(){
+  for(var i=0;i<3;i++){
+    var a=document.getElementById('es'+i+'a');
+    var b=document.getElementById('es'+i+'b');
+    var dogru=window['esesliDogru'+i];
+    if(a){a.className=a.value===dogru[0]?'correct':'wrong';}
+    if(b){b.className=b.value===dogru[1]?'correct':'wrong';}
   }
 }
+
+// ═══════════════ PDF ═══════════════
+function indir(){
+  var btn=document.getElementById('dlBtn');
+  btn.disabled=true; btn.textContent='...';
+  html2pdf().set({
+    margin:8, filename:'harf-hece-kelime-sozluk.pdf',
+    image:{type:'jpeg',quality:0.95},
+    html2canvas:{scale:1.5,useCORS:true,windowWidth:900},
+    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+  }).from(document.getElementById('icerik')).save().then(function(){
+    btn.disabled=false; btn.innerHTML='⬇️ PDF';
+  });
+}
+
+// ═══════════════ BAŞLAT ═══════════════
+buildAlfabe();
+buildHeceAlfabe();
+buildGorsel();
+buildKarisik();
+buildHB();
+buildHecele();
+buildAlfa();
+buildCark();
+memBaslat();
+buildEsesli();
 </script>
 </body>
 </html>
