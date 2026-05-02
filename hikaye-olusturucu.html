@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hikaye Oluşturucu 🎡</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --karakter: #e63946;
+  --mekan: #2196f3;
+  --zaman: #f77f00;
+  --olay: #2e7d32;
+  --sonuc: #7b1fa2;
+  --bg: #0f0f23;
+  --card: #1a1a3e;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  font-family: 'Nunito', sans-serif;
+  color: #fff;
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+.header {
+  text-align: center;
+  padding: 32px 20px 20px;
+  background: linear-gradient(180deg, #1a0a3e 0%, transparent 100%);
+}
+.header h1 {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  background: linear-gradient(135deg, #f77f00, #e63946, #2196f3, #2e7d32);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+.header p {
+  font-size: 15px;
+  color: rgba(255,255,255,.65);
+  font-weight: 600;
+}
+
+/* ── ANA LAYOUT ── */
+.page { max-width: 1100px; margin: 0 auto; padding: 20px 16px 60px; }
+
+/* ── ÇARKLAR GRID ── */
+.wheels-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+/* ── TEK ÇARK KARTI ── */
+.wheel-card {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  border: 2px solid rgba(255,255,255,.08);
+  transition: border-color .2s;
+}
+.wheel-card:hover { border-color: rgba(255,255,255,.2); }
+
+.wheel-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── SVG ÇARK ── */
+.wheel-wrap {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+.wheel-svg {
+  width: 200px;
+  height: 200px;
+  transition: transform 1.4s cubic-bezier(.17,.67,.35,1);
+  cursor: pointer;
+  border-radius: 50%;
+  box-shadow: 0 8px 32px rgba(0,0,0,.5);
+}
+.wheel-center {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 44px; height: 44px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.4);
+  cursor: pointer;
+  z-index: 10;
+  border: 3px solid rgba(0,0,0,.2);
+}
+.wheel-arrow {
+  position: absolute;
+  top: -10px; left: 50%;
+  transform: translateX(-50%);
+  width: 0; height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 22px solid #ffd700;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.5));
+  z-index: 5;
+}
+
+/* Seçilen değer kutusu */
+.selected-box {
+  background: rgba(255,255,255,.08);
+  border: 1.5px solid rgba(255,255,255,.15);
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+  min-height: 44px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .3s;
+}
+.selected-box.chosen {
+  background: rgba(255,255,255,.14);
+  border-color: rgba(255,255,255,.35);
+}
+
+/* Çevir butonu */
+.spin-btn {
+  background: transparent;
+  border: 2px solid rgba(255,255,255,.3);
+  color: #fff;
+  border-radius: 30px;
+  padding: 8px 22px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  width: 100%;
+  transition: all .2s;
+}
+.spin-btn:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.6); transform: translateY(-1px); }
+.spin-btn:disabled { opacity: .4; cursor: wait; }
+
+/* ── OLUŞTUR BUTONU ── */
+.generate-section {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.generate-btn {
+  background: linear-gradient(135deg, #f77f00, #e63946);
+  border: none;
+  color: #fff;
+  border-radius: 50px;
+  padding: 16px 48px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(231,57,70,.4);
+  transition: transform .2s, box-shadow .2s;
+  letter-spacing: 1px;
+}
+.generate-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(231,57,70,.5); }
+.generate-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+.generate-hint {
+  margin-top: 10px;
+  font-size: 13px;
+  color: rgba(255,255,255,.45);
+  font-weight: 600;
+}
+
+/* ── SEÇIMLER ÖZET ── */
+.summary-bar {
+  background: rgba(255,255,255,.06);
+  border: 1.5px solid rgba(255,255,255,.1);
+  border-radius: 16px;
+  padding: 14px 20px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.summary-chip {
+  background: rgba(255,255,255,.1);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── HİKAYE ALANI ── */
+.story-box {
+  background: linear-gradient(135deg, #1a0a3e, #0a1a3e);
+  border: 2px solid rgba(255,255,255,.12);
+  border-radius: 20px;
+  padding: 28px;
+  display: none;
+}
+.story-box.show { display: block; }
+.story-header {
+  font-family: 'Fredoka One', cursive;
+  font-size: 20px;
+  color: #ffd700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.story-text {
+  font-size: 16px;
+  line-height: 1.9;
+  color: rgba(255,255,255,.88);
+  white-space: pre-wrap;
+}
+.story-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+.story-btn {
+  background: rgba(255,255,255,.1);
+  border: 1.5px solid rgba(255,255,255,.2);
+  color: #fff;
+  border-radius: 25px;
+  padding: 9px 22px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s;
+}
+.story-btn:hover { background: rgba(255,255,255,.2); }
+
+/* Yükleniyor */
+.loading {
+  text-align: center;
+  padding: 30px;
+  display: none;
+}
+.loading.show { display: block; }
+.loading-dots {
+  font-size: 40px;
+  animation: pulse 1.2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.3;} }
+.loading p {
+  margin-top: 12px;
+  font-size: 15px;
+  color: rgba(255,255,255,.6);
+  font-weight: 600;
+}
+
+/* ── HEPSİNİ ÇEVİR ── */
+.spin-all-btn {
+  background: rgba(255,255,255,.1);
+  border: 2px solid rgba(255,255,255,.25);
+  color: #fff;
+  border-radius: 30px;
+  padding: 12px 32px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all .2s;
+  margin-bottom: 20px;
+}
+.spin-all-btn:hover { background: rgba(255,255,255,.18); transform: translateY(-2px); }
+
+@media (max-width: 600px) {
+  .wheels-grid { grid-template-columns: 1fr 1fr; }
+  .wheel-wrap { width: 150px; height: 150px; }
+  .wheel-svg { width: 150px; height: 150px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🎡 Hikaye Oluşturucu</h1>
+  <p>Çarkları çevir, karakterini, mekanını, zamanını ve olayını seç — yapay zeka hikayeni yazsın!</p>
+</div>
+
+<div class="page">
+
+  <div style="text-align:center; margin-bottom:20px;">
+    <button class="spin-all-btn" onclick="spinAll()">🎡 Hepsini Çevir!</button>
+  </div>
+
+  <!-- ÇARKLAR -->
+  <div class="wheels-grid" id="wheelsGrid"></div>
+
+  <!-- ÖZET -->
+  <div class="summary-bar" id="summaryBar" style="display:none">
+    <div class="summary-chip" id="sum0"></div>
+    <div class="summary-chip" id="sum1"></div>
+    <div class="summary-chip" id="sum2"></div>
+    <div class="summary-chip" id="sum3"></div>
+  </div>
+
+  <!-- OLUŞTUR -->
+  <div class="generate-section">
+    <button class="generate-btn" id="genBtn" onclick="generateStory()" disabled>
+      ✨ Hikayemi Yaz!
+    </button>
+    <div class="generate-hint" id="genHint">Tüm çarkları çevir, sonra butona bas!</div>
+  </div>
+
+  <!-- YÜKLENİYOR -->
+  <div class="loading" id="loading">
+    <div class="loading-dots">📖✨🌟</div>
+    <p>Harika hikayen yazılıyor...</p>
+  </div>
+
+  <!-- HİKAYE -->
+  <div class="story-box" id="storyBox">
+    <div class="story-header">📖 <span id="storyTitle">Senin Hikayen</span></div>
+    <div class="story-text" id="storyText"></div>
+    <div class="story-actions">
+      <button class="story-btn" onclick="generateStory()">🔄 Yeni Versiyon</button>
+      <button class="story-btn" onclick="spinAll()">🎡 Yeni Seçimler</button>
+      <button class="story-btn" onclick="printStory()">🖨️ Yazdır</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ══════════════ VERİLER ══════════════
+var wheels = [
+  {
+    id: 'karakter',
+    title: '👦 Karakter',
+    color: '#e63946',
+    emoji: '👦',
+    items: [
+      {label:'Ahmet',emoji:'👦'}, {label:'Ayşe',emoji:'👧'},
+      {label:'Dede',emoji:'👴'}, {label:'Nine',emoji:'👵'},
+      {label:'Tilki',emoji:'🦊'}, {label:'Tavşan',emoji:'🐰'},
+      {label:'Ayı',emoji:'🐻'}, {label:'Kurt',emoji:'🐺'},
+      {label:'Sincap',emoji:'🐿️'},{label:'Gül',emoji:'🌹'},
+      {label:'Meşe Ağacı',emoji:'🌳'},{label:'Robot',emoji:'🤖'},
+      {label:'Ejderha',emoji:'🐉'}, {label:'Peri',emoji:'🧚'},
+      {label:'Köpek',emoji:'🐶'}, {label:'Güneş',emoji:'☀️'},
+    ]
+  },
+  {
+    id: 'mekan',
+    title: '🏡 Mekan',
+    color: '#2196f3',
+    emoji: '🏡',
+    items: [
+      {label:'Orman',emoji:'🌲'}, {label:'Okul',emoji:'🏫'},
+      {label:'Köy',emoji:'🏡'}, {label:'Deniz',emoji:'🌊'},
+      {label:'Dağ',emoji:'⛰️'},{label:'Uzay',emoji:'🚀'},
+      {label:'Mağara',emoji:'🕳️'},{label:'Şehir',emoji:'🌆'},
+      {label:'Göl',emoji:'🏞️'},{label:'Çöl',emoji:'🏜️'},
+      {label:'Şato',emoji:'🏰'},{label:'Ada',emoji:'🏝️'},
+    ]
+  },
+  {
+    id: 'zaman',
+    title: '⏰ Zaman',
+    color: '#f77f00',
+    emoji: '⏰',
+    items: [
+      {label:'Sabah',emoji:'🌅'}, {label:'Akşam',emoji:'🌆'},
+      {label:'Gece',emoji:'🌙'}, {label:'Kış',emoji:'❄️'},
+      {label:'Yaz',emoji:'☀️'}, {label:'Bahar',emoji:'🌸'},
+      {label:'Sonbahar',emoji:'🍂'},{label:'Fırtına',emoji:'⛈️'},
+      {label:'Tatil',emoji:'🎉'},{label:'Okul zamanı',emoji:'📚'},
+    ]
+  },
+  {
+    id: 'olay',
+    title: '⚡ Olay',
+    color: '#2e7d32',
+    emoji: '⚡',
+    items: [
+      {label:'Kayboldu',emoji:'🗺️'}, {label:'Yeni arkadaş',emoji:'🤝'},
+      {label:'Hediye buldu',emoji:'🎁'},{label:'Yarışma',emoji:'🏆'},
+      {label:'Yardım etti',emoji:'💪'},{label:'Mucize gördü',emoji:'✨'},
+      {label:'Maceraya atıldı',emoji:'🧭'},{label:'Sır keşfetti',emoji:'🔍'},
+      {label:'Ağladı',emoji:'😢'},{label:'Şarkı söyledi',emoji:'🎵'},
+      {label:'Uçtu',emoji:'🦅'},{label:'İyileştirdi',emoji:'💚'},
+    ]
+  }
+];
+
+var rotations = [0, 0, 0, 0];
+var selected = [null, null, null, null];
+var spinning = [false, false, false, false];
+
+// ══════════════ ÇARK ÇİZ ══════════════
+function drawWheel(items, color, size) {
+  var n = items.length;
+  var slice = 360 / n;
+  var r = size / 2 - 2;
+  var cx = size / 2, cy = size / 2;
+  var svgns = 'http://www.w3.org/2000/svg';
+  var svg = document.createElementNS(svgns, 'svg');
+  svg.setAttribute('viewBox', '0 0 ' + size + ' ' + size);
+  svg.setAttribute('width', size);
+  svg.setAttribute('height', size);
+
+  // Renk paleti
+  var colors = [
+    color, lighten(color, 25), darken(color, 15), lighten(color, 40),
+    darken(color, 25), lighten(color, 55), darken(color, 35), lighten(color, 15),
+    darken(color, 10), lighten(color, 30), darken(color, 20), lighten(color, 45),
+    darken(color, 30), lighten(color, 60), darken(color, 40), lighten(color, 10),
+  ];
+
+  items.forEach(function(item, i) {
+    var start = i * slice - 90;
+    var end = start + slice;
+    var a1 = start * Math.PI / 180;
+    var a2 = end * Math.PI / 180;
+    var x1 = cx + r * Math.cos(a1);
+    var y1 = cy + r * Math.sin(a1);
+    var x2 = cx + r * Math.cos(a2);
+    var y2 = cy + r * Math.sin(a2);
+    var large = slice > 180 ? 1 : 0;
+
+    var path = document.createElementNS(svgns, 'path');
+    path.setAttribute('d', 'M'+cx+','+cy+' L'+x1+','+y1+' A'+r+','+r+' 0 '+large+',1 '+x2+','+y2+' Z');
+    path.setAttribute('fill', colors[i % colors.length]);
+    path.setAttribute('stroke', 'rgba(255,255,255,0.15)');
+    path.setAttribute('stroke-width', '1.5');
+    svg.appendChild(path);
+
+    // Emoji + label
+    var mid = (start + end) / 2;
+    var mr = r * 0.65;
+    var tx = cx + mr * Math.cos(mid * Math.PI / 180);
+    var ty = cy + mr * Math.sin(mid * Math.PI / 180);
+
+    var g = document.createElementNS(svgns, 'g');
+    g.setAttribute('transform', 'translate('+tx+','+ty+') rotate('+mid+')');
+
+    var emoji = document.createElementNS(svgns, 'text');
+    emoji.setAttribute('text-anchor', 'middle');
+    emoji.setAttribute('dominant-baseline', 'middle');
+    emoji.setAttribute('y', '-10');
+    emoji.setAttribute('font-size', n <= 8 ? '18' : '12');
+    emoji.textContent = item.emoji;
+    g.appendChild(emoji);
+
+    if (n <= 12) {
+      var label = document.createElementNS(svgns, 'text');
+      label.setAttribute('text-anchor', 'middle');
+      label.setAttribute('dominant-baseline', 'middle');
+      label.setAttribute('y', '8');
+      label.setAttribute('font-size', n <= 8 ? '10' : '8');
+      label.setAttribute('fill', '#fff');
+      label.setAttribute('font-weight', 'bold');
+      label.setAttribute('font-family', 'Nunito, sans-serif');
+      label.textContent = item.label.length > 8 ? item.label.slice(0,7)+'…' : item.label;
+      g.appendChild(label);
+    }
+    svg.appendChild(g);
+  });
+
+  return svg;
+}
+
+function lighten(hex, pct) {
+  var r = parseInt(hex.slice(1,3),16);
+  var g = parseInt(hex.slice(3,5),16);
+  var b = parseInt(hex.slice(5,7),16);
+  r = Math.min(255, r + Math.round(pct * 2.55));
+  g = Math.min(255, g + Math.round(pct * 2.55));
+  b = Math.min(255, b + Math.round(pct * 2.55));
+  return '#'+[r,g,b].map(function(v){return v.toString(16).padStart(2,'0');}).join('');
+}
+function darken(hex, pct) {
+  var r = parseInt(hex.slice(1,3),16);
+  var g = parseInt(hex.slice(3,5),16);
+  var b = parseInt(hex.slice(5,7),16);
+  r = Math.max(0, r - Math.round(pct * 2.55));
+  g = Math.max(0, g - Math.round(pct * 2.55));
+  b = Math.max(0, b - Math.round(pct * 2.55));
+  return '#'+[r,g,b].map(function(v){return v.toString(16).padStart(2,'0');}).join('');
+}
+
+// ══════════════ ÇARK KARTI oluştur ══════════════
+function buildWheels() {
+  var grid = document.getElementById('wheelsGrid');
+  grid.innerHTML = '';
+
+  wheels.forEach(function(wheel, i) {
+    var card = document.createElement('div');
+    card.className = 'wheel-card';
+
+    var title = document.createElement('div');
+    title.className = 'wheel-title';
+    title.style.color = wheel.color;
+    title.textContent = wheel.title;
+    card.appendChild(title);
+
+    var wrap = document.createElement('div');
+    wrap.className = 'wheel-wrap';
+    wrap.id = 'wrap'+i;
+
+    var arrow = document.createElement('div');
+    arrow.className = 'wheel-arrow';
+    wrap.appendChild(arrow);
+
+    var svgEl = drawWheel(wheel.items, wheel.color, 200);
+    svgEl.className = 'wheel-svg';
+    svgEl.id = 'svg'+i;
+    svgEl.addEventListener('click', (function(idx){ return function(){ spin(idx); }; })(i));
+    wrap.appendChild(svgEl);
+
+    var center = document.createElement('div');
+    center.className = 'wheel-center';
+    center.textContent = wheel.emoji;
+    center.addEventListener('click', (function(idx){ return function(){ spin(idx); }; })(i));
+    wrap.appendChild(center);
+    card.appendChild(wrap);
+
+    var box = document.createElement('div');
+    box.className = 'selected-box';
+    box.id = 'box'+i;
+    box.textContent = 'Çevir!';
+    card.appendChild(box);
+
+    var btn = document.createElement('button');
+    btn.className = 'spin-btn';
+    btn.id = 'btn'+i;
+    btn.textContent = '🎡 Çevir';
+    btn.addEventListener('click', (function(idx){ return function(){ spin(idx); }; })(i));
+    card.appendChild(btn);
+
+    grid.appendChild(card);
+  });
+}
+
+// ══════════════ ÇARK ÇEVİR ══════════════
+function spin(i) {
+  if (spinning[i]) return;
+  spinning[i] = true;
+
+  var btn = document.getElementById('btn'+i);
+  btn.disabled = true;
+  btn.textContent = 'Dönüyor...';
+
+  // Önce hangi item seçilecek karar ver
+  var n = wheels[i].items.length;
+  var slice = 360 / n;
+  var targetIdx = Math.floor(Math.random() * n);
+
+  // O item'ı okun tam altına getirecek rotasyonu hesapla
+  // Item i'nin merkezi SVG'de: i * slice - 90 + slice/2
+  // Ok tepede (-90 derece). Rotasyon R sonrası merkez = i*slice - 90 + slice/2 + R = -90
+  // R = -i*slice - slice/2  →  normalize et
+  var targetAngle = ((-(targetIdx * slice + slice / 2)) % 360 + 360) % 360;
+  var currentAngle = ((rotations[i]) % 360 + 360) % 360;
+  var diff = (targetAngle - currentAngle + 360) % 360;
+  if (diff < 45) diff += 360;
+
+  rotations[i] += diff + 720; // en az 2 tam tur
+
+  var svgEl = document.getElementById('svg'+i);
+  svgEl.style.transition = 'transform 1.4s cubic-bezier(.17,.67,.35,1)';
+  svgEl.style.transform = 'rotate(' + rotations[i] + 'deg)';
+
+  setTimeout(function() {
+    spinning[i] = false;
+    btn.disabled = false;
+    btn.textContent = '🎡 Tekrar Çevir';
+
+    selected[i] = wheels[i].items[targetIdx];
+
+    var box = document.getElementById('box'+i);
+    box.textContent = selected[i].emoji + ' ' + selected[i].label;
+    box.classList.add('chosen');
+    box.style.borderColor = wheels[i].color;
+
+    updateSummary();
+    checkReady();
+  }, 1500);
+}
+
+function spinAll() {
+  document.getElementById('storyBox').classList.remove('show');
+  document.getElementById('loading').classList.remove('show');
+  wheels.forEach(function(_, i) {
+    setTimeout(function() { spin(i); }, i * 200);
+  });
+}
+
+function updateSummary() {
+  var bar = document.getElementById('summaryBar');
+  var filled = selected.filter(Boolean).length;
+  if (filled === 0) { bar.style.display = 'none'; return; }
+  bar.style.display = 'flex';
+
+  wheels.forEach(function(w, i) {
+    var chip = document.getElementById('sum'+i);
+    if (selected[i]) {
+      chip.style.display = 'flex';
+      chip.style.borderLeft = '3px solid ' + w.color;
+      chip.innerHTML = '<span style="font-size:11px;opacity:.7">' + w.title + '</span> &nbsp; ' + selected[i].emoji + ' ' + selected[i].label;
+    } else {
+      chip.style.display = 'none';
+    }
+  });
+}
+
+function checkReady() {
+  var ready = selected.every(Boolean);
+  var btn = document.getElementById('genBtn');
+  var hint = document.getElementById('genHint');
+  btn.disabled = !ready;
+  if (ready) {
+    hint.textContent = '🎉 Hazırsın! Hikayeni yazdırmak için butona bas!';
+    hint.style.color = '#ffd700';
+  } else {
+    var remaining = selected.filter(function(s){ return !s; }).length;
+    hint.textContent = 'Tüm çarkları çevir, sonra butona bas! (' + remaining + ' kaldı)';
+    hint.style.color = 'rgba(255,255,255,.45)';
+  }
+}
+
+// ══════════════ HİKAYE OLUŞTUR ══════════════
+function generateStory() {
+  if (!selected.every(Boolean)) return;
+
+  document.getElementById('storyBox').classList.remove('show');
+  document.getElementById('loading').classList.add('show');
+  document.getElementById('genBtn').disabled = true;
+
+  var karakter = selected[0].label;
+  var mekan = selected[1].label;
+  var zaman = selected[2].label;
+  var olay = selected[3].label;
+
+  var prompt = 'Sen bir ilkokul hikaye yazarısın. Aşağıdaki unsurları kullanarak 2. sınıf öğrencilerine uygun, eğlenceli, sürükleyici ve eğitici bir hikaye yaz. Hikaye Türkçe olmalı, basit cümleler içermeli ve en az 150 kelime olmalı. Sonunda bir ders (değer) verilmeli.\n\n' +
+    'Karakter: ' + karakter + ' (' + selected[0].emoji + ')\n' +
+    'Mekan: ' + mekan + ' (' + selected[1].emoji + ')\n' +
+    'Zaman: ' + zaman + ' (' + selected[2].emoji + ')\n' +
+    'Olay: ' + olay + ' (' + selected[3].emoji + ')\n\n' +
+    'Önce hikayeye güzel bir başlık ver (sadece başlık, sonra yeni satır), ardından hikayeyi yaz. Başlığı ** ** içine alma.';
+
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data) {
+    var text = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : '';
+    if (!text) throw new Error('Boş yanıt');
+
+    var lines = text.trim().split('\n');
+    var title = lines[0].replace(/^#+\s*/, '').trim();
+    var body = lines.slice(1).join('\n').trim();
+
+    document.getElementById('storyTitle').textContent = title || (selected[0].emoji + ' ' + karakter + '\'in Hikayesi');
+    document.getElementById('storyText').textContent = body || text;
+
+    document.getElementById('loading').classList.remove('show');
+    document.getElementById('storyBox').classList.add('show');
+    document.getElementById('genBtn').disabled = false;
+    document.getElementById('storyBox').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  })
+  .catch(function(err) {
+    console.error(err);
+    // Fallback hikaye
+    var fallback = karakter + ' bir ' + zaman + ' vakti ' + mekan + '\'da yaşıyordu.\n\n' +
+      'O gün ' + olay.toLowerCase() + '. Bu onu çok şaşırttı ama yılmadı.\n\n' +
+      '"Güçlüklerin üstesinden gelmek için cesur olmak gerekir," dedi içinden.\n\n' +
+      'Ve sonunda başardı. Herkes çok mutlu oldu.\n\n' +
+      '📌 Bu hikayenin dersi: Cesur ol, pes etme!';
+    document.getElementById('storyTitle').textContent = selected[0].emoji + ' ' + karakter + "'in Hikayesi";
+    document.getElementById('storyText').textContent = fallback;
+    document.getElementById('loading').classList.remove('show');
+    document.getElementById('storyBox').classList.add('show');
+    document.getElementById('genBtn').disabled = false;
+  });
+}
+
+function printStory() {
+  var title = document.getElementById('storyTitle').textContent;
+  var text = document.getElementById('storyText').textContent;
+  var w = window.open('', '_blank');
+  w.document.write('<html><head><title>' + title + '</title><style>body{font-family:Georgia,serif;max-width:700px;margin:40px auto;line-height:1.9;font-size:16px;color:#222;}h1{font-size:24px;margin-bottom:20px;color:#333;}</style></head><body><h1>' + title + '</h1><p>' + text.replace(/\n/g,'</p><p>') + '</p></body></html>');
+  w.document.close();
+  w.print();
+}
+
+// ══════════════ BAŞLAT ══════════════
+buildWheels();
+updateSummary();
+checkReady();
+</script>
+</body>
+</html>
