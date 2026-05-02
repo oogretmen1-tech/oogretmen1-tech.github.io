@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cümle Oluşturma Etkinliği – 2. Sınıf</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+:root {
+  --purple: #6c3fc5;
+  --purple-light: #ede8fb;
+  --orange: #f77f00;
+  --orange-light: #fff3e0;
+  --green: #2e9e5b;
+  --green-light: #e6f7ed;
+  --rose: #e0366e;
+  --rose-light: #fde8f0;
+  --blue: #1e7fc2;
+  --blue-light: #e3f2fd;
+  --yellow: #f5c800;
+  --cream: #fdfbf7;
+  --text: #1e1e2e;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--cream); font-family: 'Nunito', sans-serif; color: var(--text); }
+
+/* ── TOP BAR ── */
+.topbar {
+  background: linear-gradient(135deg, var(--purple), #4a28a0);
+  padding: 14px 24px;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 3px 12px rgba(108,63,197,.3);
+}
+.topbar-title { font-family: 'Fredoka One', cursive; font-size: 18px; color: #fff; letter-spacing: 1px; }
+.btn-dl {
+  background: #fff; color: var(--purple); border: none; border-radius: 30px;
+  padding: 9px 22px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800;
+  cursor: pointer; display: flex; align-items: center; gap: 7px;
+  box-shadow: 0 3px 10px rgba(0,0,0,.15); transition: transform .15s;
+}
+.btn-dl:hover { transform: translateY(-2px); }
+.btn-dl:disabled { opacity: .6; cursor: wait; }
+
+/* ── SAYFA ── */
+.page { max-width: 860px; margin: 0 auto; padding: 24px 16px 50px; }
+
+/* ── BAŞLIK ── */
+.hero {
+  text-align: center; margin-bottom: 32px;
+  background: linear-gradient(135deg, var(--purple-light), #fce8fb);
+  border-radius: 20px; padding: 28px 20px;
+  border: 2px solid #d4b8f8;
+}
+.hero-emoji { font-size: 48px; margin-bottom: 8px; }
+.hero h1 { font-family: 'Fredoka One', cursive; font-size: 32px; color: var(--purple); margin-bottom: 6px; }
+.hero p { font-size: 15px; color: #666; font-weight: 600; }
+
+/* ── BÖLÜM KARTLARI ── */
+.section { margin-bottom: 28px; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,.07); }
+.section-header {
+  padding: 16px 22px; display: flex; align-items: center; gap: 12px;
+}
+.section-header .sec-icon { font-size: 28px; }
+.section-header h2 { font-family: 'Fredoka One', cursive; font-size: 20px; color: #fff; }
+.section-header .sec-num {
+  background: rgba(255,255,255,.25); color: #fff; font-size: 13px; font-weight: 800;
+  padding: 3px 10px; border-radius: 20px; margin-left: auto;
+}
+.section-body { background: #fff; padding: 22px; }
+
+/* Bölüm renkleri */
+.s1 .section-header { background: linear-gradient(135deg, var(--purple), #4a28a0); }
+.s2 .section-header { background: linear-gradient(135deg, var(--orange), #d96a00); }
+.s3 .section-header { background: linear-gradient(135deg, var(--green), #1e7a44); }
+.s4 .section-header { background: linear-gradient(135deg, var(--rose), #b8214f); }
+
+/* ══════════════════════════════════════
+   BÖLÜM 1: KELİME SIRALAMA
+══════════════════════════════════════ */
+.cumle-task { margin-bottom: 22px; padding-bottom: 22px; border-bottom: 1.5px dashed #eee; }
+.cumle-task:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+.task-label {
+  font-size: 12px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--purple); margin-bottom: 10px;
+}
+.word-bank {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; min-height: 44px;
+  background: var(--purple-light); border-radius: 12px; padding: 10px;
+}
+.word-tile {
+  background: var(--purple); color: #fff; border: none;
+  border-radius: 10px; padding: 8px 14px; font-family: 'Nunito', sans-serif;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  transition: transform .15s, background .15s, opacity .2s;
+  box-shadow: 0 3px 8px rgba(108,63,197,.25);
+}
+.word-tile:hover { transform: translateY(-2px); background: #4a28a0; }
+.word-tile.used { opacity: .35; cursor: not-allowed; transform: none; }
+
+.answer-area {
+  min-height: 48px; border: 2.5px dashed #c4a8f4; border-radius: 12px;
+  padding: 8px 12px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  background: #faf8ff; margin-bottom: 10px;
+}
+.answer-area .placed-word {
+  background: #fff; border: 2px solid var(--purple); color: var(--purple);
+  border-radius: 10px; padding: 6px 12px; font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: background .15s;
+}
+.answer-area .placed-word:hover { background: #fde8ff; }
+.answer-area .placeholder { color: #ccc; font-size: 14px; font-weight: 600; font-style: italic; }
+
+.task-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-check {
+  background: var(--purple); color: #fff; border: none; border-radius: 20px;
+  padding: 8px 20px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: background .15s;
+}
+.btn-check:hover { background: #4a28a0; }
+.btn-reset {
+  background: #eee; color: #666; border: none; border-radius: 20px;
+  padding: 8px 16px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700;
+  cursor: pointer;
+}
+.result-msg {
+  margin-top: 8px; font-size: 14px; font-weight: 800; padding: 8px 14px;
+  border-radius: 10px; display: none;
+}
+.result-msg.correct { background: #e6f7ed; color: var(--green); display: block; }
+.result-msg.wrong   { background: #fde8f0; color: var(--rose);  display: block; }
+
+/* ══════════════════════════════════════
+   BÖLÜM 2: KURALLI CÜMLE
+══════════════════════════════════════ */
+.rule-visual {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0; flex-wrap: wrap; margin-bottom: 20px;
+}
+.rule-part {
+  padding: 14px 20px; font-size: 16px; font-weight: 800; text-align: center;
+  position: relative; min-width: 100px;
+}
+.rule-part.ozne  { background: #e3f2fd; color: var(--blue); border-radius: 12px 0 0 12px; border: 2px solid var(--blue); }
+.rule-part.nesne { background: var(--orange-light); color: var(--orange); border: 2px solid var(--orange); border-left: none; }
+.rule-part.yuklem {
+  background: var(--green); color: #fff; border-radius: 0 12px 12px 0;
+  border: 2px solid var(--green); border-left: none;
+  position: relative;
+}
+.rule-part .label { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; opacity: .7; display: block; margin-bottom: 4px; }
+.yuklem-star {
+  position: absolute; top: -12px; right: -8px; background: var(--yellow);
+  color: #333; font-size: 11px; font-weight: 800; padding: 3px 8px;
+  border-radius: 20px; white-space: nowrap;
+}
+.arrow { font-size: 22px; color: #bbb; margin: 0 4px; }
+
+.rule-examples { display: flex; flex-direction: column; gap: 10px; }
+.rule-ex {
+  background: #f8f8ff; border-left: 4px solid var(--purple); border-radius: 10px;
+  padding: 12px 16px; font-size: 15px;
+}
+.rule-ex .ex-label { font-size: 11px; font-weight: 800; color: var(--purple); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px; }
+.rule-ex .ex-text { font-weight: 700; color: var(--text); }
+.rule-ex .ex-text .yuklem-hl { color: var(--green); background: var(--green-light); padding: 1px 6px; border-radius: 6px; }
+.rule-ex .ex-text .ozne-hl   { color: var(--blue);  background: var(--blue-light);  padding: 1px 6px; border-radius: 6px; }
+
+/* ══════════════════════════════════════
+   BÖLÜM 3: CÜMLE ÇEŞİTLERİ
+══════════════════════════════════════ */
+.cesit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.cesit-card {
+  border-radius: 14px; padding: 16px; border: 2px solid transparent;
+}
+.cesit-card.olumlu   { background: var(--green-light);  border-color: #a8d8bc; }
+.cesit-card.olumsuz  { background: var(--rose-light);   border-color: #f0b4c8; }
+.cesit-card.soru     { background: var(--blue-light);   border-color: #90caf9; }
+.cesit-card.neden    { background: var(--orange-light); border-color: #ffcc80; }
+
+.cesit-title { font-family: 'Fredoka One', cursive; font-size: 16px; margin-bottom: 6px; display: flex; align-items: center; gap: 7px; }
+.cesit-card.olumlu .cesit-title  { color: var(--green); }
+.cesit-card.olumsuz .cesit-title { color: var(--rose);  }
+.cesit-card.soru .cesit-title    { color: var(--blue);  }
+.cesit-card.neden .cesit-title   { color: var(--orange);}
+
+.cesit-rule { font-size: 12px; font-weight: 700; color: #666; margin-bottom: 8px; }
+.cesit-example { font-size: 14px; font-weight: 700; font-style: italic; color: var(--text); margin-bottom: 10px; line-height: 1.5; }
+.cesit-example span { padding: 1px 5px; border-radius: 5px; }
+
+/* Mini etkinlik - doğru yanlış seç */
+.mini-q { font-size: 13px; font-weight: 700; color: #555; margin-bottom: 6px; }
+.mini-opts { display: flex; gap: 6px; flex-wrap: wrap; }
+.mini-opt {
+  background: #fff; border: 2px solid #ddd; border-radius: 20px;
+  padding: 5px 12px; font-size: 13px; font-weight: 700; cursor: pointer;
+  transition: all .15s;
+}
+.mini-opt:hover { border-color: #aaa; }
+.mini-opt.correct { background: var(--green-light); border-color: var(--green); color: var(--green); }
+.mini-opt.wrong   { background: var(--rose-light);  border-color: var(--rose);  color: var(--rose);  }
+
+/* ══════════════════════════════════════
+   BÖLÜM 4: YAZAR MISIN?
+══════════════════════════════════════ */
+.yaz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.yaz-card { background: #fafafa; border: 2px solid #e0e0e0; border-radius: 14px; padding: 16px; }
+.yaz-prompt { font-size: 14px; font-weight: 800; color: var(--rose); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.yaz-line { border-bottom: 1.5px solid #ddd; height: 28px; margin-bottom: 6px; }
+
+/* ── PUAN TABLOSU ── */
+.score-bar {
+  background: linear-gradient(135deg, var(--purple-light), #fce8fb);
+  border: 2px solid #d4b8f8; border-radius: 16px; padding: 16px 22px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px; flex-wrap: wrap; gap: 10px;
+}
+.score-label { font-size: 14px; font-weight: 700; color: var(--purple); }
+.score-num { font-family: 'Fredoka One', cursive; font-size: 32px; color: var(--purple); }
+
+@media (max-width: 600px) {
+  .cesit-grid { grid-template-columns: 1fr; }
+  .yaz-grid   { grid-template-columns: 1fr; }
+  .rule-visual { flex-direction: column; }
+  .rule-part.ozne  { border-radius: 12px 12px 0 0; }
+  .rule-part.nesne { border-left: 2px solid var(--orange); border-top: none; }
+  .rule-part.yuklem { border-radius: 0 0 12px 12px; border-left: 2px solid var(--green); border-top: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">✏️ Cümle Oluşturma Etkinliği · 2. Sınıf</div>
+  <button class="btn-dl" id="dlBtn" onclick="indir()">⬇️ PDF İndir</button>
+</div>
+
+<div class="page" id="icerik">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-emoji">📝</div>
+    <h1>Cümle Oluşturuyorum!</h1>
+    <p>Kelimeleri sırala · Kuralı öğren · Cümle çeşitlerini keşfet</p>
+  </div>
+
+  <!-- Puan -->
+  <div class="score-bar">
+    <div class="score-label">🌟 Toplam Puanın</div>
+    <div><span class="score-num" id="scoreNum">0</span> <span style="font-size:14px;color:#888;font-weight:700;">puan</span></div>
+  </div>
+
+  <!-- ══ BÖLÜM 1 ══ -->
+  <div class="section s1">
+    <div class="section-header">
+      <span class="sec-icon">🔀</span>
+      <h2>Kelimeleri Sırala, Cümle Kur!</h2>
+      <span class="sec-num">Bölüm 1</span>
+    </div>
+    <div class="section-body">
+      <p style="font-size:14px;color:#666;font-weight:600;margin-bottom:18px;">
+        Kelimelere tıkla, doğru sırayla cümleyi oluştur. Yüklemi en sona koy!
+      </p>
+      <div id="tasks"></div>
+    </div>
+  </div>
+
+  <!-- ══ BÖLÜM 2 ══ -->
+  <div class="section s2">
+    <div class="section-header">
+      <span class="sec-icon">📐</span>
+      <h2>Kurallı Cümle Nasıl Olur?</h2>
+      <span class="sec-num">Bölüm 2</span>
+    </div>
+    <div class="section-body">
+
+      <div class="rule-visual">
+        <div class="rule-part ozne">
+          <span class="label">Kim / Ne</span>
+          ÖZNE
+        </div>
+        <div class="rule-part nesne">
+          <span class="label">Neyi / Nereye</span>
+          NESNE
+        </div>
+        <div class="rule-part yuklem">
+          <span class="yuklem-star">⭐ Hep sonda!</span>
+          <span class="label">Ne yaptı / Ne?</span>
+          YÜKLEM
+        </div>
+      </div>
+
+      <div style="background:#fff8e1;border-radius:12px;padding:14px 18px;margin-bottom:18px;border-left:4px solid var(--yellow);">
+        <div style="font-size:13px;font-weight:800;color:#c07800;margin-bottom:4px;">⭐ ALTIN KURAL</div>
+        <div style="font-size:15px;font-weight:700;">Kurallı cümlede <span style="color:var(--green);background:var(--green-light);padding:1px 7px;border-radius:6px;">yüklem</span> her zaman <strong>cümlenin sonunda</strong> yer alır!</div>
+      </div>
+
+      <div class="rule-examples">
+        <div class="rule-ex">
+          <div class="ex-label">✅ Doğru Sıralama</div>
+          <div class="ex-text">
+            <span class="ozne-hl">Çocuklar</span> bahçede
+            <span class="yuklem-hl">koşuyor.</span>
+          </div>
+        </div>
+        <div class="rule-ex">
+          <div class="ex-label">✅ Doğru Sıralama</div>
+          <div class="ex-text">
+            <span class="ozne-hl">Ayşe</span> kitabını
+            <span class="yuklem-hl">okudu.</span>
+          </div>
+        </div>
+        <div class="rule-ex" style="border-left-color:var(--rose);background:#fdf0f5;">
+          <div class="ex-label" style="color:var(--rose);">❌ Yanlış Sıralama</div>
+          <div class="ex-text" style="text-decoration:line-through;color:#aaa;">
+            Koşuyor çocuklar bahçede.
+          </div>
+          <div style="font-size:13px;color:var(--rose);margin-top:4px;">Yüklem sonda olmadığı için kuralsız!</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ BÖLÜM 3 ══ -->
+  <div class="section s3">
+    <div class="section-header">
+      <span class="sec-icon">🗂️</span>
+      <h2>Cümle Çeşitleri</h2>
+      <span class="sec-num">Bölüm 3</span>
+    </div>
+    <div class="section-body">
+
+      <div class="cesit-grid">
+
+        <!-- Olumlu -->
+        <div class="cesit-card olumlu">
+          <div class="cesit-title">✅ Olumlu Cümle</div>
+          <div class="cesit-rule">Bir işin, oluşun yapıldığını bildirir.</div>
+          <div class="cesit-example">"Hava bugün <span style="background:#c8e6c9;border-radius:4px;">çok güzel.</span>"</div>
+          <div class="cesit-example">"Köpek bahçede <span style="background:#c8e6c9;border-radius:4px;">oynuyor.</span>"</div>
+          <div class="mini-q">Hangisi olumlu cümledir?</div>
+          <div class="mini-opts">
+            <button class="mini-opt" onclick="miniCheck(this,'c')">Kuş uçuyor.</button>
+            <button class="mini-opt" onclick="miniCheck(this,'w')">Kuş uçmuyor.</button>
+          </div>
+        </div>
+
+        <!-- Olumsuz -->
+        <div class="cesit-card olumsuz">
+          <div class="cesit-title">❌ Olumsuz Cümle</div>
+          <div class="cesit-rule">Bir işin yapılmadığını bildirir. "-me/-ma, değil" ekleri alır.</div>
+          <div class="cesit-example">"Bugün okula <span style="background:#f8bbd0;border-radius:4px;">gitmedim.</span>"</div>
+          <div class="cesit-example">"Bu elma tatlı <span style="background:#f8bbd0;border-radius:4px;">değil.</span>"</div>
+          <div class="mini-q">Hangisi olumsuz cümledir?</div>
+          <div class="mini-opts">
+            <button class="mini-opt" onclick="miniCheck(this,'w')">Ali ders çalıştı.</button>
+            <button class="mini-opt" onclick="miniCheck(this,'c')">Ali ders çalışmadı.</button>
+          </div>
+        </div>
+
+        <!-- Soru -->
+        <div class="cesit-card soru">
+          <div class="cesit-title">❓ Soru Cümlesi</div>
+          <div class="cesit-rule">Bir şey sormak için kullanılır. "mı/mi/mu/mü" veya soru sözcükleri alır. Sonuna "?" konur.</div>
+          <div class="cesit-example">"Bugün hava <span style="background:#bbdefb;border-radius:4px;">güzel mi?</span>"</div>
+          <div class="cesit-example">"Sen <span style="background:#bbdefb;border-radius:4px;">nereye</span> gidiyorsun?"</div>
+          <div class="mini-q">Hangisi soru cümlesidir?</div>
+          <div class="mini-opts">
+            <button class="mini-opt" onclick="miniCheck(this,'w')">Okul bitti.</button>
+            <button class="mini-opt" onclick="miniCheck(this,'c')">Okul bitti mi?</button>
+          </div>
+        </div>
+
+        <!-- Neden-Sonuç -->
+        <div class="cesit-card neden">
+          <div class="cesit-title">🔗 Neden-Sonuç Cümlesi</div>
+          <div class="cesit-rule">Bir nedenin sonucunu anlatır. "çünkü, -den/-dan dolayı, bu yüzden" bağlaçları kullanılır.</div>
+          <div class="cesit-example">"Yorulduğum <span style="background:#ffe0b2;border-radius:4px;">için</span> uyudum."</div>
+          <div class="cesit-example">"Yağmur yağdı, <span style="background:#ffe0b2;border-radius:4px;">bu yüzden</span> ıslandım."</div>
+          <div class="mini-q">Hangisi neden-sonuç cümlesidir?</div>
+          <div class="mini-opts">
+            <button class="mini-opt" onclick="miniCheck(this,'c')">Hasta olduğum için okula gitmedim.</button>
+            <button class="mini-opt" onclick="miniCheck(this,'w')">Okula gittim.</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ BÖLÜM 4 ══ -->
+  <div class="section s4">
+    <div class="section-header">
+      <span class="sec-icon">✍️</span>
+      <h2>Yazar Mısın?</h2>
+      <span class="sec-num">Bölüm 4</span>
+    </div>
+    <div class="section-body">
+      <p style="font-size:14px;color:#666;font-weight:600;margin-bottom:16px;">
+        Aşağıdaki türlerde birer cümle yaz. Yüklemi sona almayı unutma!
+      </p>
+      <div class="yaz-grid">
+        <div class="yaz-card">
+          <div class="yaz-prompt">✅ Olumlu bir cümle yaz:</div>
+          <div class="yaz-line"></div>
+          <div class="yaz-line"></div>
+        </div>
+        <div class="yaz-card">
+          <div class="yaz-prompt" style="color:var(--rose);">❌ Olumsuz bir cümle yaz:</div>
+          <div class="yaz-line"></div>
+          <div class="yaz-line"></div>
+        </div>
+        <div class="yaz-card">
+          <div class="yaz-prompt" style="color:var(--blue);">❓ Soru cümlesi yaz:</div>
+          <div class="yaz-line"></div>
+          <div class="yaz-line"></div>
+        </div>
+        <div class="yaz-card">
+          <div class="yaz-prompt" style="color:var(--orange);">🔗 Neden-sonuç cümlesi yaz:</div>
+          <div class="yaz-line"></div>
+          <div class="yaz-line"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+// ══ VERİ ══
+var tasks = [
+  { words: ['Ahmet', 'okula', 'gidiyor.'], answer: ['Ahmet', 'okula', 'gidiyor.'] },
+  { words: ['kitap', 'Ayşe', 'çok', 'seviyor.'], answer: ['Ayşe', 'kitap', 'çok', 'seviyor.'] },
+  { words: ['bahçede', 'çocuklar', 'koşuyor.'], answer: ['Çocuklar', 'bahçede', 'koşuyor.'] },
+  { words: ['güzel.', 'bugün', 'hava'], answer: ['Bugün', 'hava', 'güzel.'] },
+  { words: ['elma', 'yiyor.', 'kuş'], answer: ['Kuş', 'elma', 'yiyor.'] },
+];
+
+// Karıştır
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length-1; i>0; i--) { var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; }
+  return a;
+}
+
+var taskStates = tasks.map(function(t) {
+  return { shuffled: shuffle(t.words), placed: [], correct: false };
+});
+
+var totalScore = 0;
+
+function renderTasks() {
+  var container = document.getElementById('tasks');
+  container.innerHTML = '';
+  tasks.forEach(function(task, i) {
+    var state = taskStates[i];
+    var div = document.createElement('div');
+    div.className = 'cumle-task';
+    div.innerHTML =
+      '<div class="task-label">Cümle ' + (i+1) + '</div>' +
+      '<div class="word-bank" id="bank'+i+'"></div>' +
+      '<div style="font-size:12px;font-weight:600;color:#aaa;margin-bottom:6px;">📌 Cümleni oluştur:</div>' +
+      '<div class="answer-area" id="ans'+i+'"></div>' +
+      '<div class="task-btns">' +
+        '<button class="btn-check" onclick="checkTask('+i+')">✅ Kontrol Et</button>' +
+        '<button class="btn-reset" onclick="resetTask('+i+')">🔄 Sıfırla</button>' +
+      '</div>' +
+      '<div class="result-msg" id="res'+i+'"></div>';
+    container.appendChild(div);
+
+    // Kelime banka
+    state.shuffled.forEach(function(w, wi) {
+      var btn = document.createElement('button');
+      btn.className = 'word-tile' + (state.placed.includes(wi) ? ' used' : '');
+      btn.textContent = w;
+      btn.onclick = function() { addWord(i, wi, w); };
+      document.getElementById('bank'+i).appendChild(btn);
+    });
+
+    // Cevap alanı
+    if (state.placed.length === 0) {
+      var ph = document.createElement('span');
+      ph.className = 'placeholder';
+      ph.textContent = 'Kelimelere tıkla...';
+      document.getElementById('ans'+i).appendChild(ph);
+    } else {
+      state.placed.forEach(function(wi) {
+        var span = document.createElement('span');
+        span.className = 'placed-word';
+        span.textContent = state.shuffled[wi];
+        span.onclick = function() { removeWord(i, wi); };
+        document.getElementById('ans'+i).appendChild(span);
+      });
+    }
+  });
+}
+
+function addWord(ti, wi, w) {
+  var state = taskStates[ti];
+  if (state.placed.includes(wi) || state.correct) return;
+  state.placed.push(wi);
+  document.getElementById('res'+ti).className = 'result-msg';
+  renderTasks();
+}
+
+function removeWord(ti, wi) {
+  var state = taskStates[ti];
+  if (state.correct) return;
+  state.placed = state.placed.filter(function(x){ return x !== wi; });
+  renderTasks();
+}
+
+function resetTask(ti) {
+  var wasCorrect = taskStates[ti].correct;
+  taskStates[ti] = { shuffled: taskStates[ti].shuffled, placed: [], correct: false };
+  if (wasCorrect) { totalScore = Math.max(0, totalScore - 20); updateScore(); }
+  document.getElementById('res'+ti).className = 'result-msg';
+  renderTasks();
+}
+
+function checkTask(ti) {
+  var state = taskStates[ti];
+  if (state.correct) return;
+  var placed = state.placed.map(function(wi){ return state.shuffled[wi]; });
+  var correct = tasks[ti].answer;
+  // Yüklem sonda mı? (son kelime doğru mu)
+  var isCorrect = placed.length === correct.length &&
+    placed[placed.length-1] === correct[correct.length-1] &&
+    placed.join(' ').toLowerCase() === correct.join(' ').toLowerCase();
+
+  var msg = document.getElementById('res'+ti);
+  if (isCorrect) {
+    msg.className = 'result-msg correct';
+    msg.textContent = '🎉 Harika! Doğru cümleyi kurdun! +20 puan';
+    state.correct = true;
+    totalScore += 20;
+    updateScore();
+  } else {
+    // Sadece yüklem sondaysa kısmen doğru
+    var yuklemOk = placed.length > 0 && placed[placed.length-1] === correct[correct.length-1];
+    if (yuklemOk && placed.length > 0) {
+      msg.className = 'result-msg wrong';
+      msg.textContent = '👍 Yüklem sonda, iyi! Ama sıralama yanlış. Tekrar dene!';
+    } else {
+      msg.className = 'result-msg wrong';
+      msg.textContent = '❌ Yanlış sıralama. İpucu: Yüklemi en sona koy!';
+    }
+  }
+}
+
+function miniCheck(btn, type) {
+  var opts = btn.parentElement.querySelectorAll('.mini-opt');
+  opts.forEach(function(o){ o.disabled = true; });
+  if (type === 'c') {
+    btn.classList.add('correct');
+    btn.textContent = '✅ ' + btn.textContent;
+    totalScore += 10;
+    updateScore();
+  } else {
+    btn.classList.add('wrong');
+    btn.textContent = '❌ ' + btn.textContent;
+    // Doğruyu göster
+    opts.forEach(function(o){
+      if (!o.classList.contains('wrong')) { o.classList.add('correct'); o.textContent = '✅ ' + o.textContent; }
+    });
+  }
+}
+
+function updateScore() {
+  document.getElementById('scoreNum').textContent = totalScore;
+}
+
+function indir() {
+  var btn = document.getElementById('dlBtn');
+  btn.disabled = true;
+  btn.textContent = 'Hazırlanıyor...';
+  var opt = {
+    margin: 0,
+    filename: 'cumle-olusturma-etkinligi.pdf',
+    image: { type: 'jpeg', quality: 0.97 },
+    html2canvas: { scale: 2, useCORS: true, windowWidth: 860 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+  html2pdf().set(opt).from(document.getElementById('icerik')).save().then(function(){
+    btn.disabled = false;
+    btn.innerHTML = '⬇️ PDF İndir';
+  });
+}
+
+// Başlat
+renderTasks();
+</script>
+</body>
+</html>
