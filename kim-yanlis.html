@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kim Yanlış Söylüyor? 🤥</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+body { background:linear-gradient(135deg,#0f2027,#203a43,#2c5364); min-height:100vh; font-family:'Nunito',sans-serif; color:#fff; }
+.header { text-align:center; padding:28px 20px 16px; }
+.header h1 { font-family:'Fredoka One',cursive; font-size:2.2rem; color:#ffd700; }
+.header p { color:rgba(255,255,255,.6); font-weight:700; font-size:14px; margin-top:4px; }
+
+.score-row { display:flex; justify-content:center; gap:24px; margin-bottom:20px; }
+.sc { text-align:center; background:rgba(255,255,255,.08); border-radius:14px; padding:10px 20px; }
+.sc-num { font-family:'Fredoka One',cursive; font-size:26px; color:#ffd700; }
+.sc-lbl { font-size:11px; font-weight:800; color:rgba(255,255,255,.5); text-transform:uppercase; }
+
+.game { max-width:700px; margin:0 auto; padding:0 16px 40px; }
+
+.question-card {
+  background:rgba(255,255,255,.07);
+  border:2px solid rgba(255,255,255,.12);
+  border-radius:20px; padding:20px;
+  text-align:center; margin-bottom:20px;
+}
+.q-label { font-size:12px; font-weight:800; color:rgba(255,255,255,.5); text-transform:uppercase; letter-spacing:2px; margin-bottom:8px; }
+.q-text { font-family:'Fredoka One',cursive; font-size:20px; color:#ffd700; }
+
+.characters { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:16px; }
+.char-card {
+  background:rgba(255,255,255,.08);
+  border:2.5px solid rgba(255,255,255,.18);
+  border-radius:18px; padding:18px 12px;
+  text-align:center; cursor:pointer;
+  transition:all .2s; position:relative;
+}
+.char-card:hover { transform:translateY(-4px); background:rgba(255,255,255,.15); border-color:rgba(255,255,255,.4); }
+.char-avatar { font-size:52px; margin-bottom:8px; display:block; }
+.char-name { font-family:'Fredoka One',cursive; font-size:16px; margin-bottom:10px; }
+.char-bubble {
+  background:rgba(255,255,255,.12); border-radius:12px; padding:10px;
+  font-size:13px; font-weight:700; line-height:1.5; color:rgba(255,255,255,.9);
+  position:relative;
+}
+.char-bubble::before {
+  content:''; position:absolute; top:-8px; left:50%; transform:translateX(-50%);
+  border:8px solid transparent; border-bottom-color:rgba(255,255,255,.12);
+  border-top:none;
+}
+
+.char-card.correct { border-color:#4caf50; background:rgba(76,175,80,.2); }
+.char-card.wrong-pick { border-color:#ef5350; background:rgba(239,83,80,.2); }
+.char-card.reveal-wrong { border-color:#ffd700; background:rgba(255,215,0,.1); }
+.char-card.correct .char-bubble { background:rgba(76,175,80,.3); }
+.char-card.wrong-pick .char-bubble { background:rgba(239,83,80,.3); }
+
+.badge { position:absolute; top:-10px; right:-10px; font-size:24px; }
+
+.feedback-box { border-radius:16px; padding:16px; text-align:center; margin-bottom:16px; display:none; }
+.feedback-box.show { display:block; }
+.feedback-box.ok { background:rgba(76,175,80,.2); border:2px solid #4caf50; }
+.feedback-box.no { background:rgba(239,83,80,.2); border:2px solid #ef5350; }
+.feedback-title { font-family:'Fredoka One',cursive; font-size:22px; margin-bottom:6px; }
+.feedback-exp { font-size:14px; font-weight:700; color:rgba(255,255,255,.8); line-height:1.6; }
+
+.next-btn {
+  display:block; width:100%; background:#ffd700; color:#1a1a3e; border:none;
+  border-radius:20px; padding:14px; font-family:'Fredoka One',cursive; font-size:20px;
+  cursor:pointer; transition:all .2s;
+}
+.next-btn:hover { background:#ffecb3; transform:translateY(-2px); }
+
+.cat-row { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:20px; }
+.cat-btn { background:rgba(255,255,255,.1); border:2px solid rgba(255,255,255,.2); color:#fff; border-radius:20px; padding:7px 16px; font-family:'Nunito',sans-serif; font-size:13px; font-weight:800; cursor:pointer; transition:all .2s; }
+.cat-btn:hover { background:rgba(255,255,255,.2); }
+.cat-btn.active { background:#ffd700; color:#1a1a3e; border-color:#ffd700; }
+
+@media (max-width:500px) {
+  .characters { grid-template-columns:1fr; }
+  .char-avatar { font-size:36px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🤥 Kim Yanlış Söylüyor?</h1>
+  <p>Üç kişi konuşuyor — hangisi yalan söylüyor? Bul!</p>
+</div>
+
+<div class="game">
+  <div class="cat-row">
+    <button class="cat-btn active" onclick="setCategory('hepsi',this)">🌟 Hepsi</button>
+    <button class="cat-btn" onclick="setCategory('turkce',this)">📖 Türkçe</button>
+    <button class="cat-btn" onclick="setCategory('hayat',this)">🌍 Hayat</button>
+    <button class="cat-btn" onclick="setCategory('matematik',this)">🔢 Matematik</button>
+    <button class="cat-btn" onclick="setCategory('genel',this)">💡 Genel</button>
+  </div>
+
+  <div class="score-row">
+    <div class="sc"><div class="sc-num" id="correct">0</div><div class="sc-lbl">Doğru</div></div>
+    <div class="sc"><div class="sc-num" id="wrong">0</div><div class="sc-lbl">Yanlış</div></div>
+    <div class="sc"><div class="sc-num" id="streak">0</div><div class="sc-lbl">Seri 🔥</div></div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">Konu</div>
+    <div class="q-text" id="qText">Hazırlanıyor...</div>
+  </div>
+
+  <div class="characters" id="characters"></div>
+
+  <div class="feedback-box" id="feedbackBox">
+    <div class="feedback-title" id="feedbackTitle"></div>
+    <div class="feedback-exp" id="feedbackExp"></div>
+  </div>
+
+  <button class="next-btn" id="nextBtn" onclick="nextQuestion()" style="display:none">➡️ Sonraki Soru</button>
+</div>
+
+<script>
+var questions = {
+  turkce: [
+    { topic:'Sesli Harfler', chars:['🐸','🦊','🐧'], names:['Kurbağa Keko','Tilki Fikri','Penguen Pınar'],
+      sayings:['Türkçede 8 sesli harf var: A,E,I,İ,O,Ö,U,Ü','Sesli harfler tek başına söylenebilir','Türkçede 12 sesli harf var'],
+      wrong:2, explain:'Türkçede 8 sesli harf vardır: A, E, I, İ, O, Ö, U, Ü' },
+    { topic:'Noktalama', chars:['🐻','🐮','🦁'], names:['Ayı Ahmet','İnek İpek','Aslan Ali'],
+      sayings:['Nokta cümle sonuna konur.','Soru işareti soru cümlesi sonuna konur?','Ünlem işareti kelime ortasına konur!'],
+      wrong:2, explain:'Ünlem işareti, duygu belirten cümlelerin SONUNA konur, ortasına değil!' },
+    { topic:'Hece', chars:['🐱','🐭','🐹'], names:['Kedi Cici','Fare Fero','Hamster Hamdi'],
+      sayings:['Her hecede en az bir sesli harf vardır','Ka-lem kelimesi 2 heceden oluşur','O-kul kelimesi 3 heceden oluşur'],
+      wrong:2, explain:'O-kul kelimesi 2 heceden oluşur: O ve kul.' },
+    { topic:'Cümle', chars:['🦋','🐝','🐞'], names:['Kelebek Kader','Arı Arzu','Uğurböceği Umut'],
+      sayings:['Kurallı cümlede yüklem sonda olur','Devrik cümlede yüklem sonda olmaz','Soru cümlesi nokta ile biter'],
+      wrong:2, explain:'Soru cümlesi soru işareti (?) ile biter, nokta ile değil!' },
+  ],
+  hayat: [
+    { topic:'Mevsimler', chars:['🐸','🐦','🐿️'], names:['Kurbağa Keko','Kuş Kuki','Sincap Simo'],
+      sayings:['Bir yılda 4 mevsim vardır','Kış mevsiminde kar yağar','Yaz mevsiminde hava soğur'],
+      wrong:2, explain:'Yaz mevsiminde hava SICAK olur, soğumaz!' },
+    { topic:'Atatürk', chars:['🦅','🐎','⭐'], names:['Kartal Kaan','At Aras','Yıldız Yıldız'],
+      sayings:['Atatürk 1881 yılında doğdu','Cumhuriyet 29 Ekim 1923\'te ilan edildi','Atatürk 1940 yılında vefat etti'],
+      wrong:2, explain:'Atatürk 10 Kasım 1938\'de vefat etti, 1940\'da değil!' },
+    { topic:'Aile', chars:['🐨','🦘','🦙'], names:['Koala Kıvılcım','Kanguru Kansu','Lama Lale'],
+      sayings:['Anne ve baba ebeveyn olarak adlandırılır','Büyükanne ve büyükbabaya dede ve nine denir','Kardeşler sadece kız olabilir'],
+      wrong:2, explain:'Kardeşler kız ya da erkek olabilir — ikisi de kardeştir!' },
+    { topic:'Sağlık', chars:['🐊','🦎','🐢'], names:['Timsah Timur','Kertenkele Kerem','Kaplumbağa Kadir'],
+      sayings:['Dişlerimizi günde 2 kez fırçalamalıyız','Ellerimizi yemekten önce yıkamalıyız','Sebze ve meyve yemek sağlığa zararlıdır'],
+      wrong:2, explain:'Sebze ve meyve yemek sağlığa ÇOK faydalıdır, zararlı değil!' },
+  ],
+  matematik: [
+    { topic:'Deste ve Düzine', chars:['🐸','🦊','🐧'], names:['Kurbağa Keko','Tilki Fikri','Penguen Pınar'],
+      sayings:['1 deste 10 tanedir','1 düzine 12 tanedir','2 deste 25 tanedir'],
+      wrong:2, explain:'2 deste = 2×10 = 20 tanedir, 25 değil!' },
+    { topic:'Basamaklar', chars:['🦁','🐯','🐻'], names:['Aslan Alp','Kaplan Kenan','Ayı Ahmet'],
+      sayings:['35 sayısında 3 onlar basamağındadır','72 sayısında 2 birler basamağındadır','54 sayısında 4 onlar basamağındadır'],
+      wrong:2, explain:'54 sayısında 5 onlar basamağında, 4 BİRLER basamağındadır!' },
+    { topic:'Karşılaştırma', chars:['🐱','🐶','🐰'], names:['Kedi Cici','Köpek Kopi','Tavşan Tuna'],
+      sayings:['45 sayısı 54\'ten küçüktür','99 sayısı 100\'den küçüktür','67 sayısı 76\'dan büyüktür'],
+      wrong:2, explain:'67 sayısı 76\'dan KÜÇÜKTÜR, büyük değil!' },
+    { topic:'Ritmik Sayma', chars:['🐸','🐝','🦋'], names:['Kurbağa Keko','Arı Arzu','Kelebek Kader'],
+      sayings:['2\'şer sayınca: 2,4,6,8,10...','5\'er sayınca: 5,10,15,20,25...','10\'ar sayınca: 10,20,35,40,50...'],
+      wrong:2, explain:'10\'ar sayınca: 10,20,30,40,50... Her seferinde 10 eklenir!' },
+  ],
+  genel: [
+    { topic:'Türkiye', chars:['🦅','🌙','⭐'], names:['Kartal Kaan','Ay Ayla','Yıldız Yıldız'],
+      sayings:['Türkiye\'nin başkenti Ankara\'dır','Türkiye\'nin nüfusu 85 milyondan fazladır','Türkiye Asya\'da yer almaktadır'],
+      wrong:2, explain:'Türkiye hem Asya hem Avrupa\'da yer alır — iki kıta üzerindedir!' },
+    { topic:'Hayvanlar', chars:['🐸','🦊','🐧'], names:['Kurbağa Keko','Tilki Fikri','Penguen Pınar'],
+      sayings:['Balinalar denizde yaşar','Karıncalar takım halinde çalışır','Penguenler sıcak iklimlerde yaşar'],
+      wrong:2, explain:'Penguenler soğuk iklimlerde (Antarktika) yaşar!' },
+    { topic:'Renkler', chars:['🎨','🖌️','✏️'], names:['Ressam Rıza','Fırça Funda','Kalem Kemal'],
+      sayings:['Kırmızı ve sarı karıştırılınca turuncu olur','Mavi ve sarı karıştırılınca yeşil olur','Kırmızı ve mavi karıştırılınca sarı olur'],
+      wrong:2, explain:'Kırmızı + Mavi = MOR renk oluşur, sarı değil!' },
+  ]
+};
+
+var allQuestions = [];
+var currentQ = null, answered = false;
+var correctCount = 0, wrongCount = 0, streakCount = 0;
+var currentCat = 'hepsi';
+var usedIdx = [];
+
+function setCategory(cat, btn) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  usedIdx = [];
+  nextQuestion();
+}
+
+function buildAllList() {
+  allQuestions = [];
+  Object.keys(questions).forEach(function(k){ allQuestions = allQuestions.concat(questions[k]); });
+}
+
+function getList() {
+  if(currentCat === 'hepsi') return allQuestions;
+  return questions[currentCat] || allQuestions;
+}
+
+function nextQuestion() {
+  answered = false;
+  document.getElementById('feedbackBox').classList.remove('show');
+  document.getElementById('nextBtn').style.display = 'none';
+
+  var list = getList();
+  var available = list.filter(function(_,i){ return !usedIdx.includes(i); });
+  if(available.length === 0){ usedIdx=[]; available=list; }
+  var pick = available[Math.floor(Math.random()*available.length)];
+  usedIdx.push(list.indexOf(pick));
+  currentQ = pick;
+
+  document.getElementById('qText').textContent = '📌 Konu: ' + pick.topic;
+
+  var chars = document.getElementById('characters');
+  chars.innerHTML = '';
+  pick.chars.forEach(function(avatar, i) {
+    var card = document.createElement('div');
+    card.className = 'char-card';
+    card.id = 'char'+i;
+    card.innerHTML = '<span class="char-avatar">'+avatar+'</span><div class="char-name">'+pick.names[i]+'</div><div class="char-bubble">'+pick.sayings[i]+'</div>';
+    card.onclick = (function(idx){ return function(){ if(!answered) checkAnswer(idx); }; })(i);
+    chars.appendChild(card);
+  });
+}
+
+function checkAnswer(idx) {
+  answered = true;
+  var isWrong = (idx === currentQ.wrong);
+
+  if(isWrong) {
+    correctCount++; streakCount++;
+    document.getElementById('correct').textContent = correctCount;
+    document.getElementById('streak').textContent = streakCount;
+    document.getElementById('char'+idx).classList.add('reveal-wrong');
+    document.getElementById('char'+idx).innerHTML += '<div class="badge">🤥</div>';
+    showFeedback(true, '🎉 Doğru buldun!', currentQ.explain);
+  } else {
+    wrongCount++; streakCount=0;
+    document.getElementById('wrong').textContent = wrongCount;
+    document.getElementById('streak').textContent = streakCount;
+    document.getElementById('char'+idx).classList.add('wrong-pick');
+    document.getElementById('char'+idx).innerHTML += '<div class="badge">❌</div>';
+    // Doğruyu göster
+    document.getElementById('char'+currentQ.wrong).classList.add('reveal-wrong');
+    document.getElementById('char'+currentQ.wrong).innerHTML += '<div class="badge">🤥</div>';
+    showFeedback(false, '❌ Yanlış!', currentQ.explain);
+  }
+  document.getElementById('nextBtn').style.display = 'block';
+}
+
+function showFeedback(ok, title, exp) {
+  var box = document.getElementById('feedbackBox');
+  box.className = 'feedback-box show ' + (ok?'ok':'no');
+  document.getElementById('feedbackTitle').textContent = title;
+  document.getElementById('feedbackExp').textContent = exp;
+}
+
+buildAllList();
+nextQuestion();
+</script>
+</body>
+</html>

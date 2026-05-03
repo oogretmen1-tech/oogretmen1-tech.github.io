@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kız Giydirme Oyunu 👗</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --pink: #e91e8c;
+  --pink-l: #fce4ec;
+  --purple: #7b1fa2;
+  --blue: #1565c0;
+  --green: #2e7d32;
+  --orange: #e65100;
+  --bg: #fff0f8;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); font-family: 'Nunito', sans-serif; min-height: 100vh; }
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #e91e8c, #9c27b0);
+  padding: 18px 24px;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+}
+.header h1 { font-family: 'Fredoka One', cursive; font-size: 24px; color: #fff; }
+.score-box {
+  background: rgba(255,255,255,.2); border: 2px solid rgba(255,255,255,.4);
+  border-radius: 30px; padding: 8px 20px; color: #fff;
+  font-family: 'Fredoka One', cursive; font-size: 20px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* GÖREV BANNER */
+.mission-bar {
+  background: linear-gradient(135deg, #fff3e0, #fce4ec);
+  border-bottom: 3px solid #f8bbd0;
+  padding: 14px 20px;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+}
+.mission-text {
+  font-family: 'Fredoka One', cursive;
+  font-size: 20px;
+  color: var(--pink);
+  display: flex; align-items: center; gap: 10px;
+}
+.mission-season {
+  background: var(--pink);
+  color: #fff; border-radius: 20px; padding: 6px 18px;
+  font-size: 14px; font-weight: 800;
+}
+.mission-btns { display: flex; gap: 8px; }
+.mis-btn {
+  background: #fff; border: 2px solid var(--pink); color: var(--pink);
+  border-radius: 20px; padding: 7px 16px; font-family: 'Nunito',sans-serif;
+  font-size: 13px; font-weight: 800; cursor: pointer; transition: all .2s;
+}
+.mis-btn:hover { background: var(--pink); color: #fff; }
+
+/* MAIN LAYOUT */
+.game-area {
+  display: grid;
+  grid-template-columns: 280px 1fr 280px;
+  gap: 0;
+  max-height: calc(100vh - 140px);
+  overflow: hidden;
+}
+
+/* KIYAFETLERsol */
+.wardrobe {
+  background: linear-gradient(180deg, #fce4ec, #f8bbd0);
+  border-right: 3px solid #f48fb1;
+  padding: 16px 12px;
+  overflow-y: auto;
+}
+.wardrobe-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 16px; color: var(--pink);
+  text-align: center; margin-bottom: 12px;
+  background: #fff; border-radius: 12px; padding: 6px;
+}
+.category-title {
+  font-size: 11px; font-weight: 800; color: #ad1457;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  margin: 10px 0 6px; display: flex; align-items: center; gap: 6px;
+}
+.category-title::after { content:''; flex:1; height:1px; background:#f48fb1; }
+.clothes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+.clothing-item {
+  background: #fff;
+  border: 2.5px solid #f8bbd0;
+  border-radius: 14px;
+  padding: 10px 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+  position: relative;
+  user-select: none;
+}
+.clothing-item:hover { transform: translateY(-4px); box-shadow: 0 6px 16px rgba(233,30,140,.2); border-color: var(--pink); }
+.clothing-item.worn { opacity: .45; cursor: not-allowed; border-color: #aaa; }
+.clothing-item.wrong-season { border-color: #ef9a9a !important; }
+.clothing-item.correct-season { border-color: #a5d6a7 !important; }
+.item-emoji { font-size: 36px; display: block; margin-bottom: 4px; }
+.item-name { font-size: 11px; font-weight: 800; color: #555; }
+.item-season { font-size: 9px; color: #888; margin-top: 2px; }
+
+/* KIZ KARAKTERi - orta */
+.character-area {
+  background: linear-gradient(180deg, #e8f5e9 0%, #f3e5f5 50%, #e3f2fd 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+  min-height: 500px;
+}
+
+.scene-bg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.char-wrap {
+  position: relative;
+  width: 200px;
+  height: 380px;
+  z-index: 5;
+}
+
+/* SVG karakter */
+.char-svg { width: 200px; height: 380px; }
+
+/* Giyilen kıyafet katmanları */
+.layer {
+  position: absolute;
+  top: 0; left: 0;
+  width: 200px; height: 380px;
+  pointer-events: none;
+  transition: opacity .3s;
+}
+
+/* Çıkar butonu */
+.remove-btn {
+  background: var(--pink); color: #fff; border: none; border-radius: 20px;
+  padding: 8px 20px; font-family: 'Nunito',sans-serif; font-size: 13px; font-weight: 800;
+  cursor: pointer; margin-top: 14px; z-index: 10;
+}
+.remove-btn:hover { background: #ad1457; }
+
+/* SAĞ - Giyilenler & Bilgi */
+.info-panel {
+  background: linear-gradient(180deg, #f3e5f5, #e8eaf6);
+  border-left: 3px solid #ce93d8;
+  padding: 16px 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.worn-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 16px; color: var(--purple);
+  background: #fff; border-radius: 12px; padding: 6px;
+  text-align: center;
+}
+.worn-list { display: flex; flex-direction: column; gap: 6px; }
+.worn-item {
+  background: #fff; border-radius: 10px; padding: 8px 12px;
+  display: flex; align-items: center; gap: 8px;
+  border: 1.5px solid #ce93d8; font-size: 13px; font-weight: 700;
+}
+.worn-item .wi-emoji { font-size: 20px; }
+.wi-remove {
+  margin-left: auto; background: #ef9a9a; border: none; border-radius: 50%;
+  width: 22px; height: 22px; cursor: pointer; font-size: 12px; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Puan animasyonu */
+.point-popup {
+  position: fixed;
+  font-family: 'Fredoka One', cursive;
+  font-size: 32px;
+  pointer-events: none;
+  z-index: 999;
+  animation: floatUp 1.2s ease forwards;
+}
+@keyframes floatUp {
+  0% { opacity:1; transform: translateY(0) scale(1); }
+  100% { opacity:0; transform: translateY(-80px) scale(1.4); }
+}
+
+/* Feedback toast */
+.toast {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+  background: #333; color: #fff; border-radius: 25px; padding: 12px 28px;
+  font-size: 15px; font-weight: 800; z-index: 998;
+  transition: all .3s; opacity: 0; pointer-events: none;
+}
+.toast.show { opacity: 1; }
+.toast.ok { background: #2e7d32; }
+.toast.wrong { background: #c62828; }
+.toast.info { background: #1565c0; }
+
+/* Konfeti */
+.confetti-piece {
+  position: fixed;
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  animation: fall 2s ease forwards;
+  pointer-events: none;
+  z-index: 997;
+}
+@keyframes fall {
+  0% { transform: translateY(-20px) rotate(0deg); opacity:1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity:0; }
+}
+
+/* Mevsim seçici */
+.season-selector {
+  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+}
+.season-btn {
+  background: #fff; border: 2.5px solid #f48fb1; border-radius: 20px;
+  padding: 8px 16px; font-family: 'Nunito',sans-serif; font-size: 13px; font-weight: 800;
+  color: var(--pink); cursor: pointer; transition: all .2s;
+}
+.season-btn:hover { transform: scale(1.05); }
+.season-btn.active { border-color: var(--pink); }
+.season-btn.kış.active { background: #e3f2fd; border-color: var(--blue); color: var(--blue); }
+.season-btn.yaz.active { background: #fff8e1; border-color: var(--orange); color: var(--orange); }
+.season-btn.ilkbahar.active { background: #e8f5e9; border-color: var(--green); color: var(--green); }
+.season-btn.sonbahar.active { background: #fff3e0; border-color: #ef6c00; color: #ef6c00; }
+.season-btn.okul.active { background: #f3e5f5; border-color: var(--purple); color: var(--purple); }
+
+@media (max-width: 700px) {
+  .game-area { grid-template-columns: 1fr; grid-template-rows: auto 400px auto; }
+  .wardrobe { border-right: none; border-bottom: 3px solid #f48fb1; max-height: 220px; }
+  .info-panel { border-left: none; border-top: 3px solid #ce93d8; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>👗 Kız Giydirme Oyunu</h1>
+  <div class="score-box">⭐ <span id="scoreNum">0</span> puan</div>
+</div>
+
+<!-- GÖREV -->
+<div class="mission-bar">
+  <div class="mission-text">
+    🎯 Görev:
+    <span id="missionText">Bir mevsim seç!</span>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:8px;">
+    <div class="season-selector">
+      <button class="season-btn kış" onclick="setMission('kış','❄️ Kış için giydir!','#1565c0')">❄️ Kış</button>
+      <button class="season-btn yaz" onclick="setMission('yaz','☀️ Yaz için giydir!','#e65100')">☀️ Yaz</button>
+      <button class="season-btn ilkbahar" onclick="setMission('ilkbahar','🌸 İlkbahar için giydir!','#2e7d32')">🌸 İlkbahar</button>
+      <button class="season-btn sonbahar" onclick="setMission('sonbahar','🍂 Sonbahar için giydir!','#ef6c00')">🍂 Sonbahar</button>
+      <button class="season-btn okul" onclick="setMission('okul','🎒 Okula hazırla!','#7b1fa2')">🎒 Okul</button>
+    </div>
+    <div style="text-align:right;">
+      <button class="mis-btn" onclick="resetAll()">🔄 Sıfırla</button>
+      <button class="mis-btn" style="margin-left:6px" onclick="checkOutfit()">✅ Kontrol Et</button>
+    </div>
+  </div>
+</div>
+
+<!-- OYUN ALANI -->
+<div class="game-area">
+
+  <!-- SOL: GARDROP -->
+  <div class="wardrobe">
+    <div class="wardrobe-title">👗 Gardırop</div>
+
+    <div class="category-title">👕 Üst Giyim</div>
+    <div class="clothes-grid" id="topClothes"></div>
+
+    <div class="category-title">👖 Alt Giyim</div>
+    <div class="clothes-grid" id="bottomClothes"></div>
+
+    <div class="category-title">🧥 Dış Giyim</div>
+    <div class="clothes-grid" id="outerClothes"></div>
+
+    <div class="category-title">👟 Ayakkabı</div>
+    <div class="clothes-grid" id="shoeClothes"></div>
+
+    <div class="category-title">🎀 Aksesuar</div>
+    <div class="clothes-grid" id="accessClothes"></div>
+  </div>
+
+  <!-- ORTA: KIZ -->
+  <div class="character-area">
+    <!-- Arka plan sahne -->
+    <div class="scene-bg" id="sceneBg">
+      <div style="font-size:80px;opacity:.15;position:absolute;bottom:20px;" id="sceneEmoji">🏠</div>
+    </div>
+
+    <div class="char-wrap" id="charWrap">
+      <!-- Temel karakter SVG -->
+      <svg class="char-svg" id="charBase" viewBox="0 0 200 380" xmlns="http://www.w3.org/2000/svg">
+        <!-- Saç arka -->
+        <ellipse cx="100" cy="68" rx="44" ry="46" fill="#8B4513"/>
+
+        <!-- Yüz -->
+        <ellipse cx="100" cy="72" rx="38" ry="40" fill="#FDBCB4"/>
+
+        <!-- Saç ön dalgalar -->
+        <path d="M62 52 Q70 35 100 38 Q130 35 138 52" fill="#8B4513"/>
+        <path d="M62 52 Q58 70 60 90" fill="#8B4513"/>
+        <path d="M138 52 Q142 70 140 90" fill="#8B4513"/>
+        <!-- Saç yan uzun -->
+        <path d="M60 90 Q55 130 62 160" fill="#8B4513" stroke="#6d3410" stroke-width="1"/>
+        <path d="M140 90 Q145 130 138 160" fill="#8B4513" stroke="#6d3410" stroke-width="1"/>
+        <!-- Perçem -->
+        <path d="M78 42 Q90 30 100 38 Q90 38 80 50" fill="#6d3410"/>
+        <path d="M122 42 Q110 30 100 38 Q110 38 120 50" fill="#6d3410"/>
+
+        <!-- Gözler -->
+        <ellipse cx="88" cy="68" rx="8" ry="9" fill="white"/>
+        <ellipse cx="112" cy="68" rx="8" ry="9" fill="white"/>
+        <circle cx="88" cy="70" r="5" fill="#5D3A1A"/>
+        <circle cx="112" cy="70" r="5" fill="#5D3A1A"/>
+        <circle cx="89" cy="69" r="2.5" fill="#1a0a00"/>
+        <circle cx="113" cy="69" r="2.5" fill="#1a0a00"/>
+        <circle cx="90" cy="67" r="1.2" fill="white"/>
+        <circle cx="114" cy="67" r="1.2" fill="white"/>
+        <!-- Kirpikler -->
+        <path d="M80 61 Q82 57 84 61" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M86 59 Q88 55 90 59" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M92 59 Q94 55 96 59" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M104 59 Q106 55 108 59" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M110 59 Q112 55 114 59" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M116 61 Q118 57 120 61" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+        <!-- Kaşlar -->
+        <path d="M81 60 Q88 56 95 60" stroke="#6d3410" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M105 60 Q112 56 119 60" stroke="#6d3410" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+        <!-- Burun -->
+        <path d="M97 78 Q100 83 103 78" stroke="#e0927a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+        <!-- Ağız & Yanak -->
+        <path d="M88 92 Q100 100 112 92" stroke="#e91e8c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <circle cx="84" cy="86" r="7" fill="#ffb3ba" opacity=".5"/>
+        <circle cx="116" cy="86" r="7" fill="#ffb3ba" opacity=".5"/>
+
+        <!-- Kulaklar -->
+        <ellipse cx="62" cy="76" rx="6" ry="7" fill="#FDBCB4"/>
+        <ellipse cx="138" cy="76" rx="6" ry="7" fill="#FDBCB4"/>
+        <ellipse cx="62" cy="76" rx="3.5" ry="4" fill="#f09080"/>
+        <ellipse cx="138" cy="76" rx="3.5" ry="4" fill="#f09080"/>
+
+        <!-- Boyun -->
+        <rect x="88" y="108" width="24" height="22" rx="8" fill="#FDBCB4"/>
+
+        <!-- Temel iç çamaşır (her zaman görünür) -->
+        <!-- Atlet -->
+        <path d="M70 130 L72 200 L128 200 L130 130 Q115 120 100 122 Q85 120 70 130Z" fill="#FFE4E1"/>
+        <!-- Tayt -->
+        <path d="M72 200 L68 300 L88 302 L100 250 L112 302 L132 300 L128 200Z" fill="#E8D5E8"/>
+        <!-- Çorap -->
+        <rect x="70" y="298" width="18" height="20" rx="4" fill="#fff"/>
+        <rect x="112" y="298" width="18" height="20" rx="4" fill="#fff"/>
+        <!-- Ayak -->
+        <ellipse cx="79" cy="322" rx="12" ry="8" fill="#FDBCB4"/>
+        <ellipse cx="121" cy="322" rx="12" ry="8" fill="#FDBCB4"/>
+
+        <!-- Kollar (ten) -->
+        <path d="M70 130 Q50 150 48 200 L62 202 Q64 165 75 148Z" fill="#FDBCB4"/>
+        <path d="M130 130 Q150 150 152 200 L138 202 Q136 165 125 148Z" fill="#FDBCB4"/>
+        <!-- El -->
+        <ellipse cx="55" cy="205" rx="10" ry="8" fill="#FDBCB4"/>
+        <ellipse cx="145" cy="205" rx="10" ry="8" fill="#FDBCB4"/>
+      </svg>
+
+      <!-- Kıyafet katmanları -->
+      <div id="layerTop" class="layer"></div>
+      <div id="layerBottom" class="layer"></div>
+      <div id="layerOuter" class="layer"></div>
+      <div id="layerShoe" class="layer"></div>
+      <div id="layerAcc" class="layer"></div>
+    </div>
+
+    <button class="remove-btn" onclick="removeAll()">👗 Hepsini Çıkar</button>
+  </div>
+
+  <!-- SAĞ: BİLGİ -->
+  <div class="info-panel">
+    <div class="worn-title">✨ Giyilenler</div>
+    <div class="worn-list" id="wornList">
+      <div style="text-align:center;color:#aaa;font-size:13px;font-weight:700;padding:20px 0;">Henüz kıyafet seçilmedi...</div>
+    </div>
+
+    <div style="border-top:2px dashed #ce93d8;padding-top:12px;">
+      <div style="font-family:'Fredoka One',cursive;font-size:15px;color:var(--purple);margin-bottom:8px;">💡 Mevsim Rehberi</div>
+      <div id="seasonGuide" style="font-size:13px;font-weight:700;color:#555;line-height:1.8;background:#fff;border-radius:10px;padding:10px;"></div>
+    </div>
+
+    <div style="border-top:2px dashed #ce93d8;padding-top:12px;">
+      <div style="font-family:'Fredoka One',cursive;font-size:15px;color:var(--purple);margin-bottom:8px;">🏆 En Yüksek Puan</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:32px;color:var(--pink);text-align:center;" id="highScore">0</div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════
+// VERİ
+// ══════════════════════════════
+var clothes = {
+  top: [
+    {id:'tisort', name:'Tişört', emoji:'👕', seasons:['yaz','ilkbahar','okul'],
+     svg:'<rect x="68" y="128" width="64" height="60" rx="8" fill="#FF6B9D"/><path d="M68 128 Q52 140 50 170 L66 172 Q64 150 75 140Z" fill="#FF6B9D"/><path d="M132 128 Q148 140 150 170 L134 172 Q136 150 125 140Z" fill="#FF6B9D"/><text x="100" y="165" text-anchor="middle" font-size="18">🌸</text>'},
+    {id:'kazak', name:'Kazak', emoji:'🧥', seasons:['kış','sonbahar'],
+     svg:'<rect x="66" y="126" width="68" height="68" rx="10" fill="#5C6BC0"/><path d="M66 126 Q48 142 46 190 L66 192 Q64 158 74 142Z" fill="#5C6BC0"/><path d="M134 126 Q152 142 154 190 L134 192 Q136 158 126 142Z" fill="#5C6BC0"/><rect x="66" y="126" width="68" height="14" rx="7" fill="#3949AB"/><text x="100" y="175" text-anchor="middle" font-size="14" fill="white" font-weight="bold">⛄</text>'},
+    {id:'gomlek', name:'Gömlek', emoji:'👔', seasons:['ilkbahar','okul','sonbahar'],
+     svg:'<rect x="68" y="128" width="64" height="62" rx="8" fill="#E3F2FD"/><path d="M68 128 Q52 142 50 188 L68 190 Q66 152 76 140Z" fill="#E3F2FD"/><path d="M132 128 Q148 142 150 188 L132 190 Q134 152 124 140Z" fill="#E3F2FD"/><rect x="94" y="128" width="12" height="8" rx="4" fill="#90CAF9"/><line x1="100" y1="136" x2="100" y2="190" stroke="#90CAF9" stroke-width="2"/>'},
+    {id:'uzunkol', name:'Uzun Kol', emoji:'🌊', seasons:['sonbahar','kış'],
+     svg:'<rect x="68" y="128" width="64" height="62" rx="8" fill="#26A69A"/><path d="M68 128 Q50 142 48 195 L68 197 Q66 155 76 140Z" fill="#26A69A"/><path d="M132 128 Q150 142 152 195 L132 197 Q134 155 124 140Z" fill="#26A69A"/>'},
+  ],
+  bottom: [
+    {id:'etek', name:'Etek', emoji:'👗', seasons:['yaz','ilkbahar'],
+     svg:'<path d="M78 196 Q68 260 65 310 L90 312 L100 260 L110 312 L135 310 Q132 260 122 196Z" fill="#FF80AB"/>'},
+    {id:'pantolon', name:'Pantolon', emoji:'👖', seasons:['kış','sonbahar','okul'],
+     svg:'<path d="M78 196 L72 310 L92 312 L100 252 L108 312 L128 310 L122 196Z" fill="#5C6BC0"/>'},
+    {id:'sort', name:'Şort', emoji:'🩳', seasons:['yaz'],
+     svg:'<path d="M78 196 L74 248 L92 250 L100 228 L108 250 L126 248 L122 196Z" fill="#FF7043"/>'},
+    {id:'taytetek', name:'Tüllü Etek', emoji:'💜', seasons:['ilkbahar','okul'],
+     svg:'<path d="M78 196 Q68 252 62 298 L90 300 L100 252 L110 300 L138 298 Q132 252 122 196Z" fill="#CE93D8"/><path d="M62 270 Q100 280 138 270 Q100 295 62 270Z" fill="#E1BEE7" opacity=".7"/>'},
+  ],
+  outer: [
+    {id:'mont', name:'Mont', emoji:'🧥', seasons:['kış'],
+     svg:'<rect x="60" y="124" width="80" height="80" rx="12" fill="#1565C0"/><path d="M60 124 Q38 144 36 208 L62 210 Q60 162 70 142Z" fill="#1565C0"/><path d="M140 124 Q162 144 164 208 L138 210 Q140 162 130 142Z" fill="#1565C0"/><rect x="60" y="124" width="80" height="16" rx="8" fill="#0D47A1"/>'},
+    {id:'yagmurluk', name:'Yağmurluk', emoji:'🌧️', seasons:['ilkbahar','sonbahar'],
+     svg:'<rect x="62" y="124" width="76" height="78" rx="12" fill="#F9A825" opacity=".9"/><path d="M62 124 Q42 144 40 206 L64 208 Q62 162 72 142Z" fill="#F9A825" opacity=".9"/><path d="M138 124 Q158 144 160 206 L136 208 Q138 162 128 142Z" fill="#F9A825" opacity=".9"/>'},
+    {id:'hirka', name:'Hırka', emoji:'🧶', seasons:['ilkbahar','sonbahar','okul'],
+     svg:'<rect x="64" y="126" width="72" height="76" rx="10" fill="#EF9A9A" opacity=".85"/><path d="M64 126 Q46 142 44 204 L66 206 Q64 160 74 142Z" fill="#EF9A9A" opacity=".85"/><path d="M136 126 Q154 142 156 204 L134 206 Q136 160 126 142Z" fill="#EF9A9A" opacity=".85"/><line x1="100" y1="126" x2="100" y2="202" stroke="#E57373" stroke-width="2" stroke-dasharray="6,4"/>'},
+  ],
+  shoe: [
+    {id:'bot', name:'Bot', emoji:'🥾', seasons:['kış','sonbahar'],
+     svg:'<rect x="68" y="308" width="24" height="28" rx="6" fill="#5D4037"/><ellipse cx="80" cy="336" rx="16" ry="8" fill="#4E342E"/><rect x="110" y="308" width="24" height="28" rx="6" fill="#5D4037"/><ellipse cx="122" cy="336" rx="16" ry="8" fill="#4E342E"/>'},
+    {id:'sandalet', name:'Sandalet', emoji:'👡', seasons:['yaz'],
+     svg:'<path d="M68 322 Q80 314 92 322 L90 334 L68 334Z" fill="#FF6B9D"/><path d="M76 322 L78 310" stroke="#FF6B9D" stroke-width="3" stroke-linecap="round"/><path d="M110 322 Q122 314 134 322 L132 334 L110 334Z" fill="#FF6B9D"/><path d="M118 322 L120 310" stroke="#FF6B9D" stroke-width="3" stroke-linecap="round"/>'},
+    {id:'spor', name:'Spor Ayakkabı', emoji:'👟', seasons:['ilkbahar','okul','sonbahar'],
+     svg:'<path d="M65 314 Q80 306 95 314 L94 334 L64 334Z" fill="#FFF9C4"/><ellipse cx="80" cy="334" rx="18" ry="5" fill="#F9A825"/><path d="M107 314 Q122 306 137 314 L136 334 L106 334Z" fill="#FFF9C4"/><ellipse cx="122" cy="334" rx="18" ry="5" fill="#F9A825"/>'},
+    {id:'kar', name:'Kar Botu', emoji:'❄️', seasons:['kış'],
+     svg:'<rect x="66" y="305" width="26" height="32" rx="8" fill="#90CAF9"/><ellipse cx="79" cy="337" rx="18" ry="7" fill="#64B5F6"/><rect x="108" y="305" width="26" height="32" rx="8" fill="#90CAF9"/><ellipse cx="121" cy="337" rx="18" ry="7" fill="#64B5F6"/>'},
+  ],
+  access: [
+    {id:'atkı', name:'Atkı', emoji:'🧣', seasons:['kış','sonbahar'],
+     svg:'<path d="M72 118 Q100 110 128 118 Q100 126 72 118Z" fill="#EF5350"/><path d="M72 118 Q65 125 62 150" stroke="#EF5350" stroke-width="8" stroke-linecap="round" fill="none"/>'},
+    {id:'bere', name:'Bere', emoji:'🧢', seasons:['kış'],
+     svg:'<ellipse cx="100" cy="40" rx="44" ry="30" fill="#5C6BC0"/><ellipse cx="100" cy="58" rx="48" ry="12" fill="#3949AB"/><circle cx="100" cy="15" r="10" fill="#FFF9C4"/>'},
+    {id:'sapka', name:'Şapka', emoji:'🎩', seasons:['yaz','ilkbahar'],
+     svg:'<ellipse cx="100" cy="60" rx="50" ry="10" fill="#FF8F00"/><rect x="72" y="20" width="56" height="42" rx="6" fill="#FFA000"/><path d="M100 18 Q100 8 100 2" stroke="#FF8F00" stroke-width="3"/>'},
+    {id:'cantaokul', name:'Okul Çantası', emoji:'🎒', seasons:['okul'],
+     svg:'<rect x="78" y="188" width="36" height="44" rx="8" fill="#7C4DFF"/><rect x="84" y="182" width="24" height="10" rx="5" fill="#651FFF"/><rect x="84" y="202" width="24" height="16" rx="4" fill="#651FFF" opacity=".5"/>'},
+    {id:'semsiye', name:'Şemsiye', emoji:'☂️', seasons:['ilkbahar','sonbahar'],
+     svg:'<path d="M100 90 L100 200" stroke="#1E88E5" stroke-width="4"/><path d="M60 90 Q100 50 140 90" fill="#42A5F5" stroke="#1E88E5" stroke-width="2"/>'},
+    {id:'gozluk', name:'Güneş Gözlüğü', emoji:'😎', seasons:['yaz'],
+     svg:'<rect x="76" y="68" width="22" height="14" rx="7" fill="#333" opacity=".8"/><rect x="102" y="68" width="22" height="14" rx="7" fill="#333" opacity=".8"/><line x1="98" y1="75" x2="102" y2="75" stroke="#555" stroke-width="2"/><line x1="62" y1="75" x2="76" y2="75" stroke="#555" stroke-width="2"/><line x1="124" y1="75" x2="138" y2="75" stroke="#555" stroke-width="2"/>'},
+  ]
+};
+
+var seasonGuides = {
+  kış: '❄️ Kış için:\n✅ Mont, Kazak, Uzun Kol\n✅ Pantolon\n✅ Bot, Kar Botu\n✅ Atkı, Bere\n❌ Şort, Sandalet olmaz!',
+  yaz: '☀️ Yaz için:\n✅ Tişört\n✅ Etek, Şort\n✅ Sandalet\n✅ Şapka, Güneş Gözlüğü\n❌ Mont, Bere olmaz!',
+  ilkbahar: '🌸 İlkbahar için:\n✅ Tişört, Gömlek\n✅ Etek, Tüllü Etek\n✅ Hırka, Yağmurluk\n✅ Spor Ayakkabı\n✅ Şemsiye',
+  sonbahar: '🍂 Sonbahar için:\n✅ Uzun Kol, Kazak\n✅ Pantolon\n✅ Hırka, Yağmurluk\n✅ Bot\n✅ Atkı, Şemsiye',
+  okul: '🎒 Okul için:\n✅ Gömlek, Tişört\n✅ Pantolon, Tüllü Etek\n✅ Spor Ayakkabı\n✅ Okul Çantası\n✅ Hırka',
+};
+
+var currentMission = null;
+var wornItems = {}; // {category: clothingId}
+var score = 0;
+var highScore = 0;
+
+// ══════════════════════════════
+// KIYAFET KARTLARI OLUŞTUR
+// ══════════════════════════════
+function buildClothes() {
+  var cats = {top:'topClothes', bottom:'bottomClothes', outer:'outerClothes', shoe:'shoeClothes', access:'accessClothes'};
+  Object.keys(cats).forEach(function(cat) {
+    var container = document.getElementById(cats[cat]);
+    container.innerHTML = '';
+    clothes[cat].forEach(function(item) {
+      var div = document.createElement('div');
+      div.className = 'clothing-item';
+      div.id = 'item_'+item.id;
+      div.innerHTML = '<span class="item-emoji">'+item.emoji+'</span><div class="item-name">'+item.name+'</div>';
+      div.onclick = function(){ wearItem(cat, item); };
+      container.appendChild(div);
+    });
+  });
+}
+
+// ══════════════════════════════
+// KIYAFETİ GİYDİR
+// ══════════════════════════════
+function wearItem(cat, item) {
+  // Önceki aynı kategori kıyafetini çıkar
+  if(wornItems[cat]) {
+    removeItem(cat);
+  }
+
+  wornItems[cat] = item.id;
+
+  // SVG katman güncelle
+  var layerMap = {top:'layerTop', bottom:'layerBottom', outer:'layerOuter', shoe:'layerShoe', access:'layerAcc'};
+  var layer = document.getElementById(layerMap[cat]);
+  layer.innerHTML = '<svg viewBox="0 0 200 380" xmlns="http://www.w3.org/2000/svg" width="200" height="380">'+item.svg+'</svg>';
+
+  // Kart işaretle
+  document.getElementById('item_'+item.id).classList.add('worn');
+
+  // Mevsim kontrolü - anlık geri bildirim
+  if(currentMission) {
+    var correct = item.seasons.includes(currentMission);
+    if(correct) {
+      showToast('✅ '+ item.name +' bu mevsim için uygun!', 'ok');
+    } else {
+      showToast('⚠️ '+ item.name +' bu mevsim için uygun olmayabilir!', 'wrong');
+    }
+  }
+
+  updateWornList();
+}
+
+function removeItem(cat) {
+  if(!wornItems[cat]) return;
+  var oldId = wornItems[cat];
+  var oldEl = document.getElementById('item_'+oldId);
+  if(oldEl) oldEl.classList.remove('worn');
+
+  var layerMap = {top:'layerTop', bottom:'layerBottom', outer:'layerOuter', shoe:'layerShoe', access:'layerAcc'};
+  document.getElementById(layerMap[cat]).innerHTML = '';
+  delete wornItems[cat];
+  updateWornList();
+}
+
+function removeAll() {
+  Object.keys(wornItems).forEach(function(cat){ removeItem(cat); });
+}
+
+function resetAll() {
+  removeAll();
+  currentMission = null;
+  document.getElementById('missionText').textContent = 'Bir mevsim seç!';
+  document.getElementById('missionText').style.color = 'var(--pink)';
+  document.getElementById('seasonGuide').textContent = '';
+  document.getElementById('sceneBg').style.background = '';
+  document.getElementById('sceneEmoji').textContent = '🏠';
+  document.querySelectorAll('.season-btn').forEach(function(b){ b.classList.remove('active'); });
+}
+
+// ══════════════════════════════
+// GİYİLENLER LİSTESİ
+// ══════════════════════════════
+function updateWornList() {
+  var list = document.getElementById('wornList');
+  var keys = Object.keys(wornItems);
+  if(keys.length === 0) {
+    list.innerHTML = '<div style="text-align:center;color:#aaa;font-size:13px;font-weight:700;padding:20px 0;">Henüz kıyafet seçilmedi...</div>';
+    return;
+  }
+  list.innerHTML = '';
+  var catNames = {top:'Üst', bottom:'Alt', outer:'Dış', shoe:'Ayakkabı', access:'Aksesuar'};
+  keys.forEach(function(cat) {
+    var itemId = wornItems[cat];
+    var item = clothes[cat].find(function(c){return c.id===itemId;});
+    if(!item) return;
+    var div = document.createElement('div');
+    div.className = 'worn-item';
+    div.innerHTML = '<span class="wi-emoji">'+item.emoji+'</span><span>'+item.name+'<br><small style="color:#aaa">'+catNames[cat]+'</small></span><button class="wi-remove" onclick="removeItem(\''+cat+'\')">✕</button>';
+    list.appendChild(div);
+  });
+}
+
+// ══════════════════════════════
+// MİSYON
+// ══════════════════════════════
+var sceneData = {
+  kış: {bg:'linear-gradient(180deg,#bbdefb,#e3f2fd)', emoji:'❄️🌨️', color:'#1565c0'},
+  yaz: {bg:'linear-gradient(180deg,#fff9c4,#e8f5e9)', emoji:'☀️🌺', color:'#e65100'},
+  ilkbahar: {bg:'linear-gradient(180deg,#f3e5f5,#e8f5e9)', emoji:'🌸🦋', color:'#2e7d32'},
+  sonbahar: {bg:'linear-gradient(180deg,#fff3e0,#fce4ec)', emoji:'🍂🍁', color:'#ef6c00'},
+  okul: {bg:'linear-gradient(180deg,#e8eaf6,#f3e5f5)', emoji:'🎒📚', color:'#7b1fa2'},
+};
+
+function setMission(season, text, color) {
+  removeAll();
+  currentMission = season;
+  document.getElementById('missionText').textContent = text;
+  document.getElementById('missionText').style.color = color;
+  document.getElementById('seasonGuide').textContent = (seasonGuides[season]||'').replace(/\\n/g,'\n');
+  document.getElementById('seasonGuide').style.whiteSpace = 'pre-line';
+
+  var sc = sceneData[season];
+  document.getElementById('sceneBg').style.background = sc.bg;
+  document.getElementById('sceneEmoji').textContent = sc.emoji;
+
+  document.querySelectorAll('.season-btn').forEach(function(b){ b.classList.remove('active'); });
+  event.target.classList.add('active');
+
+  showToast('🎯 Görev: '+text, 'info');
+}
+
+// ══════════════════════════════
+// KONTROL ET & PUANLA
+// ══════════════════════════════
+function checkOutfit() {
+  if(!currentMission) { showToast('Önce bir mevsim seç!', 'info'); return; }
+  var total = Object.keys(wornItems).length;
+  if(total === 0) { showToast('Hiç kıyafet seçmedin!', 'wrong'); return; }
+
+  var correct = 0, wrong = 0;
+  Object.keys(wornItems).forEach(function(cat) {
+    var item = clothes[cat].find(function(c){return c.id===wornItems[cat];});
+    if(item && item.seasons.includes(currentMission)) correct++;
+    else wrong++;
+  });
+
+  var points = correct * 10 - wrong * 5;
+  if(points < 0) points = 0;
+  score += points;
+  if(score > highScore) highScore = score;
+  document.getElementById('scoreNum').textContent = score;
+  document.getElementById('highScore').textContent = highScore;
+
+  if(wrong === 0 && correct >= 3) {
+    showToast('🎉 Mükemmel! +'+points+' puan! Tüm kıyafetler uygun!', 'ok');
+    showPoints('+'+points, '#2e7d32');
+    confetti();
+  } else if(wrong === 0) {
+    showToast('✅ Harika! +'+points+' puan! Daha fazla kıyafet giydirebilirsin.', 'ok');
+    showPoints('+'+points, '#1565c0');
+  } else {
+    showToast('⚠️ '+correct+' doğru, '+wrong+' yanlış kıyafet! +'+points+' puan', wrong>correct?'wrong':'ok');
+    showPoints('+'+points, wrong>0?'#e65100':'#2e7d32');
+  }
+}
+
+// ══════════════════════════════
+// YARDIMCI FONKSİYONLAR
+// ══════════════════════════════
+function showToast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show '+type;
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.className='toast'; }, 3000);
+}
+
+function showPoints(text, color) {
+  var el = document.createElement('div');
+  el.className = 'point-popup';
+  el.textContent = text;
+  el.style.color = color;
+  el.style.left = '50%'; el.style.top = '40%';
+  el.style.transform = 'translateX(-50%)';
+  document.body.appendChild(el);
+  setTimeout(function(){ document.body.removeChild(el); }, 1200);
+}
+
+function confetti() {
+  var colors = ['#ff6b9d','#ffd700','#7b1fa2','#2196f3','#4caf50','#ff5722'];
+  for(var i=0;i<30;i++){
+    (function(i){
+      setTimeout(function(){
+        var el=document.createElement('div');
+        el.className='confetti-piece';
+        el.style.left=Math.random()*100+'vw';
+        el.style.top='-20px';
+        el.style.background=colors[Math.floor(Math.random()*colors.length)];
+        el.style.transform='rotate('+Math.random()*360+'deg)';
+        el.style.animationDuration=(1.5+Math.random())+'s';
+        document.body.appendChild(el);
+        setTimeout(function(){document.body.removeChild(el);},3000);
+      }, i*60);
+    })(i);
+  }
+}
+
+// ══════════════════════════════
+// BAŞLAT
+// ══════════════════════════════
+buildClothes();
+</script>
+</body>
+</html>

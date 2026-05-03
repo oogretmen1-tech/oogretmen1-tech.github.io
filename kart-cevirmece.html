@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kart Çevirmece 🃏</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+body { background:linear-gradient(135deg,#1a0a3e,#0f1a3e); min-height:100vh; font-family:'Nunito',sans-serif; color:#fff; }
+.header { text-align:center; padding:22px 20px 12px; }
+.header h1 { font-family:'Fredoka One',cursive; font-size:2.2rem; color:#ffd700; }
+.header p { color:rgba(255,255,255,.6); font-weight:700; font-size:14px; }
+
+.controls { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; padding:0 16px 14px; }
+.ctrl { background:rgba(255,255,255,.1); border:2px solid rgba(255,255,255,.2); color:#fff; border-radius:20px; padding:8px 18px; font-family:'Nunito',sans-serif; font-size:13px; font-weight:800; cursor:pointer; transition:all .2s; }
+.ctrl:hover { background:rgba(255,255,255,.2); }
+.ctrl.active { background:#ffd700; color:#1a1a3e; border-color:#ffd700; }
+
+.stats { display:flex; justify-content:center; gap:16px; margin-bottom:14px; padding:0 16px; }
+.stat { text-align:center; background:rgba(255,255,255,.08); border-radius:12px; padding:8px 14px; }
+.stat-num { font-family:'Fredoka One',cursive; font-size:22px; color:#ffd700; }
+.stat-lbl { font-size:11px; font-weight:800; color:rgba(255,255,255,.5); }
+
+.timer { text-align:center; font-family:'Fredoka One',cursive; font-size:28px; color:#ffd700; margin-bottom:10px; }
+
+.grid { display:grid; gap:10px; max-width:700px; margin:0 auto; padding:0 16px 30px; }
+.grid.g4 { grid-template-columns:repeat(4,1fr); }
+.grid.g4x4 { grid-template-columns:repeat(4,1fr); }
+.grid.g5 { grid-template-columns:repeat(5,1fr); }
+.grid.g6 { grid-template-columns:repeat(6,1fr); }
+
+.card {
+  aspect-ratio:1; border-radius:14px; cursor:pointer;
+  perspective:600px; position:relative;
+}
+.card-inner {
+  width:100%; height:100%; position:relative;
+  transform-style:preserve-3d; transition:transform .5s ease;
+  border-radius:14px;
+}
+.card.flipped .card-inner { transform:rotateY(180deg); }
+.card.matched .card-inner { transform:rotateY(180deg); }
+
+.card-front, .card-back {
+  position:absolute; inset:0; border-radius:14px;
+  backface-visibility:hidden; display:flex;
+  align-items:center; justify-content:center;
+}
+.card-back {
+  background:linear-gradient(135deg,#7b1fa2,#4a148c);
+  border:2.5px solid rgba(255,255,255,.2);
+  font-size:28px;
+}
+.card-front {
+  background:linear-gradient(135deg,#1a237e,#283593);
+  border:2.5px solid rgba(255,255,255,.15);
+  transform:rotateY(180deg);
+  font-size:28px; flex-direction:column; gap:4px;
+}
+.card.matched .card-front { background:linear-gradient(135deg,#1b5e20,#2e7d32); border-color:#4caf50; }
+.card-label { font-size:10px; font-weight:800; color:rgba(255,255,255,.7); text-align:center; padding:0 4px; }
+
+/* Win overlay */
+.win-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.85); z-index:100; align-items:center; justify-content:center; }
+.win-overlay.show { display:flex; }
+.win-box { background:#1a1a3e; border:3px solid #ffd700; border-radius:24px; padding:36px 40px; text-align:center; }
+.win-emoji { font-size:64px; margin-bottom:12px; }
+.win-title { font-family:'Fredoka One',cursive; font-size:26px; color:#ffd700; margin-bottom:6px; }
+.win-stats { font-size:15px; font-weight:700; color:rgba(255,255,255,.7); margin-bottom:18px; }
+.win-btn { background:#ffd700; color:#1a1a3e; border:none; border-radius:20px; padding:12px 32px; font-family:'Fredoka One',cursive; font-size:18px; cursor:pointer; }
+.win-btn:hover { background:#ffecb3; }
+
+.confetti-piece { position:fixed; width:10px; height:10px; border-radius:2px; animation:fall 2s ease forwards; pointer-events:none; z-index:200; }
+@keyframes fall { 0%{transform:translateY(-20px) rotate(0deg);opacity:1;} 100%{transform:translateY(100vh) rotate(720deg);opacity:0;} }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🃏 Kart Çevirmece</h1>
+  <p>Eşleşen kartları bul — hafızanı kullan!</p>
+</div>
+
+<div class="controls">
+  <button class="ctrl active" onclick="setTheme('hayvan',this)">🐾 Hayvanlar</button>
+  <button class="ctrl" onclick="setTheme('meyve',this)">🍎 Meyveler</button>
+  <button class="ctrl" onclick="setTheme('meslek',this)">👷 Meslekler</button>
+  <button class="ctrl" onclick="setTheme('sayı',this)">🔢 Sayılar</button>
+  <button class="ctrl" onclick="setTheme('turkce',this)">📖 Türkçe</button>
+  <span style="border-left:2px solid rgba(255,255,255,.2);margin:0 4px;"></span>
+  <button class="ctrl" onclick="setSize(8,this)" id="s8">8 Kart</button>
+  <button class="ctrl active" onclick="setSize(12,this)" id="s12">12 Kart</button>
+  <button class="ctrl" onclick="setSize(16,this)" id="s16">16 Kart</button>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-num" id="moveNum">0</div><div class="stat-lbl">Hamle</div></div>
+  <div class="stat"><div class="stat-num" id="matchNum">0</div><div class="stat-lbl">Eşleşme</div></div>
+  <div class="stat"><div class="stat-num" id="bestNum">-</div><div class="stat-lbl">En İyi</div></div>
+</div>
+
+<div class="timer" id="timer">⏱ 00:00</div>
+
+<div class="grid g4" id="grid"></div>
+
+<div class="win-overlay" id="winOverlay">
+  <div class="win-box">
+    <div class="win-emoji">🎉</div>
+    <div class="win-title">Tebrikler!</div>
+    <div class="win-stats" id="winStats"></div>
+    <button class="win-btn" onclick="restart()">🔄 Tekrar Oyna</button>
+  </div>
+</div>
+
+<script>
+var themes = {
+  hayvan: [
+    {e:'🐶',l:'Köpek'},{e:'🐱',l:'Kedi'},{e:'🐻',l:'Ayı'},{e:'🦊',l:'Tilki'},
+    {e:'🐰',l:'Tavşan'},{e:'🦁',l:'Aslan'},{e:'🐸',l:'Kurbağa'},{e:'🐧',l:'Penguen'},
+    {e:'🦋',l:'Kelebek'},{e:'🐝',l:'Arı'},{e:'🦅',l:'Kartal'},{e:'🐬',l:'Yunus'},
+    {e:'🦒',l:'Zürafa'},{e:'🐘',l:'Fil'},{e:'🦓',l:'Zebra'},{e:'🦜',l:'Papağan'},
+  ],
+  meyve: [
+    {e:'🍎',l:'Elma'},{e:'🍊',l:'Portakal'},{e:'🍋',l:'Limon'},{e:'🍇',l:'Üzüm'},
+    {e:'🍓',l:'Çilek'},{e:'🍑',l:'Şeftali'},{e:'🍒',l:'Kiraz'},{e:'🍌',l:'Muz'},
+    {e:'🥝',l:'Kivi'},{e:'🍉',l:'Karpuz'},{e:'🍈',l:'Kavun'},{e:'🍍',l:'Ananas'},
+    {e:'🥭',l:'Mango'},{e:'🫐',l:'Yaban Mersini'},{e:'🍐',l:'Armut'},{e:'🥥',l:'Hindistan Cevizi'},
+  ],
+  meslek: [
+    {e:'👨‍⚕️',l:'Doktor'},{e:'👩‍🏫',l:'Öğretmen'},{e:'👨‍🚒',l:'İtfaiyeci'},{e:'👮',l:'Polis'},
+    {e:'👨‍🍳',l:'Aşçı'},{e:'👨‍✈️',l:'Pilot'},{e:'👷',l:'İnşaatçı'},{e:'👨‍🌾',l:'Çiftçi'},
+    {e:'👨‍💻',l:'Yazılımcı'},{e:'🎨',l:'Ressam'},{e:'🎵',l:'Müzisyen'},{e:'⚽',l:'Futbolcu'},
+    {e:'🔧',l:'Tamirci'},{e:'📷',l:'Fotoğrafçı'},{e:'🚢',l:'Kaptan'},{e:'🌿',l:'Bahçıvan'},
+  ],
+  sayı: [
+    {e:'1️⃣',l:'bir'},{e:'2️⃣',l:'iki'},{e:'3️⃣',l:'üç'},{e:'4️⃣',l:'dört'},
+    {e:'5️⃣',l:'beş'},{e:'6️⃣',l:'altı'},{e:'7️⃣',l:'yedi'},{e:'8️⃣',l:'sekiz'},
+    {e:'9️⃣',l:'dokuz'},{e:'🔟',l:'on'},{e:'💯',l:'yüz'},{e:'🔢',l:'sayı'},
+    {e:'➕',l:'toplama'},{e:'➖',l:'çıkarma'},{e:'✖️',l:'çarpma'},{e:'➗',l:'bölme'},
+  ],
+  turkce: [
+    {e:'📖',l:'kitap'},{e:'✏️',l:'kalem'},{e:'📝',l:'defter'},{e:'🏫',l:'okul'},
+    {e:'🎒',l:'çanta'},{e:'📏',l:'cetvel'},{e:'✂️',l:'makas'},{e:'🖊️',l:'tükenmez'},
+    {e:'📚',l:'ders'},{e:'🔤',l:'harf'},{e:'💬',l:'cümle'},{e:'⭐',l:'yıldız'},
+    {e:'❤️',l:'kalp'},{e:'🌟',l:'parlak'},{e:'🎯',l:'hedef'},{e:'🏆',l:'şampiyon'},
+  ]
+};
+
+var currentTheme='hayvan', cardCount=12;
+var flipped=[], matched=[], moves=0, matchCount=0;
+var timerInterval=null, seconds=0, best={};
+var canFlip=true;
+
+function setTheme(t, btn) {
+  currentTheme=t;
+  document.querySelectorAll('.ctrl').forEach(function(b){if(['hayvan','meyve','meslek','sayı','turkce'].some(function(x){return b.textContent.includes(x.charAt(0).toUpperCase()+x.slice(1));})||b.onclick.toString().includes("'"+t+"'")){} });
+  restart();
+  // Active stil
+  document.querySelectorAll('.ctrl').forEach(function(b){
+    var themes=['hayvan','meyve','meslek','sayı','turkce'];
+    if(themes.some(function(th){return b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'"+th+"'");})){
+      b.classList.remove('active');
+    }
+  });
+  btn.classList.add('active');
+}
+
+function setSize(n, btn) {
+  cardCount=n;
+  ['s8','s12','s16'].forEach(function(id){ var el=document.getElementById(id); if(el) el.classList.remove('active'); });
+  btn.classList.add('active');
+  restart();
+}
+
+function restart() {
+  clearInterval(timerInterval); seconds=0;
+  flipped=[]; matched=[]; moves=0; matchCount=0; canFlip=true;
+  document.getElementById('moveNum').textContent=0;
+  document.getElementById('matchNum').textContent=0;
+  document.getElementById('timer').textContent='⏱ 00:00';
+  document.getElementById('winOverlay').classList.remove('show');
+
+  var pairs = cardCount/2;
+  var pool = themes[currentTheme].slice(0,pairs);
+  var cards = pool.concat(pool.map(function(c){return {e:c.e,l:c.l,pair:true};}));
+  // shuffle
+  for(var i=cards.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=cards[i];cards[i]=cards[j];cards[j]=t;}
+
+  var grid=document.getElementById('grid');
+  grid.className='grid '+(cardCount===8?'g4':cardCount===12?'g4':cardCount===16?'g4':'g4');
+  grid.style.gridTemplateColumns='repeat('+(cardCount<=8?4:cardCount<=12?4:4)+',1fr)';
+  grid.innerHTML='';
+
+  cards.forEach(function(c,i){
+    var card=document.createElement('div');
+    card.className='card'; card.id='card'+i; card.dataset.val=c.e;
+
+    card.innerHTML='<div class="card-inner"><div class="card-back">🌟</div><div class="card-front"><span>'+c.e+'</span><span class="card-label">'+c.l+'</span></div></div>';
+    card.onclick=(function(idx,val){return function(){flipCard(idx,val);};})(i,c.e);
+    grid.appendChild(card);
+  });
+
+  // Başlat timer
+  timerInterval=setInterval(function(){
+    seconds++;
+    var m=Math.floor(seconds/60), s=seconds%60;
+    document.getElementById('timer').textContent='⏱ '+(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+  },1000);
+}
+
+function flipCard(idx, val) {
+  if(!canFlip) return;
+  var card=document.getElementById('card'+idx);
+  if(card.classList.contains('flipped')||card.classList.contains('matched')) return;
+  if(flipped.length>=2) return;
+
+  card.classList.add('flipped');
+  flipped.push({idx:idx,val:val});
+
+  if(flipped.length===2) {
+    moves++;
+    document.getElementById('moveNum').textContent=moves;
+    canFlip=false;
+
+    if(flipped[0].val===flipped[1].val) {
+      // Eşleşti!
+      setTimeout(function(){
+        flipped.forEach(function(f){
+          var c=document.getElementById('card'+f.idx);
+          c.classList.remove('flipped'); c.classList.add('matched');
+        });
+        matchCount++;
+        document.getElementById('matchNum').textContent=matchCount;
+        flipped=[]; canFlip=true;
+
+        if(matchCount===cardCount/2) {
+          clearInterval(timerInterval);
+          var key=currentTheme+'_'+cardCount;
+          if(!best[key]||moves<best[key]) best[key]=moves;
+          document.getElementById('bestNum').textContent=best[key];
+          setTimeout(showWin, 500);
+        }
+      }, 500);
+    } else {
+      // Eşleşmedi
+      setTimeout(function(){
+        flipped.forEach(function(f){ document.getElementById('card'+f.idx).classList.remove('flipped'); });
+        flipped=[]; canFlip=true;
+      }, 900);
+    }
+  }
+}
+
+function showWin() {
+  confetti();
+  var m=Math.floor(seconds/60), s=seconds%60;
+  document.getElementById('winStats').textContent=moves+' hamlede, '+(m<10?'0':'')+m+':'+(s<10?'0':'')+s+' sürede tamamladın! 🎉';
+  document.getElementById('winOverlay').classList.add('show');
+}
+
+function confetti() {
+  var colors=['#ffd700','#ff6b9d','#7b1fa2','#2196f3','#4caf50','#ff5722'];
+  for(var i=0;i<30;i++){
+    (function(i){setTimeout(function(){
+      var el=document.createElement('div'); el.className='confetti-piece';
+      el.style.left=Math.random()*100+'vw'; el.style.top='-20px';
+      el.style.background=colors[Math.floor(Math.random()*colors.length)];
+      el.style.animationDuration=(1.5+Math.random())+'s';
+      document.body.appendChild(el);
+      setTimeout(function(){document.body.removeChild(el);},3000);
+    },i*60);})(i);
+  }
+}
+
+restart();
+</script>
+</body>
+</html>
