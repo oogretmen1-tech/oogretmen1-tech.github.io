@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Acil Tahliye Planı – Taylıca İlkokulu</title>
+<style>
+@page { size: A4 landscape; margin: 7mm; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  background: white; color: #000;
+  width: 283mm; height: 196mm;
+  display: flex; flex-direction: column;
+  gap: 3px; padding: 2px;
+}
+
+header {
+  background: #000; color: #fff;
+  display: flex; align-items: center;
+  justify-content: center; gap: 10px;
+  padding: 5px 12px; font-size: 12.5pt;
+  font-weight: 900; letter-spacing: 2px; flex-shrink: 0;
+}
+header .sub { font-size: 7pt; opacity:.5; font-weight:400; letter-spacing:1px; margin-left:6px; }
+
+.main { display:flex; gap:5px; flex:1; min-height:0; }
+
+/* ══ FLOOR PLAN ══ */
+.floor-plan {
+  flex:1; border:2px solid #000;
+  padding:3px 4px 3px 4px;
+  display:flex; flex-direction:column; gap:1px;
+  min-width:0;
+}
+.sec { font-size:4.8pt; color:#999; text-align:center; letter-spacing:2.5px; text-transform:uppercase; flex-shrink:0; }
+
+/*
+  13-column grid — back=13 rooms, front=12 rooms (1-col step on right)
+  col 7 = Öğretmenler Odası (back row) = ANA GİRİŞ (front row) — ALIGNED
+  8A sınıfı is in the FRONT row, between Görsel and Kazan (col 11)
+*/
+.building {
+  display:grid;
+  grid-template-columns: repeat(13, 1fr);
+  grid-template-rows: 1fr 24px 1fr 10px;
+  flex:1; min-height:0;
+}
+
+/* ── base room ── */
+.room {
+  border:1px solid #000;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center; font-size:5.5pt; font-weight:bold;
+  padding:1px; line-height:1.2; overflow:hidden;
+  position:relative;
+}
+.ico  { font-size:9.5pt; line-height:1; }
+.ico2 { font-size:7.5pt; line-height:1; }
+
+/* door arc — quarter circle in bottom-right corner */
+.room::after {
+  content:'';
+  position:absolute;
+  bottom:2px; right:2px;
+  width:9px; height:9px;
+  border:1.2px solid #555;
+  border-radius:9px 0 0 0;
+  border-right:none; border-bottom:none;
+}
+/* WC and entrance rooms — no door arc needed (or different) */
+.no-arc::after { display:none; }
+
+/* room types */
+.r-wc    { background:#e0e0e0; }
+.r-cls   { background:#fff; }
+.r-ogrt  { background:#c2c2c2; }
+.r-ana   { background:#111; color:#fff; }
+.r-admin { background:#f0f0f0; }
+
+/* ── perimeter borders ── */
+/* back row outer walls */
+.bk          { border-top:2.5px solid #000; }
+.bk.c1       { border-left:2.5px solid #000; }
+.bk.c13      { border-right:2.5px solid #000; }
+
+/* front row outer walls */
+.fr          { border-bottom:2.5px solid #000; }
+.fr.c1       { border-left:2.5px solid #000; }
+.fr.c12      { border-right:2.5px solid #000; }
+
+/* exterior step cell (col 13, row 3) — 1-column step */
+.ext {
+  background:white; border:none;
+  border-top:2.5px solid #000;
+  border-right:2.5px solid #000;
+}
+
+/* ── corridor ── */
+.corridor {
+  grid-column:1/-1; grid-row:2;
+  background:#f5f5f5;
+  border-left:2.5px solid #000;
+  border-right:2.5px solid #000;
+  border-top:1px solid #000;
+  border-bottom:1px solid #000;
+  display:flex; align-items:center; position:relative;
+}
+.dash {
+  position:absolute; left:0; right:0; top:50%;
+  border-top:2px dashed #333; pointer-events:none;
+}
+.c-exit {
+  position:absolute; z-index:3; background:#f5f5f5;
+  padding:0 5px; font-size:8pt; font-weight:900;
+  top:50%; transform:translateY(-50%); white-space:nowrap;
+  display:flex; align-items:center; gap:2px;
+}
+.c-exit.L { left:3px; }
+.c-exit.R { right:3px; }
+.c-lbl {
+  position:absolute; left:50%; top:50%;
+  transform:translate(-50%,-50%);
+  z-index:3; background:#f5f5f5;
+  padding:0 6px; font-size:4.8pt; color:#aaa;
+  letter-spacing:3px; font-weight:400;
+}
+
+/* ── entrance protrusion row (row 4, col 7 only) ── */
+.entrance-proto {
+  grid-column:7; grid-row:4;
+  border-left:2.5px solid #000;
+  border-right:2.5px solid #000;
+  border-bottom:2.5px solid #000;
+  background:#333;
+}
+/* the other cells in row 4 — invisible */
+.row4-blank { grid-row:4; border:none; background:transparent; }
+
+/* exit label */
+.ana-lbl {
+  display:flex; align-items:center; justify-content:center;
+  gap:5px; font-size:7.5pt; font-weight:900; letter-spacing:.5px; flex-shrink:0;
+}
+.uu { font-size:14pt; line-height:1; }
+
+/* ══ INFO PANEL ══ */
+.info-panel { width:106px; display:flex; flex-direction:column; gap:4px; flex-shrink:0; }
+.ibox { border:1.5px solid #000; padding:3px 4px; }
+.ibox-title {
+  background:#000; color:#fff; font-size:6pt; font-weight:900;
+  text-align:center; padding:2px 3px; margin:-3px -4px 3px -4px; letter-spacing:.5px;
+}
+.leg-row { display:flex; align-items:center; gap:3px; margin-bottom:2px; font-size:5.8pt; }
+.l-i { width:13px; text-align:center; font-size:9pt; flex-shrink:0; }
+.emg { font-size:7.5pt; font-weight:900; display:flex; align-items:center; gap:3px; margin-bottom:2px; }
+.ins { font-size:5.8pt; margin-bottom:2px; line-height:1.4; }
+.asm-box { border:1.5px solid #000; padding:3px 4px; text-align:center; }
+.asm-ttl { background:#000; color:#fff; font-size:6pt; font-weight:900; text-align:center; padding:2px; margin:-3px -4px 4px -4px; }
+.warn { border:2px solid #000; padding:5px 4px; text-align:center; font-size:6.5pt; font-weight:900; line-height:1.7; margin-top:auto; }
+.sp { flex:1; }
+</style>
+</head>
+<body>
+
+<header>
+  ⚠ &nbsp;ACİL TAHLİYE PLANI &nbsp;–&nbsp; TAYLICA İLKOKULU
+  <span class="sub">ŞANLIURFA</span>
+</header>
+
+<div class="main">
+
+  <!-- ══ PLAN ══ -->
+  <div class="floor-plan">
+
+    <div class="sec">▲ &nbsp;a r k a &nbsp;—&nbsp; s ı n ı f l a r&nbsp; ▲</div>
+
+    <div class="building">
+
+      <!-- ═══ ARKA SIRA — 13 oda (grid-row 1) ═══ -->
+      <div class="room r-wc bk c1 no-arc" style="grid-column:1;grid-row:1">
+        <span class="ico">♀</span>Kad.<br>Öğrt.<br>WC
+      </div>
+      <div class="room r-wc bk no-arc" style="grid-column:2;grid-row:1">
+        <span class="ico">♀</span>Kız<br>Öğr.<br>WC
+      </div>
+      <div class="room r-cls bk" style="grid-column:3;grid-row:1">
+        <span class="ico2">🎒</span>ANA<br>SINIFI
+      </div>
+      <div class="room r-cls bk" style="grid-column:4;grid-row:1">
+        1A<br><span style="font-size:4.5pt">SINIFI</span>
+      </div>
+      <div class="room r-cls bk" style="grid-column:5;grid-row:1">
+        2A<br><span style="font-size:4.5pt">SINIFI</span>
+      </div>
+      <div class="room r-cls bk" style="grid-column:6;grid-row:1">
+        3A<br><span style="font-size:4.5pt">SINIFI</span>
+      </div>
+
+      <!-- ★ COL 7 – ÖĞRETMENLER ODASI ★ -->
+      <div class="room r-ogrt bk" style="grid-column:7;grid-row:1">
+        <span class="ico2">📋</span>ÖĞRET-<br>MENLER<br>ODASI
+      </div>
+
+      <div class="room r-cls bk" style="grid-column:8;grid-row:1">
+        4A<br><span style="font-size:4.5pt">SINIFI</span>
+      </div>
+      <div class="room r-cls bk" style="grid-column:9;grid-row:1">
+        5A<br><span style="font-size:4.5pt">SINIFI</span>
+      </div>
+      <div class="room r-cls bk" style="grid-column:10;grid-row:1">
+        6A<br><span style="font-size:4.5pt">SINIFI</span>
+      </div>
+      <div class="room r-cls bk" style="grid-column:11;grid-row:1">
+        7A<br><span style="font-size:4.5pt">SINIFI</span>
+      </div>
+      <div class="room r-wc bk no-arc" style="grid-column:12;grid-row:1">
+        <span class="ico">♂</span>Erk.<br>Öğr.<br>WC
+      </div>
+      <div class="room r-wc bk c13 no-arc" style="grid-column:13;grid-row:1">
+        <span class="ico">♂</span>Erk.<br>Öğrt.<br>WC
+      </div>
+
+      <!-- ═══ KORİDOR — çıkışlar uçlarda (grid-row 2) ═══ -->
+      <div class="corridor" style="grid-column:1/-1;grid-row:2">
+        <div class="dash"></div>
+        <div class="c-exit L">🚪 ← ÇIKIŞ</div>
+        <div class="c-lbl">K O R İ D O R</div>
+        <div class="c-exit R">ÇIKIŞ → 🚪</div>
+      </div>
+
+      <!-- ═══ ÖN SIRA — 12 oda (grid-row 3) ═══
+           8A sınıfı: col 11 — görsel(col 10) ile kazan(col 12) arasında ✓ -->
+      <div class="room r-admin fr c1" style="grid-column:1;grid-row:3">
+        <span class="ico2">🕌</span>MESCİT
+      </div>
+      <div class="room r-admin fr" style="grid-column:2;grid-row:3">
+        <span class="ico2">🔬</span>FEN<br>LAB.
+      </div>
+      <div class="room r-admin fr" style="grid-column:3;grid-row:3">
+        <span class="ico2">📚</span>KÜTÜP-<br>HANE
+      </div>
+      <div class="room r-admin fr" style="grid-column:4;grid-row:3">
+        <span class="ico2">🏢</span>MÜDÜR<br>ODASI
+      </div>
+      <div class="room r-admin fr" style="grid-column:5;grid-row:3">
+        <span class="ico2">💬</span>REH-<br>BERLİK
+      </div>
+      <div class="room r-admin fr" style="grid-column:6;grid-row:3">
+        <span class="ico2">🧹</span>HİZMETLİ<br>ODASI
+      </div>
+
+      <!-- ★ COL 7 – ANA GİRİŞ (aligned with Öğretmenler above) ★ -->
+      <div class="room r-ana fr no-arc" style="grid-column:7;grid-row:3">
+        <span class="ico">🚪</span>ANA<br>GİRİŞ<br><span style="font-size:12pt">↓</span>
+      </div>
+
+      <div class="room r-admin fr" style="grid-column:8;grid-row:3">
+        <span class="ico2">👔</span>MÜDÜR<br>YRD.
+      </div>
+      <div class="room r-admin fr" style="grid-column:9;grid-row:3">
+        <span class="ico2">🍽️</span>YEMEK-<br>HANE
+      </div>
+      <div class="room r-admin fr" style="grid-column:10;grid-row:3">
+        <span class="ico2">🎨</span>GÖRSEL<br>SANAT
+      </div>
+
+      <!-- ★ 8A SINIFI — col 11, görsel ile kazan arasında ★ -->
+      <div class="room r-cls fr" style="grid-column:11;grid-row:3">
+        8A<br><span style="font-size:4.5pt">SINIFI</span>
+      </div>
+
+      <div class="room r-admin fr c12" style="grid-column:12;grid-row:3">
+        <span class="ico2">⚙️</span>KAZAN<br>DAİRESİ
+      </div>
+
+      <!-- Küçük step (tek sütun — col 13, row 3) -->
+      <div class="ext" style="grid-column:13;grid-row:3"></div>
+
+      <!-- ═══ ROW 4 — Giriş girintisi (sadece col 7) ═══ -->
+      <div class="row4-blank" style="grid-column:1/7;grid-row:4"></div>
+      <div class="entrance-proto" style="grid-column:7;grid-row:4"></div>
+      <div class="row4-blank" style="grid-column:8/14;grid-row:4"></div>
+
+    </div><!-- /building -->
+
+    <div class="ana-lbl">
+      <span class="uu">↑</span>
+      ANA GİRİŞ / ACİL ÇIKIŞ KAPISI
+      <span class="uu">↑</span>
+    </div>
+
+    <div class="sec">▼ &nbsp;ö n &nbsp;—&nbsp; i d a r i &nbsp;v e &nbsp;ö z e l &nbsp;o d a l a r&nbsp; ▼</div>
+
+  </div><!-- /floor-plan -->
+
+  <!-- ══ INFO PANEL ══ -->
+  <div class="info-panel">
+
+    <div class="ibox">
+      <div class="ibox-title">LEJANT</div>
+      <div class="leg-row"><span class="l-i" style="font-size:11pt">→</span>Tahliye Yönü</div>
+      <div class="leg-row"><span class="l-i">🚪</span>Acil Çıkış Kapısı</div>
+      <div class="leg-row"><span class="l-i">🧯</span>Yangın Söndürücü</div>
+      <div class="leg-row"><span class="l-i">🔔</span>Yangın Alarm Butonu</div>
+      <div class="leg-row"><span class="l-i">⚡</span>Elektrik Tehlikesi</div>
+      <div class="leg-row"><span class="l-i">⊕</span>Toplanma Alanı</div>
+    </div>
+
+    <div class="ibox">
+      <div class="ibox-title">ACİL DURUMDA YAPILACAKLAR</div>
+      <div class="ins">1. Sakin olun.</div>
+      <div class="ins">2. En yakın çıkışa yönelin.</div>
+      <div class="ins">3. Bina dışına çıkın.</div>
+      <div class="ins">4. Toplanma alanına gidin.</div>
+      <div class="ins">5. Yetkililerin talimatlarını bekleyin.</div>
+    </div>
+
+    <div class="ibox">
+      <div class="ibox-title">ACİL DURUM NUMARALARI</div>
+      <div class="emg">📞 112 ACİL</div>
+      <div class="emg">📞 110 İTFAİYE</div>
+      <div class="emg">📞 155 POLİS</div>
+      <div class="emg">📞 156 JANDARMA</div>
+    </div>
+
+    <div class="asm-box">
+      <div class="asm-ttl">TOPLANMA ALANI</div>
+      <div style="font-size:22pt">🌳</div>
+      <div style="font-size:7.5pt;font-weight:900;margin-top:2px">OKUL BAHÇESİ</div>
+    </div>
+
+    <div class="sp"></div>
+
+    <div class="warn">
+      YANGIN ANINDA<br>PANİK YAPMAYIN!<br>📞 &nbsp;112'Yİ ARAYIN!
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>
