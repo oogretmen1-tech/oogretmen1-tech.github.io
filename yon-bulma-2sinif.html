@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yön Bulma – 2. Sınıf</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--sari:#FFD93D;--kirmizi:#FF6B6B;--mavi:#4ECDC4;--yesil:#6BCB77;--mor:#C77DFF;--turuncu:#FF9F43;--bg:#FFFBF0;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);}
+header{background:linear-gradient(160deg,#FF9F43 0%,#FFD93D 60%,#6BCB77 100%);padding:28px 16px 18px;text-align:center;overflow:hidden;position:relative;}
+header h1{font-family:'Fredoka One',cursive;font-size:clamp(2rem,6vw,3.2rem);color:#fff;text-shadow:3px 4px 0 rgba(0,0,0,.12);position:relative;z-index:1;}
+header p{color:rgba(255,255,255,.92);font-weight:700;font-size:1rem;margin-top:5px;position:relative;z-index:1;}
+.dl-btn{display:inline-block;margin-top:12px;background:#fff;color:var(--turuncu);font-family:'Fredoka One',cursive;font-size:1rem;padding:10px 26px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.15);transition:transform .2s;position:relative;z-index:1;}
+.dl-btn:hover{transform:translateY(-3px);}
+nav{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;padding:12px 10px;background:#fff;border-bottom:3px solid #f0e8d8;position:sticky;top:0;z-index:100;box-shadow:0 3px 12px rgba(0,0,0,.08);}
+nav button{font-family:'Fredoka One',cursive;font-size:.85rem;padding:8px 15px;border:3px solid transparent;border-radius:50px;cursor:pointer;transition:all .2s;background:#f5f0e8;color:#7a5c3a;}
+nav button.active,nav button:hover{background:var(--turuncu);color:#fff;border-color:#e8892a;transform:translateY(-2px);box-shadow:0 4px 12px rgba(255,159,67,.35);}
+.section{display:none;padding:24px 14px 50px;max-width:880px;margin:0 auto;}
+.section.active{display:block;animation:pop .35s ease;}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border-radius:24px;padding:24px;margin-bottom:20px;box-shadow:0 5px 24px rgba(0,0,0,.07);border:2px solid #f0e8d8;}
+.card-title{font-family:'Fredoka One',cursive;font-size:1.5rem;margin-bottom:14px;}
+.info{border-radius:14px;padding:14px 18px;margin:10px 0;font-size:1rem;font-weight:700;line-height:1.65;}
+.info-sari{background:#fffbe6;border-left:5px solid var(--sari);color:#856404;}
+.info-mavi{background:#e8fafa;border-left:5px solid var(--mavi);color:#0e7490;}
+.info-yesil{background:#f0fdf4;border-left:5px solid var(--yesil);color:#166534;}
+.info-mor{background:#faf5ff;border-left:5px solid var(--mor);color:#6b21a8;}
+.info-kirmizi{background:#fff1f1;border-left:5px solid var(--kirmizi);color:#991b1b;}
+.info-turuncu{background:#fff7ed;border-left:5px solid var(--turuncu);color:#9a3412;}
+.btn{font-family:'Fredoka One',cursive;padding:10px 22px;border:none;border-radius:50px;cursor:pointer;font-size:.95rem;transition:all .2s;margin:4px;}
+.btn-turuncu{background:var(--turuncu);color:#fff;}.btn-turuncu:hover{background:#e8892a;transform:translateY(-2px);}
+.btn-mavi{background:var(--mavi);color:#fff;}.btn-mavi:hover{background:#3ab8b0;transform:translateY(-2px);}
+.btn-yesil{background:var(--yesil);color:#fff;}.btn-yesil:hover{background:#55b863;transform:translateY(-2px);}
+.btn-kirmizi{background:var(--kirmizi);color:#fff;}.btn-kirmizi:hover{background:#e05555;transform:translateY(-2px);}
+.btn-gray{background:#94a3b8;color:#fff;}.btn-gray:hover{background:#7a8fa3;transform:translateY(-2px);}
+.ctrl{text-align:center;margin:14px 0;}
+.story-box{background:linear-gradient(135deg,#fff9e6,#fff3cc);border:2px solid var(--sari);border-radius:18px;padding:18px 20px;margin:14px 0;position:relative;}
+.story-box::before{content:'📖';position:absolute;top:-14px;left:16px;font-size:1.4rem;background:#fff;padding:0 4px;}
+.story-box p{font-size:1rem;font-weight:700;line-height:1.7;color:#3d2b00;}
+
+/* PUSULA */
+.pusula-wrap{display:flex;justify-content:center;margin:20px 0;}
+.pusula{width:220px;height:220px;border-radius:50%;background:radial-gradient(circle at 40% 40%,#fff,#f0f0f0);border:4px solid #2c3e50;position:relative;box-shadow:0 6px 20px rgba(0,0,0,.15);}
+.yon-btn{position:absolute;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:8px 14px;border-radius:50px;border:none;cursor:pointer;transition:all .2s;}
+.yon-btn:hover{transform:scale(1.1);}
+.yon-btn.aktif{transform:scale(1.15);box-shadow:0 0 0 3px rgba(255,255,255,.8);}
+.yon-kuzey{top:6px;left:50%;transform:translateX(-50%);background:#FF6B6B;color:#fff;}
+.yon-guney{bottom:6px;left:50%;transform:translateX(-50%);background:#4ECDC4;color:#fff;}
+.yon-dogu{right:6px;top:50%;transform:translateY(-50%);background:#FFD93D;color:#2c3e50;}
+.yon-bati{left:6px;top:50%;transform:translateY(-50%);background:#6BCB77;color:#fff;}
+.pusula-orta{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:1.8rem;}
+.yon-aciklama{text-align:center;font-family:'Fredoka One',cursive;font-size:1.1rem;margin-top:10px;min-height:28px;color:var(--turuncu);}
+
+/* GÜNEŞ YÖNTEMI */
+.gunes-sahne{display:flex;flex-direction:column;align-items:center;margin:16px 0;}
+.gunes-zemin{width:100%;max-width:400px;height:180px;background:linear-gradient(to bottom,#87CEEB 0%,#87CEEB 60%,#90EE90 60%,#90EE90 100%);border-radius:16px;position:relative;overflow:hidden;}
+.gunes-obj{position:absolute;font-size:2rem;cursor:pointer;transition:all .3s;user-select:none;}
+.gunes-ok{position:absolute;font-size:1.5rem;opacity:0;transition:opacity .4s;}
+.gunes-ok.show{opacity:1;}
+
+/* HARİTA */
+.harita{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin:14px 0;max-width:340px;margin-left:auto;margin-right:auto;}
+.harita-kare{width:100%;aspect-ratio:1;border-radius:8px;border:2px solid #dee2e6;display:flex;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer;transition:all .2s;background:#f8f9fa;}
+.harita-kare:hover{background:var(--sari);transform:scale(1.05);}
+.harita-kare.aktif{background:var(--turuncu);border-color:#e8892a;}
+.harita-kare.hedef{background:var(--yesil);border-color:#55b863;animation:yanip 1s infinite;}
+@keyframes yanip{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* QUIZ */
+.quiz-soru{padding:16px 18px;background:#fff7ed;border-radius:14px;border:2px solid var(--turuncu);margin-bottom:14px;}
+.quiz-soru p{font-size:1rem;font-weight:800;color:#9a3412;margin-bottom:10px;}
+.quiz-sec{display:flex;flex-wrap:wrap;gap:7px;}
+.quiz-btn{font-family:'Fredoka One',cursive;padding:9px 20px;border:3px solid var(--turuncu);border-radius:50px;background:#fff;cursor:pointer;font-size:.95rem;transition:all .2s;color:var(--turuncu);}
+.quiz-btn:hover{background:var(--turuncu);color:#fff;}
+.quiz-btn.dogru{background:#27AE60!important;color:#fff!important;border-color:#1e8449!important;}
+.quiz-btn.yanlis{background:#E74C3C!important;color:#fff!important;border-color:#c0392b!important;}
+.quiz-fb{font-size:.92rem;font-weight:800;margin-top:7px;}
+.quiz-skor{text-align:center;font-size:1.3rem;font-weight:900;padding:18px;border-radius:16px;background:#fff7ed;border:3px solid var(--turuncu);color:#9a3412;display:none;margin-top:14px;font-family:'Fredoka One',cursive;}
+</style>
+</head>
+<body>
+<header>
+  <h1>🧭 Yön Bulma</h1>
+  <p>2. Sınıf Matematik · Taylıca İlkokulu</p>
+  <button class="dl-btn" onclick="indir()">⬇ Sayfayı İndir</button>
+</header>
+<nav>
+  <button class="active" onclick="goster('nedir',this)">💡 Yönler Nedir?</button>
+  <button onclick="goster('gunes',this)">☀️ Güneşten Yön Bul</button>
+  <button onclick="goster('pusula',this)">🧭 Pusula</button>
+  <button onclick="goster('harita',this)">🗺️ Harita Oyunu</button>
+  <button onclick="goster('alistirma',this)">🎯 Alıştırma</button>
+</nav>
+
+<!-- 1. YÖNLER NEDİR -->
+<div id="nedir" class="section active">
+  <div class="card">
+    <div class="card-title" style="color:var(--turuncu)">💡 Yönler Nedir?</div>
+    <div class="story-box">
+      <p>Büyükbaban sana dedi ki: "Kaybolursan güneşe bak! Sabah güneş doğduğu yön <b>doğu</b>, battığı yön <b>batı</b>dır. Sırtın batıya dönükse önün <b>doğu</b>, sağın <b>kuzey</b>, solun <b>güney</b> olur."<br><br>
+      Yönleri bilmek bizi kaybolmaktan korur!</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0;">
+      <div style="background:#fff1f1;border:2px solid var(--kirmizi);border-radius:16px;padding:14px;text-align:center;">
+        <div style="font-size:2rem;">⬆️</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--kirmizi);">KUZEY</div>
+        <div style="font-size:.85rem;font-weight:700;color:#666;">Kutup yıldızı yönü</div>
+      </div>
+      <div style="background:#e8fafa;border:2px solid var(--mavi);border-radius:16px;padding:14px;text-align:center;">
+        <div style="font-size:2rem;">⬇️</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--mavi);">GÜNEY</div>
+        <div style="font-size:.85rem;font-weight:700;color:#666;">Sıcak bölgeler yönü</div>
+      </div>
+      <div style="background:#fffbe6;border:2px solid var(--sari);border-radius:16px;padding:14px;text-align:center;">
+        <div style="font-size:2rem;">➡️</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1.2rem;color:#856404;">DOĞU</div>
+        <div style="font-size:.85rem;font-weight:700;color:#666;">Güneş buradan doğar ☀️</div>
+      </div>
+      <div style="background:#f0fdf4;border:2px solid var(--yesil);border-radius:16px;padding:14px;text-align:center;">
+        <div style="font-size:2rem;">⬅️</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--yesil);">BATI</div>
+        <div style="font-size:.85rem;font-weight:700;color:#666;">Güneş buraya batar 🌅</div>
+      </div>
+    </div>
+    <div class="info info-sari">💡 Kolay hatırlama: <b>Kuzey</b> yukarı, <b>Güney</b> aşağı, <b>Doğu</b> sağ, <b>Batı</b> sol — haritada!</div>
+  </div>
+</div>
+
+<!-- 2. GÜNEŞTEN YÖN -->
+<div id="gunes" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--sari)">☀️ Güneşten Yön Bul</div>
+    <div class="info info-sari">Güneş her sabah <b>doğudan</b> doğar, her akşam <b>batıya</b> batar. Bu bilgiyle yönümüzü bulabiliriz!</div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--turuncu)">🎮 Sabah mı Akşam mı?</div>
+    <div id="gunesSenaryo" class="info info-turuncu" style="font-size:1.1rem;"></div>
+    <div style="background:linear-gradient(to bottom,#87CEEB,#90EE90);border-radius:20px;padding:20px;margin:14px 0;text-align:center;position:relative;min-height:140px;" id="gunesSahne">
+    </div>
+    <div id="gunesCevap" class="info info-yesil" style="display:none;text-align:center;font-family:'Fredoka One',cursive;font-size:1.1rem;"></div>
+    <div class="ctrl">
+      <button class="btn btn-sari" style="background:var(--sari);color:#2c3e50;" onclick="gunesGoster()">☀️ Göster</button>
+      <button class="btn btn-turuncu" onclick="gunesYeni()">▶ Yeni Soru</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--yesil)">🌿 Doğadan Yön Bulma</div>
+    <div class="info info-yesil">🌱 <b>Yosun:</b> Ağaçların kuzey tarafında yetişir — güneş görmez!</div>
+    <div class="info info-sari">🐜 <b>Karınca yuvası:</b> Genellikle güneye bakan tarafta olur — ısınmak için!</div>
+    <div class="info info-mavi">⭐ <b>Kutup yıldızı:</b> Gece gökyüzünde sabit kalır, hep kuzeyi gösterir.</div>
+  </div>
+</div>
+
+<!-- 3. PUSULA -->
+<div id="pusula" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--mor)">🧭 Pusula</div>
+    <div class="info info-mor">Pusula, manyetik iğnesiyle hep <b>kuzeyi</b> gösterir. Pusulaya bakarak kaybolmayız!</div>
+    <div class="pusula-wrap">
+      <div>
+        <div class="pusula">
+          <button class="yon-btn yon-kuzey" onclick="yonAc('Kuzey','⬆️ Kuzey — Kutup yıldızı yönü. Türkiye\'nin kuzeyi Karadeniz!')">K</button>
+          <button class="yon-btn yon-guney" onclick="yonAc('Güney','⬇️ Güney — Sıcak bölgeler yönü. Türkiye\'nin güneyi Akdeniz!')">G</button>
+          <button class="yon-btn yon-dogu" onclick="yonAc('Doğu','➡️ Doğu — Güneş doğar! Türkiye\'nin doğusunda dağlar var.')">D</button>
+          <button class="yon-btn yon-bati" onclick="yonAc('Batı','⬅️ Batı — Güneş batar! Türkiye\'nin batısında Ege Denizi var.')">B</button>
+          <div class="pusula-orta">🧭</div>
+        </div>
+        <div class="yon-aciklama" id="yonAciklama">Bir yöne tıkla!</div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--mavi)">🏫 Okul Çevremizde Yönler</div>
+    <div class="info info-mavi">Okula girişinde dur. Yüzün okul kapısına dönük. Sağ tarafın <b>hangi yön?</b></div>
+    <div id="okulYon" style="display:flex;flex-direction:column;gap:10px;margin:14px 0;"></div>
+    <div class="ctrl">
+      <button class="btn btn-mavi" onclick="okulGoster()">🏫 Okulda Yönler</button>
+    </div>
+  </div>
+</div>
+
+<!-- 4. HARİTA OYUNU -->
+<div id="harita" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--yesil)">🗺️ Harita Oyunu</div>
+    <div class="info info-yesil">Yönergeleri takip ederek haritada doğru yere ulaş!</div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--mavi)">🎮 Yolu Bul!</div>
+    <div id="haritaSenaryo" class="info info-sari" style="font-size:1rem;"></div>
+    <div style="text-align:center;">
+      <div style="display:inline-flex;flex-direction:column;align-items:center;gap:6px;margin:14px 0;">
+        <div style="font-family:'Fredoka One',cursive;font-size:.8rem;color:#888;">KUZEY ⬆️</div>
+        <div class="harita" id="haritaGrid"></div>
+        <div style="font-family:'Fredoka One',cursive;font-size:.8rem;color:#888;">GÜNEY ⬇️</div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;max-width:340px;margin:0 auto;">
+      <span style="font-family:'Fredoka One',cursive;font-size:.8rem;color:#888;">⬅️ BATI</span>
+      <span style="font-family:'Fredoka One',cursive;font-size:.8rem;color:#888;">DOĞU ➡️</span>
+    </div>
+    <div id="haritaSonuc" class="info info-yesil" style="display:none;text-align:center;margin-top:12px;font-family:'Fredoka One',cursive;font-size:1.1rem;"></div>
+    <div class="ctrl">
+      <button class="btn btn-yesil" onclick="haritaKontrol()">✅ Kontrol Et</button>
+      <button class="btn btn-gray" onclick="haritaReset()">🔄 Sıfırla</button>
+      <button class="btn btn-turuncu" onclick="haritaYeni()">🔀 Yeni Rota</button>
+    </div>
+  </div>
+</div>
+
+<!-- 5. ALIŞTIRMA -->
+<div id="alistirma" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--kirmizi)">🎯 Alıştırma Zamanı!</div>
+    <div class="info info-turuncu">Yönleri ne kadar öğrendik? Test edelim!</div>
+  </div>
+  <div id="quizKutu"></div>
+  <div class="quiz-skor" id="quizSkor"></div>
+  <div class="ctrl"><button class="btn btn-kirmizi" onclick="quizBasla()">🔄 Tekrar Başla</button></div>
+</div>
+
+<script>
+function goster(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+function indir(){const blob=new Blob([document.documentElement.outerHTML],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='yon-bulma-2sinif.html';a.click();}
+
+// PUSULA
+function yonAc(yon,aciklama){document.getElementById('yonAciklama').textContent=aciklama;}
+
+// OKUL YÖN
+function okulGoster(){
+  const div=document.getElementById('okulYon');
+  div.innerHTML='';
+  const yonler=[
+    {yon:'Kuzey ⬆️',aciklama:'Okul bahçesinin arka duvarı',renk:'var(--kirmizi)'},
+    {yon:'Güney ⬇️',aciklama:'Okul ana kapısı',renk:'var(--mavi)'},
+    {yon:'Doğu ➡️',aciklama:'Spor sahası',renk:'#856404'},
+    {yon:'Batı ⬅️',aciklama:'Öğretmenler odası',renk:'var(--yesil)'},
+  ];
+  yonler.forEach(y=>{
+    const el=document.createElement('div');
+    el.style.cssText='padding:10px 16px;border-radius:12px;background:#f8f9fa;border:2px solid #dee2e6;display:flex;gap:12px;align-items:center;';
+    el.innerHTML='<span style="font-family:\'Fredoka One\',cursive;font-size:1rem;color:'+y.renk+';min-width:80px;">'+y.yon+'</span>'
+      +'<span style="font-weight:700;font-size:.95rem;">'+y.aciklama+'</span>';
+    div.appendChild(el);
+  });
+}
+
+// GÜNEŞ
+const gunesSorular=[
+  {senaryo:"Sabah 7'de dışarı çıktın. Güneş sağ tarafında. Sen hangi yöne bakıyorsun?",cevap:"Kuzeye bakıyorsun! Çünkü sabah güneş doğudan doğar. Güneş sağında → sağın doğu → yüzün kuzeye! 🌅",pozisyon:"sag"},
+  {senaryo:"Akşam güneş tam karşında batıyor. Sen hangi yöne bakıyorsun?",cevap:"Batıya bakıyorsun! Güneş batıya batar ve tam karşında → yüzün batıya! 🌇",pozisyon:"orta"},
+  {senaryo:"Sabah güneş sol tarafında. Sen hangi yöne bakıyorsun?",cevap:"Güneye bakıyorsun! Sabah güneş doğudan doğar. Güneş solunda → solun doğu → yüzün güneye! 🧭",pozisyon:"sol"},
+];
+let gunesIdx=0;
+function gunesBasla(idx){
+  gunesIdx=idx%gunesSorular.length;
+  const q=gunesSorular[gunesIdx];
+  document.getElementById('gunesSenaryo').textContent=q.senaryo;
+  const sahne=document.getElementById('gunesSahne');
+  const pos=q.pozisyon==='sag'?'right:20px':q.pozisyon==='sol'?'left:20px':'left:50%;transform:translateX(-50%)';
+  sahne.innerHTML='<div style="position:absolute;top:20px;'+pos+';font-size:2.5rem;">☀️</div>'
+    +'<div style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);font-size:2rem;">🧒</div>';
+  document.getElementById('gunesCevap').style.display='none';
+}
+function gunesGoster(){const q=gunesSorular[gunesIdx];const el=document.getElementById('gunesCevap');el.style.display='block';el.textContent=q.cevap;}
+function gunesYeni(){gunesBasla(gunesIdx+1);}
+gunesBasla(0);
+
+// HARİTA
+const haritaRotalar=[
+  {baslangic:[2,2],hedef:[0,4],adimlar:"Başlangıç noktasından 2 adım kuzeye (yukarı), sonra 2 adım doğuya (sağa) git.",},
+  {baslangic:[4,0],hedef:[2,3],adimlar:"Başlangıç noktasından 2 adım kuzeye (yukarı), sonra 3 adım doğuya (sağa) git.",},
+  {baslangic:[0,0],hedef:[3,4],adimlar:"Başlangıç noktasından 3 adım güneye (aşağı), sonra 4 adım doğuya (sağa) git.",},
+];
+let haritaIdx=0,haritaSecili=null;
+function haritaBasla(idx){
+  haritaIdx=idx%haritaRotalar.length;
+  haritaSecili=null;
+  const r=haritaRotalar[haritaIdx];
+  document.getElementById('haritaSenaryo').innerHTML='🚶 <b>Başlangıç:</b> '+getKare(r.baslangic)+' kutucuğundasın.<br>'+r.adimlar+'<br>Nereye ulaştın? O kutucuğa tıkla!';
+  const grid=document.getElementById('haritaGrid');grid.innerHTML='';
+  for(let i=0;i<5;i++){
+    for(let j=0;j<5;j++){
+      const kare=document.createElement('div');kare.className='harita-kare';
+      kare.dataset.r=i;kare.dataset.c=j;
+      if(i===r.baslangic[0]&&j===r.baslangic[1])kare.textContent='🧒';
+      else kare.textContent=getEmoji(i,j);
+      kare.onclick=function(){
+        document.querySelectorAll('.harita-kare').forEach(k=>k.classList.remove('aktif'));
+        this.classList.add('aktif');
+        haritaSecili=[parseInt(this.dataset.r),parseInt(this.dataset.c)];
+      };
+      grid.appendChild(kare);
+    }
+  }
+  document.getElementById('haritaSonuc').style.display='none';
+}
+function getKare(pos){const harfler=['A','B','C','D','E'];return harfler[pos[1]]+(pos[0]+1);}
+function getEmoji(r,c){const emojiler=['🌳','🏠','🌺','⭐','🎯'];return emojiler[(r*5+c)%5];}
+function haritaKontrol(){
+  if(!haritaSecili){alert('Bir kutucuğa tıkla!');return;}
+  const r=haritaRotalar[haritaIdx];
+  const dogru=haritaSecili[0]===r.hedef[0]&&haritaSecili[1]===r.hedef[1];
+  const el=document.getElementById('haritaSonuc');el.style.display='block';
+  if(dogru){el.className='info info-yesil';el.innerHTML='🎉 Harika! Doğru yere ulaştın! Hedef: '+getKare(r.hedef);}
+  else{el.className='info info-kirmizi';el.innerHTML='❌ Tekrar dene! Doğru yer: '+getKare(r.hedef);const hedef=document.querySelector('[data-r="'+r.hedef[0]+'"][data-c="'+r.hedef[1]+'"]');if(hedef)hedef.classList.add('hedef');}
+}
+function haritaReset(){haritaBasla(haritaIdx);}
+function haritaYeni(){haritaBasla(haritaIdx+1);}
+haritaBasla(0);
+
+// QUIZ
+const quizData=[
+  {s:"☀️ Sabah güneş hangi yönden doğar?",o:["Kuzey","Güney","Doğu","Batı"],c:"Doğu"},
+  {s:"🌅 Akşam güneş hangi yöne batar?",o:["Kuzey","Güney","Doğu","Batı"],c:"Batı"},
+  {s:"🧭 Haritada yukarı hangi yönü gösterir?",o:["Kuzey","Güney","Doğu","Batı"],c:"Kuzey"},
+  {s:"🌿 Yosun ağaçların hangi tarafında yetişir?",o:["Kuzey","Güney","Doğu","Batı"],c:"Kuzey"},
+  {s:"🧒 Yüzün doğuya dönük, sağın hangi yöne bakar?",o:["Kuzey","Güney","Doğu","Batı"],c:"Güney"},
+  {s:"🗺️ Haritada sağ taraf hangi yönü gösterir?",o:["Kuzey","Güney","Doğu","Batı"],c:"Doğu"},
+  {s:"🧭 Pusula iğnesi hep hangi yönü gösterir?",o:["Kuzey","Güney","Doğu","Batı"],c:"Kuzey"},
+  {s:"🏠 Yüzün kuzeye dönük. Sağın hangi yön?",o:["Kuzey","Güney","Doğu","Batı"],c:"Doğu"},
+];
+let qCevap=[];
+function quizBasla(){
+  qCevap=[];document.getElementById('quizSkor').style.display='none';
+  const k=document.getElementById('quizKutu');k.innerHTML='';
+  quizData.forEach((q,qi)=>{
+    const sh=[...q.o].sort(()=>Math.random()-.5);
+    const div=document.createElement('div');div.className='quiz-soru';
+    div.innerHTML='<p>'+(qi+1)+'. '+q.s+'</p>'
+      +'<div class="quiz-sec">'+sh.map(o=>'<button class="quiz-btn" data-qi="'+qi+'" data-v="'+o+'" onclick="qCev(this,'+qi+',\''+o+'\',\''+q.c+'\')">'+o+'</button>').join('')+'</div>'
+      +'<div class="quiz-fb" id="qf'+qi+'"></div>';
+    k.appendChild(div);
+  });
+}
+function qCev(el,qi,val,dogru){
+  document.querySelectorAll('[data-qi="'+qi+'"]').forEach(b=>b.disabled=true);
+  const fb=document.getElementById('qf'+qi);
+  if(val==dogru){el.classList.add('dogru');fb.innerHTML='✅ <span style="color:#166534">Doğru!</span>';qCevap[qi]=true;}
+  else{el.classList.add('yanlis');fb.innerHTML='❌ <span style="color:#991b1b">Doğrusu: '+dogru+'</span>';qCevap[qi]=false;document.querySelector('[data-qi="'+qi+'"][data-v="'+dogru+'"]').classList.add('dogru');}
+  if(qCevap.filter(x=>x!==undefined).length===quizData.length){
+    const puan=qCevap.filter(Boolean).length;const sk=document.getElementById('quizSkor');sk.style.display='block';
+    sk.innerHTML='🏆 Sonuç: '+puan+'/'+quizData.length+' doğru! '+(puan>=7?'Mükemmel! 🌟':puan>=5?'Çok iyi! 👍':'Biraz daha çalışalım! 📚');
+  }
+}
+quizBasla();
+</script>
+</body>
+</html>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eşitlik – 2. Sınıf</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--sari:#FFD93D;--kirmizi:#FF6B6B;--mavi:#4ECDC4;--yesil:#6BCB77;--mor:#C77DFF;--turuncu:#FF9F43;--bg:#FFFBF0;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);}
+header{background:linear-gradient(160deg,#C77DFF 0%,#4ECDC4 60%,#FFD93D 100%);padding:28px 16px 18px;text-align:center;position:relative;overflow:hidden;}
+header::before{content:'';position:absolute;top:-30px;right:-30px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.12);}
+header h1{font-family:'Fredoka One',cursive;font-size:clamp(2rem,6vw,3.2rem);color:#fff;text-shadow:3px 4px 0 rgba(0,0,0,.12);position:relative;z-index:1;}
+header p{color:rgba(255,255,255,.92);font-weight:700;font-size:1rem;margin-top:5px;position:relative;z-index:1;}
+.dl-btn{display:inline-block;margin-top:12px;background:#fff;color:var(--mor);font-family:'Fredoka One',cursive;font-size:1rem;padding:10px 26px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.15);transition:transform .2s;position:relative;z-index:1;}
+.dl-btn:hover{transform:translateY(-3px);}
+nav{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;padding:12px 10px;background:#fff;border-bottom:3px solid #f0e8d8;position:sticky;top:0;z-index:100;box-shadow:0 3px 12px rgba(0,0,0,.08);}
+nav button{font-family:'Fredoka One',cursive;font-size:.85rem;padding:8px 15px;border:3px solid transparent;border-radius:50px;cursor:pointer;transition:all .2s;background:#f5f0e8;color:#7a5c3a;}
+nav button.active,nav button:hover{background:var(--mor);color:#fff;border-color:#9b5dcc;transform:translateY(-2px);box-shadow:0 4px 12px rgba(199,125,255,.35);}
+.section{display:none;padding:24px 14px 50px;max-width:880px;margin:0 auto;}
+.section.active{display:block;animation:pop .35s ease;}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border-radius:24px;padding:24px;margin-bottom:20px;box-shadow:0 5px 24px rgba(0,0,0,.07);border:2px solid #f0e8d8;}
+.card-title{font-family:'Fredoka One',cursive;font-size:1.5rem;margin-bottom:14px;}
+.info{border-radius:14px;padding:14px 18px;margin:10px 0;font-size:1rem;font-weight:700;line-height:1.65;}
+.info-sari{background:#fffbe6;border-left:5px solid var(--sari);color:#856404;}
+.info-mavi{background:#e8fafa;border-left:5px solid var(--mavi);color:#0e7490;}
+.info-yesil{background:#f0fdf4;border-left:5px solid var(--yesil);color:#166534;}
+.info-mor{background:#faf5ff;border-left:5px solid var(--mor);color:#6b21a8;}
+.info-kirmizi{background:#fff1f1;border-left:5px solid var(--kirmizi);color:#991b1b;}
+.info-turuncu{background:#fff7ed;border-left:5px solid var(--turuncu);color:#9a3412;}
+.btn{font-family:'Fredoka One',cursive;padding:10px 22px;border:none;border-radius:50px;cursor:pointer;font-size:.95rem;transition:all .2s;margin:4px;}
+.btn-mor{background:var(--mor);color:#fff;}.btn-mor:hover{background:#9b5dcc;transform:translateY(-2px);}
+.btn-mavi{background:var(--mavi);color:#fff;}.btn-mavi:hover{background:#3ab8b0;transform:translateY(-2px);}
+.btn-yesil{background:var(--yesil);color:#fff;}.btn-yesil:hover{background:#55b863;transform:translateY(-2px);}
+.btn-kirmizi{background:var(--kirmizi);color:#fff;}.btn-kirmizi:hover{background:#e05555;transform:translateY(-2px);}
+.btn-turuncu{background:var(--turuncu);color:#fff;}.btn-turuncu:hover{background:#e8892a;transform:translateY(-2px);}
+.btn-gray{background:#94a3b8;color:#fff;}.btn-gray:hover{background:#7a8fa3;transform:translateY(-2px);}
+.ctrl{text-align:center;margin:14px 0;}
+.story-box{background:linear-gradient(135deg,#faf5ff,#f0e8ff);border:2px solid var(--mor);border-radius:18px;padding:18px 20px;margin:14px 0;position:relative;}
+.story-box::before{content:'📖';position:absolute;top:-14px;left:16px;font-size:1.4rem;background:#fff;padding:0 4px;}
+.story-box p{font-size:1rem;font-weight:700;line-height:1.7;color:#3d0066;}
+.scenario-box{background:#faf5ff;border:2px solid var(--mor);border-radius:16px;padding:14px 18px;margin-bottom:14px;font-size:1.05rem;font-weight:800;line-height:1.55;color:#4a0080;}
+
+/* TERİ - TERAZI */
+.terazi-wrap{display:flex;flex-direction:column;align-items:center;margin:20px 0;}
+.terazi-kol{display:flex;align-items:flex-end;gap:0;position:relative;}
+.terazi-cubuk{width:220px;height:8px;background:linear-gradient(90deg,#8B4513,#D2691E);border-radius:4px;transition:transform .5s cubic-bezier(.34,1.56,.64,1);}
+.terazi-orta{width:10px;height:50px;background:linear-gradient(to bottom,#D2691E,#8B4513);border-radius:3px;position:absolute;left:50%;transform:translateX(-50%);}
+.terazi-kaide{width:60px;height:12px;background:linear-gradient(90deg,#8B4513,#D2691E);border-radius:6px;margin-top:2px;}
+.terazi-taraf{display:flex;flex-direction:column;align-items:center;width:100px;}
+.terazi-ip{width:2px;height:30px;background:#8B4513;margin:0 auto;}
+.terazi-kap{width:80px;min-height:40px;border-radius:0 0 12px 12px;border:3px solid;padding:6px;display:flex;flex-wrap:wrap;gap:3px;justify-content:center;align-items:center;transition:all .4s;}
+.terazi-label{font-family:'Fredoka One',cursive;font-size:1rem;margin-top:6px;}
+
+/* EŞİTLİK DENKLEMİ */
+.denklem{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:16px 0;}
+.denklem-sol,.denklem-sag{background:#f0fdf4;border:3px solid var(--yesil);border-radius:16px;padding:12px 20px;font-family:'Fredoka One',cursive;font-size:1.6rem;color:var(--yesil);min-width:100px;text-align:center;transition:all .4s;}
+.denklem-sol.yanlis,.denklem-sag.yanlis{background:#fff1f1;border-color:var(--kirmizi);color:var(--kirmizi);}
+.denklem-isaret{font-family:'Fredoka One',cursive;font-size:2rem;color:var(--mor);}
+
+/* BOSLUĞU BUL */
+.bosluk-soru{font-family:'Fredoka One',cursive;font-size:1.8rem;text-align:center;margin:16px 0;color:var(--lacivert,#2c3e50);line-height:1.6;}
+.bosluk-input{font-family:'Fredoka One',cursive;font-size:1.6rem;width:70px;text-align:center;border:3px solid var(--mor);border-radius:12px;padding:6px;color:var(--mor);outline:none;}
+.bosluk-input:focus{border-color:var(--mavi);box-shadow:0 0 0 3px rgba(78,205,196,.2);}
+.bosluk-fb{font-family:'Fredoka One',cursive;font-size:1.1rem;text-align:center;margin-top:8px;min-height:28px;}
+
+/* QUIZ */
+.quiz-soru{padding:16px 18px;background:#faf5ff;border-radius:14px;border:2px solid var(--mor);margin-bottom:14px;}
+.quiz-soru p{font-size:1rem;font-weight:800;color:#6b21a8;margin-bottom:10px;}
+.quiz-sec{display:flex;flex-wrap:wrap;gap:7px;}
+.quiz-btn{font-family:'Fredoka One',cursive;padding:9px 20px;border:3px solid var(--mor);border-radius:50px;background:#fff;cursor:pointer;font-size:.95rem;transition:all .2s;color:var(--mor);}
+.quiz-btn:hover{background:var(--mor);color:#fff;}
+.quiz-btn.dogru{background:#27AE60!important;color:#fff!important;border-color:#1e8449!important;}
+.quiz-btn.yanlis{background:#E74C3C!important;color:#fff!important;border-color:#c0392b!important;}
+.quiz-fb{font-size:.92rem;font-weight:800;margin-top:7px;min-height:18px;}
+.quiz-skor{text-align:center;font-size:1.3rem;font-weight:900;padding:18px;border-radius:16px;background:#faf5ff;border:3px solid var(--mor);color:#6b21a8;display:none;margin-top:14px;font-family:'Fredoka One',cursive;}
+</style>
+</head>
+<body>
+<header>
+  <h1>⚖️ Eşitlik</h1>
+  <p>2. Sınıf Matematik · Taylıca İlkokulu</p>
+  <button class="dl-btn" onclick="indir()">⬇ Sayfayı İndir</button>
+</header>
+<nav>
+  <button class="active" onclick="goster('nedir',this)">💡 Eşitlik Nedir?</button>
+  <button onclick="goster('terazi',this)">⚖️ Terazi ile Gör</button>
+  <button onclick="goster('bosluk',this)">❓ Boşluğu Bul</button>
+  <button onclick="goster('carpbol',this)">✖️➗ Çarpma–Bölme</button>
+  <button onclick="goster('alistirma',this)">🎯 Alıştırma</button>
+</nav>
+
+<!-- 1. EŞİTLİK NEDİR -->
+<div id="nedir" class="section active">
+  <div class="card">
+    <div class="card-title" style="color:var(--mor)">💡 Eşitlik Nedir?</div>
+    <div class="story-box">
+      <p>Zeynep'in 6 kalemi var. Ali'nin 4 + 2 kalemi var.<br><br>
+      Zeynep → 6 kalem<br>
+      Ali → 4 + 2 = 6 kalem<br><br>
+      İkisi de aynı! İşte buna <b>eşitlik</b> diyoruz.<br>
+      6 = 4 + 2</p>
+    </div>
+    <div class="info info-mor"><b>Eşitlik:</b> "=" işaretinin iki tarafının sonuçlarının aynı olmasıdır.</div>
+    <div class="info info-sari">"=" işareti <b>"eşittir"</b> anlamına gelir. Sol taraf ile sağ taraf birbirine eşit olmalıdır!</div>
+    <div class="info info-mavi">Eşitliğin sol tarafı = Eşitliğin sağ tarafı<br>Örnek: 3 + 4 = 5 + 2 → 7 = 7 ✅</div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--turuncu)">✅ Doğru mu? Yanlış mı?</div>
+    <div class="info info-yesil">3 + 5 = 8 → Sol: 8, Sağ: 8 → <b>Doğru! ✅</b></div>
+    <div class="info info-kirmizi">4 + 3 = 6 → Sol: 7, Sağ: 6 → <b>Yanlış! ❌</b> (7 ≠ 6)</div>
+    <div class="info info-yesil">2 × 4 = 4 + 4 → Sol: 8, Sağ: 8 → <b>Doğru! ✅</b></div>
+    <div class="info info-kirmizi">3 × 3 = 8 → Sol: 9, Sağ: 8 → <b>Yanlış! ❌</b> (9 ≠ 8)</div>
+  </div>
+</div>
+
+<!-- 2. TERAZİ -->
+<div id="terazi" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--mor)">⚖️ Terazi ile Eşitlik</div>
+    <div class="info info-mor">Eşitliği bir terazi gibi düşünebiliriz. İki kefe de aynı ağırlıkta olunca terazi dengededir — yani <b>eşittir!</b></div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--mavi)">🎮 Denge Kur!</div>
+    <div id="terzSenaryo" class="scenario-box"></div>
+    <div class="terazi-wrap">
+      <div style="display:flex;justify-content:space-around;width:280px;align-items:flex-end;position:relative;">
+        <div class="terazi-taraf">
+          <div class="terazi-ip"></div>
+          <div class="terazi-kap" id="terzSol" style="border-color:var(--kirmizi);background:#fff1f1;"></div>
+          <div class="terazi-label" style="color:var(--kirmizi)" id="terzSolV">0</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div class="terazi-cubuk" id="terzKol"></div>
+          <div class="terazi-orta"></div>
+          <div class="terazi-kaide"></div>
+        </div>
+        <div class="terazi-taraf">
+          <div class="terazi-ip"></div>
+          <div class="terazi-kap" id="terzSag" style="border-color:var(--yesil);background:#f0fdf4;"></div>
+          <div class="terazi-label" style="color:var(--yesil)" id="terzSagV">0</div>
+        </div>
+      </div>
+      <div id="terzDenge" style="font-family:'Fredoka One',cursive;font-size:1.2rem;margin-top:12px;min-height:28px;"></div>
+    </div>
+    <div id="terzDenklem" class="denklem"></div>
+    <div class="ctrl">
+      <button class="btn btn-mor" onclick="terzGoster()">⚖️ Göster</button>
+      <button class="btn btn-gray" onclick="terzReset()">🔄 Sıfırla</button>
+      <button class="btn btn-turuncu" onclick="terzYeni()">🔀 Yeni Örnek</button>
+    </div>
+  </div>
+</div>
+
+<!-- 3. BOŞLUĞU BUL -->
+<div id="bosluk" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--mor)">❓ Boşluğu Bul!</div>
+    <div class="info info-mor">Eşitliğin bir tarafında eksik sayı var. Önce bildiğimiz tarafı hesapla, sonra boşluğu bul!</div>
+    <div class="info info-sari">💡 İpucu: Önce <b>tam olan tarafı</b> hesapla. Sonra boşluklu tarafa o sonucu eşitle!</div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--mavi)">🎮 Boşluğu Doldur!</div>
+    <div id="boslukSenaryo" class="scenario-box"></div>
+    <div class="bosluk-soru" id="boslukSoru"></div>
+    <div class="ctrl">
+      <input class="bosluk-input" type="number" id="boslukInput" min="0" max="99" placeholder="?">
+      <button class="btn btn-mor" onclick="boslukKontrol()">✅ Kontrol Et</button>
+    </div>
+    <div class="bosluk-fb" id="boslukFb"></div>
+    <div class="ctrl" style="margin-top:8px;">
+      <button class="btn btn-gray" onclick="boslukIpucu()">💡 İpucu</button>
+      <button class="btn btn-turuncu" onclick="boslukYeni()">▶ Yeni Soru</button>
+    </div>
+  </div>
+</div>
+
+<!-- 4. ÇARPMA BÖLME EŞİTLİK -->
+<div id="carpbol" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--mor)">✖️➗ Çarpma–Bölme ile Eşitlik</div>
+    <div class="info info-mavi">Eşitliğin bir tarafında çarpma veya bölme işlemi de olabilir. Önce o işlemi çöz, sonra boşluğu bul!</div>
+    <div class="info info-sari">Örnek: <b>15 ÷ 3 = □ + 1</b><br>→ Önce 15 ÷ 3 = 5<br>→ Sonra 5 = □ + 1<br>→ □ = 5 − 1 = <b>4</b></div>
+    <div class="info info-yesil">Örnek: <b>18 ÷ 3 = □ × 2</b><br>→ Önce 18 ÷ 3 = 6<br>→ Sonra 6 = □ × 2<br>→ 2 ile neyi çarparsam 6 yapar? → <b>3</b></div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--mavi)">🎮 Çöz Bakalım!</div>
+    <div id="cbSenaryo" class="scenario-box"></div>
+    <div class="bosluk-soru" id="cbSoru"></div>
+    <div class="ctrl">
+      <input class="bosluk-input" type="number" id="cbInput" min="0" max="99" placeholder="?">
+      <button class="btn btn-mor" onclick="cbKontrol()">✅ Kontrol Et</button>
+    </div>
+    <div class="bosluk-fb" id="cbFb"></div>
+    <div class="ctrl" style="margin-top:8px;">
+      <button class="btn btn-gray" onclick="cbIpucu()">💡 İpucu</button>
+      <button class="btn btn-turuncu" onclick="cbYeni()">▶ Yeni Soru</button>
+    </div>
+  </div>
+</div>
+
+<!-- 5. ALIŞTIRMA -->
+<div id="alistirma" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--kirmizi)">🎯 Alıştırma Zamanı!</div>
+    <div class="info info-mor">Eşitlik konusunu ne kadar öğrendik? Test edelim!</div>
+  </div>
+  <div id="quizKutu"></div>
+  <div class="quiz-skor" id="quizSkor"></div>
+  <div class="ctrl"><button class="btn btn-kirmizi" onclick="quizBasla()">🔄 Tekrar Başla</button></div>
+</div>
+
+<script>
+function goster(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+function indir(){const blob=new Blob([document.documentElement.outerHTML],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='esitlik-2sinif.html';a.click();}
+
+// === TERAZİ ===
+const terzOrnekler=[
+  {sol:"3 + 4",solV:7,sag:"5 + 2",sagV:7,nesne:"⭐"},
+  {sol:"2 × 4",solV:8,sag:"4 + 4",sagV:8,nesne:"✏️"},
+  {sol:"3 × 3",solV:9,sag:"4 + 5",sagV:9,nesne:"🔵"},
+  {sol:"12 ÷ 2",solV:6,sag:"3 + 3",sagV:6,nesne:"🍬"},
+  {sol:"2 + 6",solV:8,sag:"2 × 4",sagV:8,nesne:"📚"},
+  {sol:"15 ÷ 3",solV:5,sag:"2 + 3",sagV:5,nesne:"⭐"},
+];
+let terzIdx=0,terzGosterildi=false;
+function terzBasla(idx){
+  terzIdx=idx%terzOrnekler.length; terzGosterildi=false;
+  const o=terzOrnekler[terzIdx];
+  document.getElementById('terzSenaryo').innerHTML='<strong>'+o.sol+'</strong> ile <strong>'+o.sag+'</strong> eşit mi?';
+  document.getElementById('terzSol').innerHTML='<span style="font-family:\'Fredoka One\',cursive;font-size:1.3rem;color:var(--kirmizi)">'+o.sol+'</span>';
+  document.getElementById('terzSag').innerHTML='<span style="font-family:\'Fredoka One\',cursive;font-size:1.3rem;color:var(--yesil)">'+o.sag+'</span>';
+  document.getElementById('terzSolV').textContent='= ?';
+  document.getElementById('terzSagV').textContent='= ?';
+  document.getElementById('terzKol').style.transform='';
+  document.getElementById('terzDenge').textContent='';
+  document.getElementById('terzDenklem').innerHTML='';
+}
+function terzGoster(){
+  const o=terzOrnekler[terzIdx];
+  document.getElementById('terzSolV').textContent='= '+o.solV;
+  document.getElementById('terzSagV').textContent='= '+o.sagV;
+  const esit=o.solV===o.sagV;
+  document.getElementById('terzKol').style.transform=esit?'':'rotate(5deg)';
+  document.getElementById('terzDenge').innerHTML=esit
+    ?'<span style="color:var(--yesil)">⚖️ Denge kuruldu! Eşit! ✅</span>'
+    :'<span style="color:var(--kirmizi)">⚖️ Denge yok! Eşit değil! ❌</span>';
+  document.getElementById('terzDenklem').innerHTML=
+    '<div class="denklem-sol'+(esit?'':' yanlis')+'">'+o.sol+' = '+o.solV+'</div>'
+    +'<div class="denklem-isaret">'+(esit?'=':'≠')+'</div>'
+    +'<div class="denklem-sag'+(esit?'':' yanlis')+'">'+o.sag+' = '+o.sagV+'</div>';
+}
+function terzReset(){terzBasla(terzIdx);}
+function terzYeni(){terzBasla(terzIdx+1);}
+terzBasla(0);
+
+// === BOŞLUĞU BUL ===
+const boslukSorular=[
+  {metin:"3 + □ = 7",ipucu:"7 − 3 = ?",cevap:4,aciklama:"3 + ? = 7 → ? = 7 − 3 = 4"},
+  {metin:"□ + 4 = 9",ipucu:"9 − 4 = ?",cevap:5,aciklama:"? + 4 = 9 → ? = 9 − 4 = 5"},
+  {metin:"6 + □ = 10",ipucu:"10 − 6 = ?",cevap:4,aciklama:"6 + ? = 10 → ? = 10 − 6 = 4"},
+  {metin:"□ + 3 = 8",ipucu:"8 − 3 = ?",cevap:5,aciklama:"? + 3 = 8 → ? = 8 − 3 = 5"},
+  {metin:"5 + □ = 12",ipucu:"12 − 5 = ?",cevap:7,aciklama:"5 + ? = 12 → ? = 12 − 5 = 7"},
+  {metin:"□ + 6 = 14",ipucu:"14 − 6 = ?",cevap:8,aciklama:"? + 6 = 14 → ? = 14 − 6 = 8"},
+  {metin:"4 + 3 = □ + 2",ipucu:"Önce sol tarafı hesapla: 4 + 3 = ?",cevap:5,aciklama:"Sol: 4+3=7 → 7 = ? + 2 → ? = 7−2 = 5"},
+  {metin:"□ + 5 = 3 + 6",ipucu:"Önce sağ tarafı hesapla: 3 + 6 = ?",cevap:4,aciklama:"Sağ: 3+6=9 → ? + 5 = 9 → ? = 9−5 = 4"},
+];
+let bIdx=0;
+function boslukBasla(idx){
+  bIdx=idx%boslukSorular.length;
+  const q=boslukSorular[bIdx];
+  document.getElementById('boslukSenaryo').innerHTML=q.aciklama.split('→')[0].trim();
+  document.getElementById('boslukSoru').innerHTML=q.metin.replace('□','<input class="bosluk-input" type="number" id="boslukInput" min="0" max="99" placeholder="?">');
+  document.getElementById('boslukFb').textContent='';
+}
+function boslukKontrol(){
+  const inp=document.getElementById('boslukInput');
+  if(!inp)return;
+  const val=parseInt(inp.value);
+  const q=boslukSorular[bIdx];
+  const fb=document.getElementById('boslukFb');
+  if(isNaN(val)){fb.innerHTML='<span style="color:#856404">Bir sayı yaz!</span>';return;}
+  if(val===q.cevap){fb.innerHTML='<span style="color:#166534">✅ Harika! Doğru! Cevap: '+q.cevap+'</span>';inp.style.borderColor='var(--yesil)';}
+  else{fb.innerHTML='<span style="color:#991b1b">❌ Tekrar dene! İpucu: '+q.ipucu+'</span>';inp.style.borderColor='var(--kirmizi)';}
+}
+function boslukIpucu(){document.getElementById('boslukFb').innerHTML='<span style="color:#856404">💡 '+boslukSorular[bIdx].ipucu+'</span>';}
+function boslukYeni(){boslukBasla(bIdx+1);}
+boslukBasla(0);
+
+// === ÇARPMA BÖLME EŞİTLİK ===
+const cbSorular=[
+  {metin:"15 ÷ 3 = □ + 1",ipucu:"Önce 15 ÷ 3 = 5, sonra 5 = ? + 1",cevap:4,aciklama:"15 ÷ 3 = 5 → 5 = □ + 1"},
+  {metin:"18 ÷ 3 = □ × 2",ipucu:"Önce 18 ÷ 3 = 6, sonra 6 = ? × 2",cevap:3,aciklama:"18 ÷ 3 = 6 → 6 = □ × 2"},
+  {metin:"4 × 3 = □ + 2",ipucu:"Önce 4 × 3 = 12, sonra 12 = ? + 2",cevap:10,aciklama:"4 × 3 = 12 → 12 = □ + 2"},
+  {metin:"20 ÷ 4 = □ + 1",ipucu:"Önce 20 ÷ 4 = 5, sonra 5 = ? + 1",cevap:4,aciklama:"20 ÷ 4 = 5 → 5 = □ + 1"},
+  {metin:"3 × 4 = □ × 6",ipucu:"Önce 3 × 4 = 12, sonra 12 = ? × 6",cevap:2,aciklama:"3 × 4 = 12 → 12 = □ × 6"},
+  {metin:"12 ÷ 4 = □ − 1",ipucu:"Önce 12 ÷ 4 = 3, sonra 3 = ? − 1",cevap:4,aciklama:"12 ÷ 4 = 3 → 3 = □ − 1"},
+];
+let cbIdx=0;
+function cbBasla(idx){
+  cbIdx=idx%cbSorular.length;
+  const q=cbSorular[cbIdx];
+  document.getElementById('cbSenaryo').innerHTML=q.aciklama;
+  document.getElementById('cbSoru').innerHTML=q.metin.replace('□','<input class="bosluk-input" type="number" id="cbInput" min="0" max="99" placeholder="?">');
+  document.getElementById('cbFb').textContent='';
+}
+function cbKontrol(){
+  const inp=document.getElementById('cbInput');
+  if(!inp)return;
+  const val=parseInt(inp.value);
+  const q=cbSorular[cbIdx];
+  const fb=document.getElementById('cbFb');
+  if(isNaN(val)){fb.innerHTML='<span style="color:#856404">Bir sayı yaz!</span>';return;}
+  if(val===q.cevap){fb.innerHTML='<span style="color:#166534">✅ Süper! Doğru! Cevap: '+q.cevap+'</span>';inp.style.borderColor='var(--yesil)';}
+  else{fb.innerHTML='<span style="color:#991b1b">❌ Tekrar dene! '+q.ipucu+'</span>';inp.style.borderColor='var(--kirmizi)';}
+}
+function cbIpucu(){document.getElementById('cbFb').innerHTML='<span style="color:#856404">💡 '+cbSorular[cbIdx].ipucu+'</span>';}
+function cbYeni(){cbBasla(cbIdx+1);}
+cbBasla(0);
+
+// === ALIŞTIRMA ===
+const quizData=[
+  {s:"⚖️ 3 + 5 = □ + 4 → □ kaçtır?",o:[2,3,4,5],c:4},
+  {s:"✅ 4 + 6 = 3 + 7 eşitliği doğru mu?",o:["Evet ✅","Hayır ❌"],c:"Evet ✅"},
+  {s:"❓ □ + 3 = 8 → □ kaçtır?",o:[4,5,6,7],c:5},
+  {s:"✖️ 3 × 4 = □ + 2 → □ kaçtır?",o:[8,9,10,11],c:10},
+  {s:"➗ 15 ÷ 3 = □ + 1 → □ kaçtır?",o:[3,4,5,6],c:4},
+  {s:"⚖️ 2 × 5 = 4 + □ → □ kaçtır?",o:[4,5,6,7],c:6},
+  {s:"❌ 3 + 4 = 8 eşitliği doğru mu?",o:["Evet ✅","Hayır ❌"],c:"Hayır ❌"},
+  {s:"❓ 6 + □ = 9 + 3 → □ kaçtır?",o:[4,5,6,7],c:6},
+  {s:"✖️ 18 ÷ 3 = □ × 2 → □ kaçtır?",o:[2,3,4,5],c:3},
+  {s:"⚖️ □ + 7 = 4 × 3 → □ kaçtır?",o:[4,5,6,7],c:5},
+];
+let qCevap=[];
+function quizBasla(){
+  qCevap=[];
+  document.getElementById('quizSkor').style.display='none';
+  const k=document.getElementById('quizKutu');k.innerHTML='';
+  quizData.forEach((q,qi)=>{
+    const sh=[...q.o].sort(()=>Math.random()-.5);
+    const div=document.createElement('div');div.className='quiz-soru';
+    div.innerHTML='<p>'+(qi+1)+'. '+q.s+'</p>'
+      +'<div class="quiz-sec">'+sh.map(o=>'<button class="quiz-btn" data-qi="'+qi+'" data-v="'+o+'" onclick="qCev(this,'+qi+',\''+o+'\',\''+q.c+'\')">'+o+'</button>').join('')+'</div>'
+      +'<div class="quiz-fb" id="qf'+qi+'"></div>';
+    k.appendChild(div);
+  });
+}
+function qCev(el,qi,val,dogru){
+  document.querySelectorAll('[data-qi="'+qi+'"]').forEach(b=>b.disabled=true);
+  const fb=document.getElementById('qf'+qi);
+  if(val==dogru){el.classList.add('dogru');fb.innerHTML='✅ <span style="color:#166534">Doğru!</span>';qCevap[qi]=true;}
+  else{el.classList.add('yanlis');fb.innerHTML='❌ <span style="color:#991b1b">Doğrusu: '+dogru+'</span>';qCevap[qi]=false;document.querySelector('[data-qi="'+qi+'"][data-v="'+dogru+'"]').classList.add('dogru');}
+  if(qCevap.filter(x=>x!==undefined).length===quizData.length){
+    const puan=qCevap.filter(Boolean).length;
+    const sk=document.getElementById('quizSkor');sk.style.display='block';
+    sk.innerHTML='🏆 Sonuç: '+puan+'/'+quizData.length+' doğru! '+(puan>=9?'Mükemmel! 🌟':puan>=7?'Çok iyi! 👍':puan>=5?'İyi! 💪':'Biraz daha çalışalım! 📚');
+  }
+}
+quizBasla();
+</script>
+</body>
+</html>

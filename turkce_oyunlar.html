@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oyunlar – 2. Sınıf Türkçe</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--sari:#FBBF24;--turuncu:#F97316;--mavi:#3B82F6;--pembe:#EC4899;--yesil:#10B981;--mor:#8B5CF6;--kirmizi:#EF4444;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Nunito',sans-serif;background:linear-gradient(160deg,#0d0a1e,#1a0f3c,#0a1628);min-height:100vh;overflow-x:hidden;color:#fff;}
+.bg-wrap{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.13;animation:drift 20s ease-in-out infinite;}
+.o1{width:600px;height:600px;background:#8B5CF6;top:-200px;left:-150px;animation-duration:24s;}
+.o2{width:450px;height:450px;background:#3B82F6;bottom:-150px;right:-150px;animation-duration:20s;animation-delay:-7s;}
+.o3{width:350px;height:350px;background:#EC4899;top:45%;left:55%;animation-duration:22s;animation-delay:-12s;}
+@keyframes drift{0%,100%{transform:translate(0,0);}50%{transform:translate(25px,15px);}}
+
+header{position:relative;z-index:10;text-align:center;padding:50px 20px 30px;}
+.h-emoji{font-size:3rem;margin-bottom:12px;animation:float 3.5s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+header h1{font-family:'Fredoka One',cursive;font-size:clamp(2rem,5vw,3.2rem);background:linear-gradient(135deg,#FBBF24,#8B5CF6,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;margin-bottom:6px;}
+.h-alt{font-size:.9rem;font-weight:700;color:rgba(255,255,255,.38);letter-spacing:2px;}
+
+.oyun-nav{position:relative;z-index:10;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;padding:15px 18px 35px;max-width:800px;margin:0 auto;}
+.onav{border-radius:25px;padding:9px 20px;font-weight:800;font-size:.85rem;cursor:pointer;text-decoration:none;border:2px solid;transition:all .22s;backdrop-filter:blur(6px);color:rgba(255,255,255,.7);background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.15);}
+.onav:hover{background:var(--mor);border-color:var(--mor);color:#fff;transform:translateY(-2px);}
+
+.content{position:relative;z-index:10;max-width:900px;margin:0 auto;padding:0 18px 80px;}
+
+.oyun-wrapper{background:rgba(255,255,255,.055);backdrop-filter:blur(12px);border:1.5px solid rgba(255,255,255,.12);border-radius:22px;overflow:hidden;margin-bottom:28px;box-shadow:0 8px 30px rgba(0,0,0,.3);}
+.oyun-header{padding:16px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.oyun-header h3{font-family:'Fredoka One',cursive;font-size:1.2rem;display:flex;align-items:center;gap:10px;}
+.oyun-body{padding:22px;}
+.skor-kutu{background:rgba(251,191,36,.14);border:2px solid rgba(251,191,36,.4);border-radius:12px;padding:9px 16px;font-weight:900;font-size:.93rem;color:var(--sari);}
+
+/* QUIZ */
+.quiz-prog{background:rgba(255,255,255,.1);border-radius:10px;height:7px;margin-bottom:14px;overflow:hidden;}
+.qbar{height:100%;background:linear-gradient(90deg,#F97316,#EC4899,#8B5CF6);border-radius:10px;transition:width .4s;}
+.q-kutu{background:rgba(255,255,255,.06);border-radius:16px;padding:20px;margin:10px 0;}
+.q-no{font-size:.74rem;font-weight:800;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.q-text{font-size:1rem;font-weight:800;margin-bottom:14px;line-height:1.5;}
+.q-secs{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.q-btn{background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.14);border-radius:12px;padding:11px 13px;font-family:'Nunito',sans-serif;font-size:.86rem;font-weight:700;color:#fff;cursor:pointer;text-align:left;transition:all .2s;line-height:1.4;}
+.q-btn:hover:not(:disabled){background:rgba(139,92,246,.25);border-color:var(--mor);}
+.q-btn.d{background:rgba(16,185,129,.3)!important;border-color:var(--yesil)!important;color:#6ee7b7!important;}
+.q-btn.y{background:rgba(239,68,68,.3)!important;border-color:var(--kirmizi)!important;color:#fca5a5!important;}
+.q-btn:disabled{cursor:default;}
+.q-fb{text-align:center;padding:11px;border-radius:11px;font-weight:800;font-size:.9rem;margin-top:10px;display:none;}
+.q-fb.ac{display:block;}
+.fd{background:rgba(16,185,129,.2);color:#6ee7b7;border:2px solid rgba(16,185,129,.4);}
+.fy{background:rgba(239,68,68,.2);color:#fca5a5;border:2px solid rgba(239,68,68,.4);}
+.q-nav{display:flex;align-items:center;justify-content:space-between;margin-top:14px;flex-wrap:wrap;gap:10px;}
+.btn-o{border:none;padding:11px 22px;border-radius:28px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;cursor:pointer;transition:all .2s;color:#fff;}
+.btn-o:hover{transform:translateY(-2px);}
+.bm{background:linear-gradient(135deg,#8B5CF6,#6D28D9);}
+.bs{background:linear-gradient(135deg,#FBBF24,#F97316);}
+.by{background:linear-gradient(135deg,#10B981,#059669);}
+.sonuc{text-align:center;padding:30px 20px;}
+.sonuc-emoji{font-size:3.8rem;margin-bottom:14px;}
+.sonuc h3{font-family:'Fredoka One',cursive;font-size:1.9rem;margin-bottom:8px;}
+.sonuc p{font-size:.93rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:18px;}
+
+/* EŞLEŞTİRME */
+.esles-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:12px;}
+.e-item{background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.14);border-radius:13px;padding:11px 14px;margin:5px 0;font-weight:700;font-size:.88rem;cursor:pointer;transition:all .2s;text-align:center;min-height:50px;display:flex;align-items:center;justify-content:center;user-select:none;line-height:1.4;}
+.e-item:hover{border-color:var(--mor);background:rgba(139,92,246,.2);}
+.e-item.s{border-color:var(--sari);background:rgba(251,191,36,.18);color:var(--sari);}
+.e-item.d{border-color:var(--yesil);background:rgba(16,185,129,.2);color:#6ee7b7;cursor:default;}
+.e-item.y{border-color:var(--kirmizi);background:rgba(239,68,68,.18);color:#fca5a5;}
+.e-skor-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
+
+/* YETENEK TESTİ */
+.test-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin:14px 0;}
+.test-kart{border-radius:16px;padding:16px 14px;text-align:center;cursor:pointer;transition:all .25s;border:2px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);}
+.test-kart:hover{transform:scale(1.04);}
+.test-kart.secildi{border-color:var(--sari);background:rgba(251,191,36,.15);}
+.tk-emoji{font-size:2rem;margin-bottom:8px;display:block;}
+.tk-ad{font-weight:800;font-size:.88rem;}
+.test-sonuc{background:rgba(139,92,246,.15);border:2px solid rgba(139,92,246,.4);border-radius:16px;padding:20px;margin-top:16px;text-align:center;display:none;}
+.test-sonuc.goster{display:block;}
+.ts-emoji{font-size:3rem;margin-bottom:10px;}
+.test-sonuc h4{font-family:'Fredoka One',cursive;font-size:1.3rem;color:#c4b5fd;margin-bottom:8px;}
+.test-sonuc p{font-size:.9rem;color:rgba(255,255,255,.72);font-weight:600;line-height:1.6;}
+
+/* HAK OYUNU */
+.hak-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin:14px 0;}
+.hak-s{border-radius:16px;padding:16px;border:2px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);}
+.hs-metin{font-size:.87rem;font-weight:700;line-height:1.5;color:rgba(255,255,255,.85);margin-bottom:10px;}
+.hak-btnler{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;}
+.hbtn{border:none;border-radius:10px;padding:6px 14px;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;cursor:pointer;}
+.hbtn-h{background:rgba(16,185,129,.2);color:#6ee7b7;border:1.5px solid rgba(16,185,129,.4);}
+.hbtn-s{background:rgba(59,130,246,.2);color:#93c5fd;border:1.5px solid rgba(59,130,246,.4);}
+.hbtn-i{background:rgba(239,68,68,.2);color:#fca5a5;border:1.5px solid rgba(239,68,68,.4);}
+.hak-ac{margin-top:10px;display:none;font-size:.8rem;font-weight:700;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);}
+
+hr.sep{border:none;height:2px;background:linear-gradient(to right,transparent,rgba(255,255,255,.1),transparent);margin:10px 0 35px;}
+
+@media(max-width:600px){.q-secs,.esles-grid{grid-template-columns:1fr!important;}.test-grid{grid-template-columns:repeat(2,1fr)!important;}.hak-grid{grid-template-columns:1fr!important;}}
+</style>
+</head>
+<body>
+<div class="bg-wrap"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+
+<header>
+  <div class="h-emoji">🎮</div>
+  <h1>Oyunlar</h1>
+  <div class="h-alt">2. Sınıf Türkçe</div>
+</header>
+
+<nav class="oyun-nav">
+  <a href="#quiz" class="onav">🏆 Bilgi Yarışması</a>
+  <a href="#esles" class="onav">🧩 Eşleştirme</a>
+  <a href="#yetenek" class="onav">⭐ Yetenek Testi</a>
+  <a href="#hak" class="onav">⚖️ Hak mı, Sorumluluk mu?</a>
+</nav>
+
+<div class="content">
+
+  <!-- QUIZ -->
+  <div class="oyun-wrapper" id="quiz">
+    <div class="oyun-header" style="background:linear-gradient(135deg,rgba(139,92,246,.35),rgba(59,130,246,.2));">
+      <h3>🏆 Bilgi Yarışması</h3>
+      <div class="skor-kutu">🌟 Puan: <span id="qp">0</span> / <span id="qt">0</span></div>
+    </div>
+    <div class="oyun-body">
+      <div class="quiz-prog"><div class="qbar" id="qbar" style="width:0%"></div></div>
+      <div id="quiz-alan"></div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- EŞLEŞTİRME -->
+  <div class="oyun-wrapper" id="esles">
+    <div class="oyun-header" style="background:linear-gradient(135deg,rgba(236,72,153,.3),rgba(139,92,246,.2));">
+      <h3>🧩 Kavramı Tanımıyla Eşleştir</h3>
+      <div class="skor-kutu">✅ Doğru: <span id="ed">0</span> / 8</div>
+    </div>
+    <div class="oyun-body">
+      <p style="font-size:.86rem;font-weight:700;color:rgba(255,255,255,.5);margin-bottom:14px;">Sol taraftan bir kelime seç, sağdan tanımına tıkla! 🎯</p>
+      <div class="e-skor-bar">
+        <span id="e-msg" style="font-weight:700;font-size:.86rem;color:rgba(255,255,255,.42);">Başlamak için sol taraftan seç 👈</span>
+        <button class="btn-o bs" onclick="eReset()">🔄 Tekrar</button>
+      </div>
+      <div class="esles-grid">
+        <div><div style="font-family:'Fredoka One',cursive;font-size:.85rem;text-align:center;margin-bottom:10px;color:rgba(255,255,255,.4);">KELİMELER</div><div id="e-sol"></div></div>
+        <div><div style="font-family:'Fredoka One',cursive;font-size:.85rem;text-align:center;margin-bottom:10px;color:rgba(255,255,255,.4);">TANIMLAR</div><div id="e-sag"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- YETENEK TESTİ -->
+  <div class="oyun-wrapper" id="yetenek">
+    <div class="oyun-header" style="background:linear-gradient(135deg,rgba(249,115,22,.3),rgba(251,191,36,.2));">
+      <h3>⭐ Hangi Yetenek Sende Güçlü?</h3>
+    </div>
+    <div class="oyun-body">
+      <p style="font-size:.88rem;font-weight:700;color:rgba(255,255,255,.55);margin-bottom:16px;">Kendine en yakın hissettikleri seç!</p>
+      <div class="test-grid">
+        <div class="test-kart" onclick="testSec(this,'Sanatçı','Renkleri, şekilleri ve tasarımı seviyorsun. Gözlemleme ve yaratma senin gücün! 🎨')"><span class="tk-emoji">🎨</span><span class="tk-ad">Resim &amp; Renk</span></div>
+        <div class="test-kart" onclick="testSec(this,'Müzisyen','Ritim ve melodileri seziyor, seslerle oynuyorsun. Kulağın çok keskin! 🎵')"><span class="tk-emoji">🎵</span><span class="tk-ad">Müzik &amp; Ritim</span></div>
+        <div class="test-kart" onclick="testSec(this,'Yazar','Kelimeler ve hikayeler aklında dans ediyor. Anlatmak ve yazmak senin dünyan! ✍️')"><span class="tk-emoji">✍️</span><span class="tk-ad">Yazı &amp; Hikaye</span></div>
+        <div class="test-kart" onclick="testSec(this,'Sporcu','Hareket etmek ve yarışmak seni mutlu ediyor. Enerjiyi çok iyi kullanıyorsun! ⚽')"><span class="tk-emoji">⚽</span><span class="tk-ad">Spor &amp; Hareket</span></div>
+        <div class="test-kart" onclick="testSec(this,'Mucit','Bir şeyleri söküp takmak, nasıl çalıştığını anlamak seni heyecanlandırıyor! 🔧')"><span class="tk-emoji">🔧</span><span class="tk-ad">İcat &amp; Yapım</span></div>
+        <div class="test-kart" onclick="testSec(this,'Bilim İnsanı','Sormak, araştırmak ve denemek senin doğan! Merak en büyük silahın. 🔬')"><span class="tk-emoji">🔬</span><span class="tk-ad">Araştırma &amp; Merak</span></div>
+        <div class="test-kart" onclick="testSec(this,'Lider','İnsanları bir araya getirmek, yardımcı olmak seni iyi hissettiriyor! 🤝')"><span class="tk-emoji">🤝</span><span class="tk-ad">Yardım &amp; Liderlik</span></div>
+        <div class="test-kart" onclick="testSec(this,'Doğa Kahramanı','Hayvanlar, bitkiler ve doğa seni çekiyor. Korumak içgüdün! 🌿')"><span class="tk-emoji">🌿</span><span class="tk-ad">Doğa &amp; Hayvanlar</span></div>
+      </div>
+      <div class="test-sonuc" id="test-sonuc">
+        <div class="ts-emoji" id="ts-emoji"></div>
+        <h4 id="ts-baslik"></h4>
+        <p id="ts-aciklama"></p>
+        <button class="btn-o bs" style="margin-top:14px;" onclick="testReset()">🔄 Tekrar Dene</button>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- HAK OYUNU -->
+  <div class="oyun-wrapper" id="hak">
+    <div class="oyun-header" style="background:linear-gradient(135deg,rgba(16,185,129,.3),rgba(59,130,246,.2));">
+      <h3>⚖️ Bu Bir Hak mı, Sorumluluk mu?</h3>
+      <div class="skor-kutu" id="hak-skor" style="display:none;">✅ <span id="hd">0</span> / 6</div>
+    </div>
+    <div class="oyun-body">
+      <p style="font-size:.88rem;font-weight:700;color:rgba(255,255,255,.55);margin-bottom:8px;">Her senaryoyu okuyup kategorisini seç! 🎯</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
+        <span style="background:rgba(16,185,129,.2);border:1.5px solid rgba(16,185,129,.4);border-radius:10px;padding:4px 12px;font-size:.75rem;font-weight:800;color:#6ee7b7;">🟢 Hak</span>
+        <span style="background:rgba(59,130,246,.2);border:1.5px solid rgba(59,130,246,.4);border-radius:10px;padding:4px 12px;font-size:.75rem;font-weight:800;color:#93c5fd;">🔵 Sorumluluk</span>
+        <span style="background:rgba(239,68,68,.2);border:1.5px solid rgba(239,68,68,.4);border-radius:10px;padding:4px 12px;font-size:.75rem;font-weight:800;color:#fca5a5;">🔴 Hak İhlali</span>
+      </div>
+      <div class="hak-grid" id="hak-grid"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* QUIZ */
+const QD=[
+  {s:"'Yetenek' ne demektir?",c:0,o:["Bir şeyi iyi yapabilme becerisi","Çok para kazanma","Kitap okuma hızı","Arkadaş sayısı"],a:"✅ Yetenek; bir şeyi iyi yapabilme becerisidir!"},
+  {s:"Derin neden yeteneğini saklıyordu?",c:2,o:["Boyaları yoktu","Resim dersi sevmiyordu","Utanıyordu","Zamanı yoktu"],a:"✅ Derin utandığı için saklıyordu. Ama yeteneğimizi saklamak doğru değil!"},
+  {s:"Mira, robotunu ne için hayal etti?",c:1,o:["Ev temizlemek","Dedesine yardım etmek","Okul ödevi yapmak","Film izlemek"],a:"✅ Mira, robotunun dedesine yardım etmesini hayal etti!"},
+  {s:"Teknoloji en iyi ne zaman işe yarar?",c:2,o:["Sadece oyun için","Sadece büyükler için","İnsanlara yardımcı olduğunda","Pahalı olduğunda"],a:"✅ Teknoloji, insanların hayatını kolaylaştırdığında en değerlidir!"},
+  {s:"'Kültürel miras' ne demektir?",c:0,o:["Geçmişten gelen değerli gelenekler","Yeni teknolojiler","Okul dersleri","Süpermarket ürünleri"],a:"✅ Kültürel miras; geçmişten bugüne aktarılan gelenekler ve değerlerdir!"},
+  {s:"Naz hakkını nasıl kullandı?",c:2,o:["Bağırarak","Ağlayarak","Yazarak","Kaçarak"],a:"✅ Naz, hakkını yazarak ve öğretmenine ileterek kullandı!"},
+  {s:"Hangi aşağıdakilerden bir haktır?",c:0,o:["Eğitim alma","Başkasının oyuncağını alma","Arkadaşı rahatsız etme","Tembellik yapma"],a:"✅ Eğitim alma her çocuğun temel hakkıdır!"},
+  {s:"'Merak' neden önemlidir?",c:1,o:["Sadece çocuklara göredir","Keşfetmenin ilk adımıdır","Tehlikeli bir duygudur","Zaman kaybettirir"],a:"✅ Merak, öğrenmenin ve keşfetmenin başlangıcıdır!"},
+  {s:"Yeteneği geliştirmek için en önemli şey nedir?",c:2,o:["Çok para","Şans","Düzenli çalışma ve azim","Başkalarından üstün olmak"],a:"✅ Yeteneği geliştirmek için düzenli çalışma ve azim şarttır!"},
+  {s:"Büyükannemin sandığı hikayesinde sandık neyi temsil ediyor?",c:1,o:["Eski eşyaların deposu","Yaşayan bir müze, geçmişin hatıraları","Sıradan bir kutu","Oyuncak saklama yeri"],a:"✅ Sandık; geçmişi yaşatan, kültürü koruyan özel bir hazinedir!"},
+];
+let qi=0,qp=0,qc=false;
+function qGoster(){
+  const a=document.getElementById('quiz-alan');
+  if(qi>=QD.length){a.innerHTML=`<div class="sonuc"><div class="sonuc-emoji">${qp>=8?'🏆':qp>=6?'⭐':qp>=4?'👍':'💪'}</div><h3>${qp>=8?'Harika!':qp>=6?'Çok İyi!':qp>=4?'İyi!':'Tekrar Dene!'}</h3><p>${QD.length} sorudan <strong>${qp}</strong> tanesini doğru yaptın!</p><button class="btn-o bs" onclick="qReset()">🔄 Tekrar Oyna</button></div>`;return;}
+  const q=QD[qi];
+  document.getElementById('qbar').style.width=((qi/QD.length)*100)+'%';
+  document.getElementById('qp').textContent=qp;document.getElementById('qt').textContent=qi;
+  a.innerHTML=`<div class="q-kutu"><div class="q-no">Soru ${qi+1} / ${QD.length}</div><div class="q-text">${q.s}</div><div class="q-secs">${q.o.map((o,i)=>`<button class="q-btn" onclick="qC(${i})">${['A','B','C','D'][i]}) ${o}</button>`).join('')}</div><div class="q-fb" id="qfb"></div></div><div class="q-nav"><span style="font-size:.8rem;color:rgba(255,255,255,.35);font-weight:700;">Soru ${qi+1} / ${QD.length}</span><button class="btn-o bm" id="qn" style="display:none;" onclick="qNext()">Sonraki ➡️</button></div>`;
+  qc=false;
+}
+function qC(i){if(qc)return;qc=true;const q=QD[qi];document.querySelectorAll('.q-btn').forEach(b=>b.disabled=true);const fb=document.getElementById('qfb');if(i===q.c){qp++;document.querySelectorAll('.q-btn')[i].classList.add('d');fb.className='q-fb ac fd';fb.textContent=q.a;}else{document.querySelectorAll('.q-btn')[i].classList.add('y');document.querySelectorAll('.q-btn')[q.c].classList.add('d');fb.className='q-fb ac fy';fb.textContent='❌ Yanlış! '+q.a;}document.getElementById('qp').textContent=qp;document.getElementById('qn').style.display='flex';}
+function qNext(){qi++;qGoster();}
+function qReset(){qi=0;qp=0;document.getElementById('qp').textContent=0;document.getElementById('qt').textContent=0;qGoster();}
+
+/* EŞLEŞTİRME */
+const ED=[
+  {k:"🌟 Yetenek",t:"Bir şeyi iyi yapabilme becerisi"},
+  {k:"🏺 Kültürel Miras",t:"Geçmişten gelen gelenekler ve değerler"},
+  {k:"⚖️ Hak",t:"Herkesin sahip olduğu güvence"},
+  {k:"🤝 Sorumluluk",t:"Yapmamız gereken görevler"},
+  {k:"🔬 Merak",t:"Bir şeyi öğrenmek için duyulan güçlü istek"},
+  {k:"🤖 Teknoloji",t:"İnsanların ürettiği araç ve sistemler"},
+  {k:"✍️ Ozan",t:"Türkü söyleyen halk sanatçısı"},
+  {k:"🔒 Mahremiyet",t:"Kişisel bilgilerin korunması"},
+];
+let eS=null,eD=0;
+function eRender(){eD=0;eS=null;document.getElementById('ed').textContent=0;const sk=[...ED].sort(()=>Math.random()-.5);document.getElementById('e-sol').innerHTML=ED.map((d,i)=>`<div class="e-item" id="es${i}" onclick="eSol(${i})">${d.k}</div>`).join('');document.getElementById('e-sag').innerHTML=sk.map((d,i)=>{const oi=ED.indexOf(d);return`<div class="e-item" id="er${i}" data-idx="${oi}" onclick="eSag(this)">${d.t}</div>`;}).join('');}
+function eSol(i){document.querySelectorAll('#e-sol .e-item').forEach(el=>{if(!el.classList.contains('d'))el.classList.remove('s');});const el=document.getElementById('es'+i);if(el.classList.contains('d'))return;eS=i;el.classList.add('s');document.getElementById('e-msg').textContent='Şimdi sağ taraftan tanımına tıkla! 👉';}
+function eSag(el){if(el.classList.contains('d'))return;if(eS===null){document.getElementById('e-msg').textContent='Önce sol taraftan seç! 👈';return;}const si=parseInt(el.dataset.idx),sl=document.getElementById('es'+eS);if(si===eS){el.classList.add('d');sl.classList.remove('s');sl.classList.add('d');eD++;document.getElementById('ed').textContent=eD;document.getElementById('e-msg').textContent=eD===ED.length?'🎉 Tebrikler! Hepsini buldu!':`✅ Doğru! ${eD}/${ED.length}`;}else{el.classList.add('y');setTimeout(()=>el.classList.remove('y'),650);sl.classList.remove('s');document.getElementById('e-msg').textContent='❌ Yanlış, tekrar dene!';}eS=null;}
+function eReset(){eRender();document.getElementById('e-msg').textContent='Başlamak için sol taraftan seç 👈';}
+
+/* YETENEK TESTİ */
+function testSec(el,b,a){document.querySelectorAll('.test-kart').forEach(k=>k.classList.remove('secildi'));el.classList.add('secildi');const emojiler={Sanatçı:'🎨',Müzisyen:'🎵',Yazar:'✍️',Sporcu:'⚽',Mucit:'🔧','Bilim İnsanı':'🔬',Lider:'🤝','Doğa Kahramanı':'🌿'};document.getElementById('ts-emoji').textContent=emojiler[b]||'⭐';document.getElementById('ts-baslik').textContent='Sen bir '+b+'sın!';document.getElementById('ts-aciklama').textContent=a;const s=document.getElementById('test-sonuc');s.classList.add('goster');s.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function testReset(){document.querySelectorAll('.test-kart').forEach(k=>k.classList.remove('secildi'));document.getElementById('test-sonuc').classList.remove('goster');}
+
+/* HAK OYUNU */
+const HD=[
+  {m:"Ali, her gün okula gidiyor.",tip:"hak",ac:"🟢 Hak! Eğitim her çocuğun temel hakkıdır."},
+  {m:"Selin, arkadaşının oyuncağını izin almadan aldı.",tip:"ihlal",ac:"🔴 Hak İhlali! Başkasının eşyasına izinsiz dokunmak yanlıştır."},
+  {m:"Can, sınıfta tahtayı silip öğretmenine yardım etti.",tip:"sorumluluk",ac:"🔵 Sorumluluk! Sınıfa yardım etmek güzel bir davranıştır."},
+  {m:"Zeynep, parkta oyun oynamak istiyor.",tip:"hak",ac:"🟢 Hak! Oynama ve dinlenme her çocuğun hakkıdır."},
+  {m:"Ahmet, ödevlerini zamanında yapıyor.",tip:"sorumluluk",ac:"🔵 Sorumluluk! Ödevleri yapmak öğrencinin görevidir."},
+  {m:"Bir çocuk hasta olduğunda doktora gidemiyor.",tip:"ihlal",ac:"🔴 Hak İhlali! Sağlık hakkı çiğneniyor. Her çocuk sağlık hizmetine ulaşabilmelidir."},
+];
+let hakD=0;
+function hakRender(){hakD=0;document.getElementById('hak-skor').style.display='none';document.getElementById('hd').textContent=0;document.getElementById('hak-grid').innerHTML=HD.map((h,i)=>`<div class="hak-s" id="hs${i}"><div class="hs-metin">${h.m}</div><div class="hak-btnler"><button class="hbtn hbtn-h" onclick="hakSec(${i},'hak')">🟢 Hak</button><button class="hbtn hbtn-s" onclick="hakSec(${i},'sorumluluk')">🔵 Sorumluluk</button><button class="hbtn hbtn-i" onclick="hakSec(${i},'ihlal')">🔴 İhlal</button></div><div class="hak-ac" id="hac${i}"></div></div>`).join('');}
+function hakSec(i,tip){const h=HD[i];document.getElementById('hs'+i).querySelectorAll('button').forEach(b=>b.disabled=true);const ac=document.getElementById('hac'+i);ac.textContent=h.ac;ac.style.display='block';if(tip===h.tip){hakD++;document.getElementById('hd').textContent=hakD;}document.getElementById('hak-skor').style.display='flex';}
+
+/* İNİT */
+document.addEventListener('DOMContentLoaded',function(){
+  try{qGoster();}catch(e){console.error(e);}
+  try{eRender();}catch(e){console.error(e);}
+  try{hakRender();}catch(e){console.error(e);}
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'});});});
+});
+</script>
+</body>
+</html>

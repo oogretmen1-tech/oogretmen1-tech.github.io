@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Çarpma İşlemi – 2. Sınıf</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--sari:#FFD93D;--kirmizi:#FF6B6B;--mavi:#4ECDC4;--yesil:#6BCB77;--mor:#C77DFF;--turuncu:#FF9F43;--lacivert:#2C3E50;--bg:#FFFBF0;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);}
+header{background:linear-gradient(160deg,#4ECDC4 0%,#FFD93D 60%,#FF9F43 100%);padding:28px 16px 18px;text-align:center;position:relative;overflow:hidden;}
+header::before{content:'';position:absolute;top:-30px;left:-30px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.12);}
+header h1{font-family:'Fredoka One',cursive;font-size:clamp(2rem,6vw,3.2rem);color:#fff;text-shadow:3px 4px 0 rgba(0,0,0,.12);position:relative;z-index:1;}
+header p{color:rgba(255,255,255,.92);font-weight:700;font-size:1rem;margin-top:5px;position:relative;z-index:1;}
+.dl-btn{display:inline-block;margin-top:12px;background:#fff;color:var(--mavi);font-family:'Fredoka One',cursive;font-size:1rem;padding:10px 26px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.15);transition:transform .2s;position:relative;z-index:1;}
+.dl-btn:hover{transform:translateY(-3px);}
+nav{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;padding:12px 10px;background:#fff;border-bottom:3px solid #f0e8d8;position:sticky;top:0;z-index:100;box-shadow:0 3px 12px rgba(0,0,0,.08);}
+nav button{font-family:'Fredoka One',cursive;font-size:.85rem;padding:8px 15px;border:3px solid transparent;border-radius:50px;cursor:pointer;transition:all .2s;background:#f5f0e8;color:#7a5c3a;}
+nav button.active,nav button:hover{background:var(--mavi);color:#fff;border-color:#3ab8b0;transform:translateY(-2px);box-shadow:0 4px 12px rgba(78,205,196,.35);}
+.section{display:none;padding:24px 14px 50px;max-width:880px;margin:0 auto;}
+.section.active{display:block;animation:pop .35s ease;}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border-radius:24px;padding:24px;margin-bottom:20px;box-shadow:0 5px 24px rgba(0,0,0,.07);border:2px solid #f0e8d8;}
+.card-title{font-family:'Fredoka One',cursive;font-size:1.5rem;margin-bottom:14px;letter-spacing:.5px;}
+.info{border-radius:14px;padding:14px 18px;margin:10px 0;font-size:1rem;font-weight:700;line-height:1.65;}
+.info-sari{background:#fffbe6;border-left:5px solid var(--sari);color:#856404;}
+.info-mavi{background:#e8fafa;border-left:5px solid var(--mavi);color:#0e7490;}
+.info-yesil{background:#f0fdf4;border-left:5px solid var(--yesil);color:#166534;}
+.info-mor{background:#faf5ff;border-left:5px solid var(--mor);color:#6b21a8;}
+.info-kirmizi{background:#fff1f1;border-left:5px solid var(--kirmizi);color:#991b1b;}
+.info-turuncu{background:#fff7ed;border-left:5px solid var(--turuncu);color:#9a3412;}
+.btn{font-family:'Fredoka One',cursive;padding:10px 22px;border:none;border-radius:50px;cursor:pointer;font-size:.95rem;transition:all .2s;margin:4px;}
+.btn-mavi{background:var(--mavi);color:#fff;}.btn-mavi:hover{background:#3ab8b0;transform:translateY(-2px);}
+.btn-yesil{background:var(--yesil);color:#fff;}.btn-yesil:hover{background:#55b863;transform:translateY(-2px);}
+.btn-kirmizi{background:var(--kirmizi);color:#fff;}.btn-kirmizi:hover{background:#e05555;transform:translateY(-2px);}
+.btn-turuncu{background:var(--turuncu);color:#fff;}.btn-turuncu:hover{background:#e8892a;transform:translateY(-2px);}
+.btn-gray{background:#94a3b8;color:#fff;}.btn-gray:hover{background:#7a8fa3;transform:translateY(-2px);}
+.ctrl{text-align:center;margin:14px 0;}
+.story-box{background:linear-gradient(135deg,#fff9e6,#fff3cc);border:2px solid var(--sari);border-radius:18px;padding:18px 20px;margin:14px 0;position:relative;}
+.story-box::before{content:'📖';position:absolute;top:-14px;left:16px;font-size:1.4rem;background:#fff;padding:0 4px;}
+.story-box p{font-size:1rem;font-weight:700;line-height:1.7;color:#3d2b00;}
+.scenario-box{background:#fff9e6;border:2px solid var(--turuncu);border-radius:16px;padding:14px 18px;margin-bottom:14px;font-size:1.05rem;font-weight:800;line-height:1.55;color:#5c3400;}
+
+/* GRUPLAR */
+.grup-alani{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin:16px 0;}
+.grup-kutu{border-radius:16px;padding:14px;min-width:80px;text-align:center;border:3px solid;transition:transform .2s;}
+.grup-kutu:hover{transform:scale(1.05);}
+.grup-icerik{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-bottom:6px;min-height:40px;}
+.grup-sayi{font-family:'Fredoka One',cursive;font-size:1.1rem;}
+
+/* CARPMA TABLOSU */
+.tablo-wrap{overflow-x:auto;margin:14px 0;}
+.ctablo{border-collapse:collapse;margin:0 auto;font-family:'Fredoka One',cursive;}
+.ctablo td,.ctablo th{width:42px;height:42px;text-align:center;border:2px solid #e9ecef;font-size:.95rem;}
+.ctablo .baslik{background:var(--mavi);color:#fff;font-size:.85rem;}
+.ctablo .satir-baslik{background:var(--turuncu);color:#fff;}
+.ctablo .sonuc{cursor:pointer;transition:all .2s;font-size:.9rem;}
+.ctablo .sonuc:hover{background:var(--sari);transform:scale(1.1);}
+.ctablo .sonuc.goster{background:var(--yesil);color:#fff;animation:puf .3s ease;}
+.ctablo .sonuc.vurgu{background:var(--kirmizi);color:#fff;}
+@keyframes puf{0%{transform:scale(.5)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
+
+/* TEKRARLANAN TOPLAMA */
+.topl-chain{display:flex;flex-direction:column;gap:8px;margin:12px 0;}
+.topl-satir{display:flex;align-items:center;gap:10px;padding:11px 16px;border-radius:12px;background:#f8f9fa;border:2px solid #e9ecef;opacity:0;transform:translateX(-20px);transition:all .4s;}
+.topl-satir.show{opacity:1;transform:translateX(0);}
+.topl-no{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.82rem;flex-shrink:0;color:#fff;}
+.topl-math{font-family:'Fredoka One',cursive;font-size:1.2rem;}
+.topl-dot{width:18px;height:18px;border-radius:50%;display:inline-block;margin:2px;}
+
+/* DEĞİŞME */
+.degisme-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;margin:14px 0;}
+.deg-kart{border-radius:16px;padding:16px;text-align:center;}
+.deg-esit{font-family:'Fredoka One',cursive;font-size:2rem;color:var(--mavi);text-align:center;}
+
+/* QUIZ */
+.quiz-soru{padding:16px 18px;background:#e8fafa;border-radius:14px;border:2px solid var(--mavi);margin-bottom:14px;}
+.quiz-soru p{font-size:1rem;font-weight:800;color:#0e7490;margin-bottom:10px;}
+.quiz-sec{display:flex;flex-wrap:wrap;gap:7px;}
+.quiz-btn{font-family:'Fredoka One',cursive;padding:9px 20px;border:3px solid var(--mavi);border-radius:50px;background:#fff;cursor:pointer;font-size:.95rem;transition:all .2s;color:var(--mavi);}
+.quiz-btn:hover{background:var(--mavi);color:#fff;}
+.quiz-btn.dogru{background:#27AE60!important;color:#fff!important;border-color:#1e8449!important;}
+.quiz-btn.yanlis{background:#E74C3C!important;color:#fff!important;border-color:#c0392b!important;}
+.quiz-fb{font-size:.92rem;font-weight:800;margin-top:7px;min-height:18px;}
+.quiz-skor{text-align:center;font-size:1.3rem;font-weight:900;padding:18px;border-radius:16px;background:#f0fdf4;border:3px solid var(--yesil);color:#166534;display:none;margin-top:14px;font-family:'Fredoka One',cursive;}
+
+/* NESNELER */
+.nesne{font-size:1.5rem;display:inline-block;margin:2px;transition:transform .2s;}
+.nesne:hover{transform:scale(1.3);}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>✖️ Çarpma İşlemi</h1>
+  <p>2. Sınıf Matematik · Taylıca İlkokulu</p>
+  <button class="dl-btn" onclick="indir()">⬇ Sayfayı İndir</button>
+</header>
+
+<nav>
+  <button class="active" onclick="goster('giris',this)">💡 Çarpma Nedir?</button>
+  <button onclick="goster('gruplar',this)">📦 Gruplarla Keşfet</button>
+  <button onclick="goster('tablo',this)">📊 Çarpım Tablosu</button>
+  <button onclick="goster('ozellik',this)">🔄 Değişme Özelliği</button>
+  <button onclick="goster('sifir',this)">0️⃣ 0 ve 1 ile Çarpma</button>
+  <button onclick="goster('alistirma',this)">🎯 Alıştırma</button>
+</nav>
+
+<!-- 1. GİRİŞ -->
+<div id="giris" class="section active">
+  <div class="card">
+    <div class="card-title" style="color:var(--mavi)">💡 Çarpma Nedir?</div>
+    <div class="story-box">
+      <p>Sınıfta 3 sıra var. Her sırada 4 öğrenci oturuyor.<br>
+      Toplamda kaç öğrenci var?<br><br>
+      4 + 4 + 4 = 12 diyebiliriz. Ama daha kısa bir yolu var:<br><br>
+      <strong>3 × 4 = 12</strong><br><br>
+      Aynı sayıyı tekrar tekrar toplamak yerine <strong>çarpma</strong> kullanırız!</p>
+    </div>
+    <div class="info info-mavi"><b>Çarpma işlemi</b> → aynı sayının tekrar tekrar toplanmasının kısa yoludur.</div>
+    <div class="info info-sari">3 tane 4 demek → 4 + 4 + 4 = 12 demek → <b>3 × 4 = 12</b> demektir!</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="color:var(--turuncu)">🏷️ Çarpma İşleminin Terimleri</div>
+    <div style="font-family:'Fredoka One',cursive;font-size:1.6rem;text-align:center;margin:16px 0;line-height:2.2;">
+      <span style="color:var(--kirmizi)">3</span>
+      <span style="color:#555"> × </span>
+      <span style="color:var(--mavi)">4</span>
+      <span style="color:#555"> = </span>
+      <span style="color:var(--yesil)">12</span>
+      <br>
+      <span style="font-size:.75rem;color:#666;font-family:'Nunito',sans-serif;font-weight:800;">çarpan &nbsp;&nbsp;&nbsp; çarpan &nbsp;&nbsp;&nbsp; çarpım</span>
+    </div>
+    <div class="info info-kirmizi"><b>Çarpan:</b> Çarpma işleminde birbiriyle çarpılan her sayı.</div>
+    <div class="info info-yesil"><b>Çarpım:</b> Çarpma işleminin sonucu.</div>
+    <div class="info info-turuncu"><b>×</b> işareti "çarpı" veya "kere" diye okunur.<br>"3 çarpı 4 eşittir 12" veya "3 kere 4, 12'dir."</div>
+  </div>
+</div>
+
+<!-- 2. GRUPLARLA KEŞFET -->
+<div id="gruplar" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--turuncu)">📦 Gruplarla Keşfedelim!</div>
+    <div class="info info-turuncu">Çarpma işlemini gruplarla görelim. Bir gruptan kaç tane var? Her grupta kaç nesne var?</div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--mavi)">🎮 Adım Adım Keşfet</div>
+    <div id="grpSenaryo" class="scenario-box"></div>
+    <div class="ctrl">
+      <button class="btn btn-mavi" id="grpBtn" onclick="grpAdim()">▶ Grubu Ekle</button>
+      <button class="btn btn-gray" onclick="grpReset()">🔄 Sıfırla</button>
+      <button class="btn btn-turuncu" onclick="grpYeni()">🔀 Yeni Soru</button>
+    </div>
+    <div class="grup-alani" id="grpAlan"></div>
+    <div id="grpTopl" class="topl-chain"></div>
+    <div id="grpSonuc" class="info info-yesil" style="display:none;text-align:center;font-family:'Fredoka One',cursive;font-size:1.2rem;margin-top:12px;"></div>
+  </div>
+</div>
+
+<!-- 3. ÇARPIM TABLOSU -->
+<div id="tablo" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--mavi)">📊 Çarpım Tablosu</div>
+    <div class="info info-mavi">Bir sayıya tıkla — o satırın çarpımları gösterilsin! Üzerine gelinerek de sonucu görebilirsin.</div>
+    <div class="tablo-wrap">
+      <table class="ctablo" id="carpimTablosu"></table>
+    </div>
+    <div class="ctrl">
+      <button class="btn btn-mavi" onclick="tabloGoster()">👁 Hepsini Göster</button>
+      <button class="btn btn-gray" onclick="tabloGizle()">🙈 Hepsini Gizle</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--yesil)">💡 Kolaylaştırıcı İpuçları</div>
+    <div class="info info-sari">🌟 <b>1 ile çarpma:</b> Sonuç her zaman o sayıdır. 5 × 1 = 5</div>
+    <div class="info info-mavi">🌟 <b>2 ile çarpma:</b> Sayıyı 2 katına çıkarırız. 4 × 2 = 8</div>
+    <div class="info info-yesil">🌟 <b>5 ile çarpma:</b> Sonuç hep 0 veya 5 ile biter! 3 × 5 = 15, 6 × 5 = 30</div>
+    <div class="info info-turuncu">🌟 <b>10 ile çarpma:</b> Sayının sonuna 0 ekle! 4 × 10 = 40</div>
+  </div>
+</div>
+
+<!-- 4. DEĞİŞME ÖZELLİĞİ -->
+<div id="ozellik" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--mor)">🔄 Değişme Özelliği</div>
+    <div class="story-box">
+      <p>Ayşe: "3 tabakta 4'er kurabiye var. 3 × 4 = 12"<br><br>
+      Ali: "4 tabakta 3'er kurabiye var. 4 × 3 = 12"<br><br>
+      İkisi de 12! Çarpma işleminde çarpanların yeri değişse de <b>çarpım değişmez!</b></p>
+    </div>
+    <div class="info info-mor"><b>Değişme Özelliği:</b> Çarpanların yeri değişirse çarpım değişmez!<br>3 × 4 = 4 × 3 = 12</div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--turuncu)">🎮 Dene Bakalım!</div>
+    <div id="degSenaryo" class="scenario-box"></div>
+    <div class="degisme-grid">
+      <div class="deg-kart" id="degSol" style="background:#fff1f1;border:2px solid var(--kirmizi);"></div>
+      <div class="deg-esit">=</div>
+      <div class="deg-kart" id="degSag" style="background:#f0fdf4;border:2px solid var(--yesil);"></div>
+    </div>
+    <div class="ctrl">
+      <button class="btn btn-mavi" onclick="degGoster()">▶ Göster</button>
+      <button class="btn btn-turuncu" onclick="degYeni()">🔀 Yeni Örnek</button>
+    </div>
+    <div id="degSonuc" class="info info-mor" style="display:none;text-align:center;font-family:'Fredoka One',cursive;font-size:1.1rem;"></div>
+  </div>
+</div>
+
+<!-- 5. SIFIR VE BİR -->
+<div id="sifir" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--mavi)">0️⃣ Sıfır ile Çarpma</div>
+    <div class="story-box">
+      <p>Okulda 5 sıra var. Ama hiç öğrenci gelmedi. Her sırada 0 öğrenci var.<br><br>
+      5 × 0 = 0<br><br>
+      Kaç kere sıfır toplarsak toplasak — sonuç hep <b>sıfır!</b></p>
+    </div>
+    <div class="info info-kirmizi"><b>Kural:</b> Herhangi bir sayıyı 0 ile çarparsak sonuç her zaman <b>0</b>'dır.<br>99 × 0 = 0 · 1000 × 0 = 0 · 0 × 0 = 0</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0;" id="sifirOrnek"></div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--yesil)">1️⃣ Bir ile Çarpma</div>
+    <div class="story-box">
+      <p>Çantanda 7 kalem var. Bunu 1 kere say.<br><br>
+      7 × 1 = 7<br><br>
+      1 ile çarpmak sayıyı değiştirmez!</p>
+    </div>
+    <div class="info info-yesil"><b>Kural:</b> Herhangi bir sayıyı 1 ile çarparsak sonuç o sayının kendisidir.<br>5 × 1 = 5 · 12 × 1 = 12 · 99 × 1 = 99</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0;" id="birOrnek"></div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--turuncu)">🎮 Test Et!</div>
+    <div id="sfSenaryo" class="scenario-box"></div>
+    <div id="sfSecenekler" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;"></div>
+    <div id="sfFb" class="quiz-fb" style="margin-top:8px;"></div>
+    <div class="ctrl"><button class="btn btn-turuncu" onclick="sfYeni()">▶ Yeni Soru</button></div>
+  </div>
+</div>
+
+<!-- 6. ALIŞTIRMA -->
+<div id="alistirma" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--kirmizi)">🎯 Alıştırma Zamanı!</div>
+    <div class="info info-mavi">Öğrendiklerimizi test edelim. Her soruyu dikkatlice oku!</div>
+  </div>
+  <div id="quizKutu"></div>
+  <div class="quiz-skor" id="quizSkor"></div>
+  <div class="ctrl"><button class="btn btn-kirmizi" onclick="quizBasla()">🔄 Tekrar Başla</button></div>
+</div>
+
+<script>
+function goster(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+function indir(){const blob=new Blob([document.documentElement.outerHTML],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='carpma-islemi-2sinif.html';a.click();}
+
+// === GRUPLARLA KEŞFET ===
+const grpSorular=[
+  {nesne:"✏️",ad:"kalem",grupSayisi:3,grupBoyutu:4,renk:"#FF6B6B"},
+  {nesne:"⭐",ad:"yıldız",grupSayisi:4,grupBoyutu:3,renk:"#FFD93D"},
+  {nesne:"🔵",ad:"top",grupSayisi:2,grupBoyutu:5,renk:"#4ECDC4"},
+  {nesne:"🍬",ad:"şeker",grupSayisi:5,grupBoyutu:2,renk:"#C77DFF"},
+  {nesne:"📚",ad:"kitap",grupSayisi:3,grupBoyutu:3,renk:"#6BCB77"},
+  {nesne:"🏀",ad:"basketbol topu",grupSayisi:4,grupBoyutu:5,renk:"#FF9F43"},
+];
+let grpIdx=0,grpMevcut=0,grpTopl=0;
+function grpBasla(idx){
+  grpIdx=idx%grpSorular.length; grpMevcut=0; grpTopl=0;
+  const s=grpSorular[grpIdx];
+  document.getElementById('grpSenaryo').innerHTML='<strong>'+s.grupSayisi+' grup var, her grupta '+s.grupBoyutu+' tane '+s.ad+'.</strong> Toplam kaç tane '+s.ad+' var?';
+  document.getElementById('grpAlan').innerHTML='';
+  document.getElementById('grpTopl').innerHTML='';
+  document.getElementById('grpSonuc').style.display='none';
+  document.getElementById('grpBtn').disabled=false;
+}
+function grpAdim(){
+  const s=grpSorular[grpIdx];
+  if(grpMevcut>=s.grupSayisi)return;
+  grpMevcut++;grpTopl+=s.grupBoyutu;
+  const kutu=document.createElement('div');kutu.className='grup-kutu';
+  kutu.style.cssText='background:'+s.renk+'18;border-color:'+s.renk+';';
+  kutu.innerHTML='<div style="font-weight:800;font-size:.85rem;color:'+s.renk+'">'+(grpMevcut)+'. Grup</div>'
+    +'<div class="grup-icerik">'+Array.from({length:s.grupBoyutu},()=>'<span class="nesne">'+s.nesne+'</span>').join('')+'</div>'
+    +'<div class="grup-sayi" style="color:'+s.renk+'">'+s.grupBoyutu+'</div>';
+  document.getElementById('grpAlan').appendChild(kutu);
+  const satir=document.createElement('div');satir.className='topl-satir';
+  const renkler=['#FF6B6B','#4ECDC4','#6BCB77','#FF9F43','#C77DFF'];
+  const r=renkler[(grpMevcut-1)%5];
+  const toplamStr=Array.from({length:grpMevcut},(_,i)=>s.grupBoyutu).join(' + ');
+  satir.innerHTML='<div class="topl-no" style="background:'+r+'">'+grpMevcut+'</div>'
+    +'<div class="topl-math" style="color:'+r+'">'+toplamStr+' = '+grpTopl+'</div>';
+  document.getElementById('grpTopl').appendChild(satir);
+  setTimeout(()=>satir.classList.add('show'),50);
+  if(grpMevcut>=s.grupSayisi){
+    document.getElementById('grpBtn').disabled=true;
+    const el=document.getElementById('grpSonuc');
+    el.style.display='block';
+    el.innerHTML='✅ '+s.grupSayisi+' kere '+s.grupBoyutu+' → <b>'+s.grupSayisi+' × '+s.grupBoyutu+' = '+grpTopl+'</b>';
+  }
+}
+function grpReset(){grpBasla(grpIdx);}
+function grpYeni(){grpBasla(grpIdx+1);}
+grpBasla(0);
+
+// === ÇARPIM TABLOSU ===
+(function(){
+  const tablo=document.getElementById('carpimTablosu');
+  const satir=document.createElement('tr');
+  const bas=document.createElement('th');bas.className='baslik';bas.textContent='×';satir.appendChild(bas);
+  for(let j=1;j<=10;j++){const th=document.createElement('th');th.className='baslik';th.textContent=j;satir.appendChild(th);}
+  tablo.appendChild(satir);
+  for(let i=1;i<=5;i++){
+    const tr=document.createElement('tr');
+    const th=document.createElement('th');th.className='satir-baslik';th.textContent=i;
+    th.style.cursor='pointer';
+    th.onclick=()=>tabloSatirGoster(i);
+    tr.appendChild(th);
+    for(let j=1;j<=10;j++){
+      const td=document.createElement('td');td.className='sonuc';td.dataset.i=i;td.dataset.j=j;
+      td.textContent='?';
+      td.onclick=function(){
+        this.textContent=i*j;this.classList.add('goster');
+        setTimeout(()=>this.classList.remove('goster'),300);
+      };
+      tr.appendChild(td);
+    }
+    tablo.appendChild(tr);
+  }
+})();
+function tabloSatirGoster(i){
+  document.querySelectorAll('.sonuc[data-i="'+i+'"]').forEach((td,idx)=>{
+    setTimeout(()=>{td.textContent=Number(td.dataset.i)*Number(td.dataset.j);td.classList.add('vurgu');setTimeout(()=>td.classList.remove('vurgu'),400);},idx*80);
+  });
+}
+function tabloGoster(){document.querySelectorAll('.sonuc').forEach(td=>td.textContent=Number(td.dataset.i)*Number(td.dataset.j));}
+function tabloGizle(){document.querySelectorAll('.sonuc').forEach(td=>td.textContent='?');}
+
+// === DEĞİŞME ÖZELLİĞİ ===
+const degOrnekler=[
+  {a:3,b:4,nesne:"🍎"},{a:2,b:5,nesne:"⭐"},{a:4,b:3,nesne:"🔵"},
+  {a:5,b:2,nesne:"✏️"},{a:3,b:5,nesne:"🏀"},{a:2,b:4,nesne:"🍬"},
+];
+let degIdx=0,degGosterildi=false;
+function degBasla(idx){
+  degIdx=idx%degOrnekler.length; degGosterildi=false;
+  const d=degOrnekler[degIdx];
+  document.getElementById('degSenaryo').innerHTML='<strong>'+d.a+' × '+d.b+'</strong> ile <strong>'+d.b+' × '+d.a+'</strong> — acaba eşit mi?';
+  document.getElementById('degSol').innerHTML='<div style="font-family:\'Fredoka One\',cursive;font-size:1.2rem;color:var(--kirmizi)">'+d.a+' × '+d.b+'</div><div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin:8px 0;">'+Array.from({length:d.a},()=>'<span style="background:#FF6B6B18;border-radius:8px;padding:4px 6px;">'+'<span style="font-size:1.1rem;">'+d.nesne.repeat(d.b)+'</span></span>').join('')+'</div><div style="font-family:\'Fredoka One\',cursive;color:var(--kirmizi);font-size:1.4rem;">= ?</div>';
+  document.getElementById('degSag').innerHTML='<div style="font-family:\'Fredoka One\',cursive;font-size:1.2rem;color:var(--yesil)">'+d.b+' × '+d.a+'</div><div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin:8px 0;">'+Array.from({length:d.b},()=>'<span style="background:#6BCB7718;border-radius:8px;padding:4px 6px;">'+'<span style="font-size:1.1rem;">'+d.nesne.repeat(d.a)+'</span></span>').join('')+'</div><div style="font-family:\'Fredoka One\',cursive;color:var(--yesil);font-size:1.4rem;">= ?</div>';
+  document.getElementById('degSonuc').style.display='none';
+}
+function degGoster(){
+  const d=degOrnekler[degIdx];const c=d.a*d.b;
+  document.getElementById('degSol').querySelector('div:last-child').textContent='= '+c;
+  document.getElementById('degSag').querySelector('div:last-child').textContent='= '+c;
+  const el=document.getElementById('degSonuc');el.style.display='block';
+  el.innerHTML='🎉 '+d.a+' × '+d.b+' = '+d.b+' × '+d.a+' = <b>'+c+'</b> → Çarpım değişmedi!';
+}
+function degYeni(){degBasla(degIdx+1);}
+degBasla(0);
+
+// === SIFIR VE BİR ===
+(function(){
+  const sf=document.getElementById('sifirOrnek');
+  [1,2,3,4,5].forEach(n=>{
+    const s=document.createElement('div');
+    s.style.cssText='background:#fff1f1;border:2px solid #FF6B6B;border-radius:12px;padding:10px 16px;font-family:\'Fredoka One\',cursive;font-size:1rem;color:#991b1b;';
+    s.textContent=n+' × 0 = 0';sf.appendChild(s);
+  });
+  const br=document.getElementById('birOrnek');
+  [1,2,3,4,5].forEach(n=>{
+    const s=document.createElement('div');
+    s.style.cssText='background:#f0fdf4;border:2px solid #6BCB77;border-radius:12px;padding:10px 16px;font-family:\'Fredoka One\',cursive;font-size:1rem;color:#166534;';
+    s.textContent=n+' × 1 = '+n;br.appendChild(s);
+  });
+})();
+
+const sfSorular=[
+  {s:"5 × 0 = ?",c:0,y:[5,10,15]},{s:"0 × 8 = ?",c:0,y:[8,16,0]},
+  {s:"7 × 1 = ?",c:7,y:[0,1,8]},{s:"1 × 9 = ?",c:9,y:[1,0,10]},
+  {s:"0 × 0 = ?",c:0,y:[1,2,3]},{s:"6 × 1 = ?",c:6,y:[0,1,7]},
+];
+let sfIdx=0;
+function sfGoster(){
+  sfIdx=sfIdx%sfSorular.length;
+  const q=sfSorular[sfIdx];
+  document.getElementById('sfSenaryo').innerHTML='<strong style="font-size:1.1rem">'+q.s+'</strong>';
+  const opts=[q.c,...q.y.filter(x=>x!==q.c)].sort(()=>Math.random()-.5).slice(0,4);
+  const div=document.getElementById('sfSecenekler');div.innerHTML='';
+  document.getElementById('sfFb').textContent='';
+  [...new Set([q.c,...opts])].slice(0,4).forEach(o=>{
+    const b=document.createElement('button');b.className='quiz-btn';b.textContent=o;
+    b.onclick=()=>{
+      document.querySelectorAll('#sfSecenekler button').forEach(x=>x.disabled=true);
+      if(o===q.c){b.classList.add('dogru');document.getElementById('sfFb').innerHTML='✅ <span style="color:#166534">Doğru!</span>';}
+      else{b.classList.add('yanlis');document.getElementById('sfFb').innerHTML='❌ <span style="color:#991b1b">Doğrusu: '+q.c+'</span>';}
+    };
+    div.appendChild(b);
+  });
+}
+function sfYeni(){sfIdx++;sfGoster();}
+sfGoster();
+
+// === ALIŞTIRMA ===
+const quizData=[
+  {s:"✏️ 3 sıra var, her sırada 4 öğrenci. Toplam kaç öğrenci?",o:[10,12,14,16],c:12},
+  {s:"⭐ 5 × 3 = ?",o:[12,13,14,15],c:15},
+  {s:"📦 4 kutu var, her kutuda 5 top. Toplam kaç top?",o:[16,18,20,22],c:20},
+  {s:"🔄 2 × 7 = 7 × ? (Değişme özelliği)",o:[2,3,5,7],c:2},
+  {s:"🌟 3 × 3 = ?",o:[6,7,8,9],c:9},
+  {s:"0️⃣ 8 × 0 = ?",o:[0,8,16,80],c:0},
+  {s:"1️⃣ 1 × 12 = ?",o:[1,11,12,13],c:12},
+  {s:"📊 4 × 4 = ?",o:[12,14,16,18],c:16},
+  {s:"🎯 Bir çarpma işleminde çarpanlar 3 ve 5'tir. Çarpım nedir?",o:[8,12,15,18],c:15},
+  {s:"🏆 5 tabakta ikişer kurabiye var. Toplam kaç kurabiye?",o:[7,8,9,10],c:10},
+];
+let qCevap=[];
+function quizBasla(){
+  qCevap=[];
+  document.getElementById('quizSkor').style.display='none';
+  const k=document.getElementById('quizKutu');k.innerHTML='';
+  quizData.forEach((q,qi)=>{
+    const sh=[...q.o].sort(()=>Math.random()-.5);
+    const div=document.createElement('div');div.className='quiz-soru';
+    div.innerHTML='<p>'+(qi+1)+'. '+q.s+'</p>'
+      +'<div class="quiz-sec">'+sh.map(o=>'<button class="quiz-btn" data-qi="'+qi+'" data-v="'+o+'" onclick="qCev(this,'+qi+','+o+','+q.c+')">'+o+'</button>').join('')+'</div>'
+      +'<div class="quiz-fb" id="qf'+qi+'"></div>';
+    k.appendChild(div);
+  });
+}
+function qCev(el,qi,val,dogru){
+  document.querySelectorAll('[data-qi="'+qi+'"]').forEach(b=>b.disabled=true);
+  const fb=document.getElementById('qf'+qi);
+  if(val===dogru){el.classList.add('dogru');fb.innerHTML='✅ <span style="color:#166534">Doğru!</span>';qCevap[qi]=true;}
+  else{el.classList.add('yanlis');fb.innerHTML='❌ <span style="color:#991b1b">Doğrusu: '+dogru+'</span>';qCevap[qi]=false;document.querySelector('[data-qi="'+qi+'"][data-v="'+dogru+'"]').classList.add('dogru');}
+  if(qCevap.filter(x=>x!==undefined).length===quizData.length){
+    const puan=qCevap.filter(Boolean).length;
+    const sk=document.getElementById('quizSkor');sk.style.display='block';
+    sk.innerHTML='🏆 Sonuç: '+puan+'/'+quizData.length+' doğru! '+(puan>=9?'Mükemmel! 🌟':puan>=7?'Çok iyi! 👍':puan>=5?'İyi! 💪':'Biraz daha çalışalım! 📚');
+  }
+}
+quizBasla();
+</script>
+</body>
+</html>

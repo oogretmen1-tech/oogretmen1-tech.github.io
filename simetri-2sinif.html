@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simetri – 2. Sınıf</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--sari:#FFD93D;--kirmizi:#FF6B6B;--mavi:#4ECDC4;--yesil:#6BCB77;--mor:#C77DFF;--turuncu:#FF9F43;--bg:#FFFBF0;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);}
+header{background:linear-gradient(160deg,#C77DFF 0%,#FF6B6B 60%,#FFD93D 100%);padding:28px 16px 18px;text-align:center;overflow:hidden;position:relative;}
+header h1{font-family:'Fredoka One',cursive;font-size:clamp(2rem,6vw,3.2rem);color:#fff;text-shadow:3px 4px 0 rgba(0,0,0,.12);position:relative;z-index:1;}
+header p{color:rgba(255,255,255,.92);font-weight:700;font-size:1rem;margin-top:5px;position:relative;z-index:1;}
+.dl-btn{display:inline-block;margin-top:12px;background:#fff;color:var(--mor);font-family:'Fredoka One',cursive;font-size:1rem;padding:10px 26px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.15);transition:transform .2s;position:relative;z-index:1;}
+.dl-btn:hover{transform:translateY(-3px);}
+nav{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;padding:12px 10px;background:#fff;border-bottom:3px solid #f0e8d8;position:sticky;top:0;z-index:100;box-shadow:0 3px 12px rgba(0,0,0,.08);}
+nav button{font-family:'Fredoka One',cursive;font-size:.85rem;padding:8px 15px;border:3px solid transparent;border-radius:50px;cursor:pointer;transition:all .2s;background:#f5f0e8;color:#7a5c3a;}
+nav button.active,nav button:hover{background:var(--mor);color:#fff;border-color:#9b5dcc;transform:translateY(-2px);box-shadow:0 4px 12px rgba(199,125,255,.35);}
+.section{display:none;padding:24px 14px 50px;max-width:880px;margin:0 auto;}
+.section.active{display:block;animation:pop .35s ease;}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border-radius:24px;padding:24px;margin-bottom:20px;box-shadow:0 5px 24px rgba(0,0,0,.07);border:2px solid #f0e8d8;}
+.card-title{font-family:'Fredoka One',cursive;font-size:1.5rem;margin-bottom:14px;}
+.info{border-radius:14px;padding:14px 18px;margin:10px 0;font-size:1rem;font-weight:700;line-height:1.65;}
+.info-sari{background:#fffbe6;border-left:5px solid var(--sari);color:#856404;}
+.info-mavi{background:#e8fafa;border-left:5px solid var(--mavi);color:#0e7490;}
+.info-yesil{background:#f0fdf4;border-left:5px solid var(--yesil);color:#166534;}
+.info-mor{background:#faf5ff;border-left:5px solid var(--mor);color:#6b21a8;}
+.info-kirmizi{background:#fff1f1;border-left:5px solid var(--kirmizi);color:#991b1b;}
+.info-turuncu{background:#fff7ed;border-left:5px solid var(--turuncu);color:#9a3412;}
+.btn{font-family:'Fredoka One',cursive;padding:10px 22px;border:none;border-radius:50px;cursor:pointer;font-size:.95rem;transition:all .2s;margin:4px;}
+.btn-mor{background:var(--mor);color:#fff;}.btn-mor:hover{background:#9b5dcc;transform:translateY(-2px);}
+.btn-mavi{background:var(--mavi);color:#fff;}.btn-mavi:hover{background:#3ab8b0;transform:translateY(-2px);}
+.btn-kirmizi{background:var(--kirmizi);color:#fff;}.btn-kirmizi:hover{background:#e05555;transform:translateY(-2px);}
+.btn-turuncu{background:var(--turuncu);color:#fff;}.btn-turuncu:hover{background:#e8892a;transform:translateY(-2px);}
+.btn-gray{background:#94a3b8;color:#fff;}.btn-gray:hover{background:#7a8fa3;transform:translateY(-2px);}
+.ctrl{text-align:center;margin:14px 0;}
+.story-box{background:linear-gradient(135deg,#faf5ff,#f0e8ff);border:2px solid var(--mor);border-radius:18px;padding:18px 20px;margin:14px 0;position:relative;}
+.story-box::before{content:'📖';position:absolute;top:-14px;left:16px;font-size:1.4rem;background:#fff;padding:0 4px;}
+.story-box p{font-size:1rem;font-weight:700;line-height:1.7;color:#3d0066;}
+
+/* SİMETRİ ŞEKİLLERİ */
+.sekil-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin:14px 0;}
+.sekil-kart{border-radius:16px;padding:14px;text-align:center;cursor:pointer;border:3px solid;transition:all .2s;}
+.sekil-kart:hover{transform:translateY(-3px);box-shadow:0 6px 16px rgba(0,0,0,.1);}
+.sekil-svg{width:80px;height:80px;margin:0 auto;}
+.sekil-ad{font-family:'Fredoka One',cursive;font-size:.95rem;margin-top:6px;}
+.sekil-eksen{font-size:.8rem;font-weight:700;margin-top:3px;}
+
+/* ÇİZGİ ÇEK OYUNU */
+.cizim-alan{display:grid;gap:3px;margin:14px auto;max-width:320px;}
+.cizim-kare{width:100%;aspect-ratio:1;border-radius:4px;border:2px solid #dee2e6;cursor:pointer;transition:all .15s;background:#f8f9fa;}
+.cizim-kare:hover{background:#e9ecef;}
+.cizim-kare.dolu{background:var(--mor);}
+.cizim-kare.ayna{background:var(--mavi);opacity:.7;}
+.cizim-kare.dolu.ayna{background:var(--kirmizi);}
+.eksen-cizgi{width:3px;background:var(--kirmizi);border-radius:2px;margin:0 auto;}
+
+/* QUIZ */
+.quiz-soru{padding:16px 18px;background:#faf5ff;border-radius:14px;border:2px solid var(--mor);margin-bottom:14px;}
+.quiz-soru p{font-size:1rem;font-weight:800;color:#6b21a8;margin-bottom:10px;}
+.quiz-sec{display:flex;flex-wrap:wrap;gap:7px;}
+.quiz-btn{font-family:'Fredoka One',cursive;padding:9px 20px;border:3px solid var(--mor);border-radius:50px;background:#fff;cursor:pointer;font-size:.95rem;transition:all .2s;color:var(--mor);}
+.quiz-btn:hover{background:var(--mor);color:#fff;}
+.quiz-btn.dogru{background:#27AE60!important;color:#fff!important;border-color:#1e8449!important;}
+.quiz-btn.yanlis{background:#E74C3C!important;color:#fff!important;border-color:#c0392b!important;}
+.quiz-fb{font-size:.92rem;font-weight:800;margin-top:7px;}
+.quiz-skor{text-align:center;font-size:1.3rem;font-weight:900;padding:18px;border-radius:16px;background:#faf5ff;border:3px solid var(--mor);color:#6b21a8;display:none;margin-top:14px;font-family:'Fredoka One',cursive;}
+</style>
+</head>
+<body>
+<header>
+  <h1>🦋 Simetri</h1>
+  <p>2. Sınıf Matematik · Taylıca İlkokulu</p>
+  <button class="dl-btn" onclick="indir()">⬇ Sayfayı İndir</button>
+</header>
+<nav>
+  <button class="active" onclick="goster('nedir',this)">💡 Simetri Nedir?</button>
+  <button onclick="goster('sekiller',this)">🔷 Simetrik Şekiller</button>
+  <button onclick="goster('cizim',this)">✏️ Simetrik Çiz</button>
+  <button onclick="goster('hayat',this)">🌍 Günlük Hayatta</button>
+  <button onclick="goster('alistirma',this)">🎯 Alıştırma</button>
+</nav>
+
+<!-- 1. SİMETRİ NEDİR -->
+<div id="nedir" class="section active">
+  <div class="card">
+    <div class="card-title" style="color:var(--mor)">💡 Simetri Nedir?</div>
+    <div class="story-box">
+      <p>Kelebeği gördün mü? Sol kanadı ile sağ kanadı <b>aynı!</b><br><br>
+      Ortasından bir çizgi çeksen, iki taraf birbirine tam uyar.<br><br>
+      İşte buna <b>simetri</b> diyoruz!</p>
+    </div>
+    <div class="info info-mor"><b>Simetri:</b> Bir şekli ortasından katlayınca iki parça birbirine tam uyuyorsa o şekil <b>simetriktir.</b></div>
+    <div class="info info-sari">Orta çizgiye <b>simetri ekseni</b> diyoruz. Bir şeklin birden fazla simetri ekseni olabilir!</div>
+    <div style="display:flex;justify-content:center;gap:20px;margin:16px 0;flex-wrap:wrap;">
+      <div style="text-align:center;">
+        <div style="font-size:3rem;">🦋</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:.9rem;color:var(--mor);">Simetrik ✅</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:3rem;">🌳</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:.9rem;color:var(--mor);">Simetrik ✅</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:3rem;">👤</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:.9rem;color:var(--mor);">Simetrik ✅</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. SİMETRİK ŞEKİLLER -->
+<div id="sekiller" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--mavi)">🔷 Simetrik Şekiller</div>
+    <div class="info info-mavi">Bu şekillerin kaç tane simetri ekseni var? Şekle tıkla ve keşfet!</div>
+    <div class="sekil-grid" id="sekilGrid"></div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--kirmizi)">❌ Simetrik Olmayan Şekiller</div>
+    <div class="info info-kirmizi">Her şekil simetrik değildir! Katlayınca iki taraf birbirine uymuyorsa simetrik değildir.</div>
+    <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin:14px 0;">
+      <div style="text-align:center;padding:14px;background:#fff1f1;border:2px solid var(--kirmizi);border-radius:16px;">
+        <div style="font-size:2.5rem;">⚡</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:.9rem;color:var(--kirmizi);">Simetrik değil ❌</div>
+      </div>
+      <div style="text-align:center;padding:14px;background:#fff1f1;border:2px solid var(--kirmizi);border-radius:16px;">
+        <div style="font-size:2.5rem;">🌀</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:.9rem;color:var(--kirmizi);">Simetrik değil ❌</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. SİMETRİK ÇİZ -->
+<div id="cizim" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--turuncu)">✏️ Simetrik Çiz!</div>
+    <div class="info info-turuncu">Sol taraftaki karelere tıkla! Sağ taraf otomatik olarak simetrik çizilir. Ortadaki kırmızı çizgi <b>simetri eksenini</b> gösterir.</div>
+    <div style="display:flex;justify-content:center;align-items:stretch;gap:0;margin:14px 0;">
+      <div>
+        <div style="font-family:'Fredoka One',cursive;font-size:.8rem;color:#888;text-align:center;margin-bottom:4px;">Sol Taraf</div>
+        <div id="solGrid" style="display:grid;grid-template-columns:repeat(5,32px);gap:3px;"></div>
+      </div>
+      <div style="display:flex;align-items:center;padding:0 4px;">
+        <div style="width:4px;height:160px;background:var(--kirmizi);border-radius:2px;"></div>
+      </div>
+      <div>
+        <div style="font-family:'Fredoka One',cursive;font-size:.8rem;color:#888;text-align:center;margin-bottom:4px;">Simetrik Taraf</div>
+        <div id="sagGrid" style="display:grid;grid-template-columns:repeat(5,32px);gap:3px;"></div>
+      </div>
+    </div>
+    <div class="ctrl">
+      <button class="btn btn-gray" onclick="cizimReset()">🔄 Temizle</button>
+    </div>
+  </div>
+</div>
+
+<!-- 4. GÜNLÜK HAYAT -->
+<div id="hayat" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--yesil)">🌍 Günlük Hayatta Simetri</div>
+    <div class="info info-yesil">Simetri doğada ve çevremizde her yerde var!</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin:14px 0;">
+      <div style="background:#faf5ff;border:2px solid var(--mor);border-radius:16px;padding:14px;text-align:center;"><div style="font-size:2rem;">🦋</div><div style="font-weight:800;font-size:.88rem;color:var(--mor);">Kelebek</div></div>
+      <div style="background:#f0fdf4;border:2px solid var(--yesil);border-radius:16px;padding:14px;text-align:center;"><div style="font-size:2rem;">🍁</div><div style="font-weight:800;font-size:.88rem;color:var(--yesil);">Yaprak</div></div>
+      <div style="background:#e8fafa;border:2px solid var(--mavi);border-radius:16px;padding:14px;text-align:center;"><div style="font-size:2rem;">❄️</div><div style="font-weight:800;font-size:.88rem;color:var(--mavi);">Kar tanesi</div></div>
+      <div style="background:#fff1f1;border:2px solid var(--kirmizi);border-radius:16px;padding:14px;text-align:center;"><div style="font-size:2rem;">🏠</div><div style="font-weight:800;font-size:.88rem;color:var(--kirmizi);">Ev</div></div>
+      <div style="background:#fffbe6;border:2px solid var(--sari);border-radius:16px;padding:14px;text-align:center;"><div style="font-size:2rem;">⭐</div><div style="font-weight:800;font-size:.88rem;color:#856404;">Yıldız</div></div>
+      <div style="background:#fff7ed;border:2px solid var(--turuncu);border-radius:16px;padding:14px;text-align:center;"><div style="font-size:2rem;">👤</div><div style="font-weight:800;font-size:.88rem;color:var(--turuncu);">İnsan yüzü</div></div>
+    </div>
+    <div class="info info-sari">🔤 Hangi harfler simetriktir? <b>A, H, I, M, O, T, U, V, W, X, Y</b> harfleri dikey simetri eksenine sahiptir!</div>
+  </div>
+</div>
+
+<!-- 5. ALIŞTIRMA -->
+<div id="alistirma" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--kirmizi)">🎯 Alıştırma Zamanı!</div>
+    <div class="info info-mor">Simetri konusunu test edelim!</div>
+  </div>
+  <div id="quizKutu"></div>
+  <div class="quiz-skor" id="quizSkor"></div>
+  <div class="ctrl"><button class="btn btn-kirmizi" onclick="quizBasla()">🔄 Tekrar Başla</button></div>
+</div>
+
+<script>
+function goster(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+function indir(){const blob=new Blob([document.documentElement.outerHTML],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='simetri-2sinif.html';a.click();}
+
+// ŞEKİLLER
+const sekilData=[
+  {ad:"Kare",eksen:"4 simetri ekseni",simge:"⬜",renk:"#FF6B6B",arka:"#fff1f1"},
+  {ad:"Dikdörtgen",eksen:"2 simetri ekseni",simge:"▬",renk:"#4ECDC4",arka:"#e8fafa"},
+  {ad:"Daire",eksen:"Sonsuz eksen!",simge:"⭕",renk:"#C77DFF",arka:"#faf5ff"},
+  {ad:"Eşkenar Üçgen",eksen:"3 simetri ekseni",simge:"🔺",renk:"#6BCB77",arka:"#f0fdf4"},
+  {ad:"Kelebek",eksen:"1 simetri ekseni",simge:"🦋",renk:"#FF9F43",arka:"#fff7ed"},
+  {ad:"Kalp",eksen:"1 simetri ekseni",simge:"❤️",renk:"#FF6B6B",arka:"#fff1f1"},
+];
+(function(){
+  const grid=document.getElementById('sekilGrid');
+  sekilData.forEach(s=>{
+    const kart=document.createElement('div');kart.className='sekil-kart';
+    kart.style.cssText='background:'+s.arka+';border-color:'+s.renk+';';
+    kart.innerHTML='<div style="font-size:2.5rem;">'+s.simge+'</div>'
+      +'<div class="sekil-ad" style="color:'+s.renk+'">'+s.ad+'</div>'
+      +'<div class="sekil-eksen" style="color:'+s.renk+'">'+s.eksen+'</div>';
+    grid.appendChild(kart);
+  });
+})();
+
+// SİMETRİ ÇİZİM
+let solDolu=Array.from({length:25},()=>false);
+(function(){
+  const sol=document.getElementById('solGrid');
+  const sag=document.getElementById('sagGrid');
+  for(let i=0;i<25;i++){
+    const ks=document.createElement('div');ks.className='cizim-kare';ks.dataset.i=i;
+    ks.style.cssText='width:32px;height:32px;';
+    ks.onclick=function(){
+      solDolu[i]=!solDolu[i];
+      this.classList.toggle('dolu');
+      const satir=Math.floor(i/5);const sutun=i%5;
+      const aynaIdx=satir*5+(4-sutun);
+      const aynaKare=sag.querySelector('[data-i="'+aynaIdx+'"]');
+      if(aynaKare){if(solDolu[i])aynaKare.classList.add('dolu');else aynaKare.classList.remove('dolu');}
+    };
+    sol.appendChild(ks);
+    const ka=document.createElement('div');ka.className='cizim-kare';ka.dataset.i=i;
+    ka.style.cssText='width:32px;height:32px;pointer-events:none;';
+    sag.appendChild(ka);
+  }
+})();
+function cizimReset(){
+  solDolu=Array.from({length:25},()=>false);
+  document.querySelectorAll('.cizim-kare').forEach(k=>k.classList.remove('dolu'));
+}
+
+// QUIZ
+const quizData=[
+  {s:"🦋 Kelebeğin kaç simetri ekseni vardır?",o:["1","2","3","4"],c:"1"},
+  {s:"⬛ Karenin kaç simetri ekseni vardır?",o:["1","2","3","4"],c:"4"},
+  {s:"⭕ Dairenin simetri ekseni sayısı nedir?",o:["1","2","4","Sonsuz"],c:"Sonsuz"},
+  {s:"✅ Hangisi simetrik bir şekildir?",o:["🦋","⚡","🌀","👟"],c:"🦋"},
+  {s:"🔤 Hangi harf dikey simetri eksenine sahiptir?",o:["A","B","C","D"],c:"A"},
+  {s:"❤️ Kalbin kaç simetri ekseni vardır?",o:["1","2","3","4"],c:"1"},
+  {s:"🔺 Eşkenar üçgenin kaç simetri ekseni vardır?",o:["1","2","3","4"],c:"3"},
+  {s:"🏠 Bir evin ön cephesi genellikle nasıldır?",o:["Simetrik","Asimetrik","Üçgensel","Dörtgensel"],c:"Simetrik"},
+];
+let qCevap=[];
+function quizBasla(){
+  qCevap=[];document.getElementById('quizSkor').style.display='none';
+  const k=document.getElementById('quizKutu');k.innerHTML='';
+  quizData.forEach((q,qi)=>{
+    const sh=[...q.o].sort(()=>Math.random()-.5);
+    const div=document.createElement('div');div.className='quiz-soru';
+    div.innerHTML='<p>'+(qi+1)+'. '+q.s+'</p>'
+      +'<div class="quiz-sec">'+sh.map(o=>'<button class="quiz-btn" data-qi="'+qi+'" data-v="'+o+'" onclick="qCev(this,'+qi+',\''+o+'\',\''+q.c+'\')">'+o+'</button>').join('')+'</div>'
+      +'<div class="quiz-fb" id="qf'+qi+'"></div>';
+    k.appendChild(div);
+  });
+}
+function qCev(el,qi,val,dogru){
+  document.querySelectorAll('[data-qi="'+qi+'"]').forEach(b=>b.disabled=true);
+  const fb=document.getElementById('qf'+qi);
+  if(val==dogru){el.classList.add('dogru');fb.innerHTML='✅ <span style="color:#166534">Doğru!</span>';qCevap[qi]=true;}
+  else{el.classList.add('yanlis');fb.innerHTML='❌ <span style="color:#991b1b">Doğrusu: '+dogru+'</span>';qCevap[qi]=false;document.querySelector('[data-qi="'+qi+'"][data-v="'+dogru+'"]').classList.add('dogru');}
+  if(qCevap.filter(x=>x!==undefined).length===quizData.length){
+    const puan=qCevap.filter(Boolean).length;const sk=document.getElementById('quizSkor');sk.style.display='block';
+    sk.innerHTML='🏆 Sonuç: '+puan+'/'+quizData.length+' doğru! '+(puan>=7?'Mükemmel! 🌟':puan>=5?'Çok iyi! 👍':'Biraz daha çalışalım! 📚');
+  }
+}
+quizBasla();
+</script>
+</body>
+</html>

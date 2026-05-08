@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veri Toplama – 2. Sınıf</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--sari:#FFD93D;--kirmizi:#FF6B6B;--mavi:#4ECDC4;--yesil:#6BCB77;--mor:#C77DFF;--turuncu:#FF9F43;--bg:#FFFBF0;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);}
+header{background:linear-gradient(160deg,#6BCB77 0%,#4ECDC4 60%,#FFD93D 100%);padding:28px 16px 18px;text-align:center;position:relative;overflow:hidden;}
+header h1{font-family:'Fredoka One',cursive;font-size:clamp(2rem,6vw,3.2rem);color:#fff;text-shadow:3px 4px 0 rgba(0,0,0,.12);position:relative;z-index:1;}
+header p{color:rgba(255,255,255,.92);font-weight:700;font-size:1rem;margin-top:5px;position:relative;z-index:1;}
+.dl-btn{display:inline-block;margin-top:12px;background:#fff;color:var(--yesil);font-family:'Fredoka One',cursive;font-size:1rem;padding:10px 26px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.15);transition:transform .2s;position:relative;z-index:1;}
+.dl-btn:hover{transform:translateY(-3px);}
+nav{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;padding:12px 10px;background:#fff;border-bottom:3px solid #f0e8d8;position:sticky;top:0;z-index:100;box-shadow:0 3px 12px rgba(0,0,0,.08);}
+nav button{font-family:'Fredoka One',cursive;font-size:.85rem;padding:8px 15px;border:3px solid transparent;border-radius:50px;cursor:pointer;transition:all .2s;background:#f5f0e8;color:#7a5c3a;}
+nav button.active,nav button:hover{background:var(--yesil);color:#fff;border-color:#55b863;transform:translateY(-2px);box-shadow:0 4px 12px rgba(107,203,119,.35);}
+.section{display:none;padding:24px 14px 50px;max-width:880px;margin:0 auto;}
+.section.active{display:block;animation:pop .35s ease;}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border-radius:24px;padding:24px;margin-bottom:20px;box-shadow:0 5px 24px rgba(0,0,0,.07);border:2px solid #f0e8d8;}
+.card-title{font-family:'Fredoka One',cursive;font-size:1.5rem;margin-bottom:14px;}
+.info{border-radius:14px;padding:14px 18px;margin:10px 0;font-size:1rem;font-weight:700;line-height:1.65;}
+.info-sari{background:#fffbe6;border-left:5px solid var(--sari);color:#856404;}
+.info-mavi{background:#e8fafa;border-left:5px solid var(--mavi);color:#0e7490;}
+.info-yesil{background:#f0fdf4;border-left:5px solid var(--yesil);color:#166534;}
+.info-mor{background:#faf5ff;border-left:5px solid var(--mor);color:#6b21a8;}
+.info-kirmizi{background:#fff1f1;border-left:5px solid var(--kirmizi);color:#991b1b;}
+.info-turuncu{background:#fff7ed;border-left:5px solid var(--turuncu);color:#9a3412;}
+.btn{font-family:'Fredoka One',cursive;padding:10px 22px;border:none;border-radius:50px;cursor:pointer;font-size:.95rem;transition:all .2s;margin:4px;}
+.btn-yesil{background:var(--yesil);color:#fff;}.btn-yesil:hover{background:#55b863;transform:translateY(-2px);}
+.btn-mavi{background:var(--mavi);color:#fff;}.btn-mavi:hover{background:#3ab8b0;transform:translateY(-2px);}
+.btn-kirmizi{background:var(--kirmizi);color:#fff;}.btn-kirmizi:hover{background:#e05555;transform:translateY(-2px);}
+.btn-turuncu{background:var(--turuncu);color:#fff;}.btn-turuncu:hover{background:#e8892a;transform:translateY(-2px);}
+.btn-gray{background:#94a3b8;color:#fff;}.btn-gray:hover{background:#7a8fa3;transform:translateY(-2px);}
+.ctrl{text-align:center;margin:14px 0;}
+.story-box{background:linear-gradient(135deg,#f0fdf4,#e8faf0);border:2px solid var(--yesil);border-radius:18px;padding:18px 20px;margin:14px 0;position:relative;}
+.story-box::before{content:'📖';position:absolute;top:-14px;left:16px;font-size:1.4rem;background:#fff;padding:0 4px;}
+.story-box p{font-size:1rem;font-weight:700;line-height:1.7;color:#064e3b;}
+
+/* TALLY - ÇIZGI SAYMA */
+.tally-wrap{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0;justify-content:center;}
+.tally-grup{display:flex;align-items:center;gap:3px;}
+.tally-cizgi{width:6px;height:30px;border-radius:3px;background:var(--lacivert,#2c3e50);display:inline-block;}
+.tally-kesik{width:36px;height:6px;border-radius:3px;background:var(--kirmizi);display:inline-block;transform:rotate(-20deg);margin-left:-20px;margin-right:4px;}
+
+/* TABLO */
+.veri-tablo{width:100%;border-collapse:collapse;margin:14px 0;}
+.veri-tablo th{background:var(--yesil);color:#fff;font-family:'Fredoka One',cursive;padding:10px;border:2px solid #55b863;font-size:.95rem;}
+.veri-tablo td{padding:10px;border:2px solid #dee2e6;text-align:center;font-weight:700;}
+.veri-tablo tr:nth-child(even) td{background:#f0fdf4;}
+.veri-tablo .nesne-hucre{font-size:1.3rem;}
+
+/* ÇUBUK GRAFİK */
+.grafik-wrap{margin:16px 0;padding:16px;background:#f8f9fa;border-radius:16px;}
+.grafik-satir{display:flex;align-items:center;gap:10px;margin:8px 0;}
+.grafik-etiket{font-weight:800;font-size:.9rem;min-width:80px;text-align:right;}
+.grafik-cubuk-bg{flex:1;background:#e9ecef;border-radius:8px;height:28px;overflow:hidden;}
+.grafik-cubuk{height:100%;border-radius:8px;transition:width 1s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-family:'Fredoka One',cursive;font-size:.9rem;color:#fff;width:0;}
+.grafik-sayi{font-weight:900;font-size:.9rem;min-width:28px;}
+
+/* ANKET */
+.anket-secenekler{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0;justify-content:center;}
+.anket-btn{font-family:'Fredoka One',cursive;padding:12px 22px;border:3px solid var(--yesil);border-radius:16px;background:#fff;cursor:pointer;font-size:1rem;transition:all .2s;color:var(--yesil);}
+.anket-btn:hover,.anket-btn.secildi{background:var(--yesil);color:#fff;transform:scale(1.05);}
+.anket-sonuc{margin:14px 0;}
+.anket-satir{display:flex;align-items:center;gap:10px;margin:6px 0;}
+.anket-etiket{font-weight:800;font-size:.9rem;min-width:120px;}
+.anket-bar-bg{flex:1;background:#e9ecef;border-radius:8px;height:26px;overflow:hidden;}
+.anket-bar{height:100%;border-radius:8px;transition:width .8s ease;display:flex;align-items:center;padding-left:8px;font-family:'Fredoka One',cursive;font-size:.85rem;color:#fff;}
+.anket-n{font-weight:900;font-size:.9rem;min-width:28px;}
+
+/* QUIZ */
+.quiz-soru{padding:16px 18px;background:#f0fdf4;border-radius:14px;border:2px solid var(--yesil);margin-bottom:14px;}
+.quiz-soru p{font-size:1rem;font-weight:800;color:#166534;margin-bottom:10px;}
+.quiz-sec{display:flex;flex-wrap:wrap;gap:7px;}
+.quiz-btn{font-family:'Fredoka One',cursive;padding:9px 20px;border:3px solid var(--yesil);border-radius:50px;background:#fff;cursor:pointer;font-size:.95rem;transition:all .2s;color:var(--yesil);}
+.quiz-btn:hover{background:var(--yesil);color:#fff;}
+.quiz-btn.dogru{background:#27AE60!important;color:#fff!important;border-color:#1e8449!important;}
+.quiz-btn.yanlis{background:#E74C3C!important;color:#fff!important;border-color:#c0392b!important;}
+.quiz-fb{font-size:.92rem;font-weight:800;margin-top:7px;}
+.quiz-skor{text-align:center;font-size:1.3rem;font-weight:900;padding:18px;border-radius:16px;background:#f0fdf4;border:3px solid var(--yesil);color:#166534;display:none;margin-top:14px;font-family:'Fredoka One',cursive;}
+</style>
+</head>
+<body>
+<header>
+  <h1>📊 Veri Toplama</h1>
+  <p>2. Sınıf Matematik · Taylıca İlkokulu</p>
+  <button class="dl-btn" onclick="indir()">⬇ Sayfayı İndir</button>
+</header>
+<nav>
+  <button class="active" onclick="goster('nedir',this)">💡 Veri Nedir?</button>
+  <button onclick="goster('tally',this)">✏️ Çizgi ile Say</button>
+  <button onclick="goster('tablo',this)">📋 Tablo</button>
+  <button onclick="goster('grafik',this)">📊 Çubuk Grafik</button>
+  <button onclick="goster('anket',this)">🗳️ Sınıf Anketi</button>
+  <button onclick="goster('alistirma',this)">🎯 Alıştırma</button>
+</nav>
+
+<!-- 1. VERİ NEDİR -->
+<div id="nedir" class="section active">
+  <div class="card">
+    <div class="card-title" style="color:var(--yesil)">💡 Veri Nedir?</div>
+    <div class="story-box">
+      <p>Öğretmenimiz sordu: "En sevdiğiniz meyve hangisi?"<br><br>
+      Ahmet → Elma, Zeynep → Muz, Ali → Elma, Fatma → Çilek, Hüseyin → Elma...<br><br>
+      Bu cevaplar birer <b>veri!</b><br>
+      Verileri topladık, saydık, gösterdik. Buna <b>veri toplama ve değerlendirme</b> diyoruz.</p>
+    </div>
+    <div class="info info-yesil"><b>Veri:</b> Saydığımız, ölçtüğümüz veya sorarak topladığımız bilgilerdir.</div>
+    <div class="info info-mavi">Verileri göstermek için <b>tablo</b> ve <b>grafik</b> kullanırız.</div>
+    <div class="info info-sari">Neden veri toplarız? → Daha iyi kararlar vermek, karşılaştırma yapmak, en çok/en az olanı bulmak için!</div>
+  </div>
+</div>
+
+<!-- 2. ÇİZGİ İLE SAY -->
+<div id="tally" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--mavi)">✏️ Çizgi ile Sayma</div>
+    <div class="info info-mavi">Veri toplarken kolay saymak için <b>çizgi</b> kullanırız. Her nesne için bir çizgi çekeriz. 5. sırada çizgiye <b>çapraz</b> çizeriz.</div>
+    <div style="background:#f8f9fa;border-radius:16px;padding:16px;margin:14px 0;text-align:center;">
+      <div style="font-family:'Fredoka One',cursive;font-size:1rem;color:#555;margin-bottom:8px;">5 sayısı çizgiyle:</div>
+      <div class="tally-grup">
+        <div class="tally-cizgi"></div>
+        <div class="tally-cizgi"></div>
+        <div class="tally-cizgi"></div>
+        <div class="tally-cizgi"></div>
+        <div style="position:relative;display:flex;align-items:center;">
+          <div class="tally-cizgi"></div>
+          <div style="position:absolute;width:34px;height:5px;background:var(--kirmizi);border-radius:3px;transform:rotate(-70deg);left:-14px;"></div>
+        </div>
+        <span style="font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--mavi);margin-left:8px;">= 5</span>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--turuncu)">🎮 Sen de Say!</div>
+    <div class="info info-turuncu">Aşağıdaki nesneleri sınıfta say ve çizgi yap! Butona tıkla, sonucu gör.</div>
+    <div id="tallyOyun" style="margin:14px 0;"></div>
+    <div class="ctrl">
+      <button class="btn btn-mavi" onclick="tallyGoster()">📊 Sonuçları Göster</button>
+      <button class="btn btn-gray" onclick="tallyReset()">🔄 Sıfırla</button>
+    </div>
+  </div>
+</div>
+
+<!-- 3. TABLO -->
+<div id="tablo" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--yesil)">📋 Tablo ile Göster</div>
+    <div class="info info-yesil">Verileri <b>tablo</b> ile düzenli gösterebiliriz. Tablo: satırlar ve sütunlardan oluşur.</div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--mavi)">🍎 Sınıfın En Sevdiği Meyveler</div>
+    <table class="veri-tablo">
+      <tr><th>Meyve</th><th>Çizgi ile Sayma</th><th>Sayı</th></tr>
+      <tr>
+        <td class="nesne-hucre">🍎 Elma</td>
+        <td><div style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap;" id="talElma"></div></td>
+        <td style="font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--kirmizi);" id="nElma">8</td>
+      </tr>
+      <tr>
+        <td class="nesne-hucre">🍌 Muz</td>
+        <td><div style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap;" id="talMuz"></div></td>
+        <td style="font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--sari);" id="nMuz">5</td>
+      </tr>
+      <tr>
+        <td class="nesne-hucre">🍓 Çilek</td>
+        <td><div style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap;" id="talCilek"></div></td>
+        <td style="font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--kirmizi);" id="nCilek">3</td>
+      </tr>
+      <tr>
+        <td class="nesne-hucre">🍇 Üzüm</td>
+        <td><div style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap;" id="talUzum"></div></td>
+        <td style="font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--mor);" id="nUzum">4</td>
+      </tr>
+    </table>
+    <div class="ctrl">
+      <button class="btn btn-yesil" onclick="tabloGoster()">📋 Tabloyu Göster</button>
+    </div>
+    <div id="tabloSorular" style="margin-top:14px;display:none;">
+      <div class="info info-mavi">📊 Tablodan ne okuyoruz?</div>
+      <div class="info info-yesil">🥇 En çok sevilen meyve: <b>🍎 Elma (8 öğrenci)</b></div>
+      <div class="info info-kirmizi">🥉 En az sevilen meyve: <b>🍓 Çilek (3 öğrenci)</b></div>
+      <div class="info info-sari">👥 Toplam kaç öğrenci? 8 + 5 + 3 + 4 = <b>20 öğrenci</b></div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. ÇUBUK GRAFİK -->
+<div id="grafik" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--turuncu)">📊 Çubuk Grafik</div>
+    <div class="info info-turuncu">Çubuk grafik verileri <b>çubuklarla</b> gösterir. Çubuk ne kadar uzunsa, o veri o kadar fazladır!</div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--mavi)">🎮 Grafiği Çiz!</div>
+    <div id="grafikSenaryo" class="info info-sari"></div>
+    <div class="grafik-wrap" id="grafikAlan"></div>
+    <div class="ctrl">
+      <button class="btn btn-turuncu" onclick="grafikGoster()">📊 Grafiği Göster</button>
+      <button class="btn btn-gray" onclick="grafikReset()">🔄 Sıfırla</button>
+      <button class="btn btn-mavi" onclick="grafikYeni()">🔀 Yeni Veri</button>
+    </div>
+    <div id="grafikSorular" style="display:none;margin-top:14px;"></div>
+  </div>
+</div>
+
+<!-- 5. SINIF ANKETİ -->
+<div id="anket" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--mor)">🗳️ Sınıf Anketi</div>
+    <div class="info info-mor">Hadi sınıfımızda küçük bir anket yapalım! Her öğrenci bir seçenek seçsin, verileri toplayalım!</div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--mavi)" id="anketBaslik">❓ En sevdiğin ders hangisi?</div>
+    <div class="anket-secenekler" id="anketSecenekler"></div>
+    <div id="anketSonuc" class="anket-sonuc" style="display:none;"></div>
+    <div class="ctrl">
+      <button class="btn btn-mor" onclick="anketSonucGoster()">📊 Sonuçları Gör</button>
+      <button class="btn btn-gray" onclick="anketReset()">🔄 Sıfırla</button>
+      <button class="btn btn-turuncu" onclick="anketYeni()">🔀 Yeni Anket</button>
+    </div>
+  </div>
+</div>
+
+<!-- 6. ALIŞTIRMA -->
+<div id="alistirma" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--kirmizi)">🎯 Alıştırma Zamanı!</div>
+    <div class="info info-yesil">Tabloyu ve grafiği okumayı öğrendik. Test edelim!</div>
+    <table class="veri-tablo" style="margin-bottom:8px;">
+      <tr><th>Hayvan</th><th>Sayı</th></tr>
+      <tr><td>🐶 Köpek</td><td>7</td></tr>
+      <tr><td>🐱 Kedi</td><td>5</td></tr>
+      <tr><td>🐟 Balık</td><td>3</td></tr>
+      <tr><td>🐦 Kuş</td><td>4</td></tr>
+    </table>
+    <div class="info info-mavi" style="font-size:.9rem;">Sınıftaki öğrencilerin evdeki hayvanları yukarıdaki tabloda verilmiştir.</div>
+  </div>
+  <div id="quizKutu"></div>
+  <div class="quiz-skor" id="quizSkor"></div>
+  <div class="ctrl"><button class="btn btn-kirmizi" onclick="quizBasla()">🔄 Tekrar Başla</button></div>
+</div>
+
+<script>
+function goster(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+function indir(){const blob=new Blob([document.documentElement.outerHTML],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='veri-toplama-2sinif.html';a.click();}
+
+function cizgiHTML(n,renk){
+  let html='';const gruplar=Math.floor(n/5);const kalan=n%5;
+  for(let g=0;g<gruplar;g++){
+    html+='<div style="display:flex;align-items:center;gap:2px;margin:2px;">';
+    for(let i=0;i<4;i++)html+='<div style="width:5px;height:22px;border-radius:2px;background:'+renk+';display:inline-block;"></div>';
+    html+='<div style="position:relative;display:inline-flex;align-items:center;">'
+      +'<div style="width:5px;height:22px;border-radius:2px;background:'+renk+';"></div>'
+      +'<div style="position:absolute;width:28px;height:4px;background:#E74C3C;border-radius:2px;transform:rotate(-70deg);left:-10px;"></div>'
+    +'</div></div>';
+  }
+  if(kalan>0){
+    html+='<div style="display:flex;align-items:center;gap:2px;margin:2px;">';
+    for(let i=0;i<kalan;i++)html+='<div style="width:5px;height:22px;border-radius:2px;background:'+renk+';display:inline-block;"></div>';
+    html+='</div>';
+  }
+  return html;
+}
+
+// TALLY OYUN
+const tallyNesneler=[
+  {nesne:"🍎",ad:"Elma",gercek:6},{nesne:"🍌",ad:"Muz",gercek:4},
+  {nesne:"🍓",ad:"Çilek",gercek:3},{nesne:"🍇",ad:"Üzüm",gercek:5},
+];
+let tallySayilar={};
+function tallyBasla(){
+  tallySayilar={};
+  const div=document.getElementById('tallyOyun');div.innerHTML='';
+  tallyNesneler.forEach(n=>{
+    tallySayilar[n.ad]=0;
+    const satir=document.createElement('div');
+    satir.style.cssText='display:flex;align-items:center;gap:12px;padding:10px;background:#f8f9fa;border-radius:12px;margin:6px 0;';
+    satir.innerHTML='<span style="font-size:1.5rem;">'+n.nesne+'</span>'
+      +'<span style="font-weight:800;min-width:60px;">'+n.ad+'</span>'
+      +'<button onclick="tallyEkle(\''+n.ad+'\')" style="font-family:\'Fredoka One\',cursive;padding:6px 14px;border:2px solid var(--yesil);border-radius:50px;background:#fff;cursor:pointer;color:var(--yesil);">+ Ekle</button>'
+      +'<div id="tal_'+n.ad+'" style="display:flex;flex-wrap:wrap;gap:2px;align-items:center;flex:1;min-height:28px;"></div>'
+      +'<span id="taln_'+n.ad+'" style="font-family:\'Fredoka One\',cursive;font-size:1rem;color:var(--mavi);min-width:24px;">0</span>';
+    div.appendChild(satir);
+  });
+}
+function tallyEkle(ad){
+  tallySayilar[ad]++;
+  const n=tallySayilar[ad];
+  document.getElementById('taln_'+ad).textContent=n;
+  const el=document.getElementById('tal_'+ad);
+  if(n%5===0){
+    const son=el.querySelector('.tally-grup-son');
+    if(son){const cizgiler=son.querySelectorAll('.tc');const son5=cizgiler[4];if(son5){const k=document.createElement('div');k.style.cssText='position:absolute;width:28px;height:4px;background:#E74C3C;border-radius:2px;transform:rotate(-70deg);left:-10px;';son5.style.position='relative';son5.appendChild(k);}}
+  }
+  if((n-1)%5===0){
+    const g=document.createElement('div');g.className='tally-grup-son';g.style.cssText='display:flex;gap:2px;margin:2px;';
+    const c=document.createElement('div');c.className='tc';c.style.cssText='width:5px;height:22px;border-radius:2px;background:var(--mavi);display:inline-block;';
+    g.appendChild(c);el.appendChild(g);
+  } else {
+    const gruplar=el.querySelectorAll('.tally-grup-son');
+    const sonGrup=gruplar[gruplar.length-1];
+    if(sonGrup){const c=document.createElement('div');c.className='tc';c.style.cssText='width:5px;height:22px;border-radius:2px;background:var(--mavi);display:inline-block;';sonGrup.appendChild(c);}
+  }
+}
+function tallyGoster(){
+  tallyNesneler.forEach(n=>{
+    tallySayilar[n.ad]=n.gercek;
+    document.getElementById('taln_'+n.ad).textContent=n.gercek;
+    document.getElementById('tal_'+n.ad).innerHTML=cizgiHTML(n.gercek,'#4ECDC4');
+  });
+}
+function tallyReset(){tallyBasla();}
+tallyBasla();
+
+// TABLO
+function tabloGoster(){
+  const veriler=[{id:'talElma',n:8,r:'#FF6B6B'},{id:'talMuz',n:5,r:'#FFD93D'},{id:'talCilek',n:3,r:'#FF6B6B'},{id:'talUzum',n:4,r:'#C77DFF'}];
+  veriler.forEach(v=>{document.getElementById(v.id).innerHTML=cizgiHTML(v.n,v.r);});
+  document.getElementById('tabloSorular').style.display='block';
+}
+
+// GRAFİK
+const grafikVeriler=[
+  {baslik:"Sınıfın en sevdiği spor",data:[{ad:"Futbol ⚽",n:8,r:"#4ECDC4"},{ad:"Basketbol 🏀",n:5,r:"#FF9F43"},{ad:"Yüzme 🏊",n:4,r:"#4ECDC4"},{ad:"Koşu 🏃",n:3,r:"#6BCB77"}]},
+  {baslik:"Hava durumu (bu hafta)",data:[{ad:"Güneşli ☀️",n:4,r:"#FFD93D"},{ad:"Bulutlu ⛅",n:2,r:"#94a3b8"},{ad:"Yağmurlu 🌧️",n:1,r:"#2980b9"}]},
+  {baslik:"En sevilen oyun",data:[{ad:"Saklambaç",n:9,r:"#FF6B6B"},{ad:"Körebe",n:6,r:"#C77DFF"},{ad:"Yakan top",n:5,r:"#FF9F43"},{ad:"İp atlama",n:4,r:"#6BCB77"}]},
+];
+let grafikIdx=0,grafikGosterildi=false;
+function grafikBasla(idx){
+  grafikIdx=idx%grafikVeriler.length; grafikGosterildi=false;
+  const v=grafikVeriler[grafikIdx];
+  document.getElementById('grafikSenaryo').textContent=v.baslik;
+  const maks=Math.max(...v.data.map(d=>d.n));
+  const alan=document.getElementById('grafikAlan');alan.innerHTML='';
+  v.data.forEach(d=>{
+    const satir=document.createElement('div');satir.className='grafik-satir';
+    satir.innerHTML='<div class="grafik-etiket">'+d.ad+'</div>'
+      +'<div class="grafik-cubuk-bg"><div class="grafik-cubuk" id="gcb_'+d.ad.replace(/\s/g,'_')+'" style="background:'+d.r+';width:0;">'+d.n+'</div></div>'
+      +'<div class="grafik-sayi" id="gsn_'+d.ad.replace(/\s/g,'_')+'">?</div>';
+    alan.appendChild(satir);
+  });
+  document.getElementById('grafikSorular').style.display='none';
+}
+function grafikGoster(){
+  const v=grafikVeriler[grafikIdx];
+  const maks=Math.max(...v.data.map(d=>d.n));
+  v.data.forEach(d=>{
+    const key=d.ad.replace(/\s/g,'_');
+    const cubuk=document.getElementById('gcb_'+key);
+    const sayi=document.getElementById('gsn_'+key);
+    if(cubuk){setTimeout(()=>{cubuk.style.width=Math.round(d.n/maks*100)+'%';},100);}
+    if(sayi)sayi.textContent=d.n;
+  });
+  const sorular=document.getElementById('grafikSorular');
+  const maksV=v.data.reduce((a,b)=>a.n>b.n?a:b);
+  const minV=v.data.reduce((a,b)=>a.n<b.n?a:b);
+  sorular.style.display='block';
+  sorular.innerHTML='<div class="info info-yesil">🥇 En fazla: <b>'+maksV.ad+' ('+maksV.n+')</b></div>'
+    +'<div class="info info-kirmizi">⬇️ En az: <b>'+minV.ad+' ('+minV.n+')</b></div>'
+    +'<div class="info info-sari">👥 Toplam: <b>'+v.data.reduce((s,d)=>s+d.n,0)+'</b></div>';
+}
+function grafikReset(){grafikBasla(grafikIdx);}
+function grafikYeni(){grafikBasla(grafikIdx+1);}
+grafikBasla(0);
+
+// ANKET
+const anketler=[
+  {soru:"En sevdiğin ders hangisi?",secenekler:["Matematik 🔢","Türkçe 📖","Hayat Bilgisi 🌍","Beden Eğitimi ⚽"],renkler:["#FF6B6B","#4ECDC4","#6BCB77","#FF9F43"]},
+  {soru:"En sevdiğin mevsim hangisi?",secenekler:["İlkbahar 🌸","Yaz ☀️","Sonbahar 🍂","Kış ❄️"],renkler:["#6BCB77","#FFD93D","#FF9F43","#4ECDC4"]},
+  {soru:"En sevdiğin renk hangisi?",secenekler:["Kırmızı 🔴","Mavi 🔵","Yeşil 🟢","Sarı 🟡"],renkler:["#FF6B6B","#4ECDC4","#6BCB77","#FFD93D"]},
+];
+let anketIdx=0,anketOylar={};
+function anketBasla(idx){
+  anketIdx=idx%anketler.length; anketOylar={};
+  const a=anketler[anketIdx];
+  document.getElementById('anketBaslik').textContent='❓ '+a.soru;
+  const div=document.getElementById('anketSecenekler');div.innerHTML='';
+  a.secenekler.forEach((s,i)=>{
+    anketOylar[s]=0;
+    const b=document.createElement('button');b.className='anket-btn';b.textContent=s;
+    b.style.borderColor=a.renkler[i];b.style.color=a.renkler[i];
+    b.onclick=function(){
+      anketOylar[s]++;
+      this.textContent=s+' ('+anketOylar[s]+')';
+    };
+    div.appendChild(b);
+  });
+  document.getElementById('anketSonuc').style.display='none';
+}
+function anketSonucGoster(){
+  const a=anketler[anketIdx];
+  const toplam=Object.values(anketOylar).reduce((s,v)=>s+v,0);
+  if(toplam===0){alert('Önce oy kullanın!');return;}
+  const div=document.getElementById('anketSonuc');div.style.display='block';div.innerHTML='';
+  a.secenekler.forEach((s,i)=>{
+    const n=anketOylar[s]||0;
+    const oran=toplam>0?Math.round(n/toplam*100):0;
+    const satir=document.createElement('div');satir.className='anket-satir';
+    satir.innerHTML='<div class="anket-etiket">'+s+'</div>'
+      +'<div class="anket-bar-bg"><div class="anket-bar" style="background:'+a.renkler[i]+';width:0;" id="ab_'+i+'">'+n+' oy</div></div>'
+      +'<div class="anket-n">'+oran+'%</div>';
+    div.appendChild(satir);
+    setTimeout(()=>{const bar=document.getElementById('ab_'+i);if(bar)bar.style.width=oran+'%';},100+i*100);
+  });
+}
+function anketReset(){anketBasla(anketIdx);}
+function anketYeni(){anketBasla(anketIdx+1);}
+anketBasla(0);
+
+// QUIZ
+const quizData=[
+  {s:"📊 Tablodan: En çok sahip olunan hayvan hangisi?",o:["🐶 Köpek","🐱 Kedi","🐟 Balık","🐦 Kuş"],c:"🐶 Köpek"},
+  {s:"📊 Tablodan: En az sahip olunan hayvan hangisi?",o:["🐶 Köpek","🐱 Kedi","🐟 Balık","🐦 Kuş"],c:"🐟 Balık"},
+  {s:"🔢 Tablodaki toplam hayvan sayısı kaçtır? (7+5+3+4)",o:[17,18,19,20],c:19},
+  {s:"📊 Köpek sahiplerine kedi sahiplerini eklersek kaç olur?",o:[10,11,12,13],c:12},
+  {s:"📋 Veri toplarken hangi aracı kullanabiliriz?",o:["Tablo","Grafik","İkisi de","Hiçbiri"],c:"İkisi de"},
+  {s:"📊 Çubuk grafikte uzun çubuk ne anlama gelir?",o:["Az","Çok","Eşit","Hiç"],c:"Çok"},
+  {s:"🔢 Kedi ve balık sahiplerinin toplamı kaçtır?",o:[6,7,8,9],c:8},
+  {s:"📋 Köpek sahipleri kuş sahiplerinden kaç fazladır?",o:[2,3,4,5],c:3},
+];
+let qCevap=[];
+function quizBasla(){
+  qCevap=[];document.getElementById('quizSkor').style.display='none';
+  const k=document.getElementById('quizKutu');k.innerHTML='';
+  quizData.forEach((q,qi)=>{
+    const sh=[...q.o].sort(()=>Math.random()-.5);
+    const div=document.createElement('div');div.className='quiz-soru';
+    div.innerHTML='<p>'+(qi+1)+'. '+q.s+'</p>'
+      +'<div class="quiz-sec">'+sh.map(o=>'<button class="quiz-btn" data-qi="'+qi+'" data-v="'+o+'" onclick="qCev(this,'+qi+',\''+o+'\',\''+q.c+'\')">'+o+'</button>').join('')+'</div>'
+      +'<div class="quiz-fb" id="qf'+qi+'"></div>';
+    k.appendChild(div);
+  });
+}
+function qCev(el,qi,val,dogru){
+  document.querySelectorAll('[data-qi="'+qi+'"]').forEach(b=>b.disabled=true);
+  const fb=document.getElementById('qf'+qi);
+  if(val==dogru){el.classList.add('dogru');fb.innerHTML='✅ <span style="color:#166534">Doğru!</span>';qCevap[qi]=true;}
+  else{el.classList.add('yanlis');fb.innerHTML='❌ <span style="color:#991b1b">Doğrusu: '+dogru+'</span>';qCevap[qi]=false;document.querySelector('[data-qi="'+qi+'"][data-v="'+dogru+'"]').classList.add('dogru');}
+  if(qCevap.filter(x=>x!==undefined).length===quizData.length){
+    const puan=qCevap.filter(Boolean).length;const sk=document.getElementById('quizSkor');sk.style.display='block';
+    sk.innerHTML='🏆 Sonuç: '+puan+'/'+quizData.length+' doğru! '+(puan>=7?'Mükemmel! 🌟':puan>=5?'Çok iyi! 👍':'Biraz daha çalışalım! 📚');
+  }
+}
+quizBasla();
+</script>
+</body>
+</html>
