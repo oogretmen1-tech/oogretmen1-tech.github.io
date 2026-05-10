@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zamanı Ölçelim – 2. Sınıf</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--sari:#FFD93D;--kirmizi:#FF6B6B;--mavi:#4ECDC4;--yesil:#6BCB77;--mor:#C77DFF;--turuncu:#FF9F43;--bg:#FFFBF0;
+  --akrep-renk:#3d5af1;--yelkovan-renk:#e74c3c;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);}
+header{background:linear-gradient(160deg,#4ECDC4,#C77DFF,#FF6B6B);padding:28px 16px 18px;text-align:center;position:relative;overflow:hidden;}
+header h1{font-family:'Fredoka One',cursive;font-size:clamp(2rem,6vw,3rem);color:#fff;text-shadow:3px 4px 0 rgba(0,0,0,.15);position:relative;z-index:1;}
+header p{color:rgba(255,255,255,.92);font-weight:700;font-size:1rem;margin-top:5px;position:relative;z-index:1;}
+.dl-btn{display:inline-block;margin-top:12px;background:#fff;color:var(--mavi);font-family:'Fredoka One',cursive;font-size:1rem;padding:10px 26px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.15);transition:transform .2s;position:relative;z-index:1;}
+.dl-btn:hover{transform:translateY(-3px);}
+nav{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;padding:12px 10px;background:#fff;border-bottom:3px solid #f0e8d8;position:sticky;top:0;z-index:100;box-shadow:0 3px 12px rgba(0,0,0,.08);}
+nav button{font-family:'Fredoka One',cursive;font-size:.82rem;padding:8px 13px;border:3px solid transparent;border-radius:50px;cursor:pointer;transition:all .2s;background:#f5f0e8;color:#7a5c3a;}
+nav button.active,nav button:hover{background:var(--mavi);color:#fff;border-color:#3ab8b0;transform:translateY(-2px);}
+.section{display:none;padding:24px 14px 50px;max-width:880px;margin:0 auto;}
+.section.active{display:block;animation:pop .35s ease;}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border-radius:24px;padding:24px;margin-bottom:20px;box-shadow:0 5px 24px rgba(0,0,0,.07);border:2px solid #f0e8d8;}
+.card-title{font-family:'Fredoka One',cursive;font-size:1.45rem;margin-bottom:14px;}
+.info{border-radius:14px;padding:14px 18px;margin:10px 0;font-size:1rem;font-weight:700;line-height:1.65;}
+.info-sari{background:#fffbe6;border-left:5px solid var(--sari);color:#856404;}
+.info-mavi{background:#e8fafa;border-left:5px solid var(--mavi);color:#0e7490;}
+.info-yesil{background:#f0fdf4;border-left:5px solid var(--yesil);color:#166534;}
+.info-mor{background:#faf5ff;border-left:5px solid var(--mor);color:#6b21a8;}
+.info-kirmizi{background:#fff1f1;border-left:5px solid var(--kirmizi);color:#991b1b;}
+.info-turuncu{background:#fff7ed;border-left:5px solid var(--turuncu);color:#9a3412;}
+.btn{font-family:'Fredoka One',cursive;padding:10px 22px;border:none;border-radius:50px;cursor:pointer;font-size:.95rem;transition:all .2s;margin:4px;}
+.btn-m{background:var(--mavi);color:#fff;}.btn-m:hover{background:#3ab8b0;transform:translateY(-2px);}
+.btn-t{background:var(--turuncu);color:#fff;}.btn-t:hover{background:#e8892a;transform:translateY(-2px);}
+.btn-y{background:var(--yesil);color:#fff;}.btn-y:hover{background:#55b863;transform:translateY(-2px);}
+.btn-k{background:var(--kirmizi);color:#fff;}.btn-k:hover{background:#e05555;transform:translateY(-2px);}
+.btn-g{background:#94a3b8;color:#fff;}.btn-g:hover{background:#7a8fa3;transform:translateY(-2px);}
+.ctrl{text-align:center;margin:14px 0;}
+
+/* ===========================
+   ÇALAR SAAT CSS
+=========================== */
+.calar-saat-wrap{display:flex;flex-direction:column;align-items:center;margin:16px 0;}
+
+.calar-saat{
+  position:relative;
+  width:220px; height:220px;
+}
+
+/* Çan kulaklıkları */
+.calar-sol-can,.calar-sag-can{
+  position:absolute;top:-18px;
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,#e8e0c0,#c8b060);
+  border:4px solid #a09040;
+  box-shadow:2px 3px 8px rgba(0,0,0,.3);
+  z-index:0;
+}
+.calar-sol-can{left:18px;}
+.calar-sag-can{right:18px;}
+/* Çan düğmesi */
+.calar-sol-can::after,.calar-sag-can::after{
+  content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:12px;height:12px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#888,#444);
+  box-shadow:inset 0 1px 3px rgba(0,0,0,.5);
+}
+
+/* Saat gövdesi */
+.saat-govde{
+  position:absolute;top:0;left:0;right:0;bottom:0;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#fff 0%,#f5f0e8 40%,#e8e0cc 100%);
+  border:10px solid;
+  box-shadow:0 6px 24px rgba(0,0,0,.25),inset 0 2px 6px rgba(255,255,255,.8);
+  z-index:1;
+}
+
+/* Saat SVG canvas */
+.saat-canvas{
+  position:absolute;top:0;left:0;
+  width:100%;height:100%;
+  z-index:2;
+  border-radius:50%;
+}
+
+/* Ayaklar */
+.calar-ayak-sol,.calar-ayak-sag{
+  position:absolute;bottom:-14px;
+  width:20px;height:28px;
+  border-radius:0 0 6px 6px;
+  background:linear-gradient(to bottom,#c8a050,#a07830);
+  border:3px solid #8a6020;
+  z-index:0;
+}
+.calar-ayak-sol{left:52px;}
+.calar-ayak-sag{right:52px;}
+
+/* DİJİTAL SAAT */
+.dijital-saat{
+  background:#1a1a2e;
+  border-radius:14px;
+  padding:12px 22px;
+  font-family:'Fredoka One',cursive;
+  font-size:2.2rem;
+  color:#00ff88;
+  text-shadow:0 0 10px rgba(0,255,136,.5);
+  letter-spacing:4px;
+  border:3px solid #333;
+  box-shadow:0 4px 16px rgba(0,0,0,.3),inset 0 1px 3px rgba(255,255,255,.05);
+  margin-top:12px;
+}
+.dijital-tip{font-family:'Nunito',sans-serif;font-size:.75rem;color:#888;text-align:center;margin-top:4px;letter-spacing:1px;}
+
+/* SAAT AÇIKLAMA ETİKETİ */
+.saat-etiket{
+  font-family:'Fredoka One',cursive;
+  font-size:1.5rem;
+  text-align:center;
+  margin-top:8px;
+}
+
+/* AKREP/YELKOVAN AÇIKLAMA */
+.kol-aciklama{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:12px 0;}
+.kol-badge{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:50px;font-weight:800;font-size:.9rem;border:2px solid;}
+.kol-cizgi{width:24px;height:5px;border-radius:3px;}
+
+/* EGZERSİZ GRID */
+.egzersiz-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin:14px 0;}
+.egzersiz-kutu{border-radius:20px;border:3px solid;padding:16px;text-align:center;background:#fff;}
+.eg-mini-saat{margin:8px auto;}
+.eg-soru{font-family:'Fredoka One',cursive;font-size:.9rem;margin-top:8px;}
+.eg-input{font-family:'Fredoka One',cursive;font-size:1.1rem;width:90px;text-align:center;border:3px solid;border-radius:10px;padding:5px;outline:none;margin-top:6px;}
+.eg-btn{font-family:'Fredoka One',cursive;font-size:.8rem;padding:6px 14px;border:none;border-radius:50px;cursor:pointer;margin-top:6px;transition:all .2s;}
+.eg-fb{font-family:'Fredoka One',cursive;font-size:.85rem;margin-top:5px;min-height:18px;}
+
+/* ÇALAR ALARM */
+.alarm-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;margin:14px 0;}
+.alarm-btn{font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 24px;border:none;border-radius:50px;cursor:pointer;transition:all .2s;}
+.alarm-aktif{animation:titres .15s infinite;}
+@keyframes titres{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+
+/* QUIZ */
+.quiz-soru{padding:16px 18px;background:#e8fafa;border-radius:14px;border:2px solid var(--mavi);margin-bottom:14px;}
+.quiz-soru p{font-size:1rem;font-weight:800;color:#0e7490;margin-bottom:10px;}
+.quiz-sec{display:flex;flex-wrap:wrap;gap:7px;}
+.quiz-btn{font-family:'Fredoka One',cursive;padding:9px 20px;border:3px solid var(--mavi);border-radius:50px;background:#fff;cursor:pointer;font-size:.95rem;transition:all .2s;color:var(--mavi);}
+.quiz-btn:hover{background:var(--mavi);color:#fff;}
+.quiz-btn.dogru{background:#27AE60!important;color:#fff!important;border-color:#1e8449!important;}
+.quiz-btn.yanlis{background:#E74C3C!important;color:#fff!important;border-color:#c0392b!important;}
+.quiz-fb{font-size:.92rem;font-weight:800;margin-top:7px;}
+.quiz-skor{text-align:center;font-size:1.3rem;font-weight:900;padding:18px;border-radius:16px;background:#e8fafa;border:3px solid var(--mavi);color:#0e7490;display:none;margin-top:14px;font-family:'Fredoka One',cursive;}
+
+.story-box{background:linear-gradient(135deg,#e8fafa,#f0e8ff);border:2px solid var(--mavi);border-radius:18px;padding:18px 20px;margin:14px 0;position:relative;}
+.story-box::before{content:'📖';position:absolute;top:-14px;left:16px;font-size:1.4rem;background:#fff;padding:0 4px;}
+.story-box p{font-size:1rem;font-weight:700;line-height:1.7;color:#0e4a6e;}
+</style>
+</head>
+<body>
+<header>
+  <h1>⏰ Zamanı Ölçelim</h1>
+  <p>2. Sınıf Matematik · Taylıca İlkokulu</p>
+  <button class="dl-btn" onclick="indir()">⬇ Sayfayı İndir</button>
+</header>
+<nav>
+  <button class="active" onclick="goster('canli',this)">🕐 Canlı Saat</button>
+  <button onclick="goster('ogren',this)">📖 Saati Öğren</button>
+  <button onclick="goster('tam',this)">✅ Tam Saat</button>
+  <button onclick="goster('bucuk',this)">⏱ Yarım Saat</button>
+  <button onclick="goster('egzersiz',this)">📝 Egzersizler</button>
+  <button onclick="goster('alarm',this)">🔔 Çalar Saat</button>
+  <button onclick="goster('alistirma',this)">🎯 Alıştırma</button>
+</nav>
+
+<!-- 1. CANLI SAAT -->
+<div id="canli" class="section active">
+  <div class="card">
+    <div class="card-title" style="color:var(--mavi)">🕐 Şu An Saat Kaç?</div>
+    <div style="display:flex;flex-wrap:wrap;gap:28px;justify-content:center;align-items:flex-start;margin:16px 0;">
+      <div>
+        <div class="calar-saat-wrap">
+          <div class="calar-saat" id="canliSaatDiv">
+            <div class="calar-sol-can"></div>
+            <div class="calar-sag-can"></div>
+            <div class="saat-govde" style="border-color:#4ECDC4;"></div>
+            <canvas class="saat-canvas" id="canliCanvas" width="220" height="220"></canvas>
+            <div class="calar-ayak-sol"></div>
+            <div class="calar-ayak-sag"></div>
+          </div>
+        </div>
+        <div class="dijital-saat" id="canliDijital">00:00</div>
+        <div class="dijital-tip">📍 Gerçek Zaman</div>
+      </div>
+    </div>
+    <div class="kol-aciklama">
+      <div class="kol-badge" style="background:#eaf4ff;border-color:var(--akrep-renk,#3d5af1);color:var(--akrep-renk,#3d5af1);">
+        <div class="kol-cizgi" style="background:#3d5af1;"></div>
+        Akrep = Kısa → Saati gösterir
+      </div>
+      <div class="kol-badge" style="background:#fff1f1;border-color:#e74c3c;color:#e74c3c;">
+        <div class="kol-cizgi" style="background:#e74c3c;"></div>
+        Yelkovan = Uzun → Dakikayı gösterir
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. ÖĞREN -->
+<div id="ogren" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--mor)">📖 Saati Nasıl Okurum?</div>
+    <div class="story-box">
+      <p>Saatte iki akrep vardır. <b style="color:#3d5af1">Kısa olan → akrep</b>, saati gösterir. <b style="color:#e74c3c">Uzun olan → yelkovan</b>, dakikayı gösterir.<br><br>
+      Yelkovan 12'nin üzerindeyse <b>tam saat</b>tir.<br>
+      Yelkovan 6'nın üzerindeyse <b>yarım saat</b> (buçuk)tur.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0;">
+      <div style="background:#eaf4ff;border:3px solid #3d5af1;border-radius:18px;padding:16px;text-align:center;">
+        <div class="calar-saat-wrap">
+          <div class="calar-saat" style="width:160px;height:160px;">
+            <div class="saat-govde" style="border-color:#3d5af1;"></div>
+            <canvas id="akrepCanvas" width="160" height="160" style="position:absolute;top:0;left:0;border-radius:50%;"></canvas>
+          </div>
+        </div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1rem;color:#3d5af1;margin-top:8px;">AKREP (Kısa)</div>
+        <div style="font-weight:700;font-size:.85rem;color:#1a3a8a;margin-top:4px;">Saati gösterir<br>Yavaş hareket eder</div>
+      </div>
+      <div style="background:#fff1f1;border:3px solid #e74c3c;border-radius:18px;padding:16px;text-align:center;">
+        <div class="calar-saat-wrap">
+          <div class="calar-saat" style="width:160px;height:160px;">
+            <div class="saat-govde" style="border-color:#e74c3c;"></div>
+            <canvas id="yelkovanCanvas" width="160" height="160" style="position:absolute;top:0;left:0;border-radius:50%;"></canvas>
+          </div>
+        </div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1rem;color:#e74c3c;margin-top:8px;">YELKOVAN (Uzun)</div>
+        <div style="font-weight:700;font-size:.85rem;color:#8a1a1a;margin-top:4px;">Dakikayı gösterir<br>Hızlı hareket eder</div>
+      </div>
+    </div>
+    <div class="info info-sari">💡 Analog saat + Dijital saat aynı zamanı gösterir! Dijitalde saat:dakika yazılır.</div>
+  </div>
+</div>
+
+<!-- 3. TAM SAAT -->
+<div id="tam" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--yesil)">✅ Tam Saatler</div>
+    <div class="info info-yesil">Tam saatlerde <b>yelkovan 12'nin üzerindedir!</b> Akrep hangi sayının üzerindeyse o saattir.</div>
+    <div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin:16px 0;" id="tamSaatler"></div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--mavi)">🎮 Saati Ayarla!</div>
+    <div class="info info-mavi">Sağdaki düğmelerle saati ayarla, analog ve dijital saati gözlemle!</div>
+    <div style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;margin:16px 0;">
+      <div class="calar-saat-wrap">
+        <div class="calar-saat" id="ayarSaatDiv">
+          <div class="calar-sol-can"></div>
+          <div class="calar-sag-can"></div>
+          <div class="saat-govde" id="ayarGovde" style="border-color:#6BCB77;"></div>
+          <canvas class="saat-canvas" id="ayarCanvas" width="220" height="220"></canvas>
+          <div class="calar-ayak-sol"></div>
+          <div class="calar-ayak-sag"></div>
+        </div>
+        <div class="dijital-saat" id="ayarDijital">04:00</div>
+        <div class="saat-etiket" id="ayarEtiket" style="color:var(--yesil)">Saat dört</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="font-family:'Fredoka One',cursive;font-size:.9rem;color:#555;margin-bottom:4px;">Saati seç:</div>
+        <div id="tamButtons" style="display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. YARIM SAAT -->
+<div id="bucuk" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--turuncu)">⏱ Yarım Saatler (Buçuk)</div>
+    <div class="info info-turuncu">Yarım saatlerde <b>yelkovan 6'nın üzerindedir!</b> Akrep iki sayının arasındadır.</div>
+    <div class="info info-sari">Saat 4 buçuk = 04:30 = "Saat dört buçuk" veya "Dördü otuz dakika geçiyor"</div>
+    <div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin:16px 0;" id="yarimSaatler"></div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--mavi)">🎮 Tam mı Yarım mı?</div>
+    <div id="tamYarimSoru" class="info info-turuncu" style="font-size:1.05rem;text-align:center;"></div>
+    <div style="display:flex;justify-content:center;margin:14px 0;">
+      <div class="calar-saat-wrap">
+        <div class="calar-saat" id="tyDiv">
+          <div class="calar-sol-can"></div>
+          <div class="calar-sag-can"></div>
+          <div class="saat-govde" id="tyGovde" style="border-color:#FF9F43;"></div>
+          <canvas class="saat-canvas" id="tyCanvas" width="220" height="220"></canvas>
+          <div class="calar-ayak-sol"></div>
+          <div class="calar-ayak-sag"></div>
+        </div>
+        <div class="dijital-saat" id="tyDijital">--:--</div>
+      </div>
+    </div>
+    <div class="ctrl">
+      <button class="btn btn-y" onclick="tamYarimCevap('tam')">✅ TAM SAAT</button>
+      <button class="btn btn-t" onclick="tamYarimCevap('yarim')">⏱ YARIM SAAT</button>
+    </div>
+    <div id="tyFb" style="font-family:'Fredoka One',cursive;font-size:1.1rem;text-align:center;margin-top:8px;min-height:28px;"></div>
+    <div class="ctrl"><button class="btn btn-m" onclick="tamYarimYeni()">▶ Yeni Soru</button></div>
+  </div>
+</div>
+
+<!-- 5. EGZERSİZLER -->
+<div id="egzersiz" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--kirmizi)">📝 Saati Oku – Yaz!</div>
+    <div class="info info-kirmizi">Her saatin altına kaç olduğunu yaz! (Örnek: 03:00 veya 07:30)</div>
+    <div class="egzersiz-grid" id="egzersizGrid"></div>
+    <div class="ctrl">
+      <button class="btn btn-m" onclick="egzersizKontrol()">✅ Hepsini Kontrol Et</button>
+      <button class="btn btn-g" onclick="egzersizYeni()">🔀 Yeni Sorular</button>
+    </div>
+    <div id="egzersizSonuc" class="info info-yesil" style="display:none;text-align:center;font-family:'Fredoka One',cursive;margin-top:10px;"></div>
+  </div>
+</div>
+
+<!-- 6. ÇALAR SAAT -->
+<div id="alarm" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--kirmizi)">🔔 Çalar Saat Kur!</div>
+    <div class="story-box">
+      <p>Sabah okulun 08:30'da başlıyor. Çalar saati 07:00'ye ayarladın. Çalar saat seni tam zamanında uyandırıyor!</p>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;margin:16px 0;">
+      <div class="calar-saat-wrap">
+        <div class="calar-saat" id="alarmSaatDiv">
+          <div class="calar-sol-can" id="alarmsol"></div>
+          <div class="calar-sag-can" id="alarmsag"></div>
+          <div class="saat-govde" id="alarmGovde" style="border-color:#FF6B6B;"></div>
+          <canvas class="saat-canvas" id="alarmCanvas" width="220" height="220"></canvas>
+          <div class="calar-ayak-sol"></div>
+          <div class="calar-ayak-sag"></div>
+        </div>
+        <div class="dijital-saat" id="alarmDijital">07:00</div>
+        <div class="saat-etiket" id="alarmEtiket" style="color:var(--kirmizi)">Alarm: Saat yedi</div>
+      </div>
+      <div>
+        <div style="font-family:'Fredoka One',cursive;font-size:.95rem;color:#555;margin-bottom:8px;">⏰ Alarmı Kur:</div>
+        <div style="display:flex;flex-direction:column;gap:6px;" id="alarmButtons"></div>
+        <div style="margin-top:14px;">
+          <button class="btn btn-k" id="testBtn" onclick="testAlarm()">🔔 Test Et!</button>
+          <button class="btn btn-g" onclick="stopAlarm()">⏹ Durdur</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 7. ALIŞTIRMA -->
+<div id="alistirma" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--kirmizi)">🎯 Alıştırma Zamanı!</div>
+    <div class="info info-mavi">Saatler konusunu test edelim!</div>
+  </div>
+  <div id="quizKutu"></div>
+  <div class="quiz-skor" id="quizSkor"></div>
+  <div class="ctrl"><button class="btn btn-k" onclick="quizBasla()">🔄 Tekrar Başla</button></div>
+</div>
+
+<script>
+function goster(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+function indir(){const blob=new Blob([document.documentElement.outerHTML],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='zaman-2sinif.html';a.click();}
+
+/* ===========================
+   SAAT ÇİZİM FONKSİYONU
+=========================== */
+const saatRenkleri = ['#FF6B6B','#4ECDC4','#6BCB77','#FF9F43','#C77DFF','#FFD93D','#FF6B9D','#2980b9','#e74c3c','#16a085','#8e44ad','#f39c12'];
+
+function saatCiz(canvasId, saat, dakika, secenek){
+  const canvas = document.getElementById(canvasId);
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W/2, cy = H/2;
+  const r = W/2 - 10;
+  ctx.clearRect(0,0,W,H);
+
+  const opts = Object.assign({
+    cercevRenk: '#4ECDC4',
+    kadranRenk: '#ffffff',
+    akrepRenk: '#3d5af1',
+    yelkovanRenk: '#e74c3c',
+    tikRenk: '#2c3e50',
+    rakaRenk: '#2c3e50',
+    kucuk: false,
+  }, secenek||{});
+
+  const kucukMod = opts.kucuk || W < 170;
+
+  // Dış halka
+  ctx.beginPath();
+  ctx.arc(cx,cy,r,0,Math.PI*2);
+  ctx.fillStyle = opts.kadranRenk;
+  ctx.fill();
+
+  // Minüt tikleri
+  for(let i=0;i<60;i++){
+    const a = (i*6-90) * Math.PI/180;
+    const uzun = i%5===0;
+    const ic = r - (uzun?14:8);
+    ctx.beginPath();
+    ctx.moveTo(cx+Math.cos(a)*ic, cy+Math.sin(a)*ic);
+    ctx.lineTo(cx+Math.cos(a)*(r-2), cy+Math.sin(a)*(r-2));
+    ctx.strokeStyle = uzun ? opts.tikRenk : '#bbb';
+    ctx.lineWidth = uzun ? (kucukMod?2:3) : 1;
+    ctx.stroke();
+  }
+
+  // Rakamlar
+  const rakamR = r - (kucukMod?22:26);
+  for(let i=1;i<=12;i++){
+    const a = (i*30-90) * Math.PI/180;
+    const x = cx + Math.cos(a)*rakamR;
+    const y = cy + Math.sin(a)*rakamR;
+    ctx.font = `bold ${kucukMod?11:14}px Nunito,Arial`;
+    ctx.fillStyle = opts.rakaRenk;
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(i, x, y);
+  }
+
+  // Merkez nokta (arka)
+  ctx.beginPath();ctx.arc(cx,cy,kucukMod?5:7,0,Math.PI*2);
+  ctx.fillStyle='#2c3e50';ctx.fill();
+
+  // AKREP (kısa, kalın, mavi)
+  const akrepA = ((saat%12)*30 + dakika*0.5 - 90) * Math.PI/180;
+  const akrepU = r * (kucukMod?0.42:0.45);
+  const akrepG = r * 0.12; // geri uzama
+  ctx.beginPath();
+  ctx.moveTo(cx - Math.cos(akrepA)*akrepG, cy - Math.sin(akrepA)*akrepG);
+  ctx.lineTo(cx + Math.cos(akrepA)*akrepU, cy + Math.sin(akrepA)*akrepU);
+  ctx.strokeStyle = opts.akrepRenk;
+  ctx.lineWidth = kucukMod?5:7;
+  ctx.lineCap='round';ctx.stroke();
+
+  // YELKOVAN (uzun, ince, kırmızı)
+  const yelkA = (dakika*6 - 90) * Math.PI/180;
+  const yelkU = r * (kucukMod?0.62:0.68);
+  const yelkG = r * 0.1;
+  ctx.beginPath();
+  ctx.moveTo(cx - Math.cos(yelkA)*yelkG, cy - Math.sin(yelkA)*yelkG);
+  ctx.lineTo(cx + Math.cos(yelkA)*yelkU, cy + Math.sin(yelkA)*yelkU);
+  ctx.strokeStyle = opts.yelkovanRenk;
+  ctx.lineWidth = kucukMod?3:4;
+  ctx.lineCap='round';ctx.stroke();
+
+  // Saniye iğnesi (ince, turuncu) - sadece canlı saatte
+  if(secenek && secenek.saniye !== undefined){
+    const sanA = (secenek.saniye*6 - 90) * Math.PI/180;
+    ctx.beginPath();
+    ctx.moveTo(cx - Math.cos(sanA)*(r*0.12), cy - Math.sin(sanA)*(r*0.12));
+    ctx.lineTo(cx + Math.cos(sanA)*(r*0.72), cy + Math.sin(sanA)*(r*0.72));
+    ctx.strokeStyle='#FF9F43';ctx.lineWidth=2;ctx.stroke();
+  }
+
+  // Merkez nokta (ön)
+  ctx.beginPath();ctx.arc(cx,cy,kucukMod?4:5,0,Math.PI*2);
+  ctx.fillStyle='#FF9F43';ctx.fill();
+  ctx.beginPath();ctx.arc(cx,cy,kucukMod?2:3,0,Math.PI*2);
+  ctx.fillStyle='#fff';ctx.fill();
+}
+
+/* ===========================
+   CANLJ SAAT
+=========================== */
+function canliGuncelle(){
+  const now = new Date();
+  const s=now.getHours(), d=now.getMinutes(), sn=now.getSeconds();
+  saatCiz('canliCanvas', s, d, {saniye:sn, akrepRenk:'#3d5af1', yelkovanRenk:'#e74c3c'});
+  const h=String(s).padStart(2,'0');const m=String(d).padStart(2,'0');
+  document.getElementById('canliDijital').textContent=h+':'+m;
+}
+canliGuncelle();
+setInterval(canliGuncelle, 1000);
+
+/* ===========================
+   ÖĞREN SAYFASI
+=========================== */
+saatCiz('akrepCanvas', 9, 0, {kucuk:true, akrepRenk:'#3d5af1', yelkovanRenk:'#e74c3c'});
+saatCiz('yelkovanCanvas', 12, 30, {kucuk:true, akrepRenk:'#3d5af1', yelkovanRenk:'#e74c3c'});
+
+/* ===========================
+   TAM SAATLER SAYFASI
+=========================== */
+const saatAdlari=['sıfır','bir','iki','üç','dört','beş','altı','yedi','sekiz','dokuz','on','on bir','on iki'];
+const tamSaatVerisi=[3,6,9,12,1,4,7,10,2,5,8,11];
+
+(function(){
+  const div=document.getElementById('tamSaatler');
+  tamSaatVerisi.slice(0,6).forEach((s,i)=>{
+    const kutu=document.createElement('div');
+    kutu.style.cssText='text-align:center;';
+    const cid='ts_'+i;
+    kutu.innerHTML='<canvas id="'+cid+'" width="110" height="110" style="border-radius:50%;box-shadow:0 3px 12px rgba(0,0,0,.12);"></canvas>'
+      +'<div style="font-family:Fredoka One,cursive;font-size:1rem;color:'+saatRenkleri[i]+';margin-top:6px;">Saat '+saatAdlari[s]+'</div>'
+      +'<div style="font-family:Fredoka One,cursive;font-size:.85rem;color:#888;">'+String(s).padStart(2,'0')+':00</div>';
+    div.appendChild(kutu);
+    setTimeout(()=>saatCiz(cid, s, 0, {kucuk:true, akrepRenk:'#3d5af1', yelkovanRenk:'#e74c3c', cercevRenk:saatRenkleri[i]}),50);
+  });
+
+  // Ayar butonları
+  const btnDiv=document.getElementById('tamButtons');
+  for(let s=1;s<=12;s++){
+    const b=document.createElement('button');
+    b.style.cssText='font-family:Fredoka One,cursive;font-size:.85rem;padding:7px 16px;border:2px solid '+saatRenkleri[s-1]+';border-radius:50px;background:#fff;cursor:pointer;transition:all .2s;color:'+saatRenkleri[s-1]+';';
+    b.textContent='Saat '+saatAdlari[s];
+    b.onclick=()=>ayarSaatiSet(s, 0);
+    btnDiv.appendChild(b);
+  }
+  ayarSaatiSet(4, 0);
+})();
+
+function ayarSaatiSet(s, d){
+  saatCiz('ayarCanvas', s, d, {akrepRenk:'#3d5af1', yelkovanRenk:'#e74c3c'});
+  document.getElementById('ayarDijital').textContent=String(s).padStart(2,'0')+':'+String(d).padStart(2,'0');
+  const tip = d===0 ? 'Saat '+saatAdlari[s%13||1] : 'Saat '+saatAdlari[s%13||1]+' buçuk';
+  document.getElementById('ayarEtiket').textContent=tip;
+  const govde=document.getElementById('ayarGovde');
+  govde.style.borderColor=saatRenkleri[(s-1)%12];
+}
+
+/* ===========================
+   YARIM SAATLER
+=========================== */
+(function(){
+  const div=document.getElementById('yarimSaatler');
+  [1,3,5,7,9,11].forEach((s,i)=>{
+    const kutu=document.createElement('div');
+    kutu.style.cssText='text-align:center;';
+    const cid='ys_'+i;
+    kutu.innerHTML='<canvas id="'+cid+'" width="110" height="110" style="border-radius:50%;box-shadow:0 3px 12px rgba(0,0,0,.12);"></canvas>'
+      +'<div style="font-family:Fredoka One,cursive;font-size:1rem;color:'+saatRenkleri[i]+';margin-top:6px;">Saat '+saatAdlari[s]+' buçuk</div>'
+      +'<div style="font-family:Fredoka One,cursive;font-size:.85rem;color:#888;">'+String(s).padStart(2,'0')+':30</div>';
+    div.appendChild(kutu);
+    setTimeout(()=>saatCiz(cid, s, 30, {kucuk:true, akrepRenk:'#3d5af1', yelkovanRenk:'#e74c3c', cercevRenk:saatRenkleri[i]}),50);
+  });
+})();
+
+// TAM mi YARIM mi oyunu
+const tyVerisi=[
+  {s:3,d:0,tip:'tam'},{s:7,d:30,tip:'yarim'},{s:11,d:0,tip:'tam'},
+  {s:4,d:30,tip:'yarim'},{s:9,d:0,tip:'tam'},{s:2,d:30,tip:'yarim'},
+  {s:6,d:0,tip:'tam'},{s:10,d:30,tip:'yarim'},{s:1,d:0,tip:'tam'},
+  {s:5,d:30,tip:'yarim'},{s:8,d:0,tip:'tam'},{s:12,d:30,tip:'yarim'},
+];
+let tyIdx=0;
+function tamYarimYeni(){
+  tyIdx=(tyIdx+1)%tyVerisi.length;
+  const q=tyVerisi[tyIdx];
+  document.getElementById('tamYarimSoru').textContent='Bu saat tam saat mi, yarım saat mi?';
+  saatCiz('tyCanvas', q.s, q.d, {akrepRenk:'#3d5af1', yelkovanRenk:'#e74c3c'});
+  document.getElementById('tyDijital').textContent=String(q.s).padStart(2,'0')+':'+String(q.d).padStart(2,'0');
+  document.getElementById('tyFb').textContent='';
+}
+function tamYarimCevap(cevap){
+  const q=tyVerisi[tyIdx];
+  const fb=document.getElementById('tyFb');
+  if(cevap===q.tip){
+    fb.innerHTML='<span style="color:#166534">✅ Doğru! '+(q.tip==='tam'?'Tam saat — yelkovan 12\'de!':'Yarım saat (buçuk) — yelkovan 6\'da!')+'</span>';
+  } else {
+    fb.innerHTML='<span style="color:#991b1b">❌ Tekrar bak! '+(q.tip==='tam'?'Bu tam saattir.':'Bu yarım saattir (buçuk).')+'</span>';
+  }
+}
+tamYarimYeni();
+
+/* ===========================
+   EGZERSİZLER
+=========================== */
+const egzersizVerisi=[
+  {s:1,d:0},{s:3,d:0},{s:6,d:0},{s:9,d:0},{s:11,d:0},{s:2,d:30},
+  {s:4,d:30},{s:7,d:30},{s:10,d:30},{s:5,d:0},{s:8,d:30},{s:12,d:0},
+];
+let egAktif=[];
+function egzersizOlustur(veri){
+  egAktif=veri;
+  const grid=document.getElementById('egzersizGrid');grid.innerHTML='';
+  veri.forEach((v,i)=>{
+    const kutu=document.createElement('div');kutu.className='egzersiz-kutu';
+    kutu.style.cssText='border-color:'+saatRenkleri[i%12]+';';
+    const cid='eg_'+i;
+    const dogru=String(v.s).padStart(2,'0')+':'+String(v.d).padStart(2,'0');
+    kutu.innerHTML='<canvas id="'+cid+'" width="120" height="120" class="eg-mini-saat" style="border-radius:50%;box-shadow:0 3px 10px rgba(0,0,0,.1);"></canvas>'
+      +'<div class="eg-soru" style="color:'+saatRenkleri[i%12]+'">Saat: ___</div>'
+      +'<input class="eg-input" type="text" id="eg_inp_'+i+'" placeholder="00:00" style="border-color:'+saatRenkleri[i%12]+';color:'+saatRenkleri[i%12]+';" data-dogru="'+dogru+'">'
+      +'<div class="eg-fb" id="eg_fb_'+i+'"></div>';
+    grid.appendChild(kutu);
+    setTimeout(()=>saatCiz(cid, v.s, v.d, {kucuk:true, akrepRenk:'#3d5af1', yelkovanRenk:'#e74c3c', cercevRenk:saatRenkleri[i%12]}),50);
+  });
+  document.getElementById('egzersizSonuc').style.display='none';
+}
+function egzersizKontrol(){
+  let dogru=0;
+  egAktif.forEach((_,i)=>{
+    const inp=document.getElementById('eg_inp_'+i);
+    const fb=document.getElementById('eg_fb_'+i);
+    const d=inp.dataset.dogru;
+    if(inp.value.trim()===d){fb.innerHTML='✅';dogru++;}
+    else{fb.innerHTML='❌ '+d;}
+  });
+  const el=document.getElementById('egzersizSonuc');el.style.display='block';
+  el.className='info '+(dogru===egAktif.length?'info-yesil':'info-turuncu');
+  el.textContent='🏆 '+dogru+'/'+egAktif.length+' doğru!';
+}
+function egzersizYeni(){egzersizOlustur([...egzersizVerisi].sort(()=>Math.random()-.5).slice(0,6));}
+egzersizOlustur(egzersizVerisi.slice(0,6));
+
+/* ===========================
+   ÇALAR SAAT
+=========================== */
+let alarmSaat=7, alarmDakika=0, alarmInterval=null, alarmCaliyor=false;
+(function(){
+  const btnDiv=document.getElementById('alarmButtons');
+  const saatler=[{s:7,d:0,l:'07:00 — Uyanma'},{s:8,d:30,l:'08:30 — Okul'},{s:12,d:0,l:'12:00 — Öğle'},{s:15,d:0,l:'15:00 — Çıkış'},{s:21,d:0,l:'21:00 — Uyku'}];
+  saatler.forEach(a=>{
+    const b=document.createElement('button');
+    b.style.cssText='font-family:Fredoka One,cursive;font-size:.85rem;padding:8px 16px;border:2px solid var(--kirmizi);border-radius:50px;background:#fff;cursor:pointer;color:var(--kirmizi);transition:all .2s;';
+    b.textContent=a.l;
+    b.onclick=()=>alarmAyarla(a.s,a.d);
+    btnDiv.appendChild(b);
+  });
+  alarmAyarla(7,0);
+})();
+function alarmAyarla(s,d){
+  alarmSaat=s;alarmDakika=d;
+  saatCiz('alarmCanvas', s, d, {akrepRenk:'#3d5af1', yelkovanRenk:'#e74c3c'});
+  document.getElementById('alarmDijital').textContent=String(s).padStart(2,'0')+':'+String(d).padStart(2,'0');
+  const tip=d===0?'Alarm: Saat '+saatAdlari[s%13||1]:'Alarm: Saat '+saatAdlari[s%13||1]+' buçuk';
+  document.getElementById('alarmEtiket').textContent=tip;
+}
+function testAlarm(){
+  if(alarmCaliyor){stopAlarm();return;}
+  alarmCaliyor=true;
+  document.getElementById('alarmsol').style.animation='titres .1s infinite';
+  document.getElementById('alarmsag').style.animation='titres .1s infinite';
+  document.getElementById('testBtn').textContent='⏹ Durdur';
+  document.getElementById('alarmGovde').style.borderColor='#e74c3c';
+  let flip=false;
+  alarmInterval=setInterval(()=>{
+    flip=!flip;
+    saatCiz('alarmCanvas', alarmSaat, alarmDakika, {akrepRenk:'#3d5af1', yelkovanRenk:flip?'#ffcc00':'#e74c3c'});
+  },200);
+}
+function stopAlarm(){
+  alarmCaliyor=false;clearInterval(alarmInterval);
+  document.getElementById('alarmsol').style.animation='';
+  document.getElementById('alarmsag').style.animation='';
+  document.getElementById('testBtn').textContent='🔔 Test Et!';
+  document.getElementById('alarmGovde').style.borderColor='#FF6B6B';
+  alarmAyarla(alarmSaat,alarmDakika);
+}
+
+/* ===========================
+   QUIZ
+=========================== */
+const quizData=[
+  {s:'⏰ Yelkovan 12\'nin üzerinde. Akrep 7\'nin üzerinde. Saat kaç?',o:['06:00','07:00','08:00','12:00'],c:'07:00'},
+  {s:'⏱ Yelkovan 6\'nın üzerinde. Akrep 4 ile 5 arasında. Bu saat:',o:['04:00','04:30','05:00','05:30'],c:'04:30'},
+  {s:'📖 Dijital saatte 09:00 yazıyor. Bu saati söyle:',o:['Saat dokuz','Saat on','Saat sekiz','Saat dokuz buçuk'],c:'Saat dokuz'},
+  {s:'🔵 Akrep kısa ya da uzun mu?',o:['Kısa','Uzun','İkisi de','Hiçbiri'],c:'Kısa'},
+  {s:'🔴 Yelkovan neyi gösterir?',o:['Saati','Dakikayı','Yılı','Günü'],c:'Dakikayı'},
+  {s:'⏰ Saat üç buçuk dijitalde nasıl yazılır?',o:['03:00','03:30','30:03','3:3'],c:'03:30'},
+  {s:'✅ Tam saatlerde yelkovan nerede?',o:["6'da","9'da","12'de","3'te"],c:"12'de"},
+  {s:'⏱ Yarım saatlerde yelkovan nerede?',o:["3'te","6'da","9'da","12'de"],c:"6'da"},
+  {s:'🕐 Sabah okul 08:30\'da başlıyor. Bu ne demek?',o:['Saat sekiz','Saat sekiz buçuk','Saat dokuz','Saat yarım'],c:'Saat sekiz buçuk'},
+  {s:'📖 1 saatte kaç dakika vardır?',o:['30','45','60','100'],c:'60'},
+];
+let qC=[];
+function quizBasla(){
+  qC=[];document.getElementById('quizSkor').style.display='none';
+  const k=document.getElementById('quizKutu');k.innerHTML='';
+  quizData.forEach((q,qi)=>{
+    const sh=[...q.o].sort(()=>Math.random()-.5);
+    const div=document.createElement('div');div.className='quiz-soru';
+    div.innerHTML='<p>'+(qi+1)+'. '+q.s+'</p><div class="quiz-sec">'+sh.map(o=>'<button class="quiz-btn" data-qi="'+qi+'" data-v="'+o+'" onclick="qCev(this,'+qi+',\''+o+'\',\''+q.c+'\')">'+o+'</button>').join('')+'</div><div class="quiz-fb" id="qf'+qi+'"></div>';
+    k.appendChild(div);
+  });
+}
+function qCev(el,qi,val,dogru){
+  document.querySelectorAll('[data-qi="'+qi+'"]').forEach(b=>b.disabled=true);
+  if(val==dogru){el.classList.add('dogru');document.getElementById('qf'+qi).innerHTML='✅ <span style="color:#166534">Doğru!</span>';qC[qi]=true;}
+  else{el.classList.add('yanlis');document.getElementById('qf'+qi).innerHTML='❌ <span style="color:#991b1b">Doğrusu: '+dogru+'</span>';qC[qi]=false;document.querySelector('[data-qi="'+qi+'"][data-v="'+dogru+'"]').classList.add('dogru');}
+  if(qC.filter(x=>x!==undefined).length===quizData.length){
+    const p=qC.filter(Boolean).length;const sk=document.getElementById('quizSkor');sk.style.display='block';
+    sk.innerHTML='🏆 Sonuç: '+p+'/'+quizData.length+' doğru! '+(p>=9?'Mükemmel! 🌟':p>=7?'Çok iyi! 👍':p>=5?'İyi! 💪':'Biraz daha çalışalım! 📚');
+  }
+}
+quizBasla();
+</script>
+</body>
+</html>
