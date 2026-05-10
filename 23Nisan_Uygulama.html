@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="23 Nisan">
+<meta name="theme-color" content="#C0392B">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>23 Nisan Etkinlik Uygulaması</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800;900&display=swap');
+
+:root {
+  --red: #C0392B; --dark-red: #922B21; --gold: #D4AC0D;
+  --dark: #1C1C2E; --cream: #FDF8F0; --text: #2C2C3E;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; overflow: hidden; }
+body { font-family: 'Nunito', sans-serif; background: var(--cream); color: var(--text); }
+
+/* ── APP SHELL ── */
+.app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; }
+
+/* ── TOP BAR ── */
+.topbar {
+  background: var(--red);
+  padding: calc(var(--safe-top) + 10px) 16px 10px;
+  display: flex; align-items: center; gap: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  flex-shrink: 0; z-index: 100;
+}
+.topbar .back-btn {
+  background: rgba(255,255,255,0.2); border: none; color: #fff;
+  width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem;
+  cursor: pointer; display: none; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.topbar .back-btn.visible { display: flex; }
+.topbar-title { color: #fff; font-weight: 900; font-size: 1.1rem; flex: 1; }
+.topbar-flag { font-size: 1.4rem; }
+
+/* ── MAIN SCROLL AREA ── */
+.main { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+
+/* ── HOME SCREEN ── */
+.home { padding: 0 0 calc(var(--safe-bottom) + 80px); }
+.home-hero {
+  background: var(--dark);
+  padding: 30px 20px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.home-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 30% 50%, rgba(192,57,43,0.3) 0%, transparent 60%);
+}
+.home-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem; color: #fff; position: relative;
+}
+.home-hero h1 span { color: var(--gold); }
+.home-hero p { color: rgba(255,255,255,0.55); font-size: 0.9rem; margin-top: 6px; position: relative; }
+.home-hero .flag-strip { height: 5px; background: linear-gradient(90deg, var(--red) 50%, #fff 50%); margin-top: 20px; }
+
+.section-title {
+  padding: 20px 16px 8px;
+  font-size: 0.75rem; font-weight: 900; letter-spacing: 3px;
+  color: var(--red); text-transform: uppercase;
+}
+.card-list { padding: 0 12px; display: flex; flex-direction: column; gap: 10px; }
+.app-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  display: flex; align-items: center; gap: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 2px solid transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+.app-card:active { transform: scale(0.97); border-color: var(--red); }
+.app-card .card-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem; flex-shrink: 0;
+}
+.app-card .card-info { flex: 1; }
+.app-card .card-name { font-weight: 900; font-size: 1rem; color: var(--text); }
+.app-card .card-desc { font-size: 0.82rem; color: #888; margin-top: 2px; line-height: 1.4; }
+.app-card .arrow { color: #ccc; font-size: 1.1rem; }
+
+/* ── SCREENS ── */
+.screen { display: none; padding-bottom: calc(var(--safe-bottom) + 20px); }
+.screen.active { display: block; }
+
+/* ══════════════════════════════
+   1) ÇARK
+══════════════════════════════ */
+.cark-screen { padding: 20px 16px; text-align: center; }
+.cark-screen h2 { font-family:'Playfair Display',serif; font-size:1.6rem; color:var(--text); margin-bottom:4px; }
+.cark-screen p { color:#888; font-size:0.88rem; margin-bottom:20px; }
+.wheel-wrap { position:relative; display:inline-flex; align-items:center; justify-content:center; }
+.pointer-tri {
+  position:absolute; top:-14px; left:50%; transform:translateX(-50%);
+  width:0; height:0;
+  border-left:14px solid transparent;
+  border-right:14px solid transparent;
+  border-top:28px solid var(--red);
+  z-index:10; filter:drop-shadow(0 3px 4px rgba(0,0,0,0.3));
+}
+#carkCanvas { border-radius:50%; box-shadow:0 6px 24px rgba(0,0,0,0.3); touch-action:manipulation; }
+.spin-center-btn {
+  position:absolute; width:64px; height:64px; border-radius:50%;
+  background:#fff; color:var(--red); font-weight:900; font-size:0.85rem;
+  border:none; cursor:pointer; box-shadow:0 3px 12px rgba(0,0,0,0.25);
+  z-index:10;
+}
+.spin-center-btn:disabled { opacity:0.4; }
+.cark-result {
+  margin-top:20px; background:#fff; border-radius:16px;
+  padding:18px 20px; box-shadow:0 2px 12px rgba(0,0,0,0.08);
+  text-align:center;
+}
+.cark-result .r-emoji { font-size:2rem; }
+.cark-result .r-text { font-size:1.05rem; font-weight:800; color:var(--red); margin-top:6px; line-height:1.4; }
+.cark-result .r-hint { font-size:0.82rem; color:#888; margin-top:4px; }
+
+/* ══════════════════════════════
+   2) KELİME OYUNU
+══════════════════════════════ */
+.kelime-screen { padding:16px; }
+.kelime-screen h2 { font-family:'Playfair Display',serif; font-size:1.5rem; margin-bottom:4px; }
+.kelime-screen p { color:#888; font-size:0.85rem; margin-bottom:16px; }
+.target-box {
+  background:#fff; border-radius:14px;
+  padding:16px; margin-bottom:12px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.07);
+}
+.target-label { font-size:0.72rem; color:var(--red); font-weight:900; letter-spacing:2px; text-transform:uppercase; margin-bottom:10px; }
+.slots { display:flex; flex-wrap:wrap; gap:8px; min-height:48px; }
+.slot {
+  height:44px; border:2px dashed #ddd; border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  padding:0 12px; font-size:0.95rem; font-weight:800; color:#bbb;
+  min-width:60px; cursor:pointer; transition:all 0.2s;
+  background:rgba(0,0,0,0.01);
+}
+.slot.filled { border-color:var(--red); color:var(--text); background:#fff8f8; }
+.prog-bar { height:5px; background:#eee; border-radius:3px; margin-bottom:14px; overflow:hidden; }
+.prog-fill { height:100%; background:var(--red); border-radius:3px; transition:width 0.3s; }
+.words-label { font-size:0.72rem; color:var(--red); font-weight:900; letter-spacing:2px; text-transform:uppercase; margin-bottom:10px; }
+.words-box { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+.word-chip {
+  background:var(--red); color:#fff; border-radius:10px;
+  padding:10px 16px; font-size:0.95rem; font-weight:800;
+  cursor:pointer; transition:all 0.2s; user-select:none;
+}
+.word-chip:active { transform:scale(0.93); }
+.word-chip.used { opacity:0.25; pointer-events:none; }
+.kelime-btns { display:flex; gap:10px; margin-top:16px; }
+.k-btn {
+  flex:1; padding:13px; border:none; border-radius:12px;
+  font-family:'Nunito',sans-serif; font-size:0.95rem; font-weight:900;
+  cursor:pointer; transition:all 0.2s;
+}
+.k-btn-check { background:var(--red); color:#fff; }
+.k-btn-reset { background:#eee; color:var(--text); }
+.k-feedback {
+  margin-top:12px; padding:12px 14px; border-radius:10px;
+  font-weight:700; font-size:0.9rem; display:none;
+}
+.k-feedback.ok { background:#d5f5e3; color:#1e8449; }
+.k-feedback.err { background:#fadbd8; color:#922b21; }
+.final-quote-box {
+  margin-top:14px; background:var(--dark); border-radius:14px;
+  padding:20px; text-align:center; display:none;
+}
+.final-quote-box .qt { font-family:'Playfair Display',serif; color:#fff; font-size:1.1rem; line-height:1.6; }
+.final-quote-box .qa { color:var(--gold); font-size:0.85rem; margin-top:6px; font-weight:700; }
+
+/* ══════════════════════════════
+   3) BİLİM KARTLARI
+══════════════════════════════ */
+.bilim-screen { padding:16px; }
+.bilim-screen h2 { font-family:'Playfair Display',serif; font-size:1.5rem; margin-bottom:4px; }
+.bilim-screen p { color:#888; font-size:0.85rem; margin-bottom:14px; }
+.filter-chips { display:flex; gap:8px; overflow-x:auto; padding-bottom:10px; margin-bottom:10px; scrollbar-width:none; }
+.filter-chips::-webkit-scrollbar { display:none; }
+.f-chip {
+  flex-shrink:0; padding:7px 14px; border-radius:20px;
+  border:2px solid #ddd; background:#fff;
+  font-size:0.82rem; font-weight:800; cursor:pointer; transition:all 0.2s;
+  font-family:'Nunito',sans-serif;
+}
+.f-chip.active { background:var(--red); color:#fff; border-color:var(--red); }
+.sci-cards { display:flex; flex-direction:column; gap:12px; }
+.sci-card {
+  background:#fff; border-radius:16px;
+  overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.07);
+  cursor:pointer; transition:all 0.2s;
+}
+.sci-card:active { transform:scale(0.98); }
+.sci-top {
+  padding:14px 16px 10px;
+  display:flex; align-items:center; gap:12px;
+}
+.sci-avatar {
+  width:52px; height:52px; border-radius:14px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.5rem; flex-shrink:0;
+}
+.sci-name { font-family:'Playfair Display',serif; font-size:1.05rem; color:var(--text); }
+.sci-years { font-size:0.75rem; color:#aaa; margin-top:1px; }
+.sci-field-tag {
+  font-size:0.68rem; font-weight:900; letter-spacing:1px;
+  text-transform:uppercase; padding:3px 8px; border-radius:20px;
+  color:#fff; display:inline-block; margin-top:4px;
+}
+.sci-body { padding:0 16px 14px; }
+.sci-teaser { font-size:0.88rem; color:#666; line-height:1.5; }
+.sci-detail {
+  margin-top:10px; display:none;
+  flex-direction:column; gap:8px;
+  border-top:1px solid #f0f0f0; padding-top:10px;
+}
+.sci-card.expanded .sci-detail { display:flex; }
+.sci-det-row { display:flex; gap:8px; }
+.sci-det-icon { font-size:0.9rem; flex-shrink:0; margin-top:1px; }
+.sci-det-text { font-size:0.83rem; color:#555; line-height:1.5; }
+.sci-det-text strong { color:var(--text); }
+.sci-fun {
+  background:#fff8f0; border-radius:10px; padding:10px;
+  font-size:0.82rem; color:#666; line-height:1.5;
+}
+.sci-fun strong { color:var(--gold); }
+.expand-hint { font-size:0.75rem; color:#ccc; text-align:right; padding:4px 16px 10px; }
+
+/* ══════════════════════════════
+   4) TAHMİN OYUNU
+══════════════════════════════ */
+.tahmin-screen { padding:16px; }
+.tahmin-screen h2 { font-family:'Playfair Display',serif; font-size:1.5rem; margin-bottom:4px; }
+.tahmin-screen p { color:#888; font-size:0.85rem; margin-bottom:16px; }
+.tahmin-card {
+  background:#fff; border-radius:16px; padding:20px;
+  box-shadow:0 2px 12px rgba(0,0,0,0.07); margin-bottom:14px;
+}
+.t-progress { font-size:0.8rem; color:#aaa; margin-bottom:12px; text-align:right; }
+.score-pill {
+  background:var(--gold); color:var(--dark);
+  font-weight:900; font-size:0.75rem;
+  padding:2px 9px; border-radius:20px; margin-left:6px;
+}
+.clue-item {
+  display:flex; gap:10px; align-items:flex-start;
+  margin-bottom:10px; opacity:0; transform:translateY(6px);
+  transition:all 0.35s;
+}
+.clue-item.show { opacity:1; transform:none; }
+.clue-num {
+  background:var(--red); color:#fff;
+  width:22px; height:22px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.72rem; font-weight:900; flex-shrink:0; margin-top:1px;
+}
+.clue-text { font-size:0.9rem; color:var(--text); line-height:1.5; }
+.t-input {
+  width:100%; padding:13px 16px;
+  border:2px solid #e0d5cc; border-radius:12px;
+  font-family:'Nunito',sans-serif; font-size:1rem;
+  outline:none; transition:border 0.2s; margin-top:6px;
+}
+.t-input:focus { border-color:var(--red); }
+.t-btns { display:flex; gap:8px; margin-top:10px; }
+.t-btn {
+  flex:1; padding:12px; border:none; border-radius:12px;
+  font-family:'Nunito',sans-serif; font-size:0.9rem; font-weight:900;
+  cursor:pointer; transition:all 0.2s;
+}
+.t-btn-hint { background:#f0ebe5; color:var(--text); }
+.t-btn-check { background:var(--red); color:#fff; }
+.t-result {
+  margin-top:10px; padding:12px; border-radius:10px;
+  font-weight:700; font-size:0.9rem; display:none;
+}
+.t-result.ok { background:#d5f5e3; color:#1e8449; }
+.t-result.err { background:#fadbd8; color:#922b21; }
+.t-next {
+  width:100%; padding:13px; background:var(--dark); color:#fff;
+  border:none; border-radius:12px; font-family:'Nunito',sans-serif;
+  font-size:0.95rem; font-weight:900; cursor:pointer; margin-top:10px; display:none;
+}
+
+/* ══════════════════════════════
+   5) ŞABLONLAR
+══════════════════════════════ */
+.sablon-screen { padding:16px; }
+.sablon-screen h2 { font-family:'Playfair Display',serif; font-size:1.5rem; margin-bottom:4px; }
+.sablon-screen p { color:#888; font-size:0.85rem; margin-bottom:16px; }
+.sablon-tabs { display:flex; gap:8px; margin-bottom:16px; overflow-x:auto; scrollbar-width:none; }
+.sablon-tabs::-webkit-scrollbar { display:none; }
+.s-tab {
+  flex-shrink:0; padding:8px 16px; border-radius:20px;
+  border:2px solid #ddd; background:#fff;
+  font-size:0.85rem; font-weight:800; cursor:pointer;
+  font-family:'Nunito',sans-serif; transition:all 0.2s;
+}
+.s-tab.active { background:var(--red); color:#fff; border-color:var(--red); }
+.s-panel { display:none; }
+.s-panel.active { display:block; }
+/* Pul */
+.pul-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.pul {
+  border:10px solid var(--red);
+  border-image: repeating-linear-gradient(90deg, var(--red) 0 6px, transparent 6px 12px) 10;
+  height:160px; display:flex; flex-direction:column;
+  align-items:center; justify-content:flex-end;
+  padding:10px; background:#fff5f5; position:relative;
+}
+.pul::before { content:'23 NİSAN'; position:absolute; top:6px; left:0; right:0; text-align:center; font-size:0.6rem; font-weight:900; color:var(--red); letter-spacing:2px; }
+.pul .draw { flex:1; border:1px dashed #e0a0a0; border-radius:4px; width:100%; display:flex; align-items:center; justify-content:center; color:#e0a0a0; font-size:0.7rem; margin:18px 0 6px; }
+.pul .pval { font-size:0.9rem; font-weight:900; color:var(--red); }
+.pul-print-hint { margin-top:12px; padding:12px; background:#fff8f8; border-radius:10px; font-size:0.83rem; color:#888; line-height:1.5; text-align:center; }
+/* Rüzgar gülü */
+.ruzgar-svg-wrap { text-align:center; margin-bottom:16px; }
+.kanat-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.kanat-box { background:#fff5f5; border:2px solid #e0a0a0; border-radius:10px; padding:12px; }
+.kanat-lbl { color:var(--red); font-weight:800; font-size:0.78rem; margin-bottom:6px; }
+.k-line { border-bottom:1px solid #ddd; height:26px; margin-bottom:4px; }
+/* Kostüm */
+.kostum-box { background:#fff; border-radius:14px; padding:16px; box-shadow:0 2px 10px rgba(0,0,0,0.07); }
+.kostum-silhouette { text-align:center; margin-bottom:14px; }
+.kostum-silhouette svg { max-width:150px; }
+.form-lbl { font-size:0.78rem; font-weight:800; color:var(--red); margin-bottom:5px; margin-top:12px; display:block; }
+.f-line { border-bottom:1.5px solid #ddd; height:28px; margin-bottom:3px; }
+.malzeme-check-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px; }
+.m-item { display:flex; align-items:center; gap:6px; font-size:0.82rem; color:#555; }
+.cb-box { width:18px; height:18px; border:2px solid var(--red); border-radius:4px; flex-shrink:0; }
+
+/* ══════════════════════════════
+   6) ÇALIŞMA KÂĞITLARI
+══════════════════════════════ */
+.calisma-screen { padding:16px; }
+.calisma-screen h2 { font-family:'Playfair Display',serif; font-size:1.5rem; margin-bottom:4px; }
+.calisma-screen p { color:#888; font-size:0.85rem; margin-bottom:16px; }
+.calisma-tabs { display:flex; gap:8px; overflow-x:auto; margin-bottom:16px; scrollbar-width:none; }
+.calisma-tabs::-webkit-scrollbar { display:none; }
+.c-tab {
+  flex-shrink:0; padding:8px 14px; border-radius:20px;
+  border:2px solid #ddd; background:#fff;
+  font-size:0.82rem; font-weight:800; cursor:pointer;
+  font-family:'Nunito',sans-serif; transition:all 0.2s;
+}
+.c-tab.active { background:var(--red); color:#fff; border-color:var(--red); }
+.c-panel { display:none; }
+.c-panel.active { display:block; }
+.worksheet { background:#fff; border-radius:14px; padding:18px; box-shadow:0 2px 10px rgba(0,0,0,0.07); }
+.ws-header { display:flex; align-items:center; gap:10px; margin-bottom:14px; padding-bottom:12px; border-bottom:2px solid var(--red); }
+.ws-icon { font-size:1.8rem; }
+.ws-title { font-family:'Playfair Display',serif; color:var(--red); font-size:1.15rem; }
+.ws-sub { color:#888; font-size:0.78rem; margin-top:1px; }
+.student-box { display:grid; grid-template-columns:2fr 1fr; gap:8px; margin-bottom:16px; }
+.st-field label { font-size:0.72rem; color:var(--red); font-weight:800; letter-spacing:1px; display:block; margin-bottom:3px; }
+.st-field .st-line { border-bottom:1.5px solid #ddd; height:26px; }
+.starter { background:#fff5f5; border-left:4px solid var(--red); padding:12px; border-radius:0 10px 10px 0; font-size:0.88rem; color:#555; font-style:italic; line-height:1.5; margin-bottom:12px; }
+.starter strong { color:var(--red); font-style:normal; }
+.q-block { margin-bottom:14px; }
+.q-row { display:flex; gap:8px; align-items:flex-start; margin-bottom:5px; }
+.q-n { background:var(--red); color:#fff; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.72rem; font-weight:900; flex-shrink:0; margin-top:1px; }
+.q-t { font-size:0.9rem; color:var(--text); font-weight:700; }
+.w-lines { display:flex; flex-direction:column; }
+.w-line { border-bottom:1px solid #eee; height:34px; }
+.w-line.hi { background:#fff8f8; }
+.sec-label { font-size:0.72rem; font-weight:900; color:var(--red); letter-spacing:1.5px; text-transform:uppercase; margin:14px 0 6px; }
+.check-row { display:flex; flex-wrap:wrap; gap:8px; }
+.chk-item { display:flex; align-items:center; gap:6px; font-size:0.85rem; color:#555; }
+.chk-cb { width:18px; height:18px; border:2px solid var(--red); border-radius:4px; flex-shrink:0; }
+.kolaj-area { width:100%; height:160px; border:2px dashed #e0a0a0; border-radius:10px; background:#fff9f9; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:6px; color:#e0a0a0; font-size:0.9rem; margin-top:8px; }
+.print-note { margin-top:14px; padding:12px; background:#f0f8ff; border-radius:10px; font-size:0.82rem; color:#2980b9; text-align:center; font-weight:700; }
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  position:fixed; bottom:0; left:0; right:0;
+  background:#fff; border-top:1px solid #eee;
+  display:flex; padding:8px 0 calc(var(--safe-bottom) + 8px);
+  box-shadow:0 -2px 12px rgba(0,0,0,0.08); z-index:100;
+}
+.nav-item {
+  flex:1; display:flex; flex-direction:column;
+  align-items:center; gap:3px; padding:4px;
+  cursor:pointer; transition:all 0.15s;
+  border:none; background:none; font-family:'Nunito',sans-serif;
+  -webkit-tap-highlight-color:transparent;
+}
+.nav-item .nav-icon { font-size:1.35rem; line-height:1; }
+.nav-item .nav-label { font-size:0.6rem; font-weight:800; color:#aaa; letter-spacing:0.5px; }
+.nav-item.active .nav-label { color:var(--red); }
+.nav-item .nav-dot { width:4px; height:4px; border-radius:50%; background:var(--red); display:none; }
+.nav-item.active .nav-dot { display:block; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <button class="back-btn" id="backBtn" onclick="goHome()">←</button>
+    <div class="topbar-title" id="topTitle">23 Nisan</div>
+    <div class="topbar-flag">🇹🇷</div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main" id="mainArea">
+
+    <!-- HOME -->
+    <div id="screen-home" class="screen active">
+      <div class="home">
+        <div class="home-hero">
+          <h1>23 <span>Nisan</span></h1>
+          <p>Ulusal Egemenlik ve Çocuk Bayramı</p>
+          <div class="flag-strip"></div>
+        </div>
+
+        <div class="section-title">🎮 Akıllı Tahta Oyunları</div>
+        <div class="card-list">
+          <div class="app-card" onclick="goScreen('cark', 'Eğlence Kesesi Çarkı')">
+            <div class="card-icon" style="background:#fff0ee;">🎡</div>
+            <div class="card-info">
+              <div class="card-name">Eğlence Kesesi Çarkı</div>
+              <div class="card-desc">Çarkı çevir, görevi bul — 12 eğlenceli görev</div>
+            </div>
+            <div class="arrow">›</div>
+          </div>
+          <div class="app-card" onclick="goScreen('kelime', 'Bulalım Tamamlayalım')">
+            <div class="card-icon" style="background:#eef4ff;">🔍</div>
+            <div class="card-info">
+              <div class="card-name">Bulalım Tamamlayalım</div>
+              <div class="card-desc">Atatürk'ün sözünü doğru sıraya koy!</div>
+            </div>
+            <div class="arrow">›</div>
+          </div>
+        </div>
+
+        <div class="section-title">🔬 Türk Bilim İnsanları</div>
+        <div class="card-list">
+          <div class="app-card" onclick="goScreen('bilim', 'Bilgi Kartları')">
+            <div class="card-icon" style="background:#f0fff4;">🧪</div>
+            <div class="card-info">
+              <div class="card-name">Bilgi Kartları</div>
+              <div class="card-desc">12 Türk bilim insanı — aç, oku, öğren</div>
+            </div>
+            <div class="arrow">›</div>
+          </div>
+          <div class="app-card" onclick="goScreen('tahmin', 'Kim Bu Bilim İnsanı?')">
+            <div class="card-icon" style="background:#fffbee;">🎯</div>
+            <div class="card-info">
+              <div class="card-name">Kim Bu Bilim İnsanı?</div>
+              <div class="card-desc">İpuçlarını oku, adını tahmin et!</div>
+            </div>
+            <div class="arrow">›</div>
+          </div>
+        </div>
+
+        <div class="section-title">✏️ Şablon ve Çalışma Kâğıtları</div>
+        <div class="card-list">
+          <div class="app-card" onclick="goScreen('sablon', 'Şablonlar')">
+            <div class="card-icon" style="background:#fff5f5;">🎨</div>
+            <div class="card-info">
+              <div class="card-name">Şablonlar</div>
+              <div class="card-desc">Pul tasarımı · Rüzgar gülü · Kostüm tasarımı</div>
+            </div>
+            <div class="arrow">›</div>
+          </div>
+          <div class="app-card" onclick="goScreen('calisma', 'Çalışma Kâğıtları')">
+            <div class="card-icon" style="background:#f5fff8;">📋</div>
+            <div class="card-info">
+              <div class="card-name">Çalışma Kâğıtları</div>
+              <div class="card-desc">Hikâye Zinciri · Aile Röportajı · Çocuk Hakları...</div>
+            </div>
+            <div class="arrow">›</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ÇARK -->
+    <div id="screen-cark" class="screen">
+      <div class="cark-screen">
+        <h2>🎡 Eğlence Kesesi</h2>
+        <p>Çarkı çevir, görevi yap!</p>
+        <div class="wheel-wrap">
+          <div class="pointer-tri"></div>
+          <canvas id="carkCanvas" width="300" height="300"></canvas>
+          <button class="spin-center-btn" id="spinBtn" onclick="spinWheel()">ÇEVİR</button>
+        </div>
+        <div class="cark-result" id="carkResult">
+          <div class="r-emoji">🎯</div>
+          <div class="r-text">Çevir ve görevini bul!</div>
+          <div class="r-hint">Butona ya da çarka dokun</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KELİME OYUNU -->
+    <div id="screen-kelime" class="screen">
+      <div class="kelime-screen">
+        <h2>🔍 Bulalım Tamamlayalım</h2>
+        <p>Atatürk'ün sözünü doğru sıraya koy!</p>
+        <div class="target-box">
+          <div class="target-label">📋 Sözü Oluştur</div>
+          <div class="slots" id="kSlots"></div>
+        </div>
+        <div class="prog-bar"><div class="prog-fill" id="kProg" style="width:0%"></div></div>
+        <div class="words-label">🎴 Kelimeye dokun</div>
+        <div class="words-box" id="kWords"></div>
+        <div class="kelime-btns">
+          <button class="k-btn k-btn-reset" onclick="kelimeInit()">🔄 Yeniden</button>
+          <button class="k-btn k-btn-check" onclick="kelimeCheck()">✅ Kontrol</button>
+        </div>
+        <div class="k-feedback" id="kFeedback"></div>
+        <div class="final-quote-box" id="kFinalQuote">
+          <div class="qt">"Çocuklar, bugünün küçükleri yarının büyükleridir."</div>
+          <div class="qa">— Mustafa Kemal Atatürk 🌟</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BİLİM KARTLARI -->
+    <div id="screen-bilim" class="screen">
+      <div class="bilim-screen">
+        <h2>🔬 Türk Bilim İnsanları</h2>
+        <p>Karta dokun, daha fazlasını öğren!</p>
+        <div class="filter-chips" id="bilimFilter">
+          <button class="f-chip active" onclick="filterSci('all',this)">Tümü</button>
+          <button class="f-chip" onclick="filterSci('matematik',this)">🔢 Matematik</button>
+          <button class="f-chip" onclick="filterSci('kimya',this)">⚗️ Kimya/Tıp</button>
+          <button class="f-chip" onclick="filterSci('fizik',this)">⚛️ Fizik</button>
+          <button class="f-chip" onclick="filterSci('biyoloji',this)">🧬 Biyoloji</button>
+        </div>
+        <div class="sci-cards" id="sciCardList"></div>
+      </div>
+    </div>
+
+    <!-- TAHMİN OYUNU -->
+    <div id="screen-tahmin" class="screen">
+      <div class="tahmin-screen">
+        <h2>🎯 Kim Bu Bilim İnsanı?</h2>
+        <p>İpuçlarına bak ve tahmin et!</p>
+        <div class="tahmin-card">
+          <div class="t-progress" id="tProgress"></div>
+          <div id="tClues"></div>
+          <input class="t-input" id="tInput" type="text" placeholder="Adını yaz..." onkeydown="if(event.key==='Enter')tahminCheck()">
+          <div class="t-btns">
+            <button class="t-btn t-btn-hint" onclick="tahminHint()">💡 İpucu</button>
+            <button class="t-btn t-btn-check" onclick="tahminCheck()">✅ Tahmin</button>
+          </div>
+          <div class="t-result" id="tResult"></div>
+          <button class="t-next" id="tNext" onclick="tahminNext()">Sonraki ➜</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ŞABLONLAR -->
+    <div id="screen-sablon" class="screen">
+      <div class="sablon-screen">
+        <h2>🎨 Şablonlar</h2>
+        <p>Yazdır ve etkinlikte kullan!</p>
+        <div class="sablon-tabs">
+          <button class="s-tab active" onclick="sTab('pul',this)">✉️ Pul</button>
+          <button class="s-tab" onclick="sTab('ruzgar',this)">🌀 Rüzgar Gülü</button>
+          <button class="s-tab" onclick="sTab('kostum',this)">🦸 Kostüm</button>
+        </div>
+        <div class="s-panel active" id="s-pul">
+          <div class="pul-grid">
+            <div class="pul"><div class="draw">✏️ Çiz</div><div class="pval">1 TL</div></div>
+            <div class="pul"><div class="draw">✏️ Çiz</div><div class="pval">2 TL</div></div>
+            <div class="pul"><div class="draw">✏️ Çiz</div><div class="pval">3 TL</div></div>
+            <div class="pul"><div class="draw">✏️ Çiz</div><div class="pval">5 TL</div></div>
+          </div>
+          <div class="pul-print-hint">💡 Tarayıcı menüsünden "Sayfayı Yazdır" seçerek kâğıda basabilirsiniz.</div>
+        </div>
+        <div class="s-panel" id="s-ruzgar">
+          <div class="ruzgar-svg-wrap">
+            <svg width="240" height="240" viewBox="0 0 320 320">
+              <rect x="10" y="10" width="300" height="300" fill="#fffbe6" stroke="#333" stroke-width="2"/>
+              <line x1="10" y1="10" x2="160" y2="160" stroke="#c0392b" stroke-width="2" stroke-dasharray="6,4"/>
+              <line x1="310" y1="10" x2="160" y2="160" stroke="#c0392b" stroke-width="2" stroke-dasharray="6,4"/>
+              <line x1="10" y1="310" x2="160" y2="160" stroke="#c0392b" stroke-width="2" stroke-dasharray="6,4"/>
+              <line x1="310" y1="310" x2="160" y2="160" stroke="#c0392b" stroke-width="2" stroke-dasharray="6,4"/>
+              <circle cx="160" cy="160" r="16" fill="#c0392b"/>
+              <text x="160" y="165" text-anchor="middle" fill="white" font-size="11" font-weight="bold">✂️</text>
+              <circle cx="10" cy="10" r="5" fill="#e74c3c"/>
+              <circle cx="310" cy="10" r="5" fill="#e74c3c"/>
+              <circle cx="10" cy="310" r="5" fill="#e74c3c"/>
+              <circle cx="310" cy="310" r="5" fill="#e74c3c"/>
+            </svg>
+          </div>
+          <div class="kanat-grid">
+            <div class="kanat-box"><div class="kanat-lbl">🌟 Benim hayalim...</div><div class="k-line"></div><div class="k-line"></div></div>
+            <div class="kanat-box"><div class="kanat-lbl">🇹🇷 Ülkem için...</div><div class="k-line"></div><div class="k-line"></div></div>
+            <div class="kanat-box"><div class="kanat-lbl">😊 Beni mutlu eden...</div><div class="k-line"></div><div class="k-line"></div></div>
+            <div class="kanat-box"><div class="kanat-lbl">🎉 23 Nisan benim için...</div><div class="k-line"></div><div class="k-line"></div></div>
+          </div>
+        </div>
+        <div class="s-panel" id="s-kostum">
+          <div class="kostum-box">
+            <div class="kostum-silhouette">
+              <svg width="150" height="220" viewBox="0 0 180 260">
+                <ellipse cx="90" cy="38" rx="30" ry="35" fill="#ffe4c4" stroke="#ddd" stroke-width="1.5"/>
+                <rect x="55" y="72" width="70" height="100" rx="10" fill="#f0f0f0" stroke="#ddd" stroke-width="1.5"/>
+                <rect x="20" y="72" width="35" height="70" rx="10" fill="#f0f0f0" stroke="#ddd" stroke-width="1.5"/>
+                <rect x="125" y="72" width="35" height="70" rx="10" fill="#f0f0f0" stroke="#ddd" stroke-width="1.5"/>
+                <rect x="57" y="170" width="28" height="80" rx="8" fill="#f0f0f0" stroke="#ddd" stroke-width="1.5"/>
+                <rect x="95" y="170" width="28" height="80" rx="8" fill="#f0f0f0" stroke="#ddd" stroke-width="1.5"/>
+                <text x="90" y="120" text-anchor="middle" fill="#ccc" font-size="11">Kostümünü</text>
+                <text x="90" y="136" text-anchor="middle" fill="#ccc" font-size="11">çiz!</text>
+              </svg>
+            </div>
+            <label class="form-lbl">🎭 Kostüm / Karakter Adı</label><div class="f-line"></div>
+            <label class="form-lbl">💭 Neden bu kostümü seçtim?</label><div class="f-line"></div><div class="f-line"></div>
+            <label class="form-lbl">📦 Kullanacağım malzemeler</label>
+            <div class="malzeme-check-grid">
+              <div class="m-item"><div class="cb-box"></div> Karton</div>
+              <div class="m-item"><div class="cb-box"></div> Kumaş</div>
+              <div class="m-item"><div class="cb-box"></div> Plastik şişe</div>
+              <div class="m-item"><div class="cb-box"></div> Poşet</div>
+              <div class="m-item"><div class="cb-box"></div> Boya</div>
+              <div class="m-item"><div class="cb-box"></div> Bant</div>
+            </div>
+            <label class="form-lbl">Adım Soyadım:</label><div class="f-line"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ÇALIŞMA KÂĞITLARI -->
+    <div id="screen-calisma" class="screen">
+      <div class="calisma-screen">
+        <h2>📋 Çalışma Kâğıtları</h2>
+        <p>Doldur, öğren, paylaş!</p>
+        <div class="calisma-tabs">
+          <button class="c-tab active" onclick="cTab('hikaye',this)">📖 Hikâye</button>
+          <button class="c-tab" onclick="cTab('hayali',this)">🌍 Hayalî Konuk</button>
+          <button class="c-tab" onclick="cTab('roportaj',this)">🎬 Röportaj</button>
+          <button class="c-tab" onclick="cTab('hak',this)">✊ Çocuk Hakları</button>
+        </div>
+        <div class="c-panel active" id="c-hikaye">
+          <div class="worksheet">
+            <div class="ws-header"><div class="ws-icon">📖</div><div><div class="ws-title">Hikâye Zinciri</div><div class="ws-sub">Metni devam ettir!</div></div></div>
+            <div class="student-box"><div class="st-field"><label>Adım Soyadım</label><div class="st-line"></div></div><div class="st-field"><label>Tarih</label><div class="st-line"></div></div></div>
+            <div class="starter"><strong>Başlangıç:</strong> "Okulun bahçesinde eski bir tahta sandık vardı. Üzerinde: <em>'23 Nisan'da açılacak!'</em> yazıyordu. Çocuklar günlerce merakla bekledi. Nihayet bayram sabahı geldiğinde sandık açıldı. İçinden..."</div>
+            <div class="sec-label">✏️ Ben devam ettiriyorum...</div>
+            <div class="w-lines"><div class="w-line hi"></div><div class="w-line hi"></div><div class="w-line"></div><div class="w-line"></div><div class="w-line"></div><div class="w-line"></div></div>
+            <div class="sec-label">⭐ Hikayeme başlık koyuyorum</div>
+            <div class="w-line" style="height:40px;"></div>
+          </div>
+        </div>
+        <div class="c-panel" id="c-hayali">
+          <div class="worksheet">
+            <div class="ws-header"><div class="ws-icon">🌍</div><div><div class="ws-title">Hayalî Konuğum Var</div><div class="ws-sub">Farklı ülkeden bir çocuk evimde!</div></div></div>
+            <div class="student-box"><div class="st-field"><label>Adım Soyadım</label><div class="st-line"></div></div><div class="st-field"><label>Tarih</label><div class="st-line"></div></div></div>
+            <div class="q-block"><div class="q-row"><div class="q-n">1</div><div class="q-t">Misafirim hangi ülkeden?</div></div><div class="w-lines"><div class="w-line"></div></div></div>
+            <div class="q-block"><div class="q-row"><div class="q-n">2</div><div class="q-t">Hangi Türk yemeklerini hazırlayacağım?</div></div><div class="w-lines"><div class="w-line"></div><div class="w-line"></div></div></div>
+            <div class="q-block"><div class="q-row"><div class="q-n">3</div><div class="q-t">Hangi oyunları oynayacağız?</div></div><div class="w-lines"><div class="w-line"></div><div class="w-line"></div></div></div>
+            <div class="q-block"><div class="q-row"><div class="q-n">4</div><div class="q-t">Ne hediye vereceğim?</div></div><div class="w-lines"><div class="w-line"></div></div></div>
+          </div>
+        </div>
+        <div class="c-panel" id="c-roportaj">
+          <div class="worksheet">
+            <div class="ws-header"><div class="ws-icon">🎬</div><div><div class="ws-title">Aile Röportajı</div><div class="ws-sub">Büyüklerimin anıları!</div></div></div>
+            <div class="student-box"><div class="st-field"><label>Adım Soyadım</label><div class="st-line"></div></div><div class="st-field"><label>Röportaj Edilen</label><div class="st-line"></div></div></div>
+            <div class="q-block"><div class="q-row"><div class="q-n">1</div><div class="q-t">23 Nisan çocukluğunuzda nasıl kutlanırdı?</div></div><div class="w-lines"><div class="w-line"></div><div class="w-line"></div><div class="w-line"></div></div></div>
+            <div class="q-block"><div class="q-row"><div class="q-n">2</div><div class="q-t">En güzel 23 Nisan anınız nedir?</div></div><div class="w-lines"><div class="w-line"></div><div class="w-line"></div></div></div>
+            <div class="q-block"><div class="q-row"><div class="q-n">3</div><div class="q-t">O zamanlar hangi şarkılar söylenirdi?</div></div><div class="w-lines"><div class="w-line"></div><div class="w-line"></div></div></div>
+            <div class="q-block"><div class="q-row"><div class="q-n">4</div><div class="q-t">Bize ne söylemek istersiniz?</div></div><div class="w-lines"><div class="w-line"></div><div class="w-line"></div></div></div>
+          </div>
+        </div>
+        <div class="c-panel" id="c-hak">
+          <div class="worksheet">
+            <div class="ws-header"><div class="ws-icon">✊</div><div><div class="ws-title">Çocuk Hakları Kolajı</div><div class="ws-sub">Haklarımı tanıyorum!</div></div></div>
+            <div class="student-box"><div class="st-field"><label>Adım Soyadım</label><div class="st-line"></div></div><div class="st-field"><label>Tarih</label><div class="st-line"></div></div></div>
+            <div class="sec-label">✅ Bildiğim hakları işaretle</div>
+            <div class="check-row">
+              <div class="chk-item"><div class="chk-cb"></div> Eğitim</div>
+              <div class="chk-item"><div class="chk-cb"></div> Oyun</div>
+              <div class="chk-item"><div class="chk-cb"></div> Sağlık</div>
+              <div class="chk-item"><div class="chk-cb"></div> Sevgi</div>
+              <div class="chk-item"><div class="chk-cb"></div> Güvenlik</div>
+              <div class="chk-item"><div class="chk-cb"></div> İsim hakkı</div>
+              <div class="chk-item"><div class="chk-cb"></div> Dinlenme</div>
+              <div class="chk-item"><div class="chk-cb"></div> Milliyeti</div>
+            </div>
+            <div class="sec-label">🎨 Kolaj Alanım</div>
+            <div class="kolaj-area"><span style="font-size:1.5rem">✂️</span>Kesip yapıştır!</div>
+            <div class="sec-label">💭 Eksik bir hak var mı?</div>
+            <div class="w-lines"><div class="w-line"></div><div class="w-line"></div></div>
+          </div>
+        </div>
+        <div class="print-note">🖨️ Telefon tarayıcısında "Paylaş → Yazdır" ile kâğıda basabilirsiniz</div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <button class="nav-item active" id="nav-home" onclick="goHome()">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-dot"></div>
+      <div class="nav-label">ANA SAYFA</div>
+    </button>
+    <button class="nav-item" id="nav-oyun" onclick="goScreen('cark','Eğlence Çarkı')">
+      <div class="nav-icon">🎮</div>
+      <div class="nav-dot"></div>
+      <div class="nav-label">OYUNLAR</div>
+    </button>
+    <button class="nav-item" id="nav-bilim" onclick="goScreen('bilim','Bilim İnsanları')">
+      <div class="nav-icon">🔬</div>
+      <div class="nav-dot"></div>
+      <div class="nav-label">BİLİM</div>
+    </button>
+    <button class="nav-item" id="nav-mat" onclick="goScreen('sablon','Şablonlar')">
+      <div class="nav-icon">📋</div>
+      <div class="nav-dot"></div>
+      <div class="nav-label">MATERYALLER</div>
+    </button>
+  </div>
+</div>
+
+<script>
+// ── NAVIGATION ──
+let currentScreen = 'home';
+function goScreen(name, title) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  document.getElementById('topTitle').textContent = title;
+  document.getElementById('backBtn').classList.add('visible');
+  document.getElementById('mainArea').scrollTop = 0;
+  currentScreen = name;
+  updateNav(name);
+  if (name === 'cark') initCark();
+  if (name === 'kelime') kelimeInit();
+  if (name === 'bilim') renderSci('all');
+  if (name === 'tahmin') tahminInit();
+}
+function goHome() {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-home').classList.add('active');
+  document.getElementById('topTitle').textContent = '23 Nisan';
+  document.getElementById('backBtn').classList.remove('visible');
+  document.getElementById('mainArea').scrollTop = 0;
+  currentScreen = 'home';
+  updateNav('home');
+}
+function updateNav(name) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (name === 'home') document.getElementById('nav-home').classList.add('active');
+  else if (name === 'cark' || name === 'kelime') document.getElementById('nav-oyun').classList.add('active');
+  else if (name === 'bilim' || name === 'tahmin') document.getElementById('nav-bilim').classList.add('active');
+  else if (name === 'sablon' || name === 'calisma') document.getElementById('nav-mat').classList.add('active');
+}
+
+// ── ÇARK ──
+const tasks = [
+  { text: "Bir hayvan gibi yürü 🐸", hint: "Sınıf tahmin etsin!" },
+  { text: "Sadece mimiklerinle duygu anlat 😮", hint: "Kelime yok!" },
+  { text: "Ellerini kullanmadan nesne taşı 🎒", hint: "Yaratıcı ol!" },
+  { text: "Enstrüman sesini taklit et 🎸", hint: "Arkadaşlar tahmin etsin" },
+  { text: "Zıplayarak şarkı söyle 🎵", hint: "Bir kıta söyle!" },
+  { text: "23 Nisan için bir slogan bul 🇹🇷", hint: "Yüksek sesle!" },
+  { text: "Bir Türk yemeği tarif et 🍽️", hint: "3 malzeme söyle!" },
+  { text: "Atatürk hakkında bir şey anlat 🌟", hint: "Bildiğini paylaş" },
+  { text: "10 saniyede 5 ülke say 🌍", hint: "Hızlı!" },
+  { text: "Sessizce nesneyi tarif et 🤫", hint: "Mim gibi göster!" },
+  { text: "Bayrak renklerini anlat 🔴⚪", hint: "Kırmızı ve beyaz..." },
+  { text: "Arkadaşına 23 Nisan dileği söyle 🎈", hint: "Güzel bir dilek!" },
+];
+const carkColors = ["#C0392B","#E74C3C","#922B21","#D35400","#C0392B","#E74C3C","#922B21","#D35400","#C0392B","#E74C3C","#922B21","#D35400"];
+let carkAngle = 0, carkSpinning = false, carkInited = false;
+
+function initCark() {
+  if (carkInited) return;
+  carkInited = true;
+  const canvas = document.getElementById('carkCanvas');
+  canvas.addEventListener('click', spinWheel);
+  drawCark(0);
+}
+
+function drawCark(angle) {
+  const canvas = document.getElementById('carkCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const cx = 150, cy = 150, r = 146;
+  ctx.clearRect(0,0,300,300);
+  const slice = 2*Math.PI / tasks.length;
+  tasks.forEach((t,i) => {
+    const s = angle + i*slice, e = s + slice;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,s,e); ctx.closePath();
+    ctx.fillStyle = carkColors[i]; ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,0.3)'; ctx.lineWidth=2; ctx.stroke();
+    ctx.save(); ctx.translate(cx,cy); ctx.rotate(s+slice/2);
+    ctx.textAlign='right'; ctx.fillStyle='#fff'; ctx.font='bold 11px Nunito,Arial';
+    const words = t.text.replace(/[\u{1F000}-\u{1FFFF}]/gu,'').trim().split(' ');
+    let lines=[], line='';
+    words.forEach(w=>{ const test=line?line+' '+w:w; if(ctx.measureText(test).width<r-50){line=test;}else{if(line)lines.push(line);line=w;}});
+    if(line)lines.push(line); lines=lines.slice(0,2);
+    lines.forEach((l,li)=>ctx.fillText(l, r-12, -((lines.length-1)*8)+li*16));
+    ctx.restore();
+  });
+  ctx.beginPath(); ctx.arc(cx,cy,34,0,2*Math.PI);
+  ctx.fillStyle='#fff'; ctx.fill();
+  ctx.strokeStyle='#C0392B'; ctx.lineWidth=3; ctx.stroke();
+}
+
+function spinWheel() {
+  if (carkSpinning) return;
+  carkSpinning = true;
+  document.getElementById('spinBtn').disabled = true;
+  document.getElementById('carkResult').innerHTML = '<div class="r-emoji">🌀</div><div class="r-text">Dönüyor...</div>';
+  const extra = (5 + Math.random()*5)*2*Math.PI;
+  const stop = Math.random()*2*Math.PI;
+  const target = carkAngle + extra + stop;
+  const dur = 3000 + Math.random()*1000;
+  const t0 = performance.now(), a0 = carkAngle;
+  function animate(now) {
+    const p = Math.min((now-t0)/dur, 1);
+    const ease = 1-Math.pow(1-p,4);
+    carkAngle = a0 + (target-a0)*ease;
+    drawCark(carkAngle);
+    if(p<1){requestAnimationFrame(animate);}
+    else{
+      carkAngle = target%(2*Math.PI); carkSpinning=false;
+      document.getElementById('spinBtn').disabled=false;
+      const slice=2*Math.PI/tasks.length;
+      const norm=((3*Math.PI/2-carkAngle)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
+      const idx=Math.floor(norm/slice)%tasks.length;
+      const t=tasks[idx];
+      const emojis=['🎉','⭐','🏆','✨','🎊'];
+      const e=emojis[Math.floor(Math.random()*emojis.length)];
+      document.getElementById('carkResult').innerHTML=`<div class="r-emoji">${e}</div><div class="r-text">${t.text}</div><div class="r-hint">💡 ${t.hint}</div>`;
+    }
+  }
+  requestAnimationFrame(animate);
+}
+
+// ── KELİME OYUNU ──
+const correctOrder = ["Çocuklar,","bugünün","küçükleri","yarının","büyükleridir."];
+let kSelected=[], kUsed=new Set();
+
+function kelimeInit() {
+  kSelected=[]; kUsed=new Set();
+  const shuffled=[...correctOrder].sort(()=>Math.random()-0.5);
+  const words=document.getElementById('kWords');
+  words.innerHTML='';
+  shuffled.forEach((w,i)=>{
+    const el=document.createElement('div');
+    el.className='word-chip'; el.textContent=w; el.dataset.idx=i;
+    el.addEventListener('click',()=>kSelect(el,w,i));
+    words.appendChild(el);
+  });
+  renderSlots();
+  document.getElementById('kFeedback').style.display='none';
+  document.getElementById('kFinalQuote').style.display='none';
+}
+function renderSlots() {
+  const slots=document.getElementById('kSlots'); slots.innerHTML='';
+  kSelected.forEach((item,si)=>{
+    const el=document.createElement('div');
+    el.className='slot filled'; el.textContent=item.word;
+    el.addEventListener('click',()=>kRemove(si,item.origIdx)); slots.appendChild(el);
+  });
+  for(let i=kSelected.length;i<correctOrder.length;i++){
+    const el=document.createElement('div'); el.className='slot'; el.textContent='?'; slots.appendChild(el);
+  }
+  document.getElementById('kProg').style.width=(kSelected.length/correctOrder.length*100)+'%';
+}
+function kSelect(el,word,origIdx){
+  if(kUsed.has(origIdx)||kSelected.length>=correctOrder.length)return;
+  el.classList.add('used'); kUsed.add(origIdx);
+  kSelected.push({word,origIdx}); renderSlots();
+}
+function kRemove(si,origIdx){
+  kSelected.splice(si,1); kUsed.delete(origIdx);
+  document.querySelectorAll('.word-chip').forEach(c=>{if(parseInt(c.dataset.idx)===origIdx)c.classList.remove('used');});
+  renderSlots(); document.getElementById('kFeedback').style.display='none';
+}
+function kelimeCheck(){
+  if(kSelected.length<correctOrder.length){showKFeedback('❗ Tüm kelimeleri yerleştir!',false);return;}
+  const ok=kSelected.every((s,i)=>s.word===correctOrder[i]);
+  if(ok){showKFeedback('🎉 Harika! Atatürk\'ün sözünü doğru oluşturdun!',true);setTimeout(()=>document.getElementById('kFinalQuote').style.display='block',800);}
+  else{showKFeedback('🔄 Henüz doğru değil, tekrar dene!',false);}
+}
+function showKFeedback(msg,ok){
+  const el=document.getElementById('kFeedback');
+  el.style.display='block'; el.className='k-feedback '+(ok?'ok':'err'); el.textContent=msg;
+}
+
+// ── BİLİM KARTLARI ──
+const scientists = [
+  {name:"Cahit Arf",years:"1910–1997",field:"Matematik",fkey:"matematik",color:"#1A5276",emoji:"🔢",teaser:"\"Arf Değişmezi\" ile cebiri değiştirdi. 10 TL banknotta yer aldı.",buluş:"Arf Değişmezi",nerede:"Trabzon doğumlu, Paris ve Göttingen'de doktora.",etki:"Matematikçiler bugün hâlâ onun teoremlerini kullanıyor.",fun:"🪙 10 TL banknotunda portrem basılıydı!",clues:["Trabzon'da 1910'da doğdum.","10 TL banknotunda portrem basılıydı.","Cebir ve sayılar teorisiyle uğraştım.","Adımı taşıyan bir kavram var: ___ Değişmezi."]},
+  {name:"Aziz Sancar",years:"1946–",field:"Kimya",fkey:"kimya",color:"#1E8449",emoji:"⚗️",teaser:"DNA onarım mekanizmalarını keşfetti. 2015 Nobel Kimya Ödülü.",buluş:"Nükleotid eksizyon tamiri",nerede:"Mardin/Savur doğumlu. ABD Chapel Hill Üniversitesi.",etki:"Kanser tedavisi araştırmalarına temel katkı.",fun:"🏆 Türk ailesinden ilk Nobel Kimya Ödülü! 8 kardeşli bir aileden geldi.",clues:["Mardin'in Savur ilçesinde doğdum.","Hücrelerin DNA'sını nasıl onardığını araştırdım.","2015 Nobel ödülü aldım.","Hangi dalda Nobel? ___ Kimya."]},
+  {name:"Feza Gürsey",years:"1921–1992",field:"Fizik",fkey:"fizik",color:"#1B2631",emoji:"⚛️",teaser:"Einstein'ın davet ettiği tek Türk fizikçi. Parçacık fiziğinin devleri arasında.",buluş:"Simetri grupları ve Gürsey modeli",nerede:"İstanbul doğumlu. Princeton ve Yale'de çalıştı.",etki:"Parçacık fiziğinin temel teorisine katkı.",fun:"🌌 Einstein onu bizzat Princeton'a davet etti!",clues:["Einstein beni Princeton'a bizzat davet etti.","Parçacıkların simetrisiyle ilgilendim.","Yale ve Princeton'da çalıştım.","Türk teorik fiziğinin zirvesiyim."]},
+  {name:"Oktay Sinanoğlu",years:"1935–2015",field:"Kimya/Fizik",fkey:"fizik",color:"#784212",emoji:"🔭",teaser:"Yale'in tarihindeki en genç tam profesörü — 28 yaşında!",buluş:"Çok-elektron teorisi, solvofobik etki",nerede:"İstanbul doğumlu. Yale, Berkeley, Princeton.",etki:"İlaç tasarımından biyokimyanın temellerine.",fun:"🎓 Yale'in 270 yıllık tarihinde en genç tam profesör — 28 yaşında!",clues:["Yale'in en genç profesörüydüm — 28 yaşında.","Moleküller arası kuvvetler üzerine çalıştım.","Kimya ve fizik arasında gezindim.","Türkiye'ye dönerek eğitim reformu için mücadele ettim."]},
+  {name:"Türkan Saylan",years:"1935–2009",field:"Tıp",fkey:"kimya",color:"#922B21",emoji:"🩺",teaser:"Cüzzam araştırmalarının öncüsü. Çağdaş Yaşamı Destekleme Derneği kurucusu.",buluş:"Cüzzam tedavisi ve araştırmaları",nerede:"İstanbul Üniversitesi dermatologu.",etki:"Hem bilim insanı hem toplumsal eşitlik öncüsü.",fun:"❤️ Kız çocuklarının okula gitmesi için hayatını verdi.",clues:["Cilt hastalıkları ve cüzzam araştırdım.","ÇYDD'yi kurdum.","Kız çocuklarının eğitimi için mücadele ettim.","Hem doktorum hem toplum önderi — kimim?"]},
+  {name:"Candan Ergenekon",years:"1962–",field:"Tıp",fkey:"biyoloji",color:"#1A5276",emoji:"🧬",teaser:"Yenidoğan yoğun bakımının öncüsü. Binlerce prematüre bebeği hayata bağladı.",buluş:"Yenidoğan yoğun bakım protokolleri",nerede:"Hacettepe Üniversitesi Tıp Fakültesi.",etki:"Türkiye'de prematüre bebek hayatta kalma oranlarını artırdı.",fun:"👶 'Gramların yarışı' der — her gram ağırlıkta bir umut!",clues:["Yeni doğan bebeklerle ilgileniyorum.","Hacettepe Üniversitesi'nde çalışıyorum.","Prematüre bebeklerin yaşaması için çalışıyorum.","Hangi alanda uzmanım? Yenidoğan ___."]},
+  {name:"Semra Günay",years:"1947–",field:"Botanik",fkey:"biyoloji",color:"#196F3D",emoji:"🌿",teaser:"Türkiye'nin endemik bitki türlerini belgeleyen bilim insanı.",buluş:"Türkiye endemik flora çalışmaları",nerede:"Ankara Üniversitesi Biyoloji Bölümü.",etki:"Binlerce endemik bitkinin belgelenmesi.",fun:"🌸 Türkiye'de dünyada başka yerde bulunmayan 3.000+ endemik bitki var!",clues:["Bitkilerle ilgileniyorum.","Ankara Üniversitesi'nde çalışıyorum.","Türkiye'ye özgü bitkileri belgeliyorum.","Biyolojinin hangi dalındayım? ___ bilimi."]},
+];
+
+function renderSci(filter) {
+  const list = document.getElementById('sciCardList'); list.innerHTML='';
+  const shown = filter==='all' ? scientists : scientists.filter(s=>s.fkey===filter);
+  shown.forEach((s,i)=>{
+    const div=document.createElement('div'); div.className='sci-card';
+    div.innerHTML=`
+      <div class="sci-top">
+        <div class="sci-avatar" style="background:${s.color}22">${s.emoji}</div>
+        <div>
+          <div class="sci-name">${s.name}</div>
+          <div class="sci-years">${s.years}</div>
+          <span class="sci-field-tag" style="background:${s.color}">${s.field}</span>
+        </div>
+      </div>
+      <div class="sci-body">
+        <div class="sci-teaser">${s.teaser}</div>
+        <div class="sci-detail">
+          <div class="sci-det-row"><div class="sci-det-icon">🏆</div><div class="sci-det-text"><strong>Katkısı:</strong> ${s.buluş}</div></div>
+          <div class="sci-det-row"><div class="sci-det-icon">📍</div><div class="sci-det-text">${s.nerede}</div></div>
+          <div class="sci-det-row"><div class="sci-det-icon">🌍</div><div class="sci-det-text">${s.etki}</div></div>
+          <div class="sci-fun"><strong>💡 Biliyor muydun?</strong><br>${s.fun}</div>
+        </div>
+      </div>
+      <div class="expand-hint" id="hint-${i}">👇 Daha fazlası için dokun</div>`;
+    div.addEventListener('click',()=>{
+      div.classList.toggle('expanded');
+      document.getElementById('hint-'+i).textContent = div.classList.contains('expanded') ? '👆 Küçült' : '👇 Daha fazlası için dokun';
+    });
+    list.appendChild(div);
+  });
+}
+function filterSci(key,btn){
+  document.querySelectorAll('.f-chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active'); renderSci(key);
+}
+
+// ── TAHMİN OYUNU ──
+let tOrder=[], tIdx=0, tClueCount=1, tScore=0;
+function tahminInit(){
+  tOrder=[...Array(scientists.length).keys()].sort(()=>Math.random()-0.5);
+  tIdx=0; tClueCount=1; tScore=0; loadTahmin();
+}
+function loadTahmin(){
+  const s=scientists[tOrder[tIdx]];
+  tClueCount=1;
+  document.getElementById('tInput').value='';
+  document.getElementById('tResult').style.display='none';
+  document.getElementById('tNext').style.display='none';
+  document.getElementById('tProgress').innerHTML=`${tIdx+1}/${scientists.length} <span class="score-pill">⭐${tScore}</span>`;
+  const area=document.getElementById('tClues'); area.innerHTML='';
+  s.clues.forEach((c,i)=>{
+    const el=document.createElement('div'); el.className='clue-item'+(i<tClueCount?' show':'');
+    el.innerHTML=`<span class="clue-num">${i+1}</span><span class="clue-text">${c}</span>`;
+    area.appendChild(el);
+  });
+}
+function tahminHint(){
+  const s=scientists[tOrder[tIdx]];
+  if(tClueCount<s.clues.length){ tClueCount++; document.querySelectorAll('.clue-item')[tClueCount-1].classList.add('show'); }
+}
+function tahminCheck(){
+  const s=scientists[tOrder[tIdx]];
+  const ans=document.getElementById('tInput').value.trim().toLowerCase();
+  const correct=s.name.toLowerCase();
+  const res=document.getElementById('tResult'); res.style.display='block';
+  document.getElementById('tNext').style.display='block';
+  if(ans&&(correct.includes(ans)||ans.includes(correct.split(' ').pop()))){
+    res.className='t-result ok'; res.textContent=`🎉 Doğru! ${s.name}`; tScore++;
+    document.getElementById('tProgress').innerHTML=`${tIdx+1}/${scientists.length} <span class="score-pill">⭐${tScore}</span>`;
+  } else {
+    res.className='t-result err'; res.textContent=`❌ Cevap: ${s.name}`;
+  }
+}
+function tahminNext(){
+  tIdx++;
+  if(tIdx>=scientists.length){
+    document.getElementById('tClues').innerHTML=`<div style="text-align:center;padding:20px;"><div style="font-size:2.5rem">🏆</div><div style="font-size:1.2rem;font-weight:900;margin:10px 0">${tScore}/${scientists.length} doğru!</div></div>`;
+    document.getElementById('tInput').style.display='none';
+    document.querySelectorAll('.t-btn').forEach(b=>b.style.display='none');
+    document.getElementById('tResult').style.display='none';
+    document.getElementById('tNext').textContent='🔄 Yeniden Başla';
+    document.getElementById('tNext').onclick=()=>{
+      document.getElementById('tInput').style.display='';
+      document.querySelectorAll('.t-btn').forEach(b=>b.style.display='');
+      document.getElementById('tNext').onclick=tahminNext;
+      tahminInit();
+    };
+    return;
+  }
+  loadTahmin();
+}
+
+// ── TABS ──
+function sTab(name,btn){
+  document.querySelectorAll('.s-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.s-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('s-'+name).classList.add('active'); btn.classList.add('active');
+}
+function cTab(name,btn){
+  document.querySelectorAll('.c-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.c-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('c-'+name).classList.add('active'); btn.classList.add('active');
+}
+
+// ── SERVICE WORKER ──
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
