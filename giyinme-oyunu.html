@@ -418,6 +418,18 @@ body { background: var(--bg); font-family: 'Nunito', sans-serif; min-height: 100
 <div class="toast" id="toast"></div>
 
 <script>
+
+// === SES EFEKTLERİ ===
+var _aC=null;
+function _aG(){if(!_aC)_aC=new(window.AudioContext||window.webkitAudioContext)();return _aC;}
+function _s(fr,du,tp,vl){try{var c=_aG(),t=c.currentTime,off=0;fr.forEach(function(f,i){var o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.type=tp||'sine';o.frequency.value=f;var d=du[i]||0.15;g.gain.setValueAtTime(vl||0.3,t+off);g.gain.exponentialRampToValueAtTime(0.001,t+off+d);o.start(t+off);o.stop(t+off+d);off+=d;});}catch(e){}}
+function sesDogru(){_s([440,554,659],[0.1,0.1,0.18],'sine',0.35);}
+function sesYanlis(){_s([300,220,160],[0.1,0.12,0.22],'sawtooth',0.25);}
+function sesKazan(){_s([523,659,784,1047,784,1047],[0.1,0.1,0.1,0.18,0.1,0.28],'sine',0.4);}
+function sesTikla(){_s([440,520],[0.06,0.08],'sine',0.2);}
+function sesEslesti(){_s([659,784,1047],[0.1,0.1,0.2],'sine',0.38);}
+// =====================
+
 // ══════════════════════════════
 // VERİ
 // ══════════════════════════════
@@ -531,9 +543,10 @@ function wearItem(cat, item) {
   if(currentMission) {
     var correct = item.seasons.includes(currentMission);
     if(correct) {
+      sesDogru();
       showToast('✅ '+ item.name +' bu mevsim için uygun!', 'ok');
     } else {
-      showToast('⚠️ '+ item.name +' bu mevsim için uygun olmayabilir!', 'wrong');
+      sesYanlis(); showToast('⚠️ '+ item.name +' bu mevsim için uygun olmayabilir!', 'wrong');
     }
   }
 
@@ -641,15 +654,15 @@ function checkOutfit() {
   document.getElementById('scoreNum').textContent = score;
   document.getElementById('highScore').textContent = highScore;
 
-  if(wrong === 0 && correct >= 3) {
+  if(wrong === 0 && correct >= 3) { sesKazan();
     showToast('🎉 Mükemmel! +'+points+' puan! Tüm kıyafetler uygun!', 'ok');
     showPoints('+'+points, '#2e7d32');
     confetti();
-  } else if(wrong === 0) {
+  } else if(wrong === 0) { sesDogru();
     showToast('✅ Harika! +'+points+' puan! Daha fazla kıyafet giydirebilirsin.', 'ok');
     showPoints('+'+points, '#1565c0');
   } else {
-    showToast('⚠️ '+correct+' doğru, '+wrong+' yanlış kıyafet! +'+points+' puan', wrong>correct?'wrong':'ok');
+    sesYanlis(); showToast('⚠️ '+correct+' doğru, '+wrong+' yanlış kıyafet! +'+points+' puan', wrong>correct?'wrong':'ok');
     showPoints('+'+points, wrong>0?'#e65100':'#2e7d32');
   }
 }
