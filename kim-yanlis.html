@@ -121,6 +121,18 @@ body { background:linear-gradient(135deg,#0f2027,#203a43,#2c5364); min-height:10
 </div>
 
 <script>
+
+// === SES EFEKTLERİ ===
+var _aC=null;
+function _aG(){if(!_aC)_aC=new(window.AudioContext||window.webkitAudioContext)();return _aC;}
+function _s(fr,du,tp,vl){try{var c=_aG(),t=c.currentTime,off=0;fr.forEach(function(f,i){var o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.type=tp||'sine';o.frequency.value=f;var d=du[i]||0.15;g.gain.setValueAtTime(vl||0.3,t+off);g.gain.exponentialRampToValueAtTime(0.001,t+off+d);o.start(t+off);o.stop(t+off+d);off+=d;});}catch(e){}}
+function sesDogru(){_s([440,554,659],[0.1,0.1,0.18],'sine',0.35);}
+function sesYanlis(){_s([300,220,160],[0.1,0.12,0.22],'sawtooth',0.25);}
+function sesKazan(){_s([523,659,784,1047,784,1047],[0.1,0.1,0.1,0.18,0.1,0.28],'sine',0.4);}
+function sesTikla(){_s([440,520],[0.06,0.08],'sine',0.2);}
+function sesEslesti(){_s([659,784,1047],[0.1,0.1,0.2],'sine',0.38);}
+// =====================
+
 var questions = {
   turkce: [
     { topic:'Sesli Harfler', chars:['🐸','🦊','🐧'], names:['Kurbağa Keko','Tilki Fikri','Penguen Pınar'],
@@ -235,17 +247,17 @@ function checkAnswer(idx) {
     correctCount++; streakCount++;
     document.getElementById('correct').textContent = correctCount;
     document.getElementById('streak').textContent = streakCount;
-    document.getElementById('char'+idx).classList.add('reveal-wrong');
+    document.getElementById('char'+idx).classList.add('reveal-wrong'); sesYanlis();
     document.getElementById('char'+idx).innerHTML += '<div class="badge">🤥</div>';
     showFeedback(true, '🎉 Doğru buldun!', currentQ.explain);
   } else {
     wrongCount++; streakCount=0;
     document.getElementById('wrong').textContent = wrongCount;
     document.getElementById('streak').textContent = streakCount;
-    document.getElementById('char'+idx).classList.add('wrong-pick');
+    document.getElementById('char'+idx).classList.add('wrong-pick'); sesDogru();
     document.getElementById('char'+idx).innerHTML += '<div class="badge">❌</div>';
     // Doğruyu göster
-    document.getElementById('char'+currentQ.wrong).classList.add('reveal-wrong');
+    document.getElementById('char'+currentQ.wrong).classList.add('reveal-wrong'); sesYanlis();
     document.getElementById('char'+currentQ.wrong).innerHTML += '<div class="badge">🤥</div>';
     showFeedback(false, '❌ Yanlış!', currentQ.explain);
   }
