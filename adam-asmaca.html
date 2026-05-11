@@ -156,6 +156,69 @@ body { background: linear-gradient(135deg,#1a1a3e,#0f2027); font-family:'Nunito'
 </div>
 
 <script>
+
+// =====================
+// SES EFEKTLERİ
+// =====================
+var audioCtx = null;
+function sesBaslat() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function sesCal(frekanslar, sureler, tip, volume) {
+  try {
+    var ctx = sesBaslat();
+    frekanslar.forEach(function(fq, i) {
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = tip || 'sine';
+      osc.frequency.value = fq;
+      var baslangic = ctx.currentTime + (sureler[i] ? sureler.slice(0,i).reduce(function(a,b){return a+b;},0) : 0);
+      var bitis = baslangic + (sureler[i] || 0.15);
+      gain.gain.setValueAtTime(volume || 0.3, baslangic);
+      gain.gain.exponentialRampToValueAtTime(0.001, bitis);
+      osc.start(baslangic);
+      osc.stop(bitis);
+    });
+  } catch(e) {}
+}
+
+// Dogru harf - neşeli yukarı çıkan ses
+function sesDogru() {
+  sesCal([440, 550, 660], [0.12, 0.12, 0.18], 'sine', 0.35);
+}
+
+// Yanlış harf - kötü inen ses
+function sesYanlis() {
+  sesCal([300, 220, 180], [0.12, 0.12, 0.2], 'sawtooth', 0.25);
+}
+
+// Kazanma - zafer melodisi
+function sesKazan() {
+  sesCal(
+    [523, 659, 784, 1047, 784, 1047],
+    [0.12, 0.12, 0.12, 0.2, 0.12, 0.3],
+    'sine', 0.4
+  );
+}
+
+// Kaybetme - hüzünlü inen ses
+function sesKaybet() {
+  sesCal(
+    [400, 350, 300, 220],
+    [0.15, 0.15, 0.15, 0.4],
+    'triangle', 0.3
+  );
+}
+
+// Yeni oyun - başlangıç sesi
+function sesYeniOyun() {
+  sesCal([330, 440], [0.1, 0.15], 'sine', 0.25);
+}
+
 var words = {
   turkce: [
     {w:'OKUL',hint:'Ders okuduğumuz yer 🏫'},{w:'KİTAP',hint:'Okuduğumuz şey 📖'},
@@ -220,6 +283,7 @@ function getWordList() {
 }
 
 function newGame() {
+  sesYeniOyun();
   document.getElementById('resultOverlay').classList.remove('show');
   wrong = 0; guessed = [];
   bodyParts.forEach(function(p){ document.getElementById(p).style.opacity=0; });
@@ -273,6 +337,7 @@ function guess(ch) {
 
   if(currentWord.includes(ch)) {
     btn.classList.add('correct');
+    sesDogru();
     // Harfleri göster
     Array.from(document.getElementById('letterBoxes').children).forEach(function(box) {
       if(box.dataset.letter === ch) box.textContent = ch;
@@ -280,6 +345,7 @@ function guess(ch) {
     // Kazandı mı?
     var allFound = currentWord.split('').every(function(l){ return guessed.includes(l); });
     if(allFound) {
+      sesKazan();
       wins++; streak++;
       document.getElementById('winNum').textContent = wins;
       document.getElementById('streakNum').textContent = streak;
@@ -292,12 +358,14 @@ function guess(ch) {
     }
   } else {
     btn.classList.add('wrong');
+    sesYanlis();
     document.getElementById('head').style.opacity = wrong>=0?1:0;
     document.getElementById(bodyParts[wrong]).style.opacity = 1;
     wrong++;
     updateLives();
     document.getElementById('wrongCount').textContent = wrong + ' / 6 yanlış';
     if(wrong >= maxWrong) {
+      sesKaybet();
       losses++; streak=0;
       document.getElementById('loseNum').textContent = losses;
       document.getElementById('streakNum').textContent = streak;
