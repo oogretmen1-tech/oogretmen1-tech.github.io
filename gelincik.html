@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>"GELİN"cik</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&family=Lora:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:#1a0808;
+  background-image:radial-gradient(ellipse at top,#3d1010 0%,#0d0404 70%);
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-family:'Nunito',sans-serif;
+  padding:14px;
+}
+h1{color:#fff;font-size:1.3rem;font-weight:800;margin-bottom:4px;text-shadow:0 2px 8px rgba(0,0,0,.5);text-align:center;letter-spacing:1px;}
+.subtitle{color:rgba(255,200,200,.45);font-size:.73rem;text-align:center;margin-bottom:10px;letter-spacing:2px;font-style:italic;}
+.audio-bar{background:rgba(255,255,255,0.06);border:1px solid rgba(180,30,30,0.3);border-radius:50px;padding:8px 18px;display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.audio-bar audio{width:200px;height:28px;}
+.book{width:100%;max-width:500px;border-radius:14px;overflow:hidden;box-shadow:0 6px 0 #5a0a0a,0 20px 50px rgba(0,0,0,.7);min-height:280px;position:relative;}
+.slide{display:none;width:100%;min-height:280px;position:relative;overflow:hidden;}
+.slide.aktif{display:block;}
+
+/* KAPAK */
+.slide-kapak{background:radial-gradient(ellipse at 30% 40%,rgba(160,20,20,0.6) 0%,transparent 60%),linear-gradient(160deg,#1a0808,#2d1010 50%,#1a0a10);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;min-height:320px;}
+.kapak-cicek{font-size:80px;animation:sway 5s ease-in-out infinite;filter:drop-shadow(0 0 30px rgba(200,30,30,.8));}
+@keyframes sway{0%,100%{transform:rotate(-4deg);}50%{transform:rotate(4deg) scale(1.05);}}
+.kapak-baslik{font-family:'Lora',serif;font-size:clamp(2rem,8vw,3.5rem);font-weight:700;color:#fff;line-height:1.1;text-shadow:0 0 40px rgba(180,30,30,.8);margin:12px 0 6px;}
+.kapak-baslik em{color:#8B1010;font-style:normal;}
+.kapak-alt{color:rgba(245,220,220,.4);font-size:.73rem;letter-spacing:.15em;text-transform:uppercase;font-style:italic;}
+
+/* METİN SLAYTı */
+.slide-metin{background:linear-gradient(160deg,#1a0808,#220c0c);padding:0;min-height:300px;display:flex;flex-direction:column;}
+.slide-bg{position:absolute;inset:0;background:radial-gradient(circle at 10% 10%,rgba(180,30,30,0.12) 0%,transparent 40%),radial-gradient(circle at 90% 90%,rgba(120,10,10,0.1) 0%,transparent 40%);pointer-events:none;}
+.slide-icerik{position:relative;z-index:1;background:rgba(60,20,20,0.55);border-left:3px solid rgba(180,30,30,0.5);margin:16px;border-radius:0 14px 14px 0;padding:20px 22px;flex:1;display:flex;flex-direction:column;justify-content:center;}
+.bolum-no{font-family:'Nunito',sans-serif;font-weight:800;color:rgba(200,80,80,0.7);font-size:.8rem;letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;}
+.metin{font-family:'Lora',serif;font-size:clamp(.85rem,2.5vw,1rem);color:#EDD8D8;line-height:1.85;}
+.d{display:block;font-style:italic;color:#F5C0C0;padding-left:12px;border-left:2px solid rgba(180,30,30,.4);margin:5px 0;}
+.vurgu{color:#F5C0C0;font-weight:700;}
+.cicek-ayrac{text-align:center;font-size:1.2rem;letter-spacing:8px;opacity:.4;margin:8px 0;}
+
+/* NAVİGASYON */
+.nav{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:14px;}
+.btn{background:#8B1010;border:none;border-radius:50px;padding:11px 26px;font-family:'Nunito',sans-serif;font-size:1.05rem;font-weight:800;color:#fff;cursor:pointer;box-shadow:0 4px 0 #5a0a0a;transition:transform .1s,box-shadow .1s;-webkit-tap-highlight-color:transparent;}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #5a0a0a;}
+.btn:disabled{background:#333;box-shadow:0 4px 0 #111;color:#666;cursor:default;}
+.counter{background:rgba(255,255,255,.1);color:#fff;border-radius:50px;padding:8px 18px;font-size:1rem;font-weight:700;min-width:76px;text-align:center;}
+.thumbs{display:flex;gap:6px;overflow-x:auto;padding:12px 0 4px;max-width:500px;width:100%;scrollbar-width:thin;scrollbar-color:#8B1010 transparent;}
+.thumbs::-webkit-scrollbar{height:4px;}
+.thumbs::-webkit-scrollbar-thumb{background:#8B1010;border-radius:4px;}
+.thumb{flex-shrink:0;width:44px;height:50px;border-radius:8px;opacity:.4;cursor:pointer;transition:opacity .2s,transform .2s;border:2px solid transparent;background:rgba(139,16,16,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;color:rgba(255,200,200,.6);text-align:center;line-height:1.2;padding:2px;}
+.thumb.active{opacity:1;border-color:#8B1010;transform:scale(1.12);}
+.hint{color:rgba(255,200,200,.3);font-size:.72rem;text-align:center;margin-top:6px;}
+</style>
+</head>
+<body>
+
+<h1>🌺 "GELİN"cik</h1>
+<p class="subtitle">Harran'dan Bir Hikaye</p>
+
+<div class="audio-bar">
+  <span>🎵</span>
+  <audio controls><source src="gelincik-sarki.m4a" type="audio/mp4">Şarkı yüklenemedi.</audio>
+</div>
+
+<div class="book" id="book">
+
+  <div class="slide slide-kapak aktif" id="s0">
+    <div class="kapak-cicek">🌺</div>
+    <div class="kapak-baslik"><em>"</em>GELİN<em>"</em>cik</div>
+    <p class="kapak-alt">Harran'ın çatlak topraklarından bir hikaye</p>
+  </div>
+
+  <div class="slide slide-metin" id="s1">
+    <div class="slide-bg"></div>
+    <div class="slide-icerik">
+      <div class="bolum-no">I.</div>
+      <p class="metin">Harran'ın temmuzunda güneş, toprağın üzerine erimiş bir bakır gibi dökülür. Yeryüzü susuzluktan öyle derin yarılır ki, o çatlaklar sanki toprağın bağrındaki feryatların dışarı sızdığı kanallardır. Karıncalar bile bu sıcağın gazabından kaçıp taş altlarına sığınır; bir damla serinliğe karınca değil, dal üstündeki serçe, taş altındaki akrep, hatta rüzgarın kendisi bile hasret kalır.</p>
+    </div>
+  </div>
+
+  <div class="slide slide-metin" id="s2">
+    <div class="slide-bg"></div>
+    <div class="slide-icerik">
+      <p class="metin">İşte tam bu yangın yerinde, her şeyin kuruduğu o çatlak toprakların arasından bir başkaldırı yükselir. Bir gelincik... Öyle narin, öyle incedir ki; uzaktan bakınca Harran'ın o kavurucu bağrına düğümlenmiş taze bir kırmızı kuşak gibi parlar. Ama yaklaştıkça görünür o meşhur siyah leke. Çiçeğin tam kalbindedir o siyahlık. Sanki kaderi, daha açmadan kırmızının tam ortasına mührünü basmıştır. Urfalılar buna <span class="vurgu">kara talih</span> der.</p>
+    </div>
+  </div>
+
+  <div class="slide slide-metin" id="s3">
+    <div class="slide-bg"></div>
+    <div class="slide-icerik">
+      <p class="metin">O sabah Harran'ın fırın sıcağı sınıfın pencerelerinden içeri sızarken, tebeşir tozları havada asılı kalmıştı. Dışarıda toprak susuzluktan öyle yarılmıştı ki, yerdeki karınca bile bir damla gölgeye hasretti. Herkes sıcaktan şikayet ederken, sınıfın en ön sırasında oturan <span class="vurgu">İbrahim'in</span> omuzlarındaki o ağır yük dikkatimi çekti. Başını sıraya gömmüş, sanki tüm dünyanın derdini o küçük sırtında taşıyordu.</p>
+    </div>
+  </div>
+
+  <div class="slide slide-metin" id="s4">
+    <div class="slide-bg"></div>
+    <div class="slide-icerik">
+      <p class="metin">Yanına gidip eğildim.
+        <span class="d">— "Ne oldu İbrahim? Bir yerin mi ağrıyor oğlum?"</span>
+        Ses vermedi. Sadece başını biraz daha gömdü sıraya. O sırada arka sıradan <span class="vurgu">Zilan</span> parmak kaldırdı, gözleri fal taşı gibi açılmıştı.
+        <span class="d">— "Hocam," dedi fısıltıyla, "İbrahim ablasına üzülüyor. Ablası evden gidiyor da..."</span>
+        Şaşırmıştım.
+        <span class="d">— "E kızım, ablası evleniyordur. Her genç kızın kaderidir bu, niye bu kadar yas tutuyorsunuz?"</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="slide slide-metin" id="s5">
+    <div class="slide-bg"></div>
+    <div class="slide-icerik">
+      <p class="metin">O an <span class="vurgu">Songül</span> söze girdi. Sesi yaşından büyük bir ciddiyetle yankılandı:
+        <span class="d">— "Hocam ama ablası çok ağlıyor. İstemiyor gitmeyi. Daha küçüktür o, geçen gün bizimle ip atlıyordu... Babası onu vermiş."</span>
+        <span class="d">— "Kime vermiş kızım?"</span>
+        <span class="d">— "Halil Ağa'ya hocam. Hani şu okul servislerinin sahibi olan, köydeki büyük marketi işleten, geçen sene camiyi yaptıran..."</span>
+        Dondum kaldım. Mehmet arkadan ekledi, sesi kısıktı:
+        <span class="d">— "Babası diyor ki hocam; 'su akarken testiyi doldurmalı.' Ama abla daha çocuktur, testi dolmadan kırılmaz mı?"</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="slide slide-metin" id="s6">
+    <div class="slide-bg"></div>
+    <div class="slide-icerik">
+      <div class="bolum-no">II.</div>
+      <p class="metin">Okuldan çıktığımda güneş Harran'ın üzerine ağır bir mühür gibi inmişti. Köy kahvesinin önünden geçerken "Hocam hayırlı akşamlar, bir acı kahvemizi iç!" diye seslenen dayıları ne duydum ne gördüm. Zihnimde sadece o gelinciğin kara lekesi ve İbrahim'in titreyişi vardı. Arkamdan fısıldaştıklarını hayal meyal seçtim:
+        <span class="d">— "Yahu bu hocanın nesi var? Selamımızı bile almadı."</span>
+        <span class="d">— "Boş ver babo, narinliği gelincikten beter. Belli ki yine bir şeye küsmüştür."</span>
+        Eve vardığımda ne üstümü değiştirdim ne de bir yudum su içtim. Öylece uzandım, tavana baktım. Aklımda sınıftaki o yüzler dönüp duruyordu... Aniden doğruldum.
+      </p>
+    </div>
+  </div>
+
+  <div class="slide slide-metin" id="s7">
+    <div class="slide-bg"></div>
+    <div class="slide-icerik">
+      <div class="bolum-no">III.</div>
+      <p class="metin">Zihnimde tek bir cümle çınlıyordu: <span class="vurgu">Çocuk yaşta evlilik suçtur.</span> Kendimi bir solukta jandarma karakolunda buldum. Durumu anlattım; bir çocuğun geleceğinin mülk ve para pazarlığına kurban edildiğini izah ettim. Komutanın yüzü bulutlandı, hemen devriyeyle beraber köyün yolunu tuttuk.</p>
+    </div>
+  </div>
+
+  <div class="slide slide-metin" id="s8">
+    <div class="slide-bg"></div>
+    <div class="slide-icerik">
+      <p class="metin">Kızın babasının evine vardığımızda avluda lüks bir cip duruyordu. Halil Ağa oradaydı. Babasıyla karşılıklı oturmuş, hiçbir şey yokmuş gibi çaylarını yudumluyorlardı. Komutan sertçe girdi söze:
+        <span class="d">— "Hayırdır efendi? Kulağımıza hiç hoş olmayan haberler gelir. Bu gencecik kızı, yaşı yetmeden Halil Ağa'ya sözlemişsin, doğru mudur?"</span>
+        Baba sanki beklediği bir saldırıya göğüs gerer gibi dikleşti. Gözleri önce jandarmaya, sonra arkadaki bana nefretle kaydı.
+      </p>
+    </div>
+  </div>
+
+  <div class="slide slide-metin" id="s9">
+    <div class="slide-bg"></div>
+    <div class="slide-icerik">
+      <p class="metin">Mehmet sesini iyice alçalttı:
+        <span class="d">— "Halil Ağa diyordu ki; 'Bu kız beni görünce kaçıyor, yüzüme bile bakmıyor.' Babası bir yutkundu, 'Seni amcası...' dedi ama cümleyi bitiremedi. 'Yok ağam' dedi, 'Utandığındandır o, yoksa seni sevmez olur mu? Hele bir gelsin eve, alışır.' Sonra para lafı geçti. Halil Ağa; 'Kız hele bir kapıdan girsin, o iş tamam, hesabı görürüz' dedi. Babası da; 'Davul zurna çalacak değiliz, bu Cuma, hayırlı gün diyeceğiz, sessizce alıp götürsün kızı' dedi."</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="slide slide-metin" id="s10">
+    <div class="slide-bg"></div>
+    <div class="slide-icerik">
+      <p class="metin"><span class="d">— "Kim demiş komutanım? Yalanıydan batasıcalar! Ne evlenmesi, ne sözlemesi? Halil Ağa bizim büyüğümüzdür. Gelmiş ki şu küncü tarlasını, şu küşne ekilecek yeri konuşak. İş güç konuşuyoruz biz, tarla takas ediyoruz."</span>
+        Komutan kızı çağırdı. Kız o narin boynuyla avluya çıktı. Gözleri kıpkırmızıydı. Önce babasına baktı, sonra Halil Ağa'nın buz gibi bakışlarına çarptı gözleri. En son bana döndü. O an bir gelinciğin rüzgarda son kez titreyişini gördüm o bakışta.
+        <span class="d">— "Kızım, doğruyu söyle. Seni zorla mı veriyorlar? Korkma, devlet burada, biz buradayız."</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="slide slide-metin" id="s11">
+    <div class="slide-bg"></div>
+    <div class="slide-icerik">
+      <p class="metin">Kızın dudakları titredi ama sesi çıkmadı. Babasının sert bakışları ve Halil Ağa'nın sahibiyim der gibi duruşu altında ezildi. Başını öyle bir öne eğdi ki, sanki boynu kırıldı. Sesi belli belirsiz çıktı:
+        <span class="d">— "Babam ne dediyse öyledir komutanım... Öyle bir şey yoktur."</span>
+        Avludan çıkarken babasının ardımızdan sesi yükseldi:
+        <span class="d">— "Durgun sular derin olur derlerdi de inanmazdık. Hocanın içine şeytan kaçmış, durduk yere kapımıza asker getirip huzurumuzu kaçırdı."</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="slide slide-metin" id="s12">
+    <div class="slide-bg"></div>
+    <div class="slide-icerik">
+      <p class="metin">Komutan yolda bana döndü:
+        <span class="d">— "Hocam gördün mü? Kızın kendisi 'yok' diyor. Bizim elimiz kolumuz bağlı. Kanun beyana bakar."</span>
+        Ben sustum. Çünkü o kızın jandarmaya "yok" derken bana bakıp gözlerini saklayışını görmüştüm. O bakış, bin tane imdat çığlığından daha gürültülüydü.
+      </p>
+    </div>
+  </div>
+
+  <div class="slide slide-metin" id="s13">
+    <div class="slide-bg"></div>
+    <div class="slide-icerik">
+      <div class="bolum-no">IV.</div>
+      <p class="metin">Ertesi sabah sınıfa girdiğimde o koca boşluk gözüme çarptı. İbrahim'in sırası boştu.
+        <span class="d">— "İbrahim niye gelmedi, haberi olan var mı?"</span>
+        Mehmet parmak kaldırdı, sesi titriyordu:
+        <span class="d">— "Hocam, sabah evlerine gittim, kapılarını çaldım. Anası çıktı, gözleri şişmişti. 'İbrahim bugün gelmeyecek, git işine' dedi, kapıyı kapattı. Tam o sırada babası avluya geldi, yanında da Halil Ağa vardı."</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="slide slide-metin" id="s14">
+    <div class="slide-bg"></div>
+    <div class="slide-icerik" style="align-items:center;text-align:center;">
+      <p class="metin" style="margin-bottom:20px;">Pencereye yöneldim. Bahçenin kenarında, çatlak toprakların arasında tek başına duran bir gelincik gördüm. Kırmızısı öyle canlıydı ki, sanki toprağa damlamış taze bir kan gibiydi. Ve tam o an, o çiçeğin kalbindeki kara lekenin neden bu kadar derin olduğunu anladım.</p>
+      <div class="cicek-ayrac" style="font-size:2rem;letter-spacing:14px;opacity:.7;">🌺</div>
+      <p class="metin" style="font-family:'Lora',serif;font-style:italic;font-size:clamp(1rem,3.5vw,1.4rem);color:rgba(245,200,200,.75);margin:14px 0;">Mevsim çoktan geçmişti.</p>
+      <div style="display:inline-block;border:2px solid rgba(180,30,30,.4);border-radius:50px;padding:7px 32px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;color:rgba(200,80,80,.6);letter-spacing:6px;">S O N</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="nav">
+  <button class="btn" id="pb" onclick="git(-1)">◀ Geri</button>
+  <div class="counter" id="cnt">1 / 15</div>
+  <button class="btn" id="nb" onclick="git(1)">İleri ▶</button>
+</div>
+
+<div class="thumbs" id="thumbs"></div>
+<p class="hint">← → tuşları veya ekranı kaydırarak geçiş yapabilirsiniz</p>
+
+<script>
+var toplam = 15;
+var simdiki = 0;
+var etiketler = [
+  ['🌺','Kapak'],['I.','Harran'],['🌿','Gelincik'],['📚','Sınıf'],
+  ['💬','İbrahim'],['💬','Songül'],['II.','Akşam'],['III.','Karakol'],
+  ['🏡','Avlu'],['💬','Mehmet'],['👧','Kız'],['😶','Sessizlik'],
+  ['🪖','Yolda'],['IV.','Sabah'],['🌺','Son']
+];
+
+var tc = document.getElementById('thumbs');
+etiketler.forEach(function(e,i){
+  var d = document.createElement('div');
+  d.className='thumb'+(i===0?' active':'');
+  d.innerHTML='<div style="font-size:'+(e[0].length>1?'.75rem':'1.2rem')+'">'+e[0]+'</div><div style="font-size:.52rem;margin-top:2px;">'+e[1]+'</div>';
+  d.onclick=(function(idx){return function(){gitSayfa(idx);};})(i);
+  tc.appendChild(d);
+});
+
+function guncelle(){
+  for(var i=0;i<toplam;i++){
+    var el=document.getElementById('s'+i);
+    if(el){el.classList.remove('aktif');if(i===simdiki)el.classList.add('aktif');}
+  }
+  document.getElementById('cnt').textContent=(simdiki+1)+' / '+toplam;
+  document.getElementById('pb').disabled=(simdiki===0);
+  document.getElementById('nb').disabled=(simdiki===toplam-1);
+  var tl=document.querySelectorAll('.thumb');
+  tl.forEach(function(t,i){
+    t.classList.remove('active');
+    if(i===simdiki){t.classList.add('active');t.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});}
+  });
+}
+function git(y){var n=simdiki+y;if(n>=0&&n<toplam){simdiki=n;guncelle();}}
+function gitSayfa(i){simdiki=i;guncelle();}
+document.addEventListener('keydown',function(e){if(e.key==='ArrowLeft')git(-1);if(e.key==='ArrowRight')git(1);});
+var tx=0;
+document.getElementById('book').addEventListener('touchstart',function(e){tx=e.touches[0].clientX;});
+document.getElementById('book').addEventListener('touchend',function(e){var f=tx-e.changedTouches[0].clientX;if(Math.abs(f)>40)git(f>0?1:-1);});
+guncelle();
+</script>
+</body>
+</html>
