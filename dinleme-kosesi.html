@@ -192,27 +192,46 @@ function goster(id,btn){
   window.speechSynthesis.cancel();
 }
 
-// TÜRKÇE SES AYARI
-let turkcesSes = null;
-function turkSesiAl(){
-  if(turkcesSes) return turkcesSes;
-  const sesler = window.speechSynthesis.getVoices();
-  turkcesSes = sesler.find(s=>s.lang.startsWith("tr")) || sesler.find(s=>s.lang.startsWith("TR")) || sesler[0];
-  return turkcesSes;
-}
-window.speechSynthesis.onvoiceschanged = ()=>{ turkcesSes = null; turkSesiAl(); };
+// TÜRKÇE SES AYARI - GELİŞTİRİLMİŞ
+var turkcesSes = null;
+var sesHazir = false;
 
-function sesliOku(metin, hiz=1, bitti=null){
+function turkSesiGuncelle() {
+  var sesler = window.speechSynthesis.getVoices();
+  if (!sesler.length) return;
+  sesHazir = true;
+  for (var i = 0; i < sesler.length; i++) {
+    if (sesler[i].lang === 'tr-TR' || sesler[i].lang === 'tr') {
+      turkcesSes = sesler[i]; break;
+    }
+  }
+  if (!turkcesSes) turkcesSes = sesler[0];
+}
+
+function turkSesiAl() { return turkcesSes; }
+
+window.speechSynthesis.onvoiceschanged = turkSesiGuncelle;
+turkSesiGuncelle();
+setTimeout(turkSesiGuncelle, 300);
+setTimeout(turkSesiGuncelle, 1000);
+setTimeout(turkSesiGuncelle, 2500);
+
+function sesliOku(metin, hiz, bitti) {
+  hiz = hiz || 1;
   window.speechSynthesis.cancel();
-  const utt = new SpeechSynthesisUtterance(metin);
-  utt.lang = "tr-TR";
-  utt.rate = hiz;
-  utt.pitch = 1.1;
-  const ses = turkSesiAl();
-  if(ses) utt.voice = ses;
-  if(bitti) utt.onend = bitti;
-  window.speechSynthesis.speak(utt);
-  return utt;
+  function _gercekOku() {
+    var utt = new SpeechSynthesisUtterance(metin);
+    utt.lang = "tr-TR";
+    utt.rate = hiz;
+    utt.pitch = 1.05;
+    utt.volume = 1;
+    if (turkcesSes) utt.voice = turkcesSes;
+    if (bitti) utt.onend = bitti;
+    utt.onerror = function(e) { console.log('Ses hatası:', e.error); };
+    window.speechSynthesis.speak(utt);
+  }
+  if (sesHazir) { _gercekOku(); }
+  else { setTimeout(function(){ turkSesiGuncelle(); _gercekOku(); }, 400); }
 }
 
 // =====================
