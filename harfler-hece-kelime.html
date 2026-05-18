@@ -716,28 +716,21 @@ var alfaData = ['elma','armut','ayva','bal','ceviz','çilek'];
 
 // Zıt Anlam
 var zatData = [
-  {kelime:'kirli', secenekler:['temiz','büyük','renkli'], dogru:'temiz'},
-  {kelime:'mutlu', secenekler:['üzgün','kuru','eski'], dogru:'üzgün'},
-  {kelime:'sağlam', secenekler:['çürük','açık','soğuk'], dogru:'çürük'},
-  {kelime:'ıslak', secenekler:['kuru','boş','genç'], dogru:'kuru'},
-  {kelime:'aç', secenekler:['tok','sert','yavaş'], dogru:'tok'},
-  {kelime:'korkak', secenekler:['cesur','eski','uzun'], dogru:'cesur'},
-  {kelime:'özgür', secenekler:['tutsak','ince','soğuk'], dogru:'tutsak'},
-  {kelime:'tenha', secenekler:['kalabalık','tatlı','hızlı'], dogru:'kalabalık'},
-  {kelime:'sıcak', secenekler:['soğuk','kirli','yavaş'], dogru:'soğuk'},
-  {kelime:'taze', secenekler:['bayat','büyük','kuru'], dogru:'bayat'},
-  {kelime:'ucuz', secenekler:['pahalı','eski','dar'], dogru:'pahalı'},
-  {kelime:'hızlı', secenekler:['yavaş','soğuk','boş'], dogru:'yavaş'},
+  {kelime:'büyük', secenekler:['küçük','uzun','güzel'], dogru:'küçük'},
+  {kelime:'sıcak', secenekler:['soğuk','renkli','hızlı'], dogru:'soğuk'},
+  {kelime:'açık', secenekler:['kapalı','yeni','eski'], dogru:'kapalı'},
+  {kelime:'hızlı', secenekler:['yavaş','güçlü','tatlı'], dogru:'yavaş'},
+  {kelime:'güzel', secenekler:['çirkin','mutlu','sessiz'], dogru:'çirkin'},
+  {kelime:'zengin', secenekler:['fakir','genç','zeki'], dogru:'fakir'},
+  {kelime:'uzun', secenekler:['kısa','dar','yumuşak'], dogru:'kısa'},
+  {kelime:'mutlu', secenekler:['üzgün','yorgun','hasta'], dogru:'üzgün'},
 ];
 
 // Eş Anlam çiftleri
 var esData = [
-  {a:'ad', b:'isim'},{a:'armağan', b:'hediye'},
-  {a:'yanıt', b:'cevap'},{a:'çabuk', b:'acele'},
-  {a:'doktor', b:'hekim'},{a:'yurt', b:'vatan'},
-  {a:'şehir', b:'kent'},{a:'hikaye', b:'öykü'},
-  {a:'kalp', b:'yürek'},{a:'vazife', b:'görev'},
-  {a:'ödül', b:'mükafat'},{a:'ünlü', b:'meşhur'},
+  {a:'güzel', b:'hoş'},{a:'büyük', b:'iri'},
+  {a:'hızlı', b:'çabuk'},{a:'mutlu', b:'sevinçli'},
+  {a:'korku', b:'ürküntü'},{a:'uyku', b:'uyuklama'},
 ];
 
 // Eş Sesli
@@ -764,6 +757,12 @@ var esesliData = [
    secB:['El (organ)','El (yabancı)']},
 ];
 
+// ═══════════════ TÜRKÇE SES SİSTEMİ ═══════════════
+var _trSes=null,_sesHazir=false;
+function _sesGuncelle(){var s=window.speechSynthesis.getVoices();if(!s.length)return;_sesHazir=true;for(var i=0;i<s.length;i++){if(s[i].lang==='tr-TR'||s[i].lang==='tr'){_trSes=s[i];break;}}}
+if('speechSynthesis' in window){window.speechSynthesis.onvoiceschanged=_sesGuncelle;_sesGuncelle();setTimeout(_sesGuncelle,300);setTimeout(_sesGuncelle,1000);setTimeout(_sesGuncelle,2500);}
+function _oku(metin,hiz){if(!('speechSynthesis' in window))return;window.speechSynthesis.cancel();function go(){var u=new SpeechSynthesisUtterance(metin);u.lang='tr-TR';u.rate=hiz||0.85;u.pitch=1;u.volume=1;if(_trSes)u.voice=_trSes;window.speechSynthesis.speak(u);}if(_sesHazir){go();}else{setTimeout(function(){_sesGuncelle();go();},400);}}
+
 // ═══════════════ HARF BİLGİSİ ═══════════════
 
 function buildAlfabe(){
@@ -774,12 +773,7 @@ function buildAlfabe(){
     btn.className = 'harf-btn' + (isUnlu ? ' unlu' : '');
     btn.innerHTML = h.toUpperCase() + '<span class="harf-type">' + (isUnlu?'ünlü':'ünsüz') + '</span>';
     btn.onclick = function(){
-      // Ses
-      if('speechSynthesis' in window){
-        var u = new SpeechSynthesisUtterance(h);
-        u.lang = 'tr-TR'; u.rate = 0.8;
-        speechSynthesis.speak(u);
-      }
+      _oku(h, 0.7);
       // Bilgi
       var box = document.getElementById('harfInfo');
       box.className = 'harf-info-box show';
@@ -1220,4 +1214,4 @@ memBaslat();
 buildEsesli();
 </script>
 </body>
-</html>
+  </html>
