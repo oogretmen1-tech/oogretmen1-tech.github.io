@@ -7,16 +7,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Baloo+2:wght@400;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --s1: #FF6B6B;
-  --s2: #FFD93D;
-  --s3: #6BCB77;
-  --s4: #4D96FF;
+  --s1: #FF6B4A;
+  --s2: #FFC93C;
+  --s3: #1FB6A8;
+  --s4: #2D9CDB;
   --purple: #C77DFF;
-  --pink: #FF9ECD;
+  --pink: #FF7AA2;
   --orange: #FF9F43;
-  --teal: #48C9B0;
-  --bg: #FAF2E0;
-  --dark: #2D2D2D;
+  --teal: #17A398;
+  --coral: #FF5E62;
+  --sand: #FFEFD2;
+  --bg: #FFF8EC;
+  --dark: #1F2A37;
 }
 * { box-sizing:border-box; margin:0; padding:0; }
 body { font-family:"Nunito",sans-serif; background:var(--bg); color:var(--dark); min-height:100vh; overflow-x:hidden; }
@@ -24,9 +26,9 @@ body::before {
   content:'';
   position:fixed;
   inset:0;
-  background-image:radial-gradient(circle, #e0d5c0 1px, transparent 1px);
-  background-size:28px 28px;
-  opacity:.45;
+  background-image:radial-gradient(circle, #ffd98a 1.5px, transparent 1.5px);
+  background-size:30px 30px;
+  opacity:.35;
   pointer-events:none;
   z-index:0;
 }
@@ -38,6 +40,7 @@ nav.navbar {
   padding:12px 20px;
   gap:10px;
   flex-wrap:wrap;
+  border-bottom: 3px solid var(--s2);
 }
 .nav-btn {
   font-family:"Nunito",sans-serif;
@@ -57,65 +60,96 @@ nav.navbar {
 .nav-btn.home:hover { background:var(--s4); color:#fff; }
 .nav-btn.about { border-color:var(--purple); color:var(--purple); }
 .nav-btn.about:hover { background:var(--purple); color:#fff; }
+
+/* ===== HERO - YAZ TEMASI ===== */
 .hero {
   position:relative;
   text-align:center;
-  padding:50px 20px 60px;
-  background:linear-gradient(135deg, #F5EBD9 0%, #EFE0C8 35%, #E8D5B7 70%, #DFC8A3 100%);
+  padding:54px 20px 90px;
+  background:linear-gradient(135deg, #FFE29A 0%, #FFB36B 38%, #FF8A65 68%, #FF6B6B 100%);
   overflow:hidden;
 }
-.hero-inner { position:relative; z-index:2; }
+.hero-inner { position:relative; z-index:3; }
+
+/* Güneş */
+.sun {
+  position:absolute;
+  top:-60px; right:6%;
+  width:160px; height:160px;
+  border-radius:50%;
+  background:radial-gradient(circle, #FFE873 0%, #FFC93C 55%, rgba(255,201,60,0) 75%);
+  box-shadow:0 0 60px 20px rgba(255,201,60,.45);
+  animation:sunPulse 5s ease-in-out infinite;
+  z-index:1;
+}
+@keyframes sunPulse { 0%,100% { transform:scale(1); opacity:.9; } 50% { transform:scale(1.08); opacity:1; } }
+
+/* Dalga - alt sınır */
+.wave-wrap { position:absolute; left:0; right:0; bottom:-2px; z-index:2; line-height:0; }
+.wave-wrap svg { width:100%; height:70px; display:block; }
+.wave-back { animation: waveMove 9s linear infinite; }
+.wave-front { animation: waveMove 6s linear infinite reverse; opacity:.85; }
+@keyframes waveMove {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 .floating-emoji {
   position:absolute;
   font-size:2.2rem;
-  opacity:.55;
+  opacity:.7;
   animation:floatUp 8s ease-in-out infinite;
   z-index:1;
   pointer-events:none;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,.08));
 }
-.floating-emoji:nth-child(1) { top:20%; left:8%; animation-delay:0s; }
-.floating-emoji:nth-child(2) { top:60%; left:14%; animation-delay:1.5s; }
-.floating-emoji:nth-child(3) { top:30%; right:10%; animation-delay:0.8s; }
-.floating-emoji:nth-child(4) { top:70%; right:18%; animation-delay:2.3s; }
-.floating-emoji:nth-child(5) { top:15%; left:48%; animation-delay:3s; font-size:1.8rem; }
-.floating-emoji:nth-child(6) { top:80%; left:42%; animation-delay:4s; }
+.floating-emoji:nth-child(1) { top:18%; left:7%; animation-delay:0s; }
+.floating-emoji:nth-child(2) { top:58%; left:13%; animation-delay:1.5s; }
+.floating-emoji:nth-child(3) { top:26%; right:22%; animation-delay:0.8s; }
+.floating-emoji:nth-child(4) { top:68%; right:30%; animation-delay:2.3s; }
+.floating-emoji:nth-child(5) { top:12%; left:42%; animation-delay:3s; font-size:1.8rem; }
+.floating-emoji:nth-child(6) { top:74%; left:38%; animation-delay:4s; }
 @keyframes floatUp {
   0%, 100% { transform:translateY(0px) rotate(-5deg); }
   50% { transform:translateY(-20px) rotate(5deg); }
 }
+
 .hero-badge {
   display:inline-block;
-  background:var(--s2);
-  color:var(--dark);
+  background:#fff;
+  color:var(--coral);
   font-family:"Nunito",sans-serif;
   font-weight:800;
   font-size:.9rem;
   padding:6px 16px;
   border-radius:50px;
   margin-bottom:14px;
-  box-shadow:0 4px 12px rgba(255,217,61,.4);
+  box-shadow:0 4px 14px rgba(0,0,0,.15);
 }
 .logo-main {
   font-family:"Nunito",sans-serif;
   font-weight:800;
   font-size:clamp(2.2rem, 8vw, 3.5rem);
   line-height:1.1;
-  color:var(--dark);
+  color:#fff;
+  text-shadow: 0 3px 0 rgba(0,0,0,.08);
   margin-bottom:8px;
 }
-.logo-main .c1 { color:var(--s4); }
-.logo-main .c2 { color:var(--s1); }
+.logo-main .c1 { color:#fff; }
+.logo-main .c2 { color:#FFF3C4; }
 .hero-desc {
   font-size:1rem;
   font-weight:700;
-  color:#555;
+  color:#fff;
+  opacity:.95;
   margin:14px auto 20px;
   max-width:500px;
+  text-shadow: 0 1px 4px rgba(0,0,0,.1);
 }
 .ataturk {
   display:inline-block;
-  background:rgba(255,255,255,.7);
-  border-left:4px solid var(--s1);
+  background:rgba(255,255,255,.85);
+  border-left:4px solid var(--coral);
   border-radius:0 14px 14px 0;
   padding:12px 18px;
   font-size:.82rem;
@@ -126,9 +160,10 @@ nav.navbar {
   max-width:520px;
   text-align:left;
   margin-top:16px;
-  box-shadow:0 4px 12px rgba(0,0,0,.06);
+  box-shadow:0 4px 12px rgba(0,0,0,.1);
 }
-.ataturk b { color:var(--s1); font-style:normal; font-size:.74rem; display:block; margin-top:4px; }
+.ataturk b { color:var(--coral); font-style:normal; font-size:.74rem; display:block; margin-top:4px; }
+
 .content-area { max-width:920px; margin:0 auto; padding:32px 16px 60px; position:relative; z-index:2; }
 .bolum-baslik {
   font-family:"Nunito",sans-serif;
@@ -142,13 +177,13 @@ nav.navbar {
 .bolum-alt { font-size:14px; color:#666; font-weight:600; text-align:center; margin-bottom:24px; }
 .divider {
   height:5px; width:80px;
-  background:linear-gradient(90deg, var(--s1), var(--s2), var(--s3), var(--s4));
+  background:linear-gradient(90deg, var(--coral), var(--s2), var(--s3), var(--s4));
   border-radius:50px;
   margin:0 auto 30px;
 }
 .hizli-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(135px,1fr)); gap:14px; margin-bottom:50px; }
 .hizli-btn {
-  background:#EFE0C8;
+  background:#FFF3DC;
   border:3px solid transparent;
   border-radius:22px;
   padding:22px 12px;
@@ -180,7 +215,7 @@ nav.navbar {
 .hizli-btn.h6::before { background:var(--teal); } .hizli-btn.h6:hover { border-color:var(--teal); }
 .sinif-list { display:flex; flex-direction:column; gap:16px; }
 .sinif-card {
-  background:#EFE0C8;
+  background:#FFF3DC;
   border-radius:22px;
   border:3px solid transparent;
   overflow:hidden;
@@ -204,7 +239,7 @@ nav.navbar {
 .sinif-3.open { border-color:var(--s3); }
 .sinif-4.open { border-color:var(--orange); }
 .sinif-header { display:flex; align-items:center; gap:16px; padding:22px 22px 18px; cursor:pointer; user-select:none; transition:background .2s; }
-.sinif-header:hover { background:#E8D5B7; }
+.sinif-header:hover { background:#FFE8BD; }
 .sinif-icon {
   width:60px; height:60px;
   border-radius:18px;
@@ -230,8 +265,8 @@ nav.navbar {
 .sinif-body-inner { padding:0 22px 24px; }
 .dersler-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:12px; }
 .ders-btn {
-  background:#DFC8A3;
-  border:2.5px solid #C9AE82;
+  background:#FFE8BD;
+  border:2.5px solid #F2C879;
   border-radius:16px;
   padding:18px 10px;
   text-align:center;
@@ -298,7 +333,7 @@ nav.navbar {
 }
 .cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(195px,1fr)); gap:12px; margin-bottom:8px; }
 .card {
-  background:#EFE0C8;
+  background:#FFF3DC;
   border-radius:18px;
   padding:16px 14px;
   text-decoration:none;
@@ -327,36 +362,52 @@ nav.navbar {
 .tema-s .card-icon { background:#F5F3FF; }
 .tema-hi .card-icon { background:#FFFBEB; }
 .tema-o .card-icon { background:#F0FDFA; }
+
 footer {
-  background:linear-gradient(135deg, var(--dark), #1a1a1a);
+  position: relative;
+  background:linear-gradient(135deg, #1F3A52, #14252F);
   text-align:center;
-  padding:28px 16px;
-  color:rgba(255,255,255,.7);
+  padding:34px 16px 24px;
+  color:rgba(255,255,255,.75);
   font-size:.85rem;
   font-weight:600;
-  position:relative;
   z-index:2;
+  overflow:hidden;
 }
+footer .footer-wave { position:absolute; top:-1px; left:0; right:0; line-height:0; transform:rotate(180deg); }
+footer .footer-wave svg { width:100%; height:40px; display:block; }
 footer strong { color:var(--s2); }
+footer .footer-emoji { font-size:1.2rem; margin-bottom:6px; opacity:.9; }
 </style>
 </head>
 <body>
 
 <div class="hero">
-  <span class="floating-emoji">📚</span>
-  <span class="floating-emoji">✨</span>
-  <span class="floating-emoji">🎨</span>
-  <span class="floating-emoji">🌟</span>
-  <span class="floating-emoji">🎈</span>
-  <span class="floating-emoji">🎓</span>
+  <div class="sun"></div>
+  <span class="floating-emoji">☀️</span>
+  <span class="floating-emoji">🍉</span>
+  <span class="floating-emoji">🌴</span>
+  <span class="floating-emoji">🍦</span>
+  <span class="floating-emoji">🐚</span>
+  <span class="floating-emoji">🕶️</span>
   <div class="hero-inner">
-    <div class="hero-badge">✏️ Eğitim Materyalleri</div>
+    <div class="hero-badge">🌞 Yaz Tatili Modu Açık!</div>
     <h1 class="logo-main">Dijital <span class="c1">Öğret</span><span class="c2">men</span></h1>
     <p class="hero-desc">1. Sınıf'tan 4. Sınıf'a tüm dersler için hazır materyaller, etkinlikler ve oyunlar! 🎉</p>
     <div class="ataturk">
       "Eğitimdir ki bir milleti ya hür, bağımsız, şanlı, yüksek bir topluluk olarak yaşatır ya da esaret ve sefalete terk eder."
       <b>— Mustafa Kemal Atatürk</b>
     </div>
+  </div>
+  <div class="wave-wrap">
+    <svg class="wave-back" viewBox="0 0 2880 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,35 C 240,70 480,0 720,35 C 960,70 1200,0 1440,35 C 1680,70 1920,0 2160,35 C 2400,70 2640,0 2880,35 L2880,70 L0,70 Z" fill="#FFEFD2" opacity="0.55"/>
+      <path d="M1440,35 C 1680,70 1920,0 2160,35 C 2400,70 2640,0 2880,35 C 3120,70 3360,0 3600,35 L3600,70 L1440,70 Z" fill="#FFEFD2" opacity="0.55" transform="translate(-1440,0)"/>
+    </svg>
+    <svg class="wave-front" viewBox="0 0 2880 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="margin-top:-30px;">
+      <path d="M0,40 C 240,10 480,65 720,40 C 960,10 1200,65 1440,40 C 1680,10 1920,65 2160,40 C 2400,10 2640,65 2880,40 L2880,70 L0,70 Z" fill="#FFF8EC"/>
+      <path d="M1440,40 C 1680,10 1920,65 2160,40 C 2400,10 2640,65 2880,40 C 3120,10 3360,65 3600,40 L3600,70 L1440,70 Z" fill="#FFF8EC" transform="translate(-1440,0)"/>
+    </svg>
   </div>
 </div>
 
@@ -559,6 +610,12 @@ footer strong { color:var(--s2); }
 </div>
 
 <footer>
+  <div class="footer-wave">
+    <svg viewBox="0 0 1440 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,20 C 240,40 480,0 720,20 C 960,40 1200,0 1440,20 L1440,40 L0,40 Z" fill="#FFF8EC"/>
+    </svg>
+  </div>
+  <div class="footer-emoji">🌊 ☀️ 🌴</div>
   <p>© 2026 <strong>Dijital Öğretmen</strong> · İlkokul Eğitim Materyalleri</p>
   <p style="margin-top:6px;font-size:.78rem;opacity:.6;">Tüm materyaller ücretsizdir. 🌟</p>
 </footer>
