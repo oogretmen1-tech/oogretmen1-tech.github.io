@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3. Sınıf Matematik | Sayılar ve Nicelikler-1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Righteous&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sun:#FFC857; --coral:#FF6F59; --teal:#2EC4B6; --indigo:#1B1B3A;
+    --cream:#FFF8EC; --grape:#7B5EA7; --leaf:#5FB85B; --ink:#23223A;
+    --r:22px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:'Nunito',sans-serif; background:var(--cream); color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.disp{font-family:'Righteous',cursive;}
+
+  /* HERO */
+  .hero{
+    background:linear-gradient(135deg,var(--indigo) 0%, #2d2a5e 60%, var(--grape) 100%);
+    color:#fff; padding:38px 20px 50px; position:relative; overflow:hidden;
+    border-radius:0 0 40px 40px;
+  }
+  .hero h1{font-size:clamp(28px,5vw,46px); margin:0 0 6px; letter-spacing:.5px;}
+  .hero p{font-size:18px; opacity:.9; margin:0; font-weight:700;}
+  .hero-stars{position:absolute; inset:0; pointer-events:none;}
+  .hero-stars span{position:absolute; font-size:22px; opacity:.5; animation:float 6s ease-in-out infinite;}
+  @keyframes float{0%,100%{transform:translateY(0) rotate(0deg);} 50%{transform:translateY(-14px) rotate(12deg);}}
+
+  /* TABS */
+  .tabbar{
+    display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
+    margin:-28px auto 30px; max-width:880px; padding:0 14px; position:relative; z-index:5;
+  }
+  .tab{
+    border:none; cursor:pointer; padding:14px 22px; border-radius:50px;
+    font-family:'Righteous',cursive; font-size:15px; color:#fff; background:rgba(255,255,255,.15);
+    backdrop-filter:blur(6px); transition:.2s; box-shadow:0 6px 18px rgba(0,0,0,.18);
+    border:2px solid rgba(255,255,255,.25);
+  }
+  .tab.active{background:var(--sun); color:var(--indigo); transform:translateY(-2px); border-color:var(--sun);}
+  .tab:hover{transform:translateY(-2px);}
+
+  .wrap{max-width:920px; margin:0 auto; padding:0 18px 60px;}
+  .panel{display:none; animation:fade .35s ease;}
+  .panel.active{display:block;}
+  @keyframes fade{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+
+  .card{
+    background:#fff; border-radius:var(--r); padding:26px; margin-bottom:24px;
+    box-shadow:0 10px 30px rgba(27,27,58,.07); border:1px solid #f1ebdd;
+  }
+  .card h2{margin:0 0 4px; color:var(--indigo); font-size:24px; display:flex; align-items:center; gap:10px;}
+  .badge{
+    display:inline-block; background:var(--teal); color:#fff; font-family:'Righteous';
+    font-size:12px; padding:4px 12px; border-radius:50px; margin-bottom:10px;
+  }
+  .lead{color:#555; font-weight:700; margin:6px 0 18px;}
+  .grid2{display:grid; grid-template-columns:1.1fr .9fr; gap:22px; align-items:center;}
+  @media (max-width:680px){.grid2{grid-template-columns:1fr;}}
+  .svgbox{display:flex; justify-content:center; align-items:center;}
+  .pill{background:var(--cream); border-radius:16px; padding:14px 16px; font-weight:700; margin-top:10px;}
+  .examplebox{
+    background:#FFF3DD; border-left:6px solid var(--sun); border-radius:14px; padding:14px 16px; margin-top:14px; font-weight:700;
+  }
+  .btn{
+    font-family:'Righteous'; border:none; cursor:pointer; padding:12px 20px; border-radius:50px;
+    background:var(--coral); color:#fff; font-size:14px; box-shadow:0 6px 16px rgba(255,111,89,.35); transition:.15s;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn.alt{background:var(--teal); box-shadow:0 6px 16px rgba(46,196,182,.35);}
+  .btn.grape{background:var(--grape); box-shadow:0 6px 16px rgba(123,94,167,.35);}
+
+  /* place value blocks */
+  .blockrow{display:flex; gap:6px; flex-wrap:wrap; justify-content:center;}
+  .block{border-radius:6px;}
+  .b-bin{width:54px; height:54px; background:var(--grape);}
+  .b-yuz{width:46px; height:46px; background:var(--coral);}
+  .b-on{width:14px; height:46px; background:var(--teal);}
+  .b-bir{width:14px; height:14px; background:var(--sun); border-radius:3px;}
+
+  /* activities */
+  .actgrid{display:grid; gap:16px;}
+  .number-display{font-family:'Righteous'; font-size:42px; text-align:center; color:var(--indigo); letter-spacing:4px;}
+  input[type=text],input[type=number]{
+    font-family:'Nunito'; font-weight:800; font-size:18px; border:2px solid #ddd; border-radius:12px;
+    padding:10px 14px; width:100%; max-width:160px; text-align:center;
+  }
+  .dropzones{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:14px;}
+  .dropzone{
+    min-width:64px; min-height:54px; border:3px dashed var(--teal); border-radius:14px;
+    display:flex; align-items:center; justify-content:center; font-family:'Righteous'; font-size:20px; color:#999;
+    background:#f4fffd;
+  }
+  .draglist{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin:14px 0;}
+  .drag{
+    padding:12px 16px; background:var(--sun); border-radius:12px; font-family:'Righteous'; font-size:18px;
+    cursor:grab; box-shadow:0 4px 10px rgba(0,0,0,.12); color:var(--indigo);
+  }
+  .drag.placed{opacity:.35; cursor:default;}
+  .feedback{margin-top:10px; font-weight:800;}
+  .feedback.ok{color:var(--leaf);}
+  .feedback.no{color:var(--coral);}
+
+  /* question bank */
+  .qcard{background:var(--cream); border-radius:16px; padding:18px; margin-bottom:14px;}
+  .qcard .qtext{font-weight:800; margin-bottom:10px; font-size:17px;}
+  .opts{display:grid; gap:8px;}
+  .opt{
+    text-align:left; padding:10px 14px; border-radius:12px; border:2px solid #e7e0cf; background:#fff;
+    cursor:pointer; font-weight:700; font-size:15px;
+  }
+  .opt.correct{background:#e6f7e6; border-color:var(--leaf);}
+  .opt.wrong{background:#ffe6e3; border-color:var(--coral);}
+  .qtoolbar{display:flex; gap:10px; justify-content:center; margin-bottom:20px; flex-wrap:wrap;}
+  .scoreboard{
+    position:sticky; top:10px; background:var(--indigo); color:#fff; border-radius:50px; padding:10px 20px;
+    text-align:center; font-family:'Righteous'; max-width:260px; margin:0 auto 20px; z-index:3;
+  }
+
+  /* game */
+  #gameArea{
+    position:relative; height:420px; background:linear-gradient(180deg,#cdeffe,#fff); border-radius:20px;
+    overflow:hidden; border:3px solid var(--teal);
+  }
+  .basket{
+    position:absolute; bottom:10px; width:120px; height:64px; border-radius:16px 16px 6px 6px;
+    display:flex; align-items:center; justify-content:center; font-family:'Righteous'; font-size:18px; color:#fff;
+  }
+  #basketOdd{left:6%; background:var(--coral);}
+  #basketEven{right:6%; background:var(--grape);}
+  .falling{
+    position:absolute; top:-50px; width:56px; height:56px; border-radius:50%; background:var(--sun);
+    display:flex; align-items:center; justify-content:center; font-family:'Righteous'; font-size:22px; color:var(--indigo);
+    box-shadow:0 4px 10px rgba(0,0,0,.2); user-select:none;
+  }
+  .gamebar{display:flex; justify-content:center; gap:20px; margin:14px 0; font-family:'Righteous'; color:var(--indigo);}
+  .gamebar div{background:#fff; padding:8px 18px; border-radius:50px; box-shadow:0 4px 10px rgba(0,0,0,.08);}
+  #gameMsg{text-align:center; font-family:'Righteous'; font-size:20px; color:var(--coral); height:30px;}
+
+  footer{text-align:center; padding:20px; color:#999; font-weight:700; font-size:13px;}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-stars">
+    <span style="top:10%; left:8%;">✦</span><span style="top:60%; left:20%; animation-delay:1s;">★</span>
+    <span style="top:20%; left:80%; animation-delay:2s;">✦</span><span style="top:75%; left:85%; animation-delay:1.5s;">★</span>
+    <span style="top:40%; left:50%; animation-delay:.5s;">✦</span>
+  </div>
+  <div style="max-width:880px; margin:0 auto; text-align:center;">
+    <h1>3. Sınıf Matematik</h1>
+    <p>Tema 1 · Sayılar ve Nicelikler-1</p>
+  </div>
+</div>
+
+<div class="tabbar">
+  <button class="tab active" data-tab="konu">📘 Konu Anlatımı</button>
+  <button class="tab" data-tab="etkinlik">✏️ Etkinlik</button>
+  <button class="tab" data-tab="soru">❓ Soru Bankası</button>
+  <button class="tab" data-tab="oyun">🎮 Oyun</button>
+</div>
+
+<div class="wrap">
+
+  <!-- ================= KONU ANLATIMI ================= -->
+  <div class="panel active" id="panel-konu">
+
+    <div class="card">
+      <span class="badge">1</span>
+      <h2>1000'e Kadar Sayılar</h2>
+      <div class="grid2">
+        <div>
+          <p class="lead">Sayıları okuruz, yazarız ve bir <b>sayı doğrusu</b> üzerinde yerlerini buluruz.</p>
+          <div class="examplebox">347 → "üç yüz kırk yedi" diye okunur.<br>Basamaklar: 3 yüzler, 4 onlar, 7 birler.</div>
+        </div>
+        <div class="svgbox">
+          <svg width="280" height="110" viewBox="0 0 280 110">
+            <line x1="20" y1="55" x2="260" y2="55" stroke="#1B1B3A" stroke-width="4" stroke-linecap="round"/>
+            <polygon points="260,55 248,48 248,62" fill="#1B1B3A"/>
+            <g id="numlineTicks"></g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="badge">2</span>
+      <h2>Basamak ve Basamak Değeri</h2>
+      <div class="grid2">
+        <div>
+          <p class="lead">Her basamağın bir <b>değeri</b> vardır. Bloklarla gösterebiliriz:</p>
+          <div class="pill">🟪 Binler &nbsp; 🟧 Yüzler &nbsp; 🟦 Onlar &nbsp; 🟨 Birler</div>
+        </div>
+        <div class="svgbox">
+          <div>
+            <div class="blockrow" style="margin-bottom:6px;">
+              <div class="block b-yuz" title="Yüzler"></div><div class="block b-yuz" title="Yüzler"></div><div class="block b-yuz" title="Yüzler"></div>
+            </div>
+            <div class="blockrow" style="margin-bottom:6px;">
+              <div class="block b-on" title="Onlar"></div><div class="block b-on" title="Onlar"></div><div class="block b-on" title="Onlar"></div><div class="block b-on" title="Onlar"></div>
+            </div>
+            <div class="blockrow">
+              <div class="block b-bir" title="Birler"></div><div class="block b-bir" title="Birler"></div><div class="block b-bir" title="Birler"></div><div class="block b-bir" title="Birler"></div><div class="block b-bir" title="Birler"></div><div class="block b-bir" title="Birler"></div><div class="block b-bir" title="Birler"></div>
+            </div>
+            <p style="text-align:center; font-family:'Righteous'; margin-top:8px; color:var(--indigo);">347</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="badge">3</span>
+      <h2>Sıralama ve Yuvarlama</h2>
+      <p class="lead">Sayıları karşılaştırırken <b>&lt;, &gt;, =</b> sembollerini kullanırız. Yuvarlarken en yakın <b>onluğa</b> veya <b>yüzlüğe</b> bakarız.</p>
+      <div class="examplebox">256 &gt; 198 &nbsp;&nbsp;|&nbsp;&nbsp; 412 yuvarlanır → 410 (onluğa) ve 400 (yüzlüğe)</div>
+    </div>
+
+    <div class="card">
+      <span class="badge">4</span>
+      <h2>Ritmik Sayma</h2>
+      <p class="lead">İleriye ve geriye doğru 2'şer, 3'er, 5'er, 10'ar ve 100'er sayarız.</p>
+      <div class="pill">10'ar say: 10 → 20 → 30 → 40 → 50 ...</div>
+    </div>
+
+    <div class="card">
+      <span class="badge">5</span>
+      <h2>Tek ve Çift Sayılar</h2>
+      <div class="grid2">
+        <p class="lead">Bir sayıyı ikişer ikişer eşleştirebiliyorsak <b>çift</b>, eşleşmeyen kalıyorsa <b>tek</b> sayıdır.</p>
+        <div class="svgbox">
+          <svg width="180" height="70" viewBox="0 0 180 70">
+            <circle cx="20" cy="20" r="10" fill="#2EC4B6"/><circle cx="44" cy="20" r="10" fill="#2EC4B6"/>
+            <circle cx="20" cy="48" r="10" fill="#FF6F59"/><circle cx="44" cy="48" r="10" fill="#FF6F59"/>
+            <circle cx="80" cy="20" r="10" fill="#7B5EA7"/><circle cx="104" cy="20" r="10" fill="#7B5EA7"/>
+            <circle cx="80" cy="48" r="10" fill="#FFC857"/>
+            <text x="135" y="40" font-family="Righteous" font-size="16" fill="#1B1B3A">5 = TEK</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="badge">6</span>
+      <h2>Sayı Örüntüleri</h2>
+      <p class="lead">Bir kurala göre artan ya da azalan sayı dizileridir.</p>
+      <div class="examplebox">5, 10, 15, 20, ?  → kural: "+5" → cevap: 25</div>
+    </div>
+
+    <div class="card">
+      <span class="badge">7</span>
+      <h2>Tahmin Etme</h2>
+      <p class="lead">Kesin sonucu bulmadan önce sonucun yaklaşık ne kadar olacağını tahmin ederiz. Bu, hesabımızı kontrol etmemize yardımcı olur.</p>
+      <div class="examplebox">198 + 305 ≈ 200 + 300 = 500 (yaklaşık)</div>
+    </div>
+
+  </div>
+
+  <!-- ================= ETKİNLİK ================= -->
+  <div class="panel" id="panel-etkinlik">
+
+    <div class="card">
+      <h2>🧩 Etkinlik 1 — Basamak Değerini Bul</h2>
+      <p class="lead">Verilen sayının basamak değerlerini yaz.</p>
+      <div class="number-display" id="actNumber">582</div>
+      <div class="dropzones" style="margin-top:18px;">
+        <div>Yüzler: <input type="number" id="inYuz"></div>
+        <div>Onlar: <input type="number" id="inOn"></div>
+        <div>Birler: <input type="number" id="inBir"></div>
+      </div>
+      <div style="text-align:center; margin-top:16px;">
+        <button class="btn" onclick="checkBasamak()">Kontrol Et</button>
+        <button class="btn alt" onclick="newActNumber()">Yeni Sayı</button>
+      </div>
+      <div class="feedback" id="basamakFeedback"></div>
+    </div>
+
+    <div class="card">
+      <h2>🧩 Etkinlik 2 — Küçükten Büyüğe Sırala</h2>
+      <p class="lead">Sayıları sürükleyip kutulara, küçükten büyüğe doğru sırayla yerleştir.</p>
+      <div class="draglist" id="dragSource"></div>
+      <div class="dropzones" id="dropTargets"></div>
+      <div style="text-align:center; margin-top:14px;">
+        <button class="btn grape" onclick="checkSiralama()">Kontrol Et</button>
+        <button class="btn alt" onclick="initSiralama()">Yeniden Karıştır</button>
+      </div>
+      <div class="feedback" id="siralamaFeedback"></div>
+    </div>
+
+    <div class="card">
+      <h2>🧩 Etkinlik 3 — En Yakın Onluğa Yuvarla</h2>
+      <p class="lead">Sayıyı en yakın onluğa yuvarla ve kutuya yaz.</p>
+      <div class="number-display" id="roundNumber">347</div>
+      <div style="text-align:center; margin-top:14px;">
+        <input type="number" id="roundInput" placeholder="?">
+      </div>
+      <div style="text-align:center; margin-top:16px;">
+        <button class="btn" onclick="checkRound()">Kontrol Et</button>
+        <button class="btn alt" onclick="newRoundNumber()">Yeni Sayı</button>
+      </div>
+      <div class="feedback" id="roundFeedback"></div>
+    </div>
+
+  </div>
+
+  <!-- ================= SORU BANKASI ================= -->
+  <div class="panel" id="panel-soru">
+    <div class="scoreboard" id="scoreboard">Skor: 0 / 0</div>
+    <div class="qtoolbar">
+      <button class="btn" onclick="shuffleQuestions()">🔀 Soruları Karıştır</button>
+      <button class="btn alt" onclick="resetScore()">🔁 Skoru Sıfırla</button>
+    </div>
+    <div id="qbank"></div>
+  </div>
+
+  <!-- ================= OYUN ================= -->
+  <div class="panel" id="panel-oyun">
+    <div class="card">
+      <h2>🎮 Tek mi Çift mi Avcısı</h2>
+      <p class="lead">Düşen sayıları doğru sepete sürükle bırak! <b>Tek sayıları sol</b>, <b>çift sayıları sağ</b> sepete sürükle.</p>
+      <div class="gamebar">
+        <div>⭐ Skor: <span id="gameScore">0</span></div>
+        <div>⏱️ Süre: <span id="gameTime">30</span></div>
+      </div>
+      <div id="gameMsg"></div>
+      <div id="gameArea">
+        <div class="basket" id="basketOdd">TEK</div>
+        <div class="basket" id="basketEven">ÇİFT</div>
+      </div>
+      <div style="text-align:center; margin-top:16px;">
+        <button class="btn" id="startGameBtn" onclick="startGame()">▶️ Oyunu Başlat</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>3. Sınıf Matematik · Tema 1: Sayılar ve Nicelikler-1</footer>
+
+<script>
+/* ---------- TAB SWITCH ---------- */
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel-'+tab.dataset.tab).classList.add('active');
+  });
+});
+
+/* ---------- NUMBER LINE TICKS ---------- */
+(function(){
+  const g = document.getElementById('numlineTicks');
+  const labels=[0,1,2,3,4,5,6];
+  let html='';
+  labels.forEach((n,i)=>{
+    const x = 20 + i*40;
+    html += `<line x1="${x}" y1="48" x2="${x}" y2="62" stroke="#1B1B3A" stroke-width="3"/>`;
+    html += `<text x="${x}" y="85" font-family="Nunito" font-weight="800" font-size="13" text-anchor="middle" fill="#1B1B3A">${n*100}</text>`;
+  });
+  g.innerHTML = html;
+})();
+
+/* ---------- ETKİNLİK 1: Basamak değeri ---------- */
+let actNum = 582;
+function setActNumber(n){
+  actNum = n;
+  document.getElementById('actNumber').textContent = n;
+  document.getElementById('inYuz').value='';
+  document.getElementById('inOn').value='';
+  document.getElementById('inBir').value='';
+  document.getElementById('basamakFeedback').textContent='';
+}
+function newActNumber(){
+  setActNumber(Math.floor(Math.random()*900)+100);
+}
+function checkBasamak(){
+  const y = Math.floor(actNum/100)*100;
+  const o = Math.floor((actNum%100)/10)*10;
+  const b = actNum%10;
+  const fb = document.getElementById('basamakFeedback');
+  const okY = parseInt(document.getElementById('inYuz').value)===y;
+  const okO = parseInt(document.getElementById('inOn').value)===o;
+  const okB = parseInt(document.getElementById('inBir').value)===b;
+  if(okY&&okO&&okB){ fb.textContent='🎉 Harika, hepsi doğru!'; fb.className='feedback ok'; }
+  else { fb.textContent=`Tekrar dene. (Doğru: Yüzler ${y}, Onlar ${o}, Birler ${b})`; fb.className='feedback no'; }
+}
+
+/* ---------- ETKİNLİK 2: Sıralama (drag&drop) ---------- */
+let siralamaNums=[];
+function initSiralama(){
+  const set = new Set();
+  while(set.size<5) set.add(Math.floor(Math.random()*900)+10);
+  siralamaNums = [...set];
+  const shuffled = [...siralamaNums].sort(()=>Math.random()-0.5);
+  const src = document.getElementById('dragSource');
+  const tgt = document.getElementById('dropTargets');
+  src.innerHTML=''; tgt.innerHTML='';
+  shuffled.forEach(n=>{
+    const d = document.createElement('div');
+    d.className='drag'; d.draggable=true; d.textContent=n; d.dataset.value=n;
+    d.addEventListener('dragstart',e=>e.dataTransfer.setData('text',n));
+    src.appendChild(d);
+  });
+  for(let i=0;i<5;i++){
+    const dz = document.createElement('div');
+    dz.className='dropzone'; dz.dataset.index=i; dz.textContent='?';
+    dz.addEventListener('dragover',e=>e.preventDefault());
+    dz.addEventListener('drop',e=>{
+      e.preventDefault();
+      const val = e.dataTransfer.getData('text');
+      dz.textContent = val;
+      dz.dataset.value = val;
+      [...src.children].forEach(c=>{ if(c.dataset.value===val) c.classList.add('placed'); });
+    });
+    tgt.appendChild(dz);
+  }
+  document.getElementById('siralamaFeedback').textContent='';
+}
+function checkSiralama(){
+  const zones=[...document.querySelectorAll('#dropTargets .dropzone')];
+  const vals = zones.map(z=>parseInt(z.dataset.value));
+  const correct = [...siralamaNums].sort((a,b)=>a-b);
+  const fb = document.getElementById('siralamaFeedback');
+  if(vals.some(isNaN)){ fb.textContent='Önce tüm kutulara bir sayı sürükle.'; fb.className='feedback no'; return; }
+  if(JSON.stringify(vals)===JSON.stringify(correct)){ fb.textContent='🎉 Doğru sıralama!'; fb.className='feedback ok'; }
+  else { fb.textContent='Sıralama yanlış, tekrar dene: '+correct.join(' < '); fb.className='feedback no'; }
+}
+initSiralama();
+
+/* ---------- ETKİNLİK 3: Yuvarlama ---------- */
+let roundNum = 347;
+function newRoundNumber(){
+  roundNum = Math.floor(Math.random()*900)+10;
+  document.getElementById('roundNumber').textContent = roundNum;
+  document.getElementById('roundInput').value='';
+  document.getElementById('roundFeedback').textContent='';
+}
+function checkRound(){
+  const ans = Math.round(roundNum/10)*10;
+  const given = parseInt(document.getElementById('roundInput').value);
+  const fb = document.getElementById('roundFeedback');
+  if(given===ans){ fb.textContent='🎉 Doğru!'; fb.className='feedback ok'; }
+  else { fb.textContent=`Yanlış. Doğru cevap: ${ans}`; fb.className='feedback no'; }
+}
+
+/* ---------- SORU BANKASI ---------- */
+const questions = [
+  {q:"347 sayısında '4' rakamının basamak değeri kaçtır?", opts:["4","40","400","34"], a:1},
+  {q:"Aşağıdakilerden hangisi çift sayıdır?", opts:["231","457","682","999"], a:2},
+  {q:"512 yuvarlanırsa en yakın onluğa hangisi olur?", opts:["500","510","520","600"], a:1},
+  {q:"5, 10, 15, 20, ? örüntüsünde boşluğa ne gelir?", opts:["22","25","30","21"], a:1},
+  {q:"En büyük sayı hangisidir?", opts:["456","465","546","564"], a:3},
+  {q:"İki yüz on dört sayısının rakamla yazılışı nedir?", opts:["214","240","204","241"], a:0},
+  {q:"100'er ileriye sayarsak 300'den sonra hangisi gelir?", opts:["310","350","400","301"], a:2},
+  {q:"827 sayısında yüzler basamağındaki rakam kaçtır?", opts:["7","2","8","82"], a:2},
+  {q:"Aşağıdakilerden hangisi tek sayıdır?", opts:["246","880","123","500"], a:2},
+  {q:"198 + 305 işleminin yaklaşık (tahmini) sonucu nedir?", opts:["300","400","500","600"], a:2},
+  {q:"650 < 750 ifadesinde hangi sembol doğru kullanılmıştır?", opts:["<","=",">","≠"], a:0},
+  {q:"3'er ritmik sayarsak 9'dan sonra hangisi gelir?", opts:["10","11","12","13"], a:2},
+  {q:"709 sayısının okunuşu nedir?", opts:["Yetmiş dokuz","Yedi yüz dokuz","Yedi yüz doksan","Yetmiş yüz dokuz"], a:1},
+  {q:"450 yuvarlanırsa en yakın yüzlüğe hangisi olur?", opts:["400","450","500","440"], a:2},
+  {q:"Aşağıdaki sayılardan hangisi en küçüktür?", opts:["389","398","839","893"], a:0}
+];
+let qOrder = [...questions.keys()];
+let score=0, answered=0;
+
+function renderQuestions(){
+  const box=document.getElementById('qbank');
+  box.innerHTML='';
+  qOrder.forEach((idx,displayIdx)=>{
+    const item=questions[idx];
+    const card=document.createElement('div');
+    card.className='qcard';
+    card.innerHTML=`<div class="qtext">${displayIdx+1}. ${item.q}</div>
+      <div class="opts">${item.opts.map((o,i)=>`<button class="opt" data-correct="${i===item.a}" onclick="answerQ(this)">${o}</button>`).join('')}</div>`;
+    box.appendChild(card);
+  });
+}
+function answerQ(btn){
+  if(btn.closest('.opts').dataset.done) return;
+  btn.closest('.opts').dataset.done='1';
+  const correct = btn.dataset.correct==='true';
+  [...btn.parentElement.children].forEach(o=>{
+    if(o.dataset.correct==='true') o.classList.add('correct');
+    o.disabled=true;
+  });
+  if(!correct) btn.classList.add('wrong');
+  answered++; if(correct) score++;
+  document.getElementById('scoreboard').textContent=`Skor: ${score} / ${answered}`;
+}
+function shuffleQuestions(){
+  qOrder.sort(()=>Math.random()-0.5);
+  renderQuestions();
+}
+function resetScore(){
+  score=0; answered=0;
+  document.getElementById('scoreboard').textContent='Skor: 0 / 0';
+  renderQuestions();
+}
+renderQuestions();
+
+/* ---------- OYUN: Tek mi Çift mi Avcısı (drag & drop) ---------- */
+let gameInterval, timerInterval, timeLeft=30, gScore=0, gameRunning=false;
+function startGame(){
+  if(gameRunning) return;
+  gameRunning=true;
+  gScore=0; timeLeft=30;
+  document.getElementById('gameScore').textContent=gScore;
+  document.getElementById('gameTime').textContent=timeLeft;
+  document.getElementById('gameMsg').textContent='';
+  document.querySelectorAll('.falling').forEach(f=>f.remove());
+  document.getElementById('startGameBtn').textContent='⏳ Oyun Sürüyor...';
+
+  gameInterval = setInterval(spawnNumber, 1100);
+  timerInterval = setInterval(()=>{
+    timeLeft--;
+    document.getElementById('gameTime').textContent=timeLeft;
+    if(timeLeft<=0) endGame();
+  },1000);
+}
+function endGame(){
+  clearInterval(gameInterval); clearInterval(timerInterval);
+  document.querySelectorAll('.falling').forEach(f=>f.remove());
+  document.getElementById('gameMsg').textContent = `⏰ Süre bitti! Toplam skor: ${gScore}`;
+  document.getElementById('startGameBtn').textContent='▶️ Tekrar Oyna';
+  gameRunning=false;
+}
+function spawnNumber(){
+  const area=document.getElementById('gameArea');
+  const n = Math.floor(Math.random()*90)+10;
+  const el=document.createElement('div');
+  el.className='falling';
+  el.textContent=n;
+  el.draggable=true;
+  el.style.left = (10+Math.random()*70)+'%';
+  el.dataset.value=n;
+  el.addEventListener('dragstart',e=>e.dataTransfer.setData('text',n));
+  area.appendChild(el);
+
+  let top=-50;
+  const fallId = setInterval(()=>{
+    top += 4;
+    el.style.top = top+'px';
+    if(top>380){ clearInterval(fallId); el.remove(); }
+  },40);
+  el._fallId=fallId;
+}
+[['basketOdd',1],['basketEven',0]].forEach(([id,mod])=>{
+  const b=document.getElementById(id);
+  b.addEventListener('dragover',e=>e.preventDefault());
+  b.addEventListener('drop',e=>{
+    e.preventDefault();
+    const val=parseInt(e.dataTransfer.getData('text'));
+    const correct = (val%2===mod);
+    gScore += correct? 10 : -5;
+    if(gScore<0) gScore=0;
+    document.getElementById('gameScore').textContent=gScore;
+    document.querySelectorAll('.falling').forEach(f=>{
+      if(parseInt(f.dataset.value)===val){ clearInterval(f._fallId); f.remove(); }
+    });
+  });
+});
+</script>
+</body>
+</html>
