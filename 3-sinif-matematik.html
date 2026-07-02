@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3. Sınıf Matematik | Konu Defteri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF8F1;
+    --paper-line:#E4DCC8;
+    --ink:#1E3A5F;
+    --orange:#FF6B35;
+    --green:#2A9D6F;
+    --purple:#6B4E9E;
+    --yellow:#FFC94A;
+    --red:#E4572E;
+    --shadow: 0 6px 0 rgba(30,58,95,0.12);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Nunito',sans-serif;
+    color:var(--ink);
+    background:
+      repeating-linear-gradient(var(--paper) 0px, var(--paper) 34px, var(--paper-line) 35px),
+      var(--paper);
+    background-attachment:local;
+  }
+  h1,h2,h3,.display{font-family:'Baloo 2',cursive;}
+
+  /* spiral binding header */
+  .spiral{
+    position:sticky; top:0; z-index:50;
+    background:var(--ink);
+    padding:14px 0 0 0;
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+  }
+  .spiral-rings{
+    display:flex; gap:22px; justify-content:center; padding:0 12px;
+  }
+  .spiral-rings span{
+    width:14px;height:14px;border-radius:50%;
+    background:var(--paper);
+    border:3px solid #14263d;
+  }
+  .hero{
+    text-align:center; color:var(--paper); padding:10px 16px 20px;
+  }
+  .hero .eyebrow{
+    font-weight:800; letter-spacing:2px; font-size:12px; color:var(--yellow);
+    text-transform:uppercase;
+  }
+  .hero h1{
+    font-size:clamp(26px,6vw,44px); margin:6px 0 4px; color:#fff;
+  }
+  .hero p{margin:0; opacity:.85; font-size:14px;}
+
+  /* tab nav = defter ayraçları */
+  nav.tabs{
+    display:flex; gap:6px; overflow-x:auto; padding:10px 10px 12px;
+    background:var(--ink);
+  }
+  nav.tabs a{
+    flex:0 0 auto;
+    font-family:'Baloo 2',cursive; font-weight:700; font-size:13px;
+    color:var(--ink); text-decoration:none;
+    background:var(--paper);
+    padding:8px 14px 10px;
+    border-radius:10px 10px 0 0;
+    white-space:nowrap;
+    position:relative; top:4px;
+    border-bottom:4px solid transparent;
+  }
+  nav.tabs a:hover{border-bottom-color:var(--orange);}
+
+  main{max-width:920px; margin:0 auto; padding:24px 16px 80px;}
+
+  .unit{
+    margin:44px 0;
+    background:#fff;
+    border-radius:18px;
+    box-shadow:var(--shadow);
+    border:1px solid var(--paper-line);
+    overflow:hidden;
+    scroll-margin-top:120px;
+  }
+  .unit-head{
+    display:flex; align-items:center; gap:14px;
+    padding:20px 22px;
+    color:#fff;
+  }
+  .unit-head .icon{
+    font-size:34px; width:56px;height:56px; display:flex; align-items:center; justify-content:center;
+    background:rgba(255,255,255,0.18); border-radius:14px;
+  }
+  .unit-head h2{margin:0; font-size:22px; color:#fff;}
+  .unit-head .tag{
+    font-size:12px; font-weight:700; opacity:.9; letter-spacing:1px;
+  }
+  .unit-body{padding:22px;}
+
+  .explain{
+    background:var(--paper);
+    border:1px dashed var(--paper-line);
+    border-radius:12px;
+    padding:16px 18px;
+    margin-bottom:20px;
+  }
+  .explain h3{margin:0 0 8px; font-size:16px;}
+  .explain ul{margin:0; padding-left:20px;}
+  .explain li{margin-bottom:6px; font-size:15px; line-height:1.5;}
+
+  .section-label{
+    font-family:'Baloo 2',cursive; font-weight:700; font-size:14px;
+    display:flex; align-items:center; gap:8px; margin:22px 0 10px;
+    color:var(--ink);
+  }
+  .section-label .dot{width:10px;height:10px;border-radius:50%;}
+
+  /* quiz */
+  .quiz{margin-bottom:8px;}
+  .q-card{
+    border:1px solid var(--paper-line); border-radius:12px; padding:14px 16px; margin-bottom:12px;
+    background:#fffdf9;
+  }
+  .q-card p.qtext{font-weight:700; margin:0 0 10px; font-size:15px;}
+  .opts{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
+  @media(max-width:480px){.opts{grid-template-columns:1fr;}}
+  .opt{
+    border:2px solid var(--paper-line); background:#fff; border-radius:10px;
+    padding:9px 12px; font-family:'Nunito',sans-serif; font-weight:700; font-size:14px;
+    cursor:pointer; text-align:left; transition:.15s;
+  }
+  .opt:hover{border-color:var(--orange);}
+  .opt.correct{background:#e6f6ee; border-color:var(--green); color:#1c6b4c;}
+  .opt.wrong{background:#fdeae5; border-color:var(--red); color:#a83619;}
+  .opt[disabled]{cursor:default;}
+  .fb{font-size:13px; margin-top:8px; font-weight:700;}
+  .fb.ok{color:var(--green);}
+  .fb.no{color:var(--red);}
+
+  /* match game */
+  .game-wrap{
+    background:#F4F0FF; border-radius:12px; padding:16px; border:1px solid #ddd3f7;
+  }
+  .game-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px;}
+  .game-head .score{font-family:'Baloo 2',cursive; font-weight:700; font-size:14px; color:var(--purple);}
+  .match-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media(max-width:520px){.match-grid{grid-template-columns:1fr;}}
+  .match-col{display:flex; flex-direction:column; gap:8px;}
+  .card{
+    border:2px solid #ddd3f7; background:#fff; border-radius:10px;
+    padding:10px 12px; font-weight:700; font-size:14px; cursor:pointer; text-align:center;
+    transition:.15s; user-select:none;
+  }
+  .card.sel{border-color:var(--purple); background:#ece5ff;}
+  .card.matched{border-color:var(--green); background:#e6f6ee; color:#1c6b4c; cursor:default;}
+  .card.shake{animation:shake .35s;}
+  @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
+  .win-msg{display:none; text-align:center; font-family:'Baloo 2',cursive; color:var(--green); font-weight:700; margin-top:10px;}
+  .reset-btn{
+    border:none; background:var(--purple); color:#fff; font-family:'Baloo 2',cursive;
+    font-weight:700; padding:6px 14px; border-radius:8px; cursor:pointer; font-size:13px;
+  }
+
+  footer{
+    text-align:center; color:#8a8577; font-size:12px; padding:20px; opacity:.8;
+  }
+
+  /* progress ruler */
+  .ruler{
+    max-width:920px; margin:0 auto; padding:14px 16px 0;
+  }
+  .ruler-track{
+    height:8px; background:var(--paper-line); border-radius:4px; overflow:hidden;
+  }
+  .ruler-fill{
+    height:100%; width:0%; background:linear-gradient(90deg,var(--orange),var(--yellow));
+    transition:width .2s;
+  }
+</style>
+</head>
+<body>
+
+<div class="spiral">
+  <div class="spiral-rings">
+    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="hero">
+    <div class="eyebrow">3. Sınıf · Maarif Modeli</div>
+    <h1>Matematik Konu Defteri</h1>
+    <p>Dört işlemden paraya, geometriden veriye kadar konu anlatımı, sorular ve oyunlar bir arada</p>
+  </div>
+  <nav class="tabs" id="tabNav"></nav>
+</div>
+
+<div class="ruler"><div class="ruler-track"><div class="ruler-fill" id="rulerFill"></div></div></div>
+
+<main id="main"></main>
+
+<footer>3. Sınıf Matematik · İnteraktif Konu Defteri</footer>
+
+<script>
+/* ================= VERİ ================= */
+const UNITS = [
+  {
+    id:"toplama-cikarma",
+    title:"Toplama ve Çıkarma İşlemleri",
+    icon:"➕➖",
+    color1:"#FF6B35", color2:"#E4572E",
+    explain:[
+      "Üç ve dört basamaklı doğal sayılarla eldeli/elde vermeli toplama işlemi yapılır.",
+      "Çıkarma işleminde onluk/yüzlük bozma (onluktan, yüzlükten bozma) stratejisi kullanılır.",
+      "Toplamanın değişme ve birleşme özelliği zihinden işlem yapmayı kolaylaştırır.",
+      "Bir toplama işleminin sonucunu tahmin etmek için sayılar yuvarlanabilir."
+    ],
+    quiz:[
+      {q:"347 + 256 = ?", opts:["503","603","593","613"], correct:2},
+      {q:"820 − 365 = ?", opts:["455","445","555","465"], correct:0},
+      {q:"Toplamanın değişme özelliğine göre 45 + 28 işleminin sonucu hangisine eşittir?", opts:["28 − 45","28 + 45","45 − 28","45 × 28"], correct:1}
+    ],
+    pairs:[
+      ["120 + 130","250"],
+      ["500 − 240","260"],
+      ["275 + 125","400"],
+      ["600 − 450","150"]
+    ]
+  },
+  {
+    id:"carpma",
+    title:"Çarpma İşlemi",
+    icon:"✖️",
+    color1:"#6B4E9E", color2:"#513a78",
+    explain:[
+      "Çarpım tablosu (1'den 10'a kadar) akıcı biçimde bilinmelidir.",
+      "Çarpma işleminde birler ve onlar basamağı ayrı ayrı çarpılıp toplanır.",
+      "Çarpmanın değişme özelliği: 6 × 4 = 4 × 6 sonucu değiştirmez.",
+      "Bir sayıyı 10, 100 ile çarparken sona sıfır eklenir (23 × 10 = 230)."
+    ],
+    quiz:[
+      {q:"7 × 8 = ?", opts:["54","56","64","48"], correct:1},
+      {q:"23 × 4 = ?", opts:["92","82","96","86"], correct:0},
+      {q:"45 × 10 = ?", opts:["405","45","4500","450"], correct:3}
+    ],
+    pairs:[
+      ["6 × 7","42"],
+      ["9 × 8","72"],
+      ["12 × 5","60"],
+      ["11 × 6","66"]
+    ]
+  },
+  {
+    id:"bolme",
+    title:"Bölme İşlemi",
+    icon:"➗",
+    color1:"#2A9D6F", color2:"#1c6b4c",
+    explain:[
+      "Bölme, eşit paylaştırma ve gruplama işlemidir; bölünen ÷ bölen = bölüm.",
+      "Bölme işleminde kalan varsa, kalan her zaman bölenden küçük olmalıdır.",
+      "Çarpım tablosu bilgisi bölme işlemini hızlandırır (6 × 7 = 42 → 42 ÷ 7 = 6).",
+      "Bölme işleminin sonucu çarpma ile kontrol edilebilir: bölüm × bölen + kalan = bölünen."
+    ],
+    quiz:[
+      {q:"56 ÷ 8 = ?", opts:["6","7","8","9"], correct:1},
+      {q:"37 ÷ 5 işleminde bölüm ve kalan nedir?", opts:["7 bölüm, 2 kalan","6 bölüm, 7 kalan","7 bölüm, 0 kalan","5 bölüm, 2 kalan"], correct:0},
+      {q:"63 ÷ 9 = ?", opts:["6","7","8","9"], correct:1}
+    ],
+    pairs:[
+      ["48 ÷ 6","8"],
+      ["81 ÷ 9","9"],
+      ["45 ÷ 5","9"],
+      ["36 ÷ 4","9"]
+    ]
+  },
+  {
+    id:"kesirler",
+    title:"Kesirler",
+    icon:"🍰",
+    color1:"#FFC94A", color2:"#e0a91f",
+    explain:[
+      "Bir bütün eşit parçalara bölündüğünde her parça bir kesri gösterir: pay/payda.",
+      "Payda, bütünün kaç eşit parçaya bölündüğünü; pay, alınan parça sayısını gösterir.",
+      "Paydaları eşit kesirlerde payı büyük olan kesir daha büyüktür.",
+      "1/2, 1/4, 1/3 gibi birim kesirler günlük hayattan örneklerle (pizza, çikolata) anlaşılır."
+    ],
+    quiz:[
+      {q:"Bir pastanın 8 eşit dilimden 3'ü yenmiştir. Yenen kısmı gösteren kesir hangisidir?", opts:["3/8","8/3","5/8","3/5"], correct:0},
+      {q:"1/4 ile 1/8 kesirlerinden hangisi daha büyüktür?", opts:["1/8","1/4","Eşittir","Karşılaştırılamaz"], correct:1},
+      {q:"Payı ve paydası eşit olan kesir (örn. 5/5) hangi sayıyı gösterir?", opts:["0","1","5","10"], correct:1}
+    ],
+    pairs:[
+      ["1/2","Bütünün yarısı"],
+      ["1/4","Bütünün dörtte biri"],
+      ["3/4","Bütünün dörtte üçü"],
+      ["1/3","Bütünün üçte biri"]
+    ]
+  },
+  {
+    id:"geometri",
+    title:"Geometri: Şekiller ve Açılar",
+    icon:"📐",
+    color1:"#1E3A5F", color2:"#132a45",
+    explain:[
+      "Çokgenler kenar sayısına göre adlandırılır: üçgen (3), dörtgen (4), beşgen (5), altıgen (6).",
+      "Açılar dar açı, dik açı ve geniş açı olarak sınıflandırılır.",
+      "Bir şeklin simetri doğrusu, şekli iki eş parçaya ayıran çizgidir.",
+      "Kare ve dikdörtgenin dört köşesi de dik açıdır."
+    ],
+    quiz:[
+      {q:"5 kenarı olan çokgenin adı nedir?", opts:["Altıgen","Beşgen","Dörtgen","Yedigen"], correct:1},
+      {q:"90 derecelik açının adı nedir?", opts:["Dar açı","Geniş açı","Dik açı","Tam açı"], correct:2},
+      {q:"Aşağıdakilerden hangisinin dört kenarı ve dört dik açısı vardır?", opts:["Üçgen","Daire","Dikdörtgen","Beşgen"], correct:2}
+    ],
+    pairs:[
+      ["3 kenar","Üçgen"],
+      ["6 kenar","Altıgen"],
+      ["90°","Dik açı"],
+      ["90°'den küçük","Dar açı"]
+    ]
+  },
+  {
+    id:"cisimler",
+    title:"Geometrik Cisimler",
+    icon:"📦",
+    color1:"#E4572E", color2:"#b03d18",
+    explain:[
+      "Küpün 6 yüzü, 12 kenarı ve 8 köşesi vardır; tüm yüzleri karedir.",
+      "Silindirin iki tabanı daire, yan yüzeyi ise eğri bir yüzeydir.",
+      "Küre, tüm noktaları merkeze eşit uzaklıkta olan yuvarlak bir cisimdir; yüzü yoktur.",
+      "Prizmaların tabanları çokgen, yan yüzeyleri ise dikdörtgendir."
+    ],
+    quiz:[
+      {q:"Küpün kaç yüzü vardır?", opts:["4","6","8","12"], correct:1},
+      {q:"Sadece iki tabanı daire olan cisim hangisidir?", opts:["Küp","Küre","Silindir","Piramit"], correct:2},
+      {q:"Hiç köşesi ve kenarı olmayan cisim hangisidir?", opts:["Küre","Küp","Prizma","Koni"], correct:0}
+    ],
+    pairs:[
+      ["Küp","6 yüz, 8 köşe"],
+      ["Silindir","2 daire taban"],
+      ["Küre","Köşesi yok"],
+      ["Koni","1 tepe noktası"]
+    ]
+  },
+  {
+    id:"olcme",
+    title:"Ölçme: Uzunluk, Zaman, Ağırlık, Sıvı",
+    icon:"📏",
+    color1:"#2A9D6F", color2:"#1c6b4c",
+    explain:[
+      "Uzunluk ölçme birimleri: 1 metre (m) = 100 santimetre (cm); 1 km = 1000 m.",
+      "Ağırlık ölçme birimleri: 1 kilogram (kg) = 1000 gram (g).",
+      "Sıvı ölçme birimleri: 1 litre (L) = 1000 mililitre (mL).",
+      "Zaman ölçme: 1 saat = 60 dakika, 1 dakika = 60 saniye; saat hem tam hem yarım hem de çeyreklerle okunur."
+    ],
+    quiz:[
+      {q:"1 metre kaç santimetredir?", opts:["10","100","1000","1"], correct:1},
+      {q:"1 kilogram kaç gramdır?", opts:["100","10","1000","10000"], correct:2},
+      {q:"Saat 3'ü çeyrek geçiyorsa saat kaçtır?", opts:["03:15","03:45","03:30","02:45"], correct:0}
+    ],
+    pairs:[
+      ["1 m","100 cm"],
+      ["1 kg","1000 g"],
+      ["1 L","1000 mL"],
+      ["1 saat","60 dakika"]
+    ]
+  },
+  {
+    id:"paralar",
+    title:"Paralarımız",
+    icon:"💰",
+    color1:"#FFC94A", color2:"#c98f10",
+    explain:[
+      "Türk Lirası banknotları: 5, 10, 20, 50, 100, 200 TL; madeni paralar: 1 kr, 5 kr, 10 kr, 25 kr, 50 kr, 1 TL.",
+      "Farklı banknot ve madeni para birleşimleriyle aynı tutar oluşturulabilir.",
+      "Alışverişte ödenen ve alınan para arasındaki fark 'para üstü' olarak hesaplanır.",
+      "Kuruş ile lira arasındaki ilişki: 100 kuruş = 1 TL."
+    ],
+    quiz:[
+      {q:"20 TL + 10 TL + 5 TL toplamı kaç TL'dir?", opts:["30","35","25","40"], correct:1},
+      {q:"50 kr + 25 kr + 25 kr toplamı kaç TL'dir?", opts:["0,75 TL","1 TL","0,50 TL","1,25 TL"], correct:1},
+      {q:"100 TL'lik bir alışverişte 150 TL verilirse para üstü kaç TL'dir?", opts:["40","50","60","30"], correct:1}
+    ],
+    pairs:[
+      ["10 TL + 5 TL","15 TL"],
+      ["50 TL + 20 TL","70 TL"],
+      ["25 kr + 25 kr","50 kr"],
+      ["100 TL + 100 TL","200 TL"]
+    ]
+  },
+  {
+    id:"veri",
+    title:"Veri Toplama ve Değerlendirme",
+    icon:"📊",
+    color1:"#6B4E9E", color2:"#513a78",
+    explain:[
+      "Veri, bir konu hakkında toplanan sayılarla ya da sözlerle ifade edilen bilgidir.",
+      "Toplanan veriler; şekil grafiği, sütun grafiği veya tabloyla gösterilebilir.",
+      "Sütun grafiğinde her sütunun yüksekliği o veriye ait sayı değerini gösterir.",
+      "Grafik okurken önce başlık ve eksenler incelenir, sonra sütunlar karşılaştırılır."
+    ],
+    quiz:[
+      {q:"Bir sınıfta yapılan ankete göre 12 öğrenci elmayı, 8 öğrenci muzu sevdiğini söylemiştir. En çok sevilen meyve hangisidir?", opts:["Muz","Elma","Eşit","Belirsiz"], correct:1},
+      {q:"Sütun grafiğinde bir sütunun yüksekliği neyi gösterir?", opts:["Rengi","Sayı değerini","Şeklin adını","Hiçbir şey"], correct:1},
+      {q:"Bir grafiği okurken ilk olarak neye bakılır?", opts:["Renklere","Başlığa ve eksenlere","Kağıdın boyutuna","Yazı tipine"], correct:1}
+    ],
+    pairs:[
+      ["Şekil grafiği","Sembollerle gösterim"],
+      ["Sütun grafiği","Dikey çubuklarla gösterim"],
+      ["Tablo","Satır ve sütunla gösterim"],
+      ["Anket","Veri toplama yöntemi"]
+    ]
+  }
+];
+
+/* ================= RENDER ================= */
+const nav = document.getElementById("tabNav");
+const main = document.getElementById("main");
+
+UNITS.forEach((u,idx)=>{
+  const a = document.createElement("a");
+  a.href = "#"+u.id;
+  a.textContent = u.icon+" "+u.title.split(":")[0];
+  nav.appendChild(a);
+
+  const section = document.createElement("section");
+  section.className = "unit";
+  section.id = u.id;
+
+  section.innerHTML = `
+    <div class="unit-head" style="background:linear-gradient(135deg, ${u.color1}, ${u.color2});">
+      <div class="icon">${u.icon}</div>
+      <div>
+        <div class="tag">ÜNİTE ${idx+1}</div>
+        <h2>${u.title}</h2>
+      </div>
+    </div>
+    <div class="unit-body">
+      <div class="explain">
+        <h3>📖 Konu Anlatımı</h3>
+        <ul>${u.explain.map(e=>`<li>${e}</li>`).join("")}</ul>
+      </div>
+
+      <div class="section-label"><span class="dot" style="background:${u.color1}"></span>Soru Bankası</div>
+      <div class="quiz" id="quiz-${u.id}"></div>
+
+      <div class="section-label"><span class="dot" style="background:${u.color1}"></span>Eşleştirme Oyunu</div>
+      <div class="game-wrap" id="game-${u.id}"></div>
+    </div>
+  `;
+  main.appendChild(section);
+
+  buildQuiz(u, document.getElementById(`quiz-${u.id}`));
+  buildMatchGame(u, document.getElementById(`game-${u.id}`));
+});
+
+function buildQuiz(u, container){
+  u.quiz.forEach((item,qi)=>{
+    const card = document.createElement("div");
+    card.className = "q-card";
+    card.innerHTML = `
+      <p class="qtext">${qi+1}. ${item.q}</p>
+      <div class="opts">
+        ${item.opts.map((o,oi)=>`<button class="opt" data-i="${oi}">${o}</button>`).join("")}
+      </div>
+      <div class="fb"></div>
+    `;
+    const btns = card.querySelectorAll(".opt");
+    const fb = card.querySelector(".fb");
+    btns.forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        const chosen = parseInt(btn.dataset.i);
+        btns.forEach(b=>b.disabled=true);
+        if(chosen === item.correct){
+          btn.classList.add("correct");
+          fb.textContent = "Doğru! 🎉";
+          fb.className = "fb ok";
+        } else {
+          btn.classList.add("wrong");
+          btns[item.correct].classList.add("correct");
+          fb.textContent = "Yanlış, doğru cevap işaretlendi.";
+          fb.className = "fb no";
+        }
+      });
+    });
+    container.appendChild(card);
+  });
+}
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function buildMatchGame(u, container){
+  const left = u.pairs.map((p,i)=>({id:i, text:p[0]}));
+  const right = u.pairs.map((p,i)=>({id:i, text:p[1]}));
+  const leftShuffled = shuffle(left);
+  const rightShuffled = shuffle(right);
+
+  container.innerHTML = `
+    <div class="game-head">
+      <span class="score" id="score-${u.id}">Eşleşen: 0 / ${u.pairs.length}</span>
+      <button class="reset-btn" id="reset-${u.id}">Yeniden Karıştır</button>
+    </div>
+    <div class="match-grid">
+      <div class="match-col" id="col-l-${u.id}"></div>
+      <div class="match-col" id="col-r-${u.id}"></div>
+    </div>
+    <div class="win-msg" id="win-${u.id}">🎉 Tebrikler, tüm eşleşmeleri buldun!</div>
+  `;
+
+  let selL = null, selR = null, matched = 0;
+  const scoreEl = container.querySelector(`#score-${u.id}`);
+  const winEl = container.querySelector(`#win-${u.id}`);
+
+  function render(){
+    matched = 0; selL = null; selR = null;
+    const colL = container.querySelector(`#col-l-${u.id}`);
+    const colR = container.querySelector(`#col-r-${u.id}`);
+    colL.innerHTML = ""; colR.innerHTML = "";
+    winEl.style.display = "none";
+
+    leftShuffled.forEach(item=>{
+      const c = document.createElement("div");
+      c.className = "card";
+      c.textContent = item.text;
+      c.dataset.id = item.id;
+      c.addEventListener("click",()=>handleClick(c,"L"));
+      colL.appendChild(c);
+    });
+    rightShuffled.forEach(item=>{
+      const c = document.createElement("div");
+      c.className = "card";
+      c.textContent = item.text;
+      c.dataset.id = item.id;
+      c.addEventListener("click",()=>handleClick(c,"R"));
+      colR.appendChild(c);
+    });
+    scoreEl.textContent = `Eşleşen: 0 / ${u.pairs.length}`;
+  }
+
+  function handleClick(el, side){
+    if(el.classList.contains("matched")) return;
+    if(side==="L"){
+      if(selL) selL.classList.remove("sel");
+      selL = el; el.classList.add("sel");
+    } else {
+      if(selR) selR.classList.remove("sel");
+      selR = el; el.classList.add("sel");
+    }
+    if(selL && selR){
+      if(selL.dataset.id === selR.dataset.id){
+        selL.classList.remove("sel"); selR.classList.remove("sel");
+        selL.classList.add("matched"); selR.classList.add("matched");
+        matched++;
+        scoreEl.textContent = `Eşleşen: ${matched} / ${u.pairs.length}`;
+        selL=null; selR=null;
+        if(matched === u.pairs.length){
+          winEl.style.display = "block";
+        }
+      } else {
+        const a = selL, b = selR;
+        a.classList.add("shake"); b.classList.add("shake");
+        setTimeout(()=>{
+          a.classList.remove("sel","shake");
+          b.classList.remove("sel","shake");
+        },350);
+        selL=null; selR=null;
+      }
+    }
+  }
+
+  render();
+  container.querySelector(`#reset-${u.id}`).addEventListener("click",()=>{
+    leftShuffled.sort(()=>Math.random()-0.5);
+    rightShuffled.sort(()=>Math.random()-0.5);
+    render();
+  });
+}
+
+/* progress ruler on scroll */
+window.addEventListener("scroll",()=>{
+  const h = document.documentElement;
+  const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+  document.getElementById("rulerFill").style.width = Math.min(100,scrolled)+"%";
+});
+</script>
+</body>
+</html>
