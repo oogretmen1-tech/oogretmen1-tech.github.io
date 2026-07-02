@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3. Sınıf Hayat Bilgisi | Dijital Öğretmen</title>
+<style>
+  :root{
+    --coral:#FF7B54;
+    --coral-dark:#E85D3D;
+    --turkuaz:#17A2A0;
+    --turkuaz-dark:#0E8482;
+    --gold:#FFC93C;
+    --cream:#FFF8F0;
+    --ink:#2D2A32;
+    --ok:#2ECC71;
+    --bad:#FF5C5C;
+    --radius:20px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Segoe UI', Verdana, Tahoma, sans-serif;
+    background:linear-gradient(180deg,#FFF3E6 0%, #E9FBFA 55%, #FFF8F0 100%);
+    color:var(--ink);
+    padding-bottom:60px;
+  }
+  header{
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(120deg,var(--coral) 0%, var(--coral-dark) 55%, var(--turkuaz) 130%);
+    color:white;
+    text-align:center;
+    padding:38px 18px 46px;
+  }
+  header h1{
+    margin:6px 0 6px;
+    font-size:2rem;
+    text-shadow:0 3px 10px rgba(0,0,0,.15);
+  }
+  header p{margin:0;font-size:1.05rem;opacity:.95;}
+  .float-emoji{
+    position:absolute;
+    font-size:2rem;
+    opacity:.35;
+    animation:float 6s ease-in-out infinite;
+  }
+  @keyframes float{
+    0%,100%{transform:translateY(0) rotate(0deg);}
+    50%{transform:translateY(-16px) rotate(8deg);}
+  }
+  .tabs{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    justify-content:center;
+    padding:20px 14px 0;
+    max-width:900px;
+    margin:0 auto;
+  }
+  .tab-btn{
+    border:none;
+    cursor:pointer;
+    padding:12px 16px;
+    border-radius:999px;
+    font-size:.95rem;
+    font-weight:700;
+    background:white;
+    color:var(--ink);
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
+    transition:.2s;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .tab-btn:hover{transform:translateY(-2px);}
+  .tab-btn.active{
+    background:var(--turkuaz);
+    color:white;
+    box-shadow:0 6px 16px rgba(23,162,160,.4);
+  }
+  main{max-width:820px;margin:0 auto;padding:24px 16px;}
+  .unit{display:none;animation:fadein .35s ease;}
+  .unit.active{display:block;}
+  @keyframes fadein{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+  .unit-hero{
+    background:white;
+    border-radius:var(--radius);
+    padding:22px 22px 20px;
+    box-shadow:0 8px 24px rgba(0,0,0,.06);
+    margin-bottom:22px;
+    display:flex;
+    align-items:center;
+    gap:16px;
+  }
+  .unit-hero .big-icon{
+    font-size:3rem;
+    background:var(--accent-bg,#FFEEDD);
+    border-radius:50%;
+    width:74px;height:74px;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .unit-hero h2{margin:0 0 4px;font-size:1.4rem;color:var(--accent,var(--coral-dark));}
+  .unit-hero p{margin:0;color:#666;font-size:.92rem;}
+
+  section.block{
+    background:white;
+    border-radius:var(--radius);
+    padding:20px 20px 22px;
+    margin-bottom:20px;
+    box-shadow:0 6px 18px rgba(0,0,0,.05);
+  }
+  section.block h3{
+    margin:0 0 14px;
+    font-size:1.1rem;
+    display:flex;align-items:center;gap:8px;
+    color:var(--accent,var(--coral-dark));
+  }
+  .intro p{
+    line-height:1.65;
+    font-size:.98rem;
+    margin:0 0 12px;
+    color:#3a3a3a;
+  }
+  .intro p:last-child{margin-bottom:0;}
+
+  /* Düşünelim accordion */
+  .think-item{
+    border:2px solid #F0F0F0;
+    border-radius:14px;
+    margin-bottom:10px;
+    overflow:hidden;
+  }
+  .think-q{
+    padding:13px 16px;
+    cursor:pointer;
+    font-weight:600;
+    font-size:.94rem;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    background:#FAFAFA;
+    transition:.2s;
+  }
+  .think-q:hover{background:#F3F3F3;}
+  .think-q .arrow{transition:.25s;flex-shrink:0;}
+  .think-item.open .arrow{transform:rotate(180deg);}
+  .think-a{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .3s ease;
+    padding:0 16px;
+    font-size:.92rem;
+    line-height:1.6;
+    color:#444;
+    background:#FFFDF7;
+  }
+  .think-item.open .think-a{
+    max-height:300px;
+    padding:12px 16px 16px;
+  }
+
+  /* Quiz */
+  .quiz-progress{
+    font-size:.85rem;
+    color:#888;
+    margin-bottom:10px;
+    font-weight:600;
+  }
+  .quiz-q{font-weight:700;margin-bottom:12px;font-size:.98rem;}
+  .quiz-options{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+  .quiz-opt{
+    text-align:left;
+    padding:12px 14px;
+    border-radius:12px;
+    border:2px solid #E8E8E8;
+    background:white;
+    cursor:pointer;
+    font-size:.92rem;
+    transition:.15s;
+  }
+  .quiz-opt:hover{border-color:var(--turkuaz);}
+  .quiz-opt.correct{background:#E9FAF0;border-color:var(--ok);font-weight:700;}
+  .quiz-opt.wrong{background:#FFEDED;border-color:var(--bad);}
+  .quiz-explain{
+    background:#FFF8E6;
+    border-radius:12px;
+    padding:12px 14px;
+    font-size:.88rem;
+    color:#6b5400;
+    margin-bottom:14px;
+    display:none;
+  }
+  .quiz-nav{display:flex;justify-content:space-between;align-items:center;}
+  .btn{
+    border:none;
+    padding:10px 18px;
+    border-radius:999px;
+    font-weight:700;
+    cursor:pointer;
+    font-size:.9rem;
+    background:var(--turkuaz);
+    color:white;
+    transition:.2s;
+  }
+  .btn:hover{background:var(--turkuaz-dark);}
+  .btn:disabled{opacity:.4;cursor:default;}
+  .quiz-score{font-weight:700;font-size:.9rem;color:var(--coral-dark);}
+  .quiz-done{
+    text-align:center;
+    padding:16px;
+  }
+  .quiz-done .emoji{font-size:2.6rem;}
+
+  /* Sort game */
+  .sort-instruction{font-size:.9rem;color:#666;margin-bottom:14px;}
+  .sort-pool{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:16px;
+    min-height:40px;
+  }
+  .sort-chip{
+    padding:9px 14px;
+    background:#F0F4FF;
+    border:2px solid #D8E0FF;
+    border-radius:999px;
+    font-size:.88rem;
+    cursor:pointer;
+    transition:.15s;
+    font-weight:600;
+  }
+  .sort-chip:hover{transform:translateY(-2px);border-color:var(--turkuaz);}
+  .sort-chip.selected{background:var(--gold);border-color:#E0A800;}
+  .sort-buckets{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .sort-bucket{
+    border:2px dashed #ccc;
+    border-radius:16px;
+    padding:12px;
+    min-height:120px;
+    background:#FAFAFA;
+    cursor:pointer;
+    transition:.15s;
+  }
+  .sort-bucket:hover{border-color:var(--turkuaz);}
+  .sort-bucket h4{margin:0 0 8px;font-size:.92rem;text-align:center;}
+  .sort-bucket .items{display:flex;flex-wrap:wrap;gap:6px;}
+  .placed{
+    padding:6px 10px;
+    border-radius:999px;
+    font-size:.78rem;
+    font-weight:700;
+  }
+  .placed.ok{background:#DFF7E7;color:#1E7A44;}
+  .placed.bad{background:#FFE3E3;color:#B33636;}
+  .sort-footer{display:flex;justify-content:space-between;align-items:center;margin-top:14px;}
+  .sort-score{font-weight:700;color:var(--coral-dark);font-size:.9rem;}
+
+  footer{
+    text-align:center;
+    font-size:.8rem;
+    color:#999;
+    padding:20px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="float-emoji" style="top:10%;left:8%;">🎒</span>
+  <span class="float-emoji" style="top:60%;left:18%;animation-delay:1s;">🌻</span>
+  <span class="float-emoji" style="top:20%;right:10%;animation-delay:2s;">🏡</span>
+  <span class="float-emoji" style="top:65%;right:16%;animation-delay:1.5s;">🌍</span>
+  <span class="float-emoji" style="top:5%;left:45%;animation-delay:.5s;">📚</span>
+  <h1>🌈 3. Sınıf Hayat Bilgisi</h1>
+  <p>Düşünerek öğren, oynayarak pekiştir! 🚀</p>
+</header>
+
+<div class="tabs" id="tabs"></div>
+
+<main id="main"></main>
+
+<footer>Dijital Öğretmen · İnteraktif Hayat Bilgisi Etkinliği</footer>
+
+<script>
+/* ============ VERİ ============ */
+const UNITS = [
+{
+  id:"okul",
+  title:"Okulumuzda Hayat",
+  icon:"🏫",
+  accent:"#FF7B54",
+  accentBg:"#FFEEDD",
+  desc:"Kurallar, sorumluluk ve arkadaşlık",
+  intro:[
+    "Okul, sadece ders çalıştığımız değil, birlikte yaşamayı öğrendiğimiz bir yerdir. 📚 Sınıf kuralları, herkesin rahat çalışabilmesi için vardır; kural koymak özgürlüğü kısıtlamak değil, herkesin hakkını korumaktır.",
+    "Öğretmenimiz bize sadece bilgi öğretmez; paylaşmayı, sırasını beklemeyi, farklı fikirlere saygı duymayı da öğretir. 🤝",
+    "Okulda bir görev üstlenmek (nöbetçilik, sınıf temsilciliği gibi) bize sorumluluk kazandırır: bir işi hep başkasının yapmasını beklemek yerine, kendi payımıza düşeni yapmayı öğreniriz. ✅"
+  ],
+  think:[
+    {q:"Sınıfta ortak kullanılan kalemler bitmek üzere ve herkes aynı anda kullanmak istiyor. Sence en adil çözüm ne olurdu? 🤔",
+     a:"Sırayla kullanma listesi yapmak ya da öğretmenden yardım istemek, kimseyi dışlamadan adil bir çözüm olur. Önemli olan, 'ben önce alayım' yerine 'nasıl paylaşırız' diye düşünmektir."},
+    {q:"Bir arkadaşın ders sırasında sürekli seni rahatsız ediyor ama söylersen kızacağını düşünüyorsun. Ne yapardın?",
+     a:"Önce nazikçe 'lütfen beni rahatsız etme, ders dinlemem gerekiyor' demek iyi bir başlangıçtır. Devam ederse öğretmenden yardım istemek, arkadaşlıktan vazgeçmek değil, doğru davranışı öğrenmesine yardım etmektir."},
+    {q:"Nöbetçi olduğun gün arkadaşların oyun oynarken sen sınıfı toplamak zorundasın. Bu adil mi, neden?",
+     a:"Evet, çünkü nöbet sırayla herkese gelir; bugün sen görev alıyorsun, yarın başka bir arkadaşın alacak. Sorumluluk, sırası geldiğinde herkesin üstüne düşeni yapmasıdır."}
+  ],
+  quiz:[
+    {q:"Sınıf kütüphanesinden aldığın bir kitabı yanlışlıkla yırttın. En doğru davranış hangisidir?",
+     opts:["Kimseye söylemeden yerine koymak","Öğretmene söyleyip özür dilemek, gerekirse onarmaya çalışmak","Kitabı çöpe atmak","Başka bir arkadaşının üstüne atmak"],
+     correct:1, explain:"Hata yapmak insani bir durumdur; önemli olan bunu saklamak değil, sorumluluğunu almaktır."},
+    {q:"Grup çalışmasında bir arkadaşın hiç katkı vermiyor. En doğrusu nedir?",
+     opts:["Onu grup dışına atmak","Öğretmene söylemeden onun payını da sen yapmak","Nazikçe görev vererek çalışmaya dahil etmeye çalışmak","Sınıfta herkese şikayet etmek"],
+     correct:2, explain:"Bir arkadaşı dışlamak yerine ona uygun bir görev vererek sürece dahil etmek, ekip çalışmasının temelidir."},
+    {q:"Teneffüste bir arkadaşının düştüğünü gördün. İlk yapman gereken nedir?",
+     opts:["Gülüp geçmek","Yanına gidip yardım etmek ve gerekirse öğretmene haber vermek","Görmezden gelmek","Fotoğrafını çekmek"],
+     correct:1, explain:"Arkadaşlık, zor anda yanında olmayı gerektirir."},
+    {q:"Sınıf kurallarının olması sence neden önemlidir?",
+     opts:["Öğrencileri cezalandırmak için","Herkesin hakkının korunması ve düzenin sağlanması için","Öğretmenin işini kolaylaştırmak için","Sadece güzel görünmesi için"],
+     correct:1, explain:"Kurallar, sınıftaki herkesin haklarının korunması için vardır."},
+    {q:"Okulda bir görev üstlendiğinde (örneğin sınıf temsilciliği) bu sana ne kazandırır?",
+     opts:["Sadece bir unvan","Sorumluluk alma ve güvenilirlik","Diğer derslerden muafiyet","Hiçbir şey"],
+     correct:1, explain:"Görev almak, sorumluluk duygusunu ve güvenilir olmayı geliştirir."}
+  ],
+  game:{
+    instruction:"Aşağıdaki davranışları doğru kutuya yerleştir! Önce bir davranışa, sonra kutuya tıkla. 👇",
+    cat1:{label:"Kurala Uygun 😊", key:"ok"},
+    cat2:{label:"Kurala Uygun Değil 😕", key:"bad"},
+    items:[
+      {t:"Sırada beklemeden öne geçmek", k:"bad"},
+      {t:"Ödünç aldığın eşyayı zamanında geri vermek", k:"ok"},
+      {t:"Ders sırasında bağırarak konuşmak", k:"bad"},
+      {t:"Elini kaldırıp söz almayı beklemek", k:"ok"},
+      {t:"Arkadaşının eşyasını izinsiz almak", k:"bad"},
+      {t:"Ortak alanları temiz kullanmak", k:"ok"},
+      {t:"Nöbetçiyken görevini yapmamak", k:"bad"},
+      {t:"Farklı düşünen arkadaşına saygı göstermek", k:"ok"}
+    ]
+  }
+},
+{
+  id:"ev",
+  title:"Evimizde Hayat",
+  icon:"🏡",
+  accent:"#E85D3D",
+  accentBg:"#FFE3D6",
+  desc:"Aile, iş bölümü ve ihtiyaç-istek",
+  intro:[
+    "Bir evde yaşamak, sadece aynı çatı altında olmak değil, birlikte iş bölümü yapmaktır. 🏠 Her aile üyesinin farklı görevleri olabilir, ama bu görevler yaşa ve güce göre adil şekilde dağıtılır.",
+    "İhtiyaç ile istek aynı şey değildir. İhtiyaç, yaşamak için gerekli olandır (yemek, barınma, sağlık); istek ise olmasa da yaşayabileceğimiz ama canımızın çektiği şeydir (yeni oyuncak gibi). Aile bütçesi yapılırken önce ihtiyaçlar düşünülür. 💰",
+    "Ailede herkesin bir sözü, bir değeri vardır; küçük kararlarda bile çocukların fikrinin sorulması, o eve ait hissetmeyi güçlendirir. 💛"
+  ],
+  think:[
+    {q:"Ailenizin bu ay bütçesi sınırlı ve hem yeni bir oyuncak hem de kırılan bir cam tamiri gerekiyor. Hangisi önce yapılmalı, neden?",
+     a:"Cam tamiri bir ihtiyaçtır çünkü güvenlik ve evin durumu için gereklidir; oyuncak ise istektir ve ertelenebilir. İhtiyaçlar her zaman isteklerden önce gelir."},
+    {q:"Anne-baban işten yorgun geldi ve evde biriken bulaşıklar var. Sen ne yapardın?",
+     a:"Yaşına uygun bir şekilde yardımcı olmak (masayı toplamak, kendi odanı düzenlemek gibi) hem onlara destek olur hem de evin bir parçası olduğunu gösterir."},
+    {q:"Kardeşinle aynı odayı paylaşıyorsunuz ve o senin eşyalarını izinsiz kullanıyor. Bunu nasıl çözersin?",
+     a:"Önce sakince konuşup nasıl hissettiğini anlatmak, ortak kurallar belirlemek iyi bir çözümdür; kavga etmek yerine anlaşma yolu aramak daha sağlıklıdır."}
+  ],
+  quiz:[
+    {q:"Aşağıdakilerden hangisi bir 'ihtiyaç' değil 'istek'tir?",
+     opts:["Su","Yeni bir video oyunu","Barınma","Yemek"], correct:1,
+     explain:"Su, barınma ve yemek yaşamak için gereklidir; video oyunu bir istektir."},
+    {q:"Ailede ev işlerinin paylaşılması neden önemlidir?",
+     opts:["Sadece anne yorulmasın diye","Herkesin sorumluluk alması ve dayanışma için","Baba işe geç kalmasın diye","Önemli değildir"], correct:1,
+     explain:"İş bölümü, ailede dayanışmayı ve sorumluluk bilincini güçlendirir."},
+    {q:"Bir aile bütçesi yaparken en doğru yaklaşım hangisidir?",
+     opts:["Her isteneni hemen almak","Önce ihtiyaçları, sonra imkan varsa istekleri karşılamak","Hiçbir şey almamak","Sadece büyüklerin istediğini almak"], correct:1,
+     explain:"Bütçe planlaması ihtiyaç-istek dengesini gözetir."},
+    {q:"Kardeşinle bir anlaşmazlık yaşadığında en sağlıklı yol nedir?",
+     opts:["Bağırmak","Konuşarak çözüm aramak","Küsmek","Eşyasını saklamak"], correct:1,
+     explain:"Sorunları konuşarak çözmek, sağlıklı ilişkilerin temelidir."},
+    {q:"Evde küçük bir karar alınırken (örneğin hafta sonu planı) çocuğun fikrinin sorulması ne kazandırır?",
+     opts:["Hiçbir şey","Kendini değerli ve aileye ait hissetme","Sadece vakit kaybı","Kararı zorlaştırır"], correct:1,
+     explain:"Fikri sorulan çocuk, ailenin bir parçası olduğunu daha güçlü hisseder."}
+  ],
+  game:{
+    instruction:"Her eşyayı/durumu doğru kutuya yerleştir! 👇",
+    cat1:{label:"İhtiyaç 🥖", key:"ok"},
+    cat2:{label:"İstek 🎁", key:"bad"},
+    items:[
+      {t:"Ekmek", k:"ok"},
+      {t:"Oyuncak araba", k:"bad"},
+      {t:"İlaç", k:"ok"},
+      {t:"Yeni bilgisayar oyunu", k:"bad"},
+      {t:"Ev kirası / barınma", k:"ok"},
+      {t:"Ekstra çikolata", k:"bad"},
+      {t:"Su faturası", k:"ok"},
+      {t:"Marka ayakkabı", k:"bad"}
+    ]
+  }
+},
+{
+  id:"saglik",
+  title:"Sağlıklı Hayat",
+  icon:"🍎",
+  accent:"#2ECC71",
+  accentBg:"#E3F9E9",
+  desc:"Beslenme, hijyen ve hareket",
+  intro:[
+    "Sağlıklı olmak sadece hasta olmamak demek değildir; dengeli beslenmek, düzenli uyumak, hareketli olmak ve temizliğe dikkat etmek, vücudumuzu güçlü tutmanın yollarıdır. 💪",
+    "Besinleri 'hiç yeme' ya da 'istediğin kadar ye' diye ayırmak yerine, çeşitli ve dengeli beslenmeyi öğrenmek önemlidir; vücudumuzun farklı besin gruplarına ihtiyacı vardır. 🥗",
+    "Hijyen (el yıkama, diş fırçalama gibi) küçük ama çok güçlü bir alışkanlıktır; göremediğimiz mikroplardan korunmanın en basit yoludur. 🧼"
+  ],
+  think:[
+    {q:"Okuldan eve gelince ellerini yıkamadan atıştırmalık yemek istiyorsun. Bu neden riskli olabilir?",
+     a:"Gün içinde birçok yüzeye dokunan ellerimizde göremediğimiz mikroplar birikir; yıkamadan yemek yersek bu mikroplar vücudumuza geçebilir."},
+    {q:"Bir arkadaşın her gün aynı saatte uyumuyor ve derste sürekli uykusu geliyor. Ona ne önerirdin?",
+     a:"Düzenli bir uyku saatinin, vücudun ve beynin dinlenip ertesi gün daha dinç olmasını sağladığını anlatırdım."},
+    {q:"Spor yapmayı sevmeyen bir arkadaşın var. Hareketli olmanın sadece 'spor yapmak' anlamına gelmediğini nasıl açıklardın?",
+     a:"Merdiven çıkmak, ip atlamak, bisiklete binmek, oyun oynamak da hareket etmektir; önemli olan gün içinde bedenimizi çok fazla hareketsiz bırakmamaktır."}
+  ],
+  quiz:[
+    {q:"Aşağıdakilerden hangisi sağlıklı bir alışkanlık değildir?",
+     opts:["Düzenli uyumak","Yemekten önce elleri yıkamak","Gün boyu hareketsiz oturmak","Dişleri fırçalamak"], correct:2,
+     explain:"Uzun süre hareketsiz kalmak, sağlıklı bir alışkanlık değildir."},
+    {q:"Dengeli beslenme ne demektir?",
+     opts:["Hiçbir şey yememek","Sadece tek bir besin yemek","Vücudun ihtiyacı olan farklı besin gruplarından yeterli miktarda tüketmek","İstediğin kadar tatlı yemek"], correct:2,
+     explain:"Dengeli beslenme, çeşitli besin gruplarını yeterli miktarda tüketmektir."},
+    {q:"El yıkamak neden önemlidir?",
+     opts:["Elleri güzel koklatmak için","Göremediğimiz mikroplardan korunmak için","Vakit geçirmek için","Önemli değildir"], correct:1,
+     explain:"El yıkama, hastalıklardan korunmanın en basit yollarından biridir."},
+    {q:"Düzenli uyku vücudumuza ne kazandırır?",
+     opts:["Hiçbir şey","Dinlenme ve enerji toplama","Sadece yorgunluk","Sadece rüya görme"], correct:1,
+     explain:"Uyku, vücudun ve beynin dinlenip yenilenmesini sağlar."},
+    {q:"Aşağıdakilerden hangisi 'hareketli olmak' kapsamına girer?",
+     opts:["Sadece televizyon izlemek","İp atlamak, bisiklete binmek, oyun oynamak","Sürekli oturmak","Hiçbiri"], correct:1,
+     explain:"Hareketli olmak, spor kadar günlük oyun ve aktiviteleri de kapsar."}
+  ],
+  game:{
+    instruction:"Besinleri doğru kutuya yerleştir! 👇",
+    cat1:{label:"Her Gün Yiyebiliriz 🥦", key:"ok"},
+    cat2:{label:"Ara Sıra Yiyebiliriz 🍬", key:"bad"},
+    items:[
+      {t:"Elma", k:"ok"},
+      {t:"Sebze yemeği", k:"ok"},
+      {t:"Süt", k:"ok"},
+      {t:"Tam tahıllı ekmek", k:"ok"},
+      {t:"Cips", k:"bad"},
+      {t:"Gazlı içecek", k:"bad"},
+      {t:"Çikolata", k:"bad"},
+      {t:"Şekerleme", k:"bad"}
+    ]
+  }
+},
+{
+  id:"guvenli",
+  title:"Güvenli Hayat",
+  icon:"🚦",
+  accent:"#3B82F6",
+  accentBg:"#E1EBFF",
+  desc:"Trafik, ev ve dijital güvenlik",
+  intro:[
+    "Güvenlik, korkmak değil, dikkatli ve bilinçli olmaktır. Trafikte, evde, okulda ve internette karşılaşabileceğimiz tehlikeleri önceden bilmek bizi korur. 🛡️",
+    "Tanımadığımız biri bize bir şey teklif ettiğinde ya da bizden bir şey istediğinde, 'hayır' diyebilmek ve güvendiğimiz bir yetişkine haber vermek en doğru davranıştır.",
+    "Deprem, yangın gibi afetlerde panik yerine önceden öğrendiğimiz kuralları hatırlamak hayat kurtarır (Çök-Kapan-Tutun gibi). 🏚️"
+  ],
+  think:[
+    {q:"Yalnız evdeyken kapı çalıyor ve tanımadığın biri kapıyı açmanı istiyor. Ne yapardın?",
+     a:"Kapıyı açmadan içeriden kimin geldiğini sormak, açmamak ve mümkünse hemen güvendiğim bir yetişkine haber vermek en güvenli davranıştır."},
+    {q:"Karşıdan karşıya geçerken arkadaşın 'acele et, araba gelmiyor' diyor ama yaya ışığı kırmızı. Ne yapardın?",
+     a:"Işık yeşil olana kadar beklemek gerekir; arkadaşının aceleci davranışına uymak yerine kurala uymak güvenliği sağlar."},
+    {q:"İnternette hiç tanımadığın biri sana kişisel bilgilerini (adresini, okulunu) soruyor. Ne yapardın?",
+     a:"Bu bilgileri paylaşmamak ve durumu bir yetişkine anlatmak gerekir; internette de tanımadığımız kişilere karşı temkinli olmalıyız."}
+  ],
+  quiz:[
+    {q:"Yaya geçidinde karşıya geçerken önce ne yapılmalıdır?",
+     opts:["Koşarak geçmek","Sağa-sola bakıp ışığın uygun olduğundan emin olmak","Telefona bakarak geçmek","Hiçbiri"], correct:1,
+     explain:"Karşıya geçmeden önce etrafı kontrol etmek hayat kurtarır."},
+    {q:"Deprem sırasında en doğru davranış hangisidir?",
+     opts:["Pencereye koşmak","Asansöre binmek","Çök-Kapan-Tutun kuralını uygulamak","Panikle dışarı koşmak"], correct:2,
+     explain:"Çök-Kapan-Tutun, deprem anında öğretilen temel güvenlik kuralıdır."},
+    {q:"Tanımadığın biri seni bir yere davet ederse ne yapmalısın?",
+     opts:["Hemen gitmek","Reddedip güvendiğim bir yetişkine haber vermek","Arkadaşlarına söylemeden gitmek","Görmezden gelmek"], correct:1,
+     explain:"Tanımadığımız kişilerin tekliflerini reddedip bir yetişkine haber vermek güvenlidir."},
+    {q:"İnternette güvenli davranış hangisidir?",
+     opts:["Herkesle kişisel bilgi paylaşmak","Tanımadığın kişilerin isteklerini yetişkine danışmadan kabul etmek","Kişisel bilgileri paylaşmamak ve şüpheli durumda yetişkine haber vermek","Şifreleri herkesle paylaşmak"], correct:2,
+     explain:"Dijital güvenlik, kişisel bilgileri korumayı gerektirir."},
+    {q:"Evde yalnızken mutfakta bir gaz kokusu fark ettin. Ne yapmalısın?",
+     opts:["Kibrit yakıp bakmak","Pencereleri açıp hemen bir yetişkini aramak","Görmezden gelmek","Ocağı açmayı denemek"], correct:1,
+     explain:"Gaz kokusunda ateş kaynağından uzak durup havalandırmak ve yetişkine haber vermek gerekir."}
+  ],
+  game:{
+    instruction:"Durumları doğru kutuya yerleştir! 👇",
+    cat1:{label:"Güvenli ✅", key:"ok"},
+    cat2:{label:"Tehlikeli ⚠️", key:"bad"},
+    items:[
+      {t:"Yaya geçidinden karşıya geçmek", k:"ok"},
+      {t:"Kırmızı ışıkta karşıya koşmak", k:"bad"},
+      {t:"Emniyet kemeri takmak", k:"ok"},
+      {t:"Tanımadığın biriyle arabaya binmek", k:"bad"},
+      {t:"Prizle oynamak", k:"bad"},
+      {t:"Yetişkin eşliğinde bisiklete binmek", k:"ok"},
+      {t:"Merdivenlerde koşmak", k:"bad"},
+      {t:"Deprem çantası hazırlamak", k:"ok"}
+    ]
+  }
+},
+{
+  id:"ulke",
+  title:"Ülkemizde Hayat",
+  icon:"🇹🇷",
+  accent:"#C0392B",
+  accentBg:"#FBE1DE",
+  desc:"Vatandaşlık, semboller ve haklar",
+  intro:[
+    "Bir ülkede yaşamak, o ülkenin haklarından yararlanmak kadar sorumluluklarını da üstlenmek demektir. Vatandaş olmak, hem hak sahibi olmak hem de kurallara uymaktır. 🏛️",
+    "Bayrağımız, İstiklal Marşımız gibi milli semboller, milletimizin ortak değerlerini ve tarihini temsil eder; bu semboller sadece görsel değil, anlam yüklü değerlerdir.",
+    "Yaşadığımız şehirdeki belediye, okul, hastane gibi kurumlar hepimizin ortak ihtiyaçlarını karşılamak için çalışır; bu kurumlara saygı göstermek toplumsal yaşamın bir parçasıdır. 🏢"
+  ],
+  think:[
+    {q:"Parkta gördüğün bir çöpü, senin atmadığın halde neden yerden alıp çöpe atmalısın?",
+     a:"Ortak alanlar hepimize ait; kim attığına bakmadan temizliğine katkı sağlamak iyi bir vatandaşlık davranışıdır."},
+    {q:"İstiklal Marşı okunurken bazı arkadaşların konuşuyor. Bu davranış hakkında ne düşünürsün?",
+     a:"İstiklal Marşı, milletimizin bağımsızlık mücadelesini ve değerlerini anlatır; saygıyla dinlenmesi gerekir. Bu bir görgü kuralından çok, ortak değerlere gösterilen saygıdır."},
+    {q:"Sence bir vatandaş olarak hakların yanında hangi sorumlulukların var?",
+     a:"Kurallara uymak, çevreyi korumak, başkalarının haklarına saygı göstermek gibi sorumluluklarımız vardır."}
+  ],
+  quiz:[
+    {q:"Türk bayrağındaki ay-yıldız neyi temsil eder?",
+     opts:["Sadece süs","Milletimizin bağımsızlığını ve birliğini","Hiçbir anlamı yok","Sadece bir şekil"], correct:1,
+     explain:"Bayrağımızdaki her sembol, milli tarihimiz ve değerlerimizle ilgilidir."},
+    {q:"Vatandaş olmanın gerektirdiklerinden biri hangisidir?",
+     opts:["Sadece hak istemek","Hem haklardan yararlanıp hem sorumluluk almak","Kurallara uymamak","Hiçbiri"], correct:1,
+     explain:"Vatandaşlık, hak ve sorumlulukların birlikte yürütülmesidir."},
+    {q:"Ortak kullanılan bir parkı temiz tutmak kimin görevidir?",
+     opts:["Sadece belediyenin","Sadece çöp atanın","Orayı kullanan herkesin","Hiç kimsenin"], correct:2,
+     explain:"Ortak alanlar, orayı kullanan herkesin ortak sorumluluğudur."},
+    {q:"Milli bayramlarımızı kutlamamızın amacı nedir?",
+     opts:["Sadece tatil yapmak","Tarihimizi ve değerlerimizi hatırlamak, gelecek nesillere aktarmak","Hiçbir amacı yok","Sadece eğlenmek"], correct:1,
+     explain:"Bayramlar, milli tarih ve değerlerin nesilden nesile aktarılmasını sağlar."},
+    {q:"Yaşadığın mahalledeki bir sorunu (örneğin bozuk kaldırım) fark ettiğinde en doğru davranış nedir?",
+     opts:["Görmezden gelmek","İlgili yere (belediyeye) bildirmek","Şikayet edip hiçbir şey yapmamak","Kaldırımı kendin kırmak"], correct:1,
+     explain:"Sorunları ilgili kuruma bildirmek, aktif vatandaşlığın bir parçasıdır."}
+  ],
+  game:{
+    instruction:"Aşağıdakileri doğru kutuya yerleştir! 👇",
+    cat1:{label:"Milli Sembol/Değer 🇹🇷", key:"ok"},
+    cat2:{label:"Kişisel Eşya/İçerik 🎒", key:"bad"},
+    items:[
+      {t:"Türk Bayrağı", k:"ok"},
+      {t:"İstiklal Marşı", k:"ok"},
+      {t:"Atatürk Anıtları", k:"ok"},
+      {t:"Kişisel oyuncak", k:"bad"},
+      {t:"Ay-yıldız", k:"ok"},
+      {t:"Okul çantası", k:"bad"},
+      {t:"Cumhuriyet Bayramı", k:"ok"},
+      {t:"Favori dizi karakteri", k:"bad"}
+    ]
+  }
+},
+{
+  id:"doga",
+  title:"Doğada Hayat",
+  icon:"🌳",
+  accent:"#0E8482",
+  accentBg:"#DFF6F5",
+  desc:"Canlılar, mevsimler ve doğa sevgisi",
+  intro:[
+    "Doğa, canlı ve cansız varlıkların birlikte oluşturduğu büyük bir denge sistemidir. Bir bitkiden bir taşa kadar her şeyin doğadaki yeri ve önemi vardır. 🌱",
+    "Mevsimler değiştikçe doğa da değişir; bu değişim canlıların yaşam biçimini (göç eden kuşlar, kışa hazırlanan hayvanlar gibi) doğrudan etkiler. 🍂❄️🌸☀️",
+    "Doğayı korumak (geri dönüşüm, su tasarrufu, ağaç dikmek gibi) sadece 'güzel bir davranış' değil, gelecekte yaşayacağımız dünyayı korumaktır. ♻️"
+  ],
+  think:[
+    {q:"Bir pikniğe gittiniz ve dönerken plastik şişeler, kağıtlar geride kaldı. Bunu görmezden gelmek neden yanlış olur?",
+     a:"Doğaya bıraktığımız çöpler hem görüntü kirliliği yapar hem de uzun yıllar boyunca doğaya zarar verebilir; oraya geldiğimizden daha temiz bırakmak bizim sorumluluğumuzdur."},
+    {q:"Kışın bazı kuşların göç ettiğini, bazı hayvanların kış uykusuna yattığını biliyorsun. Bu davranışların ortak amacı nedir?",
+     a:"Her ikisi de soğuk havada besin bulmanın zorlaşmasına karşı canlıların geliştirdiği hayatta kalma yöntemleridir."},
+    {q:"Evde kağıt, cam ve plastik atıkları ayrı kutulara atmak neden önemlidir?",
+     a:"Geri dönüşüm, atıkların yeniden kullanılabilir hale gelmesini sağlar; bu da doğal kaynakları daha az tüketmemize yardımcı olur."}
+  ],
+  quiz:[
+    {q:"Aşağıdakilerden hangisi 'canlı' bir varlıktır?",
+     opts:["Taş","Ağaç","Bulut","Su damlası"], correct:1,
+     explain:"Ağaç büyür, beslenir ve üreyebilir; bu yüzden canlıdır."},
+    {q:"Kuşların kışın sıcak bölgelere göç etmesinin temel nedeni nedir?",
+     opts:["Eğlenmek için","Besin ve sıcaklık ihtiyacı için","Rastgele uçmak","Hiçbir nedeni yok"], correct:1,
+     explain:"Göç, canlıların hayatta kalma stratejilerinden biridir."},
+    {q:"Geri dönüşümün faydası nedir?",
+     opts:["Çöpü çoğaltmak","Doğal kaynakları korumak ve atıkları yeniden değerlendirmek","Hiçbir faydası yok","Sadece kutuları doldurmak"], correct:1,
+     explain:"Geri dönüşüm, doğal kaynakların daha az tüketilmesini sağlar."},
+    {q:"Bir ormanda kamp yaptıktan sonra en doğru davranış hangisidir?",
+     opts:["Çöpleri orada bırakmak","Çöpleri toplayıp geri götürmek","Ateşi söndürmeden gitmek","Ağaç dallarını kırmak"], correct:1,
+     explain:"Doğayı geldiğimizden temiz bırakmak, doğa sevgisinin bir göstergesidir."},
+    {q:"Mevsimlerin değişmesi doğayı nasıl etkiler?",
+     opts:["Hiçbir şekilde etkilemez","Bitkilerin ve hayvanların yaşam biçimini değiştirir","Sadece havayı değiştirir, canlıları etkilemez","Yalnızca insanları etkiler"], correct:1,
+     explain:"Mevsim değişimi, tüm canlıların yaşam döngüsünü etkiler."}
+  ],
+  game:{
+    instruction:"Varlıkları doğru kutuya yerleştir! 👇",
+    cat1:{label:"Canlı 🐦", key:"ok"},
+    cat2:{label:"Cansız 🪨", key:"bad"},
+    items:[
+      {t:"Ağaç", k:"ok"},
+      {t:"Taş", k:"bad"},
+      {t:"Kelebek", k:"ok"},
+      {t:"Bulut", k:"bad"},
+      {t:"Balık", k:"ok"},
+      {t:"Toprak", k:"bad"},
+      {t:"Çiçek", k:"ok"},
+      {t:"Güneş", k:"bad"}
+    ]
+  }
+}
+];
+
+/* ============ RENDER ============ */
+const tabsEl = document.getElementById('tabs');
+const mainEl = document.getElementById('main');
+
+UNITS.forEach((u,idx)=>{
+  const btn = document.createElement('button');
+  btn.className = 'tab-btn' + (idx===0 ? ' active' : '');
+  btn.innerHTML = `${u.icon} ${u.title}`;
+  btn.onclick = ()=> switchUnit(u.id);
+  btn.id = 'tabbtn-'+u.id;
+  tabsEl.appendChild(btn);
+
+  const sec = document.createElement('div');
+  sec.className = 'unit' + (idx===0 ? ' active' : '');
+  sec.id = 'unit-'+u.id;
+  sec.style.setProperty('--accent', u.accent);
+  sec.style.setProperty('--accent-bg', u.accentBg);
+
+  sec.innerHTML = `
+    <div class="unit-hero">
+      <div class="big-icon">${u.icon}</div>
+      <div>
+        <h2>${u.title}</h2>
+        <p>${u.desc}</p>
+      </div>
+    </div>
+
+    <section class="block intro">
+      <h3>📖 Konu Anlatımı</h3>
+      ${u.intro.map(p=>`<p>${p}</p>`).join('')}
+    </section>
+
+    <section class="block">
+      <h3>🤔 Hadi Düşünelim</h3>
+      <div class="think-list">
+        ${u.think.map((t,i)=>`
+          <div class="think-item" id="think-${u.id}-${i}">
+            <div class="think-q" onclick="toggleThink('${u.id}',${i})">
+              <span>${t.q}</span>
+              <span class="arrow">▼</span>
+            </div>
+            <div class="think-a">${t.a}</div>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+
+    <section class="block">
+      <h3>🏆 Bilgi Yarışması</h3>
+      <div id="quiz-${u.id}"></div>
+    </section>
+
+    <section class="block">
+      <h3>🎮 Sınıflandırma Oyunu</h3>
+      <p class="sort-instruction">${u.game.instruction}</p>
+      <div id="game-${u.id}"></div>
+    </section>
+  `;
+  mainEl.appendChild(sec);
+
+  initQuiz(u);
+  initGame(u);
+});
+
+function switchUnit(id){
+  document.querySelectorAll('.unit').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+  document.getElementById('unit-'+id).classList.add('active');
+  document.getElementById('tabbtn-'+id).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function toggleThink(uid, i){
+  const el = document.getElementById(`think-${uid}-${i}`);
+  el.classList.toggle('open');
+}
+
+/* ---- QUIZ ENGINE ---- */
+function initQuiz(u){
+  const state = {i:0, score:0, answered:false};
+  const container = document.getElementById('quiz-'+u.id);
+
+  function render(){
+    if(state.i >= u.quiz.length){
+      const pct = Math.round((state.score/u.quiz.length)*100);
+      let emoji = pct>=80?'🌟':pct>=50?'👍':'💪';
+      container.innerHTML = `
+        <div class="quiz-done">
+          <div class="emoji">${emoji}</div>
+          <p style="font-weight:700;font-size:1.05rem;">${u.quiz.length} sorudan ${state.score} doğru!</p>
+          <button class="btn" onclick="restartQuiz_${u.id}()">Tekrar Dene</button>
+        </div>`;
+      return;
+    }
+    const q = u.quiz[state.i];
+    container.innerHTML = `
+      <div class="quiz-progress">Soru ${state.i+1} / ${u.quiz.length} &nbsp;·&nbsp; <span class="quiz-score">✅ ${state.score} doğru</span></div>
+      <div class="quiz-q">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((o,idx)=>`<button class="quiz-opt" data-idx="${idx}">${o}</button>`).join('')}
+      </div>
+      <div class="quiz-explain" id="explain-${u.id}">${q.explain}</div>
+      <div class="quiz-nav">
+        <span></span>
+        <button class="btn" id="next-${u.id}" disabled>Sonraki Soru →</button>
+      </div>
+    `;
+    const opts = container.querySelectorAll('.quiz-opt');
+    opts.forEach(btn=>{
+      btn.onclick = ()=>{
+        if(state.answered) return;
+        state.answered = true;
+        const idx = parseInt(btn.dataset.idx);
+        opts.forEach(b=>b.style.pointerEvents='none');
+        if(idx === q.correct){
+          btn.classList.add('correct');
+          state.score++;
+        } else {
+          btn.classList.add('wrong');
+          opts[q.correct].classList.add('correct');
+        }
+        document.getElementById('explain-'+u.id).style.display='block';
+        document.getElementById('next-'+u.id).disabled = false;
+      };
+    });
+    document.getElementById('next-'+u.id).onclick = ()=>{
+      state.i++; state.answered=false; render();
+    };
+  }
+  window['restartQuiz_'+u.id] = ()=>{ state.i=0; state.score=0; state.answered=false; render(); };
+  render();
+}
+
+/* ---- SORT GAME ENGINE ---- */
+function initGame(u){
+  const g = u.game;
+  const container = document.getElementById('game-'+u.id);
+  let selected = null;
+  let placed = {}; // text -> true
+  let correctCount = 0;
+
+  function render(){
+    const pool = g.items.filter(it=>!placed[it.t]);
+    container.innerHTML = `
+      <div class="sort-pool">
+        ${pool.map(it=>`<div class="sort-chip" data-t="${it.t}">${it.t}</div>`).join('')}
+        ${pool.length===0 ? '<span style="color:#999;font-size:.85rem;">Tüm öğeler yerleştirildi! 🎉</span>' : ''}
+      </div>
+      <div class="sort-buckets">
+        <div class="sort-bucket" data-k="${g.cat1.key}">
+          <h4>${g.cat1.label}</h4>
+          <div class="items" id="bucket1-${u.id}"></div>
+        </div>
+        <div class="sort-bucket" data-k="${g.cat2.key}">
+          <h4>${g.cat2.label}</h4>
+          <div class="items" id="bucket2-${u.id}"></div>
+        </div>
+      </div>
+      <div class="sort-footer">
+        <span class="sort-score">✅ ${correctCount} doğru yerleşim</span>
+        <button class="btn" id="reset-${u.id}">Baştan Başla</button>
+      </div>
+    `;
+    // restore placed items visually
+    Object.keys(placed).forEach(t=>{
+      const item = g.items.find(it=>it.t===t);
+      const isOk = item.k === (item._placedIn);
+      const b = item._placedIn === g.cat1.key ? document.getElementById('bucket1-'+u.id) : document.getElementById('bucket2-'+u.id);
+      const chip = document.createElement('div');
+      chip.className = 'placed ' + (isOk ? 'ok':'bad');
+      chip.textContent = t + (isOk ? ' ✓' : ' ✗');
+      b.appendChild(chip);
+    });
+
+    container.querySelectorAll('.sort-chip').forEach(c=>{
+      c.onclick = ()=>{
+        container.querySelectorAll('.sort-chip').forEach(x=>x.classList.remove('selected'));
+        c.classList.add('selected');
+        selected = c.dataset.t;
+      };
+    });
+    container.querySelectorAll('.sort-bucket').forEach(b=>{
+      b.onclick = ()=>{
+        if(!selected) return;
+        const item = g.items.find(it=>it.t===selected);
+        item._placedIn = b.dataset.k;
+        placed[selected] = true;
+        if(item.k === b.dataset.k) correctCount++;
+        selected = null;
+        render();
+      };
+    });
+    document.getElementById('reset-'+u.id).onclick = ()=>{
+      placed = {}; correctCount=0; selected=null;
+      g.items.forEach(it=>delete it._placedIn);
+      render();
+    };
+  }
+  render();
+}
+</script>
+</body>
+</html>

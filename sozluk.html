@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Türkçe Sözlük</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FFFFFF;
+    --paper-edge:#FFFFFF;
+    --ink:#2B2118;
+    --ink-soft:#5A4B3B;
+    --red:#B5231F;
+    --red-deep:#8C1A17;
+    --gold:#B4903F;
+    --line:#E7D9D8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 600px at 10% -10%, #C22823 0%, transparent 60%),
+      var(--red);
+    font-family:'Source Sans 3', sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:28px 14px 60px;
+  }
+  .book{
+    width:100%;
+    max-width:760px;
+    position:relative;
+  }
+  header{
+    text-align:center;
+    margin-bottom:22px;
+  }
+  .kicker{
+    font-size:12px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:#FFD9D7;
+    font-weight:700;
+  }
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:44px;
+    margin:6px 0 4px;
+    color:#FFFFFF;
+  }
+  .sub{
+    color:#FBE4E3;
+    font-size:15px;
+  }
+
+  /* --- Alphabet tab rail: the signature element --- */
+  .rail-wrap{
+    display:flex;
+    gap:10px;
+    align-items:stretch;
+  }
+  .rail{
+    display:flex;
+    flex-direction:column;
+    flex-wrap:wrap;
+    max-height:520px;
+    gap:3px;
+    padding-right:4px;
+  }
+  .tab{
+    font-family:'Fraunces', serif;
+    font-size:12px;
+    font-weight:700;
+    width:22px;
+    height:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#FFFFFF;
+    color:var(--red);
+    border:1px solid #FFFFFF;
+    border-left:none;
+    border-radius:0 5px 5px 0;
+    cursor:pointer;
+    transition:all .15s ease;
+    box-shadow:0 1px 3px rgba(0,0,0,.15);
+  }
+  .tab:hover{
+    background:var(--gold);
+    color:#fff;
+    border-color:var(--gold);
+    transform:translateX(2px);
+  }
+
+  main{
+    flex:1;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:4px;
+    box-shadow:0 1px 0 var(--line), 0 14px 30px -18px rgba(43,33,24,.35);
+    padding:26px;
+    min-height:520px;
+    position:relative;
+  }
+  main::before{
+    content:"";
+    position:absolute;
+    left:0; top:0; bottom:0;
+    width:3px;
+    background:linear-gradient(var(--gold), var(--red));
+    border-radius:4px 0 0 4px;
+    opacity:.55;
+  }
+
+  .search-row{
+    display:flex;
+    gap:8px;
+    margin-bottom:22px;
+  }
+  input[type=text]{
+    flex:1;
+    font-family:'Fraunces', serif;
+    font-size:20px;
+    padding:11px 14px;
+    border:1px solid var(--line);
+    border-radius:6px;
+    background:#fff;
+    color:var(--ink);
+    outline:none;
+  }
+  input[type=text]:focus{
+    border-color:var(--red);
+    box-shadow:0 0 0 3px rgba(140,47,42,.12);
+  }
+  button.go{
+    font-family:'Source Sans 3', sans-serif;
+    font-weight:700;
+    font-size:14px;
+    letter-spacing:.03em;
+    background:var(--red);
+    color:#fff;
+    border:none;
+    border-radius:6px;
+    padding:0 22px;
+    cursor:pointer;
+    transition:background .15s ease;
+  }
+  button.go:hover{background:var(--red-deep);}
+  button.go:disabled{background:#c9b9a3; cursor:default;}
+
+  #status{
+    color:var(--ink-soft);
+    font-size:14px;
+    min-height:20px;
+    margin-bottom:6px;
+  }
+
+  .entry-head{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    flex-wrap:wrap;
+    border-bottom:1px dashed var(--line);
+    padding-bottom:12px;
+    margin-bottom:16px;
+  }
+  .entry-word{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:34px;
+    color:var(--red);
+  }
+  .entry-origin{
+    font-size:13px;
+    color:var(--ink-soft);
+    font-style:italic;
+  }
+
+  ol.meanings{
+    margin:0;
+    padding-left:22px;
+  }
+  ol.meanings li{
+    margin-bottom:14px;
+    line-height:1.55;
+  }
+  .tag{
+    display:inline-block;
+    font-size:11px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    color:var(--gold);
+    border:1px solid var(--gold);
+    border-radius:20px;
+    padding:1px 8px;
+    margin-right:8px;
+    vertical-align:middle;
+  }
+  .example{
+    display:block;
+    margin-top:4px;
+    color:var(--ink-soft);
+    font-style:italic;
+    font-size:14.5px;
+  }
+  .example::before{content:"“"; }
+  .example::after{content:"”"; }
+
+  .suggestions{
+    margin-top:6px;
+  }
+  .suggestions .chip{
+    display:inline-block;
+    background:var(--paper-edge);
+    border:1px solid var(--line);
+    color:var(--ink);
+    border-radius:20px;
+    padding:4px 12px;
+    margin:4px 6px 0 0;
+    font-size:14px;
+    cursor:pointer;
+  }
+  .suggestions .chip:hover{border-color:var(--red); color:var(--red);}
+
+  .empty{
+    text-align:center;
+    color:var(--ink-soft);
+    padding:60px 10px;
+  }
+  .empty .big{
+    font-family:'Fraunces', serif;
+    font-size:26px;
+    color:var(--ink);
+    margin-bottom:8px;
+  }
+
+  footer{
+    text-align:center;
+    margin-top:18px;
+    font-size:12px;
+    color:#FBE4E3;
+    opacity:.85;
+  }
+
+  @media (max-width:600px){
+    .rail{max-height:400px;}
+    h1{font-size:32px;}
+    .entry-word{font-size:26px;}
+  }
+</style>
+</head>
+<body>
+<div class="book">
+  <header>
+    <div class="kicker">Güncel Türkçe Sözlük</div>
+    <h1>Sözlük Köşesi</h1>
+    <div class="sub">Bir kelime yaz, anlamını, türünü ve örnek cümlesini gör.</div>
+  </header>
+
+  <div class="rail-wrap">
+    <div class="rail" id="rail"></div>
+
+    <main>
+      <div class="search-row">
+        <input type="text" id="searchInput" placeholder="Bir kelime yazın… (örn. güneş)" autocomplete="off">
+        <button class="go" id="searchBtn">Ara</button>
+      </div>
+      <div id="status"></div>
+      <div id="result">
+        <div class="empty">
+          <div class="big">📖 Aramaya başla</div>
+          Merak ettiğin bir kelimeyi yukarıya yaz ya da yandaki harflerden birine dokun.
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <footer>Sonuçlar Türk Dil Kurumu Güncel Türkçe Sözlük veritabanından alınır.</footer>
+</div>
+
+<script>
+const ALPHABET = ["A","B","C","Ç","D","E","F","G","Ğ","H","I","İ","J","K","L","M","N","O","Ö","P","R","S","Ş","T","U","Ü","V","Y","Z"];
+const SAMPLE_WORDS = {
+  A:"armut", B:"balık", C:"cam", Ç:"çınar", D:"deniz", E:"elma", F:"fener",
+  G:"güneş", Ğ:"değirmen", H:"hayal", I:"ışık", İ:"iyilik", J:"jimnastik",
+  K:"kitap", L:"lale", M:"masal", N:"nehir", O:"orman", Ö:"öğretmen",
+  P:"pusula", R:"rüzgar", S:"sevgi", Ş:"şiir", T:"toprak", U:"umut",
+  Ü:"üzüm", V:"vatan", Y:"yıldız", Z:"zaman"
+};
+
+const rail = document.getElementById('rail');
+ALPHABET.forEach(letter=>{
+  const btn = document.createElement('div');
+  btn.className = 'tab';
+  btn.textContent = letter;
+  btn.title = "Örnek: " + SAMPLE_WORDS[letter];
+  btn.addEventListener('click', ()=>{
+    input.value = SAMPLE_WORDS[letter];
+    search(SAMPLE_WORDS[letter]);
+  });
+  rail.appendChild(btn);
+});
+
+const OFFLINE_DICT = {
+  "elma":"Yuvarlak, kırmızı, sarı ya da yeşil kabuklu, tatlı veya mayhoş bir meyve.",
+  "armut":"Bir ucu ince, bir ucu şişkin, tatlı bir meyve.",
+  "kitap":"Bir konuyu anlatmak için basılmış, sayfalardan oluşan yazılı eser.",
+  "okul":"Öğrencilerin ders gördüğü, öğretmenlerin ders verdiği yer.",
+  "öğretmen":"Bir okulda öğrencilere ders veren kişi.",
+  "öğrenci":"Bir okulda ders gören, öğrenim gören kişi.",
+  "ev":"İnsanların içinde yaşadığı, barındığı yapı.",
+  "araba":"Yolda insan veya eşya taşımaya yarayan motorlu taşıt.",
+  "güneş":"Dünyaya ışık ve sıcaklık veren, gökyüzündeki en parlak yıldız.",
+  "ay":"Dünyanın uydusu; geceleri gökyüzünde görülen ışıklı gök cismi.",
+  "yıldız":"Gece gökyüzünde ışık saçan gök cisimlerinden her biri.",
+  "deniz":"Geniş, tuzlu su kütlesi.",
+  "dağ":"Çevresine göre çok yüksek, geniş yeryüzü parçası.",
+  "nehir":"Sürekli akan büyük akarsu.",
+  "göl":"Kara içinde, çevresi karayla çevrili durgun su kütlesi.",
+  "orman":"Sık ağaçlarla kaplı geniş alan.",
+  "ağaç":"Kökü, gövdesi ve dalları olan büyük bitki.",
+  "çiçek":"Bitkilerin renkli, güzel kokulu üreme organı.",
+  "kuş":"Uçabilen, tüylü, gagalı hayvan.",
+  "kedi":"Evcil, tüylü, pençeli, miyavlayan hayvan.",
+  "köpek":"Evcil, sadık, havlayan dört ayaklı hayvan.",
+  "at":"Binilen ya da yük taşıyan, dört ayaklı, hızlı koşan hayvan.",
+  "inek":"Süt veren, çiftlik hayvanı olan büyükbaş hayvan.",
+  "koyun":"Yünü ve eti için beslenen, meleyen evcil hayvan.",
+  "tavuk":"Yumurta ve eti için beslenen, kanatlı çiftlik hayvanı.",
+  "balık":"Suda yaşayan, solungaçlarıyla nefes alan hayvan.",
+  "aslan":"Güçlü, yeleli, 'ormanların kralı' diye anılan yırtıcı hayvan.",
+  "fil":"Kocaman, hortumlu, çok büyük memeli hayvan.",
+  "kaplan":"Çizgili postu olan, güçlü ve yırtıcı büyük kedigil.",
+  "ayı":"İri gövdeli, kalın tüylü, güçlü memeli hayvan.",
+  "tavşan":"Uzun kulaklı, hızlı zıplayan küçük memeli hayvan.",
+  "kelebek":"Renkli kanatlı, çiçekten çiçeğe uçan böcek.",
+  "arı":"Bal yapan, iğnesi olan uçan böcek.",
+  "karınca":"Küçük, çalışkan, koloniler hâlinde yaşayan böcek.",
+  "örümcek":"Ağ ören, sekiz bacaklı küçük canlı.",
+  "yılan":"Bacaksız, sürünerek hareket eden uzun gövdeli sürüngen.",
+  "kaplumbağa":"Sırtında sert kabuğu olan, yavaş hareket eden sürüngen.",
+  "sınıf":"Öğrencilerin ders gördüğü oda; aynı düzeyde okuyan öğrenci grubu.",
+  "masa":"Üzerinde çalışılan, yemek yenilen düz yüzeyli mobilya.",
+  "sandalye":"Üzerine oturulan, sırtlıklı mobilya.",
+  "tahta":"Sınıfta yazı yazmak için kullanılan düz yüzey.",
+  "kalem":"Yazı yazmaya yarayan ince araç.",
+  "silgi":"Yazılanı silmeye yarayan küçük araç.",
+  "defter":"İçine yazı yazılan, sayfaları birleşik kâğıt.",
+  "çanta":"Eşya taşımaya yarayan, kulplu ya da askılı taşıma aracı.",
+  "top":"Yuvarlak, oyun oynamaya yarayan nesne.",
+  "oyun":"Eğlenmek için yapılan etkinlik.",
+  "oyuncak":"Çocukların oynadığı, eğlenmek için yapılmış eşya.",
+  "arkadaş":"Birlikte vakit geçirilen, sevilen, güvenilen kişi.",
+  "aile":"Anne, baba ve çocuklardan oluşan topluluk.",
+  "anne":"Bir çocuğun kadın ebeveyni.",
+  "baba":"Bir çocuğun erkek ebeveyni.",
+  "kardeş":"Aynı anne babadan doğan çocuklardan her biri.",
+  "dede":"Baba ya da annenin babası.",
+  "nine":"Baba ya da annenin annesi.",
+  "sokak":"Evlerin, binaların arasından geçen dar yol.",
+  "şehir":"Çok sayıda insanın yaşadığı, büyük yerleşim yeri.",
+  "köy":"Az sayıda insanın yaşadığı, tarımla uğraşılan küçük yerleşim yeri.",
+  "ülke":"Belirli sınırları olan, bir milletin yaşadığı toprak parçası.",
+  "dünya":"Üzerinde yaşadığımız gezegen.",
+  "gökyüzü":"Yeryüzünün üzerinde uzanan, güneş, ay ve yıldızların görüldüğü boşluk.",
+  "bulut":"Gökyüzünde su buharından oluşan beyaz veya gri kütle.",
+  "yağmur":"Bulutlardan yeryüzüne düşen su damlaları.",
+  "kar":"Havada donan su buharının beyaz taneler hâlinde yağması.",
+  "rüzgar":"Havanın yer değiştirmesiyle oluşan hava akımı.",
+  "mevsim":"Yılın hava durumuna göre bölündüğü dört dönemden her biri.",
+  "ilkbahar":"Kışla yaz arasındaki, havaların ısınmaya başladığı mevsim.",
+  "yaz":"Yılın en sıcak mevsimi.",
+  "sonbahar":"Yazla kış arasındaki, yaprakların döküldüğü mevsim.",
+  "kış":"Yılın en soğuk mevsimi.",
+  "gün":"Güneşin doğuşundan batışına kadar geçen süre; bir haftanın günlerinden biri.",
+  "gece":"Güneşin battığı, karanlık olan zaman dilimi.",
+  "sabah":"Günün, güneşin doğduğu ilk saatleri.",
+  "akşam":"Günün, güneşin battığı son saatleri.",
+  "saat":"Zamanı gösteren araç; 60 dakikalık zaman birimi.",
+  "hafta":"Yedi günden oluşan zaman birimi.",
+  "bugün":"İçinde bulunulan gün.",
+  "yarın":"Bugünden sonra gelen gün.",
+  "dün":"Bugünden önceki gün.",
+  "renk":"Gözün ışığı algılamasıyla oluşan görüntü özelliği.",
+  "kırmızı":"Kan rengi, ateş rengi.",
+  "mavi":"Gökyüzü ve deniz rengi.",
+  "sarı":"Limon, güneş rengi.",
+  "yeşil":"Çimen ve yaprak rengi.",
+  "beyaz":"Kar ve süt rengi.",
+  "siyah":"Karanlık, kömür rengi.",
+  "büyük":"Boyutu, hacmi fazla olan.",
+  "küçük":"Boyutu, hacmi az olan.",
+  "uzun":"Boyu ya da süresi fazla olan.",
+  "kısa":"Boyu ya da süresi az olan.",
+  "ağır":"Kaldırılması güç, kütlesi fazla olan.",
+  "hafif":"Kaldırılması kolay, kütlesi az olan.",
+  "hızlı":"Kısa sürede çok yol alan, çabuk.",
+  "yavaş":"Uzun sürede az yol alan, ağır hareket eden.",
+  "sıcak":"Isısı yüksek olan.",
+  "soğuk":"Isısı düşük olan.",
+  "tatlı":"Şeker tadında olan.",
+  "acı":"Keskin, yakıcı bir tada sahip olan.",
+  "yemek":"Karın doyurmak için yenilen besin; besin hazırlama işi.",
+  "su":"Renksiz, kokusuz, hayat için gerekli sıvı.",
+  "ekmek":"Undan yapılan, fırında pişirilen temel besin.",
+  "süt":"Memeli hayvanlardan elde edilen besleyici beyaz sıvı.",
+  "peynir":"Sütten yapılan, katı hâle getirilmiş besin.",
+  "meyve":"Bitkilerin yenebilen, tohum taşıyan ürünü.",
+  "sebze":"Yemeklerde kullanılan, bitkilerin yenebilen kısımları.",
+  "muz":"Sarı kabuklu, uzun, tatlı bir meyve.",
+  "portakal":"Turuncu kabuklu, ekşimsi tatlı bir meyve.",
+  "üzüm":"Salkım hâlinde yetişen, küçük ve tatlı bir meyve.",
+  "çilek":"Kırmızı, küçük, tatlı bir meyve.",
+  "karpuz":"Yeşil kabuklu, içi kırmızı, sulu ve tatlı bir meyve.",
+  "domates":"Kırmızı, sulu, sebze olarak kullanılan bir bitki ürünü.",
+  "patates":"Toprak altında yetişen, nişastalı bir sebze.",
+  "sağlık":"Vücudun hastalıksız, iyi olma durumu.",
+  "hastane":"Hastaların tedavi edildiği kurum.",
+  "doktor":"Hastaları muayene edip tedavi eden sağlık uzmanı.",
+  "ilaç":"Hastalığı tedavi etmek için kullanılan madde.",
+  "spor":"Sağlık ve eğlence için yapılan bedensel etkinlik.",
+  "futbol":"Ayakla top oynanan, iki takım arasında oynanan spor.",
+  "müzik":"Seslerin uyumlu bir şekilde bir araya gelmesiyle oluşan sanat.",
+  "şarkı":"Müzik eşliğinde söylenen, sözleri olan eser.",
+  "resim":"Bir şeyin çizgi, renk ile kâğıt üzerine aktarılmış görüntüsü.",
+  "bilgisayar":"Bilgi işleyen, hesap yapan elektronik araç.",
+  "telefon":"Uzaktan konuşmayı sağlayan iletişim aracı.",
+  "uçak":"Havada uçarak yolcu ya da yük taşıyan araç.",
+  "gemi":"Su üzerinde yolcu ya da yük taşıyan büyük araç.",
+  "tren":"Raylar üzerinde giden, vagonlardan oluşan taşıt.",
+  "otobüs":"Yolda çok sayıda yolcu taşıyan büyük taşıt.",
+  "bisiklet":"Pedal çevirerek hareket ettirilen iki tekerlekli taşıt.",
+  "yol":"Bir yerden bir yere gitmek için kullanılan uzun geçit.",
+  "köprü":"İki yakayı birleştiren, üzerinden geçilen yapı.",
+  "para":"Alışverişte kullanılan, değeri kabul edilmiş ödeme aracı.",
+  "mutlu":"Sevinçli, keyifli olma durumunda olan.",
+  "üzgün":"Kederli, canı sıkkın olan.",
+  "yorgun":"Gücü tükenmiş, dinlenmeye ihtiyacı olan."
+};
+
+
+const input = document.getElementById('searchInput');
+const btn = document.getElementById('searchBtn');
+const statusEl = document.getElementById('status');
+const resultEl = document.getElementById('result');
+
+btn.addEventListener('click', ()=> search(input.value));
+input.addEventListener('keydown', e=>{ if(e.key === 'Enter') search(input.value); });
+
+function turkishLower(str){
+  return str
+    .replace(/İ/g,'i').replace(/I/g,'ı')
+    .toLocaleLowerCase('tr');
+}
+
+// TDK'nin API'si tarayıcıdan doğrudan çağrılara CORS izni vermiyor.
+// Önce doğrudan denenir, olmazsa bir CORS proxy üzerinden tekrar denenir.
+async function fetchJson(targetUrl){
+  try{
+    const res = await fetch(targetUrl);
+    if(!res.ok) throw new Error('direct-failed');
+    return await res.json();
+  }catch(e){
+    const proxied = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(targetUrl);
+    const res2 = await fetch(proxied);
+    if(!res2.ok) throw new Error('proxy-failed');
+    return await res2.json();
+  }
+}
+
+async function search(raw){
+  const word = (raw||'').trim();
+  if(!word){ return; }
+  btn.disabled = true;
+  statusEl.textContent = "Aranıyor…";
+  resultEl.innerHTML = '';
+
+  try{
+    const data = await fetchJson('https://sozluk.gov.tr/gts?ara=' + encodeURIComponent(word));
+
+    if(Array.isArray(data) && data.length && data[0].madde){
+      renderEntries(data);
+      statusEl.textContent = '';
+    } else {
+      await renderSuggestions(word);
+    }
+  }catch(err){
+    const offlineHit = OFFLINE_DICT[turkishLower(word)];
+    if(offlineHit){
+      renderOffline(word, offlineHit);
+      statusEl.textContent = '';
+    } else {
+      statusEl.textContent = '';
+      resultEl.innerHTML = `
+        <div class="empty">
+          <div class="big">🚧 Sözlüğe şu an ulaşılamadı</div>
+          TDK sözlüğüne şu anda erişilemiyor ve bu kelime çevrimdışı listede de yok.
+          Birkaç saniye sonra tekrar dener misin? Sorun devam ederse
+          <a href="https://sozluk.gov.tr/?ara=${encodeURIComponent(word)}" target="_blank" rel="noopener">sozluk.gov.tr</a>
+          adresinden bakabilirsin.
+        </div>`;
+    }
+  }finally{
+    btn.disabled = false;
+  }
+}
+
+function renderOffline(word, meaning){
+  resultEl.innerHTML = `
+    <div>
+      <div class="entry-head">
+        <span class="entry-word">${word}</span>
+        <span class="entry-origin">(çevrimdışı sözlük)</span>
+      </div>
+      <ol class="meanings"><li>${meaning}</li></ol>
+    </div>`;
+}
+
+async function renderSuggestions(word){
+  try{
+    const data = await fetchJson('https://sozluk.gov.tr/oneri?soz=' + encodeURIComponent(word));
+    if(Array.isArray(data) && data.length){
+      const chips = data.slice(0,12).map(o=>`<span class="chip">${o.madde}</span>`).join('');
+      resultEl.innerHTML = `
+        <div class="empty">
+          <div class="big">🔎 "${word}" bulunamadı</div>
+          Şunu mu demek istedin?
+          <div class="suggestions">${chips}</div>
+        </div>`;
+      resultEl.querySelectorAll('.chip').forEach(chip=>{
+        chip.addEventListener('click', ()=>{
+          input.value = chip.textContent;
+          search(chip.textContent);
+        });
+      });
+      return;
+    }
+  }catch(e){ /* ignore, fall through */ }
+
+  resultEl.innerHTML = `
+    <div class="empty">
+      <div class="big">🔎 "${word}" bulunamadı</div>
+      Yazımı kontrol edip tekrar dener misin?
+    </div>`;
+}
+
+function renderEntries(entries){
+  const html = entries.map(entry=>{
+    const origin = entry.lisan ? `<span class="entry-origin">(${entry.lisan})</span>` : '';
+    const meanings = (entry.anlamlarListe || []).map(m=>{
+      const tag = m.ozelliklerListe && m.ozelliklerListe.length
+        ? `<span class="tag">${m.ozelliklerListe.map(o=>o.tam_adi).join(', ')}</span>`
+        : '';
+      const example = m.orneklerListe && m.orneklerListe.length
+        ? `<span class="example">${m.orneklerListe[0].ornek}</span>`
+        : '';
+      return `<li>${tag}${m.anlam}${example}</li>`;
+    }).join('');
+
+    return `
+      <div>
+        <div class="entry-head">
+          <span class="entry-word">${entry.madde}</span>
+          ${origin}
+        </div>
+        <ol class="meanings">${meanings}</ol>
+      </div>`;
+  }).join('<hr style="border:none;border-top:1px dashed var(--line);margin:22px 0;">');
+
+  resultEl.innerHTML = html;
+}
+</script>
+</body>
+</html>
