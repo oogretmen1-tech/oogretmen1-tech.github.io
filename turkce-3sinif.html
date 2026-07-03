@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3. Sınıf Türkçe Konuları</title>
+<style>
+  :root{
+    --mavi:#1e88e5;
+    --acik-mavi:#e3f2fd;
+    --pembe:#ff6f91;
+    --sari:#ffc107;
+    --yesil:#43a047;
+    --kirmizi:#e53935;
+    --mor:#7e57c2;
+    --turuncu:#fb8c00;
+    --lacivert:#3949ab;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Trebuchet MS','Segoe UI',sans-serif;
+    background:linear-gradient(135deg,#e3f2fd,#fff3e0);
+    color:#263238;
+  }
+  header{
+    background:linear-gradient(90deg,var(--mavi),var(--mor));
+    color:#fff;
+    padding:22px 16px;
+    text-align:center;
+    box-shadow:0 4px 10px rgba(0,0,0,.15);
+  }
+  header h1{margin:0;font-size:1.7rem;}
+  header p{margin:6px 0 0;font-size:1rem;opacity:.95;}
+
+  .layout{
+    display:flex;
+    max-width:1200px;
+    margin:0 auto;
+    min-height:80vh;
+  }
+  nav#konu-menu{
+    width:280px;
+    flex-shrink:0;
+    background:#fff;
+    padding:14px;
+    border-right:3px solid var(--acik-mavi);
+    max-height:90vh;
+    overflow-y:auto;
+    position:sticky;
+    top:0;
+  }
+  nav#konu-menu h2{
+    font-size:1rem;
+    color:var(--mavi);
+    margin:6px 4px 10px;
+  }
+  .konu-btn{
+    display:block;
+    width:100%;
+    text-align:left;
+    background:var(--acik-mavi);
+    border:none;
+    border-radius:10px;
+    padding:10px 12px;
+    margin-bottom:6px;
+    font-size:.92rem;
+    color:#263238;
+    cursor:pointer;
+    transition:.2s;
+    font-weight:600;
+  }
+  .konu-btn:hover{background:#bbdefb;}
+  .konu-btn.aktif{
+    background:var(--mavi);
+    color:#fff;
+  }
+  main{
+    flex:1;
+    padding:20px;
+  }
+  .konu-bolumu{display:none;}
+  .konu-bolumu.aktif{display:block;animation:fadeIn .4s;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+  .konu-baslik{
+    background:linear-gradient(90deg,var(--pembe),var(--sari));
+    color:#fff;
+    padding:14px 18px;
+    border-radius:14px;
+    font-size:1.3rem;
+    margin-bottom:16px;
+    box-shadow:0 3px 8px rgba(0,0,0,.15);
+  }
+  .anlatim{
+    background:#fff;
+    border-left:6px solid var(--mavi);
+    padding:16px;
+    border-radius:10px;
+    margin-bottom:20px;
+    line-height:1.7;
+    font-size:1.05rem;
+  }
+  .anlatim ul{margin:8px 0;padding-left:22px;}
+  .anlatim b{color:var(--mavi);}
+  .ornek-kutu{
+    background:var(--acik-mavi);
+    border-radius:8px;
+    padding:10px 14px;
+    margin-top:10px;
+    font-style:italic;
+  }
+
+  h3.etkinlik-baslik{
+    color:var(--mor);
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:1.15rem;
+    margin-top:26px;
+  }
+  .skor-rozeti{
+    display:inline-block;
+    background:linear-gradient(90deg,var(--turuncu),var(--sari));
+    color:#fff;
+    font-size:.85rem;
+    font-weight:bold;
+    padding:4px 12px;
+    border-radius:20px;
+    margin-left:auto;
+  }
+
+  .soru-alani{
+    background:#fff;
+    border-radius:14px;
+    padding:16px;
+    margin-bottom:16px;
+    box-shadow:0 3px 8px rgba(0,0,0,.08);
+    border:2px solid #eceff1;
+    position:relative;
+    overflow:hidden;
+  }
+  .soru-alani::before{
+    content:"";
+    position:absolute;
+    left:0;top:0;bottom:0;
+    width:6px;
+  }
+  .soru-alani.tur-cs::before{background:var(--mavi);}
+  .soru-alani.tur-bd::before{background:var(--turuncu);}
+  .soru-alani.tur-es::before{background:var(--mor);}
+  .soru-alani.tur-dy::before{background:var(--yesil);}
+
+  .tur-etiket{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    font-size:.75rem;
+    font-weight:bold;
+    padding:3px 10px;
+    border-radius:12px;
+    margin-bottom:8px;
+    color:#fff;
+  }
+  .tur-etiket.cs{background:var(--mavi);}
+  .tur-etiket.bd{background:var(--turuncu);}
+  .tur-etiket.es{background:var(--mor);}
+  .tur-etiket.dy{background:var(--yesil);}
+
+  .soru-basligi{
+    font-weight:bold;
+    margin-bottom:10px;
+    font-size:1.02rem;
+  }
+  .soru-basligi span.numara{
+    background:var(--lacivert);
+    color:#fff;
+    border-radius:50%;
+    padding:3px 10px;
+    margin-right:8px;
+    font-size:.9rem;
+  }
+
+  /* çoktan seçmeli */
+  .secenekler label{
+    display:block;
+    background:#f5f5f5;
+    padding:8px 12px;
+    border-radius:8px;
+    margin-bottom:6px;
+    cursor:pointer;
+    transition:.2s;
+  }
+  .secenekler label:hover{background:#eceff1;}
+  .secenekler input{margin-right:8px;}
+  .dogru{background:#c8e6c9 !important;font-weight:bold;}
+  .yanlis{background:#ffcdd2 !important;}
+
+  /* boşluk doldurma */
+  .bosluk-metin{font-size:1.05rem;margin-bottom:10px;}
+  .bosluk-input{
+    border:2px solid var(--turuncu);
+    border-radius:8px;
+    padding:6px 10px;
+    font-size:1rem;
+    width:160px;
+    font-family:inherit;
+  }
+
+  /* eşleştirme */
+  .eslestirme-satir{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:#f5f5f5;
+    padding:8px 12px;
+    border-radius:8px;
+    margin-bottom:8px;
+    flex-wrap:wrap;
+  }
+  .eslestirme-sol{font-weight:bold;min-width:140px;}
+  .eslestirme-satir select{
+    padding:6px 8px;
+    border-radius:8px;
+    border:2px solid var(--mor);
+    font-family:inherit;
+    font-size:.95rem;
+    flex:1;
+    min-width:160px;
+  }
+
+  /* doğru yanlış */
+  .dy-satir{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#f5f5f5;
+    padding:8px 12px;
+    border-radius:8px;
+    margin-bottom:8px;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .dy-metin{flex:1;min-width:150px;}
+  .dy-secim button{
+    border:2px solid var(--yesil);
+    background:#fff;
+    color:var(--yesil);
+    padding:5px 14px;
+    border-radius:16px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-right:6px;
+  }
+  .dy-secim button.yanlis-btn{border-color:var(--kirmizi);color:var(--kirmizi);}
+  .dy-secim button.secili{color:#fff;}
+  .dy-secim button.secili.dogru-btn{background:var(--yesil);}
+  .dy-secim button.secili.yanlis-btn{background:var(--kirmizi);}
+
+  .kontrol-btn{
+    background:var(--yesil);
+    color:#fff;
+    border:none;
+    padding:9px 20px;
+    border-radius:20px;
+    cursor:pointer;
+    font-size:.95rem;
+    font-weight:bold;
+    margin-top:8px;
+  }
+  .kontrol-btn:hover{background:#2e7d32;}
+  .sonuc-mesaji{
+    margin-left:10px;
+    font-weight:bold;
+  }
+
+  @media(max-width:850px){
+    .layout{flex-direction:column;}
+    nav#konu-menu{
+      width:100%;
+      max-height:none;
+      position:static;
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      border-right:none;
+      border-bottom:3px solid var(--acik-mavi);
+    }
+    .konu-btn{width:auto;flex:1 1 45%;font-size:.82rem;padding:8px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📚 3. Sınıf Türkçe Konuları</h1>
+  <p>Konuyu seç, oku, öğren ve yeni nesil sorularla kendini test et! 🚀</p>
+</header>
+
+<div class="layout">
+  <nav id="konu-menu"></nav>
+  <main id="icerik-alani"></main>
+</div>
+
+<script>
+/* ================= VERİ TABANI ================= */
+/* Soru türleri: cs = çoktan seçmeli, bd = boşluk doldurma,
+   es = eşleştirme, dy = doğru/yanlış listesi */
+
+const konular = [
+{
+  id:"okuma-anlama",
+  baslik:"1. Okuma Anlama",
+  anlatim:`
+    <p><b>Okuduğunu anlama</b>, bir metni okuyup içindeki bilgileri, olayları ve duyguları kavrayabilme becerisidir.</p>
+    <ul>
+      <li>Metni dikkatli ve yavaş oku.</li>
+      <li>Anlamını bilmediğin kelimelerin altını çiz.</li>
+      <li>Metnin ana fikrini bulmaya çalış.</li>
+      <li>Sorulara metne bakarak cevap ver.</li>
+    </ul>
+    <div class="ornek-kutu">Metin: "Merve, her Cumartesi büyükannesinin bahçesine gider. Büyükannesi ona sebze yetiştirmeyi öğretir. Bu hafta domates fideleri diktiler. Merve, fidelerin büyümesini sabırsızlıkla bekliyor."</div>
+  `,
+  sorular:[
+    {tur:"cs", soru:"Merve büyükannesinin bahçesine hangi gün gider?", secenekler:["Pazartesi","Cumartesi","Pazar","Çarşamba"], dogru:1},
+    {tur:"bd", soru:"Bu hafta diktikleri fidenin adı ___.", cevap:["domates","domates fidesi"]},
+    {tur:"es", baslik:"Kim ne yaptı? Doğru eşleştir.", sol:["Merve","Büyükanne","İkisi birlikte"], sag:["bahçeye gider","sebze yetiştirmeyi öğretti","fide dikti"], dogru:[0,1,2]},
+    {tur:"dy", ifadeler:[
+      {metin:"Merve bahçeye her hafta gider.", dogru:true},
+      {metin:"Diktikleri bitki çilektir.", dogru:false},
+      {metin:"Merve fidelerin büyümesini merakla bekliyor.", dogru:true}
+    ]}
+  ]
+},
+{
+  id:"harf-bilgisi",
+  baslik:"2. Harf Bilgisi",
+  anlatim:`
+    <p>Türkçe alfabemizde <b>29 harf</b> vardır. Harfler ikiye ayrılır:</p>
+    <ul>
+      <li><b>Sesli (ünlü) harfler:</b> a, e, ı, i, o, ö, u, ü (8 tane)</li>
+      <li><b>Sessiz (ünsüz) harfler:</b> geri kalan 21 harf</li>
+    </ul>
+    <p>Cümle başlarında ve özel isimlerde büyük harf kullanılır.</p>
+    <div class="ornek-kutu">Örnek: "Ankara güzel bir şehirdir." → Ankara özel isim olduğu için büyük harfle başlar.</div>
+  `,
+  sorular:[
+    {tur:"cs", soru:"Hangi kelimede 3 tane sesli harf vardır?", secenekler:["ev","araba","kalem","göz"], dogru:1},
+    {tur:"bd", soru:"Türkçe alfabede ___ tane sesli harf vardır.", cevap:["8","sekiz"]},
+    {tur:"es", baslik:"Harfleri türüne göre eşleştir.", sol:["a","p","ü","t"], sag:["Sesli","Sessiz","Sesli","Sessiz"], dogru:[0,1,2,3]},
+    {tur:"dy", ifadeler:[
+      {metin:"'k' harfi sessiz bir harftir.", dogru:true},
+      {metin:"'i' harfi sessiz bir harftir.", dogru:false},
+      {metin:"Özel isimler büyük harfle başlar.", dogru:true}
+    ]}
+  ]
+},
+{
+  id:"hece-bilgisi",
+  baslik:"3. Hece Bilgisi",
+  anlatim:`
+    <p><b>Hece</b>, bir kelimenin tek seferde söylenebilen parçasıdır. Her hecede en az bir sesli harf bulunur.</p>
+    <div class="ornek-kutu">
+      ka-lem (2 hece) &nbsp; o-kul (2 hece) &nbsp; pen-ce-re (3 hece)
+    </div>
+    <p>Satır sonuna sığmayan kelimeler hecelerinden bölünerek kısa çizgi (-) ile yazılır.</p>
+  `,
+  sorular:[
+    {tur:"cs", soru:"'Kelebek' kelimesi kaç hecelidir?", secenekler:["2","3","4","5"], dogru:1},
+    {tur:"bd", soru:"'Kitap' kelimesi hecelenince: ki-___ olur.", cevap:["tap"]},
+    {tur:"es", baslik:"Kelimeleri hece sayısıyla eşleştir.", sol:["kalem","pencere","el","kelebek"], sag:["2","3","1","3"], dogru:[0,1,2,3]},
+    {tur:"dy", ifadeler:[
+      {metin:"Her hecede en az bir sesli harf bulunur.", dogru:true},
+      {metin:"'Göz' kelimesi 2 hecelidir.", dogru:false},
+      {metin:"Heceleme satır sonunda kısa çizgi ile yapılır.", dogru:true}
+    ]}
+  ]
+},
+{
+  id:"kelime-bilgisi",
+  baslik:"4. Kelime Bilgisi",
+  anlatim:`
+    <p><b>Kelime (sözcük)</b>, tek başına anlamı olan ses veya ses grubudur.</p>
+    <ul>
+      <li>Bir kelimenin <b>gerçek anlamı</b> ve bazen <b>mecaz anlamı</b> olabilir.</li>
+    </ul>
+    <div class="ornek-kutu">"Yüreği taş kesildi." cümlesinde "taş" kelimesi mecaz anlamda kullanılmıştır.</div>
+  `,
+  sorular:[
+    {tur:"cs", soru:"'Yüreği yanıyordu.' cümlesinde 'yanmak' kelimesi hangi anlamda kullanılmıştır?", secenekler:["Gerçek anlam","Mecaz anlam","Eş anlam","Zıt anlam"], dogru:1},
+    {tur:"bd", soru:"Tek başına anlamı olan ses veya ses grubuna ___ denir.", cevap:["kelime","sözcük"]},
+    {tur:"es", baslik:"Cümledeki altı çizili kelimenin anlamını eşleştir.", sol:["Yüreği taş kesildi.","Elini yıkadı.","Kalbi kırıldı.","Kapıyı açtı."], sag:["Mecaz","Gerçek","Mecaz","Gerçek"], dogru:[0,1,2,3]},
+    {tur:"dy", ifadeler:[
+      {metin:"Bir kelimenin sadece gerçek anlamı olabilir.", dogru:false},
+      {metin:"Mecaz anlam, kelimenin gerçek anlamından farklı kullanılmasıdır.", dogru:true},
+      {metin:"'Kalemi masaya koydu.' cümlesinde 'kalem' mecaz anlamdadır.", dogru:false}
+    ]}
+  ]
+},
+{
+  id:"es-anlamli",
+  baslik:"5. Eş Anlamlı Kelimeler",
+  anlatim:`
+    <p><b>Eş anlamlı (anlamdaş) kelimeler</b>, yazılışları farklı ama anlamları aynı veya birbirine çok yakın olan kelimelerdir.</p>
+    <div class="ornek-kutu">Ev = Konut &nbsp; Kara = Siyah &nbsp; Sevgi = Aşk &nbsp; Cevap = Yanıt</div>
+  `,
+  sorular:[
+    {tur:"cs", soru:"'Muvaffak oldu.' cümlesindeki 'muvaffak' kelimesinin eş anlamlısı hangisidir?", secenekler:["Başarılı","Başarısız","Yorgun","Mutlu"], dogru:0},
+    {tur:"bd", soru:"'Kara' kelimesinin eş anlamlısı ___'dır.", cevap:["siyah"]},
+    {tur:"es", baslik:"Kelimeleri eş anlamlısıyla eşleştir.", sol:["Ev","Cevap","Sevgi","Başarı"], sag:["Yanıt","Aşk","Konut","Muvaffakiyet"], dogru:[2,0,1,3]},
+    {tur:"dy", ifadeler:[
+      {metin:"'Güzel' ile 'çirkin' eş anlamlıdır.", dogru:false},
+      {metin:"'Akıllı' ile 'zeki' eş anlamlıdır.", dogru:true},
+      {metin:"Eş anlamlı kelimelerin yazılışı aynıdır.", dogru:false}
+    ]}
+  ]
+},
+{
+  id:"zit-anlamli",
+  baslik:"6. Zıt Anlamlı Kelimeler",
+  anlatim:`
+    <p><b>Zıt anlamlı (karşıt) kelimeler</b>, anlamca birbirinin tersi olan kelimelerdir.</p>
+    <div class="ornek-kutu">Büyük ≠ Küçük &nbsp; Gece ≠ Gündüz &nbsp; Sıcak ≠ Soğuk &nbsp; Uzun ≠ Kısa</div>
+  `,
+  sorular:[
+    {tur:"cs", soru:"'Karanlık bir gece' ifadesindeki 'karanlık' kelimesinin zıt anlamlısı nedir?", secenekler:["Loş","Aydınlık","Kara","Koyu"], dogru:1},
+    {tur:"bd", soru:"'Uzun' kelimesinin zıt anlamlısı ___'dır.", cevap:["kısa"]},
+    {tur:"es", baslik:"Kelimeleri zıt anlamlısıyla eşleştir.", sol:["Sıcak","Büyük","Hızlı","Gündüz"], sag:["Soğuk","Küçük","Yavaş","Gece"], dogru:[0,1,2,3]},
+    {tur:"dy", ifadeler:[
+      {metin:"'İyi' kelimesinin zıddı 'kötü'dür.", dogru:true},
+      {metin:"'Ağır' ile 'hafif' eş anlamlıdır.", dogru:false},
+      {metin:"Zıt anlamlı kelimeler birbirinin tersidir.", dogru:true}
+    ]}
+  ]
+},
+{
+  id:"es-sesli",
+  baslik:"7. Eş Sesli Kelimeler",
+  anlatim:`
+    <p><b>Eş sesli (sesteş) kelimeler</b>, yazılışları aynı olduğu hâlde anlamları farklı olan kelimelerdir.</p>
+    <div class="ornek-kutu">
+      "Kır" → 1) Kırsal alan 2) Kırmak fiili<br>
+      "Yüz" → 1) Sayı 2) Vücut kısmı 3) Yüzmek fiili
+    </div>
+  `,
+  sorular:[
+    {tur:"cs", soru:"'Yüzünü yıkadı.' cümlesinde 'yüz' kelimesi hangi anlamda kullanılmıştır?", secenekler:["Sayı","Vücut kısmı","Yüzme fiili","Hiçbiri"], dogru:1},
+    {tur:"bd", soru:"Yazılışı aynı, anlamı farklı olan kelimelere ___ kelimeler denir.", cevap:["eş sesli","sesteş"]},
+    {tur:"es", baslik:"Cümledeki 'kır'/'yüz' kelimesinin anlamını eşleştir.", sol:["Kırda gezdik.","Camı kırdı.","Yüz kişi geldi.","Havuzda yüzdü."], sag:["Kırsal alan","Kırmak fiili","Sayı","Yüzmek fiili"], dogru:[0,1,2,3]},
+    {tur:"dy", ifadeler:[
+      {metin:"'Dolu' kelimesi hem yağış hem 'boş olmayan' anlamında kullanılabilir.", dogru:true},
+      {metin:"Eş sesli kelimelerin anlamı her zaman aynıdır.", dogru:false},
+      {metin:"'Kır' kelimesi sadece 'kırsal alan' anlamına gelir.", dogru:false}
+    ]}
+  ]
+},
+{
+  id:"cumle-bilgisi",
+  baslik:"8. Cümle Bilgisi",
+  anlatim:`
+    <p><b>Cümle</b>, bir duyguyu, düşünceyi ya da olayı anlatan, anlamlı ve bitmiş sözlerdir.</p>
+    <p>Anlatım şekline göre: <b>Olumlu, Olumsuz, Soru, Ünlem</b> cümleleri olabilir.</p>
+    <div class="ornek-kutu">
+      Olumlu: Ahmet okula gitti. &nbsp; Olumsuz: Ahmet okula gitmedi.<br>
+      Soru: Ahmet okula gitti mi? &nbsp; Ünlem: Ne kadar güzel bir gün!
+    </div>
+  `,
+  sorular:[
+    {tur:"cs", soru:"'Bugün okula gitmedim.' cümlesi ne tür bir cümledir?", secenekler:["Olumlu","Olumsuz","Soru","Ünlem"], dogru:1},
+    {tur:"bd", soru:"Soru cümleleri genellikle '___' eki veya soru kelimesiyle kurulur.", cevap:["mi","mı","mu","mü"]},
+    {tur:"es", baslik:"Cümleleri türüyle eşleştir.", sol:["Ne kadar güzel!","Ders çalıştın mı?","Kitap okudum.","Bugün gitmedim."], sag:["Ünlem","Soru","Olumlu","Olumsuz"], dogru:[0,1,2,3]},
+    {tur:"dy", ifadeler:[
+      {metin:"Cümleler büyük harfle başlar.", dogru:true},
+      {metin:"Her cümle mutlaka soru cümlesidir.", dogru:false},
+      {metin:"Ünlem cümlesi genellikle '!' ile biter.", dogru:true}
+    ]}
+  ]
+},
+{
+  id:"isim-bilgisi",
+  baslik:"9. Ad (İsim) Bilgisi",
+  anlatim:`
+    <p><b>İsim (ad)</b>, varlıkları ve kavramları karşılayan kelimelerdir.</p>
+    <ul>
+      <li><b>Özel isim:</b> Belirli, tek bir varlığı adlandırır (Ahmet, İstanbul).</li>
+      <li><b>Cins isim:</b> Aynı türden birçok varlığı adlandırır (kalem, kuş).</li>
+      <li><b>Somut isim:</b> Beş duyuyla algılanabilen (masa, çiçek).</li>
+      <li><b>Soyut isim:</b> Beş duyuyla algılanamayan (sevgi, mutluluk).</li>
+    </ul>
+  `,
+  sorular:[
+    {tur:"cs", soru:"Aşağıdakilerden hangisi özel isimdir?", secenekler:["şehir","Ankara","çocuk","kalem"], dogru:1},
+    {tur:"bd", soru:"Beş duyu ile algılanamayan isimlere ___ isim denir.", cevap:["soyut"]},
+    {tur:"es", baslik:"Kelimeleri isim türüyle eşleştir.", sol:["Ali","kalem","mutluluk","masa"], sag:["Özel isim","Cins isim","Soyut isim","Somut isim"], dogru:[0,1,2,3]},
+    {tur:"dy", ifadeler:[
+      {metin:"'İstanbul' özel isimdir.", dogru:true},
+      {metin:"'Sevgi' somut bir isimdir.", dogru:false},
+      {metin:"Cins isimler büyük harfle başlamaz.", dogru:true}
+    ]}
+  ]
+},
+{
+  id:"sifat-bilgisi",
+  baslik:"10. Varlıkların Özelliklerini Belirten Kelimeler",
+  anlatim:`
+    <p>Bu kelimelere <b>sıfat</b> denir. Varlıkların rengini, biçimini, büyüklüğünü, sayısını, durumunu belirtirler ve isimden önce gelirler.</p>
+    <div class="ornek-kutu"><b>Kırmızı</b> elma (renk) &nbsp; <b>Büyük</b> ev (büyüklük) &nbsp; <b>Beş</b> kalem (sayı)</div>
+  `,
+  sorular:[
+    {tur:"cs", soru:"'Üç kalem aldım.' cümlesinde 'üç' kelimesi neyi belirtir?", secenekler:["Rengi","Sayıyı","Biçimi","Durumu"], dogru:1},
+    {tur:"bd", soru:"Varlıkların özelliğini belirten kelimelere ___ denir.", cevap:["sıfat"]},
+    {tur:"es", baslik:"İfadeleri belirttikleri özellikle eşleştir.", sol:["Kırmızı elma","Büyük ev","Beş kitap","Yuvarlak top"], sag:["Renk","Büyüklük","Sayı","Biçim"], dogru:[0,1,2,3]},
+    {tur:"dy", ifadeler:[
+      {metin:"Sıfatlar isimlerden önce gelir.", dogru:true},
+      {metin:"'Koşmak' bir sıfattır.", dogru:false},
+      {metin:"'Uzun yol' ifadesinde 'uzun' sıfattır.", dogru:true}
+    ]}
+  ]
+},
+{
+  id:"adin-yerine",
+  baslik:"11. Adın Yerine Kullanılan Kelimeler",
+  anlatim:`
+    <p>Bu kelimelere <b>zamir (adıl)</b> denir. İsimlerin yerine kullanılırlar; isimlerin tekrar tekrar söylenmesini önlerler.</p>
+    <div class="ornek-kutu">
+      Kişi zamirleri: ben, sen, o, biz, siz, onlar<br>
+      "Ali okula gitti. <b>O</b> derse geç kaldı." → "O" zamiri Ali'nin yerine kullanılmıştır.
+    </div>
+  `,
+  sorular:[
+    {tur:"cs", soru:"'Ayşe geldi. O çok mutluydu.' cümlesinde 'O' kimin yerine kullanılmıştır?", secenekler:["Öğretmenin","Ayşe'nin","Kardeşin","Komşunun"], dogru:1},
+    {tur:"bd", soru:"İsimlerin yerine kullanılan kelimelere ___ denir.", cevap:["zamir","adıl"]},
+    {tur:"es", baslik:"Zamirleri kişisiyle eşleştir.", sol:["ben","sen","biz","onlar"], sag:["1. tekil kişi","2. tekil kişi","1. çoğul kişi","3. çoğul kişi"], dogru:[0,1,2,3]},
+    {tur:"dy", ifadeler:[
+      {metin:"'Masa' bir zamirdir.", dogru:false},
+      {metin:"Zamirler isim tekrarını önler.", dogru:true},
+      {metin:"'O' üçüncü tekil kişi zamiridir.", dogru:true}
+    ]}
+  ]
+},
+{
+  id:"eylem-bilgisi",
+  baslik:"12. Eylem Bildiren Kelimeler",
+  anlatim:`
+    <p>Bu kelimelere <b>fiil (eylem)</b> denir. Bir işi, oluşu veya hareketi bildirirler.</p>
+    <div class="ornek-kutu">koş-mak, oku-mak, yaz-mak, uyu-mak, gül-mek</div>
+  `,
+  sorular:[
+    {tur:"cs", soru:"'Kuşlar gökyüzünde uçuyor.' cümlesinde eylem hangisidir?", secenekler:["Kuşlar","gökyüzünde","uçuyor","hiçbiri"], dogru:2},
+    {tur:"bd", soru:"İşi, oluşu veya hareketi bildiren kelimelere ___ denir.", cevap:["fiil","eylem"]},
+    {tur:"es", baslik:"Fiilleri anlamlarına göre eşleştir.", sol:["koşmak","uyumak","gülmek","yazmak"], sag:["hareket","dinlenme","duygu","iş"], dogru:[0,1,2,3]},
+    {tur:"dy", ifadeler:[
+      {metin:"'Kalem' bir fiildir.", dogru:false},
+      {metin:"Fiiller genellikle '-mek/-mak' ile biter.", dogru:true},
+      {metin:"'Gülmek' bir eylemdir.", dogru:true}
+    ]}
+  ]
+},
+{
+  id:"noktalama",
+  baslik:"13. Noktalama İşaretleri",
+  anlatim:`
+    <p>Noktalama işaretleri, yazılanların daha kolay ve doğru anlaşılmasını sağlar.</p>
+    <ul>
+      <li><b>Nokta (.)</b> — Cümle sonunda kullanılır.</li>
+      <li><b>Virgül (,)</b> — Sıralı kelimeleri ayırır.</li>
+      <li><b>Soru işareti (?)</b> — Soru cümlesi sonunda kullanılır.</li>
+      <li><b>Ünlem işareti (!)</b> — Sevinç, korku, şaşkınlık bildirir.</li>
+    </ul>
+  `,
+  sorular:[
+    {tur:"cs", soru:"'Ne kadar güzel bir manzara!' cümlesi hangi işaretle biter?", secenekler:["Nokta","Soru işareti","Ünlem işareti","Virgül"], dogru:2},
+    {tur:"bd", soru:"Sıralı kelimeleri ayırmak için ___ kullanılır.", cevap:["virgül"]},
+    {tur:"es", baslik:"İşaretleri görevleriyle eşleştir.", sol:[".","?","!",","], sag:["Cümleyi bitirir","Soru sorar","Şaşkınlık bildirir","Kelimeleri ayırır"], dogru:[0,1,2,3]},
+    {tur:"dy", ifadeler:[
+      {metin:"Soru cümlesi ünlem işareti ile biter.", dogru:false},
+      {metin:"Nokta cümle sonunda kullanılır.", dogru:true},
+      {metin:"Virgül cümleyi bitirir.", dogru:false}
+    ]}
+  ]
+},
+{
+  id:"yazim-kurallari",
+  baslik:"14. Yazım Yanlışı (Yazım Kuralları)",
+  anlatim:`
+    <p>Doğru yazım için bazı önemli kurallar vardır:</p>
+    <ul>
+      <li>Özel isimler büyük harfle başlar (Ahmet, İzmir).</li>
+      <li>Cümle başları büyük harfle başlar.</li>
+      <li>"de/da" bağlacı ayrı, hâl eki olan "-de/-da" bitişik yazılır.</li>
+      <li>"mi/mı" soru eki her zaman ayrı yazılır.</li>
+    </ul>
+  `,
+  sorular:[
+    {tur:"cs", soru:"Aşağıdakilerden hangisi doğru yazılmıştır?", secenekler:["Ahmet okula gitti.","ahmet okula gitti.","Ahmet Okula Gitti","ahmet Okula gitti."], dogru:0},
+    {tur:"bd", soru:"'Geldin mi?' cümlesinde soru eki '___' her zaman ayrı yazılır.", cevap:["mi"]},
+    {tur:"es", baslik:"Kelimeleri isim türüyle eşleştir.", sol:["Ahmet","okul","İzmir","kalem"], sag:["Özel isim","Cins isim","Özel isim","Cins isim"], dogru:[0,1,2,3]},
+    {tur:"dy", ifadeler:[
+      {metin:"Özel isimler büyük harfle başlar.", dogru:true},
+      {metin:"Cümle ortasında büyük harf kullanılabilir.", dogru:false},
+      {metin:"'mi' soru eki bitişik yazılır.", dogru:false}
+    ]}
+  ]
+},
+{
+  id:"metnin-bolumleri",
+  baslik:"15. Metnin Bölümleri",
+  anlatim:`
+    <p>Bir metin genellikle üç bölümden oluşur:</p>
+    <ul>
+      <li><b>Giriş:</b> Konunun tanıtıldığı bölümdür.</li>
+      <li><b>Gelişme:</b> Olayların, bilgilerin detaylı anlatıldığı bölümdür.</li>
+      <li><b>Sonuç:</b> Metnin özetlendiği, bitirildiği bölümdür.</li>
+    </ul>
+  `,
+  sorular:[
+    {tur:"cs", soru:"Bir metnin konusunun tanıtıldığı bölüme ne denir?", secenekler:["Sonuç","Giriş","Gelişme","Başlık"], dogru:1},
+    {tur:"bd", soru:"Olayların ayrıntılı anlatıldığı bölüme ___ denir.", cevap:["gelişme"]},
+    {tur:"es", baslik:"Metin bölümlerini görevleriyle eşleştir.", sol:["Giriş","Gelişme","Sonuç","Başlık"], sag:["Konu tanıtılır","Olaylar anlatılır","Metin özetlenir","Konuyu yansıtır"], dogru:[0,1,2,3]},
+    {tur:"dy", ifadeler:[
+      {metin:"Her metnin bir başlığı olmalıdır.", dogru:true},
+      {metin:"Sonuç bölümü metnin en başındadır.", dogru:false},
+      {metin:"Gelişme bölümü metnin en uzun kısmıdır.", dogru:true}
+    ]}
+  ]
+},
+{
+  id:"siir-bilgisi",
+  baslik:"16. Şiir Bilgisi",
+  anlatim:`
+    <p>Şiir, duygu ve düşüncelerin ölçülü, kafiyeli ve etkili biçimde anlatıldığı yazı türüdür.</p>
+    <ul>
+      <li><b>Dize (mısra):</b> Şiirin her bir satırı.</li>
+      <li><b>Kıta (bent):</b> Dizelerin oluşturduğu bölüm.</li>
+      <li><b>Kafiye:</b> Dize sonlarındaki ses benzerliği.</li>
+      <li><b>Redif:</b> Dize sonunda tekrar eden aynı görevdeki ek veya kelime.</li>
+    </ul>
+  `,
+  sorular:[
+    {tur:"cs", soru:"Şiirin her bir satırına ne denir?", secenekler:["Kıta","Dize","Kafiye","Redif"], dogru:1},
+    {tur:"bd", soru:"Dizelerin oluşturduğu bölüme ___ denir.", cevap:["kıta","bent"]},
+    {tur:"es", baslik:"Şiir terimlerini tanımlarıyla eşleştir.", sol:["Dize","Kıta","Kafiye","Redif"], sag:["Şiirin satırı","Dizelerin bölümü","Ses benzerliği","Tekrar eden ek"], dogru:[0,1,2,3]},
+    {tur:"dy", ifadeler:[
+      {metin:"Şiirde ölçü ve kafiye önemlidir.", dogru:true},
+      {metin:"Dize, birden fazla satırdan oluşan bölümdür.", dogru:false},
+      {metin:"Kafiye dize sonlarındaki ses benzerliğidir.", dogru:true}
+    ]}
+  ]
+},
+{
+  id:"hikaye-unsurlari",
+  baslik:"17. Hikayenin Unsurları",
+  anlatim:`
+    <p>Bir hikâyede bulunması gereken temel unsurlar şunlardır:</p>
+    <ul>
+      <li><b>Kişi (kahraman):</b> Olayı yaşayan varlıklar.</li>
+      <li><b>Yer (mekân):</b> Olayın geçtiği yer.</li>
+      <li><b>Zaman:</b> Olayın gerçekleştiği vakit.</li>
+      <li><b>Olay:</b> Hikâyede anlatılan durum.</li>
+    </ul>
+  `,
+  sorular:[
+    {tur:"cs", soru:"Hikâyenin geçtiği yere ne denir?", secenekler:["Zaman","Mekân","Kişi","Olay"], dogru:1},
+    {tur:"bd", soru:"Hikâyede olayı yaşayan varlıklara ___ denir.", cevap:["kişi","kahraman"]},
+    {tur:"es", baslik:"Hikâye unsurlarını karşılıklarıyla eşleştir.", sol:["Kişi","Yer","Zaman","Olay"], sag:["Kahraman","Mekân","Vakit","Durum"], dogru:[0,1,2,3]},
+    {tur:"dy", ifadeler:[
+      {metin:"Her hikâyede mutlaka bir olay vardır.", dogru:true},
+      {metin:"Zaman unsuru hikâyede önemsizdir.", dogru:false},
+      {metin:"Hikâye kahramanları sadece insan olabilir.", dogru:false}
+    ]}
+  ]
+},
+{
+  id:"atasozu-deyim",
+  baslik:"18. Atasözleri ve Deyimler",
+  anlatim:`
+    <p><b>Atasözü:</b> Geçmişten gelen, ders veren, kim tarafından söylendiği bilinmeyen kalıplaşmış sözlerdir.</p>
+    <p><b>Deyim:</b> Genellikle gerçek anlamından uzaklaşarak yeni bir anlam kazanan kalıplaşmış söz gruplarıdır.</p>
+  `,
+  sorular:[
+    {tur:"cs", soru:"'Ağzı kulaklarına varmak' deyimi ne anlama gelir?", secenekler:["Üzülmek","Çok sevinmek","Kızmak","Korkmak"], dogru:1},
+    {tur:"bd", soru:"'Damlaya damlaya ___ olur.' atasözünü tamamlayınız.", cevap:["göl"]},
+    {tur:"es", baslik:"Atasözünü anlamıyla eşleştir.", sol:["Damlaya damlaya göl olur.","Ağaç yaşken eğilir.","Gülü seven dikenine katlanır."], sag:["Küçük birikimler büyük sonuç doğurur.","Eğitim küçük yaşta verilmelidir.","Bir şeyi seven zorluklarına katlanır."], dogru:[0,1,2]},
+    {tur:"dy", ifadeler:[
+      {metin:"Atasözlerinin sahibi bellidir.", dogru:false},
+      {metin:"Deyimler genellikle mecaz anlam taşır.", dogru:true},
+      {metin:"Atasözleri ders verici sözlerdir.", dogru:true}
+    ]}
+  ]
+},
+{
+  id:"kazanim-testleri",
+  baslik:"19. Kazanım Testleri (Genel Tekrar)",
+  anlatim:`<p>Bu bölümde öğrendiğin tüm konularla ilgili karma sorular yer almaktadır. Kendini test et! 🎯</p>`,
+  sorular:[
+    {tur:"cs", soru:"'Kalem' kelimesi kaç hecelidir?", secenekler:["1","2","3","4"], dogru:1},
+    {tur:"bd", soru:"'Güzel' kelimesinin zıt anlamlısı ___'dir.", cevap:["çirkin"]},
+    {tur:"es", baslik:"Kelimeleri türüyle eşleştir.", sol:["Ankara","koşmak","büyük","o"], sag:["Özel isim","Fiil","Sıfat","Zamir"], dogru:[0,1,2,3]},
+    {tur:"dy", ifadeler:[
+      {metin:"Soru cümlesi '?' ile biter.", dogru:true},
+      {metin:"'Damlaya damlaya göl olur' bir deyimdir.", dogru:false},
+      {metin:"Zamirler isimlerin yerini tutar.", dogru:true}
+    ]}
+  ]
+}
+];
+
+/* ================= YARDIMCI ================= */
+function normallestir(s){
+  return s.toString().trim().toLocaleLowerCase("tr-TR").replace(/[.,!?]/g,"");
+}
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+/* ================= RENDER ================= */
+const menu = document.getElementById("konu-menu");
+const icerik = document.getElementById("icerik-alani");
+
+let menuHtml = "<h2>📖 Konular</h2>";
+konular.forEach((k,i)=>{
+  menuHtml += `<button class="konu-btn" data-index="${i}" onclick="konuGoster(${i})">${k.baslik}</button>`;
+});
+menu.innerHTML = menuHtml;
+
+const turEtiket = {
+  cs:{ad:"Çoktan Seçmeli", ikon:"🤔"},
+  bd:{ad:"Boşluk Doldurma", ikon:"✏️"},
+  es:{ad:"Eşleştirme", ikon:"🧩"},
+  dy:{ad:"Doğru mu Yanlış mı?", ikon:"🎯"}
+};
+
+function soruHtmlOlustur(konuIndex, soruIndex, s){
+  const kutuId = `soru-alani-${konuIndex}-${soruIndex}`;
+  let icHtml = "";
+
+  if(s.tur === "cs"){
+    let secenekHtml = "";
+    s.secenekler.forEach((sec,j)=>{
+      secenekHtml += `<label><input type="radio" name="soru-${konuIndex}-${soruIndex}" value="${j}"> ${sec}</label>`;
+    });
+    icHtml = `
+      <div class="soru-basligi"><span class="numara">${soruIndex+1}</span>${s.soru}</div>
+      <div class="secenekler">${secenekHtml}</div>`;
+  }
+  else if(s.tur === "bd"){
+    icHtml = `
+      <div class="soru-basligi"><span class="numara">${soruIndex+1}</span>Boşluğu doldur</div>
+      <div class="bosluk-metin">${s.soru}</div>
+      <input type="text" class="bosluk-input" id="bd-${konuIndex}-${soruIndex}" placeholder="Cevabını yaz...">`;
+  }
+  else if(s.tur === "es"){
+    const sagKarisik = shuffle(s.sag);
+    let satirHtml = "";
+    s.sol.forEach((solOge,j)=>{
+      let opsiyonlar = `<option value="">Seç...</option>`;
+      sagKarisik.forEach(opt=>{
+        opsiyonlar += `<option value="${opt.replace(/"/g,'&quot;')}">${opt}</option>`;
+      });
+      satirHtml += `
+        <div class="eslestirme-satir" id="es-satir-${konuIndex}-${soruIndex}-${j}">
+          <span class="eslestirme-sol">${solOge}</span>
+          <select id="es-${konuIndex}-${soruIndex}-${j}">${opsiyonlar}</select>
+        </div>`;
+    });
+    icHtml = `
+      <div class="soru-basligi"><span class="numara">${soruIndex+1}</span>${s.baslik}</div>
+      ${satirHtml}`;
+  }
+  else if(s.tur === "dy"){
+    let satirHtml = "";
+    s.ifadeler.forEach((ifade,j)=>{
+      satirHtml += `
+        <div class="dy-satir" id="dy-satir-${konuIndex}-${soruIndex}-${j}">
+          <span class="dy-metin">${ifade.metin}</span>
+          <span class="dy-secim">
+            <button type="button" class="dogru-btn" onclick="dySec(${konuIndex},${soruIndex},${j},true,this)">Doğru</button>
+            <button type="button" class="yanlis-btn" onclick="dySec(${konuIndex},${soruIndex},${j},false,this)">Yanlış</button>
+          </span>
+        </div>`;
+    });
+    icHtml = `
+      <div class="soru-basligi"><span class="numara">${soruIndex+1}</span>Aşağıdaki ifadeler doğru mu, yanlış mı?</div>
+      ${satirHtml}`;
+  }
+
+  return `
+    <div class="soru-alani tur-${s.tur}" id="${kutuId}">
+      <span class="tur-etiket ${s.tur}">${turEtiket[s.tur].ikon} ${turEtiket[s.tur].ad}</span>
+      ${icHtml}
+      <div>
+        <button class="kontrol-btn" onclick="kontrolEt(${konuIndex},${soruIndex})">Kontrol Et</button>
+        <span class="sonuc-mesaji" id="sonuc-${konuIndex}-${soruIndex}"></span>
+      </div>
+    </div>`;
+}
+
+/* doğru/yanlış seçim state saklama */
+const dySecimleri = {};
+function dySec(konuIndex, soruIndex, ifadeIndex, secim, btn){
+  const key = `${konuIndex}-${soruIndex}-${ifadeIndex}`;
+  dySecimleri[key] = secim;
+  const satir = document.getElementById(`dy-satir-${konuIndex}-${soruIndex}-${ifadeIndex}`);
+  satir.querySelectorAll(".dy-secim button").forEach(b=>b.classList.remove("secili"));
+  btn.classList.add("secili");
+}
+
+function soruBlokOlustur(konuIndex){
+  const k = konular[konuIndex];
+  let html = "";
+  k.sorular.forEach((s,i)=>{
+    html += soruHtmlOlustur(konuIndex, i, s);
+  });
+  return html;
+}
+
+function icerikOlustur(){
+  let html = "";
+  konular.forEach((k,i)=>{
+    html += `
+      <section class="konu-bolumu" id="bolum-${i}">
+        <div class="konu-baslik">${k.baslik}</div>
+        <div class="anlatim">${k.anlatim}</div>
+        <h3 class="etkinlik-baslik">📝 Yeni Nesil Alıştırmalar</h3>
+        ${soruBlokOlustur(i)}
+      </section>`;
+  });
+  icerik.innerHTML = html;
+}
+icerikOlustur();
+
+function konuGoster(index){
+  document.querySelectorAll(".konu-bolumu").forEach(el=>el.classList.remove("aktif"));
+  document.querySelectorAll(".konu-btn").forEach(el=>el.classList.remove("aktif"));
+  document.getElementById("bolum-"+index).classList.add("aktif");
+  document.querySelectorAll(".konu-btn")[index].classList.add("aktif");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+konuGoster(0);
+
+/* ================= KONTROL FONKSİYONU ================= */
+function kontrolEt(konuIndex, soruIndex){
+  const s = konular[konuIndex].sorular[soruIndex];
+  const sonucSpan = document.getElementById(`sonuc-${konuIndex}-${soruIndex}`);
+
+  if(s.tur === "cs"){
+    const secili = document.querySelector(`input[name="soru-${konuIndex}-${soruIndex}"]:checked`);
+    const labels = document.querySelectorAll(`#soru-alani-${konuIndex}-${soruIndex} .secenekler label`);
+    labels.forEach(l=>l.classList.remove("dogru","yanlis"));
+    if(!secili){
+      sonucSpan.textContent = "Lütfen bir seçenek işaretle!";
+      sonucSpan.style.color = "var(--kirmizi)";
+      return;
+    }
+    const seciliDeger = parseInt(secili.value);
+    labels[s.dogru].classList.add("dogru");
+    if(seciliDeger === s.dogru){
+      sonucSpan.textContent = "Doğru! 🎉";
+      sonucSpan.style.color = "var(--yesil)";
+    } else {
+      labels[seciliDeger].classList.add("yanlis");
+      sonucSpan.textContent = "Yanlış, doğru cevap işaretlendi.";
+      sonucSpan.style.color = "var(--kirmizi)";
+    }
+  }
+
+  else if(s.tur === "bd"){
+    const input = document.getElementById(`bd-${konuIndex}-${soruIndex}`);
+    const deger = normallestir(input.value);
+    const kabulEdilen = s.cevap.map(c=>normallestir(c));
+    if(!input.value.trim()){
+      sonucSpan.textContent = "Lütfen bir cevap yaz!";
+      sonucSpan.style.color = "var(--kirmizi)";
+      return;
+    }
+    if(kabulEdilen.includes(deger)){
+      input.style.borderColor = "var(--yesil)";
+      input.style.background = "#c8e6c9";
+      sonucSpan.textContent = "Doğru! 🎉";
+      sonucSpan.style.color = "var(--yesil)";
+    } else {
+      input.style.borderColor = "var(--kirmizi)";
+      input.style.background = "#ffcdd2";
+      sonucSpan.textContent = `Yanlış. Doğru cevap: ${s.cevap[0]}`;
+      sonucSpan.style.color = "var(--kirmizi)";
+    }
+  }
+
+  else if(s.tur === "es"){
+    let dogruSayisi = 0;
+    let tumuSecildi = true;
+    s.sol.forEach((solOge,j)=>{
+      const select = document.getElementById(`es-${konuIndex}-${soruIndex}-${j}`);
+      const satir = document.getElementById(`es-satir-${konuIndex}-${soruIndex}-${j}`);
+      satir.style.background = "#f5f5f5";
+      if(!select.value){ tumuSecildi = false; return; }
+      const dogruCevap = s.sag[s.dogru[j]];
+      if(select.value === dogruCevap){
+        satir.style.background = "#c8e6c9";
+        dogruSayisi++;
+      } else {
+        satir.style.background = "#ffcdd2";
+      }
+    });
+    if(!tumuSecildi){
+      sonucSpan.textContent = "Lütfen tüm eşleştirmeleri tamamla!";
+      sonucSpan.style.color = "var(--kirmizi)";
+      return;
+    }
+    sonucSpan.textContent = `${dogruSayisi}/${s.sol.length} doğru`;
+    sonucSpan.style.color = dogruSayisi === s.sol.length ? "var(--yesil)" : "var(--kirmizi)";
+  }
+
+  else if(s.tur === "dy"){
+    let dogruSayisi = 0;
+    let tumuSecildi = true;
+    s.ifadeler.forEach((ifade,j)=>{
+      const key = `${konuIndex}-${soruIndex}-${j}`;
+      const satir = document.getElementById(`dy-satir-${konuIndex}-${soruIndex}-${j}`);
+      if(dySecimleri[key] === undefined){ tumuSecildi = false; return; }
+      if(dySecimleri[key] === ifade.dogru){
+        satir.style.background = "#c8e6c9";
+        dogruSayisi++;
+      } else {
+        satir.style.background = "#ffcdd2";
+      }
+    });
+    if(!tumuSecildi){
+      sonucSpan.textContent = "Lütfen tüm ifadeleri işaretle!";
+      sonucSpan.style.color = "var(--kirmizi)";
+      return;
+    }
+    sonucSpan.textContent = `${dogruSayisi}/${s.ifadeler.length} doğru`;
+    sonucSpan.style.color = dogruSayisi === s.ifadeler.length ? "var(--yesil)" : "var(--kirmizi)";
+  }
+}
+</script>
+</body>
+</html>
