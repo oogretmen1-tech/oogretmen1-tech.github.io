@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İngilizce Öğreniyorum — A1'den B2'ye</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f8f7; --ink:#182b2d; --ink-soft:#5b7472;
+  --teal:#0e7c72; --teal-deep:#0a5951; --teal-tint:#e2f2ef;
+  --amber:#c17f1f; --amber-tint:#faeed9; --white:#ffffff; --line:#e1e8e6;
+  --red:#c4453f; --green:#2f8f5c; --radius:14px; --shadow:0 6px 24px rgba(10,60,55,0.08);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;}
+h1,h2,h3,.disp{font-family:'Space Grotesk',sans-serif;}
+.topbar{background:var(--white);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50;}
+.topbar-inner{max-width:1080px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;color:var(--teal-deep);display:flex;align-items:center;gap:8px;}
+.logo .dot{width:9px;height:9px;background:var(--amber);border-radius:2px;}
+.nav-tabs{display:flex;gap:6px;flex-wrap:wrap;}
+.nav-tab{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13.5px;border:1.5px solid var(--line);background:var(--white);color:var(--ink-soft);padding:8px 15px;border-radius:999px;cursor:pointer;transition:.15s;}
+.nav-tab:hover{border-color:var(--teal);color:var(--teal-deep);}
+.nav-tab.active{background:var(--teal-deep);border-color:var(--teal-deep);color:#fff;}
+.nav-tab.done::after{content:" ✓";}
+.hero{max-width:1080px;margin:0 auto;padding:34px 20px 6px;}
+.hero .eyebrow{color:var(--amber);font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;}
+.hero h1{font-size:clamp(24px,4vw,32px);color:var(--teal-deep);margin:8px 0 8px;}
+.hero p{color:var(--ink-soft);max-width:640px;line-height:1.6;font-size:15px;}
+main{max-width:1080px;margin:0 auto;padding:20px 20px 90px;}
+.level-panel{display:none;} .level-panel.show{display:block;animation:fade .3s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.level-head{background:linear-gradient(120deg,var(--teal-deep),var(--teal));border-radius:20px;padding:24px 26px;color:#fff;margin-bottom:20px;}
+.level-head h2{font-size:24px;} .level-head p{opacity:.92;font-size:14px;max-width:580px;margin-top:6px;}
+.level-tag{background:rgba(255,255,255,.18);padding:5px 14px;border-radius:999px;font-size:13px;font-weight:600;}
+.sub-nav{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+.sub-btn{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;padding:9px 15px;border-radius:10px;border:1.5px solid var(--line);background:var(--white);color:var(--ink-soft);cursor:pointer;}
+.sub-btn.active{background:var(--teal-tint);border-color:var(--teal);color:var(--teal-deep);}
+.sub-section{display:none;} .sub-section.show{display:block;animation:fade .25s ease;}
+.card-block{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px clamp(16px,3vw,26px);box-shadow:var(--shadow);margin-bottom:16px;}
+.card-block h3{color:var(--teal-deep);font-size:16.5px;margin-bottom:10px;}
+.grammar-example{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--teal-tint);border-radius:10px;padding:10px 14px;margin-top:7px;flex-wrap:wrap;}
+.grammar-example .en{font-weight:600;color:var(--teal-deep);} .grammar-example .tr{font-size:12.5px;color:var(--ink-soft);}
+.vocab-cat{margin-bottom:22px;}
+.vocab-cat h4{font-size:13px;color:var(--amber);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;font-weight:700;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:9px;}
+.vword{border:1px solid var(--line);border-radius:11px;padding:11px 13px;cursor:pointer;transition:.15s;background:var(--white);}
+.vword:hover{border-color:var(--teal);background:var(--teal-tint);}
+.vword .en{font-family:'Space Grotesk',sans-serif;font-weight:600;color:var(--teal-deep);font-size:14.5px;}
+.vword .tr{font-size:12px;color:var(--ink-soft);margin-top:2px;} .vword .ic{float:right;color:var(--teal);}
+.reading-text{line-height:2;font-size:15.5px;}
+.gword{border-bottom:1.5px dashed var(--amber);cursor:pointer;color:var(--ink);position:relative;}
+.gword:hover{background:var(--amber-tint);}
+.tooltip{position:absolute;bottom:130%;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:6px 10px;border-radius:8px;font-size:12.5px;white-space:nowrap;z-index:10;display:none;}
+.gword.open .tooltip{display:block;}
+.read-toolbar{display:flex;gap:10px;margin-bottom:14px;}
+.text-switch{display:flex;gap:8px;margin-bottom:16px;}
+.text-switch button{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;padding:7px 14px;border-radius:8px;border:1.5px solid var(--line);background:#fff;cursor:pointer;color:var(--ink-soft);}
+.text-switch button.active{background:var(--teal-tint);border-color:var(--teal);color:var(--teal-deep);}
+.quiz-item{background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:15px 17px;margin-bottom:11px;}
+.quiz-item .q{font-weight:600;margin-bottom:9px;font-size:14.5px;}
+.opts{display:grid;gap:7px;}
+.opt{text-align:left;padding:9px 13px;border-radius:9px;border:1.5px solid var(--line);background:#fff;cursor:pointer;font-size:13.8px;font-family:inherit;color:var(--ink);}
+.opt:hover{border-color:var(--teal);}
+.opt.selected{border-color:var(--teal);background:var(--teal-tint);}
+.opt.correct{border-color:var(--green);background:#e6f5eb;font-weight:600;}
+.opt.wrong{border-color:var(--red);background:#fbe9e8;}
+.btn{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14px;border:none;border-radius:10px;padding:11px 22px;cursor:pointer;background:var(--teal-deep);color:#fff;transition:.15s;}
+.btn:hover{background:var(--teal);}
+.btn.secondary{background:transparent;color:var(--teal-deep);border:1.5px solid var(--line);}
+.btn.secondary:hover{border-color:var(--teal);}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+.icon-btn{border:none;background:var(--teal);color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:14px;flex-shrink:0;}
+.icon-btn:hover{background:var(--teal-deep);}
+.score-msg{display:none;margin-top:14px;padding:12px 16px;border-radius:10px;font-weight:600;font-size:14px;}
+.score-msg.show{display:block;} .score-msg.good{background:#e6f5eb;color:var(--green);} .score-msg.mid{background:var(--amber-tint);color:#8a5a13;}
+.check-row{display:flex;justify-content:space-between;align-items:center;margin-top:16px;flex-wrap:wrap;gap:10px;}
+.game-tabs{display:flex;gap:8px;margin-bottom:16px;}
+.game-tab{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;padding:8px 15px;border-radius:9px;border:1.5px solid var(--line);background:#fff;cursor:pointer;color:var(--ink-soft);}
+.game-tab.active{background:var(--teal-tint);border-color:var(--teal);color:var(--teal-deep);}
+.game-area{text-align:center;}
+.hangman-word{font-family:'Space Grotesk',sans-serif;font-size:26px;letter-spacing:7px;margin:16px 0;color:var(--teal-deep);}
+.keyboard{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:480px;margin:0 auto;}
+.key{width:34px;height:34px;border-radius:8px;border:1.5px solid var(--line);background:#fff;cursor:pointer;font-weight:600;font-family:'Space Grotesk',sans-serif;font-size:13px;}
+.key:hover{border-color:var(--teal);}
+.key.used-right{background:#e6f5eb;border-color:var(--green);color:var(--green);}
+.key.used-wrong{background:#fbe9e8;border-color:var(--red);color:var(--red);}
+.key:disabled{cursor:not-allowed;}
+.lives{font-size:13.5px;color:var(--ink-soft);margin-top:6px;}
+.hint{font-size:12.5px;color:var(--ink-soft);margin-top:4px;}
+.scramble-letters{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:14px 0;}
+.slet{width:38px;height:38px;border-radius:8px;background:var(--teal-tint);color:var(--teal-deep);font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1.5px solid var(--teal);}
+.slet.used{opacity:.25;cursor:not-allowed;}
+.answer-slots{display:flex;gap:6px;justify-content:center;margin-bottom:10px;min-height:42px;flex-wrap:wrap;}
+.aslot{width:38px;height:38px;border-radius:8px;border:1.5px dashed var(--line);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;cursor:pointer;}
+.match-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;max-width:520px;margin:0 auto;}
+.match-card{aspect-ratio:1;border-radius:10px;background:var(--teal-deep);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12.5px;cursor:pointer;padding:6px;text-align:center;}
+.match-card.flip{background:var(--white);color:var(--ink);border:1.5px solid var(--teal);}
+.match-card.matched{background:#e6f5eb;color:var(--green);border:1.5px solid var(--green);cursor:default;}
+.cloze-sentence{font-size:15.5px;margin-bottom:10px;line-height:1.9;}
+.cloze-blank{display:inline-block;border-bottom:2px solid var(--amber);min-width:80px;text-align:center;font-weight:600;color:var(--teal-deep);}
+.cloze-options{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:14px;}
+.cloze-opt{padding:8px 14px;border-radius:8px;border:1.5px solid var(--line);background:#fff;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13.5px;}
+.cloze-opt:hover{border-color:var(--teal);}
+.order-bank{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin:14px 0;}
+.oword{padding:8px 13px;border-radius:8px;background:var(--teal-tint);color:var(--teal-deep);font-weight:600;cursor:pointer;border:1.5px solid var(--teal);font-family:'Space Grotesk',sans-serif;font-size:13.5px;}
+.oword.used{opacity:.25;cursor:not-allowed;}
+.order-answer{min-height:44px;border:1.5px dashed var(--line);border-radius:10px;padding:8px;display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-bottom:10px;}
+.game-msg{margin-top:14px;font-weight:600;font-family:'Space Grotesk',sans-serif;font-size:14px;}
+.game-msg.good{color:var(--green);} .game-msg.bad{color:var(--red);}
+.dict-search{width:100%;padding:13px 16px;border-radius:12px;border:1.5px solid var(--line);font-size:15px;margin-bottom:16px;font-family:'Inter',sans-serif;}
+.dict-search:focus{outline:none;border-color:var(--teal);}
+.dict-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;}
+.dict-row{display:flex;justify-content:space-between;align-items:center;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:9px 13px;}
+.dict-row .en{font-family:'Space Grotesk',sans-serif;font-weight:600;color:var(--teal-deep);font-size:13.5px;}
+.dict-row .tr{font-size:12px;color:var(--ink-soft);}
+.dict-tag{font-size:10px;background:var(--teal-tint);color:var(--teal-deep);padding:2px 6px;border-radius:6px;font-weight:700;margin-left:6px;}
+/* AI chat */
+.chat-wrap{max-width:720px;margin:0 auto;}
+.chat-level-select{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.chat-level-select button{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;padding:8px 16px;border-radius:999px;border:1.5px solid var(--line);background:#fff;cursor:pointer;color:var(--ink-soft);}
+.chat-level-select button.active{background:var(--teal-deep);border-color:var(--teal-deep);color:#fff;}
+.chat-box{background:var(--white);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);height:440px;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;}
+.msg{max-width:80%;padding:11px 15px;border-radius:14px;font-size:14.5px;line-height:1.55;}
+.msg.bot{background:var(--teal-tint);color:var(--teal-deep);align-self:flex-start;border-bottom-left-radius:4px;}
+.msg.user{background:var(--teal-deep);color:#fff;align-self:flex-end;border-bottom-right-radius:4px;}
+.msg.typing{color:var(--ink-soft);font-style:italic;}
+.chat-input-row{display:flex;gap:10px;margin-top:12px;}
+.chat-input-row input{flex:1;padding:13px 16px;border-radius:12px;border:1.5px solid var(--line);font-size:14.5px;font-family:'Inter',sans-serif;}
+.chat-input-row input:focus{outline:none;border-color:var(--teal);}
+.chat-note{font-size:12.5px;color:var(--ink-soft);margin-top:10px;text-align:center;}
+footer{text-align:center;color:#9db0af;font-size:12.5px;padding:20px;}
+@media(max-width:640px){.vocab-grid{grid-template-columns:repeat(2,1fr);} .match-grid{grid-template-columns:repeat(3,1fr);}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="logo"><span class="dot"></span>Dijital Öğretmen — English</div>
+    <div class="nav-tabs" id="navTabs"></div>
+  </div>
+</div>
+
+<div class="hero" id="heroBlock">
+  <div class="eyebrow">Yetişkinler için · A1 → B2</div>
+  <h1>Sıfırdan İleri Seviyeye İngilizce</h1>
+  <p>Geniş kelime dağarcığı, detaylı dilbilgisi, sesli okuma metinleri, çift oyunlu pekiştirme ve yapay zekâ ile karşılıklı konuşma pratiği. Seviyeni seç, öğren, oyna, test ol, sonra konuşarak pekiştir.</p>
+</div>
+
+<main id="main"></main>
+
+<footer>🔊 simgesine tıklayarak telaffuzu dinle. Metinlerde altı çizili kelimelere tıkla, anlamını gör.</footer>
+
+<script>
+function speak(text, rate){
+  if(!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang='en-US'; u.rate=rate||0.9;
+  window.speechSynthesis.speak(u);
+}
+
+/* =================================================================
+   VERİ: SEVİYELER
+================================================================= */
+const LEVELS = [
+{
+  id:'A1', title:'Başlangıç', tag:'A1',
+  desc:'Temel tanışma, günlük yaşam ve şimdiki/geniş zamanla kurulan basit cümleler.',
+  grammar:[
+    {title:"'To be' fiili (am / is / are)", explain:"Kişiyi tanıtmak, durum bildirmek için kullanılır.",
+      examples:[["I am a teacher.","Ben bir öğretmenim."],["You are late.","Sen geç kaldın."],["It is cold today.","Bugün hava soğuk."],["We are ready.","Hazırız."]]},
+    {title:"Basit sorular (Wh- questions)", explain:"'What / Where / Who / When / Why' ile temel soru kurma.",
+      examples:[["What is your name?","Senin adın ne?"],["Where are you from?","Nerelisin?"],["When do you work?","Ne zaman çalışıyorsun?"]]},
+    {title:"'Have / has' — sahiplik", explain:"Bir şeye sahip olmayı ifade eder.",
+      examples:[["I have a car.","Benim bir arabam var."],["She has two children.","Onun iki çocuğu var."]]},
+    {title:"Present Simple", explain:"Alışkanlıkları, genel doğruları ve rutinleri anlatır.",
+      examples:[["I wake up at seven.","Yedide uyanırım."],["She works in a bank.","O bir bankada çalışır."],["They don't like coffee.","Onlar kahveyi sevmez."]]},
+    {title:"Çoğul isimler", explain:"İsimlere -s / -es eklenerek çoğul yapılır.",
+      examples:[["one book, two books","bir kitap, iki kitap"],["one box, three boxes","bir kutu, üç kutu"]]}
+  ],
+  vocab:[
+    ["Hello","Merhaba"],["Goodbye","Hoşça kal"],["Please","Lütfen"],["Thank you","Teşekkür ederim"],
+    ["Name","İsim"],["Work","İş / çalışmak"],["Family","Aile"],["Friend","Arkadaş"],
+    ["Money","Para"],["Time","Zaman"],["Today","Bugün"],["Tomorrow","Yarın"],
+    ["City","Şehir"],["House","Ev"],["Water","Su"],["Food","Yiyecek"],
+    ["Mother","Anne"],["Father","Baba"],["Sister","Kız kardeş"],["Brother","Erkek kardeş"],
+    ["Child","Çocuk"],["Wife","Eş (kadın)"],["Husband","Eş (erkek)"],["Baby","Bebek"],
+    ["Morning","Sabah"],["Evening","Akşam"],["Night","Gece"],["Week","Hafta"],
+    ["Month","Ay"],["Year","Yıl"],["Day","Gün"],["Hour","Saat"],
+    ["Red","Kırmızı"],["Blue","Mavi"],["Green","Yeşil"],["Black","Siyah"],
+    ["White","Beyaz"],["Yellow","Sarı"],["Big","Büyük"],["Small","Küçük"],
+    ["Hot","Sıcak"],["Cold","Soğuk"],["New","Yeni"],["Old","Eski / yaşlı"],
+    ["Good","İyi"],["Bad","Kötü"],["Happy","Mutlu"],["Sad","Üzgün"],
+    ["Tired","Yorgun"],["Hungry","Aç"],["Thirsty","Susamış"],["Busy","Meşgul"],
+    ["Eat","Yemek yemek"],["Drink","İçmek"],["Sleep","Uyumak"],["Walk","Yürümek"],
+    ["Run","Koşmak"],["Talk","Konuşmak"],["Listen","Dinlemek"],["Read","Okumak"],
+    ["Write","Yazmak"],["Buy","Satın almak"],["Sell","Satmak"],["Open","Açmak"],
+    ["Close","Kapatmak"],["Start","Başlamak"],["Finish","Bitirmek"],["Live","Yaşamak"],
+    ["School","Okul"],["Hospital","Hastane"],["Market","Market"],["Street","Sokak"],
+    ["Car","Araba"],["Bus","Otobüs"],["Train","Tren"],["Airport","Havalimanı"],
+    ["Doctor","Doktor"],["Teacher","Öğretmen"],["Driver","Şoför"],["Engineer","Mühendis"],
+    ["Shirt","Gömlek"],["Shoes","Ayakkabı"],["Bag","Çanta"],["Phone","Telefon"],
+    ["Table","Masa"],["Chair","Sandalye"],["Door","Kapı"],["Window","Pencere"],
+    ["Milk","Süt"],["Bread","Ekmek"],["Egg","Yumurta"],["Meat","Et"],
+    ["Fruit","Meyve"],["Vegetable","Sebze"],["Rain","Yağmur"],["Sun","Güneş"]
+  ],
+  readings:[
+    {title:"My Name is Elif", text:"Hello, my {name|isim} is Elif. I am from {Turkey|Türkiye}. I {live|yaşamak} in a small {city|şehir}. I {work|çalışmak} in an office. Every {morning|sabah}, I drink {coffee|kahve} and go to work. In the {evening|akşam}, I go {home|eve} and spend time with my {family|aile}. I have a small dog. His {name|isim} is Max. I love my {life|hayat} in this city.",
+     ttsText:"Hello, my name is Elif. I am from Turkey. I live in a small city. I work in an office. Every morning, I drink coffee and go to work. In the evening, I go home and spend time with my family. I have a small dog. His name is Max. I love my life in this city."},
+    {title:"A Normal Day", text:"I {wake up|uyanmak} at seven o'clock. I {eat|yemek yemek} breakfast with my {family|aile}, and then I go to {work|iş}. I {work|çalışmak} in a small {market|market} near my {house|ev}. At noon, I {eat|yemek yemek} lunch with my {friend|arkadaş}. After work, I {walk|yürümek} home. In the {evening|akşam}, I {read|okumak} a book or {listen|dinlemek} to music. I go to {sleep|uyumak} at eleven o'clock.",
+     ttsText:"I wake up at seven o'clock. I eat breakfast with my family, and then I go to work. I work in a small market near my house. At noon, I eat lunch with my friend. After work, I walk home. In the evening, I read a book or listen to music. I go to sleep at eleven o'clock."}
+  ],
+  quiz:[
+    {q:"'Ben bir öğretmenim' cümlesi nasıl kurulur?",opts:["I is a teacher.","I am a teacher.","I are a teacher.","I be a teacher."],a:1},
+    {q:"'Aile' kelimesinin İngilizcesi nedir?",opts:["Friend","Work","Family","Money"],a:2},
+    {q:"'Where are you from?' sorusunun anlamı nedir?",opts:["Adın ne?","Kaç yaşındasın?","Nerelisin?","Ne iş yapıyorsun?"],a:2},
+    {q:"'She has two children' cümlesinin anlamı nedir?",opts:["Onun iki arabası var.","Onun iki çocuğu var.","O iki çocuk istiyor.","O iki çocuğu seviyor."],a:1},
+    {q:"'They don't like coffee' cümlesinde boşluğa hangisi gelmeli: They ___ coffee.",opts:["doesn't like","don't likes","don't like","not like"],a:2},
+    {q:"'Aç' ve 'susamış' kelimeleri sırasıyla hangileridir?",opts:["Tired / Busy","Hungry / Thirsty","Sad / Happy","Hot / Cold"],a:1},
+    {q:"'one box, three ___' cümlesinde boşluğa ne gelmeli?",opts:["box","boxs","boxes","boxies"],a:2},
+    {q:"'Satın almak' fiili hangisidir?",opts:["Sell","Buy","Open","Close"],a:1}
+  ],
+  games:[
+    {type:'match', label:'Eşleştirme', title:'Kelime Eşleştirme', desc:'Kartları çevirerek İngilizce-Türkçe eşlerini bul.',
+      pairs:[["Hello","Merhaba"],["Water","Su"],["Friend","Arkadaş"],["House","Ev"],["Money","Para"],["Hungry","Aç"],["Morning","Sabah"],["Doctor","Doktor"]]},
+    {type:'speed', label:'Hızlı Seç', title:'Hızlı Kelime Seçme', desc:'Verilen Türkçe kelimenin doğru İngilizce karşılığını hızlıca seç.',
+      items:[
+        {word:"Yorgun",correct:"Tired",opts:["Tired","Busy","Sad","Hot"]},
+        {word:"Kız kardeş",correct:"Sister",opts:["Brother","Sister","Mother","Wife"]},
+        {word:"Bitirmek",correct:"Finish",opts:["Start","Open","Finish","Close"]},
+        {word:"Sebze",correct:"Vegetable",opts:["Fruit","Meat","Vegetable","Bread"]},
+        {word:"Sokak",correct:"Street",opts:["School","Street","Market","Airport"]},
+        {word:"Yeni",correct:"New",opts:["Old","New","Big","Small"]},
+        {word:"Dinlemek",correct:"Listen",opts:["Talk","Read","Listen","Write"]},
+        {word:"Pencere",correct:"Window",opts:["Door","Table","Chair","Window"]}
+      ]}
+  ]
+},
+{
+  id:'A2', title:'Temel Üstü', tag:'A2',
+  desc:'Geçmiş zaman, gelecek zaman, karşılaştırmalar ve günlük konuşmalarda geçen kelimeler.',
+  grammar:[
+    {title:"Past Simple (-ed)", explain:"Geçmişte olan biten olayları anlatır.",
+      examples:[["I worked yesterday.","Dün çalıştım."],["She visited her parents.","Ailesini ziyaret etti."],["They didn't come.","Onlar gelmedi."]]},
+    {title:"Future — 'going to'", explain:"Planlanan gelecek eylemleri anlatır.",
+      examples:[["I am going to travel next week.","Gelecek hafta seyahat edeceğim."],["They are going to buy a house.","Bir ev satın alacaklar."]]},
+    {title:"Comparatives / Superlatives", explain:"İki ya da daha fazla şeyi karşılaştırmak için kullanılır.",
+      examples:[["This city is bigger than mine.","Bu şehir benimkinden daha büyük."],["He is the most careful driver.","O en dikkatli sürücü."]]},
+    {title:"Present Continuous", explain:"Şu anda olan ya da geçici eylemleri anlatır.",
+      examples:[["I am reading a book now.","Şu anda bir kitap okuyorum."],["She is working this week.","Bu hafta çalışıyor."]]},
+    {title:"Countable / Uncountable — 'some, any, much, many'", explain:"Sayılabilen ve sayılamayan isimlerle miktar bildirir.",
+      examples:[["I have some money.","Biraz param var."],["There isn't much time.","Fazla zaman yok."],["How many books do you have?","Kaç kitabın var?"]]}
+  ],
+  vocab:[
+    ["Yesterday","Dün"],["Last week","Geçen hafta"],["Journey","Yolculuk"],["Weather","Hava durumu"],
+    ["Decision","Karar"],["Opinion","Fikir"],["Health","Sağlık"],["Experience","Deneyim"],
+    ["Neighbor","Komşu"],["Meeting","Toplantı"],["Reason","Sebep"],["Result","Sonuç"],
+    ["Improve","Geliştirmek"],["Decide","Karar vermek"],["Explain","Açıklamak"],["Continue","Devam etmek"],
+    ["Airport","Havalimanı"],["Ticket","Bilet"],["Passport","Pasaport"],["Luggage","Bagaj"],
+    ["Hotel","Otel"],["Reservation","Rezervasyon"],["Delay","Gecikme"],["Departure","Kalkış"],
+    ["Arrival","Varış"],["Traffic","Trafik"],["Directions","Yol tarifi"],["Map","Harita"],
+    ["Shopping","Alışveriş"],["Price","Fiyat"],["Discount","İndirim"],["Receipt","Fiş"],
+    ["Customer","Müşteri"],["Salary","Maaş"],["Bill","Fatura"],["Budget","Bütçe"],
+    ["Hobby","Hobi"],["Exercise","Egzersiz"],["Habit","Alışkanlık"],["Diet","Diyet"],
+    ["Illness","Hastalık"],["Symptom","Belirti"],["Medicine","İlaç"],["Appointment","Randevu"],
+    ["Ambulance","Ambulans"],["Emergency","Acil durum"],["Pain","Ağrı"],["Injury","Yaralanma"],
+    ["Feeling","Duygu"],["Excited","Heyecanlı"],["Nervous","Gergin"],["Bored","Sıkılmış"],
+    ["Surprised","Şaşırmış"],["Disappointed","Hayal kırıklığına uğramış"],["Proud","Gururlu"],["Worried","Endişeli"],
+    ["Relative","Akraba"],["Colleague","İş arkadaşı"],["Stranger","Yabancı"],["Roommate","Ev arkadaşı"],
+    ["Weekend","Hafta sonu"],["Holiday","Tatil"],["Season","Mevsim"],["Century","Yüzyıl"],
+    ["Increase","Artmak"],["Decrease","Azalmak"],["Compare","Karşılaştırmak"],["Choose","Seçmek"],
+    ["Arrive","Varmak"],["Leave","Ayrılmak"],["Return","Geri dönmek"],["Borrow","Ödünç almak"],
+    ["Lend","Ödünç vermek"],["Forget","Unutmak"],["Remember","Hatırlamak"],["Repair","Tamir etmek"]
+  ],
+  readings:[
+    {title:"A Trip to the Mountains", text:"Last {weekend|hafta sonu}, my friends and I {decided|karar verdik} to go on a short {journey|yolculuk} to the mountains. The {weather|hava durumu} was cold, but we were {excited|heyecanlı}. We walked for three hours and stopped near a lake to {rest|dinlenmek}. My friend Ahmet {explained|açıkladı} how to read a {map|harita}, and I {learned|öğrendim} something new. It was a great {experience|deneyim}, and we {decided|karar verdik} to go again next month.",
+     ttsText:"Last weekend, my friends and I decided to go on a short journey to the mountains. The weather was cold, but we were excited. We walked for three hours and stopped near a lake to rest. My friend Ahmet explained how to read a map, and I learned something new. It was a great experience, and we decided to go again next month."},
+    {title:"A Problem at the Airport", text:"Yesterday, I went to the {airport|havalimanı} very early because my {flight|uçuş} was at nine. But there was a {delay|gecikme}, and I had to wait for three hours. I was {bored|sıkılmış} and a little {nervous|gergin} because I had an important {meeting|toplantı} the next day. I checked my {luggage|bagaj} again and talked to a {customer|müşteri} service agent. Finally, the {departure|kalkış} time changed, and I {arrived|vardım} at my {hotel|otel} very late that night.",
+     ttsText:"Yesterday, I went to the airport very early because my flight was at nine. But there was a delay, and I had to wait for three hours. I was bored and a little nervous because I had an important meeting the next day. I checked my luggage again and talked to a customer service agent. Finally, the departure time changed, and I arrived at my hotel very late that night."}
+  ],
+  quiz:[
+    {q:"'Dün çalıştım' cümlesi nasıl kurulur?",opts:["I work yesterday.","I worked yesterday.","I working yesterday.","I works yesterday."],a:1},
+    {q:"'Deneyim' kelimesinin İngilizcesi nedir?",opts:["Decision","Reason","Experience","Result"],a:2},
+    {q:"'This city is bigger than mine' cümlesinin anlamı nedir?",opts:["Bu şehir benimkinden küçük.","Bu şehir benimkiyle aynı.","Bu şehir benimkinden büyük.","Bu şehri sevmiyorum."],a:2},
+    {q:"'Geliştirmek' fiili hangisidir?",opts:["Continue","Improve","Explain","Decide"],a:1},
+    {q:"'How many books do you have?' cümlesinde neden 'many' kullanılır?",opts:["Books sayılamayan isim olduğu için","Books sayılabilen çoğul isim olduğu için","Soru olduğu için","Geçmiş zaman olduğu için"],a:1},
+    {q:"'Gecikme' kelimesi hangisidir?",opts:["Departure","Arrival","Delay","Traffic"],a:2},
+    {q:"'She is working this week' cümlesi hangi zamanı gösterir?",opts:["Geçmiş zaman","Geniş zaman","Şimdiki zaman (geçici)","Gelecek zaman"],a:2},
+    {q:"'Ödünç almak' ve 'ödünç vermek' sırasıyla hangileridir?",opts:["Lend / Borrow","Borrow / Lend","Forget / Remember","Increase / Decrease"],a:1}
+  ],
+  games:[
+    {type:'hangman', label:'Adam Asmaca', title:'Adam Asmaca', desc:'Kelimeyi tahmin et, harf seçerek çöz.', words:['JOURNEY','WEATHER','NEIGHBOR','DECISION','EXPERIENCE','LUGGAGE','DEPARTURE']},
+    {type:'scramble', label:'Karıştırma', title:'Kelime Karıştırma', desc:'Harfleri doğru sıraya dizerek kelimeyi bul.', words:['AIRPORT','HOLIDAY','COLLEAGUE','APPOINTMENT','DISCOUNT']}
+  ]
+},
+{
+  id:'B1', title:'Orta Seviye', tag:'B1',
+  desc:'Karmaşık cümle yapıları, present perfect, koşul cümleleri ve soyut kelimeler.',
+  grammar:[
+    {title:"Present Perfect", explain:"Geçmişte başlayıp etkisi süren ya da deneyim bildiren eylemler için kullanılır.",
+      examples:[["I have lived here for five years.","Beş yıldır burada yaşıyorum."],["She has already finished the report.","Raporu çoktan bitirdi."],["Have you ever been to London?","Hiç Londra'ya gittin mi?"]]},
+    {title:"First Conditional", explain:"Gerçekleşmesi muhtemel gelecek koşulları anlatır.",
+      examples:[["If it rains, I will stay home.","Eğer yağmur yağarsa, evde kalacağım."],["If you study, you will pass.","Eğer çalışırsan, geçeceksin."]]},
+    {title:"Modal verbs — should / must / might", explain:"Öneri, zorunluluk ve olasılık bildirir.",
+      examples:[["You should see a doctor.","Bir doktora görünmelisin."],["We must finish this today.","Bunu bugün bitirmeliyiz."],["It might rain later.","Sonra yağmur yağabilir."]]},
+    {title:"Relative clauses (who / which / that)", explain:"İki cümleyi bağlayarak isim hakkında ek bilgi verir.",
+      examples:[["The man who called is my boss.","Arayan adam benim patronum."],["This is the book that I read.","Bu benim okuduğum kitap."]]},
+    {title:"Phrasal verbs (temel)", explain:"Fiil + edat kalıpları farklı anlamlar taşır.",
+      examples:[["I need to give up smoking.","Sigarayı bırakmam gerekiyor."],["She looks after her sister.","Kız kardeşine bakıyor."],["Turn off the lights.","Işıkları kapat."]]}
+  ],
+  vocab:[
+    ["Achieve","Başarmak"],["Challenge","Zorluk / meydan okuma"],["Opportunity","Fırsat"],["Responsibility","Sorumluluk"],
+    ["Environment","Çevre"],["Behavior","Davranış"],["Consequence","Sonuç"],["Relationship","İlişki"],
+    ["Confident","Kendine güvenen"],["Reliable","Güvenilir"],["Avoid","Kaçınmak"],["Suggest","Önermek"],
+    ["Increase","Artmak"],["Reduce","Azaltmak"],["Involve","İçermek"],["Recognize","Tanımak / fark etmek"],
+    ["Society","Toplum"],["Culture","Kültür"],["Tradition","Gelenek"],["Community","Topluluk"],
+    ["Government","Hükümet"],["Policy","Politika"],["Economy","Ekonomi"],["Industry","Sanayi / endüstri"],
+    ["Employee","Çalışan"],["Employer","İşveren"],["Interview","Mülakat"],["Promotion","Terfi"],
+    ["Skill","Beceri"],["Knowledge","Bilgi"],["Ability","Yetenek"],["Talent","Yetenek (doğal)"],
+    ["Support","Destek / desteklemek"],["Encourage","Cesaretlendirmek"],["Achieve","Elde etmek"],["Struggle","Mücadele etmek"],
+    ["Attitude","Tutum"],["Mistake","Hata"],["Advantage","Avantaj"],["Disadvantage","Dezavantaj"],
+    ["Argument","Tartışma"],["Solution","Çözüm"],["Purpose","Amaç"],["Goal","Hedef"],
+    ["Achievement","Başarı"],["Failure","Başarısızlık"],["Progress","İlerleme"],["Development","Gelişim"],
+    ["Independent","Bağımsız"],["Dependent","Bağımlı"],["Aware","Farkında"],["Curious","Meraklı"],
+    ["Patient (adj)","Sabırlı"],["Generous","Cömert"],["Honest","Dürüst"],["Stubborn","İnatçı"],
+    ["Give up","Bırakmak / vazgeçmek"],["Look after","Bakmak / ilgilenmek"],["Turn off","Kapatmak"],["Turn on","Açmak"],
+    ["Look forward to","Sabırsızlıkla beklemek"],["Get along with","İyi anlaşmak"],["Deal with","Başa çıkmak"],["Take care of","İlgilenmek"],
+    ["Point of view","Bakış açısı"],["In my opinion","Bence"],["As a result","Sonuç olarak"],["On the other hand","Öte yandan"]
+  ],
+  readings:[
+    {title:"Changing Careers", text:"Many people today {decide|karar veriyor} to change their careers, even after {achieving|başarmak} success in their first job. This can be a difficult {decision|karar}, but it often brings new {opportunities|fırsatlar}. Before making such a big change, experts {suggest|öneriyor} thinking carefully about your {responsibility|sorumluluk} to your family and finances. If you {avoid|kaçınmak} taking risks completely, you may never {achieve|elde etmek} your real goals. A good {relationship|ilişki} with your colleagues can also help you feel more {confident|kendine güvenen} about the change.",
+     ttsText:"Many people today decide to change their careers, even after achieving success in their first job. This can be a difficult decision, but it often brings new opportunities. Before making such a big decision, experts suggest thinking carefully about your responsibility to your family and finances. If you avoid taking risks completely, you may never achieve your real goals. A good relationship with your colleagues can also help you feel more confident about the change."},
+    {title:"Work and Society", text:"In every {society|toplum}, work shapes how people see their place in the {community|topluluk}. A good {employer|işveren} understands that a happy {employee|çalışan} is usually more productive. However, many workers still {struggle|mücadele etmek} with low salaries and a lack of {opportunity|fırsat} for {promotion|terfi}. Governments often try to {reduce|azaltmak} this problem through new {policy|politika}, but real {progress|ilerleme} usually depends on the wider {economy|ekonomi} and the {attitude|tutum} of local businesses toward their staff.",
+     ttsText:"In every society, work shapes how people see their place in the community. A good employer understands that a happy employee is usually more productive. However, many workers still struggle with low salaries and a lack of opportunity for promotion. Governments often try to reduce this problem through new policy, but real progress usually depends on the wider economy and the attitude of local businesses toward their staff."}
+  ],
+  quiz:[
+    {q:"'Beş yıldır burada yaşıyorum' cümlesi nasıl kurulur?",opts:["I live here for five years.","I have lived here for five years.","I am living here for five years.","I lived here since five years."],a:1},
+    {q:"'Fırsat' kelimesinin İngilizcesi nedir?",opts:["Challenge","Opportunity","Consequence","Behavior"],a:1},
+    {q:"'You should see a doctor' cümlesinin anlamı nedir?",opts:["Doktor olmalısın.","Bir doktora görünmelisin.","Doktoru aramalısın.","Doktordan kaçınmalısın."],a:1},
+    {q:"'Kaçınmak' fiili hangisidir?",opts:["Avoid","Suggest","Involve","Reduce"],a:0},
+    {q:"'The man who called is my boss' cümlesinde 'who' neyi bağlar?",opts:["İki farklı cümleyi 'man' hakkında bilgi vererek","Bir soru cümlesi kurar","Geçmiş zaman bildirir","Karşılaştırma yapar"],a:0},
+    {q:"'Give up' phrasal verb'ünün anlamı nedir?",opts:["Başlamak","Bırakmak / vazgeçmek","İlgilenmek","Açmak"],a:1},
+    {q:"'Stubborn' kelimesinin anlamı nedir?",opts:["Cömert","Dürüst","İnatçı","Sabırlı"],a:2},
+    {q:"'It might rain later' cümlesindeki 'might' ne anlatır?",opts:["Kesinlik","Zorunluluk","Olasılık","Geçmiş zaman"],a:2}
+  ],
+  games:[
+    {type:'scramble', label:'Karıştırma', title:'Kelime Karıştırma', desc:'Harfleri doğru sıraya dizerek kelimeyi bul.', words:['CHALLENGE','RELIABLE','ENVIRONMENT','RESPONSIBILITY','CONFIDENT']},
+    {type:'cloze', label:'Boşluk Doldurma', title:'Boşluk Doldurma', desc:'Cümledeki boşluğu en uygun kelimeyle tamamla.',
+      items:[
+        {sentence:"If you ___ hard, you will pass the exam.", answer:"study", opts:["study","studies","studying","studied"]},
+        {sentence:"She has ___ finished her homework.", answer:"already", opts:["already","yesterday","tomorrow","ago"]},
+        {sentence:"He is the man ___ helped me yesterday.", answer:"who", opts:["who","which","whose","what"]},
+        {sentence:"Please turn ___ the lights before you leave.", answer:"off", opts:["on","off","up","down"]}
+      ]}
+  ]
+},
+{
+  id:'B2', title:'İleri Seviye', tag:'B2',
+  desc:'Soyut konular, pasif yapı, dolaylı anlatım ve akıcı konuşma için gelişmiş kalıplar.',
+  grammar:[
+    {title:"Passive Voice", explain:"Eylemi yapan değil, eylemden etkilenen ön plandadır.",
+      examples:[["The report was written by the team.","Rapor ekip tarafından yazıldı."],["Mistakes were made during the project.","Proje sırasında hatalar yapıldı."]]},
+    {title:"Second Conditional", explain:"Gerçek olmayan ya da mümkün görünmeyen durumlar için kullanılır.",
+      examples:[["If I had more time, I would travel more.","Daha fazla zamanım olsaydı, daha çok seyahat ederdim."],["If she were here, she would help us.","O burada olsaydı, bize yardım ederdi."]]},
+    {title:"Reported Speech", explain:"Başkasının söylediklerini aktarmak için kullanılır.",
+      examples:[["He said that he was tired.","Yorgun olduğunu söyledi."],["She told me she would call later.","Bana sonra arayacağını söyledi."]]},
+    {title:"Third Conditional", explain:"Geçmişte gerçekleşmemiş durumlar ve onların hayali sonuçları için kullanılır.",
+      examples:[["If I had known, I would have helped.","Bilseydim, yardım ederdim."],["She wouldn't have missed the bus if she had left earlier.","Daha erken çıksaydı otobüsü kaçırmazdı."]]},
+    {title:"Advanced linking words", explain:"Fikirleri akademik/resmi şekilde bağlamak için kullanılır.",
+      examples:[["Although it was raining, we went out.","Yağmur yağmasına rağmen dışarı çıktık."],["Despite the difficulties, they succeeded.","Zorluklara rağmen başardılar."],["Nevertheless, she continued working.","Yine de çalışmaya devam etti."]]}
+  ],
+  vocab:[
+    ["Significant","Önemli / kayda değer"],["Contribute","Katkıda bulunmak"],["Perspective","Bakış açısı"],["Assumption","Varsayım"],
+    ["Inevitable","Kaçınılmaz"],["Sustainable","Sürdürülebilir"],["Controversial","Tartışmalı"],["Enhance","Geliştirmek/artırmak"],
+    ["Undermine","Zayıflatmak"],["Ambiguous","Belirsiz / çift anlamlı"],["Reluctant","İsteksiz"],["Compelling","İkna edici"],
+    ["Notion","Kavram / fikir"],["Prevail","Üstün gelmek"],["Coherent","Tutarlı"],["Feasible","Uygulanabilir"],
+    ["Comprehensive","Kapsamlı"],["Substantial","Önemli ölçüde / hatırı sayılır"],["Arbitrary","Keyfi"],["Subtle","İnce / belirgin olmayan"],
+    ["Profound","Derin / köklü"],["Versatile","Çok yönlü"],["Rigid","Katı / esnek olmayan"],["Meticulous","Titiz"],
+    ["Discrepancy","Tutarsızlık / fark"],["Ambivalent","İki duygu arasında kalmış"],["Pragmatic","Pragmatik / gerçekçi"],["Skeptical","Şüpheci"],
+    ["Implication","Sonuç / çıkarım"],["Consensus","Fikir birliği"],["Paradox","Çelişki / paradoks"],["Bias","Önyargı"],
+    ["Legislation","Mevzuat / yasa"],["Regulation","Düzenleme"],["Framework","Çerçeve"],["Infrastructure","Altyapı"],
+    ["Deteriorate","Kötüleşmek"],["Alleviate","Hafifletmek"],["Exacerbate","Kötüleştirmek / şiddetlendirmek"],["Mitigate","Azaltmak / hafifletmek"],
+    ["Advocate","Savunmak / savunucu"],["Justify","Haklı çıkarmak"],["Acknowledge","Kabul etmek / itiraf etmek"],["Presume","Varsaymak"],
+    ["Withstand","Dayanmak / karşı koymak"],["Foster","Geliştirmek / beslemek (fikir vb.)"],["Overlook","Gözden kaçırmak"],["Reinforce","Güçlendirmek/pekiştirmek"],
+    ["Deprive","Yoksun bırakmak"],["Cultivate","Geliştirmek / yetiştirmek"],["Facilitate","Kolaylaştırmak"],["Hinder","Engellemek"],
+    ["Nonetheless","Yine de"],["Whereas","Oysa ki / -e karşın"],["Provided that","Şartıyla"],["In light of","Işığında / göz önünde bulundurarak"]
+  ],
+  readings:[
+    {title:"The Future of Work", text:"It is widely believed that {sustainable|sürdürülebilir} practices will become {inevitable|kaçınılmaz} in most industries over the next decade. Some experts argue that this shift is a {compelling|ikna edici} reason for companies to change now, rather than later. However, this {notion|kavram} remains {controversial|tartışmalı}: not everyone agrees on how realistic or {feasible|uygulanabilir} rapid change really is. Employees who {contribute|katkıda bulunmak} new ideas often help {enhance|geliştirmek} a company's overall {perspective|bakış açısı}, but leaders are sometimes {reluctant|isteksiz} to question their own {assumptions|varsayımlar}.",
+     ttsText:"It is widely believed that sustainable practices will become inevitable in most industries over the next decade. Some experts argue that this shift is a compelling reason for companies to change now, rather than later. However, this notion remains controversial: not everyone agrees on how realistic or feasible rapid change really is. Employees who contribute new ideas often help enhance a company's overall perspective, but leaders are sometimes reluctant to question their own assumptions."},
+    {title:"Urban Planning and the Environment", text:"City planners today face a genuine {paradox|çelişki}: rapid growth is often necessary for the {economy|ekonomi}, yet it can seriously {exacerbate|kötüleştirmek} environmental problems if not managed carefully. New {legislation|mevzuat} can help {mitigate|azaltmak} some of this damage, but critics argue that {regulation|düzenleme} alone cannot {facilitate|kolaylaştırmak} real change without public support. A {comprehensive|kapsamlı} plan should {foster|geliştirmek} better {infrastructure|altyapı} while addressing the {implications|sonuçlar} of climate change. Whereas some cities have made {substantial|önemli ölçüde} progress, others still {overlook|gözden kaçırmak} basic problems like public transport.",
+     ttsText:"City planners today face a genuine paradox: rapid growth is often necessary for the economy, yet it can seriously exacerbate environmental problems if not managed carefully. New legislation can help mitigate some of this damage, but critics argue that regulation alone cannot facilitate real change without public support. A comprehensive plan should foster better infrastructure while addressing the implications of climate change. Whereas some cities have made substantial progress, others still overlook basic problems like public transport."}
+  ],
+  quiz:[
+    {q:"'Rapor ekip tarafından yazıldı' cümlesi nasıl kurulur?",opts:["The team wrote the report.","The report was written by the team.","The report is writing by the team.","The team was written the report."],a:1},
+    {q:"'Kaçınılmaz' kelimesinin İngilizcesi nedir?",opts:["Ambiguous","Coherent","Inevitable","Reluctant"],a:2},
+    {q:"'If I had more time, I would travel more' cümlesinin anlamı nedir?",opts:["Daha fazla zamanım var ve seyahat ediyorum.","Daha fazla zamanım olsaydı, daha çok seyahat ederdim.","Zamanım olmadığı için seyahat etmiyorum.","Seyahat etmek için zaman ayırmalıyım."],a:1},
+    {q:"'Tartışmalı' kelimesi hangisidir?",opts:["Controversial","Feasible","Coherent","Significant"],a:0},
+    {q:"'If I had known, I would have helped' hangi zaman kalıbıdır?",opts:["First Conditional","Second Conditional","Third Conditional","Present Perfect"],a:2},
+    {q:"'Nevertheless' kelimesi cümlede ne işlev görür?",opts:["Sebep belirtir","Zıtlık/karşıtlık belirtir (yine de)","Zaman belirtir","Miktar belirtir"],a:1},
+    {q:"'Mitigate' ve 'exacerbate' kelimeleri anlamca nasıl ilişkilidir?",opts:["Eş anlamlıdır","Zıt anlamlıdır","Aynı kelimenin farklı halleridir","İlgisizdir"],a:1},
+    {q:"'Acknowledge' kelimesinin en yakın anlamı nedir?",opts:["Reddetmek","Kabul etmek / itiraf etmek","Şüphelenmek","Gözden kaçırmak"],a:1}
+  ],
+  games:[
+    {type:'cloze', label:'Boşluk Doldurma', title:'Boşluk Doldurma', desc:'Cümledeki boşluğu en uygun kelimeyle tamamla.',
+      items:[
+        {sentence:"Companies must ___ new ideas to stay competitive.", answer:"contribute", opts:["contribute","undermine","prevail","assume"]},
+        {sentence:"His argument was very ___ and convinced everyone.", answer:"compelling", opts:["ambiguous","compelling","reluctant","feasible"]},
+        {sentence:"This plan seems ___ ; we can actually do it.", answer:"feasible", opts:["inevitable","controversial","feasible","undermine"]},
+        {sentence:"She was ___ to share her opinion in the meeting.", answer:"reluctant", opts:["reluctant","coherent","sustainable","significant"]}
+      ]},
+    {type:'order', label:'Cümle Kurma', title:'Cümle Sıralama', desc:'Kelimeleri doğru sıraya dizerek anlamlı bir cümle kur.',
+      items:[
+        {words:["Despite","the","difficulties,","they","succeeded"], correct:"Despite the difficulties, they succeeded"},
+        {words:["If","I","had","known,","I","would","have","helped"], correct:"If I had known, I would have helped"},
+        {words:["The","report","was","written","by","the","team"], correct:"The report was written by the team"},
+        {words:["Nevertheless,","she","continued","working"], correct:"Nevertheless, she continued working"}
+      ]}
+  ]
+}
+];
+
+/* =================================================================
+   NAV & PANEL OLUŞTUR
+================================================================= */
+const navTabs = document.getElementById('navTabs');
+const mainEl = document.getElementById('main');
+
+LEVELS.forEach(lv=>{
+  const tab=document.createElement('button');
+  tab.className='nav-tab'; tab.id='tab-'+lv.id; tab.textContent=lv.tag;
+  tab.addEventListener('click',()=>showLevel(lv.id));
+  navTabs.appendChild(tab);
+});
+const dictTab=document.createElement('button');
+dictTab.className='nav-tab'; dictTab.id='tab-dict'; dictTab.textContent='📖 Sözlük';
+dictTab.addEventListener('click',()=>showLevel('dict'));
+navTabs.appendChild(dictTab);
+
+const chatTab=document.createElement('button');
+chatTab.className='nav-tab'; chatTab.id='tab-chat'; chatTab.textContent='🤖 AI ile Pratik';
+chatTab.addEventListener('click',()=>showLevel('chat'));
+navTabs.appendChild(chatTab);
+
+LEVELS.forEach(lv=>{
+  const panel=document.createElement('section');
+  panel.className='level-panel'; panel.id='panel-'+lv.id;
+  panel.innerHTML=buildLevelHTML(lv);
+  mainEl.appendChild(panel);
+});
+mainEl.appendChild(buildDictPanel());
+mainEl.appendChild(buildChatPanel());
+
+function buildLevelHTML(lv){
+  return `
+    <div class="level-head">
+      <span class="level-tag">${lv.tag}</span>
+      <h2>${lv.title}</h2>
+      <p>${lv.desc}</p>
+    </div>
+    <div class="sub-nav">
+      <button class="sub-btn active" data-sub="grammar">Dilbilgisi</button>
+      <button class="sub-btn" data-sub="vocab">Kelimeler (${lv.vocab.length})</button>
+      <button class="sub-btn" data-sub="reading">Okuma</button>
+      <button class="sub-btn" data-sub="game">Oyunlar</button>
+      <button class="sub-btn" data-sub="quiz">Test</button>
+    </div>
+
+    <div class="sub-section show" data-section="grammar">
+      ${lv.grammar.map(g=>`
+        <div class="card-block">
+          <h3>${g.title}</h3>
+          <p style="color:var(--ink-soft);font-size:13.8px;margin-bottom:6px;">${g.explain}</p>
+          ${g.examples.map(ex=>`
+            <div class="grammar-example">
+              <div><div class="en">${ex[0]}</div><div class="tr">${ex[1]}</div></div>
+              <button class="icon-btn say-inline" data-en="${ex[0]}">🔊</button>
+            </div>`).join('')}
+        </div>`).join('')}
+    </div>
+
+    <div class="sub-section" data-section="vocab">
+      <div class="card-block">
+        <h3>Kelime Listesi</h3>
+        <div class="vocab-grid">
+          ${lv.vocab.map(w=>`
+            <div class="vword" data-en="${w[0]}">
+              <span class="ic">🔊</span>
+              <div class="en">${w[0]}</div>
+              <div class="tr">${w[1]}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-section" data-section="reading">
+      <div class="card-block">
+        <div class="text-switch" data-readswitch="${lv.id}">
+          ${lv.readings.map((r,i)=>`<button class="${i===0?'active':''}" data-i="${i}">${r.title}</button>`).join('')}
+        </div>
+        <div id="readbody-${lv.id}"></div>
+      </div>
+    </div>
+
+    <div class="sub-section" data-section="game">
+      <div class="card-block">
+        <div class="game-tabs" data-gameswitch="${lv.id}">
+          ${lv.games.map((g,i)=>`<button class="game-tab ${i===0?'active':''}" data-gi="${i}">${g.label}</button>`).join('')}
+        </div>
+        <p style="color:var(--ink-soft);font-size:13.8px;margin-bottom:14px;" id="gamedesc-${lv.id}">${lv.games[0].desc}</p>
+        <div class="game-area" id="game-${lv.id}"></div>
+      </div>
+    </div>
+
+    <div class="sub-section" data-section="quiz">
+      <div class="card-block">
+        <h3>Seviye Testi</h3>
+        ${lv.quiz.map((q,qi)=>`
+          <div class="quiz-item" data-qi="${qi}" data-answer="${q.a}">
+            <div class="q">${qi+1}. ${q.q}</div>
+            <div class="opts">${q.opts.map((o,oi)=>`<button class="opt" data-oi="${oi}">${o}</button>`).join('')}</div>
+          </div>`).join('')}
+        <div class="check-row"><span></span><button class="btn" data-check="${lv.id}">Kontrol Et</button></div>
+        <div class="score-msg" id="score-${lv.id}"></div>
+      </div>
+    </div>
+  `;
+}
+
+function renderReadingText(text){
+  return text.replace(/\{([^|]+)\|([^}]+)\}/g,(m,en,tr)=>`<span class="gword" data-en="${en}" data-tr="${tr}">${en}<span class="tooltip">${tr}</span></span>`);
+}
+function renderReadBody(lv, idx){
+  const r = lv.readings[idx];
+  document.getElementById('readbody-'+lv.id).innerHTML = `
+    <h3>${r.title}</h3>
+    <div class="read-toolbar"><button class="btn secondary listen-all" data-en="${r.ttsText.replace(/"/g,'&quot;')}">🔊 Metni Dinle</button></div>
+    <div class="reading-text">${renderReadingText(r.text)}</div>
+  `;
+}
+LEVELS.forEach(lv=> renderReadBody(lv,0));
+
+/* =================================================================
+   SÖZLÜK
+================================================================= */
+function buildDictPanel(){
+  const panel=document.createElement('section');
+  panel.className='level-panel'; panel.id='panel-dict';
+  const all=[];
+  LEVELS.forEach(lv=> lv.vocab.forEach(w=> all.push({en:w[0],tr:w[1],tag:lv.tag})));
+  all.sort((a,b)=>a.en.localeCompare(b.en));
+  panel.innerHTML=`
+    <div class="level-head"><span class="level-tag">A-Z</span><h2>Sözlük</h2><p>Tüm seviyelerdeki ${all.length} kelime tek listede.</p></div>
+    <input type="text" class="dict-search" id="dictSearch" placeholder="Kelime ara... (İngilizce ya da Türkçe)">
+    <div class="dict-list" id="dictList">
+      ${all.map(w=>`<div class="dict-row" data-en="${w.en.toLowerCase()}" data-tr="${w.tr.toLowerCase()}">
+        <div><span class="en">${w.en}</span><span class="dict-tag">${w.tag}</span><div class="tr">${w.tr}</div></div>
+        <button class="icon-btn dict-say" data-en="${w.en}">🔊</button>
+      </div>`).join('')}
+    </div>`;
+  return panel;
+}
+
+/* =================================================================
+   AI İLE PRATİK
+================================================================= */
+function buildChatPanel(){
+  const panel=document.createElement('section');
+  panel.className='level-panel'; panel.id='panel-chat';
+  panel.innerHTML=`
+    <div class="level-head"><span class="level-tag">AI</span><h2>Yapay Zekâ ile Konuşma Pratiği</h2><p>Seviyeni seç ve İngilizce yazarak konuş. Yapay zekâ seninle sohbet edecek ve hatalarını nazikçe düzeltecek.</p></div>
+    <div class="chat-wrap">
+      <div class="chat-level-select" id="chatLevelSelect">
+        ${LEVELS.map((lv,i)=>`<button data-lvl="${lv.id}" class="${i===0?'active':''}">${lv.tag}</button>`).join('')}
+      </div>
+      <div class="chat-box" id="chatBox"></div>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="İngilizce bir cümle yaz...">
+        <button class="btn" id="chatSend">Gönder</button>
+      </div>
+      <div class="chat-note">Bu bölüm Claude'un API'sini kullanır. Bu sohbet penceresi içinde çalışır; dosyayı kendi sitene yüklediğinde bu özellik pasif kalır.</div>
+    </div>`;
+  return panel;
+}
+
+let chatLevel = LEVELS[0].id;
+let chatHistory = [];
+
+function addMsg(text, who){
+  const box=document.getElementById('chatBox');
+  const div=document.createElement('div');
+  div.className='msg '+who;
+  div.textContent=text;
+  box.appendChild(div);
+  box.scrollTop=box.scrollHeight;
+  return div;
+}
+addMsg("Hi! I'm your English practice partner. Write me a sentence in English and let's chat — I'll gently correct any mistakes. What level do you want to start with?", 'bot');
+
+document.addEventListener('click', async (e)=>{
+  const lvlBtn = e.target.closest('#chatLevelSelect button');
+  if(lvlBtn){
+    document.querySelectorAll('#chatLevelSelect button').forEach(b=>b.classList.remove('active'));
+    lvlBtn.classList.add('active');
+    chatLevel = lvlBtn.dataset.lvl;
+    addMsg(`(Level set to ${chatLevel})`, 'bot');
+    return;
+  }
+  if(e.target.id==='chatSend'){ sendChat(); return; }
+});
+document.addEventListener('keydown',(e)=>{
+  if(e.target.id==='chatInput' && e.key==='Enter'){ sendChat(); }
+});
+
+async function sendChat(){
+  const input=document.getElementById('chatInput');
+  const text=input.value.trim();
+  if(!text) return;
+  addMsg(text,'user');
+  chatHistory.push({role:'user', content:text});
+  input.value='';
+  const typingEl = addMsg('...','bot typing');
+
+  try{
+    const systemPrompt = `You are a friendly, encouraging English conversation partner for a Turkish adult learner at CEFR level ${chatLevel}. Keep your replies short (2-4 sentences), use vocabulary and grammar appropriate for level ${chatLevel}. If the user makes a grammar or vocabulary mistake, gently correct it by showing the corrected sentence, then briefly explain the correction in Turkish in one short sentence, then continue the conversation naturally in English with a follow-up question. Always be warm and patient.`;
+
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({
+        model:"claude-sonnet-4-6",
+        max_tokens:400,
+        system: systemPrompt,
+        messages: chatHistory
+      })
+    });
+    const data = await response.json();
+    const reply = data.content && data.content.find(c=>c.type==='text') ? data.content.find(c=>c.type==='text').text : "Sorry, I couldn't respond right now.";
+    typingEl.remove();
+    addMsg(reply,'bot');
+    chatHistory.push({role:'assistant', content:reply});
+    speak(reply.replace(/\([^)]*\)/g,''), 0.95);
+  }catch(err){
+    typingEl.remove();
+    addMsg("Bu özellik şu anda yalnızca bu sohbet penceresi içinde çalışıyor; kendi sitene yüklediğinde aktif olmayacak.", 'bot');
+  }
+}
+
+/* =================================================================
+   NAVİGASYON
+================================================================= */
+function showLevel(id){
+  document.querySelectorAll('.level-panel').forEach(p=>p.classList.remove('show'));
+  document.getElementById('panel-'+id).classList.add('show');
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  document.getElementById('heroBlock').style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id!=='dict' && id!=='chat'){
+    const gameArea = document.getElementById('game-'+id);
+    if(gameArea && !gameArea.dataset.built){
+      buildGame(LEVELS.find(l=>l.id===id), 0);
+    }
+  }
+}
+showLevel(LEVELS[0].id);
+document.getElementById('heroBlock').style.display='block';
+
+/* sub-nav / read-switch / game-switch / diğer olaylar */
+mainEl.addEventListener('click',(e)=>{
+  const subBtn=e.target.closest('.sub-btn');
+  if(subBtn){
+    const panel=subBtn.closest('.level-panel');
+    panel.querySelectorAll('.sub-btn').forEach(b=>b.classList.remove('active'));
+    panel.querySelectorAll('.sub-section').forEach(s=>s.classList.remove('show'));
+    subBtn.classList.add('active');
+    panel.querySelector(`.sub-section[data-section="${subBtn.dataset.sub}"]`).classList.add('show');
+    return;
+  }
+  const readSwitchBtn = e.target.closest('[data-readswitch] button');
+  if(readSwitchBtn){
+    const wrap = readSwitchBtn.closest('[data-readswitch]');
+    const lvId = wrap.dataset.readswitch;
+    wrap.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+    readSwitchBtn.classList.add('active');
+    renderReadBody(LEVELS.find(l=>l.id===lvId), parseInt(readSwitchBtn.dataset.i));
+    return;
+  }
+  const gameSwitchBtn = e.target.closest('[data-gameswitch] .game-tab');
+  if(gameSwitchBtn){
+    const wrap = gameSwitchBtn.closest('[data-gameswitch]');
+    const lvId = wrap.dataset.gameswitch;
+    wrap.querySelectorAll('.game-tab').forEach(b=>b.classList.remove('active'));
+    gameSwitchBtn.classList.add('active');
+    const lv = LEVELS.find(l=>l.id===lvId);
+    const gi = parseInt(gameSwitchBtn.dataset.gi);
+    document.getElementById('gamedesc-'+lvId).textContent = lv.games[gi].desc;
+    buildGame(lv, gi);
+    return;
+  }
+  const sayInline=e.target.closest('.say-inline'); if(sayInline){ speak(sayInline.dataset.en); return; }
+  const vword=e.target.closest('.vword'); if(vword){ speak(vword.dataset.en); return; }
+  const listenAll=e.target.closest('.listen-all'); if(listenAll){ speak(listenAll.dataset.en,0.85); return; }
+  const gword=e.target.closest('.gword');
+  if(gword){
+    speak(gword.dataset.en);
+    document.querySelectorAll('.gword.open').forEach(g=>{ if(g!==gword) g.classList.remove('open'); });
+    gword.classList.toggle('open');
+    return;
+  }
+  const dictSay=e.target.closest('.dict-say'); if(dictSay){ speak(dictSay.dataset.en); return; }
+  const opt=e.target.closest('.opt');
+  if(opt){
+    const item=opt.closest('.quiz-item');
+    item.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
+    opt.classList.add('selected');
+    return;
+  }
+  const checkBtn=e.target.closest('[data-check]'); if(checkBtn){ checkQuiz(checkBtn.dataset.check); return; }
+});
+
+document.getElementById('dictSearch')?.addEventListener('input',(e)=>{
+  const q=e.target.value.toLowerCase();
+  document.querySelectorAll('.dict-row').forEach(row=>{
+    row.style.display = (row.dataset.en.includes(q)||row.dataset.tr.includes(q)) ? 'flex' : 'none';
+  });
+});
+
+function checkQuiz(id){
+  const panel=document.getElementById('panel-'+id);
+  const items=panel.querySelectorAll('.quiz-item');
+  let correct=0;
+  items.forEach(item=>{
+    const answer=parseInt(item.dataset.answer);
+    const opts=item.querySelectorAll('.opt');
+    const selected=item.querySelector('.opt.selected');
+    opts.forEach((o,i)=>{ if(i===answer) o.classList.add('correct'); else if(o===selected) o.classList.add('wrong'); });
+    if(selected && parseInt(selected.dataset.oi)===answer) correct++;
+  });
+  const total=items.length;
+  const msg=document.getElementById('score-'+id);
+  msg.classList.add('show');
+  if(correct===total){
+    msg.className='score-msg show good';
+    msg.textContent=`Tebrikler! ${total}/${total} doğru. ${id} seviyesini tamamladın. 🎉`;
+    document.getElementById('tab-'+id).classList.add('done');
+  } else {
+    msg.className='score-msg show mid';
+    msg.textContent=`${correct}/${total} doğru. Dilbilgisi ve kelimeler bölümüne dönüp tekrar deneyebilirsin.`;
+  }
+}
+
+/* =================================================================
+   OYUNLAR
+================================================================= */
+function buildGame(lv, gi){
+  const area=document.getElementById('game-'+lv.id);
+  area.dataset.built='1';
+  const g = lv.games[gi];
+  if(g.type==='match') buildMatchGame(area, g.pairs);
+  if(g.type==='hangman') buildHangman(area, g.words);
+  if(g.type==='scramble') buildScramble(area, g.words);
+  if(g.type==='cloze') buildCloze(area, g.items);
+  if(g.type==='speed') buildSpeed(area, g.items);
+  if(g.type==='order') buildOrder(area, g.items);
+}
+
+function buildMatchGame(area, pairs){
+  let cards=[];
+  pairs.forEach((p,i)=>{ cards.push({id:i+'e',text:p[0],pair:i}); cards.push({id:i+'t',text:p[1],pair:i}); });
+  cards.sort(()=>Math.random()-0.5);
+  let flipped=[], matched=0, lock=false;
+  area.innerHTML=`<div class="match-grid">${cards.map(c=>`<div class="match-card" data-id="${c.id}" data-pair="${c.pair}">?</div>`).join('')}</div><div class="game-msg" id="mgMsg"></div>`;
+  area.querySelectorAll('.match-card').forEach((el,idx)=>{
+    el.addEventListener('click',()=>{
+      if(lock||el.classList.contains('flip')||el.classList.contains('matched')) return;
+      el.classList.add('flip'); el.textContent=cards[idx].text;
+      flipped.push({el,idx});
+      if(flipped.length===2){
+        lock=true;
+        const [a,b]=flipped;
+        if(cards[a.idx].pair===cards[b.idx].pair){
+          a.el.classList.add('matched'); b.el.classList.add('matched');
+          matched++; flipped=[]; lock=false;
+          if(matched===pairs.length){ document.getElementById('mgMsg').className='game-msg good'; document.getElementById('mgMsg').textContent='Harika! Tüm eşleri buldun. 🎉'; }
+        } else {
+          setTimeout(()=>{ a.el.classList.remove('flip'); a.el.textContent='?'; b.el.classList.remove('flip'); b.el.textContent='?'; flipped=[]; lock=false; },700);
+        }
+      }
+    });
+  });
+}
+
+function buildHangman(area, words){
+  const word=words[Math.floor(Math.random()*words.length)];
+  let guessed=[], wrong=0; const maxWrong=6;
+  render();
+  function render(){
+    const display=word.split('').map(l=>guessed.includes(l)?l:'_').join(' ');
+    const alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    area.innerHTML=`<div class="hangman-word">${display}</div><div class="lives">Kalan hak: ${maxWrong-wrong}</div>
+      <div class="keyboard">${alphabet.map(l=>`<button class="key ${guessed.includes(l)?(word.includes(l)?'used-right':'used-wrong'):''}" data-l="${l}" ${guessed.includes(l)?'disabled':''}>${l}</button>`).join('')}</div>
+      <div class="game-msg" id="hmMsg"></div>`;
+    area.querySelectorAll('.key').forEach(k=>k.addEventListener('click',()=>{
+      const l=k.dataset.l; if(guessed.includes(l)) return;
+      guessed.push(l); if(!word.includes(l)) wrong++;
+      render(); checkEnd();
+    }));
+  }
+  function checkEnd(){
+    const msg=document.getElementById('hmMsg');
+    const solved=word.split('').every(l=>guessed.includes(l));
+    if(solved){ msg.className='game-msg good'; msg.textContent='Doğru bildin! Kelime: '+word+' 🎉'; area.querySelectorAll('.key').forEach(k=>k.disabled=true); speak(word); }
+    else if(wrong>=maxWrong){ msg.className='game-msg bad'; msg.textContent='Hak bitti. Kelime: '+word; area.querySelectorAll('.key').forEach(k=>k.disabled=true); }
+  }
+}
+
+function buildScramble(area, words){
+  const word=words[Math.floor(Math.random()*words.length)];
+  let letters=word.split('').map((l,i)=>({l,id:i,used:false}));
+  letters.sort(()=>Math.random()-0.5);
+  let answer=[];
+  render();
+  function render(){
+    area.innerHTML=`<div class="hint">${word.length} harf</div>
+      <div class="answer-slots">${Array(word.length).fill(0).map((_,i)=>`<div class="aslot" data-i="${i}">${answer[i]?answer[i].l:''}</div>`).join('')}</div>
+      <div class="scramble-letters">${letters.map(o=>`<div class="slet ${o.used?'used':''}" data-id="${o.id}">${o.l}</div>`).join('')}</div>
+      <div style="margin-top:14px;"><button class="btn secondary" id="clearBtn">Temizle</button></div>
+      <div class="game-msg" id="scMsg"></div>`;
+    area.querySelectorAll('.slet').forEach(el=>el.addEventListener('click',()=>{
+      const id=parseInt(el.dataset.id); const letterObj=letters.find(o=>o.id===id);
+      if(letterObj.used||answer.length>=word.length) return;
+      letterObj.used=true; answer.push(letterObj); render(); checkDone();
+    }));
+    area.querySelectorAll('.aslot').forEach(el=>el.addEventListener('click',()=>{
+      const i=parseInt(el.dataset.i); if(!answer[i]) return;
+      answer[i].used=false; answer.splice(i,1); render();
+    }));
+    document.getElementById('clearBtn').addEventListener('click',()=>{ answer.forEach(a=>a.used=false); answer=[]; render(); });
+  }
+  function checkDone(){
+    if(answer.length!==word.length) return;
+    const guess=answer.map(a=>a.l).join('');
+    const msg=document.getElementById('scMsg');
+    if(guess===word){ msg.className='game-msg good'; msg.textContent='Doğru! Kelime: '+word+' 🎉'; speak(word); }
+    else{ msg.className='game-msg bad'; msg.textContent='Yanlış sıralama, tekrar dene.'; }
+  }
+}
+
+function buildCloze(area, items){
+  let idx=0, score=0;
+  render();
+  function render(){
+    if(idx>=items.length){ area.innerHTML=`<div class="game-msg good">Bitti! ${score}/${items.length} doğru. 🎉</div>`; return; }
+    const it=items[idx];
+    area.innerHTML=`<div class="hint">Soru ${idx+1} / ${items.length}</div>
+      <div class="cloze-sentence">${it.sentence.replace('___','<span class="cloze-blank">?</span>')}</div>
+      <div class="cloze-options">${it.opts.map(o=>`<button class="cloze-opt" data-o="${o}">${o}</button>`).join('')}</div>
+      <div class="game-msg" id="czMsg"></div>`;
+    area.querySelectorAll('.cloze-opt').forEach(btn=>btn.addEventListener('click',()=>{
+      const chosen=btn.dataset.o; const msg=document.getElementById('czMsg');
+      area.querySelectorAll('.cloze-opt').forEach(b=>b.disabled=true);
+      if(chosen===it.answer){ score++; msg.className='game-msg good'; msg.textContent='Doğru! 🎉'; btn.style.borderColor='var(--green)'; }
+      else{ msg.className='game-msg bad'; msg.textContent='Yanlış. Doğru cevap: '+it.answer; btn.style.borderColor='var(--red)'; }
+      speak(it.sentence.replace('___', it.answer));
+      setTimeout(()=>{ idx++; render(); },1400);
+    }));
+  }
+}
+
+function buildSpeed(area, items){
+  let idx=0, score=0, order=[...items].sort(()=>Math.random()-0.5);
+  render();
+  function render(){
+    if(idx>=order.length){ area.innerHTML=`<div class="game-msg good">Bitti! ${score}/${order.length} doğru. 🎉</div>`; return; }
+    const it=order[idx];
+    const opts=[...it.opts].sort(()=>Math.random()-0.5);
+    area.innerHTML=`<div class="hint">Soru ${idx+1} / ${order.length}</div>
+      <div class="cloze-sentence" style="font-size:19px;font-weight:600;color:var(--teal-deep);">${it.word}</div>
+      <div class="cloze-options">${opts.map(o=>`<button class="cloze-opt" data-o="${o}">${o}</button>`).join('')}</div>
+      <div class="game-msg" id="spMsg"></div>`;
+    area.querySelectorAll('.cloze-opt').forEach(btn=>btn.addEventListener('click',()=>{
+      const chosen=btn.dataset.o; const msg=document.getElementById('spMsg');
+      area.querySelectorAll('.cloze-opt').forEach(b=>b.disabled=true);
+      if(chosen===it.correct){ score++; msg.className='game-msg good'; msg.textContent='Doğru! 🎉'; btn.style.borderColor='var(--green)'; speak(it.correct); }
+      else{ msg.className='game-msg bad'; msg.textContent='Yanlış. Doğru cevap: '+it.correct; btn.style.borderColor='var(--red)'; }
+      setTimeout(()=>{ idx++; render(); },1100);
+    }));
+  }
+}
+
+function buildOrder(area, items){
+  let idx=0, score=0;
+  render();
+  function render(){
+    if(idx>=items.length){ area.innerHTML=`<div class="game-msg good">Bitti! ${score}/${items.length} doğru. 🎉</div>`; return; }
+    const it=items[idx];
+    let bank=it.words.map((w,i)=>({w,id:i,used:false}));
+    bank.sort(()=>Math.random()-0.5);
+    let answer=[];
+    draw();
+    function draw(){
+      area.innerHTML=`<div class="hint">Cümle ${idx+1} / ${items.length}</div>
+        <div class="order-answer">${answer.map(a=>`<span class="oword" style="cursor:default;">${a.w}</span>`).join('')}</div>
+        <div class="order-bank">${bank.map(b=>`<div class="oword ${b.used?'used':''}" data-id="${b.id}">${b.w}</div>`).join('')}</div>
+        <div style="margin-top:10px;"><button class="btn secondary" id="ordClear">Temizle</button> <button class="btn" id="ordCheck">Kontrol Et</button></div>
+        <div class="game-msg" id="ordMsg"></div>`;
+      area.querySelectorAll('.order-bank .oword').forEach(el=>el.addEventListener('click',()=>{
+        const id=parseInt(el.dataset.id); const w=bank.find(b=>b.id===id);
+        if(w.used) return; w.used=true; answer.push(w); draw();
+      }));
+      document.getElementById('ordClear').addEventListener('click',()=>{ bank.forEach(b=>b.used=false); answer=[]; draw(); });
+      document.getElementById('ordCheck').addEventListener('click',()=>{
+        const guess=answer.map(a=>a.w).join(' ');
+        const msg=document.getElementById('ordMsg');
+        if(guess===it.correct){ score++; msg.className='game-msg good'; msg.textContent='Doğru! 🎉'; speak(it.correct); setTimeout(()=>{ idx++; render(); },1300); }
+        else{ msg.className='game-msg bad'; msg.textContent='Yanlış sıralama, tekrar dene.'; }
+      });
+    }
+  }
+}
+</script>
+</body>
+</html>
