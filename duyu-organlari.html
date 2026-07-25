@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duyu Organları</title>
+<style>
+  :root{
+    --pink:#d9527a; --orange:#e8672c; --green:#6ea92f; --blue:#2f7fb8; --purple:#8a4fbf;
+    --dark:#2b2b2b; --cream:#fdf6ea; --gold:#e8b13a; --red:#c0392b; --leaf:#3a8f52;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Segoe UI',Tahoma,sans-serif; background:#f4f1f5; color:#222; line-height:1.5; padding-bottom:60px;}
+  header{
+    background:var(--pink); padding:50px 20px; text-align:center;
+  }
+  header h1{
+    color:white; font-size:2.4em; font-weight:800; letter-spacing:1px;
+  }
+  header p{
+    color:white; opacity:.9; margin-top:8px; font-size:1.15em; font-weight:600;
+  }
+  section{max-width:860px; margin:36px auto; padding:0 20px;}
+  .card-title{font-size:1.5em; color:#3a2540; margin-bottom:16px; border-left:6px solid var(--pink); padding-left:14px;}
+  .panel{background:white; border-radius:16px; padding:24px; box-shadow:0 6px 20px rgba(60,20,50,.08);}
+
+  .organ-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:18px; margin-top:8px;}
+  .flip-card{perspective:1000px; height:230px; cursor:pointer;}
+  .flip-inner{position:relative; width:100%; height:100%; transition:transform .5s; transform-style:preserve-3d;}
+  .flip-card.flipped .flip-inner{transform:rotateY(180deg);}
+  .flip-front, .flip-back{
+    position:absolute; width:100%; height:100%; backface-visibility:hidden;
+    border-radius:16px; padding:16px; color:white; text-align:center;
+    display:flex; flex-direction:column; justify-content:center; align-items:center;
+  }
+  .flip-front .em{font-size:2.8em; margin-bottom:8px;}
+  .flip-front h3{font-size:1.15em; margin-bottom:6px;}
+  .flip-front p{font-size:.85em; opacity:.9;}
+  .flip-back{transform:rotateY(180deg); background:var(--dark); font-size:.85em;}
+  .flip-back b{display:block; margin-bottom:6px; color:var(--gold);}
+  .goz{background:linear-gradient(135deg,#c0392b,#e07856);}
+  .deri{background:linear-gradient(135deg,#4d7a1f,#7fbf3f);}
+  .burun{background:linear-gradient(135deg,#1a6fa8,#3aa6d6);}
+  .dil{background:linear-gradient(135deg,#d9761c,#f2a93c);}
+  .kulak{background:linear-gradient(135deg,#8a4fbf,#c78aef);}
+  .hint{text-align:center; color:#888; font-size:.85em; margin-top:14px;}
+
+  /* matching game */
+  .match-wrap{display:grid; grid-template-columns:1fr 1fr; gap:30px; margin-top:16px;}
+  @media (max-width:600px){.match-wrap{grid-template-columns:1fr;}}
+  .match-col h4{text-align:center; margin-bottom:10px; color:#3a2540;}
+  .match-item{
+    background:var(--cream); border-radius:12px; padding:12px 16px; margin-bottom:10px;
+    text-align:center; cursor:pointer; font-weight:600; border:3px solid transparent;
+  }
+  .match-item.sel{border-color:var(--pink); background:#fbe3ec;}
+  .match-item.correct{border-color:var(--leaf); background:#e3f7e8;}
+  .match-item.matched{opacity:.5; cursor:default;}
+  #match-result{text-align:center; margin-top:14px; font-weight:bold; color:var(--dark);}
+
+  /* scenario activity */
+  .scenario{background:var(--cream); border-radius:12px; padding:16px 18px; margin-bottom:12px;}
+  .scenario p{font-weight:600; margin-bottom:10px;}
+  .scenario-opts button{
+    padding:7px 14px; border-radius:16px; border:2px solid #ccc; background:white; margin:3px; cursor:pointer; font-size:.88em;
+  }
+  .scenario-opts button.active{background:var(--pink); color:white; border-color:var(--pink);}
+  .scenario .feedback{margin-top:8px; font-size:.88em; font-weight:bold;}
+
+  #score-box{text-align:center; font-size:1.3em; font-weight:bold; color:#3a2540; margin-top:16px;}
+  footer{text-align:center; color:#888; font-size:.85em; margin-top:40px;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>DUYU ORGANLARI</h1>
+  <p>Çevremizi nasıl algılıyoruz?</p>
+</header>
+
+<section>
+  <h2 class="card-title">Duyu Organı Nedir?</h2>
+  <div class="panel">
+    <p>Çevremizde olup bitenleri anlamamızı sağlayan organlarımıza <b>duyu organları</b> denir. Etrafımızdaki her şeyi <b>görme, işitme, koklama, dokunma ve tatma</b> gibi duyularla anlarız. Bütün bunlar duyu organlarımızla olur — <b>5 duyu organımız</b> vardır.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="card-title">🎴 Duyu Organlarımızı Tanıyalım</h2>
+  <p class="hint">Kartlara tıkla, o organ olmasaydı ne olurdu öğren!</p>
+  <div class="organ-grid">
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front goz"><div class="em">👁️</div><h3>GÖZ</h3><p>Görme Duyu Organı</p></div>
+        <div class="flip-back"><b>Gözümüz olmasaydı?</b>Çevremizdeki canlı ve cansız varlıkları, sevdiğimiz insanları, rengarenk çiçekleri, kuşları ve kelebekleri göremezdik.</div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front deri"><div class="em">🖐️</div><h3>DERİ</h3><p>Dokunma Duyu Organı</p></div>
+        <div class="flip-back"><b>Derimiz olmasaydı?</b>Sıcak ve soğuğun farkına varamaz, donar veya yanardık. Hayati önemi olan solunumu gerçekleştiremez, ter atamazdık.</div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front burun"><div class="em">👃</div><h3>BURUN</h3><p>Koku Alma Duyu Organı</p></div>
+        <div class="flip-back"><b>Burnumuz olmasaydı?</b>Çevremizdeki güzel kokuları alamaz, duman gibi kötü kokularla etrafımızdaki tehlikelerin farkına varamazdık.</div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front dil"><div class="em">👅</div><h3>DİL</h3><p>Tat Alma Duyu Organı</p></div>
+        <div class="flip-back"><b>Dilimiz olmasaydı?</b>Yemeklerin acı, tatlı, ekşi ya da bozuk olduğunu anlayamazdık. Dilimiz sağlıksız olursa yemeklerden lezzet alamayız.</div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front kulak"><div class="em">👂</div><h3>KULAK</h3><p>İşitme Duyu Organı</p></div>
+        <div class="flip-back"><b>Kulaklarımız olmasaydı?</b>Konuşmalarını işitemezdik. Konuşmak işitmekle doğrudan ilgilidir; doğuştan işitmeyenler konuşamaz.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="card-title">🎯 Etkinlik 1: Organ - Duyu Eşleştirme</h2>
+  <div class="panel">
+    <p>Önce soldan bir organ, sonra sağdan doğru duyusunu seç.</p>
+    <div class="match-wrap">
+      <div class="match-col">
+        <h4>Organ</h4>
+        <div id="organ-col"></div>
+      </div>
+      <div class="match-col">
+        <h4>Duyu</h4>
+        <div id="sense-col"></div>
+      </div>
+    </div>
+    <div id="match-result"></div>
+  </div>
+</section>
+
+<section>
+  <h2 class="card-title">🎯 Etkinlik 2: Hangi Organla Anlarız?</h2>
+  <div class="panel" id="scenario-panel"></div>
+</section>
+
+<footer>Dijital Öğretmen • 3. Sınıf Fen Bilimleri</footer>
+
+<script>
+// Matching game
+const pairs = [
+  {organ:"Göz", sense:"Görme"},
+  {organ:"Deri", sense:"Dokunma"},
+  {organ:"Burun", sense:"Koklama"},
+  {organ:"Dil", sense:"Tatma"},
+  {organ:"Kulak", sense:"İşitme"}
+];
+const organCol = document.getElementById('organ-col');
+const senseCol = document.getElementById('sense-col');
+const shuffledSenses = [...pairs].sort(()=>Math.random()-0.5);
+
+pairs.forEach((p,i)=>{
+  const el = document.createElement('div');
+  el.className='match-item'; el.textContent=p.organ; el.dataset.organ=p.organ;
+  el.onclick = ()=>selectOrgan(el, p.organ);
+  organCol.appendChild(el);
+});
+shuffledSenses.forEach((p)=>{
+  const el = document.createElement('div');
+  el.className='match-item'; el.textContent=p.sense; el.dataset.sense=p.sense;
+  el.onclick = ()=>selectSense(el, p.sense);
+  senseCol.appendChild(el);
+});
+
+let selectedOrganEl=null, selectedOrganName=null;
+let matchScore={correct:0,total:0};
+function selectOrgan(el,name){
+  if(el.classList.contains('matched')) return;
+  document.querySelectorAll('#organ-col .match-item').forEach(x=>x.classList.remove('sel'));
+  el.classList.add('sel');
+  selectedOrganEl=el; selectedOrganName=name;
+}
+function selectSense(el,sense){
+  if(el.classList.contains('matched') || !selectedOrganEl) return;
+  const correctPair = pairs.find(p=>p.organ===selectedOrganName);
+  matchScore.total++;
+  if(correctPair.sense === sense){
+    matchScore.correct++;
+    selectedOrganEl.classList.add('matched','correct');
+    el.classList.add('matched','correct');
+  } else {
+    selectedOrganEl.style.borderColor='#c0392b';
+    el.style.borderColor='#c0392b';
+    setTimeout(()=>{ selectedOrganEl.style.borderColor=''; el.style.borderColor=''; selectedOrganEl.classList.remove('sel'); },600);
+  }
+  document.getElementById('match-result').textContent = `Doğru eşleşme: ${matchScore.correct} / 5 (Deneme: ${matchScore.total})`;
+  selectedOrganEl=null; selectedOrganName=null;
+}
+
+// Scenario activity
+const scenarios = [
+  {text:"Uzaktaki bir kuşun rengini ve şeklini fark ederiz.", answer:"Göz"},
+  {text:"Fırından yeni çıkan ekmeğin kokusunu alırız.", answer:"Burun"},
+  {text:"Limonun ekşi olduğunu anlarız.", answer:"Dil"},
+  {text:"Buzun soğukluğunu hissederiz.", answer:"Deri"},
+  {text:"Uzaktan gelen bir zilin sesini duyarız.", answer:"Kulak"},
+  {text:"Kumaşın yumuşak mı sert mi olduğunu anlarız.", answer:"Deri"},
+  {text:"Bir arkadaşımızın bize seslendiğini fark ederiz.", answer:"Kulak"},
+  {text:"Çiçeğin güzel koktuğunu fark ederiz.", answer:"Burun"}
+];
+const scenarioPanel = document.getElementById('scenario-panel');
+let scenarioAnswered={};
+scenarios.forEach((s,i)=>{
+  const div = document.createElement('div');
+  div.className='scenario';
+  div.innerHTML = `<p>${i+1}. ${s.text}</p>
+    <div class="scenario-opts">
+      ${["Göz","Deri","Burun","Dil","Kulak"].map(o=>`<button onclick="answerScenario(${i},'${o}',this)">${o}</button>`).join('')}
+    </div>
+    <div class="feedback" id="sfb-${i}"></div>`;
+  scenarioPanel.appendChild(div);
+});
+function answerScenario(i, choice, btn){
+  if(scenarioAnswered[i]!==undefined) return;
+  scenarioAnswered[i]=choice;
+  btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const fb = document.getElementById('sfb-'+i);
+  if(choice===scenarios[i].answer){
+    fb.textContent="Doğru! ✔️"; fb.style.color="#3a8f52";
+  } else {
+    fb.textContent="Yanlış, doğru cevap: "+scenarios[i].answer; fb.style.color="#c0392b";
+  }
+}
+</script>
+</body>
+</html>

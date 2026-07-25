@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maddenin Halleri</title>
+<style>
+  :root{
+    --orange:#d9761c; --terra:#c0603a; --cream:#fdf3e4; --dark:#2b2b2b;
+    --gold:#e8b13a; --red:#c0392b; --leaf:#3a8f52; --blue:#2f7fb8;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Segoe UI',Tahoma,sans-serif; background:#f6f2ec; color:#222; line-height:1.5; padding-bottom:60px;}
+  header{background:var(--terra); padding:50px 20px; text-align:center;}
+  header h1{color:white; font-size:2.4em; font-weight:800; letter-spacing:1px;}
+  header p{color:white; opacity:.9; margin-top:8px; font-size:1.1em; font-weight:600;}
+
+  section{max-width:860px; margin:36px auto; padding:0 20px;}
+  .card-title{font-size:1.5em; color:#4a2c1a; margin-bottom:16px; border-left:6px solid var(--terra); padding-left:14px;}
+  .panel{background:white; border-radius:16px; padding:24px; box-shadow:0 6px 20px rgba(80,40,10,.08);}
+
+  .ana-hat{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media (max-width:600px){.ana-hat{grid-template-columns:1fr;}}
+  .ana-hat div{background:var(--cream); border-radius:12px; padding:16px; text-align:center; font-weight:600;}
+
+  .state-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:18px; margin-top:8px;}
+  .state-card{border-radius:16px; padding:18px; color:white;}
+  .state-card h3{font-size:1.2em; margin-bottom:10px;}
+  .state-card ul{margin:8px 0 0 18px; font-size:.9em;}
+  .particles{
+    height:70px; border-radius:10px; background:rgba(255,255,255,.15); margin-top:10px;
+    position:relative; overflow:hidden;
+  }
+  .dot{position:absolute; width:9px; height:9px; border-radius:50%; background:white;}
+  .kati{background:linear-gradient(135deg,#c0392b,#e07856);}
+  .sivi{background:linear-gradient(135deg,#1a6fa8,#3aa6d6);}
+  .gaz{background:linear-gradient(135deg,#5c3d99,#8a63c9);}
+
+  /* sorting activity */
+  .obj-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(100px,1fr)); gap:12px; margin-top:14px;}
+  .obj{background:var(--cream); border-radius:12px; padding:14px 6px; text-align:center; cursor:pointer; user-select:none; border:3px solid transparent; transition:.15s; font-size:2em;}
+  .obj span.label{display:block; font-size:.4em; margin-top:6px; color:#555;}
+  .obj.selected{border-color:var(--gold); background:#fff4d6;}
+  .obj.correct{border-color:var(--leaf); background:#e3f7e8;}
+  .obj.wrong{border-color:var(--red); background:#fbe3e0;}
+  .cat-buttons{margin-top:14px;}
+  .cat-buttons button{padding:8px 18px; border-radius:20px; border:2px solid #ccc; background:white; margin-right:8px; cursor:pointer; font-weight:bold;}
+  .cat-buttons button.active{background:var(--terra); color:white; border-color:var(--terra);}
+  .check-btn{margin-top:18px; background:var(--terra); color:white; border:none; padding:12px 26px; border-radius:30px; font-size:1em; cursor:pointer;}
+  .check-btn:hover{background:#a84e2e;}
+  #obj-result{margin-top:12px; font-weight:bold;}
+
+  /* mystery matter */
+  .mystery-box{background:var(--cream); border-radius:14px; padding:20px; margin-top:10px;}
+  .mystery-box ul{margin:10px 0 16px 20px;}
+  .mystery-opts button{padding:9px 20px; border-radius:20px; border:2px solid #ccc; background:white; margin-right:8px; cursor:pointer; font-weight:bold;}
+  .mystery-opts button.active{background:var(--blue); color:white; border-color:var(--blue);}
+  #mystery-fb{margin-top:10px; font-weight:bold;}
+
+  .summary-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin-top:8px;}
+  .summary-card{background:var(--cream); border-radius:14px; padding:16px; text-align:center;}
+  .summary-card h4{color:var(--terra); margin-bottom:8px;}
+
+  .think-box{background:linear-gradient(135deg,#fff3e0,#ffe8d6); border-radius:16px; padding:22px; border:2px solid #f3d9bd;}
+  textarea{width:100%; margin-top:12px; border-radius:10px; border:2px solid #e0c8a8; padding:10px; font-family:inherit; font-size:1em; min-height:70px;}
+
+  footer{text-align:center; color:#888; font-size:.85em; margin-top:40px;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>MADDENİN HALLERİ</h1>
+  <p>Maddenin farklı hallerinde parçacıklar nasıl düzenlenir ve davranır?</p>
+</header>
+
+<section>
+  <h2 class="card-title">Ders Ana Hatları</h2>
+  <div class="panel ana-hat">
+    <div>Katı, Sıvı ve Gaz<br>Madde Örnekleri</div>
+    <div>Her Madde Halindeki<br>Parçacık Düzeni ve Davranışı</div>
+  </div>
+</section>
+
+<section>
+  <h2 class="card-title">Üç Hal, Üç Farklı Düzen</h2>
+  <div class="state-grid">
+    <div class="state-card kati">
+      <h3>🧊 KATI</h3>
+      <div class="particles" id="p-kati"></div>
+      <p style="margin-top:10px; font-size:.9em;"><b>Parçacıklar:</b> Sıkıca bir aradadır, belirli bir desende düzenlenmiştir, olduğu yerde titreşir.</p>
+      <ul><li>Sert</li><li>Sabit şekilli</li><li>Sabit hacimli</li><li>Sıkıştırılamaz</li><li>Akışkan değil</li></ul>
+    </div>
+    <div class="state-card sivi">
+      <h3>💧 SIVI</h3>
+      <div class="particles" id="p-sivi"></div>
+      <p style="margin-top:10px; font-size:.9em;"><b>Parçacıklar:</b> Birbirine yakındır ama düzensizdir, aralarında az boşluk vardır, kayıp yuvarlanarak geçerler.</p>
+      <ul><li>Sert değil</li><li>Sabit şekilli değil</li><li>Sabit hacimli</li><li>Az sıkıştırılabilir</li><li>Akabilir</li></ul>
+    </div>
+    <div class="state-card gaz">
+      <h3>💨 GAZ</h3>
+      <div class="particles" id="p-gaz"></div>
+      <p style="margin-top:10px; font-size:.9em;"><b>Parçacıklar:</b> Geniş aralıklıdır, düz çizgi halinde hızlı hareket eder, sekene kadar yol alır.</p>
+      <ul><li>Sert değil</li><li>Sabit şekilli değil</li><li>Sabit hacimli değil</li><li>Sıkıştırılabilir</li><li>Akabilir</li></ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="card-title">💭 Düşün - Eşleştir - Paylaş</h2>
+  <div class="panel">
+    <p>1. Katı bir maddeyi karıştırabilir misiniz? Neden?</p>
+    <p style="margin-top:10px;">2. Gazı tutabilir misiniz? Neden?</p>
+    <p style="margin-top:14px; color:#777; font-size:.9em;">Önce tek başına düşün, sonra bir arkadaşınla tartış, sonunda sınıfla paylaş.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="card-title">🎯 Etkinlik: Katı, Sıvı mı, Gaz mı?</h2>
+  <div class="panel">
+    <p>Önce bir nesneye, sonra doğru hale tıkla.</p>
+    <div class="obj-grid" id="obj-grid"></div>
+    <div id="obj-result"></div>
+  </div>
+</section>
+
+<section>
+  <h2 class="card-title">🔍 Maddenin Halini Tahmin Et</h2>
+  <div class="panel">
+    <p>Kerem, aşağıdaki özelliklere sahip gizemli bir madde buldu:</p>
+    <div class="mystery-box">
+      <ul>
+        <li>Kabının şeklini alır</li>
+        <li>Akar</li>
+        <li>Sabit bir hacmi vardır</li>
+        <li>Biraz sıkıştırılabilir</li>
+      </ul>
+      <p><b>Bu madde hangi haldedir?</b></p>
+      <div class="mystery-opts">
+        <button onclick="checkMystery('Katı', this)">Katı</button>
+        <button onclick="checkMystery('Sıvı', this)">Sıvı</button>
+        <button onclick="checkMystery('Gaz', this)">Gaz</button>
+      </div>
+      <div id="mystery-fb"></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="card-title">📌 Bir Özet</h2>
+  <div class="panel">
+    <div class="summary-grid">
+      <div class="summary-card">
+        <h4>KATI</h4>
+        <p>Parçacıklar sıkıca bir aradadır ve düzenli bir yapıya sahiptir; oldukları yerde titreşim yaparlar.<br><b>Örnekler:</b> Kitap, beslenme çantası</p>
+      </div>
+      <div class="summary-card">
+        <h4>SIVI</h4>
+        <p>Parçacıklar düzenli bir desende değildir ama aralarında az boşluk vardır; birbirinin arasından kayarlar.<br><b>Örnekler:</b> Su, meyve suyu</p>
+      </div>
+      <div class="summary-card">
+        <h4>GAZLAR</h4>
+        <p>Parçacıklar arasında geniş boşluklar vardır, hızlı hareket ederek bulundukları alanı doldururlar.<br><b>Örnekler:</b> Rüzgar, buhar</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="card-title">🤔 Bu Konuda Düşünün!</h2>
+  <div class="think-box">
+    <p>Annenizin veya bakıcınızın su ısıtıcısında su ısıttığını gözlemlemiş olabilirsiniz.</p>
+    <p style="margin-top:8px;"><b>Sizce ısındıkça sıvıdaki parçacıklara ne olur?</b></p>
+    <textarea placeholder="Düşüncelerini buraya yazabilirsin..."></textarea>
+  </div>
+</section>
+
+<footer>Dijital Öğretmen • 3. Sınıf Fen Bilimleri</footer>
+
+<script>
+// Particle animation dots
+function makeParticles(id, count, style){
+  const box = document.getElementById(id);
+  for(let i=0;i<count;i++){
+    const d = document.createElement('div');
+    d.className='dot';
+    box.appendChild(d);
+  }
+  const dots = box.querySelectorAll('.dot');
+  if(style==='kati'){
+    // grid tight, slight vibration
+    const cols=6, rows=3;
+    dots.forEach((d,i)=>{
+      const c=i%cols, r=Math.floor(i/cols);
+      const x=8+c*10, y=8+r*18;
+      d.style.left=x+'px'; d.style.top=y+'px';
+      d.style.animation=`vib 0.4s infinite alternate`;
+      d.style.animationDelay=(Math.random()*0.3)+'s';
+    });
+  } else if(style==='sivi'){
+    dots.forEach((d)=>{
+      const x = 10+Math.random()*(box.clientWidth-20 || 200);
+      const y = 10+Math.random()*40;
+      d.style.left=x+'px'; d.style.top=y+'px';
+      d.style.animation=`drift 3s infinite ease-in-out`;
+      d.style.animationDelay=(Math.random()*2)+'s';
+    });
+  } else if(style==='gaz'){
+    dots.forEach((d)=>{
+      const x = Math.random()*220;
+      const y = Math.random()*60;
+      d.style.left=x+'px'; d.style.top=y+'px';
+      d.style.animation=`fly 2.5s infinite linear`;
+      d.style.animationDelay=(Math.random()*2)+'s';
+    });
+  }
+}
+const styleTag = document.createElement('style');
+styleTag.textContent = `
+@keyframes vib { from{transform:translate(0,0);} to{transform:translate(1px,1px);} }
+@keyframes drift { 0%{transform:translate(0,0);} 50%{transform:translate(6px,-4px);} 100%{transform:translate(0,0);} }
+@keyframes fly { 0%{transform:translate(0,0);} 25%{transform:translate(40px,-20px);} 50%{transform:translate(80px,10px);} 75%{transform:translate(30px,25px);} 100%{transform:translate(0,0);} }
+`;
+document.head.appendChild(styleTag);
+window.addEventListener('load',()=>{
+  makeParticles('p-kati', 18, 'kati');
+  makeParticles('p-sivi', 14, 'sivi');
+  makeParticles('p-gaz', 10, 'gaz');
+});
+
+// Sorting activity
+const objects = [
+  {name:"Kitap", em:"📕", state:"Katı"},
+  {name:"Bardak Su", em:"🥛", state:"Sıvı"},
+  {name:"Zımba", em:"🗜️", state:"Katı"},
+  {name:"Meyve Suyu", em:"🧃", state:"Sıvı"},
+  {name:"Tahta", em:"🖤", state:"Katı"},
+  {name:"Rüzgar", em:"🌬️", state:"Gaz"},
+  {name:"Buhar", em:"♨️", state:"Gaz"},
+  {name:"Taş", em:"🪨", state:"Katı"},
+  {name:"Balon (hava)", em:"🎈", state:"Gaz"}
+];
+const objGrid = document.getElementById('obj-grid');
+let objState = {}; // index -> chosen state
+objects.forEach((o,i)=>{
+  const div = document.createElement('div');
+  div.className='obj';
+  div.innerHTML = `${o.em}<span class="label">${o.name}</span>
+    <div class="cat-buttons" style="margin-top:8px;">
+      <button style="font-size:.5em; padding:4px 8px;" onclick="event.stopPropagation(); chooseState(${i},'Katı',this)">Katı</button>
+      <button style="font-size:.5em; padding:4px 8px;" onclick="event.stopPropagation(); chooseState(${i},'Sıvı',this)">Sıvı</button>
+      <button style="font-size:.5em; padding:4px 8px;" onclick="event.stopPropagation(); chooseState(${i},'Gaz',this)">Gaz</button>
+    </div>`;
+  objGrid.appendChild(div);
+});
+function chooseState(i, state, btn){
+  objState[i] = state;
+  const parent = btn.closest('.obj');
+  parent.querySelectorAll('.cat-buttons button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const correct = objects[i].state === state;
+  parent.classList.remove('correct','wrong');
+  parent.classList.add(correct ? 'correct' : 'wrong');
+  let right=0, total=Object.keys(objState).length;
+  for(const k in objState){ if(objState[k]===objects[k].state) right++; }
+  document.getElementById('obj-result').textContent = `Doğru: ${right} / ${total} (Toplam ${objects.length} nesne)`;
+}
+
+// Mystery matter
+function checkMystery(choice, btn){
+  document.querySelectorAll('.mystery-opts button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const fb = document.getElementById('mystery-fb');
+  if(choice==='Sıvı'){
+    fb.textContent = "Doğru! Kerem SIVI bir madde buldu. ✔️";
+    fb.style.color = "#3a8f52";
+  } else {
+    fb.textContent = "Yanlış, doğru cevap: Sıvı (kabının şeklini alması ve akması bunu gösterir).";
+    fb.style.color = "#c0392b";
+  }
+}
+</script>
+</body>
+</html>

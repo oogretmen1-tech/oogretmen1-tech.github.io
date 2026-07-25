@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elektrik - Etkileşimli Etkinlik</title>
+<style>
+  :root {
+    --gold: #B8860B;
+    --gold-dark: #5C4A12;
+    --light-gold: #FBF0D9;
+    --blue: #3E7CB1;
+    --light-blue: #E4EEF5;
+    --green: #2E7D5B;
+    --light-green: #E6F2EA;
+    --red: #D9534F;
+    --light-red: #F7EAEA;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Verdana, sans-serif;
+    background: linear-gradient(180deg, #FBF0D9 0%, #FFFFFF 40%);
+    color: var(--gold-dark);
+    min-height: 100vh;
+  }
+  header {
+    background: var(--gold);
+    color: white;
+    padding: 24px 16px 30px;
+    text-align: center;
+    border-radius: 0 0 30px 30px;
+  }
+  header h1 { margin: 0; font-size: 26px; }
+  header p { margin: 6px 0 0; opacity: 0.9; }
+  .container { max-width: 900px; margin: 0 auto; padding: 20px 16px 60px; }
+  .card {
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  .card h2 {
+    color: var(--gold);
+    font-size: 20px;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gold);
+    color: white;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+
+  /* Explanation boxes */
+  .explain-row { display: flex; gap: 16px; flex-wrap: wrap; }
+  .explain-box {
+    flex: 1;
+    min-width: 240px;
+    border-radius: 14px;
+    padding: 16px;
+  }
+  .explain-box h3 { margin: 0 0 8px; font-size: 17px; }
+  .explain-box p { margin: 0 0 12px; font-size: 14px; color: #444; }
+  .example-grid { display: flex; flex-direction: column; gap: 8px; }
+  .example-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gold-dark);
+  }
+  .example-emoji { font-size: 20px; }
+
+  .tip-list { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+  .tip-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--light-green);
+    border-radius: 12px;
+    padding: 10px 14px;
+  }
+  .tip-item .emoji { font-size: 24px; }
+  .tip-item .text { font-size: 14px; font-weight: 600; color: var(--green); }
+
+  .safety-item {
+    background: var(--light-red);
+    border-radius: 12px;
+    padding: 10px 14px;
+  }
+
+  /* Sorting activity */
+  .pool {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px;
+    background: #F4F4F4;
+    border-radius: 12px;
+    min-height: 60px;
+    margin-bottom: 16px;
+  }
+  .item {
+    background: white;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-size: 16px;
+    user-select: none;
+  }
+  .drop-zones { display: flex; gap: 16px; flex-wrap: wrap; }
+  .zone {
+    flex: 1;
+    min-width: 260px;
+    min-height: 140px;
+    border-radius: 14px;
+    padding: 14px;
+    border: 3px dashed #bbb;
+    cursor: pointer;
+  }
+  .zone.yes { background: var(--light-gold); border-color: var(--gold); }
+  .zone.no { background: var(--light-blue); border-color: var(--blue); }
+  .zone h3 { margin: 0 0 10px; font-size: 17px; }
+  .zone .item { border-color: transparent; }
+  .zone-items { display: flex; flex-wrap: wrap; gap: 8px; min-height: 40px; }
+
+  /* Quiz */
+  .question { margin-bottom: 18px; }
+  .question p { font-weight: 600; margin-bottom: 8px; }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .option {
+    background: #F7F7F7;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.15s;
+  }
+  .option:hover { background: #EFEFEF; }
+  .option.correct { background: #DFF3E4; border-color: var(--green); }
+  .option.incorrect { background: #FBE4E4; border-color: var(--red); }
+  .option.disabled { pointer-events: none; }
+
+  button.check {
+    background: var(--gold);
+    color: white;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 22px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  button.check:hover { background: #9A6F09; }
+  button.reset {
+    background: transparent;
+    color: var(--gold);
+    border: 2px solid var(--gold);
+    border-radius: 24px;
+    padding: 8px 18px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+
+  .feedback { margin-top: 10px; font-weight: 600; min-height: 22px; }
+  .feedback.ok { color: var(--green); }
+  .feedback.bad { color: var(--red); }
+
+  #score-panel {
+    text-align: center;
+    background: var(--gold);
+    color: white;
+    border-radius: 18px;
+    padding: 18px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>⚡ Elektrik</h1>
+  <p>3. Sınıf Fen Bilimleri — Etkileşimli Etkinlik</p>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <h2><span class="badge">1</span> Elektrik Nedir?</h2>
+    <div class="explain-row">
+      <div class="explain-box" style="background: var(--light-gold); flex: 2;">
+        <p style="font-size:16px; margin-bottom:10px;"><strong>Elektrik</strong>, birçok aracı çalıştıran bir enerji türüdür.</p>
+        <p style="font-size:15px;">Evimizde, okulumuzda ve şehrimizde birçok yerde elektrik kullanılır. Elektrik sayesinde ışık, ısı ve hareket elde edebiliriz. Elektrik olmasaydı televizyon izleyemez, bilgisayar kullanamaz, geceleri ışıksız kalırdık.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge">2</span> Elektrik Nerede Kullanılır?</h2>
+    <p>Elektrik, evde, okulda ve dışarıda birçok yerde kullanılır.</p>
+    <div class="explain-row">
+      <div class="explain-box" style="background: var(--light-gold);">
+        <h3>🏠 Evde</h3>
+        <div class="example-grid">
+          <div class="example-item"><span class="example-emoji">🧊</span>Buzdolabı</div>
+          <div class="example-item"><span class="example-emoji">📺</span>Televizyon</div>
+          <div class="example-item"><span class="example-emoji">🧺</span>Çamaşır Makinesi</div>
+        </div>
+      </div>
+      <div class="explain-box" style="background: var(--light-blue);">
+        <h3>🏫 Okulda</h3>
+        <div class="example-grid">
+          <div class="example-item"><span class="example-emoji">💻</span>Bilgisayar</div>
+          <div class="example-item"><span class="example-emoji">🔔</span>Zil</div>
+          <div class="example-item"><span class="example-emoji">💡</span>Aydınlatma</div>
+        </div>
+      </div>
+      <div class="explain-box" style="background: var(--light-green);">
+        <h3>🏙️ Dışarıda</h3>
+        <div class="example-grid">
+          <div class="example-item"><span class="example-emoji">🚦</span>Trafik Işıkları</div>
+          <div class="example-item"><span class="example-emoji">💡</span>Sokak Lambaları</div>
+          <div class="example-item"><span class="example-emoji">🛗</span>Asansörler</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge">3</span> Elektrikle Çalışır mı?</h2>
+    <p>Önce bir kartın üzerine dokun, sonra ait olduğu gruba dokun.</p>
+    <div class="pool" id="pool-device"></div>
+    <div class="drop-zones">
+      <div class="zone yes" id="zone-yes">
+        <h3>⚡ Elektrikle Çalışan</h3>
+        <div class="zone-items" id="zone-yes-items"></div>
+      </div>
+      <div class="zone no" id="zone-no">
+        <h3>🚫 Elektrikle Çalışmayan</h3>
+        <div class="zone-items" id="zone-no-items"></div>
+      </div>
+    </div>
+    <div class="feedback" id="sort-device-feedback"></div>
+    <button class="check" onclick="deviceSort.check()">Kontrol Et</button>
+    <button class="reset" onclick="deviceSort.reset()">Baştan Başla</button>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge">4</span> Elektrik Tasarrufu</h2>
+    <p>Elektriği tasarruflu kullanmak hem ailemize hem doğaya iyi gelir.</p>
+    <div class="tip-list">
+      <div class="tip-item"><span class="emoji">💡</span><span class="text">Kullanılmayan odalarda ışıkları söndürelim</span></div>
+      <div class="tip-item"><span class="emoji">🔌</span><span class="text">Kullanılmayan aletleri fişten çekelim</span></div>
+      <div class="tip-item"><span class="emoji">🌞</span><span class="text">Gün ışığından faydalanalım</span></div>
+      <div class="tip-item"><span class="emoji">🔆</span><span class="text">Enerji tasarruflu ampuller kullanalım</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge">5</span> Elektrik Güvenliği</h2>
+    <p>Elektrik çarpması tehlikelidir. Bu yüzden bazı kurallara uymalıyız:</p>
+    <div class="tip-list">
+      <div class="tip-item safety-item"><span class="emoji">🚫💧</span><span class="text" style="color:#8B2E2A;">Islak elle prize dokunma</span></div>
+      <div class="tip-item safety-item"><span class="emoji">🚫🔌</span><span class="text" style="color:#8B2E2A;">Prizlerle ve kablolarla oynama</span></div>
+      <div class="tip-item safety-item"><span class="emoji">⚠️</span><span class="text" style="color:#8B2E2A;">Bozuk kabloyu bir büyüğe haber ver</span></div>
+      <div class="tip-item safety-item"><span class="emoji">👨‍👩‍👧</span><span class="text" style="color:#8B2E2A;">Elektrikli aletleri yetişkin gözetiminde kullan</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge">6</span> Güvenli mi, Tehlikeli mi?</h2>
+    <p>Önce bir kartın üzerine dokun, sonra ait olduğu gruba dokun.</p>
+    <div class="pool" id="pool-safety"></div>
+    <div class="drop-zones">
+      <div class="zone yes" id="zone-safe">
+        <h3>✅ Güvenli Davranış</h3>
+        <div class="zone-items" id="zone-safe-items"></div>
+      </div>
+      <div class="zone no" id="zone-danger" style="background: var(--light-red); border-color: var(--red);">
+        <h3>⚠️ Tehlikeli Davranış</h3>
+        <div class="zone-items" id="zone-danger-items"></div>
+      </div>
+    </div>
+    <div class="feedback" id="sort-safety-feedback"></div>
+    <button class="check" onclick="safetySort.check()">Kontrol Et</button>
+    <button class="reset" onclick="safetySort.reset()">Baştan Başla</button>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge">7</span> Küçük Bilgi Yarışması</h2>
+    <div id="quiz"></div>
+  </div>
+
+  <div class="card" id="score-panel">
+    Puanın: <span id="score">0</span> / <span id="total">0</span>
+  </div>
+
+</div>
+
+<script>
+function shuffle(arr) {
+  return arr.map(v => [Math.random(), v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]);
+}
+
+const scoreState = {};
+
+function makeSortActivity(config) {
+  const state = { selectedEl: null };
+  scoreState[config.key] = false;
+
+  function buildPool() {
+    const pool = document.getElementById(config.poolId);
+    pool.innerHTML = "";
+    shuffle(config.items).forEach((it, idx) => {
+      const el = document.createElement("div");
+      el.className = "item";
+      el.textContent = it.text;
+      el.dataset.type = it.type;
+      el.id = config.poolId + "-item-" + idx;
+      el.addEventListener("click", () => selectItem(el));
+      pool.appendChild(el);
+    });
+  }
+
+  function selectItem(el) {
+    if (state.selectedEl) state.selectedEl.style.boxShadow = "";
+    state.selectedEl = el;
+    const zoneMatch = config.zones.find(z => z.type === el.dataset.type);
+    el.style.boxShadow = "0 0 0 3px " + (zoneMatch ? zoneMatch.color : "#999");
+  }
+
+  function placeInZone(zoneItemsId) {
+    if (!state.selectedEl) return;
+    document.getElementById(zoneItemsId).appendChild(state.selectedEl);
+    state.selectedEl.style.boxShadow = "";
+    state.selectedEl = null;
+  }
+
+  config.zones.forEach(z => {
+    document.getElementById(z.id).addEventListener("click", () => placeInZone(z.itemsId));
+  });
+  document.getElementById(config.poolId).addEventListener("click", (e) => {
+    if (e.target.id === config.poolId && state.selectedEl) {
+      document.getElementById(config.poolId).appendChild(state.selectedEl);
+      state.selectedEl.style.boxShadow = "";
+      state.selectedEl = null;
+    }
+  });
+
+  function reset() {
+    state.selectedEl = null;
+    buildPool();
+    config.zones.forEach(z => { document.getElementById(z.itemsId).innerHTML = ""; });
+    const fb = document.getElementById(config.feedbackId);
+    fb.textContent = "";
+    fb.className = "feedback";
+  }
+
+  function check() {
+    let correct = 0, placed = 0;
+    config.zones.forEach(z => {
+      document.querySelectorAll("#" + z.itemsId + " .item").forEach(el => {
+        placed++;
+        if (el.dataset.type === z.type) correct++;
+      });
+    });
+    const fb = document.getElementById(config.feedbackId);
+    if (placed < config.items.length) {
+      fb.textContent = "Henüz tüm kartları yerleştirmedin. Devam et!";
+      fb.className = "feedback";
+    } else if (correct === config.items.length) {
+      fb.textContent = "🎉 Harika! Hepsi doğru yerde!";
+      fb.className = "feedback ok";
+    } else {
+      fb.textContent = `${correct} / ${config.items.length} kart doğru yerde. Tekrar dener misin?`;
+      fb.className = "feedback bad";
+    }
+    scoreState[config.key] = (correct === config.items.length && placed === config.items.length);
+    updateScore();
+  }
+
+  buildPool();
+  return { reset, check };
+}
+
+const deviceSort = makeSortActivity({
+  key: "device",
+  items: [
+    { text: "📺 Televizyon", type: "yes" },
+    { text: "📖 Kitap", type: "no" },
+    { text: "🧊 Buzdolabı", type: "yes" },
+    { text: "✂️ Makas", type: "no" },
+    { text: "🧺 Çamaşır Makinesi", type: "yes" },
+    { text: "⚽ Top", type: "no" },
+  ],
+  poolId: "pool-device",
+  zones: [
+    { id: "zone-yes", itemsId: "zone-yes-items", type: "yes", color: "#B8860B" },
+    { id: "zone-no", itemsId: "zone-no-items", type: "no", color: "#3E7CB1" },
+  ],
+  feedbackId: "sort-device-feedback",
+});
+
+const safetySort = makeSortActivity({
+  key: "safety",
+  items: [
+    { text: "👨‍👩‍👧 Yetişkin gözetiminde kullanmak", type: "safe" },
+    { text: "💧 Islak elle prize dokunmak", type: "danger" },
+    { text: "⚠️ Bozuk kabloyu büyüğe haber vermek", type: "safe" },
+    { text: "🔌 Prizle oynamak", type: "danger" },
+  ],
+  poolId: "pool-safety",
+  zones: [
+    { id: "zone-safe", itemsId: "zone-safe-items", type: "safe", color: "#2E7D5B" },
+    { id: "zone-danger", itemsId: "zone-danger-items", type: "danger", color: "#D9534F" },
+  ],
+  feedbackId: "sort-safety-feedback",
+});
+
+// ---------- Quiz ----------
+const quizData = [
+  {
+    q: "Elektrik nedir?",
+    options: ["Bir oyuncak türü", "Birçok aracı çalıştıran bir enerji türü", "Bir yiyecek türü"],
+    correct: 1,
+  },
+  {
+    q: "Aşağıdakilerden hangisi elektrikle çalışmaz?",
+    options: ["Buzdolabı", "Makas", "Televizyon"],
+    correct: 1,
+  },
+  {
+    q: "Elektrik tasarrufu için ne yapmalıyız?",
+    options: ["Kullanmadığımızda ışıkları söndürmeliyiz", "Tüm ışıkları sürekli açık bırakmalıyız", "Aletleri hiç kapatmamalıyız"],
+    correct: 0,
+  },
+  {
+    q: "Islak elle prize dokunmak neden tehlikelidir?",
+    options: ["Elimiz kirlenir", "Elektrik çarpabilir", "Priz bozulur"],
+    correct: 1,
+  },
+  {
+    q: "Bozuk kablolu bir alet gördüğümüzde ne yapmalıyız?",
+    options: ["Kendimiz tamir etmeliyiz", "Bir büyüğe haber vermeliyiz", "Görmezden gelmeliyiz"],
+    correct: 1,
+  },
+];
+
+let quizAnswered = new Array(quizData.length).fill(false);
+
+function buildQuiz() {
+  const quizDiv = document.getElementById("quiz");
+  quizDiv.innerHTML = "";
+  quizData.forEach((item, qi) => {
+    const qDiv = document.createElement("div");
+    qDiv.className = "question";
+    const p = document.createElement("p");
+    p.textContent = (qi + 1) + ". " + item.q;
+    qDiv.appendChild(p);
+    const optsDiv = document.createElement("div");
+    optsDiv.className = "options";
+    item.options.forEach((opt, oi) => {
+      const optDiv = document.createElement("div");
+      optDiv.className = "option";
+      optDiv.textContent = opt;
+      optDiv.onclick = () => selectOption(qi, oi, optDiv, qDiv);
+      optsDiv.appendChild(optDiv);
+    });
+    qDiv.appendChild(optsDiv);
+    quizDiv.appendChild(qDiv);
+  });
+  document.getElementById("total").textContent = quizData.length + 2;
+}
+
+function selectOption(qi, oi, optDiv, qDiv) {
+  if (quizAnswered[qi]) return;
+  quizAnswered[qi] = true;
+  const opts = qDiv.querySelectorAll(".option");
+  opts.forEach((o, idx) => {
+    o.classList.add("disabled");
+    if (idx === quizData[qi].correct) o.classList.add("correct");
+  });
+  if (oi !== quizData[qi].correct) {
+    optDiv.classList.add("incorrect");
+  }
+  updateScore();
+}
+
+function updateScore() {
+  let right = 0;
+  const questionDivs = document.querySelectorAll(".question");
+  quizData.forEach((item, qi) => {
+    const qDiv = questionDivs[qi];
+    if (!qDiv) return;
+    if (quizAnswered[qi] && !qDiv.querySelector(".option.incorrect")) right++;
+  });
+  const sortPoints = Object.values(scoreState).filter(Boolean).length;
+  document.getElementById("score").textContent = right + sortPoints;
+}
+
+buildQuiz();
+</script>
+
+</body>
+</html>

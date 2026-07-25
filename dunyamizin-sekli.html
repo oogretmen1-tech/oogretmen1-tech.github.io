@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dünyamızın Şekli</title>
+<style>
+  :root{
+    --navy:#14206b; --green:#0e5c33; --leaf:#3a8f52;
+    --cream:#fbf6ea; --gold:#e8b13a; --red:#c0392b;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Segoe UI', Tahoma, sans-serif;
+    background: linear-gradient(180deg,#dff3ff 0%, #f7fbff 400px, #f7fbff 100%);
+    color:#222; line-height:1.5; padding-bottom:60px;
+  }
+  header{
+    background: radial-gradient(circle at 80% 30%, #2b3fa0, var(--navy) 70%);
+    color:white; text-align:center; padding:50px 20px 60px;
+    position:relative; overflow:hidden;
+  }
+  header h1{font-size:2.4em; letter-spacing:1px;}
+  header p{opacity:.85; margin-top:8px; font-size:1.1em;}
+  .earth-hero{
+    width:110px; height:110px; border-radius:50%; margin:20px auto 0;
+    background: radial-gradient(circle at 35% 30%, #7fd0ff, #2f8fce 60%, #1c5f8c);
+    box-shadow: inset -15px -15px 30px rgba(0,0,0,.35), 0 0 40px rgba(127,208,255,.4);
+    position:relative;
+  }
+  .earth-hero::before{
+    content:"";
+    position:absolute; width:40px; height:30px; background:#3a8f52; border-radius:60% 40% 50% 50%;
+    top:20px; left:15px; transform:rotate(-10deg);
+  }
+  .earth-hero::after{
+    content:"";
+    position:absolute; width:35px; height:25px; background:#3a8f52; border-radius:50% 60% 40% 50%;
+    bottom:15px; right:10px;
+  }
+  section{
+    max-width:820px; margin:36px auto; padding:0 20px;
+  }
+  .card-title{
+    font-size:1.5em; color:var(--navy); margin-bottom:16px;
+    border-left:6px solid var(--gold); padding-left:14px;
+  }
+  .panel{
+    background:white; border-radius:16px; padding:24px;
+    box-shadow:0 6px 20px rgba(20,32,107,.08);
+  }
+  .myths{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:16px;
+  }
+  .myth-card{
+    background:var(--cream); border-radius:14px; padding:18px; text-align:center;
+    border:2px solid #f0e2bd;
+  }
+  .myth-card .emoji{font-size:2.6em; margin-bottom:8px;}
+  .myth-card p{font-size:.95em; color:#444;}
+  .timeline{position:relative; padding-left:28px; margin-top:10px;}
+  .timeline::before{
+    content:""; position:absolute; left:8px; top:6px; bottom:6px; width:3px;
+    background:linear-gradient(var(--gold), var(--leaf));
+  }
+  .t-item{position:relative; margin-bottom:20px;}
+  .t-item::before{
+    content:""; position:absolute; left:-28px; top:4px; width:16px; height:16px;
+    border-radius:50%; background:var(--gold); border:3px solid white; box-shadow:0 0 0 2px var(--gold);
+  }
+  .t-item b{color:var(--navy);}
+  .t-item .yil{color:var(--red); font-weight:bold;}
+  .proofs{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px;}
+  .proof-card{
+    background:#eef8ff; border-radius:14px; padding:18px; text-align:center;
+    border:2px solid #cbe9fb;
+  }
+  .proof-card .emoji{font-size:2.4em; margin-bottom:6px;}
+
+  /* activity: round or not */
+  .obj-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(90px,1fr)); gap:12px; margin-top:14px;
+  }
+  .obj{
+    background:var(--cream); border-radius:12px; padding:14px 6px; text-align:center;
+    cursor:pointer; user-select:none; border:3px solid transparent; transition:.15s;
+    font-size:2em;
+  }
+  .obj span.label{display:block; font-size:.4em; margin-top:6px; color:#555;}
+  .obj.selected{border-color:var(--gold); background:#fff4d6;}
+  .obj.correct{border-color:var(--leaf); background:#e3f7e8;}
+  .obj.wrong{border-color:var(--red); background:#fbe3e0;}
+  .check-btn{
+    margin-top:18px; background:var(--navy); color:white; border:none;
+    padding:12px 26px; border-radius:30px; font-size:1em; cursor:pointer;
+  }
+  .check-btn:hover{background:#1c2c8c;}
+  #obj-result{margin-top:12px; font-weight:bold;}
+
+  /* quiz */
+  .q-item{
+    background:var(--cream); border-radius:12px; padding:16px 18px; margin-bottom:12px;
+  }
+  .q-item p{margin-bottom:10px; font-weight:600; color:#333;}
+  .tf-buttons button{
+    padding:8px 18px; border-radius:20px; border:2px solid #ccc; background:white;
+    margin-right:8px; cursor:pointer; font-weight:bold;
+  }
+  .tf-buttons button.true-btn.active{background:var(--leaf); color:white; border-color:var(--leaf);}
+  .tf-buttons button.false-btn.active{background:var(--red); color:white; border-color:var(--red);}
+  .feedback{margin-top:8px; font-size:.9em; font-weight:bold;}
+  .feedback.ok{color:var(--leaf);}
+  .feedback.bad{color:var(--red);}
+  #score-box{
+    text-align:center; font-size:1.3em; font-weight:bold; color:var(--navy); margin-top:16px;
+  }
+
+  .info-box{
+    background: linear-gradient(135deg,#eafff0,#e4f5ff);
+    border-radius:16px; padding:22px; border:2px solid #cdeedb;
+  }
+  footer{text-align:center; color:#888; font-size:.85em; margin-top:40px;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🌍 Dünyamızın Şekli</h1>
+  <p>3. Sınıf Fen Bilimleri</p>
+  <div class="earth-hero"></div>
+</header>
+
+<section>
+  <h2 class="card-title">Çok Eski Zamanlarda Dünyanın Şekli</h2>
+  <div class="panel">
+    <p style="margin-bottom:16px;">Çok eski zamanlarda insanlar dünyanın şekli hakkında farklı düşüncelere sahipti. Bugün bize komik gelse de o dönemde birçok kişi bu fikirlere inanıyordu:</p>
+    <div class="myths">
+      <div class="myth-card">
+        <div class="emoji">🐢🐘</div>
+        <p><b>Kaplumbağa ve Filler:</b> Hintliler, dünyanın bir deniz kaplumbağasının sırtındaki dört fil tarafından taşındığını düşünüyordu.</p>
+      </div>
+      <div class="myth-card">
+        <div class="emoji">🐂</div>
+        <p><b>Öküzün Boynuzları:</b> Bazı insanlar dünyanın bir öküzün boynuzları üzerinde durduğunu, depremlerin de bundan olduğunu söylerdi.</p>
+      </div>
+      <div class="myth-card">
+        <div class="emoji">⬜</div>
+        <p><b>Düz Dünya:</b> Diğerlerine göre dünya tamamen düz bir yapıya sahipti.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="card-title">Dünyanın Şekli Üzerine Tarihsel Gelişmeler</h2>
+  <div class="panel">
+    <div class="timeline">
+      <div class="t-item"><span class="yil">MÖ 600</span> — <b>Thales</b>, dünyanın şeklini yarım küreye benzetmiş ve suda yüzdüğünü belirtmiştir.</div>
+      <div class="t-item"><span class="yil">MÖ 500</span> — <b>Pisagor</b>, dünyanın yuvarlak olduğunu söyleyen ilk bilim insanı olmuştur.</div>
+      <div class="t-item"><span class="yil">MÖ 300</span> — <b>Ariston</b>, ay tutulması sırasında dünyanın ayın üzerine düşen gölgesinin yuvarlak olduğunu fark etmiştir.</div>
+      <div class="t-item"><span class="yil">973–1048</span> — <b>Biruni</b>, dünyayı küre şeklinde düşündüğünü öne sürmüştür.</div>
+      <div class="t-item"><span class="yil">1480–1521</span> — <b>Macellan</b>, dünyanın çevresini gemiyle dolaşarak başladığı noktaya ulaşabileceğini düşünmüş, yolculuğu tamamlarken hayatını kaybetmiş, arkadaşları rotayı tamamlayarak dünyanın yuvarlak olduğunu kanıtlamıştır.</div>
+      <div class="t-item"><span class="yil">1564–1642</span> — <b>Galilei</b>, teleskobu bulmuş ve dünyanın hareket ettiğini belirtmiş, bu görüşü nedeniyle Kilise tarafından yargılanmıştır.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="card-title">Günümüzde Dünyanın Küre Olduğunu Nasıl Biliyoruz?</h2>
+  <div class="panel">
+    <div class="proofs">
+      <div class="proof-card"><div class="emoji">🚢</div><p>Kıyıdan uzaklaşan bir geminin ufuk çizgisine yaklaştıkça önce gövdesi, sonra direkleri kaybolur.</p></div>
+      <div class="proof-card"><div class="emoji">✈️</div><p>Sürekli aynı yöne doğru uçan bir uçak, başladığı noktaya geri döner.</p></div>
+      <div class="proof-card"><div class="emoji">🛰️</div><p>Dünyamızın uzaydan çekilen fotoğrafları, küre şeklinde olduğunun en büyük ispatıdır.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="card-title">🎯 Etkinlik: Dünyanın Şekline Benzeyen Görselleri Seç</h2>
+  <div class="panel">
+    <p>Aşağıdaki nesnelerden <b>yuvarlak (küre) olanları</b> tıklayarak seç, sonra kontrol et.</p>
+    <div class="obj-grid" id="obj-grid">
+      <div class="obj" data-round="true">🍎<span class="label">Elma</span></div>
+      <div class="obj" data-round="false">🧊<span class="label">Küp</span></div>
+      <div class="obj" data-round="true">🎈<span class="label">Balon</span></div>
+      <div class="obj" data-round="true">🍉<span class="label">Karpuz</span></div>
+      <div class="obj" data-round="false">📕<span class="label">Kitap</span></div>
+      <div class="obj" data-round="false">⏰<span class="label">Saat</span></div>
+      <div class="obj" data-round="true">🥚<span class="label">Yumurta*</span></div>
+      <div class="obj" data-round="true">🍓<span class="label">Çilek*</span></div>
+      <div class="obj" data-round="false">🍫<span class="label">Çikolata</span></div>
+    </div>
+    <button class="check-btn" onclick="checkObjects()">Kontrol Et</button>
+    <div id="obj-result"></div>
+  </div>
+</section>
+
+<section>
+  <h2 class="card-title">✅ Doğru mu, Yanlış mı?</h2>
+  <div class="panel" id="quiz-panel">
+    <!-- filled by JS -->
+    <div id="score-box"></div>
+  </div>
+</section>
+
+<section>
+  <h2 class="card-title">📌 Sonuç</h2>
+  <div class="info-box">
+    <p>Dünya, büyük bir top gibi yuvarlaktır. Aslında Dünya'nın şekli tam olarak bir küre değildir, biraz yassıdır — bilim insanları bu şekle <b>"geoit"</b> der. Geoit, kutuplardan biraz basık, ekvatorda biraz şişkindir. Dünya'nın bu şekli sayesinde üzerinde yaşadığımız kara parçaları ve okyanuslar dengede kalır. Gökyüzündeki yıldızlar ve gezegenler gibi Dünya da uzayda döner; bu dönüş gece ve gündüzün oluşmasına neden olur.</p>
+  </div>
+</section>
+
+<footer>Dijital Öğretmen • 3. Sınıf Fen Bilimleri</footer>
+
+<script>
+// Object selection activity
+document.querySelectorAll('#obj-grid .obj').forEach(el=>{
+  el.addEventListener('click',()=>{
+    el.classList.toggle('selected');
+  });
+});
+function checkObjects(){
+  let correct=0, total=0;
+  document.querySelectorAll('#obj-grid .obj').forEach(el=>{
+    const isRound = el.dataset.round === 'true';
+    const isSelected = el.classList.contains('selected');
+    el.classList.remove('correct','wrong');
+    if(isRound) total++;
+    if(isSelected && isRound){ el.classList.add('correct'); correct++; }
+    else if(isSelected && !isRound){ el.classList.add('wrong'); }
+    else if(!isSelected && isRound){ el.classList.add('wrong'); }
+  });
+  document.getElementById('obj-result').textContent =
+    `${correct} / ${total} yuvarlak nesneyi doğru seçtin. (*Yumurta ve çilek tam küre değildir ama yuvarlak/oval kabul edilir.)`;
+}
+
+// True/False quiz
+const quizData = [
+  {text:"Dünyanın şeklini basketbol topuna benzetebiliriz.", answer:true},
+  {text:"Eski çağlardan beri dünyanın yuvarlak olduğu bilinmektedir.", answer:false},
+  {text:"Hintliler, geçmişte dünyanın kaplumbağa sırtında dört fil tarafından taşındığına inanıyorlardı.", answer:true},
+  {text:"Tüm gezegenler dünyanın etrafında döner.", answer:false},
+  {text:"Ufuk çizgisi, deniz ile gökyüzünü ayıran bir çizgidir.", answer:true},
+  {text:"Macellan, dünyanın yuvarlak olduğunu kanıtlamak için gemiyle yolculuğa çıkan denizcidir.", answer:true},
+  {text:"Aynı yükseklikte sürekli aynı yöne uçan bir uçak, başladığı noktaya geri döner.", answer:true},
+  {text:"Uzaydan çekilen fotoğraflar, dünyanın küresel yapısını kanıtlar.", answer:true},
+  {text:"Pisagor, dünyanın yuvarlak olduğunu savunan ilk bilim insanıdır.", answer:true}
+];
+const quizPanel = document.getElementById('quiz-panel');
+const scoreBox = document.getElementById('score-box');
+let answered = {};
+
+quizData.forEach((q,i)=>{
+  const div = document.createElement('div');
+  div.className='q-item';
+  div.innerHTML = `
+    <p>${i+1}. ${q.text}</p>
+    <div class="tf-buttons">
+      <button class="true-btn" onclick="answerQ(${i}, true, this)">Doğru</button>
+      <button class="false-btn" onclick="answerQ(${i}, false, this)">Yanlış</button>
+    </div>
+    <div class="feedback" id="fb-${i}"></div>
+  `;
+  quizPanel.insertBefore(div, scoreBox);
+});
+
+function answerQ(i, val, btn){
+  if(answered[i] !== undefined) return; // already answered
+  answered[i] = val;
+  const parent = btn.parentElement;
+  parent.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const fb = document.getElementById('fb-'+i);
+  const correct = quizData[i].answer;
+  if(val === correct){
+    fb.textContent = "Doğru cevap! ✔️";
+    fb.className = "feedback ok";
+  } else {
+    fb.textContent = "Yanlış, doğru cevap: " + (correct ? "Doğru" : "Yanlış");
+    fb.className = "feedback bad";
+  }
+  updateScore();
+}
+function updateScore(){
+  const total = Object.keys(answered).length;
+  let correctCount = 0;
+  for(const i in answered){
+    if(answered[i] === quizData[i].answer) correctCount++;
+  }
+  scoreBox.textContent = `Puan: ${correctCount} / ${quizData.length} (Cevaplanan: ${total})`;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Çevremizdeki Işık ve Sesler - Etkileşimli Etkinlik</title>
+<style>
+  :root {
+    --blue: #1F5C7A;
+    --blue-dark: #16324A;
+    --light-blue: #E4EEF5;
+    --yellow: #E8A93B;
+    --light-yellow: #FFF3D6;
+    --purple: #6C5B9E;
+    --light-purple: #EEEAF7;
+    --red: #D9534F;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Verdana, sans-serif;
+    background: linear-gradient(180deg, #E4EEF5 0%, #FFFFFF 40%);
+    color: var(--blue-dark);
+    min-height: 100vh;
+  }
+  header {
+    background: var(--blue);
+    color: white;
+    padding: 24px 16px 30px;
+    text-align: center;
+    border-radius: 0 0 30px 30px;
+  }
+  header h1 { margin: 0; font-size: 26px; }
+  header p { margin: 6px 0 0; opacity: 0.9; }
+  .container { max-width: 900px; margin: 0 auto; padding: 20px 16px 60px; }
+  .card {
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  .card h2 {
+    color: var(--blue);
+    font-size: 20px;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--blue);
+    color: white;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+
+  /* Explanation boxes */
+  .explain-row { display: flex; gap: 16px; flex-wrap: wrap; }
+  .explain-box {
+    flex: 1;
+    min-width: 260px;
+    border-radius: 14px;
+    padding: 16px;
+  }
+  .explain-box h3 { margin: 0 0 8px; font-size: 18px; }
+  .explain-box p { margin: 0 0 12px; font-size: 15px; color: #444; }
+  .natural-box { background: var(--light-yellow); }
+  .artificial-box { background: var(--light-blue); }
+  .natural-box-sound { background: var(--light-blue); }
+  .artificial-box-sound { background: var(--light-purple); }
+  .example-grid { display: flex; flex-direction: column; gap: 8px; }
+  .example-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--blue-dark);
+  }
+  .example-emoji { font-size: 22px; }
+
+  /* Sorting activity */
+  .pool {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px;
+    background: #F4F4F4;
+    border-radius: 12px;
+    min-height: 60px;
+    margin-bottom: 16px;
+  }
+  .item {
+    background: white;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-size: 16px;
+    user-select: none;
+  }
+  .drop-zones { display: flex; gap: 16px; flex-wrap: wrap; }
+  .zone {
+    flex: 1;
+    min-width: 260px;
+    min-height: 140px;
+    border-radius: 14px;
+    padding: 14px;
+    border: 3px dashed #bbb;
+    cursor: pointer;
+  }
+  .zone.natural { background: var(--light-yellow); border-color: var(--yellow); }
+  .zone.artificial { background: var(--light-blue); border-color: var(--blue); }
+  .zone h3 { margin: 0 0 10px; font-size: 17px; }
+  .zone .item { border-color: transparent; }
+  .zone-items { display: flex; flex-wrap: wrap; gap: 8px; min-height: 40px; }
+
+  /* Distance simulator */
+  .sim-wrap { text-align: center; padding: 10px 0 4px; }
+  .sim-track {
+    position: relative;
+    height: 70px;
+    background: #F4F4F4;
+    border-radius: 14px;
+    margin: 16px 0;
+    display: flex;
+    align-items: center;
+  }
+  .sim-source { font-size: 34px; position: absolute; left: 10px; }
+  .sim-ear { font-size: 34px; position: absolute; right: 10px; }
+  .sim-wave {
+    position: absolute;
+    font-size: 22px;
+    transition: opacity 0.2s;
+  }
+  input[type=range] { width: 100%; margin-top: 10px; }
+  #sim-label { font-weight: 700; font-size: 18px; margin-top: 8px; color: var(--blue); }
+
+  /* Quiz */
+  .question { margin-bottom: 18px; }
+  .question p { font-weight: 600; margin-bottom: 8px; }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .option {
+    background: #F7F7F7;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.15s;
+  }
+  .option:hover { background: #EFEFEF; }
+  .option.correct { background: #DFF3E4; border-color: #2E7D5B; }
+  .option.incorrect { background: #FBE4E4; border-color: var(--red); }
+  .option.disabled { pointer-events: none; }
+
+  button.check {
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 22px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  button.check:hover { background: #164A63; }
+  button.reset {
+    background: transparent;
+    color: var(--blue);
+    border: 2px solid var(--blue);
+    border-radius: 24px;
+    padding: 8px 18px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+
+  .feedback { margin-top: 10px; font-weight: 600; min-height: 22px; }
+  .feedback.ok { color: #2E7D5B; }
+  .feedback.bad { color: var(--red); }
+
+  #score-panel {
+    text-align: center;
+    background: var(--blue);
+    color: white;
+    border-radius: 18px;
+    padding: 18px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>💡🔊 Çevremizdeki Işık ve Sesler</h1>
+  <p>3. Sınıf Fen Bilimleri — Etkileşimli Etkinlik</p>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <h2><span class="badge">1</span> Işık Kaynakları</h2>
+    <p>Işık kaynakları ikiye ayrılır: <strong>doğal</strong> ve <strong>yapay</strong>.</p>
+    <div class="explain-row">
+      <div class="explain-box natural-box">
+        <h3>☀️ Doğal Işık Kaynakları</h3>
+        <p>Kendiliğinden ışık veren, insan yapımı olmayan kaynaklardır.</p>
+        <div class="example-grid">
+          <div class="example-item"><span class="example-emoji">☀️</span>Güneş</div>
+          <div class="example-item"><span class="example-emoji">🌟</span>Yıldızlar</div>
+          <div class="example-item"><span class="example-emoji">⚡</span>Şimşek</div>
+        </div>
+      </div>
+      <div class="explain-box artificial-box">
+        <h3>💡 Yapay Işık Kaynakları</h3>
+        <p>İnsanlar tarafından üretilen ışık kaynaklarıdır.</p>
+        <div class="example-grid">
+          <div class="example-item"><span class="example-emoji">💡</span>Ampul</div>
+          <div class="example-item"><span class="example-emoji">🕯️</span>Mum</div>
+          <div class="example-item"><span class="example-emoji">🔦</span>El Feneri</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge">2</span> Işık Kaynağı: Doğal mı, Yapay mı?</h2>
+    <p>Önce bir kartın üzerine dokun, sonra ait olduğu gruba dokun.</p>
+    <div class="pool" id="pool"></div>
+    <div class="drop-zones">
+      <div class="zone natural" id="zone-natural">
+        <h3>☀️ Doğal Işık Kaynağı</h3>
+        <div class="zone-items" id="zone-natural-items"></div>
+      </div>
+      <div class="zone artificial" id="zone-artificial">
+        <h3>💡 Yapay Işık Kaynağı</h3>
+        <div class="zone-items" id="zone-artificial-items"></div>
+      </div>
+    </div>
+    <div class="feedback" id="sort-feedback"></div>
+    <button class="check" onclick="checkSort()">Kontrol Et</button>
+    <button class="reset" onclick="resetSort()">Baştan Başla</button>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge">3</span> Ses Kaynakları</h2>
+    <p>Ses kaynakları da ikiye ayrılır: <strong>doğal</strong> ve <strong>yapay</strong>.</p>
+    <div class="explain-row">
+      <div class="explain-box natural-box-sound">
+        <h3>🌬️ Doğal Ses Kaynakları</h3>
+        <p>Doğada kendiliğinden oluşan seslerdir.</p>
+        <div class="example-grid">
+          <div class="example-item"><span class="example-emoji">🌬️</span>Rüzgar</div>
+          <div class="example-item"><span class="example-emoji">🌧️</span>Yağmur</div>
+          <div class="example-item"><span class="example-emoji">🐦</span>Kuş Sesi</div>
+        </div>
+      </div>
+      <div class="explain-box artificial-box-sound">
+        <h3>🚗 Yapay Ses Kaynakları</h3>
+        <p>İnsanların ürettiği araç ve nesnelerden çıkan seslerdir.</p>
+        <div class="example-grid">
+          <div class="example-item"><span class="example-emoji">🚗</span>Araba Kornası</div>
+          <div class="example-item"><span class="example-emoji">🎵</span>Müzik</div>
+          <div class="example-item"><span class="example-emoji">🔔</span>Zil</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge">4</span> Ses Kaynağı: Doğal mı, Yapay mı?</h2>
+    <p>Önce bir kartın üzerine dokun, sonra ait olduğu gruba dokun.</p>
+    <div class="pool" id="pool-sound"></div>
+    <div class="drop-zones">
+      <div class="zone natural" id="zone-natural-sound">
+        <h3>🌬️ Doğal Ses Kaynağı</h3>
+        <div class="zone-items" id="zone-natural-sound-items"></div>
+      </div>
+      <div class="zone artificial" id="zone-artificial-sound">
+        <h3>🚗 Yapay Ses Kaynağı</h3>
+        <div class="zone-items" id="zone-artificial-sound-items"></div>
+      </div>
+    </div>
+    <div class="feedback" id="sort-sound-feedback"></div>
+    <button class="check" onclick="checkSoundSort()">Kontrol Et</button>
+    <button class="reset" onclick="resetSoundSort()">Baştan Başla</button>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge">5</span> Ses Kaynağı Yaklaşıyor mu, Uzaklaşıyor mu?</h2>
+    <p>Kaydırıcıyı hareket ettirerek sesin şiddetinin nasıl değiştiğini gözlemle.</p>
+    <div class="sim-wrap">
+      <div class="sim-track">
+        <div class="sim-source">🔔</div>
+        <div class="sim-wave" id="sim-wave">))) </div>
+        <div class="sim-ear">👂</div>
+      </div>
+      <input type="range" min="0" max="100" value="50" id="sim-slider" oninput="updateSim(this.value)">
+      <div id="sim-label">Orta şiddette ses</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge">6</span> Küçük Bilgi Yarışması</h2>
+    <div id="quiz"></div>
+  </div>
+
+  <div class="card" id="score-panel">
+    Puanın: <span id="score">0</span> / <span id="total">0</span>
+  </div>
+
+</div>
+
+<script>
+// ---------- Sorting activity (generic factory: supports light + sound) ----------
+function shuffle(arr) {
+  return arr.map(v => [Math.random(), v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]);
+}
+
+function makeSortActivity(config) {
+  // config: { items, poolId, naturalZoneId, naturalItemsId, artificialZoneId, artificialItemsId, feedbackId, colorNatural, colorArtificial, resultKey }
+  const state = { selectedEl: null, correct: false };
+
+  function buildPool() {
+    const pool = document.getElementById(config.poolId);
+    pool.innerHTML = "";
+    shuffle(config.items).forEach((it, idx) => {
+      const el = document.createElement("div");
+      el.className = "item";
+      el.textContent = it.text;
+      el.dataset.type = it.type;
+      el.id = config.poolId + "-item-" + idx;
+      el.addEventListener("click", () => selectItem(el));
+      pool.appendChild(el);
+    });
+  }
+
+  function selectItem(el) {
+    if (state.selectedEl) state.selectedEl.style.boxShadow = "";
+    state.selectedEl = el;
+    el.style.boxShadow = "0 0 0 3px " + (el.dataset.type === "natural" ? config.colorNatural : config.colorArtificial);
+  }
+
+  function placeInZone(zoneItemsId) {
+    if (!state.selectedEl) return;
+    document.getElementById(zoneItemsId).appendChild(state.selectedEl);
+    state.selectedEl.style.boxShadow = "";
+    state.selectedEl = null;
+  }
+
+  document.getElementById(config.naturalZoneId).addEventListener("click", () => placeInZone(config.naturalItemsId));
+  document.getElementById(config.artificialZoneId).addEventListener("click", () => placeInZone(config.artificialItemsId));
+  document.getElementById(config.poolId).addEventListener("click", (e) => {
+    if (e.target.id === config.poolId && state.selectedEl) {
+      document.getElementById(config.poolId).appendChild(state.selectedEl);
+      state.selectedEl.style.boxShadow = "";
+      state.selectedEl = null;
+    }
+  });
+
+  function reset() {
+    state.selectedEl = null;
+    buildPool();
+    document.getElementById(config.naturalItemsId).innerHTML = "";
+    document.getElementById(config.artificialItemsId).innerHTML = "";
+    const fb = document.getElementById(config.feedbackId);
+    fb.textContent = "";
+    fb.className = "feedback";
+  }
+
+  function check() {
+    let correct = 0, placed = 0;
+    document.querySelectorAll("#" + config.naturalItemsId + " .item").forEach(el => {
+      placed++;
+      if (el.dataset.type === "natural") correct++;
+    });
+    document.querySelectorAll("#" + config.artificialItemsId + " .item").forEach(el => {
+      placed++;
+      if (el.dataset.type === "artificial") correct++;
+    });
+    const fb = document.getElementById(config.feedbackId);
+    if (placed < config.items.length) {
+      fb.textContent = "Henüz tüm kartları yerleştirmedin. Devam et!";
+      fb.className = "feedback";
+    } else if (correct === config.items.length) {
+      fb.textContent = "🎉 Harika! Hepsi doğru yerde!";
+      fb.className = "feedback ok";
+    } else {
+      fb.textContent = `${correct} / ${config.items.length} kart doğru yerde. Tekrar dener misin?`;
+      fb.className = "feedback bad";
+    }
+    state.correct = (correct === config.items.length && placed === config.items.length);
+    scoreState[config.resultKey] = state.correct;
+    updateScore();
+  }
+
+  buildPool();
+  return { reset, check };
+}
+
+const scoreState = { light: false, sound: false };
+
+const lightSort = makeSortActivity({
+  items: [
+    { text: "☀️ Güneş", type: "natural" },
+    { text: "💡 Ampul", type: "artificial" },
+    { text: "🕯️ Mum", type: "artificial" },
+    { text: "🌟 Yıldızlar", type: "natural" },
+    { text: "🔦 El Feneri", type: "artificial" },
+    { text: "⚡ Şimşek", type: "natural" },
+  ],
+  poolId: "pool",
+  naturalZoneId: "zone-natural", naturalItemsId: "zone-natural-items",
+  artificialZoneId: "zone-artificial", artificialItemsId: "zone-artificial-items",
+  feedbackId: "sort-feedback",
+  colorNatural: "#E8A93B", colorArtificial: "#1F5C7A",
+  resultKey: "light",
+});
+
+const soundSort = makeSortActivity({
+  items: [
+    { text: "🌬️ Rüzgar", type: "natural" },
+    { text: "🚗 Araba Kornası", type: "artificial" },
+    { text: "🌧️ Yağmur", type: "natural" },
+    { text: "🎵 Müzik", type: "artificial" },
+    { text: "🐦 Kuş Sesi", type: "natural" },
+    { text: "🔔 Zil", type: "artificial" },
+  ],
+  poolId: "pool-sound",
+  naturalZoneId: "zone-natural-sound", naturalItemsId: "zone-natural-sound-items",
+  artificialZoneId: "zone-artificial-sound", artificialItemsId: "zone-artificial-sound-items",
+  feedbackId: "sort-sound-feedback",
+  colorNatural: "#1F5C7A", colorArtificial: "#6C5B9E",
+  resultKey: "sound",
+});
+
+function resetSort() { lightSort.reset(); }
+function checkSort() { lightSort.check(); }
+function resetSoundSort() { soundSort.reset(); }
+function checkSoundSort() { soundSort.check(); }
+
+// ---------- Distance simulator ----------
+function updateSim(val) {
+  const wave = document.getElementById("sim-wave");
+  const label = document.getElementById("sim-label");
+  const pct = val / 100; // 0 = far (left), 100 = close... we'll map slider to ear proximity
+  // slider represents ear position moving from far(0) to near(100) the bell
+  const trackWidth = 100; // percent
+  const leftPos = 8 + pct * 78; // percent within track
+  wave.style.left = leftPos + "%";
+  const size = 16 + pct * 26;
+  wave.style.fontSize = size + "px";
+  wave.style.opacity = 0.4 + pct * 0.6;
+  if (pct > 0.66) {
+    label.textContent = "🔊 Yakın: Ses şiddetli duyuluyor";
+    label.style.color = "#1F5C7A";
+  } else if (pct > 0.33) {
+    label.textContent = "🔉 Orta mesafe: Ses orta şiddette";
+    label.style.color = "#6C5B9E";
+  } else {
+    label.textContent = "🔈 Uzak: Ses hafif duyuluyor";
+    label.style.color = "#8A8A8A";
+  }
+}
+
+// ---------- Quiz ----------
+const quizData = [
+  {
+    q: "Karanlıkta neden göremeyiz?",
+    options: ["Gözlerimiz yorgun olduğu için", "Işık olmadığı için", "Çok sessiz olduğu için"],
+    correct: 1,
+  },
+  {
+    q: "Aşağıdakilerden hangisi yapay bir ışık kaynağıdır?",
+    options: ["Güneş", "Yıldızlar", "Ampul"],
+    correct: 2,
+  },
+  {
+    q: "Ses, kaynağından çıktıktan sonra nasıl yayılır?",
+    options: ["Sadece tek yöne", "Her yöne", "Hiç yayılmaz"],
+    correct: 1,
+  },
+  {
+    q: "Ses kaynağına yaklaştıkça ses nasıl duyulur?",
+    options: ["Daha hafif", "Daha şiddetli", "Değişmez"],
+    correct: 1,
+  },
+  {
+    q: "İnsan kulağı hakkında hangisi doğrudur?",
+    options: ["Her sesi duyabilir", "Bazı sesleri duyamaz", "Hiçbir sesi duyamaz"],
+    correct: 1,
+  },
+  {
+    q: "Şiddetli seslerden korunmak için ne yapabiliriz?",
+    options: ["Kulak koruyucu kullanmak", "Sesi daha da açmak", "Kulaklıkla sürekli yüksek sesle dinlemek"],
+    correct: 0,
+  },
+];
+
+let quizAnswered = new Array(quizData.length).fill(false);
+
+function buildQuiz() {
+  const quizDiv = document.getElementById("quiz");
+  quizDiv.innerHTML = "";
+  quizData.forEach((item, qi) => {
+    const qDiv = document.createElement("div");
+    qDiv.className = "question";
+    const p = document.createElement("p");
+    p.textContent = (qi + 1) + ". " + item.q;
+    qDiv.appendChild(p);
+    const optsDiv = document.createElement("div");
+    optsDiv.className = "options";
+    item.options.forEach((opt, oi) => {
+      const optDiv = document.createElement("div");
+      optDiv.className = "option";
+      optDiv.textContent = opt;
+      optDiv.onclick = () => selectOption(qi, oi, optDiv, qDiv);
+      optsDiv.appendChild(optDiv);
+    });
+    qDiv.appendChild(optsDiv);
+    quizDiv.appendChild(qDiv);
+  });
+  document.getElementById("total").textContent = quizData.length + 2;
+}
+
+function selectOption(qi, oi, optDiv, qDiv) {
+  if (quizAnswered[qi]) return;
+  quizAnswered[qi] = true;
+  const opts = qDiv.querySelectorAll(".option");
+  opts.forEach((o, idx) => {
+    o.classList.add("disabled");
+    if (idx === quizData[qi].correct) o.classList.add("correct");
+  });
+  if (oi !== quizData[qi].correct) {
+    optDiv.classList.add("incorrect");
+  }
+  updateScore();
+}
+
+function updateScore() {
+  let right = 0;
+  const questionDivs = document.querySelectorAll(".question");
+  quizData.forEach((item, qi) => {
+    const qDiv = questionDivs[qi];
+    if (!qDiv) return;
+    if (quizAnswered[qi] && !qDiv.querySelector(".option.incorrect")) right++;
+  });
+  const sortPoints = (scoreState.light ? 1 : 0) + (scoreState.sound ? 1 : 0);
+  document.getElementById("score").textContent = right + sortPoints;
+}
+
+buildQuiz();
+updateSim(50);
+</script>
+
+</body>
+</html>

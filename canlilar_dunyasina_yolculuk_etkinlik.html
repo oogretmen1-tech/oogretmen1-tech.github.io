@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canlılar Dünyasına Yolculuk - Etkileşimli Etkinlik</title>
+<style>
+  :root {
+    --green: #2E7D5B;
+    --green-dark: #1C3D2E;
+    --light-green: #E6F2EA;
+    --blue: #3E7CB1;
+    --light-blue: #E4EEF5;
+    --orange: #E08E45;
+    --light-orange: #FDF1E4;
+    --purple: #6C5B9E;
+    --light-purple: #EEEAF7;
+    --red: #D9534F;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Verdana, sans-serif;
+    background: linear-gradient(180deg, #E6F2EA 0%, #FFFFFF 40%);
+    color: var(--green-dark);
+    min-height: 100vh;
+  }
+  header {
+    background: var(--green);
+    color: white;
+    padding: 24px 16px 30px;
+    text-align: center;
+    border-radius: 0 0 30px 30px;
+  }
+  header h1 { margin: 0; font-size: 26px; }
+  header p { margin: 6px 0 0; opacity: 0.9; }
+  .container { max-width: 900px; margin: 0 auto; padding: 20px 16px 60px; }
+  .card {
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  .card h2 {
+    color: var(--green);
+    font-size: 20px;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--green);
+    color: white;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+
+  /* Explanation boxes */
+  .explain-row { display: flex; gap: 16px; flex-wrap: wrap; }
+  .explain-box {
+    flex: 1;
+    min-width: 240px;
+    border-radius: 14px;
+    padding: 16px;
+  }
+  .explain-box h3 { margin: 0 0 8px; font-size: 17px; }
+  .explain-box p { margin: 0 0 12px; font-size: 14px; color: #444; }
+  .example-grid { display: flex; flex-direction: column; gap: 8px; }
+  .example-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--green-dark);
+  }
+  .example-emoji { font-size: 20px; }
+
+  .trait-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
+  .trait-item {
+    background: var(--light-green);
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+  }
+  .trait-item .emoji { font-size: 26px; display: block; margin-bottom: 4px; }
+  .trait-item .label { font-size: 13px; font-weight: 700; color: var(--green); }
+
+  /* Sorting activity */
+  .pool {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px;
+    background: #F4F4F4;
+    border-radius: 12px;
+    min-height: 60px;
+    margin-bottom: 16px;
+  }
+  .item {
+    background: white;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-size: 16px;
+    user-select: none;
+  }
+  .drop-zones { display: flex; gap: 16px; flex-wrap: wrap; }
+  .zone {
+    flex: 1;
+    min-width: 260px;
+    min-height: 140px;
+    border-radius: 14px;
+    padding: 14px;
+    border: 3px dashed #bbb;
+    cursor: pointer;
+  }
+  .zone.plant { background: var(--light-green); border-color: var(--green); }
+  .zone.animal { background: var(--light-orange); border-color: var(--orange); }
+  .zone.land { background: var(--light-orange); border-color: var(--orange); }
+  .zone.water { background: var(--light-blue); border-color: var(--blue); }
+  .zone.air { background: var(--light-purple); border-color: var(--purple); }
+  .zone h3 { margin: 0 0 10px; font-size: 17px; }
+  .zone .item { border-color: transparent; }
+  .zone-items { display: flex; flex-wrap: wrap; gap: 8px; min-height: 40px; }
+
+  /* Quiz */
+  .question { margin-bottom: 18px; }
+  .question p { font-weight: 600; margin-bottom: 8px; }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .option {
+    background: #F7F7F7;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.15s;
+  }
+  .option:hover { background: #EFEFEF; }
+  .option.correct { background: #DFF3E4; border-color: var(--green); }
+  .option.incorrect { background: #FBE4E4; border-color: var(--red); }
+  .option.disabled { pointer-events: none; }
+
+  button.check {
+    background: var(--green);
+    color: white;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 22px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  button.check:hover { background: #235F45; }
+  button.reset {
+    background: transparent;
+    color: var(--green);
+    border: 2px solid var(--green);
+    border-radius: 24px;
+    padding: 8px 18px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+
+  .feedback { margin-top: 10px; font-weight: 600; min-height: 22px; }
+  .feedback.ok { color: var(--green); }
+  .feedback.bad { color: var(--red); }
+
+  #score-panel {
+    text-align: center;
+    background: var(--green);
+    color: white;
+    border-radius: 18px;
+    padding: 18px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🌍 Canlılar Dünyasına Yolculuk</h1>
+  <p>3. Sınıf Fen Bilimleri — Etkileşimli Etkinlik</p>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <h2><span class="badge">1</span> Canlıların Ortak Özellikleri</h2>
+    <p>Tüm canlılarda bulunan altı ortak özellik vardır:</p>
+    <div class="trait-grid">
+      <div class="trait-item"><span class="emoji">🍽️</span><span class="label">Beslenme</span></div>
+      <div class="trait-item"><span class="emoji">💨</span><span class="label">Solunum</span></div>
+      <div class="trait-item"><span class="emoji">🏃</span><span class="label">Hareket</span></div>
+      <div class="trait-item"><span class="emoji">🌱</span><span class="label">Büyüme-Gelişme</span></div>
+      <div class="trait-item"><span class="emoji">👶</span><span class="label">Üreme</span></div>
+      <div class="trait-item"><span class="emoji">⚡</span><span class="label">Tepki Verme</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge">2</span> Canlı Çeşitliliği</h2>
+    <p>Canlılar başlıca <strong>bitkiler</strong>, <strong>hayvanlar</strong> ve <strong>diğer canlılar</strong> olarak gruplanır.</p>
+    <div class="explain-row">
+      <div class="explain-box" style="background: var(--light-green);">
+        <h3>🌳 Bitkiler</h3>
+        <div class="example-grid">
+          <div class="example-item"><span class="example-emoji">🌳</span>Çam Ağacı</div>
+          <div class="example-item"><span class="example-emoji">🌸</span>Papatya</div>
+          <div class="example-item"><span class="example-emoji">🌹</span>Gül</div>
+        </div>
+      </div>
+      <div class="explain-box" style="background: var(--light-orange);">
+        <h3>🐘 Hayvanlar</h3>
+        <div class="example-grid">
+          <div class="example-item"><span class="example-emoji">🐱</span>Kedi</div>
+          <div class="example-item"><span class="example-emoji">🐟</span>Balık</div>
+          <div class="example-item"><span class="example-emoji">🦋</span>Kelebek</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge">3</span> Bitki mi, Hayvan mı?</h2>
+    <p>Önce bir kartın üzerine dokun, sonra ait olduğu gruba dokun.</p>
+    <div class="pool" id="pool-group"></div>
+    <div class="drop-zones">
+      <div class="zone plant" id="zone-plant">
+        <h3>🌳 Bitki</h3>
+        <div class="zone-items" id="zone-plant-items"></div>
+      </div>
+      <div class="zone animal" id="zone-animal">
+        <h3>🐘 Hayvan</h3>
+        <div class="zone-items" id="zone-animal-items"></div>
+      </div>
+    </div>
+    <div class="feedback" id="sort-group-feedback"></div>
+    <button class="check" onclick="groupSort.check()">Kontrol Et</button>
+    <button class="reset" onclick="groupSort.reset()">Baştan Başla</button>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge">4</span> Canlıların Yaşadığı Ortamlar</h2>
+    <p>Canlılar <strong>karada</strong>, <strong>suda</strong> ya da <strong>havada</strong> yaşayabilir.</p>
+    <div class="explain-row">
+      <div class="explain-box" style="background: var(--light-orange);">
+        <h3>🏞️ Karada</h3>
+        <div class="example-grid">
+          <div class="example-item"><span class="example-emoji">🦁</span>Aslan</div>
+          <div class="example-item"><span class="example-emoji">🐇</span>Tavşan</div>
+        </div>
+      </div>
+      <div class="explain-box" style="background: var(--light-blue);">
+        <h3>🌊 Suda</h3>
+        <div class="example-grid">
+          <div class="example-item"><span class="example-emoji">🐬</span>Yunus</div>
+          <div class="example-item"><span class="example-emoji">⭐</span>Deniz Yıldızı</div>
+        </div>
+      </div>
+      <div class="explain-box" style="background: var(--light-purple);">
+        <h3>☁️ Havada</h3>
+        <div class="example-grid">
+          <div class="example-item"><span class="example-emoji">🐦</span>Kuşlar</div>
+          <div class="example-item"><span class="example-emoji">🦋</span>Böcekler</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge">5</span> Bu Canlı Nerede Yaşar?</h2>
+    <p>Önce bir kartın üzerine dokun, sonra ait olduğu ortama dokun.</p>
+    <div class="pool" id="pool-habitat"></div>
+    <div class="drop-zones">
+      <div class="zone land" id="zone-land">
+        <h3>🏞️ Kara</h3>
+        <div class="zone-items" id="zone-land-items"></div>
+      </div>
+      <div class="zone water" id="zone-water">
+        <h3>🌊 Su</h3>
+        <div class="zone-items" id="zone-water-items"></div>
+      </div>
+      <div class="zone air" id="zone-air">
+        <h3>☁️ Hava</h3>
+        <div class="zone-items" id="zone-air-items"></div>
+      </div>
+    </div>
+    <div class="feedback" id="sort-habitat-feedback"></div>
+    <button class="check" onclick="habitatSort.check()">Kontrol Et</button>
+    <button class="reset" onclick="habitatSort.reset()">Baştan Başla</button>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge">6</span> Küçük Bilgi Yarışması</h2>
+    <div id="quiz"></div>
+  </div>
+
+  <div class="card" id="score-panel">
+    Puanın: <span id="score">0</span> / <span id="total">0</span>
+  </div>
+
+</div>
+
+<script>
+function shuffle(arr) {
+  return arr.map(v => [Math.random(), v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]);
+}
+
+const scoreState = {};
+
+function makeSortActivity(config) {
+  // config: { key, items, poolId, zones: [{id, itemsId, type}], feedbackId }
+  const state = { selectedEl: null };
+  scoreState[config.key] = false;
+
+  function buildPool() {
+    const pool = document.getElementById(config.poolId);
+    pool.innerHTML = "";
+    shuffle(config.items).forEach((it, idx) => {
+      const el = document.createElement("div");
+      el.className = "item";
+      el.textContent = it.text;
+      el.dataset.type = it.type;
+      el.id = config.poolId + "-item-" + idx;
+      el.addEventListener("click", () => selectItem(el));
+      pool.appendChild(el);
+    });
+  }
+
+  function selectItem(el) {
+    if (state.selectedEl) state.selectedEl.style.boxShadow = "";
+    state.selectedEl = el;
+    const zoneMatch = config.zones.find(z => z.type === el.dataset.type);
+    el.style.boxShadow = "0 0 0 3px " + (zoneMatch ? zoneMatch.color : "#999");
+  }
+
+  function placeInZone(zoneItemsId) {
+    if (!state.selectedEl) return;
+    document.getElementById(zoneItemsId).appendChild(state.selectedEl);
+    state.selectedEl.style.boxShadow = "";
+    state.selectedEl = null;
+  }
+
+  config.zones.forEach(z => {
+    document.getElementById(z.id).addEventListener("click", () => placeInZone(z.itemsId));
+  });
+  document.getElementById(config.poolId).addEventListener("click", (e) => {
+    if (e.target.id === config.poolId && state.selectedEl) {
+      document.getElementById(config.poolId).appendChild(state.selectedEl);
+      state.selectedEl.style.boxShadow = "";
+      state.selectedEl = null;
+    }
+  });
+
+  function reset() {
+    state.selectedEl = null;
+    buildPool();
+    config.zones.forEach(z => { document.getElementById(z.itemsId).innerHTML = ""; });
+    const fb = document.getElementById(config.feedbackId);
+    fb.textContent = "";
+    fb.className = "feedback";
+  }
+
+  function check() {
+    let correct = 0, placed = 0;
+    config.zones.forEach(z => {
+      document.querySelectorAll("#" + z.itemsId + " .item").forEach(el => {
+        placed++;
+        if (el.dataset.type === z.type) correct++;
+      });
+    });
+    const fb = document.getElementById(config.feedbackId);
+    if (placed < config.items.length) {
+      fb.textContent = "Henüz tüm kartları yerleştirmedin. Devam et!";
+      fb.className = "feedback";
+    } else if (correct === config.items.length) {
+      fb.textContent = "🎉 Harika! Hepsi doğru yerde!";
+      fb.className = "feedback ok";
+    } else {
+      fb.textContent = `${correct} / ${config.items.length} kart doğru yerde. Tekrar dener misin?`;
+      fb.className = "feedback bad";
+    }
+    scoreState[config.key] = (correct === config.items.length && placed === config.items.length);
+    updateScore();
+  }
+
+  buildPool();
+  return { reset, check };
+}
+
+const groupSort = makeSortActivity({
+  key: "group",
+  items: [
+    { text: "🐱 Kedi", type: "animal" },
+    { text: "🌸 Papatya", type: "plant" },
+    { text: "🐟 Balık", type: "animal" },
+    { text: "🌳 Çam Ağacı", type: "plant" },
+    { text: "🦋 Kelebek", type: "animal" },
+    { text: "🌹 Gül", type: "plant" },
+  ],
+  poolId: "pool-group",
+  zones: [
+    { id: "zone-plant", itemsId: "zone-plant-items", type: "plant", color: "#2E7D5B" },
+    { id: "zone-animal", itemsId: "zone-animal-items", type: "animal", color: "#E08E45" },
+  ],
+  feedbackId: "sort-group-feedback",
+});
+
+const habitatSort = makeSortActivity({
+  key: "habitat",
+  items: [
+    { text: "🦁 Aslan", type: "land" },
+    { text: "🐬 Yunus", type: "water" },
+    { text: "🐦 Kuş", type: "air" },
+    { text: "🐇 Tavşan", type: "land" },
+    { text: "⭐ Deniz Yıldızı", type: "water" },
+    { text: "🦋 Kelebek", type: "air" },
+  ],
+  poolId: "pool-habitat",
+  zones: [
+    { id: "zone-land", itemsId: "zone-land-items", type: "land", color: "#E08E45" },
+    { id: "zone-water", itemsId: "zone-water-items", type: "water", color: "#3E7CB1" },
+    { id: "zone-air", itemsId: "zone-air-items", type: "air", color: "#6C5B9E" },
+  ],
+  feedbackId: "sort-habitat-feedback",
+});
+
+// ---------- Quiz ----------
+const quizData = [
+  {
+    q: "Aşağıdakilerden hangisi tüm canlılarda ortak bir özelliktir?",
+    options: ["Uçabilmek", "Beslenmek", "Konuşabilmek"],
+    correct: 1,
+  },
+  {
+    q: "Aşağıdakilerden hangisi bir bitkidir?",
+    options: ["Kelebek", "Gül", "Balık"],
+    correct: 1,
+  },
+  {
+    q: "Aşağıdakilerden hangisi suda yaşayan bir canlıdır?",
+    options: ["Aslan", "Yunus", "Tavşan"],
+    correct: 1,
+  },
+  {
+    q: "Bir bitkinin yaşaması için aşağıdakilerden hangisine ihtiyacı yoktur?",
+    options: ["Su", "Işık", "Kulaklık"],
+    correct: 2,
+  },
+  {
+    q: "Canlıların kendine benzer yeni canlılar oluşturmasına ne denir?",
+    options: ["Üreme", "Solunum", "Hareket"],
+    correct: 0,
+  },
+];
+
+let quizAnswered = new Array(quizData.length).fill(false);
+
+function buildQuiz() {
+  const quizDiv = document.getElementById("quiz");
+  quizDiv.innerHTML = "";
+  quizData.forEach((item, qi) => {
+    const qDiv = document.createElement("div");
+    qDiv.className = "question";
+    const p = document.createElement("p");
+    p.textContent = (qi + 1) + ". " + item.q;
+    qDiv.appendChild(p);
+    const optsDiv = document.createElement("div");
+    optsDiv.className = "options";
+    item.options.forEach((opt, oi) => {
+      const optDiv = document.createElement("div");
+      optDiv.className = "option";
+      optDiv.textContent = opt;
+      optDiv.onclick = () => selectOption(qi, oi, optDiv, qDiv);
+      optsDiv.appendChild(optDiv);
+    });
+    qDiv.appendChild(optsDiv);
+    quizDiv.appendChild(qDiv);
+  });
+  document.getElementById("total").textContent = quizData.length + 2;
+}
+
+function selectOption(qi, oi, optDiv, qDiv) {
+  if (quizAnswered[qi]) return;
+  quizAnswered[qi] = true;
+  const opts = qDiv.querySelectorAll(".option");
+  opts.forEach((o, idx) => {
+    o.classList.add("disabled");
+    if (idx === quizData[qi].correct) o.classList.add("correct");
+  });
+  if (oi !== quizData[qi].correct) {
+    optDiv.classList.add("incorrect");
+  }
+  updateScore();
+}
+
+function updateScore() {
+  let right = 0;
+  const questionDivs = document.querySelectorAll(".question");
+  quizData.forEach((item, qi) => {
+    const qDiv = questionDivs[qi];
+    if (!qDiv) return;
+    if (quizAnswered[qi] && !qDiv.querySelector(".option.incorrect")) right++;
+  });
+  const sortPoints = Object.values(scoreState).filter(Boolean).length;
+  document.getElementById("score").textContent = right + sortPoints;
+}
+
+buildQuiz();
+</script>
+
+</body>
+</html>
