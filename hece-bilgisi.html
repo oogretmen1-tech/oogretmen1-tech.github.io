@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hece Bilgisi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky:#f3f0ff;
+    --paper:#ffffff;
+    --ink:#2c2645;
+    --hece1:#9b6bff;     /* purple */
+    --hece1-dark:#7c4fe0;
+    --hece2:#ffb648;     /* amber */
+    --hece2-dark:#e79a1f;
+    --leaf:#4cb26a;
+    --berry:#e8607a;
+    --chalk:#f6f1ff;
+    --border:#e2d9fb;
+    --shadow: 0 6px 0 rgba(44,38,69,0.12);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Nunito', sans-serif;
+    background:
+      radial-gradient(circle at 10% 15%, #ffe9d6 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, #e4d9ff 0%, transparent 45%),
+      var(--sky);
+    color:var(--ink);
+    min-height:100vh;
+    padding-bottom:60px;
+  }
+  h1,h2,h3{ font-family:'Baloo 2', cursive; margin:0; }
+  .wrap{ max-width:960px; margin:0 auto; padding:0 20px; }
+
+  /* HERO */
+  .hero{ padding:38px 20px 30px; text-align:center; }
+  .hero-blocks{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-bottom:18px; }
+  .hero-blocks span{
+    font-family:'Baloo 2', cursive; font-size:1.5rem; font-weight:800;
+    padding:10px 14px; border-radius:12px; color:#fff; box-shadow:var(--shadow);
+    animation: bob 2.6s ease-in-out infinite;
+  }
+  .hero-blocks span:nth-child(1){ background:var(--hece1); }
+  .hero-blocks span:nth-child(2){ background:var(--hece2); animation-delay:.2s;}
+  .hero-blocks span:nth-child(3){ background:var(--hece1); animation-delay:.4s;}
+  @keyframes bob{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+  @media (prefers-reduced-motion:reduce){ .hero-blocks span{animation:none;} }
+  .hero h1{ font-size:2.2rem; }
+  .hero p.sub{ font-size:1.05rem; color:#5b5478; margin-top:8px; }
+
+  .card{
+    background:var(--paper); border:3px solid var(--border); border-radius:24px;
+    box-shadow:var(--shadow); padding:26px 24px; margin:26px 0;
+  }
+  .card > h2{ font-size:1.5rem; display:flex; align-items:center; gap:10px; margin-bottom:14px; color:var(--hece1-dark);}
+  .badge{
+    display:inline-flex; align-items:center; justify-content:center; width:34px;height:34px;border-radius:50%;
+    background:var(--hece1); color:#fff; font-family:'Baloo 2';font-weight:700; flex:none;
+  }
+  .info{
+    background:var(--chalk); border-left:6px solid var(--hece2); border-radius:14px;
+    padding:16px 18px; line-height:1.65; font-size:1.02rem;
+  }
+  .info b{ color:var(--hece1-dark); }
+  .syl-demo{
+    display:flex; gap:6px; margin:14px 0; flex-wrap:wrap;
+  }
+  .syl-demo span{
+    font-family:'Baloo 2'; font-weight:700; font-size:1.1rem;
+    background:var(--hece1); color:#fff; padding:6px 12px; border-radius:10px;
+  }
+  .syl-demo span:nth-child(even){ background:var(--hece2); }
+
+  /* QUIZ COMMON */
+  .quiz-item{ background:#fbfaff; border:2px solid var(--border); border-radius:16px; padding:16px 18px; margin-bottom:14px; }
+  .quiz-q{ font-weight:700; font-size:1.08rem; margin-bottom:10px; }
+  .opt-row{ display:flex; gap:10px; flex-wrap:wrap; }
+  .opt-btn{
+    font-family:'Nunito'; font-weight:700; font-size:.98rem;
+    border:2px solid var(--border); background:#fff; color:var(--ink);
+    border-radius:12px; padding:9px 16px; cursor:pointer; transition:all .15s ease;
+  }
+  .opt-btn:hover{ border-color:var(--hece1); }
+  .opt-btn.correct{ background:var(--leaf); border-color:#3a9256; color:#fff; }
+  .opt-btn.wrong{ background:var(--berry); border-color:#c94860; color:#fff; }
+  .opt-btn:disabled{ cursor:default; opacity:.85; }
+  .feedback{ margin-top:10px; font-weight:700; min-height:22px; }
+  .feedback.ok{ color:#2e8b4f; }
+  .feedback.bad{ color:var(--berry); }
+
+  /* HECE PUZZLE (ordering) */
+  .puzzle-row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; min-height:56px;
+    background:#fbfaff; border:2px dashed var(--border); border-radius:14px; padding:10px; }
+  .syl-piece{
+    font-family:'Baloo 2'; font-weight:700; font-size:1.1rem; color:#fff;
+    background:var(--hece1); border-radius:10px; padding:10px 16px; cursor:grab;
+    box-shadow:0 3px 0 var(--hece1-dark); user-select:none;
+  }
+  .syl-piece:nth-child(even){ background:var(--hece2); box-shadow:0 3px 0 var(--hece2-dark); }
+  .syl-piece.dragging{ opacity:.4; }
+  .drag-hint{ font-size:.88rem; color:#736c92; margin-top:8px;}
+
+  .check-btn{
+    margin-top:16px; font-family:'Baloo 2'; font-weight:700; font-size:1.02rem;
+    background:var(--leaf); color:#fff; border:none; border-radius:14px; padding:12px 26px;
+    cursor:pointer; box-shadow:0 5px 0 #3a9256;
+  }
+  .check-btn:active{ transform:translateY(3px); box-shadow:none; }
+  .reset-btn{
+    font-family:'Baloo 2'; font-weight:700; font-size:.95rem;
+    background:#fff; color:var(--hece1-dark); border:2px solid var(--hece1);
+    border-radius:12px; padding:8px 18px; cursor:pointer; margin-left:10px;
+  }
+
+  .scorebar{
+    position:sticky; top:12px; z-index:5;
+    display:flex; align-items:center; justify-content:space-between;
+    background:#fff; border:3px solid var(--border); border-radius:18px;
+    padding:10px 20px; margin:0 auto 8px; box-shadow:var(--shadow); max-width:960px;
+  }
+  .scorebar .title{ font-family:'Baloo 2'; font-weight:700; color:var(--hece1-dark);}
+  .scorebar .score{ font-family:'Baloo 2'; font-weight:800; font-size:1.15rem;}
+  .scorebar .score span{ color:var(--leaf); }
+
+  .next-list{ margin-top:14px; }
+  .next-item{
+    display:flex; align-items:center; gap:14px; background:#fbfaff; border:2px solid var(--border);
+    border-radius:14px; padding:12px 16px; margin-bottom:10px;
+  }
+  .next-item .word{
+    font-family:'Baloo 2'; font-weight:700; font-size:1.1rem; color:var(--hece1-dark); min-width:120px;
+  }
+
+  footer{ text-align:center; color:#7a728f; font-size:.9rem; margin-top:30px; }
+
+  @media (max-width:560px){
+    .hero h1{ font-size:1.6rem; }
+    .card{ padding:18px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="scorebar wrap">
+  <div class="title">🌟 Puanım</div>
+  <div class="score"><span id="scoreVal">0</span> / <span id="scoreMax">0</span></div>
+</div>
+
+<div class="hero wrap">
+  <div class="hero-blocks"><span>he</span><span>ce</span><span>ler</span></div>
+  <h1>Hece Bilgisi</h1>
+  <p class="sub">3. Sınıf Türkçe · Tema 1 — Kelimeleri hecelerine ayıralım, hecelerden kelime oluşturalım!</p>
+</div>
+
+<div class="wrap">
+
+  <!-- BILGI KUTUSU -->
+  <section class="card">
+    <h2><span class="badge">1</span> Ne Öğreneceğiz?</h2>
+    <div class="info">
+      Bir kelimeyi <b>tek seferde söylenebilen</b> parçalarına ayırırsak <b>heceleri</b> buluruz.
+      Her hecede mutlaka <b>bir ünlü harf</b> bulunur; bu yüzden bir kelimenin hece sayısı,
+      o kelimedeki <b>ünlü harf sayısına</b> eşittir.<br><br>
+      <b>Kurallar:</b><br>
+      • İki ünlü arasında <b>tek ünsüz</b> varsa, o ünsüz kendisinden sonraki ünlüyle hece kurar: <i>a-ra-ba</i><br>
+      • İki ünlü arasında <b>birden fazla ünsüz</b> varsa, son ünsüz sonraki heceye, diğerleri önceki heceye gider: <i>bar-dak, mek-tup</i><br>
+      • Satır sonuna sığmayan kelimeler hecelerine bölünüp kısa çizgi (-) ile ayrılır.
+    </div>
+    <div class="syl-demo">
+      <span>ki</span><span>ta</span><span>plık</span>
+    </div>
+  </section>
+
+  <!-- HECE SAYISI -->
+  <section class="card">
+    <h2><span class="badge">2</span> Kaç Heceli?</h2>
+    <p>Aşağıdaki kelimelerin kaç heceden oluştuğunu bul.</p>
+    <div id="quizCount"></div>
+  </section>
+
+  <!-- HECELERI SIRALA -->
+  <section class="card">
+    <h2><span class="badge">3</span> Heceleri Doğru Sıraya Diz</h2>
+    <p>Karışık verilen heceleri sürükleyerek doğru kelimeyi oluştur, sonra "Kontrol Et" düğmesine bas.</p>
+    <div id="puzzleArea"></div>
+  </section>
+
+  <!-- HECELERDEN KELIME OLUSTURMA -->
+  <section class="card">
+    <h2><span class="badge">4</span> Son Hecesiyle Yeni Kelime Türet</h2>
+    <p>Verilen kelimenin <b>son hecesini</b> bul; bu hece, aşağıdaki yeni kelimelerden hangisinin <b>ilk</b> hecesi olabilir?</p>
+    <div id="quizChain"></div>
+  </section>
+
+  <footer>Dijital Öğretmen · 3. Sınıf Türkçe Etkinliği</footer>
+</div>
+
+<script>
+let score = 0, scoreMax = 0;
+function updateScore(){
+  document.getElementById('scoreVal').textContent = score;
+  document.getElementById('scoreMax').textContent = scoreMax;
+}
+
+/* ---------- HECE SAYISI QUIZ ---------- */
+const countData = [
+  {word:'kelebek', syl:['ke','le','bek']},
+  {word:'havalandırma', syl:['ha','va','lan','dır','ma']},
+  {word:'sarımsak', syl:['sa','rım','sak']},
+  {word:'basketbol', syl:['bas','ket','bol']},
+  {word:'fincan', syl:['fin','can']},
+  {word:'eğlenceli', syl:['eğ','len','ce','li']},
+];
+const quizCountEl = document.getElementById('quizCount');
+countData.forEach((item, idx)=>{
+  scoreMax += 1;
+  const correct = item.syl.length;
+  const options = new Set([correct]);
+  while(options.size < 4){
+    const n = correct + Math.floor(Math.random()*5) - 2;
+    if(n>=1 && n<=6) options.add(n);
+  }
+  const optsArr = [...options].sort(()=>Math.random()-0.5);
+
+  const div = document.createElement('div');
+  div.className = 'quiz-item';
+  div.innerHTML = `
+    <div class="quiz-q">${idx+1}. "<span style="font-family:'Baloo 2';color:var(--hece1-dark)">${item.word}</span>" kelimesi kaç hecelidir?</div>
+    <div class="opt-row"></div>
+    <div class="feedback"></div>
+  `;
+  const row = div.querySelector('.opt-row');
+  const fb = div.querySelector('.feedback');
+  optsArr.forEach(n=>{
+    const b = document.createElement('button');
+    b.className = 'opt-btn';
+    b.textContent = n;
+    b.addEventListener('click', ()=>{
+      row.querySelectorAll('.opt-btn').forEach(x=>x.disabled=true);
+      if(n === correct){
+        b.classList.add('correct');
+        fb.innerHTML = `Doğru! → <b>${item.syl.join('-')}</b> 🎉`;
+        fb.className = 'feedback ok';
+        score += 1;
+      } else {
+        b.classList.add('wrong');
+        [...row.querySelectorAll('.opt-btn')].find(x=>x.textContent==correct).classList.add('correct');
+        fb.innerHTML = `Doğrusu <b>${correct}</b> hece: <b>${item.syl.join('-')}</b>`;
+        fb.className = 'feedback bad';
+      }
+      updateScore();
+    });
+    row.appendChild(b);
+  });
+  quizCountEl.appendChild(div);
+});
+
+/* ---------- HECE PUZZLE (drag to order) ---------- */
+const puzzleWords = [
+  {word:'öğretmen', syl:['öğ','ret','men']},
+  {word:'kitaplık', syl:['ki','tap','lık']},
+  {word:'yağmurluk', syl:['yağ','mur','luk']},
+];
+const puzzleArea = document.getElementById('puzzleArea');
+
+puzzleWords.forEach((item, wi)=>{
+  scoreMax += 1;
+  const shuffled = [...item.syl].sort(()=>Math.random()-0.5);
+  const block = document.createElement('div');
+  block.className = 'quiz-item';
+  block.innerHTML = `
+    <div class="quiz-q">${wi+1}. Bu heceleri doğru sıraya diz:</div>
+    <div class="puzzle-row" id="puz-${wi}"></div>
+    <p class="drag-hint">🖐️ Hece kutucuklarını sürükleyip yerlerini değiştirebilirsin.</p>
+    <button class="check-btn" data-idx="${wi}">Kontrol Et</button>
+    <div class="feedback" id="puzFb-${wi}"></div>
+  `;
+  puzzleArea.appendChild(block);
+
+  const row = block.querySelector(`#puz-${wi}`);
+  let order = [...shuffled];
+  function renderRow(){
+    row.innerHTML = '';
+    order.forEach(syl=>{
+      const piece = document.createElement('div');
+      piece.className = 'syl-piece';
+      piece.draggable = true;
+      piece.dataset.syl = syl;
+      piece.textContent = syl;
+      row.appendChild(piece);
+    });
+    attachPieceDrag();
+  }
+  function attachPieceDrag(){
+    let dragEl = null;
+    row.querySelectorAll('.syl-piece').forEach(p=>{
+      p.addEventListener('dragstart', ()=>{ dragEl = p; p.classList.add('dragging'); });
+      p.addEventListener('dragend', ()=>{ p.classList.remove('dragging'); order = [...row.querySelectorAll('.syl-piece')].map(x=>x.dataset.syl); });
+      p.addEventListener('dragover', e=>{
+        e.preventDefault();
+        const after = getAfter(row, e.clientX);
+        if(after == null){ row.appendChild(dragEl); } else { row.insertBefore(dragEl, after); }
+      });
+    });
+  }
+  function getAfter(container, x){
+    const els = [...container.querySelectorAll('.syl-piece:not(.dragging)')];
+    return els.reduce((closest, child)=>{
+      const box = child.getBoundingClientRect();
+      const offset = x - box.left - box.width/2;
+      if(offset < 0 && offset > closest.offset){ return {offset, element:child}; }
+      return closest;
+    }, {offset:-Infinity}).element;
+  }
+  renderRow();
+
+  block.querySelector('.check-btn').addEventListener('click', (e)=>{
+    order = [...row.querySelectorAll('.syl-piece')].map(x=>x.dataset.syl);
+    const fb = document.getElementById(`puzFb-${wi}`);
+    const isCorrect = order.length === item.syl.length && order.every((s,i)=>s===item.syl[i]);
+    if(isCorrect){
+      fb.innerHTML = `Harika! Kelime: <b>${item.word}</b> 🎉`;
+      fb.className = 'feedback ok';
+      if(!e.target.dataset.scored){ score += 1; updateScore(); e.target.dataset.scored='1'; }
+    } else {
+      fb.textContent = 'Henüz doğru değil, hece sırasını kontrol et.';
+      fb.className = 'feedback bad';
+    }
+  });
+});
+
+/* ---------- HECE ZINCIRI (son hece -> yeni kelime) ---------- */
+const chainData = [
+  {word:'kestane', lastSyl:'ne', options:['ne-hir','kitap','deniz'], correctIdx:0},
+  {word:'biber', lastSyl:'ber', options:['ber-ber','ekmek','sokak'], correctIdx:0},
+  {word:'masal', lastSyl:'sal', options:['sal-ça','yıldız','körfez'], correctIdx:0},
+];
+const quizChainEl = document.getElementById('quizChain');
+chainData.forEach((item, idx)=>{
+  scoreMax += 1;
+  const div = document.createElement('div');
+  div.className = 'quiz-item';
+  div.innerHTML = `
+    <div class="quiz-q">${idx+1}. "<span style="font-family:'Baloo 2';color:var(--hece1-dark)">${item.word}</span>" kelimesinin son hecesi
+      <b>"${item.lastSyl}"</b> ile başlayan kelime hangisi?</div>
+    <div class="opt-row"></div>
+    <div class="feedback"></div>
+  `;
+  const row = div.querySelector('.opt-row');
+  const fb = div.querySelector('.feedback');
+  item.options.forEach((opt, oi)=>{
+    const b = document.createElement('button');
+    b.className = 'opt-btn';
+    b.textContent = opt;
+    b.addEventListener('click', ()=>{
+      row.querySelectorAll('.opt-btn').forEach(x=>x.disabled=true);
+      if(oi === item.correctIdx){
+        b.classList.add('correct');
+        fb.textContent = 'Doğru! 🎉';
+        fb.className = 'feedback ok';
+        score += 1;
+      } else {
+        b.classList.add('wrong');
+        [...row.querySelectorAll('.opt-btn')][item.correctIdx].classList.add('correct');
+        fb.textContent = 'Tekrar dene, doğrusu işaretlendi.';
+        fb.className = 'feedback bad';
+      }
+      updateScore();
+    });
+    row.appendChild(b);
+  });
+  quizChainEl.appendChild(div);
+});
+
+updateScore();
+</script>
+</body>
+</html>

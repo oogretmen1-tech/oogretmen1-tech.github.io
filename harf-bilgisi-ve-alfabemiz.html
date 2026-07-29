@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harf Bilgisi ve Alfabemiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky:#eaf6ff;
+    --paper:#ffffff;
+    --ink:#243b4a;
+    --unlu:#ff9f43;      /* vowels - warm orange */
+    --unlu-dark:#e67e22;
+    --unsuz:#4d8fdc;     /* consonants - blue */
+    --unsuz-dark:#2f6fc1;
+    --leaf:#4cb26a;       /* success green */
+    --berry:#e8607a;      /* wrong / alert */
+    --chalk:#fff8e8;
+    --border:#d8e6f0;
+    --shadow: 0 6px 0 rgba(36,59,74,0.12);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Nunito', sans-serif;
+    background:
+      radial-gradient(circle at 8% 12%, #fff6da 0%, transparent 40%),
+      radial-gradient(circle at 92% 85%, #dff2ff 0%, transparent 45%),
+      var(--sky);
+    color:var(--ink);
+    min-height:100vh;
+    padding-bottom:60px;
+  }
+  h1,h2,h3{ font-family:'Baloo 2', cursive; margin:0; }
+  .wrap{ max-width:960px; margin:0 auto; padding:0 20px; }
+
+  /* HERO */
+  .hero{
+    padding:38px 20px 30px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-letters{
+    display:flex; justify-content:center; gap:10px; flex-wrap:wrap;
+    margin-bottom:18px;
+  }
+  .hero-letters span{
+    font-family:'Baloo 2', cursive;
+    font-size:2.1rem;
+    font-weight:800;
+    width:56px;height:56px;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:16px;
+    color:#fff;
+    box-shadow: var(--shadow);
+    transform:rotate(var(--r,0deg));
+    animation: pop 2.6s ease-in-out infinite;
+  }
+  .hero-letters span:nth-child(odd){ background:var(--unlu); animation-delay:.15s;}
+  .hero-letters span:nth-child(even){ background:var(--unsuz); }
+  .hero-letters span:nth-child(1){--r:-6deg;}
+  .hero-letters span:nth-child(2){--r:4deg;}
+  .hero-letters span:nth-child(3){--r:-3deg;}
+  .hero-letters span:nth-child(4){--r:5deg;}
+  .hero-letters span:nth-child(5){--r:-4deg;}
+  @keyframes pop{ 0%,100%{transform:translateY(0) rotate(var(--r,0deg));} 50%{transform:translateY(-8px) rotate(var(--r,0deg));} }
+  @media (prefers-reduced-motion:reduce){ .hero-letters span{animation:none;} }
+
+  .hero h1{ font-size:2.2rem; color:var(--ink); }
+  .hero p.sub{ font-size:1.05rem; color:#4a6274; margin-top:8px; }
+
+  /* CARD */
+  .card{
+    background:var(--paper);
+    border:3px solid var(--border);
+    border-radius:24px;
+    box-shadow: var(--shadow);
+    padding:26px 24px;
+    margin:26px 0;
+  }
+  .card > h2{
+    font-size:1.5rem;
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:14px;
+    color:var(--unsuz-dark);
+  }
+  .badge{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:34px;height:34px;border-radius:50%;
+    background:var(--unsuz); color:#fff; font-family:'Baloo 2';font-weight:700;
+    flex:none;
+  }
+
+  /* INFO BOX */
+  .info{
+    background:var(--chalk);
+    border-left:6px solid var(--unlu);
+    border-radius:14px;
+    padding:16px 18px;
+    line-height:1.65;
+    font-size:1.02rem;
+  }
+  .info b{ color:var(--unlu-dark); }
+  .info .tag{
+    display:inline-block; background:var(--unsuz); color:#fff; border-radius:8px;
+    padding:2px 8px; font-weight:700; font-size:.9rem; margin:0 2px;
+  }
+
+  /* LETTER LISTS */
+  .letter-list{ display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+  .letter-chip{
+    display:flex; flex-direction:column; align-items:center; gap:2px;
+    border-radius:12px; padding:8px 14px; font-family:'Baloo 2'; font-weight:700;
+    box-shadow:var(--shadow); color:#fff; min-width:56px;
+  }
+  .letter-chip span{ font-family:'Nunito'; font-weight:600; font-size:.72rem; opacity:.9; }
+  .unlu-chip{ background:var(--unlu); }
+  .unsuz-chip{ background:var(--unsuz); }
+
+  /* ALPHABET GRID */
+  .alpha-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(52px,1fr));
+    gap:10px;
+    margin-top:18px;
+  }
+  .letter-btn{
+    font-family:'Baloo 2', cursive;
+    font-size:1.35rem; font-weight:700;
+    border:3px solid var(--border);
+    background:#fff;
+    border-radius:14px;
+    padding:10px 0;
+    cursor:pointer;
+    transition: transform .12s ease, box-shadow .12s ease, background .2s, color .2s, border-color .2s;
+    color:var(--ink);
+  }
+  .letter-btn:hover{ transform:translateY(-3px); box-shadow:0 5px 0 rgba(36,59,74,.15); }
+  .letter-btn.is-unlu{ background:var(--unlu); border-color:var(--unlu-dark); color:#fff; }
+  .letter-btn.is-unsuz{ background:var(--unsuz); border-color:var(--unsuz-dark); color:#fff; }
+  .alpha-legend{ display:flex; gap:18px; margin-top:16px; flex-wrap:wrap; font-weight:700; font-size:.95rem;}
+  .alpha-legend span{ display:inline-flex; align-items:center; gap:8px; }
+  .dot{ width:16px;height:16px;border-radius:50%; display:inline-block; }
+  .dot.unlu{ background:var(--unlu);}
+  .dot.unsuz{ background:var(--unsuz);}
+  .alpha-counts{
+    margin-top:14px; display:flex; gap:14px; flex-wrap:wrap; font-family:'Baloo 2'; font-weight:600;
+  }
+  .count-pill{
+    background:#fff;border:2px solid var(--border); border-radius:999px;padding:6px 16px;font-size:.95rem;color:var(--ink);
+  }
+
+  /* QUIZ COMMON */
+  .quiz-item{
+    background:#fbfdff;
+    border:2px solid var(--border);
+    border-radius:16px;
+    padding:16px 18px;
+    margin-bottom:14px;
+  }
+  .quiz-q{ font-weight:700; font-size:1.08rem; margin-bottom:10px; }
+  .opt-row{ display:flex; gap:10px; flex-wrap:wrap; }
+  .opt-btn{
+    font-family:'Nunito'; font-weight:700; font-size:.98rem;
+    border:2px solid var(--border); background:#fff; color:var(--ink);
+    border-radius:12px; padding:9px 16px; cursor:pointer;
+    transition: all .15s ease;
+  }
+  .opt-btn:hover{ border-color:var(--unsuz); }
+  .opt-btn.correct{ background:var(--leaf); border-color:#3a9256; color:#fff; }
+  .opt-btn.wrong{ background:var(--berry); border-color:#c94860; color:#fff; }
+  .opt-btn:disabled{ cursor:default; opacity:.85; }
+  .feedback{ margin-top:10px; font-weight:700; min-height:22px; }
+  .feedback.ok{ color:#2e8b4f; }
+  .feedback.bad{ color:var(--berry); }
+
+  /* ORDERING ACTIVITY */
+  .order-list{ list-style:none; padding:0; margin:14px 0 0; display:flex; flex-direction:column; gap:8px; }
+  .order-list li{
+    background:#fff; border:2px solid var(--border); border-radius:12px;
+    padding:10px 14px; display:flex; align-items:center; gap:12px;
+    cursor:grab; font-weight:700; user-select:none;
+  }
+  .order-list li.dragging{ opacity:.4; }
+  .order-list li .num{
+    width:26px;height:26px;border-radius:50%;background:var(--unsuz);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:.85rem;flex:none;
+  }
+  .drag-hint{ font-size:.88rem; color:#607385; margin-top:8px;}
+
+  .check-btn{
+    margin-top:16px;
+    font-family:'Baloo 2'; font-weight:700; font-size:1.02rem;
+    background:var(--leaf); color:#fff; border:none;
+    border-radius:14px; padding:12px 26px; cursor:pointer;
+    box-shadow:0 5px 0 #3a9256;
+  }
+  .check-btn:active{ transform:translateY(3px); box-shadow:none; }
+  .reset-btn{
+    font-family:'Baloo 2'; font-weight:700; font-size:.95rem;
+    background:#fff; color:var(--unsuz-dark); border:2px solid var(--unsuz);
+    border-radius:12px; padding:8px 18px; cursor:pointer; margin-left:10px;
+  }
+
+  /* SCORE BAR */
+  .scorebar{
+    position:sticky; top:12px; z-index:5;
+    display:flex; align-items:center; justify-content:space-between;
+    background:#fff; border:3px solid var(--border); border-radius:18px;
+    padding:10px 20px; margin:0 0 8px; box-shadow:var(--shadow);
+    max-width:960px; margin-left:auto;margin-right:auto;
+  }
+  .scorebar .title{ font-family:'Baloo 2'; font-weight:700; color:var(--unsuz-dark);}
+  .scorebar .score{ font-family:'Baloo 2'; font-weight:800; font-size:1.15rem;}
+  .scorebar .score span{ color:var(--leaf); }
+
+  footer{ text-align:center; color:#6b8091; font-size:.9rem; margin-top:30px; }
+
+  @media (max-width:560px){
+    .hero h1{ font-size:1.6rem; }
+    .hero-letters span{ width:44px;height:44px;font-size:1.6rem; }
+    .card{ padding:18px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="scorebar wrap">
+  <div class="title">🌟 Puanım</div>
+  <div class="score"><span id="scoreVal">0</span> / <span id="scoreMax">0</span></div>
+</div>
+
+<div class="hero wrap">
+  <div class="hero-letters">
+    <span>H</span><span>A</span><span>R</span><span>F</span><span>!</span>
+  </div>
+  <h1>Harf Bilgisi ve Alfabemiz</h1>
+  <p class="sub">3. Sınıf Türkçe · Tema 1 — Türk alfabesini tanıyalım, ünlü ve ünsüz harfleri öğrenelim!</p>
+</div>
+
+<div class="wrap">
+
+  <!-- BILGI KUTUSU -->
+  <section class="card">
+    <h2><span class="badge">1</span> Ne Öğreneceğiz?</h2>
+    <div class="info">
+      Türk alfabesinde <b>29 harf</b> vardır. Bu harflerin <b>8</b> tanesi <span class="tag">ÜNLÜ</span>
+      (a, e, ı, i, o, ö, u, ü), <b>21</b> tanesi ise <span class="tag">ÜNSÜZ</span> harftir.<br><br>
+      Ünlü harfler ağzımızdan hiçbir engele takılmadan çıkar ve tek başına okunabilir.
+      Ünsüz harfler ise tek başına okunamaz, bir ünlü harfin yardımına ihtiyaç duyar.<br><br>
+      Ünlüler kendi aralarında ikiye ayrılır:
+      <b>Kalın ünlüler:</b> a, ı, o, u &nbsp;·&nbsp; <b>İnce ünlüler:</b> e, i, ö, ü.
+      Bir Türkçe kelimede kalın ünlüden sonra genellikle kalın, ince ünlüden sonra genellikle ince ünlü gelir.
+      Buna <b>büyük ünlü uyumu</b> denir. Örnek: <i>kalemlik</i> (ince-ince-ince ✓), <i>kitaplık</i> (ince-kalın-kalın — istisnadır).
+    </div>
+
+    <h3 style="margin-top:22px;color:var(--unlu-dark);font-size:1.15rem;">🟠 8 Ünlü Harfimiz</h3>
+    <div class="letter-list">
+      <div class="letter-chip unlu-chip"><b>A a</b><span>kalın</span></div>
+      <div class="letter-chip unlu-chip"><b>E e</b><span>ince</span></div>
+      <div class="letter-chip unlu-chip"><b>I ı</b><span>kalın</span></div>
+      <div class="letter-chip unlu-chip"><b>İ i</b><span>ince</span></div>
+      <div class="letter-chip unlu-chip"><b>O o</b><span>kalın</span></div>
+      <div class="letter-chip unlu-chip"><b>Ö ö</b><span>ince</span></div>
+      <div class="letter-chip unlu-chip"><b>U u</b><span>kalın</span></div>
+      <div class="letter-chip unlu-chip"><b>Ü ü</b><span>ince</span></div>
+    </div>
+
+    <h3 style="margin-top:22px;color:var(--unsuz-dark);font-size:1.15rem;">🔵 21 Ünsüz Harfimiz</h3>
+    <div class="letter-list">
+      <div class="letter-chip unsuz-chip"><b>B b</b></div>
+      <div class="letter-chip unsuz-chip"><b>C c</b></div>
+      <div class="letter-chip unsuz-chip"><b>Ç ç</b></div>
+      <div class="letter-chip unsuz-chip"><b>D d</b></div>
+      <div class="letter-chip unsuz-chip"><b>F f</b></div>
+      <div class="letter-chip unsuz-chip"><b>G g</b></div>
+      <div class="letter-chip unsuz-chip"><b>Ğ ğ</b></div>
+      <div class="letter-chip unsuz-chip"><b>H h</b></div>
+      <div class="letter-chip unsuz-chip"><b>J j</b></div>
+      <div class="letter-chip unsuz-chip"><b>K k</b></div>
+      <div class="letter-chip unsuz-chip"><b>L l</b></div>
+      <div class="letter-chip unsuz-chip"><b>M m</b></div>
+      <div class="letter-chip unsuz-chip"><b>N n</b></div>
+      <div class="letter-chip unsuz-chip"><b>P p</b></div>
+      <div class="letter-chip unsuz-chip"><b>R r</b></div>
+      <div class="letter-chip unsuz-chip"><b>S s</b></div>
+      <div class="letter-chip unsuz-chip"><b>Ş ş</b></div>
+      <div class="letter-chip unsuz-chip"><b>T t</b></div>
+      <div class="letter-chip unsuz-chip"><b>V v</b></div>
+      <div class="letter-chip unsuz-chip"><b>Y y</b></div>
+      <div class="letter-chip unsuz-chip"><b>Z z</b></div>
+    </div>
+    <p style="margin-top:14px;font-size:.95rem;color:#4a6274;">
+      Toplam: 8 ünlü + 21 ünsüz = <b>29 harf</b>. Türk alfabesinde İngiliz alfabesinden farklı olarak
+      <b>ç, ğ, ı, ö, ş, ü</b> harfleri vardır; <b>q, w, x</b> harfleri ise yoktur.
+    </p>
+  </section>
+
+  <!-- ALFABE GRID -->
+  <section class="card">
+    <h2><span class="badge">2</span> Alfabemizi Keşfet</h2>
+    <p>Aşağıdaki harflere tıkla: <b>turuncu</b> olursa ünlü, <b>mavi</b> olursa ünsüz harftir!</p>
+    <div class="alpha-grid" id="alphaGrid"></div>
+    <div class="alpha-legend">
+      <span><i class="dot unlu"></i> Ünlü harf</span>
+      <span><i class="dot unsuz"></i> Ünsüz harf</span>
+    </div>
+    <div class="alpha-counts">
+      <span class="count-pill">Tıklanan ünlü: <b id="cUnlu">0</b> / 8</span>
+      <span class="count-pill">Tıklanan ünsüz: <b id="cUnsuz">0</b> / 21</span>
+    </div>
+  </section>
+
+  <!-- QUIZ: UNLU MU UNSUZ MU -->
+  <section class="card">
+    <h2><span class="badge">3</span> Ünlü mü, Ünsüz mü?</h2>
+    <div id="quiz1"></div>
+  </section>
+
+  <!-- QUIZ: BUYUK UNLU UYUMU -->
+  <section class="card">
+    <h2><span class="badge">4</span> Büyük Ünlü Uyumuna Uyuyor mu?</h2>
+    <p>Kelimedeki ünlüler hep kalın ya da hep ince ise <b>"Uyuyor"</b>, karışıksa <b>"Uymuyor"</b> seçelim.</p>
+    <div id="quiz2"></div>
+  </section>
+
+  <!-- SIRALAMA -->
+  <section class="card">
+    <h2><span class="badge">5</span> Sözlük Sırasına Koyalım</h2>
+    <p>Aşağıdaki kelimeleri sürükleyerek <b>alfabetik sıraya</b> diz, sonra "Kontrol Et" düğmesine bas.</p>
+    <ul class="order-list" id="orderList"></ul>
+    <p class="drag-hint">🖐️ Kelimeleri yukarı-aşağı sürükleyerek yerlerini değiştirebilirsin.</p>
+    <button class="check-btn" id="checkOrder">Kontrol Et</button>
+    <button class="reset-btn" id="shuffleOrder">Karıştır</button>
+    <div class="feedback" id="orderFeedback"></div>
+  </section>
+
+  <footer>Dijital Öğretmen · 3. Sınıf Türkçe Etkinliği</footer>
+</div>
+
+<script>
+/* ---------- DATA ---------- */
+const UNLU = ['a','e','ı','i','o','ö','u','ü'];
+const ALPHABET = ['a','b','c','ç','d','e','f','g','ğ','h','ı','i','j','k','l','m','n','o','ö','p','r','s','ş','t','u','ü','v','y','z'];
+
+let score = 0, scoreMax = 0;
+function addScore(pts, max){ score += pts; scoreMax += max; updateScore(); }
+function updateScore(){
+  document.getElementById('scoreVal').textContent = score;
+  document.getElementById('scoreMax').textContent = scoreMax;
+}
+
+/* ---------- ALPHABET GRID ---------- */
+const alphaGrid = document.getElementById('alphaGrid');
+let clickedUnlu = new Set(), clickedUnsuz = new Set();
+ALPHABET.forEach(letter=>{
+  const btn = document.createElement('button');
+  btn.className = 'letter-btn';
+  btn.textContent = letter.toLocaleUpperCase('tr-TR');
+  btn.addEventListener('click', ()=>{
+    const isUnlu = UNLU.includes(letter);
+    if(isUnlu){ btn.classList.toggle('is-unlu'); clickedUnlu.has(letter) ? clickedUnlu.delete(letter): clickedUnlu.add(letter);}
+    else { btn.classList.toggle('is-unsuz'); clickedUnsuz.has(letter) ? clickedUnsuz.delete(letter): clickedUnsuz.add(letter);}
+    document.getElementById('cUnlu').textContent = clickedUnlu.size;
+    document.getElementById('cUnsuz').textContent = clickedUnsuz.size;
+  });
+  alphaGrid.appendChild(btn);
+});
+
+/* ---------- QUIZ 1: UNLU / UNSUZ ---------- */
+const quiz1Data = [
+  {letter:'ğ', answer:'ünsüz'},
+  {letter:'ö', answer:'ünlü'},
+  {letter:'ş', answer:'ünsüz'},
+  {letter:'ı', answer:'ünlü'},
+  {letter:'v', answer:'ünsüz'},
+  {letter:'ü', answer:'ünlü'},
+];
+const quiz1El = document.getElementById('quiz1');
+quiz1Data.forEach((item, idx)=>{
+  scoreMax += 1;
+  const div = document.createElement('div');
+  div.className = 'quiz-item';
+  div.innerHTML = `
+    <div class="quiz-q">${idx+1}. "<span style="font-family:'Baloo 2';font-size:1.3rem;color:var(--unsuz-dark)">${item.letter.toLocaleUpperCase('tr-TR')}</span>" harfi hangi gruba girer?</div>
+    <div class="opt-row">
+      <button class="opt-btn" data-v="ünlü">Ünlü</button>
+      <button class="opt-btn" data-v="ünsüz">Ünsüz</button>
+    </div>
+    <div class="feedback"></div>
+  `;
+  const btns = div.querySelectorAll('.opt-btn');
+  const fb = div.querySelector('.feedback');
+  btns.forEach(b=>{
+    b.addEventListener('click', ()=>{
+      btns.forEach(x=>x.disabled=true);
+      if(b.dataset.v === item.answer){
+        b.classList.add('correct');
+        fb.textContent = 'Doğru! 🎉';
+        fb.className = 'feedback ok';
+        score += 1; updateScore();
+      } else {
+        b.classList.add('wrong');
+        [...btns].find(x=>x.dataset.v===item.answer).classList.add('correct');
+        fb.textContent = 'Tekrar dene, doğrusu işaretlendi.';
+        fb.className = 'feedback bad';
+      }
+      updateScore();
+    });
+  });
+  quiz1El.appendChild(div);
+});
+
+/* ---------- QUIZ 2: BUYUK UNLU UYUMU ---------- */
+const KALIN = ['a','ı','o','u'];
+const INCE  = ['e','i','ö','ü'];
+function vowelsOf(word){
+  return [...word].filter(ch=>UNLU.includes(ch));
+}
+function uyumluMu(word){
+  const vs = vowelsOf(word);
+  const hasKalin = vs.some(v=>KALIN.includes(v));
+  const hasInce = vs.some(v=>INCE.includes(v));
+  return !(hasKalin && hasInce);
+}
+const quiz2Words = ['kalemlik','kitaplık','araba','defterlik','sınıf','öğretmen'];
+const quiz2El = document.getElementById('quiz2');
+quiz2Words.forEach((word, idx)=>{
+  const correct = uyumluMu(word) ? 'uyuyor' : 'uymuyor';
+  scoreMax += 1;
+  const div = document.createElement('div');
+  div.className = 'quiz-item';
+  div.innerHTML = `
+    <div class="quiz-q">${idx+1}. "<span style="font-family:'Baloo 2';font-size:1.2rem;color:var(--unsuz-dark)">${word}</span>" kelimesi büyük ünlü uyumuna uyuyor mu?</div>
+    <div class="opt-row">
+      <button class="opt-btn" data-v="uyuyor">Uyuyor</button>
+      <button class="opt-btn" data-v="uymuyor">Uymuyor</button>
+    </div>
+    <div class="feedback"></div>
+  `;
+  const btns = div.querySelectorAll('.opt-btn');
+  const fb = div.querySelector('.feedback');
+  btns.forEach(b=>{
+    b.addEventListener('click', ()=>{
+      btns.forEach(x=>x.disabled=true);
+      if(b.dataset.v === correct){
+        b.classList.add('correct');
+        fb.textContent = 'Doğru! 🎉';
+        fb.className = 'feedback ok';
+        score += 1;
+      } else {
+        b.classList.add('wrong');
+        [...btns].find(x=>x.dataset.v===correct).classList.add('correct');
+        fb.textContent = 'Tekrar dene, doğrusu işaretlendi.';
+        fb.className = 'feedback bad';
+      }
+      updateScore();
+    });
+  });
+  quiz2El.appendChild(div);
+});
+
+/* ---------- SIRALAMA (SÖZLÜK SIRASI) ---------- */
+const orderWords = ['muayene','kelebek','havalandırma','sarımsak','fincan'];
+const correctOrder = [...orderWords].sort((a,b)=>a.localeCompare(b,'tr'));
+let currentOrder = [...orderWords];
+const orderListEl = document.getElementById('orderList');
+
+function renderOrderList(){
+  orderListEl.innerHTML = '';
+  currentOrder.forEach((word, i)=>{
+    const li = document.createElement('li');
+    li.draggable = true;
+    li.dataset.word = word;
+    li.innerHTML = `<span class="num">${i+1}</span> ${word}`;
+    orderListEl.appendChild(li);
+  });
+  attachDrag();
+}
+function shuffle(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function attachDrag(){
+  let dragEl = null;
+  orderListEl.querySelectorAll('li').forEach(li=>{
+    li.addEventListener('dragstart', ()=>{ dragEl = li; li.classList.add('dragging'); });
+    li.addEventListener('dragend', ()=>{ li.classList.remove('dragging'); syncOrderFromDOM(); });
+    li.addEventListener('dragover', e=>{
+      e.preventDefault();
+      const after = getDragAfterElement(orderListEl, e.clientY);
+      if(after == null){ orderListEl.appendChild(dragEl); }
+      else{ orderListEl.insertBefore(dragEl, after); }
+    });
+  });
+}
+function getDragAfterElement(container, y){
+  const els = [...container.querySelectorAll('li:not(.dragging)')];
+  return els.reduce((closest, child)=>{
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height/2;
+    if(offset < 0 && offset > closest.offset){
+      return {offset:offset, element:child};
+    } else { return closest; }
+  }, {offset:-Infinity}).element;
+}
+function syncOrderFromDOM(){
+  currentOrder = [...orderListEl.querySelectorAll('li')].map(li=>li.dataset.word);
+  [...orderListEl.querySelectorAll('li')].forEach((li,i)=>{ li.querySelector('.num').textContent = i+1; });
+}
+renderOrderList();
+scoreMax += 1;
+updateScore();
+
+document.getElementById('shuffleOrder').addEventListener('click', ()=>{
+  currentOrder = shuffle(orderWords);
+  renderOrderList();
+  document.getElementById('orderFeedback').textContent = '';
+});
+document.getElementById('checkOrder').addEventListener('click', ()=>{
+  syncOrderFromDOM();
+  const fb = document.getElementById('orderFeedback');
+  const isCorrect = currentOrder.every((w,i)=>w===correctOrder[i]);
+  if(isCorrect){
+    fb.textContent = 'Harika! Doğru sözlük sırası bu. 🎉';
+    fb.className = 'feedback ok';
+    if(!document.getElementById('checkOrder').dataset.scored){
+      score += 1; updateScore();
+      document.getElementById('checkOrder').dataset.scored = '1';
+    }
+  } else {
+    fb.textContent = 'Sıralama henüz doğru değil, tekrar dene: ' + correctOrder.join(' → ');
+    fb.className = 'feedback bad';
+  }
+});
+
+updateScore();
+</script>
+</body>
+</html>

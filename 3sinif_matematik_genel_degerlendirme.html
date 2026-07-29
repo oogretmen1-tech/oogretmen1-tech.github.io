@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3. Sınıf Matematik Genel Değerlendirme</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF6EC; --ink:#1F2A44; --muted:#6b7280; --ok:#2f9e44; --bad:#d64545; --line:#d8d2c2;
+    --accent:#2E86AB;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:#e9e4d6; font-family:'Nunito',sans-serif; color:var(--ink); padding:24px 12px;}
+  .sheet{max-width:820px; margin:0 auto; background:var(--paper); border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,0.15); padding:30px 26px;}
+  h1{font-family:'Patrick Hand',cursive; font-size:2rem; margin:0 0 4px 0; color:var(--accent); text-align:center;}
+  .subtitle{text-align:center; font-family:'Space Mono',monospace; font-size:0.8rem; color:var(--muted); margin-bottom:26px;}
+  .q{border-top:2px dashed var(--line); padding:22px 0;}
+  .q:first-of-type{border-top:none;}
+  .qnum{display:inline-flex; align-items:center; justify-content:center; width:30px;height:30px; border-radius:50%; background:var(--accent); color:#fff; font-weight:800; font-family:'Space Mono',monospace; margin-right:8px; flex:none;}
+  .qhead{display:flex; align-items:center; gap:2px; margin-bottom:14px;}
+  .qtitle{font-weight:800; font-size:1.02rem;}
+  table{border-collapse:collapse; width:100%; margin-top:8px;}
+  th, td{border:1px solid var(--line); padding:8px; text-align:center; font-size:0.92rem;}
+  th{background:#00000008;}
+  input[type=text]{
+    width:100%; padding:6px 8px; border:1.5px solid var(--line); border-radius:5px; font-family:'Space Mono',monospace; font-size:0.9rem; text-align:center; background:#fff;
+  }
+  input.correct, select.correct{border-color:var(--ok); background:#2f9e441a;}
+  input.wrong, select.wrong{border-color:var(--bad); background:#d645451a;}
+  select{width:100%; padding:7px 6px; border:1.5px solid var(--line); border-radius:5px; font-family:'Nunito',sans-serif; font-size:0.88rem; background:#fff;}
+  .grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(160px,1fr)); gap:12px;}
+  .card{background:#ffffffa0; border-radius:8px; padding:12px; text-align:center;}
+  .card .num{font-family:'Space Mono',monospace; font-weight:700; font-size:1.05rem; margin-bottom:8px;}
+  .op-row{display:flex; align-items:center; gap:10px; margin-bottom:10px; font-family:'Space Mono',monospace; font-size:1.05rem;}
+  .op-row input{width:110px;}
+  .pattern{background:#ffffffa0; border-radius:8px; padding:14px; margin-bottom:10px;}
+  .pattern .seq{font-family:'Space Mono',monospace; font-size:1rem; margin-bottom:8px;}
+  .pattern input{width:80px; display:inline-block;}
+  .match-row{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
+  .match-word{width:170px; font-weight:700; flex:none; font-size:0.92rem;}
+  .opts{display:flex; flex-wrap:wrap; gap:8px;}
+  .opt-btn{padding:8px 14px; border-radius:6px; border:1.5px solid var(--line); background:#fff; cursor:pointer; font-size:0.88rem; transition:background .15s;}
+  .opt-btn:hover{background:#00000008;}
+  .opt-btn.selected{border-color:var(--ink); background:var(--ink); color:#fff;}
+  .opt-btn.correct{border-color:var(--ok); background:#2f9e441a; color:var(--ink);}
+  .opt-btn.wrong{border-color:var(--bad); background:#d645451a; color:var(--ink);}
+  .hint{font-size:0.78rem; color:var(--muted); margin-top:6px;}
+  .footer{text-align:center; margin-top:10px; padding-top:20px;}
+  button.check{
+    font-family:'Nunito',sans-serif; font-weight:800; font-size:1rem; padding:13px 28px; border-radius:9px; border:none;
+    background:var(--ink); color:#fff; cursor:pointer;
+  }
+  button.check:hover{opacity:0.9;}
+  .score-box{
+    display:none; text-align:center; margin-top:18px; font-family:'Patrick Hand',cursive; font-size:1.8rem;
+    background:#ffffffa0; border-radius:8px; padding:14px;
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <h1>3. Sınıf Matematik — Genel Değerlendirme</h1>
+  <div class="subtitle">TÜM KONULAR · KARIŞIK ETKİNLİK TESTİ</div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">1</span><span class="qtitle">Aşağıdaki sayıları en yakın onluğa yuvarlayın.</span></div>
+    <div class="grid" id="round-grid"></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">2</span><span class="qtitle">Aşağıdaki toplama işlemlerinin sonucu tek mi çift mi? Seçin.</span></div>
+    <table>
+      <tr><th>İşlem</th><th>Tek / Çift</th></tr>
+      <tr><td>43 + 35 = ?</td><td><select id="tc-0"><option value="">seçin</option><option>Tek</option><option>Çift</option></select></td></tr>
+      <tr><td>42 + 59 = ?</td><td><select id="tc-1"><option value="">seçin</option><option>Tek</option><option>Çift</option></select></td></tr>
+      <tr><td>67 + 23 = ?</td><td><select id="tc-2"><option value="">seçin</option><option>Tek</option><option>Çift</option></select></td></tr>
+      <tr><td>56 + 33 = ?</td><td><select id="tc-3"><option value="">seçin</option><option>Tek</option><option>Çift</option></select></td></tr>
+      <tr><td>14 + 57 = ?</td><td><select id="tc-4"><option value="">seçin</option><option>Tek</option><option>Çift</option></select></td></tr>
+    </table>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">3</span><span class="qtitle">Okunuşları verilen sayıları Romen rakamıyla yazın.</span></div>
+    <div class="grid" id="romen-grid"></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">4</span><span class="qtitle">Boşluklara "&lt; , &gt; , =" sembollerinden uygun olanı seçin.</span></div>
+    <div id="cmp-list"></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">5</span><span class="qtitle">Aşağıdaki eldeli toplama işlemlerini yapın.</span></div>
+    <div id="add-list"></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">6</span><span class="qtitle">Aşağıdaki çıkarma işlemlerini yapın.</span></div>
+    <div id="sub-list"></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">7</span><span class="qtitle">Aşağıdaki toplama işlemlerinde verilmeyen toplananı bulun.</span></div>
+    <div id="missing-list"></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">8</span><span class="qtitle">Aşağıdaki sayı örüntülerinin kuralını bulup devam ettirin.</span></div>
+    <div class="pattern">
+      <div class="seq">105 - 110 - 115 - 120 - 125 - <input type="text" id="pat-0"></div>
+    </div>
+    <div class="pattern">
+      <div class="seq">348 - 343 - 338 - 333 - <input type="text" id="pat-1"></div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">9</span><span class="qtitle">Geometrik şekillerin kenar ve köşe sayılarını yazın.</span></div>
+    <table>
+      <tr><th>Şekil</th><th>Kenar Sayısı</th><th>Köşe Sayısı</th></tr>
+      <tr><td>Üçgen</td><td><input type="text" id="sek-0-k"></td><td><input type="text" id="sek-0-c"></td></tr>
+      <tr><td>Kare</td><td><input type="text" id="sek-1-k"></td><td><input type="text" id="sek-1-c"></td></tr>
+      <tr><td>Beşgen</td><td><input type="text" id="sek-2-k"></td><td><input type="text" id="sek-2-c"></td></tr>
+      <tr><td>Altıgen</td><td><input type="text" id="sek-3-k"></td><td><input type="text" id="sek-3-c"></td></tr>
+    </table>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">10</span><span class="qtitle">Saat 15:20 günlük konuşmada nasıl ifade edilir?</span></div>
+    <div class="opts" data-qid="p10-0" data-correct="1">
+      <button class="opt-btn" data-v="0">Üçü yirmi geçiyor</button>
+      <button class="opt-btn" data-v="1">Üçü yirmi geçiyor (15.20)</button>
+      <button class="opt-btn" data-v="2">Dördü yirmi geçiyor</button>
+      <button class="opt-btn" data-v="3">Üçe yirmi var</button>
+    </div>
+    <div class="hint">İpucu: 15:20, öğleden sonra saat 3'ü 20 dakika geçe demektir.</div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">11</span><span class="qtitle">Bir pastanın 8 eşit diliminden 3 tanesi yenmiştir. Yenen kısmı gösteren kesir hangisidir?</span></div>
+    <div class="opts" data-qid="p11-0" data-correct="1">
+      <button class="opt-btn" data-v="0">8/3</button>
+      <button class="opt-btn" data-v="1">3/8</button>
+      <button class="opt-btn" data-v="2">5/8</button>
+      <button class="opt-btn" data-v="3">3/5</button>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">12</span><span class="qtitle">Ela'nın cüzdanında 2 tane 20 TL, 1 tane 10 TL ve 1 tane 5 TL vardır. Ela'nın toplam kaç TL'si vardır?</span></div>
+    <input type="text" id="para-0" placeholder="cevap (TL)" style="width:160px;">
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">13</span><span class="qtitle">Nesneleri geometrik cisim türleriyle eşleştirin.</span></div>
+    <div id="match-cisim"></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">14</span><span class="qtitle">Sıvı ölçü birimlerini dönüştürün.</span></div>
+    <div id="sivi-list"></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">15</span><span class="qtitle">Uzunluk ölçü birimlerini dönüştürün.</span></div>
+    <div id="uzunluk-list"></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">16</span><span class="qtitle">Problemleri çözün.</span></div>
+    <div class="op-row"><span>7 kutuda 8'er çikolata vardır. Toplam kaç çikolata vardır?</span></div>
+    <input type="text" id="carp-0" placeholder="cevap" style="width:120px; margin-bottom:12px;">
+    <div class="op-row"><span>72 elma 8 kişiye eşit paylaştırılırsa her birine kaç elma düşer?</span></div>
+    <input type="text" id="carp-1" placeholder="cevap" style="width:120px;">
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">17</span><span class="qtitle">Tablo: Bir markette satılan meyve sayıları — Elma: 40, Armut: 25, Muz: 35. Soruları cevaplayın.</span></div>
+    <div class="opts" data-qid="p17-0" data-correct="0">
+      <button class="opt-btn" data-v="0">Elma</button>
+      <button class="opt-btn" data-v="1">Armut</button>
+      <button class="opt-btn" data-v="2">Muz</button>
+      <button class="opt-btn" data-v="3">Hepsi eşit</button>
+    </div>
+    <div class="subq" style="margin-top:12px;">
+      <div class="subq-text">Armut ile muz arasındaki satış farkı kaçtır?</div>
+      <input type="text" id="veri-0" placeholder="cevap" style="width:120px;">
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">18</span><span class="qtitle">Zaman hesaplayın.</span></div>
+    <div class="op-row"><span>Bir film 14:00'te başlayıp 15:45'te bitiyor. Film kaç dakika sürmüştür?</span></div>
+    <input type="text" id="zaman-0" placeholder="dakika" style="width:120px; margin-bottom:12px;">
+    <div class="op-row"><span>Ali 08:30'da evden çıkıp 09:15'te okula varıyor. Yolda kaç dakika geçirmiştir?</span></div>
+    <input type="text" id="zaman-1" placeholder="dakika" style="width:120px;">
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">19</span><span class="qtitle">Cüzdanda 3 tane 50 TL, 2 tane 20 TL ve 1 tane 5 TL vardır. Toplam kaç TL'dir?</span></div>
+    <input type="text" id="para2-0" placeholder="cevap (TL)" style="width:160px;">
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">20</span><span class="qtitle">Bir çubuk 5 eşit parçaya bölünmüş, 2 parçası boyanmıştır. Boyalı kısmı gösteren kesir hangisidir?</span></div>
+    <div class="opts" data-qid="p20-0" data-correct="1">
+      <button class="opt-btn" data-v="0">5/2</button>
+      <button class="opt-btn" data-v="1">2/5</button>
+      <button class="opt-btn" data-v="2">3/5</button>
+      <button class="opt-btn" data-v="3">2/3</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    <button class="check" id="checkBtn">Tümünü Kontrol Et</button>
+    <div class="score-box" id="scoreBox"></div>
+  </div>
+</div>
+
+<script>
+function markInput(el, isCorrect){
+  el.classList.remove('correct','wrong');
+  el.classList.add(isCorrect ? 'correct' : 'wrong');
+}
+function norm(s){ return (s||'').toString().trim().replace(/\s+/g,''); }
+
+// --- Q1 rounding ---
+const roundNums = [256,348,421,102,657,521,634,125];
+const roundAns = roundNums.map(n => Math.round(n/10)*10);
+const roundGrid = document.getElementById('round-grid');
+roundNums.forEach((n,i)=>{
+  const c = document.createElement('div');
+  c.className = 'card';
+  c.innerHTML = `<div class="num">${n}</div><input type="text" id="round-${i}" placeholder="yuvarlanmış">`;
+  roundGrid.appendChild(c);
+});
+
+// --- Q3 romen ---
+const romenItems = [
+  {tr:"Dört", roman:"IV"},
+  {tr:"İki", roman:"II"},
+  {tr:"On üç", roman:"XIII"},
+  {tr:"On altı", roman:"XVI"},
+  {tr:"Dokuz", roman:"IX"}
+];
+const romenGrid = document.getElementById('romen-grid');
+romenItems.forEach((item,i)=>{
+  const c = document.createElement('div');
+  c.className = 'card';
+  c.innerHTML = `<div class="num">${item.tr}</div><input type="text" id="romen-${i}" placeholder="Romen rakamı">`;
+  romenGrid.appendChild(c);
+});
+
+// --- Q4 comparisons ---
+const cmpItems = [
+  {a:146,b:238}, {a:423,b:420}, {a:321,b:864}, {a:777,b:778}
+];
+const cmpList = document.getElementById('cmp-list');
+cmpItems.forEach((item,i)=>{
+  const row = document.createElement('div');
+  row.className = 'op-row';
+  row.innerHTML = `<span>${item.a}</span><select id="cmp-${i}"><option value="">?</option><option value="<">&lt;</option><option value=">">&gt;</option><option value="=">=</option></select><span>${item.b}</span>`;
+  cmpList.appendChild(row);
+});
+const cmpAns = cmpItems.map(item => item.a < item.b ? "<" : (item.a > item.b ? ">" : "="));
+
+// --- Q5 eldeli toplama ---
+const addItems = [
+  {a:256,b:389}, {a:145,b:277}, {a:579,b:453}, {a:458,b:342}
+];
+const addList = document.getElementById('add-list');
+addItems.forEach((item,i)=>{
+  const row = document.createElement('div');
+  row.className = 'op-row';
+  row.innerHTML = `<span>${item.a} + ${item.b} =</span><input type="text" id="add-${i}">`;
+  addList.appendChild(row);
+});
+const addAns = addItems.map(item => item.a + item.b);
+
+// --- Q6 çıkarma ---
+const subItems = [
+  {a:543,b:278}, {a:555,b:288}, {a:432,b:287}
+];
+const subList = document.getElementById('sub-list');
+subItems.forEach((item,i)=>{
+  const row = document.createElement('div');
+  row.className = 'op-row';
+  row.innerHTML = `<span>${item.a} - ${item.b} =</span><input type="text" id="sub-${i}">`;
+  subList.appendChild(row);
+});
+const subAns = subItems.map(item => item.a - item.b);
+
+// --- Q7 missing addend ---
+const missItems = [
+  {a:256, sum:385}, {a:311, sum:540}, {a:632, sum:955}
+];
+const missList = document.getElementById('missing-list');
+missItems.forEach((item,i)=>{
+  const row = document.createElement('div');
+  row.className = 'op-row';
+  row.innerHTML = `<span>${item.a} + </span><input type="text" id="miss-${i}" style="width:90px;"><span> = ${item.sum}</span>`;
+  missList.appendChild(row);
+});
+const missAns = missItems.map(item => item.sum - item.a);
+
+// --- Q13 geometrik cisim eşleştirme ---
+const cisimPairs = [
+  {left:"Top", right:"Küre"},
+  {left:"Dondurma külahı", right:"Koni"},
+  {left:"Konserve kutusu", right:"Silindir"},
+  {left:"Zar", right:"Küp"}
+];
+const cisimOptions = cisimPairs.map(p=>p.right);
+const cisimContainer = document.getElementById('match-cisim');
+cisimPairs.forEach((p,i)=>{
+  const row = document.createElement('div');
+  row.className = 'match-row';
+  let opts = '<option value="">seçin</option>' + cisimOptions.map(r=>`<option>${r}</option>`).join('');
+  row.innerHTML = `<div class="match-word">${p.left}</div><select id="cisim-${i}">${opts}</select>`;
+  cisimContainer.appendChild(row);
+});
+
+// --- Q14 sıvı ölçü ---
+const siviItems = [
+  {q:"3 L kaç mL'dir?", ans:"3000"},
+  {q:"5000 mL kaç L'dir?", ans:"5"}
+];
+const siviList = document.getElementById('sivi-list');
+siviItems.forEach((item,i)=>{
+  const row = document.createElement('div');
+  row.className = 'op-row';
+  row.innerHTML = `<span>${item.q}</span><input type="text" id="sivi-${i}" style="width:110px;">`;
+  siviList.appendChild(row);
+});
+
+// --- Q15 uzunluk ölçü ---
+const uzunlukItems = [
+  {q:"500 cm kaç m'dir?", ans:"5"},
+  {q:"2 m kaç cm'dir?", ans:"200"}
+];
+const uzunlukList = document.getElementById('uzunluk-list');
+uzunlukItems.forEach((item,i)=>{
+  const row = document.createElement('div');
+  row.className = 'op-row';
+  row.innerHTML = `<span>${item.q}</span><input type="text" id="uzunluk-${i}" style="width:110px;">`;
+  uzunlukList.appendChild(row);
+});
+
+// --- Q10/Q11 MC click handling ---
+document.querySelectorAll('.opts').forEach(group=>{
+  group.querySelectorAll('.opt-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      group.querySelectorAll('.opt-btn').forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+    });
+  });
+});
+
+// --- Validation ---
+document.getElementById('checkBtn').addEventListener('click', ()=>{
+  let total = 0, correct = 0;
+
+  // Q9 şekil kenar/köşe
+  const sekAns = [
+    {k:"3", c:"3"}, {k:"4", c:"4"}, {k:"5", c:"5"}, {k:"6", c:"6"}
+  ];
+  sekAns.forEach((row,i)=>{
+    ['k','c'].forEach(key=>{
+      const el = document.getElementById(`sek-${i}-${key}`);
+      total++;
+      const ok = norm(el.value) === row[key];
+      if(ok) correct++;
+      markInput(el, ok);
+    });
+  });
+
+  // Q10/Q11 MC
+  document.querySelectorAll('.opts').forEach(group=>{
+    const correctV = group.dataset.correct;
+    const selected = group.querySelector('.opt-btn.selected');
+    total++;
+    let ok = false;
+    group.querySelectorAll('.opt-btn').forEach(b=>{
+      b.classList.remove('correct','wrong');
+      if(b.dataset.v === correctV) b.classList.add('correct');
+    });
+    if(selected){
+      ok = selected.dataset.v === correctV;
+      if(!ok) selected.classList.add('wrong');
+    }
+    if(ok) correct++;
+  });
+
+  // Q12 para toplamı
+  {
+    const el = document.getElementById('para-0');
+    total++;
+    const ok = norm(el.value) === "55";
+    if(ok) correct++;
+    markInput(el, ok);
+  }
+
+  roundNums.forEach((n,i)=>{
+    const el = document.getElementById(`round-${i}`);
+    total++;
+    const ok = norm(el.value) === norm(String(roundAns[i]));
+    if(ok) correct++;
+    markInput(el, ok);
+  });
+
+  const tcAns = ["Çift","Tek","Çift","Tek","Tek"];
+  tcAns.forEach((ans,i)=>{
+    const el = document.getElementById(`tc-${i}`);
+    total++;
+    const ok = el.value === ans;
+    if(ok) correct++;
+    markInput(el, ok);
+  });
+
+  romenItems.forEach((item,i)=>{
+    const el = document.getElementById(`romen-${i}`);
+    total++;
+    const ok = norm(el.value).toUpperCase() === item.roman;
+    if(ok) correct++;
+    markInput(el, ok);
+  });
+
+  cmpAns.forEach((ans,i)=>{
+    const el = document.getElementById(`cmp-${i}`);
+    total++;
+    const ok = el.value === ans;
+    if(ok) correct++;
+    markInput(el, ok);
+  });
+
+  addAns.forEach((ans,i)=>{
+    const el = document.getElementById(`add-${i}`);
+    total++;
+    const ok = norm(el.value) === String(ans);
+    if(ok) correct++;
+    markInput(el, ok);
+  });
+
+  subAns.forEach((ans,i)=>{
+    const el = document.getElementById(`sub-${i}`);
+    total++;
+    const ok = norm(el.value) === String(ans);
+    if(ok) correct++;
+    markInput(el, ok);
+  });
+
+  missAns.forEach((ans,i)=>{
+    const el = document.getElementById(`miss-${i}`);
+    total++;
+    const ok = norm(el.value) === String(ans);
+    if(ok) correct++;
+    markInput(el, ok);
+  });
+
+  const patAns = ["130","328"];
+  patAns.forEach((ans,i)=>{
+    const el = document.getElementById(`pat-${i}`);
+    total++;
+    const ok = norm(el.value) === ans;
+    if(ok) correct++;
+    markInput(el, ok);
+  });
+
+  // Q13 geometrik cisim eşleştirme
+  cisimPairs.forEach((p,i)=>{
+    const el = document.getElementById(`cisim-${i}`);
+    total++;
+    const ok = el.value === p.right;
+    if(ok) correct++;
+    markInput(el, ok);
+  });
+
+  // Q14 sıvı ölçü
+  siviItems.forEach((item,i)=>{
+    const el = document.getElementById(`sivi-${i}`);
+    total++;
+    const ok = norm(el.value) === item.ans;
+    if(ok) correct++;
+    markInput(el, ok);
+  });
+
+  // Q15 uzunluk ölçü
+  uzunlukItems.forEach((item,i)=>{
+    const el = document.getElementById(`uzunluk-${i}`);
+    total++;
+    const ok = norm(el.value) === item.ans;
+    if(ok) correct++;
+    markInput(el, ok);
+  });
+
+  // Q16 çarpma/bölme problemleri
+  {
+    const el0 = document.getElementById('carp-0');
+    total++;
+    const ok0 = norm(el0.value) === "56";
+    if(ok0) correct++;
+    markInput(el0, ok0);
+
+    const el1 = document.getElementById('carp-1');
+    total++;
+    const ok1 = norm(el1.value) === "9";
+    if(ok1) correct++;
+    markInput(el1, ok1);
+  }
+
+  // Q17 veri analizi fark
+  {
+    const el = document.getElementById('veri-0');
+    total++;
+    const ok = norm(el.value) === "10";
+    if(ok) correct++;
+    markInput(el, ok);
+  }
+
+  // Q18 zaman
+  {
+    const el0 = document.getElementById('zaman-0');
+    total++;
+    const ok0 = norm(el0.value) === "105";
+    if(ok0) correct++;
+    markInput(el0, ok0);
+
+    const el1 = document.getElementById('zaman-1');
+    total++;
+    const ok1 = norm(el1.value) === "45";
+    if(ok1) correct++;
+    markInput(el1, ok1);
+  }
+
+  // Q19 para
+  {
+    const el = document.getElementById('para2-0');
+    total++;
+    const ok = norm(el.value) === "195";
+    if(ok) correct++;
+    markInput(el, ok);
+  }
+
+  const box = document.getElementById('scoreBox');
+  box.style.display = 'block';
+  box.textContent = `Sonuç: ${correct} / ${total} doğru`;
+  box.scrollIntoView({behavior:'smooth', block:'center'});
+});
+</script>
+</body>
+</html>

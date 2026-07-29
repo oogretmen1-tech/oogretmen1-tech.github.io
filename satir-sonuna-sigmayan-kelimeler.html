@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Satır Sonuna Sığmayan Kelimeler</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky:#f3f0ff;
+    --paper:#ffffff;
+    --ink:#2c2645;
+    --hece1:#9b6bff;
+    --hece1-dark:#7c4fe0;
+    --hece2:#ffb648;
+    --hece2-dark:#e79a1f;
+    --leaf:#4cb26a;
+    --berry:#e8607a;
+    --chalk:#f6f1ff;
+    --border:#e2d9fb;
+    --shadow: 0 6px 0 rgba(44,38,69,0.12);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; font-family:'Nunito', sans-serif;
+    background:
+      radial-gradient(circle at 10% 15%, #ffe9d6 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, #e4d9ff 0%, transparent 45%),
+      var(--sky);
+    color:var(--ink); min-height:100vh; padding-bottom:60px;
+  }
+  h1,h2,h3{ font-family:'Baloo 2', cursive; margin:0; }
+  .wrap{ max-width:960px; margin:0 auto; padding:0 20px; }
+
+  .hero{ padding:38px 20px 30px; text-align:center; }
+  .hero-line{
+    display:inline-flex; align-items:center; gap:6px; margin-bottom:18px;
+    font-family:'Baloo 2'; font-weight:800; font-size:1.6rem;
+  }
+  .hero-line .a{ background:var(--hece1); color:#fff; padding:8px 14px; border-radius:12px 0 0 12px; box-shadow:var(--shadow);}
+  .hero-line .dash{ color:var(--hece2-dark); font-size:2rem; }
+  .hero-line .b{ background:var(--hece2); color:#fff; padding:8px 14px; border-radius:0 12px 12px 0; box-shadow:var(--shadow);}
+  .hero h1{ font-size:2.1rem; }
+  .hero p.sub{ font-size:1.05rem; color:#5b5478; margin-top:8px; }
+
+  .card{
+    background:var(--paper); border:3px solid var(--border); border-radius:24px;
+    box-shadow:var(--shadow); padding:26px 24px; margin:26px 0;
+  }
+  .card > h2{ font-size:1.5rem; display:flex; align-items:center; gap:10px; margin-bottom:14px; color:var(--hece1-dark);}
+  .badge{
+    display:inline-flex; align-items:center; justify-content:center; width:34px;height:34px;border-radius:50%;
+    background:var(--hece1); color:#fff; font-family:'Baloo 2';font-weight:700; flex:none;
+  }
+  .info{ background:var(--chalk); border-left:6px solid var(--hece2); border-radius:14px; padding:16px 18px; line-height:1.65; font-size:1.02rem; }
+  .info b{ color:var(--hece1-dark); }
+
+  .line-demo{
+    background:#fbfaff; border:2px dashed var(--border); border-radius:14px; padding:14px 18px; margin-top:14px;
+    font-family:'Baloo 2'; font-size:1.05rem; line-height:1.9;
+  }
+  .line-demo .hy{ color:var(--hece2-dark); font-weight:800; }
+
+  .quiz-item{ background:#fbfaff; border:2px solid var(--border); border-radius:16px; padding:16px 18px; margin-bottom:14px; }
+  .quiz-q{ font-weight:700; font-size:1.08rem; margin-bottom:10px; }
+  .quiz-q .word-split{ font-family:'Baloo 2'; font-size:1.15rem; color:var(--hece1-dark); }
+  .opt-row{ display:flex; gap:10px; flex-wrap:wrap; }
+  .opt-btn{
+    font-family:'Nunito'; font-weight:700; font-size:.98rem;
+    border:2px solid var(--border); background:#fff; color:var(--ink);
+    border-radius:12px; padding:9px 16px; cursor:pointer; transition:all .15s ease;
+  }
+  .opt-btn:hover{ border-color:var(--hece1); }
+  .opt-btn.correct{ background:var(--leaf); border-color:#3a9256; color:#fff; }
+  .opt-btn.wrong{ background:var(--berry); border-color:#c94860; color:#fff; }
+  .opt-btn:disabled{ cursor:default; opacity:.85; }
+  .feedback{ margin-top:10px; font-weight:700; min-height:22px; }
+  .feedback.ok{ color:#2e8b4f; }
+  .feedback.bad{ color:var(--berry); }
+
+  .scorebar{
+    position:sticky; top:12px; z-index:5;
+    display:flex; align-items:center; justify-content:space-between;
+    background:#fff; border:3px solid var(--border); border-radius:18px;
+    padding:10px 20px; margin:0 auto 8px; box-shadow:var(--shadow); max-width:960px;
+  }
+  .scorebar .title{ font-family:'Baloo 2'; font-weight:700; color:var(--hece1-dark);}
+  .scorebar .score{ font-family:'Baloo 2'; font-weight:800; font-size:1.15rem;}
+  .scorebar .score span{ color:var(--leaf); }
+
+  footer{ text-align:center; color:#7a728f; font-size:.9rem; margin-top:30px; }
+
+  @media (max-width:560px){
+    .hero h1{ font-size:1.6rem; }
+    .card{ padding:18px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="scorebar wrap">
+  <div class="title">🌟 Puanım</div>
+  <div class="score"><span id="scoreVal">0</span> / <span id="scoreMax">0</span></div>
+</div>
+
+<div class="hero wrap">
+  <div class="hero-line"><span class="a">kita</span><span class="dash">-</span><span class="b">plık</span></div>
+  <h1>Satır Sonuna Sığmayan Kelimeler</h1>
+  <p class="sub">3. Sınıf Türkçe · Tema 1 — Bir kelime satıra sığmazsa nereden bölünür?</p>
+</div>
+
+<div class="wrap">
+
+  <section class="card">
+    <h2><span class="badge">1</span> Ne Öğreneceğiz?</h2>
+    <div class="info">
+      Yazarken bir kelime satırın sonuna <b>sığmayabilir</b>. Böyle durumlarda kelime,
+      rastgele değil, <b>hecelerine göre</b> bölünür ve satır sonuna <b>kısa çizgi (-)</b> konur.
+      Kelimenin geri kalanı bir alt satıra yazılır.<br><br>
+      Önemli kural: Bölme işlemi mutlaka <b>iki hece arasından</b> yapılır — bir hecenin
+      ortasından kelime bölünmez.
+    </div>
+    <div class="line-demo">
+      Bahçedeki çiçekler çok güzel koku-<span class="hy">✂</span><br>
+      yordu. Herkes onları izliyordu.
+      <div style="margin-top:10px;font-size:.92rem;color:#6b6486;">
+        "kokuyordu" kelimesi <b>ko-ku-yor-du</b> şeklinde hecelere ayrılır. Satıra "koku-" sığdığı için
+        çizgi <b>ko-ku</b>'dan sonra, yani <b>hece sınırından</b> konur.
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><span class="badge">2</span> Doğru mu, Yanlış Bölünmüş mü?</h2>
+    <p>Aşağıdaki kelimeler satır sonunda gösterildiği gibi bölünmüş. Hece sınırına uygun mu?</p>
+    <div id="quizYN"></div>
+  </section>
+
+  <section class="card">
+    <h2><span class="badge">3</span> Nereden Ayrılabilir?</h2>
+    <p>Kelimenin satır sonuna sığmadığını düşünelim. Doğru bölünme noktasını seç.</p>
+    <div id="quizWhere"></div>
+  </section>
+
+  <footer>Dijital Öğretmen · 3. Sınıf Türkçe Etkinliği</footer>
+</div>
+
+<script>
+let score = 0, scoreMax = 0;
+function updateScore(){
+  document.getElementById('scoreVal').textContent = score;
+  document.getElementById('scoreMax').textContent = scoreMax;
+}
+
+const ynData = [
+  {shown:'kulak-lık', correctSyl:['ku','lak','lık'], isCorrect:true},
+  {shown:'habe-rleşme', correctSyl:['ha','ber','leş','me'], isCorrect:false},
+  {shown:'kal-em', correctSyl:['ka','lem'], isCorrect:false},
+  {shown:'si-vilce', correctSyl:['si','vil','ce'], isCorrect:true},
+  {shown:'han-tal', correctSyl:['han','tal'], isCorrect:true},
+  {shown:'gösteri-şli', correctSyl:['gös','te','riş','li'], isCorrect:false},
+];
+const properForm = s => s.correctSyl.join('-');
+const quizYNEl = document.getElementById('quizYN');
+ynData.forEach((item, idx)=>{
+  scoreMax += 1;
+  const div = document.createElement('div');
+  div.className = 'quiz-item';
+  div.innerHTML = `
+    <div class="quiz-q">${idx+1}. <span class="word-split">${item.shown}</span> şeklindeki bölünme doğru mu?</div>
+    <div class="opt-row">
+      <button class="opt-btn" data-v="dogru">Doğru ✔</button>
+      <button class="opt-btn" data-v="yanlis">Yanlış ✘</button>
+    </div>
+    <div class="feedback"></div>
+  `;
+  const btns = div.querySelectorAll('.opt-btn');
+  const fb = div.querySelector('.feedback');
+  btns.forEach(b=>{
+    b.addEventListener('click', ()=>{
+      btns.forEach(x=>x.disabled=true);
+      const userSaysCorrect = b.dataset.v === 'dogru';
+      if(userSaysCorrect === item.isCorrect){
+        b.classList.add('correct');
+        fb.textContent = item.isCorrect ? 'Doğru! Hece sınırından bölünmüş. 🎉' : `Doğru bildin, bu yanlış bir bölünme. Uygunu: ${properForm(item)}`;
+        fb.className = 'feedback ok';
+        score += 1;
+      } else {
+        b.classList.add('wrong');
+        [...btns].find(x=> (x.dataset.v==='dogru') === item.isCorrect).classList.add('correct');
+        fb.textContent = item.isCorrect ? 'Aslında bu doğru bir bölünmeydi.' : `Bu yanlış bir bölünme, doğrusu: ${properForm(item)}`;
+        fb.className = 'feedback bad';
+      }
+      updateScore();
+    });
+  });
+  quizYNEl.appendChild(div);
+});
+
+const whereData = [
+  {word:'zambak', syl:['zam','bak'], options:['zam-bak','za-mbak','zambak-'], correctIdx:0},
+  {word:'dipçik', syl:['dip','çik'], options:['di-pçik','dip-çik','dipç-ik'], correctIdx:1},
+  {word:'çiçek', syl:['çi','çek'], options:['çiç-ek','çi-çek','çiçe-k'], correctIdx:1},
+  {word:'kalem', syl:['ka','lem'], options:['ka-lem','kal-em','kale-m'], correctIdx:0},
+];
+const quizWhereEl = document.getElementById('quizWhere');
+whereData.forEach((item, idx)=>{
+  scoreMax += 1;
+  const div = document.createElement('div');
+  div.className = 'quiz-item';
+  div.innerHTML = `
+    <div class="quiz-q">${idx+1}. "<span class="word-split">${item.word}</span>" kelimesi (heceleri: ${item.syl.join('-')}) satır sonuna sığmıyor.
+    Doğru bölünme hangisi?</div>
+    <div class="opt-row"></div>
+    <div class="feedback"></div>
+  `;
+  const row = div.querySelector('.opt-row');
+  const fb = div.querySelector('.feedback');
+  item.options.forEach((opt, oi)=>{
+    const b = document.createElement('button');
+    b.className = 'opt-btn';
+    b.textContent = opt;
+    b.addEventListener('click', ()=>{
+      row.querySelectorAll('.opt-btn').forEach(x=>x.disabled=true);
+      if(oi === item.correctIdx){
+        b.classList.add('correct');
+        fb.textContent = 'Doğru! 🎉';
+        fb.className = 'feedback ok';
+        score += 1;
+      } else {
+        b.classList.add('wrong');
+        [...row.querySelectorAll('.opt-btn')][item.correctIdx].classList.add('correct');
+        fb.textContent = 'Tekrar dene, doğrusu işaretlendi.';
+        fb.className = 'feedback bad';
+      }
+      updateScore();
+    });
+    row.appendChild(b);
+  });
+  quizWhereEl.appendChild(div);
+});
+
+updateScore();
+</script>
+</body>
+</html>

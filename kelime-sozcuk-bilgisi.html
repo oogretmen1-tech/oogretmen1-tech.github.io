@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kelime (Sözcük) Bilgisi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky:#e9fbf8;
+    --paper:#ffffff;
+    --ink:#173a38;
+    --main:#22b3a0;
+    --main-dark:#178f81;
+    --accent:#ff7f6b;
+    --accent-dark:#e35c46;
+    --leaf:#4cb26a;
+    --berry:#e8607a;
+    --chalk:#effcf9;
+    --border:#cdece7;
+    --shadow: 0 6px 0 rgba(23,58,56,0.12);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:'Nunito', sans-serif;
+    background: radial-gradient(circle at 10% 15%, #ffe4dd 0%, transparent 40%),
+                radial-gradient(circle at 90% 85%, #cdf3ea 0%, transparent 45%), var(--sky);
+    color:var(--ink); min-height:100vh; padding-bottom:60px;
+  }
+  h1,h2,h3{ font-family:'Baloo 2', cursive; margin:0; }
+  .wrap{ max-width:960px; margin:0 auto; padding:0 20px; }
+  .hero{ padding:38px 20px 30px; text-align:center; }
+  .hero-chip{
+    display:inline-block; font-family:'Baloo 2'; font-weight:800; font-size:1.4rem;
+    background:var(--main); color:#fff; padding:8px 20px; border-radius:14px; box-shadow:var(--shadow);
+    margin-bottom:18px;
+  }
+  .hero h1{ font-size:2.1rem; }
+  .hero p.sub{ font-size:1.05rem; color:#3e6864; margin-top:8px; }
+
+  .card{
+    background:var(--paper); border:3px solid var(--border); border-radius:24px;
+    box-shadow:var(--shadow); padding:26px 24px; margin:26px 0;
+  }
+  .card > h2{ font-size:1.5rem; display:flex; align-items:center; gap:10px; margin-bottom:14px; color:var(--main-dark);}
+  .badge{
+    display:inline-flex; align-items:center; justify-content:center; width:34px;height:34px;border-radius:50%;
+    background:var(--main); color:#fff; font-family:'Baloo 2';font-weight:700; flex:none;
+  }
+  .info{ background:var(--chalk); border-left:6px solid var(--accent); border-radius:14px; padding:16px 18px; line-height:1.65; font-size:1.02rem; }
+  .info b{ color:var(--main-dark); }
+
+  .sentence-box{
+    background:#fbfffd; border:2px solid var(--border); border-radius:14px;
+    padding:14px 18px; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
+  }
+  .sentence-box .txt{ font-weight:700; font-size:1.02rem; }
+  .word-input{
+    width:60px; border:2px solid var(--border); border-radius:10px; padding:6px 10px;
+    font-family:'Baloo 2'; font-weight:700; font-size:1rem; text-align:center;
+  }
+  .word-input:focus{ outline:none; border-color:var(--main); }
+  .check-one{
+    font-family:'Baloo 2'; font-weight:700; font-size:.85rem; background:var(--main); color:#fff;
+    border:none; border-radius:10px; padding:8px 14px; cursor:pointer;
+  }
+  .mini-fb{ font-weight:700; font-size:.9rem; min-width:90px; }
+  .mini-fb.ok{ color:#1f8f74; }
+  .mini-fb.bad{ color:var(--berry); }
+
+  .quiz-item{ background:#fbfffd; border:2px solid var(--border); border-radius:16px; padding:16px 18px; margin-bottom:14px; }
+  .quiz-q{ font-weight:700; font-size:1.06rem; margin-bottom:10px; }
+  .opt-row{ display:flex; gap:10px; flex-wrap:wrap; }
+  .opt-btn{
+    font-family:'Nunito'; font-weight:700; font-size:.96rem;
+    border:2px solid var(--border); background:#fff; color:var(--ink);
+    border-radius:12px; padding:9px 16px; cursor:pointer; transition:all .15s ease;
+  }
+  .opt-btn:hover{ border-color:var(--main); }
+  .opt-btn.correct{ background:var(--leaf); border-color:#3a9256; color:#fff; }
+  .opt-btn.wrong{ background:var(--berry); border-color:#c94860; color:#fff; }
+  .opt-btn:disabled{ cursor:default; opacity:.85; }
+  .feedback{ margin-top:10px; font-weight:700; min-height:22px; }
+  .feedback.ok{ color:#1f8f74; }
+  .feedback.bad{ color:var(--berry); }
+
+  .scorebar{
+    position:sticky; top:12px; z-index:5; display:flex; align-items:center; justify-content:space-between;
+    background:#fff; border:3px solid var(--border); border-radius:18px; padding:10px 20px;
+    margin:0 auto 8px; box-shadow:var(--shadow); max-width:960px;
+  }
+  .scorebar .title{ font-family:'Baloo 2'; font-weight:700; color:var(--main-dark);}
+  .scorebar .score{ font-family:'Baloo 2'; font-weight:800; font-size:1.15rem;}
+  .scorebar .score span{ color:var(--leaf); }
+
+  footer{ text-align:center; color:#5f827d; font-size:.9rem; margin-top:30px; }
+  @media (max-width:560px){ .hero h1{font-size:1.6rem;} .card{padding:18px 16px;} }
+</style>
+</head>
+<body>
+
+<div class="scorebar wrap">
+  <div class="title">🌟 Puanım</div>
+  <div class="score"><span id="scoreVal">0</span> / <span id="scoreMax">0</span></div>
+</div>
+
+<div class="hero wrap">
+  <div class="hero-chip">Tema 2</div>
+  <h1>Kelime (Sözcük) Bilgisi</h1>
+  <p class="sub">Cümleleri oluşturan kelimeleri tanıyalım!</p>
+</div>
+
+<div class="wrap">
+
+  <section class="card">
+    <h2><span class="badge">1</span> Ne Öğreneceğiz?</h2>
+    <div class="info">
+      Bir düşünceyi, duyguyu ya da varlığı anlatmak için kullanılan, anlamlı en küçük ses ya da
+      ses birliğine <b>kelime (sözcük)</b> denir. Cümleler, bir araya gelen kelimelerden oluşur.<br><br>
+      Örnek: <i>"Ali okula gitti."</i> cümlesi <b>3 kelimeden</b> oluşur: <b>Ali</b> / <b>okula</b> / <b>gitti</b>.
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><span class="badge">2</span> Cümledeki Kelime Sayısını Bul</h2>
+    <p>Her cümledeki kelime sayısını kutuya yaz, sonra "Kontrol Et" düğmesine bas.</p>
+    <div id="wordCountArea"></div>
+  </section>
+
+  <section class="card">
+    <h2><span class="badge">3</span> Boşluğa Uygun Kelimeyi Seç</h2>
+    <p>Cümledeki boşluğa en uygun kelimeyi seç.</p>
+    <div id="fillQuiz"></div>
+  </section>
+
+  <footer>Dijital Öğretmen · 3. Sınıf Türkçe Etkinliği</footer>
+</div>
+
+<script>
+let score = 0, scoreMax = 0;
+function updateScore(){
+  document.getElementById('scoreVal').textContent = score;
+  document.getElementById('scoreMax').textContent = scoreMax;
+}
+
+/* ---------- KELIME SAYISI ---------- */
+const wcData = [
+  {sentence:'Bu hafta okumam gereken kitabımı yeni bitirdim.', count:6},
+  {sentence:'Ben buraları avucumun içi gibi bilirim.', count:6},
+  {sentence:'Kapının arkasında montum var.', count:4},
+  {sentence:'Öğretmenimiz her akşam mutlaka ödev verir.', count:6},
+  {sentence:'Annem boş saksıya menekşe dikti.', count:5},
+];
+const wcArea = document.getElementById('wordCountArea');
+wcData.forEach((item, idx)=>{
+  scoreMax += 1;
+  const box = document.createElement('div');
+  box.className = 'sentence-box';
+  box.innerHTML = `
+    <span class="txt">${idx+1}. "${item.sentence}"</span>
+    <input type="number" class="word-input" min="1" max="12">
+    <button class="check-one">Kontrol Et</button>
+    <span class="mini-fb"></span>
+  `;
+  const input = box.querySelector('.word-input');
+  const btn = box.querySelector('.check-one');
+  const fb = box.querySelector('.mini-fb');
+  btn.addEventListener('click', ()=>{
+    if(btn.disabled) return;
+    const val = parseInt(input.value, 10);
+    if(val === item.count){
+      fb.textContent = 'Doğru! ✔'; fb.className = 'mini-fb ok';
+      score += 1;
+    } else {
+      fb.textContent = `Doğrusu: ${item.count}`; fb.className = 'mini-fb bad';
+    }
+    input.disabled = true; btn.disabled = true;
+    updateScore();
+  });
+  wcArea.appendChild(box);
+});
+
+/* ---------- BOSLUK DOLDURMA ---------- */
+const fillData = [
+  {sentence:'Gökyüzünde gözle görülemeyecek kadar küçük ______ canlılardır.', opts:['mikroplar','filler','kayalar'], correct:0},
+  {sentence:'Babasının hastalığı ______ diye her gün dua ediyor.', opts:['büyüsün','iyileşsin','uzasın'], correct:1},
+  {sentence:'Sabah okula geç kalmamak için ______ kurdu.', opts:['saati alarm','çanta','defter'], correct:0},
+  {sentence:'Evini kaybetmiş bir kediyi sahiplenmek için ______ gitti.', opts:['barınağa','markete','okula'], correct:0},
+  {sentence:'Hava çok sıcak olduğu için ______ dondurma yaptı.', opts:['annem','kışın','soğukta'], correct:0},
+];
+const fillArea = document.getElementById('fillQuiz');
+fillData.forEach((item, idx)=>{
+  scoreMax += 1;
+  const div = document.createElement('div');
+  div.className = 'quiz-item';
+  div.innerHTML = `
+    <div class="quiz-q">${idx+1}. ${item.sentence}</div>
+    <div class="opt-row"></div>
+    <div class="feedback"></div>
+  `;
+  const row = div.querySelector('.opt-row');
+  const fb = div.querySelector('.feedback');
+  item.opts.forEach((opt, oi)=>{
+    const b = document.createElement('button');
+    b.className = 'opt-btn';
+    b.textContent = opt;
+    b.addEventListener('click', ()=>{
+      row.querySelectorAll('.opt-btn').forEach(x=>x.disabled=true);
+      if(oi === item.correct){
+        b.classList.add('correct'); fb.textContent='Doğru! 🎉'; fb.className='feedback ok'; score+=1;
+      } else {
+        b.classList.add('wrong');
+        row.children[item.correct].classList.add('correct');
+        fb.textContent='Tekrar dene, doğrusu işaretlendi.'; fb.className='feedback bad';
+      }
+      updateScore();
+    });
+    row.appendChild(b);
+  });
+  fillArea.appendChild(div);
+});
+
+updateScore();
+</script>
+</body>
+</html>

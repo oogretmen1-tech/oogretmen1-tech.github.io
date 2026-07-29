@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tema 1 - Değerlendirme</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky:#eef7f0;
+    --paper:#ffffff;
+    --ink:#20362a;
+    --main:#2fa66a;
+    --main-dark:#1f8551;
+    --accent:#ffb648;
+    --accent-dark:#e79a1f;
+    --leaf:#4cb26a;
+    --berry:#e8607a;
+    --chalk:#f2fbf5;
+    --border:#d7ecdd;
+    --shadow: 0 6px 0 rgba(32,54,42,0.12);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:'Nunito', sans-serif;
+    background: radial-gradient(circle at 10% 15%, #fff3d9 0%, transparent 40%),
+                radial-gradient(circle at 90% 85%, #d7f3e3 0%, transparent 45%), var(--sky);
+    color:var(--ink); min-height:100vh; padding-bottom:60px;
+  }
+  h1,h2{ font-family:'Baloo 2', cursive; margin:0; }
+  .wrap{ max-width:960px; margin:0 auto; padding:0 20px; }
+  .hero{ padding:36px 20px 26px; text-align:center; }
+  .hero .medal{ font-size:2.6rem; }
+  .hero h1{ font-size:2.1rem; margin-top:6px; }
+  .hero p.sub{ font-size:1.02rem; color:#456552; margin-top:8px; }
+
+  .scorebar{
+    position:sticky; top:12px; z-index:5; display:flex; align-items:center; justify-content:space-between;
+    background:#fff; border:3px solid var(--border); border-radius:18px; padding:10px 20px;
+    margin:0 auto 8px; box-shadow:var(--shadow); max-width:960px;
+  }
+  .scorebar .title{ font-family:'Baloo 2'; font-weight:700; color:var(--main-dark);}
+  .scorebar .score{ font-family:'Baloo 2'; font-weight:800; font-size:1.15rem;}
+  .scorebar .score span{ color:var(--leaf); }
+
+  .qcard{
+    background:var(--paper); border:3px solid var(--border); border-radius:20px;
+    box-shadow:var(--shadow); padding:20px 22px; margin:16px 0;
+  }
+  .qnum{
+    display:inline-flex; align-items:center; justify-content:center; width:30px;height:30px;border-radius:50%;
+    background:var(--main); color:#fff; font-family:'Baloo 2'; font-weight:700; margin-right:8px; flex:none;
+  }
+  .qtext{ font-weight:700; font-size:1.06rem; display:flex; align-items:flex-start; gap:4px; margin-bottom:12px;}
+  .opt-row{ display:flex; flex-direction:column; gap:8px; }
+  .opt-btn{
+    text-align:left; font-family:'Nunito'; font-weight:700; font-size:.98rem;
+    border:2px solid var(--border); background:#fbfffc; color:var(--ink);
+    border-radius:12px; padding:10px 16px; cursor:pointer; transition:all .15s ease;
+  }
+  .opt-btn:hover{ border-color:var(--main); }
+  .opt-btn.correct{ background:var(--leaf); border-color:#3a9256; color:#fff; }
+  .opt-btn.wrong{ background:var(--berry); border-color:#c94860; color:#fff; }
+  .opt-btn:disabled{ cursor:default; opacity:.9; }
+  .feedback{ margin-top:10px; font-weight:700; min-height:22px; }
+  .feedback.ok{ color:#1f8551; }
+  .feedback.bad{ color:var(--berry); }
+
+  .result{
+    text-align:center; margin-top:24px; padding:20px; border-radius:20px;
+    background:#fff; border:3px solid var(--border); box-shadow:var(--shadow); display:none;
+  }
+  .result.show{ display:block; }
+  .result h2{ color:var(--main-dark); font-size:1.6rem; }
+  .result p{ font-size:1.1rem; margin-top:8px; }
+
+  footer{ text-align:center; color:#5c7568; font-size:.9rem; margin-top:30px; }
+</style>
+</head>
+<body>
+
+<div class="scorebar wrap">
+  <div class="title">🌟 Puanım</div>
+  <div class="score"><span id="scoreVal">0</span> / <span id="scoreMax">0</span></div>
+</div>
+
+<div class="hero wrap">
+  <div class="medal">🏅</div>
+  <h1>Tema 1 - Değerlendirme</h1>
+  <p class="sub">Harf Bilgisi, Hece Bilgisi ve Satır Sonuna Sığmayan Kelimeler konularını tekrar edelim!</p>
+</div>
+
+<div class="wrap" id="quizArea"></div>
+<div class="wrap">
+  <div class="result" id="resultBox">
+    <h2 id="resultTitle"></h2>
+    <p id="resultText"></p>
+  </div>
+  <footer>Dijital Öğretmen · 3. Sınıf Türkçe Etkinliği</footer>
+</div>
+
+<script>
+const questions = [
+  {q:'Türk alfabesinde toplam kaç harf vardır?', opts:['26','29','21'], correct:1},
+  {q:'Aşağıdakilerden hangisi bir ünlü harftir?', opts:['ş','ö','v'], correct:1},
+  {q:'Aşağıdakilerden hangisi bir ünsüz harftir?', opts:['ğ','ü','ı'], correct:0},
+  {q:'"ç, ğ, ı, ö, ş, ü" harfleri hangi alfabede bulunmaz?', opts:['Türk alfabesinde','İngiliz alfabesinde','Her ikisinde de'], correct:1},
+  {q:'Aşağıdaki kelimelerden hangisi büyük ünlü uyumuna uyar?', opts:['kalemlik','kitaplık','saatler'], correct:0},
+  {q:'"Kalın ünlüler" hangi seçenekte doğru verilmiştir?', opts:['e, i, ö, ü','a, ı, o, u','b, c, d, f'], correct:1},
+  {q:'Bir kelimenin hece sayısı neye eşittir?', opts:['Harf sayısına','Ünsüz harf sayısına','Ünlü harf sayısına'], correct:2},
+  {q:'"kelebek" kelimesi kaç hecelidir?', opts:['2','3','4'], correct:1},
+  {q:'"basketbol" kelimesinin doğru hecelenişi hangisidir?', opts:['bas-ket-bol','ba-sket-bol','baske-tbol'], correct:0},
+  {q:'İki ünlü arasında tek ünsüz varsa bu ünsüz nasıl hecelenir?', opts:['Önceki ünlüyle birlikte','Sonraki ünlüyle birlikte','Hiçbirine ait olmaz'], correct:1},
+  {q:'Bir kelime satır sonuna sığmazsa nasıl bölünür?', opts:['Rastgele bir yerden','Hecelerine göre','Harflerin ortasından'], correct:1},
+  {q:'"zambak" kelimesi satır sonuna sığmazsa doğru bölünüşü hangisidir?', opts:['zam-bak','za-mbak','zambak-'], correct:0},
+  {q:'"çiçek" kelimesinin doğru hece bölünüşü hangisidir?', opts:['çiç-ek','çi-çek','çiçe-k'], correct:1},
+  {q:'Aşağıdakilerden hangisi 4 heceli bir kelimedir?', opts:['fincan','eğlenceli','sınıf'], correct:1},
+  {q:'"öğretmen" kelimesinin heceleri hangisidir?', opts:['öğ-ret-men','öğr-et-men','ö-ğret-men'], correct:0},
+];
+
+let score = 0, scoreMax = questions.length;
+document.getElementById('scoreMax').textContent = scoreMax;
+
+const quizArea = document.getElementById('quizArea');
+questions.forEach((item, idx)=>{
+  const card = document.createElement('div');
+  card.className = 'qcard';
+  card.innerHTML = `
+    <div class="qtext"><span class="qnum">${idx+1}</span> ${item.q}</div>
+    <div class="opt-row"></div>
+    <div class="feedback"></div>
+  `;
+  const row = card.querySelector('.opt-row');
+  const fb = card.querySelector('.feedback');
+  item.opts.forEach((opt, oi)=>{
+    const b = document.createElement('button');
+    b.className = 'opt-btn';
+    b.textContent = opt;
+    b.addEventListener('click', ()=>{
+      row.querySelectorAll('.opt-btn').forEach(x=>x.disabled=true);
+      if(oi === item.correct){
+        b.classList.add('correct');
+        fb.textContent = 'Doğru! 🎉';
+        fb.className = 'feedback ok';
+        score += 1;
+      } else {
+        b.classList.add('wrong');
+        row.children[item.correct].classList.add('correct');
+        fb.textContent = 'Tekrar dene, doğrusu işaretlendi.';
+        fb.className = 'feedback bad';
+      }
+      document.getElementById('scoreVal').textContent = score;
+      checkAllDone();
+    });
+    row.appendChild(b);
+  });
+  quizArea.appendChild(card);
+});
+
+function checkAllDone(){
+  const allDisabled = [...quizArea.querySelectorAll('.opt-row')].every(row =>
+    [...row.querySelectorAll('.opt-btn')].every(b=>b.disabled)
+  );
+  if(allDisabled){
+    const box = document.getElementById('resultBox');
+    box.classList.add('show');
+    const pct = Math.round((score/scoreMax)*100);
+    document.getElementById('resultTitle').textContent =
+      pct >= 80 ? 'Harikasın! 🌟' : pct >= 50 ? 'Güzel iş çıkardın! 👏' : 'Tekrar çalışalım! 💪';
+    document.getElementById('resultText').textContent = `${scoreMax} sorudan ${score} tanesini doğru yaptın (%${pct}).`;
+    box.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+}
+</script>
+</body>
+</html>

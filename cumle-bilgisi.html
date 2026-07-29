@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cümle Bilgisi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF6EA;
+    --ink:#2E2A22;
+    --rail:#2B4A3E;
+    --rail-dark:#1E362D;
+    --olumlu:#3E8E5C;
+    --olumsuz:#D65B44;
+    --soru:#2E6FA3;
+    --unlem:#D98F2B;
+    --mor:#7B5EA7;
+    --card:#FFFFFF;
+    --shadow: 0 6px 0 rgba(43,74,62,0.18);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Nunito', sans-serif;background:var(--paper);color:var(--ink);}
+  h1,h2,h3,.display{font-family:'Baloo 2', sans-serif;}
+
+  .hero{background:var(--rail);color:#fff;padding:44px 20px 66px;position:relative;overflow:hidden;text-align:center;}
+  .hero .eyebrow{font-weight:800;letter-spacing:3px;text-transform:uppercase;font-size:13px;color:#BEE3CE;margin-bottom:10px;}
+  .hero h1{font-size:clamp(30px,7vw,48px);margin:0 0 10px;font-weight:800;}
+  .hero p{font-size:16px;color:#DCEFE2;max-width:560px;margin:0 auto;}
+  .track{position:relative;margin-top:30px;height:64px;}
+  .rail-line{position:absolute;bottom:10px;left:0;right:0;height:6px;background:repeating-linear-gradient(90deg,#8A6A3F 0 18px, transparent 18px 30px);opacity:0.85;}
+  .train-row{position:absolute;bottom:16px;left:0;display:flex;gap:10px;animation: chug 18s linear infinite;white-space:nowrap;}
+  @keyframes chug{0%{transform:translateX(110vw);}100%{transform:translateX(-160vw);}}
+  .car{width:60px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-family:'Baloo 2',sans-serif;color:#fff;box-shadow:0 4px 0 rgba(0,0,0,0.2);flex:0 0 auto;font-size:13px;}
+  .car.w1{background:var(--olumlu);} .car.w2{background:var(--soru);} .car.w3{background:var(--unlem);}
+  .car.w4{background:var(--olumsuz);} .car.w5{background:var(--mor);}
+  .car.engine{width:52px;background:#F4E7C9;color:var(--rail-dark);border-radius:10px 4px 4px 10px;}
+
+  main{max-width:900px;margin:-32px auto 0;padding:0 18px 60px;}
+
+  /* konu haritası */
+  .roadmap{background:var(--card);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow);border:1px solid rgba(43,74,62,0.08);margin-bottom:30px;}
+  .roadmap h2{margin:0 0 12px;font-size:17px;}
+  .roadmap ol{margin:0;padding-left:20px;font-size:14.5px;line-height:1.9;font-weight:700;color:var(--rail);}
+
+  section{margin-bottom:36px;}
+  .card{background:var(--card);border-radius:16px;padding:24px 26px;box-shadow:var(--shadow);border:1px solid rgba(43,74,62,0.08);}
+  .section-title{display:flex;align-items:center;gap:10px;margin:0 0 16px;}
+  .section-title .num{background:var(--rail);color:#fff;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2';font-weight:800;font-size:15px;flex:0 0 auto;}
+  .section-title h2{margin:0;font-size:21px;}
+  .example{background:#F3F0E4;border-left:4px solid var(--rail);padding:10px 14px;border-radius:0 8px 8px 0;margin-top:10px;font-size:15.5px;}
+
+  .qmark-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px;}
+  .qmark{background:#F3F0E4;border-radius:10px;padding:10px 12px;font-size:14px;}
+  .qmark b{color:var(--rail);font-family:'Baloo 2';}
+
+  .badge{display:inline-block;background:var(--rail);color:#fff;font-family:'Baloo 2';font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:20px;margin-bottom:10px;}
+  .story-box{background:#F3F0E4;border-radius:12px;padding:16px 18px;font-size:15.5px;line-height:1.7;margin:12px 0 18px;}
+  .prompt{font-size:18px;font-weight:700;margin:6px 0 16px;}
+  .choices{display:flex;flex-wrap:wrap;gap:10px;}
+  .choice-btn{border:2px solid var(--rail);background:#fff;color:var(--rail);font-family:'Nunito';font-weight:700;font-size:14.5px;padding:10px 16px;border-radius:10px;cursor:pointer;transition:all .15s;text-align:left;}
+  .choice-btn:hover{background:var(--rail);color:#fff;}
+  .choice-btn.correct{background:var(--olumlu);border-color:var(--olumlu);color:#fff;}
+  .choice-btn.wrong{background:var(--olumsuz);border-color:var(--olumsuz);color:#fff;}
+  .choice-btn[disabled]{cursor:default;}
+  .feedback{margin-top:14px;font-weight:800;font-size:15px;min-height:22px;}
+  .feedback.ok{color:var(--olumlu);} .feedback.no{color:var(--olumsuz);}
+  .nextbar{margin-top:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+  .nextbtn{background:var(--rail-dark);color:#fff;border:none;padding:9px 18px;border-radius:8px;font-family:'Baloo 2';font-weight:700;cursor:pointer;font-size:14px;display:none;}
+  .score{font-family:'Baloo 2';font-weight:700;color:var(--rail);font-size:14px;}
+
+  .word-bank{display:flex;flex-wrap:wrap;gap:8px;min-height:44px;margin-bottom:16px;}
+  .word-tile{background:#F3F0E4;border:2px solid var(--rail);padding:8px 14px;border-radius:8px;font-weight:700;cursor:pointer;font-size:15px;user-select:none;}
+  .word-tile.used{opacity:0.35;cursor:default;}
+  .built-line{min-height:50px;border:2px dashed #B9AF95;border-radius:10px;padding:8px 10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px;background:#fff;}
+  .built-line .word-tile{background:var(--rail);color:#fff;border-color:var(--rail);}
+  .row-buttons{display:flex;gap:10px;flex-wrap:wrap;}
+  .action-btn{background:var(--soru);color:#fff;border:none;padding:9px 16px;border-radius:8px;font-weight:700;font-family:'Nunito';cursor:pointer;font-size:14.5px;}
+  .action-btn.secondary{background:#8A8367;}
+
+  footer{text-align:center;padding:24px;color:#8A8367;font-size:13px;}
+  @media (max-width:600px){main{margin-top:-22px;} .card{padding:18px 16px;}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="eyebrow">3. Sınıf Türkçe</div>
+  <h1>Cümle Bilgisi</h1>
+  <p>Altı istasyonlu cümle treniyle yolculuğa çıkıyoruz: 5N1K, hikaye unsurları, sebep-sonuç, soru-ünlem cümleleri, cümle tamamlama ve kurallı cümle kurma!</p>
+  <div class="track">
+    <div class="rail-line"></div>
+    <div class="train-row">
+      <div class="car engine">🚂</div>
+      <div class="car w1">5N1K</div>
+      <div class="car w2">Hikaye</div>
+      <div class="car w3">Sebep</div>
+      <div class="car w4">Soru!</div>
+      <div class="car w5">Tamamla</div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <div class="roadmap">
+    <h2>🚉 Bu Yolculukta 6 İstasyon Var</h2>
+    <ol>
+      <li>5N1K (Kim, Ne, Nerede, Ne Zaman, Nasıl, Niçin)</li>
+      <li>Hikaye Unsurları</li>
+      <li>Sebep - Sonuç Cümleleri</li>
+      <li>Soru ve Ünlem Cümlesi</li>
+      <li>Cümle Oluşturma - Cümle Tamamlama</li>
+      <li>Anlamlı ve Kurallı Cümle Oluşturma</li>
+    </ol>
+  </div>
+
+  <!-- ========== 1. 5N1K ========== -->
+  <section>
+    <div class="card">
+      <div class="section-title"><div class="num">1</div><h2>5N1K</h2></div>
+      <p>Bir cümledeki bilgileri tam olarak anlamak için altı soru sorarız. Bu sorulara <strong>5N1K</strong> denir:</p>
+      <div class="qmark-grid">
+        <div class="qmark"><b>Kim?</b> — cümlenin öznesi</div>
+        <div class="qmark"><b>Ne?</b> — yapılan iş</div>
+        <div class="qmark"><b>Nerede?</b> — yer</div>
+        <div class="qmark"><b>Ne Zaman?</b> — zaman</div>
+        <div class="qmark"><b>Nasıl?</b> — biçim</div>
+        <div class="qmark"><b>Niçin?</b> — sebep</div>
+      </div>
+      <div class="example">"Ali <u>dün akşam</u> (ne zaman) <u>parkta</u> (nerede) arkadaşlarıyla <u>neşeyle</u> (nasıl) top oynadı."</div>
+
+      <div style="margin-top:22px;">
+        <div class="badge">Etkinlik</div>
+        <div class="prompt" id="p1-prompt"></div>
+        <div class="choices" id="p1-choices"></div>
+        <div class="feedback" id="p1-feedback"></div>
+        <div class="nextbar">
+          <span class="score" id="p1-score">Puan: 0 / 0</span>
+          <button class="nextbtn" id="p1-next">Sıradaki ➜</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 2. Hikaye Unsurları ========== -->
+  <section>
+    <div class="card">
+      <div class="section-title"><div class="num">2</div><h2>Hikaye Unsurları</h2></div>
+      <p>Bir hikayede dört temel unsur bulunur:</p>
+      <div class="qmark-grid">
+        <div class="qmark"><b>Kişiler</b> — hikayedeki kahramanlar</div>
+        <div class="qmark"><b>Zaman</b> — olayın geçtiği zaman</div>
+        <div class="qmark"><b>Yer (Mekan)</b> — olayın geçtiği yer</div>
+        <div class="qmark"><b>Olay</b> — hikayede ne olduğu</div>
+      </div>
+      <div class="story-box" id="story-text">
+        Bir varmış bir yokmuş, küçük bir tavşan varmış. Bu tavşan, sonbahar günlerinden birinde ormanda kaybolmuş. Şaşkın şaşkın etrafına bakınırken bir kirpiyle karşılaşmış. Kirpi ona yol göstererek tavşanı evine kadar götürmüş.
+      </div>
+      <div class="badge">Etkinlik</div>
+      <div class="prompt" id="p2-prompt"></div>
+      <div class="choices" id="p2-choices"></div>
+      <div class="feedback" id="p2-feedback"></div>
+      <div class="nextbar">
+        <span class="score" id="p2-score">Puan: 0 / 0</span>
+        <button class="nextbtn" id="p2-next">Sıradaki ➜</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 3. Sebep-Sonuç ========== -->
+  <section>
+    <div class="card">
+      <div class="section-title"><div class="num">3</div><h2>Sebep - Sonuç Cümleleri</h2></div>
+      <p>Bir cümlede bir olayın <strong>nedeni (sebebi)</strong> ile o olayın ortaya çıkardığı <strong>durum (sonucu)</strong> birlikte anlatılıyorsa buna sebep-sonuç cümlesi denir. Genellikle <strong>"çünkü, için, -dığı için, bu yüzden, -diğinden"</strong> gibi bağlaçlarla kurulur.</p>
+      <div class="example">"Hava çok soğuduğu için <em>(sebep)</em> herkes mont giydi <em>(sonuç)</em>."</div>
+      <div class="badge" style="margin-top:18px;">Etkinlik</div>
+      <div class="prompt" id="p3-prompt"></div>
+      <div class="choices" id="p3-choices"></div>
+      <div class="feedback" id="p3-feedback"></div>
+      <div class="nextbar">
+        <span class="score" id="p3-score">Puan: 0 / 0</span>
+        <button class="nextbtn" id="p3-next">Sıradaki ➜</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 4. Soru ve Ünlem Cümlesi ========== -->
+  <section>
+    <div class="card">
+      <div class="section-title"><div class="num">4</div><h2>Soru ve Ünlem Cümlesi</h2></div>
+      <p><strong>Soru cümlesi:</strong> bir şey öğrenmek için sorulur, sonuna <strong>soru işareti (?)</strong> konur. "mi/mı/mu/mü" ya da <strong>ne, kim, nerede, ne zaman, nasıl, niçin</strong> gibi soru kelimeleri bulunabilir.</p>
+      <p><strong>Ünlem cümlesi:</strong> sevinç, korku, şaşkınlık gibi güçlü bir duyguyu coşkuyla anlatır, sonuna <strong>ünlem işareti (!)</strong> konur.</p>
+      <div class="example">Soru: "Yarın pikniğe gelecek misin?" &nbsp; | &nbsp; Ünlem: "Ne kadar güzel bir sürpriz!"</div>
+      <div class="badge" style="margin-top:18px;">Etkinlik</div>
+      <p style="margin-top:0;color:#6B6551;font-size:14.5px;">Cümlenin sonuna hangi işaret gelmeli?</p>
+      <div class="prompt" id="p4-prompt"></div>
+      <div class="choices" id="p4-choices"></div>
+      <div class="feedback" id="p4-feedback"></div>
+      <div class="nextbar">
+        <span class="score" id="p4-score">Puan: 0 / 0</span>
+        <button class="nextbtn" id="p4-next">Sıradaki ➜</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 5. Cümle Tamamlama ========== -->
+  <section>
+    <div class="card">
+      <div class="section-title"><div class="num">5</div><h2>Cümle Oluşturma - Cümle Tamamlama</h2></div>
+      <p>Bazen bir cümlenin bir bölümü eksik bırakılır. Cümlenin anlamlı olması için boşluğa <strong>en uygun</strong> kelime ya da kelime grubunu getirmemiz gerekir.</p>
+      <div class="badge">Etkinlik</div>
+      <div class="prompt" id="p5-prompt"></div>
+      <div class="choices" id="p5-choices"></div>
+      <div class="feedback" id="p5-feedback"></div>
+      <div class="nextbar">
+        <span class="score" id="p5-score">Puan: 0 / 0</span>
+        <button class="nextbtn" id="p5-next">Sıradaki ➜</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 6. Anlamlı ve Kurallı Cümle Oluşturma ========== -->
+  <section>
+    <div class="card">
+      <div class="section-title"><div class="num">6</div><h2>Anlamlı ve Kurallı Cümle Oluşturma</h2></div>
+      <p>Kelimeler doğru sırada dizilmezse cümle anlamsız olur. Vagonlara tıklayarak kelimeleri doğru sıraya diz, anlamlı ve kurallı bir cümle oluştur.</p>
+      <div class="word-bank" id="p6-bank"></div>
+      <div class="built-line" id="p6-built"></div>
+      <div class="row-buttons">
+        <button class="action-btn" id="p6-check">Kontrol Et</button>
+        <button class="action-btn secondary" id="p6-reset">Baştan Başla</button>
+      </div>
+      <div class="feedback" id="p6-feedback"></div>
+      <div class="nextbar">
+        <span class="score" id="p6-score">Puan: 0 / 0</span>
+        <button class="nextbtn" id="p6-next">Sıradaki ➜</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>Cümle Bilgisi — İnteraktif Etkinlik</footer>
+
+<script>
+function shuffle(arr){ return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]); }
+
+function runMCQ(cfg){
+  // cfg: {prefix, data, getPrompt(item), getOptions(item) -> {correct, distractors}, doneSuffix}
+  let i=0, score=0, answered=false;
+  const promptEl=document.getElementById(cfg.prefix+'-prompt');
+  const choicesEl=document.getElementById(cfg.prefix+'-choices');
+  const fbEl=document.getElementById(cfg.prefix+'-feedback');
+  const scoreEl=document.getElementById(cfg.prefix+'-score');
+  const nextBtn=document.getElementById(cfg.prefix+'-next');
+  function load(){
+    answered=false;
+    const item=cfg.data[i];
+    promptEl.innerHTML = cfg.getPrompt(item);
+    const opts = cfg.getOptions(item);
+    const allOpts = shuffle([opts.correct, ...opts.distractors]);
+    choicesEl.innerHTML='';
+    allOpts.forEach(opt=>{
+      const b=document.createElement('button');
+      b.className='choice-btn'; b.textContent=opt;
+      b.onclick=()=>check(b,opt,opts.correct);
+      choicesEl.appendChild(b);
+    });
+    fbEl.textContent=''; fbEl.className='feedback';
+    nextBtn.style.display='none';
+  }
+  function check(btn,chosen,correct){
+    if(answered) return;
+    answered=true;
+    const all=choicesEl.querySelectorAll('.choice-btn');
+    all.forEach(b=>b.disabled=true);
+    if(chosen===correct){
+      btn.classList.add('correct'); score++;
+      fbEl.textContent='Doğru! 🎉'; fbEl.className='feedback ok';
+    } else {
+      btn.classList.add('wrong');
+      fbEl.textContent='Yanlış. Doğrusu: "'+correct+'"'; fbEl.className='feedback no';
+      all.forEach(b=>{ if(b.textContent===correct) b.classList.add('correct'); });
+    }
+    scoreEl.textContent='Puan: '+score+' / '+(i+1);
+    if(i<cfg.data.length-1) nextBtn.style.display='inline-block';
+    else fbEl.textContent += ' Etkinlik tamamlandı!';
+  }
+  nextBtn.onclick=()=>{ i++; load(); };
+  load();
+}
+
+/* ===== 1. 5N1K ===== */
+const p1Data = [
+  {s:"Ali dün kütüphanede sessizce kitap okudu.", q:"Kim?", a:"Ali", d:["Zeynep","Mehmet","Ayşe"]},
+  {s:"Zeynep bahçede çiçek topladı.", q:"Ne yaptı?", a:"çiçek topladı", d:["bahçede yürüdü","kitap okudu","resim çizdi"]},
+  {s:"Öğrenciler bahçede voleybol oynadı.", q:"Nerede?", a:"bahçede", d:["sınıfta","evde","parkta"]},
+  {s:"Annem sabah erkenden pazara gitti.", q:"Ne zaman?", a:"sabah erkenden", d:["öğleden sonra","akşam geç vakit","gece yarısı"]},
+  {s:"Kedi yavaşça masadan aşağı indi.", q:"Nasıl?", a:"yavaşça", d:["hızlıca","gürültüyle","zıplayarak"]},
+  {s:"Ayşe çok yorgun olduğu için erken yattı.", q:"Niçin?", a:"çok yorgun olduğu için", d:["kitap okumak için","ödev yapmak için","misafir geldiği için"]}
+];
+runMCQ({
+  prefix:'p1', data:p1Data,
+  getPrompt:item=>'"'+item.s+'"<br><span style="color:'+"#2E6FA3"+';">'+item.q+'</span>',
+  getOptions:item=>({correct:item.a, distractors:item.d})
+});
+
+/* ===== 2. Hikaye Unsurları ===== */
+const p2Data = [
+  {q:"Bu hikayenin kahramanları kimlerdir?", a:"Tavşan ve kirpi", d:["Tavşan ve tilki","Kirpi ve kurbağa","Tavşan ve kurt"]},
+  {q:"Hikaye nerede geçiyor?", a:"Ormanda", d:["Denizde","Çölde","Şehirde"]},
+  {q:"Hikaye hangi mevsimde geçiyor?", a:"Sonbaharda", d:["Kışta","Yazda","İlkbaharda"]},
+  {q:"Hikayede ne olmuş?", a:"Tavşan ormanda kaybolmuş, kirpi ona yardım etmiş.", d:["Tavşan kirpiyle yarış yapmış.","Tavşan evine misafir çağırmış.","Kirpi ormanda kaybolmuş."]}
+];
+runMCQ({
+  prefix:'p2', data:p2Data,
+  getPrompt:item=>item.q,
+  getOptions:item=>({correct:item.a, distractors:item.d})
+});
+
+/* ===== 3. Sebep-Sonuç ===== */
+const p3Data = [
+  {s:"Yağmur yağdığı için maç ertelendi.", ask:"sebep", a:"Yağmur yağdığı için", d:["maç ertelendi"]},
+  {s:"Çok çalıştığı için sınavdan yüksek not aldı.", ask:"sonuç", a:"sınavdan yüksek not aldı", d:["Çok çalıştığı için"]},
+  {s:"Trafik yoğun olduğundan okula geç kaldı.", ask:"sebep", a:"Trafik yoğun olduğundan", d:["okula geç kaldı"]},
+  {s:"Buzda kaydığı için düştü.", ask:"sonuç", a:"düştü", d:["Buzda kaydığı için"]},
+  {s:"Hasta olduğundan okula gidemedi.", ask:"sebep", a:"Hasta olduğundan", d:["okula gidemedi"]},
+  {s:"Erken kalktığı için kahvaltısını rahat rahat yaptı.", ask:"sonuç", a:"kahvaltısını rahat rahat yaptı", d:["Erken kalktığı için"]}
+];
+runMCQ({
+  prefix:'p3', data:p3Data,
+  getPrompt:item=>'"'+item.s+'"<br><span style="color:'+"#2E6FA3"+';">Bu cümlede '+item.ask.toUpperCase()+' bölümü hangisidir?</span>',
+  getOptions:item=>({correct:item.a, distractors:item.d})
+});
+
+/* ===== 4. Soru ve Ünlem ===== */
+const p4Data = [
+  {s:"Yarın pikniğe gelecek misin ___", a:"?"},
+  {s:"Aa, sınavdan tam not aldım ___", a:"!"},
+  {s:"Bu hediyeyi kim gönderdi ___", a:"?"},
+  {s:"İmdat, balonum patladı ___", a:"!"},
+  {s:"Saat kaçta buluşacağız ___", a:"?"},
+  {s:"Vay canına, ne kadar büyük bir kelebek ___", a:"!"},
+  {s:"En sevdiğin renk hangisi ___", a:"?"},
+  {s:"Harika, yarışmayı kazandık ___", a:"!"}
+];
+runMCQ({
+  prefix:'p4', data:p4Data,
+  getPrompt:item=>'"'+item.s+'"',
+  getOptions:item=>({correct:item.a, distractors:["?","!"].filter(x=>x!==item.a)})
+});
+
+/* ===== 5. Cümle Tamamlama ===== */
+const p5Data = [
+  {s:"Susadığım için bir bardak ___ içtim.", a:"su", d:["kalem","top","masa"]},
+  {s:"Kütüphaneye gidip bir ___ ödünç aldım.", a:"kitap", d:["çorap","tabak","bisiklet"]},
+  {s:"Kar yağınca çocuklar bahçede ___ yaptı.", a:"kardan adam", d:["deniz banyosu","güneşlenme","piknik"]},
+  {s:"Dişlerimi fırçalamadan önce ___ sıktım.", a:"macun", d:["reçel","çorba","boya"]},
+  {s:"Yorgun olduğum için erken ___ gittim.", a:"yatmaya", d:["koşmaya","yüzmeye","dans etmeye"]},
+  {s:"Sınıfımızda ödevlerimizi ___ yazarız.", a:"deftere", d:["tabağa","bardağa","süpürgeye"]}
+];
+runMCQ({
+  prefix:'p5', data:p5Data,
+  getPrompt:item=>'"'+item.s+'"',
+  getOptions:item=>({correct:item.a, distractors:item.d})
+});
+
+/* ===== 6. Kelime dizme ===== */
+const p6Data = [
+  {words:["okula","erken","Ali","gitti."], correct:"Ali erken okula gitti."},
+  {words:["defterini","masaya","Zeynep","koydu."], correct:"Zeynep defterini masaya koydu."},
+  {words:["bahçede","köpek","oynuyor.","küçük"], correct:"Küçük köpek bahçede oynuyor."},
+  {words:["okudu?","kitabı","kim","bu"], correct:"Bu kitabı kim okudu?"},
+  {words:["çok","bugün","güzel!","hava"], correct:"Bugün hava çok güzel!"}
+];
+let p6i=0, p6score=0, p6built=[], p6usedIdx=new Set();
+function loadP6(){
+  p6built=[]; p6usedIdx=new Set();
+  const item=p6Data[p6i];
+  const bank=document.getElementById('p6-bank');
+  bank.innerHTML='';
+  shuffle(item.words.map((w,idx)=>({w,idx}))).forEach(obj=>{
+    const t=document.createElement('div');
+    t.className='word-tile'; t.textContent=obj.w; t.dataset.idx=obj.idx;
+    t.onclick=()=>pickWord(obj.idx,obj.w,t);
+    bank.appendChild(t);
+  });
+  document.getElementById('p6-built').innerHTML='';
+  document.getElementById('p6-feedback').textContent='';
+  document.getElementById('p6-feedback').className='feedback';
+  document.getElementById('p6-next').style.display='none';
+}
+function pickWord(idx,w,tileEl){
+  if(p6usedIdx.has(idx)) return;
+  p6usedIdx.add(idx); tileEl.classList.add('used'); p6built.push(w);
+  const built=document.getElementById('p6-built');
+  const bt=document.createElement('div'); bt.className='word-tile'; bt.textContent=w;
+  built.appendChild(bt);
+}
+document.getElementById('p6-reset').onclick=()=>{ loadP6(); };
+document.getElementById('p6-check').onclick=()=>{
+  const item=p6Data[p6i];
+  const built=p6built.join(' ');
+  const fb=document.getElementById('p6-feedback');
+  if(built===item.correct){
+    p6score++;
+    fb.textContent='Harika, kurallı ve anlamlı bir cümle kurdun! 🎉'; fb.className='feedback ok';
+    document.getElementById('p6-next').style.display='inline-block';
+  } else {
+    fb.textContent='Henüz olmadı. Doğru cümle: "'+item.correct+'" — Baştan Başla\'ya tıklayıp tekrar dene.';
+    fb.className='feedback no';
+  }
+  document.getElementById('p6-score').textContent='Puan: '+p6score+' / '+(p6i+1);
+};
+document.getElementById('p6-next').onclick=()=>{
+  p6i++;
+  if(p6i<p6Data.length) loadP6();
+  else{
+    document.getElementById('p6-bank').innerHTML='';
+    document.getElementById('p6-built').innerHTML='';
+    document.getElementById('p6-feedback').textContent='Tüm cümleleri tamamladın! 🚂🎉';
+    document.getElementById('p6-feedback').className='feedback ok';
+    document.getElementById('p6-next').style.display='none';
+  }
+};
+loadP6();
+</script>
+
+</body>
+</html>
