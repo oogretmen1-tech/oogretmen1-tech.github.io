@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3. Sınıf Hayat Bilgisi Genel Değerlendirme</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF6EC; --ink:#1F2A44; --muted:#6b7280; --ok:#2f9e44; --bad:#d64545; --line:#d8d2c2;
+    --accent:#C0392B;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:#e9e4d6; font-family:'Nunito',sans-serif; color:var(--ink); padding:24px 12px;}
+  .sheet{max-width:820px; margin:0 auto; background:var(--paper); border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,0.15); padding:30px 26px;}
+  h1{font-family:'Patrick Hand',cursive; font-size:2rem; margin:0 0 4px 0; color:var(--accent); text-align:center;}
+  .subtitle{text-align:center; font-family:'Space Mono',monospace; font-size:0.8rem; color:var(--muted); margin-bottom:26px;}
+  .q{border-top:2px dashed var(--line); padding:22px 0;}
+  .q:first-of-type{border-top:none;}
+  .qnum{display:inline-flex; align-items:center; justify-content:center; width:30px;height:30px; border-radius:50%; background:var(--accent); color:#fff; font-weight:800; font-family:'Space Mono',monospace; margin-right:8px; flex:none;}
+  .qhead{display:flex; align-items:center; gap:2px; margin-bottom:14px;}
+  .qtitle{font-weight:800; font-size:1.02rem;}
+  table{border-collapse:collapse; width:100%; margin-top:8px;}
+  th, td{border:1px solid var(--line); padding:8px; text-align:center; font-size:0.9rem;}
+  th{background:#00000008;}
+  select{width:100%; padding:7px 6px; border:1.5px solid var(--line); border-radius:5px; font-family:'Nunito',sans-serif; font-size:0.85rem; background:#fff;}
+  select.correct{border-color:var(--ok); background:#2f9e441a;}
+  select.wrong{border-color:var(--bad); background:#d645451a;}
+  .match-row{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
+  .match-word{width:190px; font-weight:700; flex:none; font-size:0.92rem;}
+  .passage{background:#ffffffa0; border-left:4px solid var(--ink); padding:12px 14px; border-radius:6px; font-style:italic; margin-bottom:14px; font-size:0.95rem; line-height:1.5;}
+  .subq{margin-bottom:14px;}
+  .subq-text{font-weight:700; margin-bottom:8px; font-size:0.95rem;}
+  .opts{display:flex; flex-wrap:wrap; gap:8px;}
+  .opt-btn{padding:8px 14px; border-radius:6px; border:1.5px solid var(--line); background:#fff; cursor:pointer; font-size:0.88rem; transition:background .15s;}
+  .opt-btn:hover{background:#00000008;}
+  .opt-btn.selected{border-color:var(--ink); background:var(--ink); color:#fff;}
+  .opt-btn.correct{border-color:var(--ok); background:#2f9e441a; color:var(--ink);}
+  .opt-btn.wrong{border-color:var(--bad); background:#d645451a; color:var(--ink);}
+  .footer{text-align:center; margin-top:10px; padding-top:20px;}
+  button.check{
+    font-family:'Nunito',sans-serif; font-weight:800; font-size:1rem; padding:13px 28px; border-radius:9px; border:none;
+    background:var(--ink); color:#fff; cursor:pointer;
+  }
+  button.check:hover{opacity:0.9;}
+  .score-box{
+    display:none; text-align:center; margin-top:18px; font-family:'Patrick Hand',cursive; font-size:1.8rem;
+    background:#ffffffa0; border-radius:8px; padding:14px;
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <h1>3. Sınıf Hayat Bilgisi — Genel Değerlendirme</h1>
+  <div class="subtitle">TÜM ÜNİTELER · KARIŞIK ETKİNLİK TESTİ</div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">1</span><span class="qtitle">Aşağıdaki ifadeler doğru ise "D", yanlış ise "Y" seçin.</span></div>
+    <table id="dy-table">
+      <tr><th>İfade</th><th>D / Y</th></tr>
+    </table>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">2</span><span class="qtitle">Meslekleri görevleriyle eşleştirin.</span></div>
+    <div id="match-meslek"></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">3</span><span class="qtitle">Metni okuyup soruları cevaplayın.</span></div>
+    <div class="passage">Ailece dedemin evine gittik. Onun bayramını kutladık. Hediye olarak şeker götürdük. Dedem, yanında olduğumuz için çok mutlu görünüyordu.</div>
+    <div class="subq">
+      <div class="subq-text">Bu metinde aile için hangi değer öne çıkmaktadır?</div>
+      <div class="opts" data-qid="p3-0" data-correct="1">
+        <button class="opt-btn" data-v="0">Rekabet</button>
+        <button class="opt-btn" data-v="1">Sevgi ve saygı</button>
+        <button class="opt-btn" data-v="2">Bencillik</button>
+        <button class="opt-btn" data-v="3">Yalnızlık</button>
+      </div>
+    </div>
+    <div class="subq">
+      <div class="subq-text">Metne göre dedeye ne götürülmüştür?</div>
+      <div class="opts" data-qid="p3-1" data-correct="2">
+        <button class="opt-btn" data-v="0">Çiçek</button>
+        <button class="opt-btn" data-v="1">Kitap</button>
+        <button class="opt-btn" data-v="2">Şeker</button>
+        <button class="opt-btn" data-v="3">Oyuncak</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">4</span><span class="qtitle">Doğal afetlerde yapılması gereken doğru davranışı eşleştirin.</span></div>
+    <div id="match-afet"></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">5</span><span class="qtitle">Aşağıdaki davranışları Doğru / Yanlış olarak sınıflandırın.</span></div>
+    <table id="davranis-table">
+      <tr><th>Davranış</th><th>Doğru / Yanlış</th></tr>
+    </table>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">6</span><span class="qtitle">Milli bayramları tarihleriyle eşleştirin.</span></div>
+    <div id="match-bayram"></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">7</span><span class="qtitle">Bir çocuk her sabah kahvaltıda süt, yumurta, peynir ve domates yiyor. Bu davranış hangi alışkanlığı gösterir?</span></div>
+    <div class="opts" data-qid="p7-0" data-correct="2">
+      <button class="opt-btn" data-v="0">Trafik kurallarına uyma</button>
+      <button class="opt-btn" data-v="1">Güvenlik önlemi alma</button>
+      <button class="opt-btn" data-v="2">Sağlıklı beslenme</button>
+      <button class="opt-btn" data-v="3">Zaman yönetimi</button>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">8</span><span class="qtitle">Aşağıdaki ifadeler doğru ise "D", yanlış ise "Y" seçin.</span></div>
+    <table id="dy2-table">
+      <tr><th>İfade</th><th>D / Y</th></tr>
+    </table>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">9</span><span class="qtitle">Yönetim birimlerini yöneticileriyle eşleştirin.</span></div>
+    <div id="match-yonetim"></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">10</span><span class="qtitle">Cumhuriyet'in getirdiği yeniliklerle ilgili ifadeler doğru ise "D", yanlış ise "Y" seçin.</span></div>
+    <table id="cumhuriyet-table">
+      <tr><th>İfade</th><th>D / Y</th></tr>
+    </table>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">11</span><span class="qtitle">Yağmur, kar ve rüzgar gibi olaylara ne ad verilir?</span></div>
+    <div class="opts" data-qid="p11-0" data-correct="0">
+      <button class="opt-btn" data-v="0">Doğa olayları</button>
+      <button class="opt-btn" data-v="1">Yapay olaylar</button>
+      <button class="opt-btn" data-v="2">İnsan olayları</button>
+      <button class="opt-btn" data-v="3">Hayvan olayları</button>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">12</span><span class="qtitle">Aşağıdaki varlıkları Hayvan / Bitki olarak sınıflandırın.</span></div>
+    <table id="canli-table">
+      <tr><th>Varlık</th><th>Hayvan / Bitki</th></tr>
+    </table>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">13</span><span class="qtitle">Geri dönüşüm atıklarını doğru kutu rengiyle eşleştirin.</span></div>
+    <div id="match-geridonusum"></div>
+  </div>
+
+  <div class="footer">
+    <button class="check" id="checkBtn">Tümünü Kontrol Et</button>
+    <div class="score-box" id="scoreBox"></div>
+  </div>
+</div>
+
+<script>
+function markSel(el, isCorrect){
+  el.classList.remove('correct','wrong');
+  el.classList.add(isCorrect ? 'correct' : 'wrong');
+}
+
+// --- Q1 D/Y ---
+const dyItems = [
+  {text:"Sınıf kurallarını sadece öğretmen belirler, öğrenciler hiç katılamaz.", ans:"Y"},
+  {text:"Karşıdan karşıya geçerken yaya geçidini kullanmak güvenlidir.", ans:"D"},
+  {text:"Elektrikli aletleri büyüklerin izni olmadan kullanmak güvenlidir.", ans:"Y"},
+  {text:"Yardımlaşma toplumda dayanışmayı güçlendirir.", ans:"D"},
+  {text:"Bayrağımıza ve İstiklal Marşımıza saygı göstermek vatan sevgisinin bir göstergesidir.", ans:"D"}
+];
+const dyTable = document.getElementById('dy-table');
+dyItems.forEach((item,i)=>{
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td style="text-align:left;">${item.text}</td><td><select id="dy-${i}"><option value="">seçin</option><option>D</option><option>Y</option></select></td>`;
+  dyTable.appendChild(tr);
+});
+
+// --- Q2 meslek eşleştirme ---
+const meslekPairs = [
+  {left:"Doktor", right:"Hastaları tedavi eder"},
+  {left:"İtfaiyeci", right:"Yangın söndürür"},
+  {left:"Polis", right:"Trafik düzenler"},
+  {left:"Öğretmen", right:"Eğitim verir"}
+];
+const meslekOptions = meslekPairs.map(p=>p.right);
+const meslekContainer = document.getElementById('match-meslek');
+meslekPairs.forEach((p,i)=>{
+  const row = document.createElement('div');
+  row.className = 'match-row';
+  let opts = '<option value="">seçin</option>' + meslekOptions.map(r=>`<option>${r}</option>`).join('');
+  row.innerHTML = `<div class="match-word">${p.left}</div><select id="meslek-${i}">${opts}</select>`;
+  meslekContainer.appendChild(row);
+});
+
+// --- Q4 afet eşleştirme ---
+const afetPairs = [
+  {left:"Deprem", right:"Çök - Kapan - Tutun"},
+  {left:"Yangın", right:"Dışarı çık ve 112'yi ara"},
+  {left:"Sel", right:"Yüksek bir yere çık"}
+];
+const afetOptions = afetPairs.map(p=>p.right);
+const afetContainer = document.getElementById('match-afet');
+afetPairs.forEach((p,i)=>{
+  const row = document.createElement('div');
+  row.className = 'match-row';
+  let opts = '<option value="">seçin</option>' + afetOptions.map(r=>`<option>${r}</option>`).join('');
+  row.innerHTML = `<div class="match-word">${p.left}</div><select id="afet-${i}">${opts}</select>`;
+  afetContainer.appendChild(row);
+});
+
+// --- Q5 davranış D/Y ---
+const davranisItems = [
+  {text:"Yabancının verdiği şekeri yemek", ans:"Yanlış"},
+  {text:"Karşıdan karşıya yaya geçidinden geçmek", ans:"Doğru"},
+  {text:"Islak elle prize dokunmak", ans:"Yanlış"},
+  {text:"Dişleri düzenli fırçalamak", ans:"Doğru"},
+  {text:"Kullanılmayan ışıkları söndürmek", ans:"Doğru"},
+  {text:"Sokaktaki banklara zarar vermek", ans:"Yanlış"}
+];
+const davranisTable = document.getElementById('davranis-table');
+davranisItems.forEach((item,i)=>{
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td style="text-align:left;">${item.text}</td><td><select id="dav-${i}"><option value="">seçin</option><option>Doğru</option><option>Yanlış</option></select></td>`;
+  davranisTable.appendChild(tr);
+});
+
+// --- Q6 bayram - tarih eşleştirme ---
+const bayramPairs = [
+  {left:"23 Nisan", right:"Ulusal Egemenlik ve Çocuk Bayramı"},
+  {left:"19 Mayıs", right:"Atatürk'ü Anma, Gençlik ve Spor Bayramı"},
+  {left:"29 Ekim", right:"Cumhuriyet Bayramı"},
+  {left:"30 Ağustos", right:"Zafer Bayramı"}
+];
+const bayramOptions = bayramPairs.map(p=>p.right);
+const bayramContainer = document.getElementById('match-bayram');
+bayramPairs.forEach((p,i)=>{
+  const row = document.createElement('div');
+  row.className = 'match-row';
+  let opts = '<option value="">seçin</option>' + bayramOptions.map(r=>`<option>${r}</option>`).join('');
+  row.innerHTML = `<div class="match-word">${p.left}</div><select id="bayram-${i}">${opts}</select>`;
+  bayramContainer.appendChild(row);
+});
+
+// --- Q8 ikinci D/Y tablosu ---
+const dy2Items = [
+  {text:"Grup çalışmasında herkes tüm işi tek başına yapmalıdır.", ans:"Y"},
+  {text:"Ülkemizin yönetim şekli cumhuriyettir.", ans:"D"},
+  {text:"Tarihi mekanlar sadece turistler için önemlidir.", ans:"Y"},
+  {text:"Doğal afetlerde sakin kalıp doğru davranışları uygulamak hayat kurtarır.", ans:"D"}
+];
+const dy2Table = document.getElementById('dy2-table');
+dy2Items.forEach((item,i)=>{
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td style="text-align:left;">${item.text}</td><td><select id="dy2-${i}"><option value="">seçin</option><option>D</option><option>Y</option></select></td>`;
+  dy2Table.appendChild(tr);
+});
+
+// --- Q3 passage MC click ---
+document.querySelectorAll('.opts').forEach(group=>{
+  group.querySelectorAll('.opt-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      group.querySelectorAll('.opt-btn').forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+    });
+  });
+});
+
+// --- Validation ---
+document.getElementById('checkBtn').addEventListener('click', ()=>{
+  let total = 0, correct = 0;
+
+  dyItems.forEach((item,i)=>{
+    const el = document.getElementById(`dy-${i}`);
+    total++;
+    const ok = el.value === item.ans;
+    if(ok) correct++;
+    markSel(el, ok);
+  });
+
+  meslekPairs.forEach((p,i)=>{
+    const el = document.getElementById(`meslek-${i}`);
+    total++;
+    const ok = el.value === p.right;
+    if(ok) correct++;
+    markSel(el, ok);
+  });
+
+  document.querySelectorAll('.opts').forEach(group=>{
+    const correctV = group.dataset.correct;
+    const selected = group.querySelector('.opt-btn.selected');
+    total++;
+    let ok = false;
+    group.querySelectorAll('.opt-btn').forEach(b=>{
+      b.classList.remove('correct','wrong');
+      if(b.dataset.v === correctV) b.classList.add('correct');
+    });
+    if(selected){
+      ok = selected.dataset.v === correctV;
+      if(!ok) selected.classList.add('wrong');
+    }
+    if(ok) correct++;
+  });
+
+  afetPairs.forEach((p,i)=>{
+    const el = document.getElementById(`afet-${i}`);
+    total++;
+    const ok = el.value === p.right;
+    if(ok) correct++;
+    markSel(el, ok);
+  });
+
+  davranisItems.forEach((item,i)=>{
+    const el = document.getElementById(`dav-${i}`);
+    total++;
+    const ok = el.value === item.ans;
+    if(ok) correct++;
+    markSel(el, ok);
+  });
+
+  bayramPairs.forEach((p,i)=>{
+    const el = document.getElementById(`bayram-${i}`);
+    total++;
+    const ok = el.value === p.right;
+    if(ok) correct++;
+    markSel(el, ok);
+  });
+
+  dy2Items.forEach((item,i)=>{
+    const el = document.getElementById(`dy2-${i}`);
+    total++;
+    const ok = el.value === item.ans;
+    if(ok) correct++;
+    markSel(el, ok);
+  });
+
+  const box = document.getElementById('scoreBox');
+  box.style.display = 'block';
+  box.textContent = `Sonuç: ${correct} / ${total} doğru`;
+  box.scrollIntoView({behavior:'smooth', block:'center'});
+});
+</script>
+</body>
+</html>

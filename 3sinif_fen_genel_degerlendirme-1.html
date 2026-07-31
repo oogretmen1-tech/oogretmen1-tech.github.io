@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3. Sınıf Fen Bilimleri Genel Değerlendirme</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF6EC; --ink:#1F2A44; --muted:#6b7280; --ok:#2f9e44; --bad:#d64545; --line:#d8d2c2;
+    --accent:#3F8E4F;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:#e9e4d6; font-family:'Nunito',sans-serif; color:var(--ink); padding:24px 12px;}
+  .sheet{max-width:820px; margin:0 auto; background:var(--paper); border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,0.15); padding:30px 26px;}
+  h1{font-family:'Patrick Hand',cursive; font-size:2rem; margin:0 0 4px 0; color:var(--accent); text-align:center;}
+  .subtitle{text-align:center; font-family:'Space Mono',monospace; font-size:0.8rem; color:var(--muted); margin-bottom:26px;}
+  .q{border-top:2px dashed var(--line); padding:22px 0;}
+  .q:first-of-type{border-top:none;}
+  .qnum{display:inline-flex; align-items:center; justify-content:center; width:30px;height:30px; border-radius:50%; background:var(--accent); color:#fff; font-weight:800; font-family:'Space Mono',monospace; margin-right:8px; flex:none;}
+  .qhead{display:flex; align-items:center; gap:2px; margin-bottom:14px;}
+  .qtitle{font-weight:800; font-size:1.02rem;}
+  table{border-collapse:collapse; width:100%; margin-top:8px;}
+  th, td{border:1px solid var(--line); padding:8px; text-align:center; font-size:0.9rem;}
+  th{background:#00000008;}
+  select{width:100%; padding:7px 6px; border:1.5px solid var(--line); border-radius:5px; font-family:'Nunito',sans-serif; font-size:0.85rem; background:#fff;}
+  select.correct{border-color:var(--ok); background:#2f9e441a;}
+  select.wrong{border-color:var(--bad); background:#d645451a;}
+  .match-row{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
+  .match-word{width:170px; font-weight:700; flex:none; font-size:0.92rem;}
+  .passage{background:#ffffffa0; border-left:4px solid var(--ink); padding:12px 14px; border-radius:6px; font-style:italic; margin-bottom:14px; font-size:0.95rem; line-height:1.5;}
+  .subq{margin-bottom:14px;}
+  .subq-text{font-weight:700; margin-bottom:8px; font-size:0.95rem;}
+  .opts{display:flex; flex-wrap:wrap; gap:8px;}
+  .opt-btn{padding:8px 14px; border-radius:6px; border:1.5px solid var(--line); background:#fff; cursor:pointer; font-size:0.88rem; transition:background .15s;}
+  .opt-btn:hover{background:#00000008;}
+  .opt-btn.selected{border-color:var(--ink); background:var(--ink); color:#fff;}
+  .opt-btn.correct{border-color:var(--ok); background:#2f9e441a; color:var(--ink);}
+  .opt-btn.wrong{border-color:var(--bad); background:#d645451a; color:var(--ink);}
+  .footer{text-align:center; margin-top:10px; padding-top:20px;}
+  button.check{
+    font-family:'Nunito',sans-serif; font-weight:800; font-size:1rem; padding:13px 28px; border-radius:9px; border:none;
+    background:var(--ink); color:#fff; cursor:pointer;
+  }
+  button.check:hover{opacity:0.9;}
+  .score-box{
+    display:none; text-align:center; margin-top:18px; font-family:'Patrick Hand',cursive; font-size:1.8rem;
+    background:#ffffffa0; border-radius:8px; padding:14px;
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <h1>3. Sınıf Fen Bilimleri — Genel Değerlendirme</h1>
+  <div class="subtitle">TÜM KONULAR · KARIŞIK ETKİNLİK TESTİ</div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">1</span><span class="qtitle">Aşağıdaki ifadeler doğru ise "D", yanlış ise "Y" seçin.</span></div>
+    <table id="dy-table">
+      <tr><th>İfade</th><th>D / Y</th></tr>
+    </table>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">2</span><span class="qtitle">Aşağıdaki çevre unsurlarını Doğal / Yapay olarak sınıflandırın.</span></div>
+    <table id="cevre-table">
+      <tr><th>Unsur</th><th>Doğal / Yapay</th></tr>
+    </table>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">3</span><span class="qtitle">Aşağıdaki ışık kaynaklarını Doğal / Yapay olarak sınıflandırın.</span></div>
+    <table id="isik-table">
+      <tr><th>Işık Kaynağı</th><th>Doğal / Yapay</th></tr>
+    </table>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">4</span><span class="qtitle">Elektrikli araçları kullanım alanlarıyla eşleştirin.</span></div>
+    <div id="match-elektrik"></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">5</span><span class="qtitle">Metni okuyup soruları cevaplayın.</span></div>
+    <div class="passage">Bir tohum toprağa ekildi. Su ve güneş ışığı alan tohum zamanla filizlendi, büyüdü ve çiçek açtı.</div>
+    <div class="subq">
+      <div class="subq-text">Bu metinde canlıların hangi ortak özelliği anlatılmaktadır?</div>
+      <div class="opts" data-qid="p5-0" data-correct="0">
+        <button class="opt-btn" data-v="0">Büyüme ve gelişme</button>
+        <button class="opt-btn" data-v="1">Ses çıkarma</button>
+        <button class="opt-btn" data-v="2">Hareket etme</button>
+        <button class="opt-btn" data-v="3">Uçma</button>
+      </div>
+    </div>
+    <div class="subq">
+      <div class="subq-text">Tohumun büyümesi için nelere ihtiyacı vardır?</div>
+      <div class="opts" data-qid="p5-1" data-correct="1">
+        <button class="opt-btn" data-v="0">Sadece toprağa</button>
+        <button class="opt-btn" data-v="1">Su ve güneş ışığına</button>
+        <button class="opt-btn" data-v="2">Sadece suya</button>
+        <button class="opt-btn" data-v="3">Hiçbir şeye</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">6</span><span class="qtitle">Canlıları yaşadıkları ortamla eşleştirin.</span></div>
+    <div id="match-yasam"></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">7</span><span class="qtitle">Bir kişiden uzaklaştıkça sesinin şiddeti nasıl değişir?</span></div>
+    <div class="opts" data-qid="p7-0" data-correct="1">
+      <button class="opt-btn" data-v="0">Artar</button>
+      <button class="opt-btn" data-v="1">Azalır</button>
+      <button class="opt-btn" data-v="2">Değişmez</button>
+      <button class="opt-btn" data-v="3">Önce artar sonra azalır</button>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">8</span><span class="qtitle">Aşağıdaki ifadeler doğru ise "D", yanlış ise "Y" seçin.</span></div>
+    <table id="dy2-table">
+      <tr><th>İfade</th><th>D / Y</th></tr>
+    </table>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">9</span><span class="qtitle">Dünyamızın şekli neye benzer?</span></div>
+    <div class="opts" data-qid="p9-0" data-correct="1">
+      <button class="opt-btn" data-v="0">Küp</button>
+      <button class="opt-btn" data-v="1">Küre</button>
+      <button class="opt-btn" data-v="2">Silindir</button>
+      <button class="opt-btn" data-v="3">Koni</button>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">10</span><span class="qtitle">Dünyanın en dış katmanına ne ad verilir?</span></div>
+    <div class="opts" data-qid="p10-0" data-correct="0">
+      <button class="opt-btn" data-v="0">Yer kabuğu</button>
+      <button class="opt-btn" data-v="1">Manto</button>
+      <button class="opt-btn" data-v="2">Çekirdek</button>
+      <button class="opt-btn" data-v="3">Atmosfer</button>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">11</span><span class="qtitle">Duyu organlarını görevleriyle eşleştirin.</span></div>
+    <div id="match-duyu"></div>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">12</span><span class="qtitle">Aşağıdaki maddeleri hâllerine göre sınıflandırın.</span></div>
+    <table id="madde-table">
+      <tr><th>Madde</th><th>Katı / Sıvı / Gaz</th></tr>
+    </table>
+  </div>
+
+  <div class="q">
+    <div class="qhead"><span class="qnum">13</span><span class="qtitle">Lastik bir top sıkıştırıldığında şekli değişir. Bu durum kuvvetin cisimler üzerindeki hangi etkisini gösterir?</span></div>
+    <div class="opts" data-qid="p13-0" data-correct="0">
+      <button class="opt-btn" data-v="0">Şekil değiştirme</button>
+      <button class="opt-btn" data-v="1">Hareket ettirme</button>
+      <button class="opt-btn" data-v="2">Durdurma</button>
+      <button class="opt-btn" data-v="3">Yön değiştirme</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    <button class="check" id="checkBtn">Tümünü Kontrol Et</button>
+    <div class="score-box" id="scoreBox"></div>
+  </div>
+</div>
+
+<script>
+function markSel(el, isCorrect){
+  el.classList.remove('correct','wrong');
+  el.classList.add(isCorrect ? 'correct' : 'wrong');
+}
+
+// --- Q1 D/Y ---
+const dyItems = [
+  {text:"Ay kendiliğinden ışık yayan bir gök cismidir.", ans:"Y"},
+  {text:"Sesin şiddeti kaynağa yaklaştıkça artar.", ans:"D"},
+  {text:"Bütün canlılar beslenir, büyür ve ürer.", ans:"D"},
+  {text:"Elektrikli aletlerin ıslak elle kullanılması güvenlidir.", ans:"Y"},
+  {text:"Doğal çevre insan eliyle oluşturulmuş çevredir.", ans:"Y"}
+];
+const dyTable = document.getElementById('dy-table');
+dyItems.forEach((item,i)=>{
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td style="text-align:left;">${item.text}</td><td><select id="dy-${i}"><option value="">seçin</option><option>D</option><option>Y</option></select></td>`;
+  dyTable.appendChild(tr);
+});
+
+// --- Q2 Doğal/Yapay çevre ---
+const cevreItems = [
+  {word:"Göl", ans:"Doğal"}, {word:"Köprü", ans:"Yapay"}, {word:"Dağ", ans:"Doğal"},
+  {word:"Bina", ans:"Yapay"}, {word:"Orman", ans:"Doğal"}, {word:"Yol", ans:"Yapay"}
+];
+const cevreTable = document.getElementById('cevre-table');
+cevreItems.forEach((item,i)=>{
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td>${item.word}</td><td><select id="cevre-${i}"><option value="">seçin</option><option>Doğal</option><option>Yapay</option></select></td>`;
+  cevreTable.appendChild(tr);
+});
+
+// --- Q3 Doğal/Yapay ışık kaynağı ---
+const isikItems = [
+  {word:"Güneş", ans:"Doğal"}, {word:"Ampul", ans:"Yapay"}, {word:"Yıldız", ans:"Doğal"},
+  {word:"Mum", ans:"Yapay"}, {word:"Şimşek", ans:"Doğal"}, {word:"El feneri", ans:"Yapay"}
+];
+const isikTable = document.getElementById('isik-table');
+isikItems.forEach((item,i)=>{
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td>${item.word}</td><td><select id="isik-${i}"><option value="">seçin</option><option>Doğal</option><option>Yapay</option></select></td>`;
+  isikTable.appendChild(tr);
+});
+
+// --- Q4 elektrik matching ---
+const elektrikPairs = [
+  {left:"Tost makinesi", right:"Isıtma"},
+  {left:"El feneri", right:"Aydınlatma"},
+  {left:"Buzdolabı", right:"Soğutma"},
+  {left:"Çamaşır makinesi", right:"Temizlik"}
+];
+const elektrikOptions = elektrikPairs.map(p=>p.right);
+const matchContainer = document.getElementById('match-elektrik');
+elektrikPairs.forEach((p,i)=>{
+  const row = document.createElement('div');
+  row.className = 'match-row';
+  let opts = '<option value="">seçin</option>' + elektrikOptions.map(r=>`<option>${r}</option>`).join('');
+  row.innerHTML = `<div class="match-word">${p.left}</div><select id="elektrik-${i}">${opts}</select>`;
+  matchContainer.appendChild(row);
+});
+
+// --- Q11 duyu organı eşleştirme ---
+const duyuPairs = [
+  {left:"Göz", right:"Görme"},
+  {left:"Kulak", right:"İşitme"},
+  {left:"Burun", right:"Koklama"},
+  {left:"Dil", right:"Tatma"},
+  {left:"Deri", right:"Dokunma"}
+];
+const duyuOptions = duyuPairs.map(p=>p.right);
+const duyuContainer = document.getElementById('match-duyu');
+duyuPairs.forEach((p,i)=>{
+  const row = document.createElement('div');
+  row.className = 'match-row';
+  let opts = '<option value="">seçin</option>' + duyuOptions.map(r=>`<option>${r}</option>`).join('');
+  row.innerHTML = `<div class="match-word">${p.left}</div><select id="duyu-${i}">${opts}</select>`;
+  duyuContainer.appendChild(row);
+});
+
+// --- Q12 madde halleri ---
+const maddeItems = [
+  {word:"Su", ans:"Sıvı"}, {word:"Taş", ans:"Katı"}, {word:"Hava", ans:"Gaz"},
+  {word:"Buz", ans:"Katı"}, {word:"Süt", ans:"Sıvı"}, {word:"Oksijen", ans:"Gaz"}
+];
+const maddeTable = document.getElementById('madde-table');
+maddeItems.forEach((item,i)=>{
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td>${item.word}</td><td><select id="madde-${i}"><option value="">seçin</option><option>Katı</option><option>Sıvı</option><option>Gaz</option></select></td>`;
+  maddeTable.appendChild(tr);
+});
+
+// --- Q6 canlı - yaşam ortamı eşleştirme ---
+const yasamPairs = [
+  {left:"Balık", right:"Su"},
+  {left:"Kuş", right:"Hava/Ağaç"},
+  {left:"Solucan", right:"Toprak"},
+  {left:"Deve", right:"Çöl"}
+];
+const yasamOptions = yasamPairs.map(p=>p.right);
+const yasamContainer = document.getElementById('match-yasam');
+yasamPairs.forEach((p,i)=>{
+  const row = document.createElement('div');
+  row.className = 'match-row';
+  let opts = '<option value="">seçin</option>' + yasamOptions.map(r=>`<option>${r}</option>`).join('');
+  row.innerHTML = `<div class="match-word">${p.left}</div><select id="yasam-${i}">${opts}</select>`;
+  yasamContainer.appendChild(row);
+});
+
+// --- Q8 ikinci D/Y tablosu ---
+const dy2Items = [
+  {text:"Kullanılmayan elektrikli aletlerin fişini prizde bırakmak tasarrufludur.", ans:"Y"},
+  {text:"Bir canlının yaşayabileceği en uygun ortam, ona uygun besin ve barınak sunan ortamdır.", ans:"D"},
+  {text:"Ay geceleri kendiliğinden ışık üretir.", ans:"Y"},
+  {text:"Elektrikli aletlerin kablosu yıpranmışsa kullanmaya devam edilmelidir.", ans:"Y"}
+];
+const dy2Table = document.getElementById('dy2-table');
+dy2Items.forEach((item,i)=>{
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td style="text-align:left;">${item.text}</td><td><select id="dy2-${i}"><option value="">seçin</option><option>D</option><option>Y</option></select></td>`;
+  dy2Table.appendChild(tr);
+});
+
+// --- Q5 passage MC click ---
+document.querySelectorAll('.opts').forEach(group=>{
+  group.querySelectorAll('.opt-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      group.querySelectorAll('.opt-btn').forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+    });
+  });
+});
+
+// --- Validation ---
+document.getElementById('checkBtn').addEventListener('click', ()=>{
+  let total = 0, correct = 0;
+
+  dyItems.forEach((item,i)=>{
+    const el = document.getElementById(`dy-${i}`);
+    total++;
+    const ok = el.value === item.ans;
+    if(ok) correct++;
+    markSel(el, ok);
+  });
+
+  cevreItems.forEach((item,i)=>{
+    const el = document.getElementById(`cevre-${i}`);
+    total++;
+    const ok = el.value === item.ans;
+    if(ok) correct++;
+    markSel(el, ok);
+  });
+
+  isikItems.forEach((item,i)=>{
+    const el = document.getElementById(`isik-${i}`);
+    total++;
+    const ok = el.value === item.ans;
+    if(ok) correct++;
+    markSel(el, ok);
+  });
+
+  elektrikPairs.forEach((p,i)=>{
+    const el = document.getElementById(`elektrik-${i}`);
+    total++;
+    const ok = el.value === p.right;
+    if(ok) correct++;
+    markSel(el, ok);
+  });
+
+  document.querySelectorAll('.opts').forEach(group=>{
+    const correctV = group.dataset.correct;
+    const selected = group.querySelector('.opt-btn.selected');
+    total++;
+    let ok = false;
+    group.querySelectorAll('.opt-btn').forEach(b=>{
+      b.classList.remove('correct','wrong');
+      if(b.dataset.v === correctV) b.classList.add('correct');
+    });
+    if(selected){
+      ok = selected.dataset.v === correctV;
+      if(!ok) selected.classList.add('wrong');
+    }
+    if(ok) correct++;
+  });
+
+  yasamPairs.forEach((p,i)=>{
+    const el = document.getElementById(`yasam-${i}`);
+    total++;
+    const ok = el.value === p.right;
+    if(ok) correct++;
+    markSel(el, ok);
+  });
+
+  dy2Items.forEach((item,i)=>{
+    const el = document.getElementById(`dy2-${i}`);
+    total++;
+    const ok = el.value === item.ans;
+    if(ok) correct++;
+    markSel(el, ok);
+  });
+
+  duyuPairs.forEach((p,i)=>{
+    const el = document.getElementById(`duyu-${i}`);
+    total++;
+    const ok = el.value === p.right;
+    if(ok) correct++;
+    markSel(el, ok);
+  });
+
+  maddeItems.forEach((item,i)=>{
+    const el = document.getElementById(`madde-${i}`);
+    total++;
+    const ok = el.value === item.ans;
+    if(ok) correct++;
+    markSel(el, ok);
+  });
+
+  const box = document.getElementById('scoreBox');
+  box.style.display = 'block';
+  box.textContent = `Sonuç: ${correct} / ${total} doğru`;
+  box.scrollIntoView({behavior:'smooth', block:'center'});
+});
+</script>
+</body>
+</html>
