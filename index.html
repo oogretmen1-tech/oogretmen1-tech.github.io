@@ -1,771 +1,706 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hasan Tutus – İlkokul Materyalleri</title>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --s1: #FF6B6B;
-      --s2: #FFD93D;
-      --s3: #6BCB77;
-      --s4: #4D96FF;
-      --purple: #C77DFF;
-      --pink: #FF9ECD;
-      --orange: #FF9F43;
-      --teal: #48C9B0;
-      --bg: #FFFBF0;
-      --dark: #2D2D2D;
-      --card-shadow: 0 8px 24px rgba(0,0,0,0.10);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dijital Öğretmen - İlkokul Materyalleri</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --s1: #FF6B4A;
+  --s2: #FFC93C;
+  --s3: #1FB6A8;
+  --s4: #2D9CDB;
+  --purple: #C77DFF;
+  --pink: #FF7AA2;
+  --orange: #FF9F43;
+  --teal: #17A398;
+  --coral: #FF5E62;
+  --sand: #FFEFD2;
+  --bg: #FFFBF0;
+  --dark: #1F2A37;
+  --leafgreen-deep: #4FB87E;
+  --gray-light: #E2E8F0;
+  --indigo: #6C5CE7;
+  --indigo-deep: #4834D4;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:"Nunito",sans-serif; background:var(--bg); color:var(--dark); min-height:100vh; overflow-x:hidden; }
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:radial-gradient(circle, #e8dcc4 1.4px, transparent 1.4px);
+  background-size:28px 28px;
+  opacity:.4;
+  pointer-events:none;
+  z-index:0;
+}
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+/* ===== NAV ===== */
+nav.navbar {
+  position:sticky; top:0; z-index:100;
+  background:#fff;
+  box-shadow:0 2px 12px rgba(0,0,0,.08);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 24px;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.nav-logo {
+  font-family:"Baloo 2",cursive;
+  font-size:1.3rem; font-weight:800;
+  color:var(--dark);
+  display:flex; align-items:center; gap:6px;
+  white-space:nowrap;
+}
+.nav-logo span { color:var(--s1); }
+.nav-links { display:flex; gap:8px; flex-wrap:wrap; }
+.nav-btn {
+  font-family:"Nunito",sans-serif;
+  font-size:14px; font-weight:800;
+  padding:8px 18px;
+  border-radius:30px;
+  border:2px solid #E2E8F0;
+  background:#fff;
+  color:var(--dark);
+  text-decoration:none;
+  cursor:pointer;
+  transition:all .2s;
+  display:flex; align-items:center; gap:6px;
+}
+.nav-btn:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,.1); }
+.nav-btn.home { border-color:var(--s4); color:var(--s4); }
+.nav-btn.home:hover { background:var(--s4); color:#fff; }
+.nav-btn.about { border-color:var(--purple); color:var(--purple); }
+.nav-btn.about:hover { background:var(--purple); color:#fff; }
 
-    body {
-      font-family: 'Nunito', sans-serif;
-      background: var(--bg);
-      color: var(--dark);
-      overflow-x: hidden;
-    }
+/* ===== HERO (sade) ===== */
+.hero {
+  position:relative; z-index:1;
+  text-align:center;
+  padding:56px 20px 46px;
+  background:linear-gradient(180deg, #FFF3D9 0%, var(--bg) 100%);
+  overflow:hidden;
+}
+.floating-emoji {
+  position:absolute;
+  font-size:1.9rem;
+  opacity:.55;
+  animation:floatUp 8s ease-in-out infinite;
+  z-index:1;
+  pointer-events:none;
+}
+.floating-emoji:nth-child(1) { top:10%; left:6%; animation-delay:0s; }
+.floating-emoji:nth-child(2) { top:65%; left:9%; animation-delay:1.5s; }
+.floating-emoji:nth-child(3) { top:16%; right:8%; animation-delay:0.8s; }
+.floating-emoji:nth-child(4) { top:70%; right:10%; animation-delay:2.3s; }
+.floating-emoji:nth-child(5) { top:8%; left:44%; animation-delay:3s; font-size:1.6rem; }
+.floating-emoji:nth-child(6) { top:75%; left:46%; animation-delay:4s; font-size:1.6rem; }
+@keyframes floatUp {
+  0%, 100% { transform:translateY(0px) rotate(-4deg); }
+  50% { transform:translateY(-16px) rotate(4deg); }
+}
+.hero-inner { position:relative; z-index:3; }
+.hero-badge {
+  display:inline-block;
+  background:var(--s2); color:var(--dark);
+  font-weight:800; font-size:.85rem;
+  padding:6px 18px; border-radius:20px;
+  margin-bottom:16px;
+  box-shadow:3px 3px 0 #e6b800;
+}
+.logo-main {
+  font-family:"Baloo 2",cursive;
+  font-weight:800;
+  font-size:clamp(2.2rem, 7vw, 3.6rem);
+  line-height:1.1;
+  margin-bottom:10px;
+}
+.logo-main .c1 { color:var(--s4); }
+.logo-main .c2 { color:var(--s1); }
+.hero-desc {
+  font-size:1.05rem;
+  font-weight:600;
+  color:#555;
+  margin:0 auto 26px;
+  max-width:520px;
+}
+.hero-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:26px; }
+.btn-hero {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:13px 26px; border-radius:30px;
+  font-family:"Baloo 2",cursive; font-weight:700; font-size:.95rem;
+  text-decoration:none; border:none; cursor:pointer;
+  transition:transform .2s, box-shadow .2s;
+}
+.btn-hero:hover { transform:translateY(-3px); }
+.btn-primary { background:var(--s1); color:#fff; box-shadow:4px 4px 0 #c94f34; }
+.btn-secondary { background:#fff; color:var(--dark); box-shadow:4px 4px 0 #ddd; border:2px solid #eee; }
+.ataturk {
+  display:flex;
+  align-items:center;
+  gap:16px;
+  background:#fff;
+  border-left:4px solid var(--leafgreen-deep);
+  border-radius:0 14px 14px 0;
+  padding:12px 18px;
+  font-size:.82rem;
+  font-weight:600;
+  color:#444;
+  font-style:italic;
+  line-height:1.6;
+  max-width:560px;
+  text-align:left;
+  margin:0 auto;
+  box-shadow:0 4px 14px rgba(0,0,0,.08);
+}
+.ataturk-img {
+  width:60px; height:60px; border-radius:50%; object-fit:cover; flex-shrink:0;
+  border:3px solid var(--leafgreen-deep);
+}
+.ataturk b { color:var(--leafgreen-deep); font-style:normal; font-size:.74rem; display:block; margin-top:4px; }
 
-    /* ── DOTS BACKGROUND ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: radial-gradient(circle, #e0d5c0 1px, transparent 1px);
-      background-size: 28px 28px;
-      opacity: .45;
-      pointer-events: none;
-      z-index: 0;
-    }
+.content-area { max-width:960px; margin:0 auto; padding:36px 16px 60px; position:relative; z-index:2; }
+.bolum-baslik {
+  font-family:"Baloo 2",cursive; font-weight:800;
+  font-size:26px;
+  color:var(--dark);
+  text-align:center;
+  margin-bottom:6px;
+}
+.bolum-baslik .em { font-size:1.1em; }
+.bolum-alt { font-size:14px; color:#666; font-weight:600; text-align:center; margin-bottom:22px; }
+.divider {
+  height:5px; width:70px;
+  background:linear-gradient(90deg, var(--coral), var(--s2), var(--s3), var(--s4));
+  border-radius:50px;
+  margin:0 auto 30px;
+}
 
-    /* ── NAV ── */
-    nav {
-      position: sticky; top: 0; z-index: 100;
-      background: #fff;
-      box-shadow: 0 2px 12px rgba(0,0,0,.08);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 12px 32px;
-      gap: 16px;
-    }
-    .nav-logo {
-      font-family: 'Baloo 2', cursive;
-      font-size: 1.5rem; font-weight: 800;
-      background: linear-gradient(135deg, var(--s1), var(--s4));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      white-space: nowrap;
-    }
-    .nav-links { display: flex; gap: 8px; flex-wrap: wrap; }
-    .nav-links a {
-      text-decoration: none; font-weight: 700; font-size: .85rem;
-      padding: 6px 14px; border-radius: 20px;
-      color: var(--dark); transition: all .2s;
-    }
-    .nav-links a:hover { background: var(--s2); transform: translateY(-2px); }
+/* ===== HIZLI ERİŞİM ===== */
+.hizli-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(135px,1fr)); gap:14px; margin-bottom:54px; }
+.hizli-btn {
+  background:#fff;
+  border:3px solid transparent;
+  border-radius:22px;
+  padding:20px 12px;
+  text-align:center;
+  cursor:pointer;
+  text-decoration:none;
+  color:var(--dark);
+  box-shadow:0 4px 16px rgba(0,0,0,.07);
+  transition:all .22s;
+  display:block;
+  position:relative;
+  overflow:hidden;
+}
+.hizli-btn::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; border-radius:22px 22px 0 0; }
+.hizli-btn:hover { transform:translateY(-5px); box-shadow:0 10px 24px rgba(0,0,0,.13); }
+.hizli-btn .h-icon { font-size:36px; display:block; margin-bottom:8px; }
+.hizli-btn .h-icon img { width:36px; height:36px; object-fit:contain; border-radius:9px; }
+.hizli-btn .h-label { font-family:"Nunito",sans-serif; font-size:13px; font-weight:800; }
+.hizli-btn.h1::before { background:var(--s4); } .hizli-btn.h1:hover { border-color:var(--s4); }
+.hizli-btn.h2::before { background:var(--orange); } .hizli-btn.h2:hover { border-color:var(--orange); }
+.hizli-btn.h3::before { background:var(--s3); } .hizli-btn.h3:hover { border-color:var(--s3); }
+.hizli-btn.h4::before { background:var(--s1); } .hizli-btn.h4:hover { border-color:var(--s1); }
+.hizli-btn.h5::before { background:var(--purple); } .hizli-btn.h5:hover { border-color:var(--purple); }
+.hizli-btn.h6::before { background:var(--teal); } .hizli-btn.h6:hover { border-color:var(--teal); }
+.hizli-btn.h7::before { background:var(--indigo); } .hizli-btn.h7:hover { border-color:var(--indigo); }
+.hizli-btn.h8::before { background:var(--leafgreen-deep); } .hizli-btn.h8:hover { border-color:var(--leafgreen-deep); }
 
-    /* ── HERO ── */
-    .hero {
-      position: relative; z-index: 1;
-      text-align: center;
-      padding: 72px 24px 56px;
-      overflow: hidden;
-    }
-    .hero-badge {
-      display: inline-block;
-      background: var(--s2); color: var(--dark);
-      font-weight: 800; font-size: .85rem;
-      padding: 6px 18px; border-radius: 20px;
-      margin-bottom: 18px;
-      box-shadow: 3px 3px 0 #e6b800;
-      animation: popIn .5s cubic-bezier(.34,1.56,.64,1) both;
-    }
-    .hero h1 {
-      font-family: 'Baloo 2', cursive;
-      font-size: clamp(2.2rem, 6vw, 4rem);
-      font-weight: 800; line-height: 1.15;
-      animation: slideUp .6s ease both .1s;
-    }
-    .hero h1 span { color: var(--s1); }
-    .hero p {
-      font-size: 1.15rem; color: #555; max-width: 520px; margin: 16px auto 32px;
-      animation: slideUp .6s ease both .2s;
-    }
-    .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; animation: slideUp .6s ease both .3s; }
-    .btn-hero {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 14px 28px; border-radius: 30px;
-      font-family: 'Baloo 2', cursive; font-weight: 700; font-size: 1rem;
-      text-decoration: none; border: none; cursor: pointer;
-      transition: transform .2s, box-shadow .2s;
-    }
-    .btn-hero:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,.15); }
-    .btn-primary { background: var(--s1); color: #fff; box-shadow: 4px 4px 0 #c94f4f; }
-    .btn-secondary { background: #fff; color: var(--dark); box-shadow: 4px 4px 0 #ccc; border: 2px solid #eee; }
+/* ===== SINIF KARTLARI ===== */
+.sinif-list { display:flex; flex-direction:column; gap:16px; }
+.sinif-card {
+  background:#fff;
+  border-radius:22px;
+  border:3px solid transparent;
+  overflow:hidden;
+  box-shadow:0 4px 16px rgba(0,0,0,.07);
+  transition:all .25s;
+  position:relative;
+}
+.sinif-card::before { content:''; position:absolute; top:0; left:0; right:0; height:6px; }
+.sinif-card.open { box-shadow:0 12px 32px rgba(0,0,0,.12); }
+.sinif-1::before { background:linear-gradient(90deg, var(--pink), var(--s1)); }
+.sinif-2::before { background:linear-gradient(90deg, var(--s4), #3B82F6); }
+.sinif-3::before { background:linear-gradient(90deg, var(--s3), var(--teal)); }
+.sinif-4::before { background:linear-gradient(90deg, var(--orange), var(--s2)); }
+.sinif-1.open { border-color:var(--s1); }
+.sinif-2.open { border-color:var(--s4); }
+.sinif-3.open { border-color:var(--s3); }
+.sinif-4.open { border-color:var(--orange); }
+.sinif-header { display:flex; align-items:center; gap:16px; padding:22px 22px 18px; cursor:pointer; user-select:none; transition:background .2s; }
+.sinif-header:hover { background:#FFF8EC; }
+.sinif-icon {
+  width:58px; height:58px; border-radius:16px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:28px; color:#fff; flex-shrink:0;
+  font-family:"Baloo 2",cursive; font-weight:800;
+  box-shadow:0 4px 12px rgba(0,0,0,.14);
+}
+.sinif-1 .sinif-icon { background:linear-gradient(135deg, var(--pink), var(--s1)); }
+.sinif-2 .sinif-icon { background:linear-gradient(135deg, var(--s4), #3B82F6); }
+.sinif-3 .sinif-icon { background:linear-gradient(135deg, var(--s3), var(--teal)); }
+.sinif-4 .sinif-icon { background:linear-gradient(135deg, var(--orange), var(--s2)); }
+.sinif-info { flex:1; }
+.sinif-info h3 { font-family:"Baloo 2",cursive; font-weight:800; font-size:21px; color:var(--dark); }
+.sinif-info p { font-size:13px; color:#666; font-weight:600; margin-top:3px; }
+.sinif-arrow { font-size:20px; color:#aaa; transition:transform .25s; }
+.sinif-card.open .sinif-arrow { transform:rotate(180deg); color:var(--s1); }
+.sinif-body { max-height:0; overflow:hidden; transition:max-height .4s ease; }
+.sinif-card.open .sinif-body { max-height:2600px; }
+.sinif-body-inner { padding:0 22px 24px; }
+.dersler-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:12px; }
+.ders-btn {
+  background:#FFF8EC;
+  border:2.5px solid #F1E4C8;
+  border-radius:16px;
+  padding:16px 8px;
+  text-align:center;
+  cursor:pointer;
+  text-decoration:none;
+  color:var(--dark);
+  transition:all .2s;
+  display:block;
+}
+.ders-btn:hover { transform:translateY(-4px) scale(1.02); box-shadow:0 8px 20px rgba(0,0,0,.1); }
+.ders-btn .d-icon { font-size:30px; display:block; margin-bottom:7px; }
+.ders-btn .d-icon img { width:30px; height:30px; object-fit:contain; border-radius:8px; }
+.ders-btn .d-name { font-family:"Nunito",sans-serif; font-size:12.5px; font-weight:800; line-height:1.2; }
+.ders-btn.turkce:hover { border-color:var(--s4); background:#EFF6FF; }
+.ders-btn.matematik:hover { border-color:var(--orange); background:#FFF7ED; }
+.ders-btn.hayat:hover { border-color:var(--s3); background:#ECFDF5; }
+.ders-btn.belirli:hover { border-color:var(--s1); background:#FEF2F2; }
+.ders-btn.siir:hover { border-color:var(--purple); background:#F5F3FF; }
+.ders-btn.hikaye:hover { border-color:var(--s2); background:#FFFBEB; }
+.ders-btn.oyun:hover { border-color:var(--teal); background:#F0FDFA; }
+.ders-btn.fen:hover { border-color:var(--leafgreen-deep); background:#ECFDF5; }
+.ders-btn.ingilizce:hover { border-color:var(--indigo); background:#EEF2FF; }
+.ders-btn.sosyal:hover { border-color:#B45309; background:#FFFBEB; }
+.ders-btn.din:hover { border-color:#0F766E; background:#F0FDFA; }
+.ders-btn.gorsel:hover { border-color:var(--pink); background:#FDF2F8; }
+.ders-btn.muzik:hover { border-color:var(--purple); background:#F5F3FF; }
+.ders-btn.yakinda { opacity:.55; cursor:default; }
+.ders-btn.yakinda:hover { transform:none; box-shadow:none; }
+.ders-btn.yakinda .yakinda-tag { display:inline-block; font-size:10px; background:#E2E8F0; color:#666; padding:2px 8px; border-radius:50px; margin-top:4px; font-weight:700; }
 
-    /* Floating emojis */
-    .floaties { pointer-events: none; position: absolute; inset: 0; overflow: hidden; }
-    .floaty {
-      position: absolute; font-size: 2rem; opacity: .6;
-      animation: float linear infinite;
-    }
+/* ===== SAYFA İÇERİKLERİ ===== */
+.page-section { display:none; }
+.page-section.aktif { display:block; }
+.back-btn {
+  display:inline-flex; align-items:center; gap:8px;
+  background:#fff; border:3px solid var(--dark); color:var(--dark);
+  font-family:"Nunito",sans-serif; font-size:14px; font-weight:800;
+  padding:8px 18px; border-radius:30px; cursor:pointer; margin-bottom:22px;
+  text-decoration:none; transition:all .2s;
+}
+.back-btn:hover { background:var(--dark); color:#fff; transform:translateX(-3px); }
+.cat-hero {
+  border-radius:24px; padding:26px; margin-bottom:24px;
+  display:flex; align-items:center; gap:18px; color:#fff;
+  box-shadow:0 8px 24px rgba(0,0,0,.12);
+}
+.cat-hero.turkce    { background:linear-gradient(135deg, var(--s4), #3B82F6); }
+.cat-hero.matematik { background:linear-gradient(135deg, var(--orange), var(--s2)); }
+.cat-hero.hayat     { background:linear-gradient(135deg, var(--s3), var(--teal)); }
+.cat-hero.belirli   { background:linear-gradient(135deg, var(--s1), var(--pink)); }
+.cat-hero.siir      { background:linear-gradient(135deg, var(--purple), #8B5CF6); }
+.cat-hero.hikaye    { background:linear-gradient(135deg, #F59E0B, var(--s2)); }
+.cat-hero.oyun      { background:linear-gradient(135deg, var(--teal), #0EA5E9); }
+.cat-hero.ingilizce { background:linear-gradient(135deg, var(--indigo), var(--indigo-deep)); }
+.cat-hero.fen       { background:linear-gradient(135deg, var(--leafgreen-deep), var(--s3)); }
+.cat-hero-icon { font-size:46px; }
+.cat-hero-cover { width:80px; height:106px; object-fit:cover; border-radius:14px; box-shadow:0 6px 16px rgba(0,0,0,.25); flex-shrink:0; border:3px solid rgba(255,255,255,.6); }
+.cat-hero h2 { font-family:"Baloo 2",cursive; font-weight:800; font-size:25px; line-height:1.1; }
+.cat-hero p  { font-size:13px; opacity:.92; font-weight:600; margin-top:4px; }
+.alt-baslik { font-family:"Baloo 2",cursive; font-size:1rem; font-weight:800; margin:22px 0 10px; padding:8px 14px; border-radius:10px; display:inline-block; }
+.cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:12px; margin-bottom:8px; }
+.card {
+  background:#fff; border-radius:18px; padding:16px 14px;
+  text-decoration:none; color:var(--dark);
+  box-shadow:0 3px 12px rgba(0,0,0,.06);
+  transition:all .22s;
+  display:flex; align-items:flex-start; gap:12px;
+  border:2px solid transparent;
+}
+.card:hover { transform:translateY(-4px); box-shadow:0 10px 22px rgba(0,0,0,.1); border-color:var(--s2); }
+.card-icon { width:44px; height:44px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:1.35rem; flex-shrink:0; }
+.card-icon img { width:100%; height:100%; object-fit:cover; border-radius:13px; }
+.card-body h3 { font-family:"Nunito",sans-serif; font-size:.93rem; font-weight:800; margin-bottom:3px; line-height:1.3; }
+.card-body p  { font-size:.74rem; color:#999; font-weight:600; }
+.card.yakinda { opacity:.45; pointer-events:none; }
+.yakinda-badge { font-size:.68rem; background:#FFF4D6; color:#B45309; padding:2px 8px; border-radius:50px; font-weight:700; display:inline-block; margin-top:3px; }
+.tema-t .card-icon { background:#EFF6FF; }
+.tema-m .card-icon { background:#FFF7ED; }
+.tema-h .card-icon { background:#ECFDF5; }
+.tema-b .card-icon { background:#FEF2F2; }
+.tema-s .card-icon { background:#F5F3FF; }
+.tema-hi .card-icon { background:#FFFBEB; }
+.tema-o .card-icon { background:#F0FDFA; }
+.tema-i .card-icon { background:#EEF2FF; }
+.tema-f .card-icon { background:#ECFDF5; }
 
-    /* ── SECTION WRAPPER ── */
-    section { position: relative; z-index: 1; padding: 60px 20px; max-width: 1100px; margin: 0 auto; }
-    .section-title {
-      font-family: 'Baloo 2', cursive; font-size: 2rem; font-weight: 800;
-      text-align: center; margin-bottom: 8px;
-    }
-    .section-sub { text-align: center; color: #666; margin-bottom: 36px; font-size: 1rem; }
-    .divider { width: 60px; height: 5px; border-radius: 3px; margin: 10px auto 32px; }
-
-    /* ── CLASSES GRID ── */
-    .classes-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 24px;
-    }
-    .class-card {
-      background: #fff;
-      border-radius: 24px;
-      overflow: hidden;
-      box-shadow: var(--card-shadow);
-      transition: transform .25s, box-shadow .25s;
-      cursor: pointer;
-    }
-    .class-card:hover { transform: translateY(-6px); box-shadow: 0 16px 36px rgba(0,0,0,.13); }
-    .class-card-header {
-      display: flex; align-items: center; gap: 14px;
-      padding: 22px 22px 16px;
-      border-bottom: 3px solid #f0f0f0;
-    }
-    .class-icon {
-      width: 56px; height: 56px; border-radius: 16px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.8rem; flex-shrink: 0;
-    }
-    .class-card-header h3 {
-      font-family: 'Baloo 2', cursive;
-      font-size: 1.3rem; font-weight: 800;
-    }
-    .class-card-header p { font-size: .82rem; color: #777; margin-top: 2px; }
-    .subjects-list { padding: 16px 22px 20px; display: flex; flex-direction: column; gap: 8px; }
-    .subject-btn {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 10px 14px; border-radius: 12px;
-      font-family: 'Nunito', sans-serif; font-weight: 700; font-size: .9rem;
-      text-decoration: none; color: var(--dark);
-      background: #f7f7f7; border: 2px solid transparent;
-      transition: all .18s; cursor: pointer;
-    }
-    .subject-btn:hover { border-color: currentColor; background: #fff; transform: translateX(4px); }
-    .subject-btn .arrow { font-size: .75rem; opacity: .5; }
-
-    /* card accent colors */
-    .c1 .class-icon { background: #fff0f0; }
-    .c1 .class-card-header { border-color: var(--s1); }
-    .c1 .subject-btn:hover { color: var(--s1); }
-    .c2 .class-icon { background: #fffce0; }
-    .c2 .class-card-header { border-color: var(--s2); }
-    .c2 .subject-btn:hover { color: #c9a800; }
-    .c3 .class-icon { background: #f0fff2; }
-    .c3 .class-card-header { border-color: var(--s3); }
-    .c3 .subject-btn:hover { color: var(--s3); }
-    .c4 .class-icon { background: #f0f6ff; }
-    .c4 .class-card-header { border-color: var(--s4); }
-    .c4 .subject-btn:hover { color: var(--s4); }
-
-    /* ── QUICK ACCESS ── */
-    .quick-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-      gap: 18px;
-    }
-    .quick-card {
-      background: #fff; border-radius: 20px;
-      padding: 28px 20px; text-align: center;
-      box-shadow: var(--card-shadow);
-      text-decoration: none; color: var(--dark);
-      transition: transform .22s, box-shadow .22s;
-      display: flex; flex-direction: column; align-items: center; gap: 12px;
-      border-bottom: 5px solid transparent;
-    }
-    .quick-card:hover { transform: translateY(-5px); box-shadow: 0 14px 30px rgba(0,0,0,.12); }
-    .quick-card .qicon { font-size: 2.4rem; }
-    .quick-card h4 { font-family: 'Baloo 2', cursive; font-size: 1.05rem; font-weight: 800; }
-    .quick-card p { font-size: .8rem; color: #777; line-height: 1.4; }
-    .qc1 { border-color: var(--purple); } .qc1:hover { background: #fdf0ff; }
-    .qc2 { border-color: var(--orange); } .qc2:hover { background: #fff6ee; }
-    .qc3 { border-color: var(--teal); }   .qc3:hover { background: #f0fefa; }
-    .qc4 { border-color: var(--pink); }   .qc4:hover { background: #fff0f7; }
-    .qc5 { border-color: var(--s3); }     .qc5:hover { background: #f0fff2; }
-
-    /* ── GAMES ── */
-    .games-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-    }
-    .game-card {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      border-radius: 22px; padding: 28px 20px;
-      color: #fff; text-align: center;
-      box-shadow: 0 6px 20px rgba(102,126,234,.4);
-      transition: transform .22s;
-      cursor: pointer;
-      text-decoration: none;
-    }
-    .game-card:hover { transform: scale(1.04); }
-    .game-card .gicon { font-size: 2.8rem; margin-bottom: 10px; }
-    .game-card h4 { font-family: 'Baloo 2', cursive; font-size: 1.1rem; font-weight: 800; }
-    .game-card p { font-size: .82rem; opacity: .85; margin-top: 6px; line-height: 1.4; }
-    .g1 { background: linear-gradient(135deg, #f7971e, #ffd200); color: #2d2d2d; box-shadow: 0 6px 20px rgba(247,151,30,.35); }
-    .g2 { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #1a3a2a; box-shadow: 0 6px 20px rgba(67,233,123,.35); }
-    .g3 { background: linear-gradient(135deg, #fa709a, #fee140); color: #2d2d2d; box-shadow: 0 6px 20px rgba(250,112,154,.35); }
-    .g4 { background: linear-gradient(135deg, #4facfe, #00f2fe); color: #0a2a3a; box
--shadow: 0 6px 20px rgba(79,172,254,.35); }
-
-    /* ── ABOUT ── */
-    .about-box {
-      background: #fff; border-radius: 28px;
-      box-shadow: var(--card-shadow);
-      display: flex; gap: 36px; align-items: center;
-      padding: 40px; flex-wrap: wrap;
-    }
-    .about-avatar {
-      width: 120px; height: 120px; border-radius: 50%; flex-shrink: 0;
-      background: linear-gradient(135deg, var(--s1), var(--s4));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 3.5rem; box-shadow: 0 8px 20px rgba(0,0,0,.12);
-    }
-    .about-text h3 {
-      font-family: 'Baloo 2', cursive; font-size: 1.6rem; font-weight: 800;
-      margin-bottom: 6px;
-    }
-    .about-text p { color: #555; line-height: 1.7; font-size: .95rem; max-width: 500px; }
-    .about-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
-    .about-tag {
-      background: #f3f3f3; border-radius: 20px;
-      padding: 5px 14px; font-size: .82rem; font-weight: 700;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      position: relative; z-index: 1;
-      background: var(--dark); color: #ccc;
-      text-align: center; padding: 32px 20px;
-      font-size: .88rem; margin-top: 40px;
-    }
-    footer span { color: var(--s1); font-weight: 800; }
-
-    /* ── ANIMATIONS ── */
-    @keyframes popIn {
-      from { opacity:0; transform: scale(.7); }
-      to   { opacity:1; transform: scale(1); }
-    }
-    @keyframes slideUp {
-      from { opacity:0; transform: translateY(30px); }
-      to   { opacity:1; transform: translateY(0); }
-    }
-    @keyframes float {
-      0%   { transform: translateY(110vh) rotate(0deg); opacity:.6; }
-      100% { transform: translateY(-10vh) rotate(360deg); opacity:0; }
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 600px) {
-      nav { flex-direction: column; align-items: flex-start; }
-      .about-box { flex-direction: column; text-align: center; }
-      .about-tags { justify-content: center; }
-    }
-  </style>
+footer {
+  background:#fff; border-top:3px solid var(--s2);
+  text-align:center; padding:30px 16px 22px;
+  color:#555; font-size:.85rem; font-weight:600; position:relative; z-index:2;
+}
+footer strong { color:var(--s1); }
+</style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-logo">📚 Hasan Tutus</div>
+<nav class="navbar">
+  <div class="nav-logo">📚 Dijital <span>Öğretmen</span></div>
   <div class="nav-links">
-    <a href="#siniflar">Sınıflar</a>
-    <a href="#hizli">Hızlı Erişim</a>
-    <a href="#oyunlar">Oyunlar</a>
-    <a href="#hakkimda">Hakkımda</a>
+    <a class="nav-btn home" href="#" onclick="showHome();return false;">🏠 Ana Sayfa</a>
+    <a class="nav-btn about" href="hakkimda.html">👤 Hakkımda</a>
   </div>
 </nav>
 
-<!-- HERO -->
 <div class="hero">
-  <!-- floating emojis -->
-  <div class="floaties">
-    <div class="floaty" style="left:5%;animation-duration:12s;animation-delay:0s;font-size:1.6rem">🌟</div>
-    <div class="floaty" style="left:15%;animation-duration:9s;animation-delay:2s;font-size:2rem">✏️</div>
-    <div class="floaty" style="left:30%;animation-duration:14s;animation-delay:1s;font-size:1.4rem">📖</div>
-    <div class="floaty" style="left:55%;animation-duration:10s;animation-delay:3s;font-size:2rem">🎨</div>
-    <div class="floaty" style="left:70%;animation-duration:11s;animation-delay:.5s;font-size:1.6rem">🔢</div>
-    <div class="floaty" style="left:85%;animation-duration:13s;animation-delay:4s;font-size:1.8rem">🎒</div>
-    <div class="floaty" style="left:92%;animation-duration:8s;animation-delay:2.5s;font-size:1.4rem">🌈</div>
-  </div>
-
-  <div class="hero-badge">✏️ Eğitim Materyalleri</div>
-  <h1>İlkokul <span>Eğitim</span><br>Materyalleri</h1>
-  <p>1. Sınıf'tan 4. Sınıf'a tüm dersler için hazır materyaller, etkinlikler ve oyunlar!</p>
-  <div class="hero-btns">
-    <a href="#siniflar" class="btn-hero btn-primary">🎓 Sınıflara Göz At</a>
-    <a href="#hizli" class="btn-hero btn-secondary">⚡ Hızlı Erişim</a>
+  <span class="floating-emoji">🌟</span>
+  <span class="floating-emoji">✏️</span>
+  <span class="floating-emoji">📖</span>
+  <span class="floating-emoji">🔢</span>
+  <span class="floating-emoji">🎒</span>
+  <span class="floating-emoji">🌈</span>
+  <div class="hero-inner">
+    <div class="hero-badge">✏️ Eğitim Materyalleri</div>
+    <h1 class="logo-main"><span class="c1">Dijital</span> <span class="c2">Öğretmen</span></h1>
+    <p class="hero-desc">1. Sınıf'tan 4. Sınıf'a tüm dersler için hazır materyaller, etkinlikler ve oyunlar! 🎉</p>
+    <div class="hero-btns">
+      <a href="#siniflar" class="btn-hero btn-primary">🎓 Sınıfını Seç</a>
+      <a href="#hizli" class="btn-hero btn-secondary">⚡ Hızlı Erişim</a>
+    </div>
+    <div class="ataturk">
+      <img class="ataturk-img" src="ataturk.jpg" alt="Mustafa Kemal Atatürk" onerror="this.style.display='none'">
+      <span>"Eğitimdir ki bir milleti ya hür, bağımsız, şanlı, yüksek bir topluluk olarak yaşatır ya da esaret ve sefalete terk eder."
+      <b>— Mustafa Kemal Atatürk</b></span>
+    </div>
   </div>
 </div>
 
-<!-- SINIFLAR -->
-<section id="siniflar">
-  <p class="section-title">📚 Sınıflar</p>
-  <div class="divider" style="background: linear-gradient(90deg,var(--s1),var(--s4));"></div>
-  <p class="section-sub">Sınıfına tıkla, derslerini seç ve materyali indir!</p>
+<div class="content-area">
 
-  <div class="classes-grid">
+  <div id="page-home" class="page-section aktif">
+    <h2 class="bolum-baslik" id="hizli"><span class="em">⚡</span> Hızlı Erişim</h2>
+    <p class="bolum-alt">Popüler bölümlere direkt git</p>
+    <div class="divider"></div>
+    <div class="hizli-grid">
+      <a class="hizli-btn h1" href="#" onclick="showPage('turkce');return false;"><span class="h-icon"><img src="icon_tr_okuma_seti.png" alt=""></span><span class="h-label">Türkçe</span></a>
+      <a class="hizli-btn h2" href="#" onclick="showPage('matematik');return false;"><span class="h-icon"><img src="icon_mat_carpma.png" alt=""></span><span class="h-label">Matematik</span></a>
+      <a class="hizli-btn h3" href="#" onclick="showPage('hayat');return false;"><span class="h-icon">🌍</span><span class="h-label">Hayat Bilgisi</span></a>
+      <a class="hizli-btn h8" href="#" onclick="showPage('fen3');return false;"><span class="h-icon"><img src="icon_fen_deney_tup.png" alt=""></span><span class="h-label">Fen Bilimleri</span></a>
+      <a class="hizli-btn h4" href="#" onclick="showPage('belirli');return false;"><span class="h-icon"><img src="icon_gen_23nisan.png" alt=""></span><span class="h-label">Belirli Günler</span></a>
+      <a class="hizli-btn h5" href="#" onclick="showPage('hikaye');return false;"><span class="h-icon">📚</span><span class="h-label">Hikaye</span></a>
+      <a class="hizli-btn h6" href="#" onclick="showPage('oyun');return false;"><span class="h-icon">🎮</span><span class="h-label">Oyunlar</span></a>
+      <a class="hizli-btn h7" href="#" onclick="showPage('ingilizce');return false;"><span class="h-icon"><img src="icon_gen_ingilizce.png" alt=""></span><span class="h-label">İngilizce</span></a>
+    </div>
 
-    <!-- 1. SINIF -->
-    <div class="class-card c1">
-      <div class="class-card-header">
-        <div class="class-icon">🐣</div>
-        <div>
-          <h3>1. Sınıf</h3>
-          <p>Maarif Modeli Müfredatı</p>
+    <h2 class="bolum-baslik" id="siniflar"><span class="em">🎓</span> Sınıfını Seç</h2>
+    <p class="bolum-alt">Sınıfa tıkla, dersler açılsın</p>
+    <div class="divider"></div>
+    <div class="sinif-list">
+
+      <div class="sinif-card sinif-1" id="card-1">
+        <div class="sinif-header" onclick="toggleSinif(1)">
+          <div class="sinif-icon">1</div>
+          <div class="sinif-info"><h3>1. Sınıf</h3><p>Okuma yazma, matematik, hayat bilgisi</p></div>
+          <div class="sinif-arrow">▼</div>
         </div>
+        <div class="sinif-body"><div class="sinif-body-inner"><div class="dersler-grid">
+          <a class="ders-btn turkce" href="1-sinif-okuma-yazma-v2.html"><span class="d-icon">📖</span><span class="d-name">Okuma Yazma</span></a>
+          <a class="ders-btn matematik" href="1-sinif-matematik.html"><span class="d-icon"><img src="icon_mat_dogal_sayilar.png" alt=""></span><span class="d-name">Matematik</span></a>
+          <a class="ders-btn hayat" href="1-sinif-hayat-bilgisi.html"><span class="d-icon">🌍</span><span class="d-name">Hayat Bilgisi</span></a>
+          <a class="ders-btn belirli" href="#" onclick="showPage('belirli');return false;"><span class="d-icon"><img src="icon_gen_23nisan.png" alt=""></span><span class="d-name">Belirli Günler</span></a>
+          <a class="ders-btn oyun" href="#" onclick="showPage('oyun');return false;"><span class="d-icon">🎮</span><span class="d-name">Oyunlar</span></a>
+          <div class="ders-btn gorsel yakinda"><span class="d-icon">🎨</span><span class="d-name">Görsel Sanatlar</span><br><span class="yakinda-tag">Yakında</span></div>
+          <div class="ders-btn muzik yakinda"><span class="d-icon">🎵</span><span class="d-name">Müzik</span><br><span class="yakinda-tag">Yakında</span></div>
+        </div></div></div>
       </div>
-      <div class="subjects-list">
-        <a href="javascript:void(0)" class="subject-btn" style="color:var(--s1)">📝 Türkçe <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🔢 Matematik <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🌿 Hayat Bilgisi <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🎨 Görsel Sanatlar <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🎵 Müzik <span class="arrow">▶</span></a>
-      </div>
-    </div>
 
-    <!-- 2. SINIF -->
-    <div class="class-card c2">
-      <div class="class-card-header">
-        <div class="class-icon">🌱</div>
-        <div>
-          <h3>2. Sınıf</h3>
-          <p>Maarif Modeli Müfredatı</p>
+      <div class="sinif-card sinif-2 open" id="card-2">
+        <div class="sinif-header" onclick="toggleSinif(2)">
+          <div class="sinif-icon">2</div>
+          <div class="sinif-info"><h3>2. Sınıf</h3><p>Tüm dersler · Hikaye · Oyunlar · Belirli Günler</p></div>
+          <div class="sinif-arrow">▼</div>
         </div>
+        <div class="sinif-body"><div class="sinif-body-inner"><div class="dersler-grid">
+          <a class="ders-btn turkce" href="#" onclick="showPage('turkce');return false;"><span class="d-icon"><img src="icon_tr_okuma_seti.png" alt=""></span><span class="d-name">Türkçe</span></a>
+          <a class="ders-btn matematik" href="#" onclick="showPage('matematik');return false;"><span class="d-icon"><img src="icon_mat_carpma.png" alt=""></span><span class="d-name">Matematik</span></a>
+          <a class="ders-btn hayat" href="#" onclick="showPage('hayat');return false;"><span class="d-icon">🌍</span><span class="d-name">Hayat Bilgisi</span></a>
+          <a class="ders-btn belirli" href="#" onclick="showPage('belirli');return false;"><span class="d-icon"><img src="icon_gen_23nisan.png" alt=""></span><span class="d-name">Belirli Günler</span></a>
+          <a class="ders-btn siir" href="#" onclick="showPage('siir');return false;"><span class="d-icon"><img src="icon_tr_siir_sarki.png" alt=""></span><span class="d-name">Şiir</span></a>
+          <a class="ders-btn hikaye" href="#" onclick="showPage('hikaye');return false;"><span class="d-icon">📚</span><span class="d-name">Hikaye</span></a>
+          <a class="ders-btn oyun" href="#" onclick="showPage('oyun');return false;"><span class="d-icon">🎮</span><span class="d-name">Oyunlar</span></a>
+          <div class="ders-btn gorsel yakinda"><span class="d-icon">🎨</span><span class="d-name">Görsel Sanatlar</span><br><span class="yakinda-tag">Yakında</span></div>
+          <div class="ders-btn muzik yakinda"><span class="d-icon">🎵</span><span class="d-name">Müzik</span><br><span class="yakinda-tag">Yakında</span></div>
+        </div></div></div>
       </div>
-      <div class="subjects-list">
-        <a href="javascript:void(0)" class="subject-btn">📝 Türkçe (Tema 1–8) <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🔢 Matematik <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🌿 Hayat Bilgisi <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🎨 Görsel Sanatlar <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🎵 Müzik <span class="arrow">▶</span></a>
-      </div>
-    </div>
 
-    <!-- 3. SINIF -->
-    <div class="class-card c3">
-      <div class="class-card-header">
-        <div class="class-icon">🌳</div>
-        <div>
-          <h3>3. Sınıf</h3>
-          <p>Maarif Modeli Müfredatı</p>
+      <div class="sinif-card sinif-3" id="card-3">
+        <div class="sinif-header" onclick="toggleSinif(3)">
+          <div class="sinif-icon">3</div>
+          <div class="sinif-info"><h3>3. Sınıf</h3><p>Türkçe, Matematik, Fen Bilimleri, Hayat Bilgisi</p></div>
+          <div class="sinif-arrow">▼</div>
         </div>
+        <div class="sinif-body"><div class="sinif-body-inner"><div class="dersler-grid">
+          <a class="ders-btn turkce" href="#" onclick="showPage('turkce3');return false;"><span class="d-icon"><img src="icon_tr_grammar_kitap.png" alt=""></span><span class="d-name">Türkçe</span></a>
+          <a class="ders-btn matematik" href="#" onclick="showPage('matematik3');return false;"><span class="d-icon"><img src="icon_mat_dogal_sayilar.png" alt=""></span><span class="d-name">Matematik</span></a>
+          <a class="ders-btn fen" href="#" onclick="showPage('fen3');return false;"><span class="d-icon"><img src="icon_fen_deney_tup.png" alt=""></span><span class="d-name">Fen Bilimleri</span></a>
+          <a class="ders-btn hayat" href="#" onclick="showPage('hayat3');return false;"><span class="d-icon">🌍</span><span class="d-name">Hayat Bilgisi</span></a>
+          <a class="ders-btn belirli" href="#" onclick="showPage('belirli');return false;"><span class="d-icon"><img src="icon_gen_23nisan.png" alt=""></span><span class="d-name">Belirli Günler</span></a>
+          <a class="ders-btn hikaye" href="#" onclick="showPage('hikaye');return false;"><span class="d-icon">📚</span><span class="d-name">Hikaye</span></a>
+          <a class="ders-btn oyun" href="#" onclick="showPage('oyun');return false;"><span class="d-icon">🎮</span><span class="d-name">Oyunlar</span></a>
+          <a class="ders-btn ingilizce" href="#" onclick="showPage('ingilizce');return false;"><span class="d-icon"><img src="icon_gen_ingilizce.png" alt=""></span><span class="d-name">İngilizce</span></a>
+          <div class="ders-btn sosyal yakinda"><span class="d-icon">🌍</span><span class="d-name">Sosyal Bilgiler</span><br><span class="yakinda-tag">Yakında</span></div>
+          <div class="ders-btn din yakinda"><span class="d-icon">🕌</span><span class="d-name">Din Kültürü</span><br><span class="yakinda-tag">Yakında</span></div>
+        </div></div></div>
       </div>
-      <div class="subjects-list">
-        <a href="javascript:void(0)" class="subject-btn">📝 Türkçe <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🔢 Matematik <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🌿 Hayat Bilgisi <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🔬 Fen Bilimleri <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🌍 Sosyal Bilgiler <span class="arrow">▶</span></a>
-      </div>
-    </div>
 
-    <!-- 4. SINIF -->
-    <div class="class-card c4">
-      <div class="class-card-header">
-        <div class="class-icon">🎓</div>
-        <div>
-          <h3>4. Sınıf</h3>
-          <p>Maarif Modeli Müfredatı</p>
+      <div class="sinif-card sinif-4" id="card-4">
+        <div class="sinif-header" onclick="toggleSinif(4)">
+          <div class="sinif-icon">4</div>
+          <div class="sinif-info"><h3>4. Sınıf</h3><p>Ders materyalleri hazırlanıyor</p></div>
+          <div class="sinif-arrow">▼</div>
         </div>
+        <div class="sinif-body"><div class="sinif-body-inner"><div class="dersler-grid">
+          <div class="ders-btn turkce yakinda"><span class="d-icon">📖</span><span class="d-name">Türkçe</span><br><span class="yakinda-tag">Yakında</span></div>
+          <div class="ders-btn matematik yakinda"><span class="d-icon">🔢</span><span class="d-name">Matematik</span><br><span class="yakinda-tag">Yakında</span></div>
+          <div class="ders-btn fen yakinda"><span class="d-icon">🔬</span><span class="d-name">Fen Bilimleri</span><br><span class="yakinda-tag">Yakında</span></div>
+          <div class="ders-btn sosyal yakinda"><span class="d-icon">🌍</span><span class="d-name">Sosyal Bilgiler</span><br><span class="yakinda-tag">Yakında</span></div>
+          <div class="ders-btn din yakinda"><span class="d-icon">🕌</span><span class="d-name">Din Kültürü</span><br><span class="yakinda-tag">Yakında</span></div>
+          <a class="ders-btn belirli" href="#" onclick="showPage('belirli');return false;"><span class="d-icon"><img src="icon_gen_23nisan.png" alt=""></span><span class="d-name">Belirli Günler</span></a>
+          <a class="ders-btn hikaye" href="#" onclick="showPage('hikaye');return false;"><span class="d-icon">📚</span><span class="d-name">Hikaye</span></a>
+          <a class="ders-btn oyun" href="#" onclick="showPage('oyun');return false;"><span class="d-icon">🎮</span><span class="d-name">Oyunlar</span></a>
+          <a class="ders-btn ingilizce" href="#" onclick="showPage('ingilizce');return false;"><span class="d-icon"><img src="icon_gen_ingilizce.png" alt=""></span><span class="d-name">İngilizce</span></a>
+        </div></div></div>
       </div>
-      <div class="subjects-list">
-        <a href="javascript:void(0)" class="subject-btn">📝 Türkçe <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🔢 Matematik <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🔬 Fen Bilimleri <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🌍 Sosyal Bilgiler <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🕌 Din Kültürü <span class="arrow">▶</span></a>
-      </div>
-    </div>
 
-  </div>
-</section>
-
-<!-- HIZLI ERİŞİM -->
-<section id="hizli" style="background:linear-gradient(135deg,#fff8e1,#fce4ec);border-radius:32px;padding:48px 32px;">
-  <p class="section-title">⚡ Hızlı Erişim</p>
-  <div class="divider" style="background: linear-gradient(90deg,var(--orange),var(--pink));"></div>
-  <p class="section-sub">Sık kullanılan bölümlere tek tıkla ulaş</p>
-
-  <div class="quick-grid">
-    <a href="javascript:void(0)" class="quick-card qc1">
-      <div class="qicon">🎗️</div>
-      <h4>Belirli Gün ve Haftalar</h4>
-      <p>23 Nisan, 10 Kasım, Öğretmenler Günü ve daha fazlası</p>
-    </a>
-    <a href="javascript:void(0)" class="quick-card qc2">
-      <div class="qicon">💎</div>
-      <h4>Değerler Eğitimi (ÇEDES)</h4>
-      <p>Aylık etkinlikler ve raporlar</p>
-    </a>
-    <a href="javascript:void(0)" class="quick-card qc3">
-      <div class="qicon">📖</div>
-      <h4>Kitap Okuma</h4>
-      <p>Okuma listeleri, anlama soruları, etkinlik kitapları</p>
-    </a>
-    <a href="javascript:void(0)" class="quick-card qc4">
-      <div class="qicon">🗓️</div>
-      <h4>Yıllık Planlar</h4>
-      <p>Tüm dersler için hazır yıllık planlar</p>
-    </a>
-    <a href="javascript:void(0)" class="quick-card qc5">
-      <div class="qicon">🖨️</div>
-      <h4>Baskıya Hazır Etkinlikler</h4>
-      <p>PDF formatında indirip doğrudan yazdır</p>
-    </a>
-  </div>
-</section>
-
-<!-- OYUNLAR -->
-<section id="oyunlar">
-  <p class="section-title">🎮 Eğitici Oyunlar</p>
-  <div class="divider" style="background: linear-gradient(90deg,#667eea,#764ba2);"></div>
-  <p class="section-sub">Öğrenirken eğlenen öğrenciler unutmaz!</p>
-
-  <div class="games-grid">
-    <a href="javascript:void(0)" class="game-card g1">
-      <div class="gicon">🔢</div>
-      <h4>Matematik Oyunları</h4>
-      <p>Toplama, çıkarma, çarpma egzersizleri</p>
-    </a>
-    <a href="javascript:void(0)" class="game-card g2">
-      <div class="gicon">📝</div>
-      <h4>Türkçe Oyunları</h4>
-      <p>Kelime bulmaca, hece eşleştirme</p>
-    </a>
-    <a href="javascript:void(0)" class="game-card g3">
-      <div class="gicon">🧩</div>
-      <h4>Bulmacalar</h4>
-      <p>Hayat bilgisi ve genel kültür</p>
-    </a>
-    <a href="javascript:void(0)" class="game-card g4">
-      <div class="gicon">🎯</div>
-      <h4>Quiz Yarışması</h4>
-      <p>Tüm derslerden karışık sorular</p>
-    </a>
-  </div>
-</section>
-
-<!-- HAKKIMDA -->
-<section id="hakkimda">
-  <p class="section-title">👋 Hakkımda</p>
-  <div class="divider" style="background: linear-gradient(90deg,var(--s3),var(--teal));"></div>
-
-  <div class="about-box">
-    <div class="about-avatar">👨‍🏫</div>
-    <div class="about-text">
-      <h3>Hasan Tutus</h3>
-      <p>
-        İlkokul öğretmeniyim. Maarif Modeli müfredatıyla
-        ilkokul öğrencileri için özgün materyaller hazırlıyor, bunları tüm öğretmenlerle
-        paylaşıyorum. Bu sitede 1.–4. sınıf için Türkçe, Matematik, Hayat Bilgisi ve daha
-        birçok derse ait etkinlik, baskıya hazır materyal ve oyunlar bulabilirsiniz.
-      </p>
-      <div class="about-tags">
-        <span class="about-tag">📚 Maarif Modeli</span>
-        <span class="about-tag">🎓 İlkokul 1–4. Sınıf</span>
-        <span class="about-tag">🐙 GitHub</span>
-      </div>
     </div>
   </div>
-</section>
 
-<!-- FOOTER -->
-<footer>
-  <p>© 2025 <span>Hasan Tutus</span></p>
-  <p style="margin-top:6px;font-size:.8rem;opacity:.6;">Tüm materyaller ücretsizdir. Kaynak göstererek kullanabilirsiniz. 🌟</p>
-</footer>
-
-</body>
-</html>
--shadow: 0 6px 20px rgba(79,172,254,.35); }
-
-    /* ── ABOUT ── */
-    .about-box {
-      background: #fff; border-radius: 28px;
-      box-shadow: var(--card-shadow);
-      display: flex; gap: 36px; align-items: center;
-      padding: 40px; flex-wrap: wrap;
-    }
-    .about-avatar {
-      width: 120px; height: 120px; border-radius: 50%; flex-shrink: 0;
-      background: linear-gradient(135deg, var(--s1), var(--s4));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 3.5rem; box-shadow: 0 8px 20px rgba(0,0,0,.12);
-    }
-    .about-text h3 {
-      font-family: 'Baloo 2', cursive; font-size: 1.6rem; font-weight: 800;
-      margin-bottom: 6px;
-    }
-    .about-text p { color: #555; line-height: 1.7; font-size: .95rem; max-width: 500px; }
-    .about-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
-    .about-tag {
-      background: #f3f3f3; border-radius: 20px;
-      padding: 5px 14px; font-size: .82rem; font-weight: 700;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      position: relative; z-index: 1;
-      background: var(--dark); color: #ccc;
-      text-align: center; padding: 32px 20px;
-      font-size: .88rem; margin-top: 40px;
-    }
-    footer span { color: var(--s1); font-weight: 800; }
-
-    /* ── ANIMATIONS ── */
-    @keyframes popIn {
-      from { opacity:0; transform: scale(.7); }
-      to   { opacity:1; transform: scale(1); }
-    }
-    @keyframes slideUp {
-      from { opacity:0; transform: translateY(30px); }
-      to   { opacity:1; transform: translateY(0); }
-    }
-    @keyframes float {
-      0%   { transform: translateY(110vh) rotate(0deg); opacity:.6; }
-      100% { transform: translateY(-10vh) rotate(360deg); opacity:0; }
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 600px) {
-      nav { flex-direction: column; align-items: flex-start; }
-      .about-box { flex-direction: column; text-align: center; }
-      .about-tags { justify-content: center; }
-    }
-  </style>
-</head>
-<body>
-
-<!-- NAV -->
-<nav>
-  <div class="nav-logo">📚 Hasan Tutus</div>
-  <div class="nav-links">
-    <a href="#siniflar">Sınıflar</a>
-    <a href="#hizli">Hızlı Erişim</a>
-    <a href="#oyunlar">Oyunlar</a>
-    <a href="#hakkimda">Hakkımda</a>
-  </div>
-</nav>
-
-<!-- HERO -->
-<div class="hero">
-  <!-- floating emojis -->
-  <div class="floaties">
-    <div class="floaty" style="left:5%;animation-duration:12s;animation-delay:0s;font-size:1.6rem">🌟</div>
-    <div class="floaty" style="left:15%;animation-duration:9s;animation-delay:2s;font-size:2rem">✏️</div>
-    <div class="floaty" style="left:30%;animation-duration:14s;animation-delay:1s;font-size:1.4rem">📖</div>
-    <div class="floaty" style="left:55%;animation-duration:10s;animation-delay:3s;font-size:2rem">🎨</div>
-    <div class="floaty" style="left:70%;animation-duration:11s;animation-delay:.5s;font-size:1.6rem">🔢</div>
-    <div class="floaty" style="left:85%;animation-duration:13s;animation-delay:4s;font-size:1.8rem">🎒</div>
-    <div class="floaty" style="left:92%;animation-duration:8s;animation-delay:2.5s;font-size:1.4rem">🌈</div>
+  <div id="page-turkce" class="page-section">
+    <a class="back-btn" href="#" onclick="showHome();return false;">← Ana Sayfa</a>
+    <div class="cat-hero turkce"><img class="cat-hero-cover" src="turkce-kapak.png" alt="Türkçe" onerror="this.style.display='none'"><div><h2>Türkçe</h2><p>2. Sınıf · Okuma, yazma, dil bilgisi</p></div></div>
+    <div class="cards tema-t">
+      <a href="tekerleme.html" class="card"><div class="card-icon">👁️</div><div class="card-body"><h3>Tekerleme</h3><p>Okuma Akıcılığı</p></div></a>
+      <a href="atasozleri-deyimler.html" class="card"><div class="card-icon"><img src="icon_tr_es_anlamli.png" alt=""></div><div class="card-body"><h3>Atasözleri & Deyimler</h3><p>İnteraktif Etkinlik</p></div></a>
+      <a href="23nisan-turkce-etkinlik.html" class="card"><div class="card-icon"><img src="icon_gen_23nisan.png" alt=""></div><div class="card-body"><h3>23 Nisan Etkinliği</h3><p>Türkçe Etkinlik</p></div></a>
+      <a href="harfler-hece-kelime.html" class="card"><div class="card-icon"><img src="icon_tr_hece.png" alt=""></div><div class="card-body"><h3>Harf Hece Kelime</h3><p>İnteraktif Etkinlik</p></div></a>
+      <a href="okuma-anlama.html" class="card"><div class="card-icon"><img src="icon_tr_okuma_yazma.png" alt=""></div><div class="card-body"><h3>Okuma ve Anlama</h3><p>5 Metin + Sorular</p></div></a>
+      <a href="yazim-yanlislari.html" class="card"><div class="card-icon"><img src="icon_tr_alfabe.png" alt=""></div><div class="card-body"><h3>Yazım Kuralları</h3><p>5 Bölüm + Etkinlik</p></div></a>
+      <a href="noktalama.html" class="card"><div class="card-icon"><img src="icon_tr_noktalama.png" alt=""></div><div class="card-body"><h3>Noktalama İşaretleri</h3><p>Metin Doldurma</p></div></a>
+      <a href="cumle-olusturma.html" class="card"><div class="card-icon"><img src="icon_tr_cumle_bilgisi.png" alt=""></div><div class="card-body"><h3>Cümle Oluşturma</h3><p>Kurallı & Devrik + Çeşitler</p></div></a>
+      <a href="turkce_okuma_anlama.html" class="card"><div class="card-icon"><img src="icon_tr_okuma_seti.png" alt=""></div><div class="card-body"><h3>Okuma & Anlama 2</h3><p>4 Özgün Metin + Sorular</p></div></a>
+      <a href="turkce_calisma.html" class="card"><div class="card-icon"><img src="icon_tr_grammar_kitap.png" alt=""></div><div class="card-body"><h3>Çalışma Kağıtları</h3><p>5 İndirilebilir Etkinlik</p></div></a>
+    </div>
   </div>
 
-  <div class="hero-badge">✏️ Eğitim Materyalleri</div>
-  <h1>İlkokul <span>Eğitim</span><br>Materyalleri</h1>
-  <p>1. Sınıf'tan 4. Sınıf'a tüm dersler için hazır materyaller, etkinlikler ve oyunlar!</p>
-  <div class="hero-btns">
-    <a href="#siniflar" class="btn-hero btn-primary">🎓 Sınıflara Göz At</a>
-    <a href="#hizli" class="btn-hero btn-secondary">⚡ Hızlı Erişim</a>
+  <div id="page-matematik" class="page-section">
+    <a class="back-btn" href="#" onclick="showHome();return false;">← Ana Sayfa</a>
+    <div class="cat-hero matematik"><img class="cat-hero-cover" src="matematik-kapak.png" alt="Matematik" onerror="this.style.display='none'"><div><h2>Matematik</h2><p>2. Sınıf · Sayılar, işlemler, geometri</p></div></div>
+    <div class="cards tema-m">
+      <a href="dogal-sayilar.html" class="card"><div class="card-icon"><img src="icon_mat_dogal_sayilar.png" alt=""></div><div class="card-body"><h3>Doğal Sayılar</h3><p>Sayma Basamak Yuvarlama</p></div></a>
+      <a href="carpim-tablosu.html" class="card"><div class="card-icon"><img src="icon_mat_carpma.png" alt=""></div><div class="card-body"><h3>Çarpım Tablosu</h3><p>İnteraktif Oyun</p></div></a>
+      <a href="toplama-cikarma.html" class="card"><div class="card-icon"><img src="icon_mat_toplama_cikarma.png" alt=""></div><div class="card-body"><h3>Toplama ve Çıkarma</h3><p>Kural + Görsel + Oyun</p></div></a>
+      <a href="geometri.html" class="card"><div class="card-icon"><img src="icon_mat_geometri.png" alt=""></div><div class="card-body"><h3>Geometri</h3><p>Cisimler + Şekiller</p></div></a>
+      <a href="carpma-islemi-2sinif.html" class="card"><div class="card-icon"><img src="icon_mat_carpma.png" alt=""></div><div class="card-body"><h3>Çarpma İşlemi</h3><p>Gruplar Tablo Özellikler</p></div></a>
+      <a href="bolme-islemi-2sinif.html" class="card"><div class="card-icon"><img src="icon_mat_bolme.png" alt=""></div><div class="card-body"><h3>Bölme İşlemi</h3><p>Bölüştürme Gösterim Oyun</p></div></a>
+      <a href="esitlik-2sinif.html" class="card"><div class="card-icon"><img src="icon_mat_esitlik.png" alt=""></div><div class="card-body"><h3>Eşitlik</h3><p>Terazi Boşluk Doldur</p></div></a>
+      <a href="veri-toplama-2sinif.html" class="card"><div class="card-icon"><img src="icon_mat_veri.png" alt=""></div><div class="card-body"><h3>Veri Toplama</h3><p>Tablo Grafik Anket</p></div></a>
+      <a href="yon-bulma-2sinif.html" class="card"><div class="card-icon">🧭</div><div class="card-body"><h3>Yön Bulma</h3><p>Pusula Harita Güneş</p></div></a>
+      <a href="simetri-2sinif.html" class="card"><div class="card-icon"><img src="icon_mat_simetri.png" alt=""></div><div class="card-body"><h3>Simetri</h3><p>Eksen Çiz Keşfet</p></div></a>
+      <a href="paralarimiz-2sinif.html" class="card"><div class="card-icon">💰</div><div class="card-body"><h3>Paralarımız</h3><p>Tanı Say Market Oyunu</p></div></a>
+      <a href="zaman-2sinif.html" class="card"><div class="card-icon"><img src="icon_mat_zaman.png" alt=""></div><div class="card-body"><h3>Zaman</h3><p>Saat Takvim Çalar Saat</p></div></a>
+      <a href="uzunluk-kutle-2sinif.html" class="card"><div class="card-icon"><img src="icon_mat_uzunluk_kutle.png" alt=""></div><div class="card-body"><h3>Uzunluk ve Kütle</h3><p>Cetvel Terazi Dönüşüm</p></div></a>
+    </div>
   </div>
+
+  <div id="page-turkce3" class="page-section">
+    <a class="back-btn" href="#" onclick="showHome();return false;">← Ana Sayfa</a>
+    <div class="cat-hero turkce"><img class="cat-hero-cover" src="turkce-kapak.png" alt="Türkçe" onerror="this.style.display='none'"><div><h2>Türkçe</h2><p>3. Sınıf · Okuma, dil bilgisi, yeni nesil sorular</p></div></div>
+    <div class="cards tema-t">
+      <a href="turkce-3sinif.html" class="card"><div class="card-icon"><img src="icon_tr_grammar_kitap.png" alt=""></div><div class="card-body"><h3>3. Sınıf Türkçe Konuları</h3><p>19 Konu · Konu Anlatımı + Yeni Nesil Sorular</p></div></a>
+      <a href="3sinif_turkce_genel_degerlendirme-2.html" class="card"><div class="card-icon"><img src="icon_gen_inceleme.png" alt=""></div><div class="card-body"><h3>Genel Değerlendirme</h3><p>Karma Test</p></div></a>
+    </div>
+  </div>
+
+  <div id="page-matematik3" class="page-section">
+    <a class="back-btn" href="#" onclick="showHome();return false;">← Ana Sayfa</a>
+    <div class="cat-hero matematik"><img class="cat-hero-cover" src="matematik-kapak.png" alt="Matematik" onerror="this.style.display='none'"><div><h2>Matematik</h2><p>3. Sınıf · Sayılar, işlemler, geometri</p></div></div>
+    <div class="cards tema-m">
+      <a href="tema1-sayilar-nicelikler.html" class="card"><div class="card-icon"><img src="icon_mat_dogal_sayilar.png" alt=""></div><div class="card-body"><h3>Tema 1: Sayılar ve Nicelikler-1</h3><p>Konu Anlatımı + Etkinlik + Soru Bankası + Oyun</p></div></a>
+      <a href="3sinif_matematik_genel_degerlendirme.html" class="card"><div class="card-icon"><img src="icon_gen_inceleme.png" alt=""></div><div class="card-body"><h3>Genel Değerlendirme</h3><p>Karma Test</p></div></a>
+      <div class="card yakinda"><div class="card-icon">➕</div><div class="card-body"><h3>Tema 2: Sayılar ve Nicelikler-2</h3><span class="yakinda-badge">Yakında</span></div></div>
+      <div class="card yakinda"><div class="card-icon"><img src="icon_mat_geometri.png" alt=""></div><div class="card-body"><h3>Tema 3: Geometrik Şekiller</h3><span class="yakinda-badge">Yakında</span></div></div>
+      <div class="card yakinda"><div class="card-icon"><img src="icon_mat_uzunluk_kutle.png" alt=""></div><div class="card-body"><h3>Tema 4: Ölçme</h3><span class="yakinda-badge">Yakında</span></div></div>
+      <div class="card yakinda"><div class="card-icon"><img src="icon_mat_veri.png" alt=""></div><div class="card-body"><h3>Tema 5: Veri İşleme</h3><span class="yakinda-badge">Yakında</span></div></div>
+      <div class="card yakinda"><div class="card-icon"><img src="icon_mat_kesirler.png" alt=""></div><div class="card-body"><h3>Tema 6: Kesirler ve Para</h3><span class="yakinda-badge">Yakında</span></div></div>
+    </div>
+  </div>
+
+  <div id="page-fen3" class="page-section">
+    <a class="back-btn" href="#" onclick="showHome();return false;">← Ana Sayfa</a>
+    <div class="cat-hero fen"><img class="cat-hero-cover" src="fen-kapak.png" alt="Fen Bilimleri" onerror="this.style.display='none'"><div><h2>Fen Bilimleri</h2><p>3. Sınıf · Konu anlatımı + interaktif etkinlikler</p></div></div>
+    <div class="cards tema-f">
+      <a href="dunyamizin-sekli.html" class="card"><div class="card-icon">🌍</div><div class="card-body"><h3>Dünyamızın Şekli</h3><p>Tarihsel Gelişim + Etkinlik</p></div></a>
+      <a href="dunyanin-katmanlari.html" class="card"><div class="card-icon">🌎</div><div class="card-body"><h3>Dünyanın Katmanları</h3><p>5 Katman + Etkinlik</p></div></a>
+      <a href="duyu-organlari.html" class="card"><div class="card-icon"><img src="icon_fen_kesif_buyutec.png" alt=""></div><div class="card-body"><h3>Duyu Organlarımız</h3><p>5 Duyu Organı + Eşleştirme</p></div></a>
+      <a href="maddenin-halleri.html" class="card"><div class="card-icon"><img src="icon_fen_madde_hal.png" alt=""></div><div class="card-body"><h3>Maddenin Halleri</h3><p>Katı Sıvı Gaz + Etkinlik</p></div></a>
+      <a href="kuvvet-birlesik.html" class="card"><div class="card-icon"><img src="icon_fen_kuvvet.png" alt=""></div><div class="card-body"><h3>Kuvveti Tanıyalım</h3><p>Halat Çekme + Hareket Özellikleri</p></div></a>
+      <a href="isik_ve_sesler_etkinlik.html" class="card"><div class="card-icon"><img src="icon_fen_ampul.png" alt=""></div><div class="card-body"><h3>Çevremizdeki Işık ve Sesler</h3><p>İnteraktif Etkinlik</p></div></a>
+      <a href="yasadigim_cevre_etkinlik.html" class="card"><div class="card-icon"><img src="icon_fen_cevre_ev.png" alt=""></div><div class="card-body"><h3>Yaşadığım Çevre</h3><p>İnteraktif Etkinlik</p></div></a>
+      <a href="canlilar_dunyasina_yolculuk_etkinlik.html" class="card"><div class="card-icon"><img src="icon_fen_canlilar.png" alt=""></div><div class="card-body"><h3>Canlılar Dünyasına Yolculuk</h3><p>İnteraktif Etkinlik</p></div></a>
+      <a href="elektrik_etkinlik.html" class="card"><div class="card-icon">⚡</div><div class="card-body"><h3>Elektrik</h3><p>İnteraktif Etkinlik</p></div></a>
+      <a href="3sinif_fen_genel_degerlendirme-1.html" class="card"><div class="card-icon"><img src="icon_gen_inceleme.png" alt=""></div><div class="card-body"><h3>Genel Değerlendirme</h3><p>Karma Test</p></div></a>
+    </div>
+  </div>
+
+  <div id="page-hayat3" class="page-section">
+    <a class="back-btn" href="#" onclick="showHome();return false;">← Ana Sayfa</a>
+    <div class="cat-hero hayat"><img class="cat-hero-cover" src="hayatbilgisi-kapak.png" alt="Hayat Bilgisi" onerror="this.style.display='none'"><div><h2>Hayat Bilgisi</h2><p>3. Sınıf · Konu anlatımı + interaktif etkinlikler</p></div></div>
+    <div class="cards tema-h">
+      <a href="ben-ve-okulum.html" class="card"><div class="card-icon"><img src="icon-ben-ve-okulum.png" alt="" onerror="this.parentElement.innerHTML='🏫'"></div><div class="card-body"><h3>Ben ve Okulum</h3><p>3 Alt Konu + Etkinlik</p></div></a>
+      <a href="sagligim-ve-guvenligim.html" class="card"><div class="card-icon"><img src="icon-sagligim-guvenligim.png" alt="" onerror="this.src='icon_gen_ilkyardim_kirmizi.png'"></div><div class="card-body"><h3>Sağlığım ve Güvenliğim</h3><p>3 Alt Konu + Etkinlik</p></div></a>
+      <a href="ailem-ve-toplum.html" class="card"><div class="card-icon"><img src="icon-ailem-ve-toplum.png" alt="" onerror="this.src='icon_gen_aile_kalp.png'"></div><div class="card-body"><h3>Ailem ve Toplum</h3><p>3 Alt Konu + Etkinlik</p></div></a>
+      <a href="yasadigim-yer-ve-ulkem.html" class="card"><div class="card-icon"><img src="icon-yasadigim-yer-ulkem.png" alt="" onerror="this.src='icon_gen_hayatbilgisi_harita.png'"></div><div class="card-body"><h3>Yaşadığım Yer ve Ülkem</h3><p>3 Alt Konu + Etkinlik</p></div></a>
+      <a href="doga-ve-cevre.html" class="card"><div class="card-icon"><img src="icon-doga-ve-cevre.png" alt="" onerror="this.src='icon_gen_geri_donusum.png'"></div><div class="card-body"><h3>Doğa ve Çevre</h3><p>3 Alt Konu + Etkinlik</p></div></a>
+      <a href="3sinif_hayatbilgisi_genel_degerlendirme-1.html" class="card"><div class="card-icon"><img src="icon-genel-degerlendirme.png" alt="" onerror="this.src='icon_gen_inceleme.png'"></div><div class="card-body"><h3>Genel Değerlendirme</h3><p>Karma Test</p></div></a>
+    </div>
+  </div>
+
+  <div id="page-hayat" class="page-section">
+    <a class="back-btn" href="#" onclick="showHome();return false;">← Ana Sayfa</a>
+    <div class="cat-hero hayat"><img class="cat-hero-cover" src="hayatbilgisi-kapak.png" alt="Hayat Bilgisi" onerror="this.style.display='none'"><div><h2>Hayat Bilgisi</h2><p>2. Sınıf · Yaşam, çevre, toplum</p></div></div>
+    <div class="cards tema-h">
+      <a href="deprem_cantasi.html" class="card"><div class="card-icon">🎒</div><div class="card-body"><h3>Deprem Çantası</h3><p>İnteraktif Etkinlik</p></div></a>
+      <a href="dogal_afetler_2sinif.html" class="card"><div class="card-icon">🌋</div><div class="card-body"><h3>Doğal Afetler</h3><p>Ders Materyali</p></div></a>
+      <a href="tasarruf-akilli-tahta-etkinligi.html" class="card"><div class="card-icon"><img src="icon_gen_yenilenebilir_enerji.png" alt=""></div><div class="card-body"><h3>Tasarruf</h3><p>Akıllı Tahta Etkinliği</p></div></a>
+      <a href="ataturk-cocukluk.html" class="card"><div class="card-icon"><img src="icon_gen_ataturk_anitkabir.png" alt=""></div><div class="card-body"><h3>Atatürk Çocukluk Yılları</h3><p>Metin + Zaman Çizgisi</p></div></a>
+      <a href="tarihi-yerler.html" class="card"><div class="card-icon">🏛️</div><div class="card-body"><h3>Tarihi ve Doğal Yerler</h3><p>Türkiye + Güneydoğu</p></div></a>
+      <a href="yerel-yonetimler.html" class="card"><div class="card-icon">🏢</div><div class="card-body"><h3>Yerel Yönetimler</h3><p>Muhtar, Kaymakam, Vali</p></div></a>
+      <a href="meslekler.html" class="card"><div class="card-icon">👷</div><div class="card-body"><h3>Meslekler</h3><p>12 Meslek + Etkinlik</p></div></a>
+      <a href="hava-mevsimler.html" class="card"><div class="card-icon">🌤️</div><div class="card-body"><h3>Hava ve Mevsimler</h3><p>8 Hava + 4 Mevsim</p></div></a>
+      <a href="hayat_bilgisi_unite6.html" class="card"><div class="card-icon">🌍</div><div class="card-body"><h3>Ünite 6</h3><p>Hayat Bilgisi Etkinliği</p></div></a>
+    </div>
+  </div>
+
+  <div id="page-belirli" class="page-section">
+    <a class="back-btn" href="#" onclick="showHome();return false;">← Ana Sayfa</a>
+    <div class="cat-hero belirli"><span class="cat-hero-icon">📅</span><div><h2>Belirli Gün ve Haftalar</h2><p>Özel gün etkinlikleri ve materyalleri · Tüm sınıflar</p></div></div>
+
+    <div class="alt-baslik" style="background:#FEF2F2;color:#DC2626;">🎉 23 Nisan</div>
+    <div class="cards tema-b">
+      <a href="23nisan-turkce-etkinlik.html" class="card"><div class="card-icon"><img src="icon_gen_23nisan.png" alt=""></div><div class="card-body"><h3>23 Nisan Etkinliği</h3><p>Türkçe Etkinlik</p></div></a>
+      <a href="23Nisan_Uygulama.html" class="card"><div class="card-icon"><img src="icon_gen_23nisan.png" alt=""></div><div class="card-body"><h3>23 Nisan Uygulama</h3><p>İnteraktif Uygulama</p></div></a>
+    </div>
+
+    <div class="alt-baslik" style="background:#FDF2F8;color:#BE185D;margin-top:16px;">🌸 Anneler Günü</div>
+    <div class="cards tema-b">
+      <a href="anneler-gunu-siir.html" class="card"><div class="card-icon"><img src="icon_gen_anneler_gunu.png" alt=""></div><div class="card-body"><h3>Şiir</h3><p>Şiir + Çalışma Sayfası</p></div></a>
+      <a href="anneler-gunu-pano.html" class="card"><div class="card-icon"><img src="icon_gen_anneler_gunu.png" alt=""></div><div class="card-body"><h3>Pano</h3><p>Mesaj & Süsleme Kartları</p></div></a>
+      <a href="anneler-gunu-kes-yapistir.html" class="card"><div class="card-icon"><img src="icon_gen_anneler_gunu.png" alt=""></div><div class="card-body"><h3>Etkinlik</h3><p>Kes-Yapıştır & Annem</p></div></a>
+    </div>
+
+    <div class="alt-baslik" style="background:#FFF7ED;color:#D97706;margin-top:16px;">🚦 Trafik</div>
+    <div class="cards tema-b">
+      <a href="trafik-haftasi.html" class="card"><div class="card-icon"><img src="icon_gen_trafik.png" alt=""></div><div class="card-body"><h3>Trafik İşaretleri</h3><p>İşaretler + Oyun</p></div></a>
+    </div>
+
+    <div class="alt-baslik" style="background:#EFF6FF;color:#2563EB;margin-top:16px;">🏆 19 Mayıs</div>
+    <div class="cards tema-b">
+      <a href="19mayis.html" class="card"><div class="card-icon"><img src="icon_gen_ataturk_at.png" alt=""></div><div class="card-body"><h3>19 Mayıs</h3><p>Atatürk'ü Anma, Gençlik ve Spor Bayramı</p></div></a>
+    </div>
+
+    <div class="alt-baslik" style="background:#F1F5F9;color:#64748B;margin-top:16px;">🕐 Yakında</div>
+    <div class="cards tema-b">
+      <div class="card yakinda"><div class="card-icon"><img src="icon_gen_ataturk_anitkabir.png" alt=""></div><div class="card-body"><h3>10 Kasım</h3><span class="yakinda-badge">Yakında</span></div></div>
+      <div class="card yakinda"><div class="card-icon"><img src="icon_gen_29ekim.png" alt=""></div><div class="card-body"><h3>29 Ekim</h3><span class="yakinda-badge">Yakında</span></div></div>
+      <div class="card yakinda"><div class="card-icon"><img src="icon_gen_ogretmenler_gunu.png" alt=""></div><div class="card-body"><h3>Öğretmenler Günü</h3><span class="yakinda-badge">Yakında</span></div></div>
+    </div>
+  </div>
+
+  <div id="page-siir" class="page-section">
+    <a class="back-btn" href="#" onclick="showHome();return false;">← Ana Sayfa</a>
+    <div class="cat-hero siir"><span class="cat-hero-icon">✨</span><div><h2>Şiir</h2><p>Şiir okuma ve anlama etkinlikleri</p></div></div>
+    <div class="cards tema-s">
+      <div class="card yakinda"><div class="card-icon"><img src="icon_tr_siir_sarki.png" alt=""></div><div class="card-body"><h3>Yakında...</h3><span class="yakinda-badge">Çok yakında</span></div></div>
+    </div>
+  </div>
+
+  <div id="page-hikaye" class="page-section">
+    <a class="back-btn" href="#" onclick="showHome();return false;">← Ana Sayfa</a>
+    <div class="cat-hero hikaye"><span class="cat-hero-icon">📚</span><div><h2>Hikaye</h2><p>Hikaye oluşturma ve okuma etkinlikleri</p></div></div>
+    <div class="cards tema-hi">
+      <a href="hikaye-olusturucu.html" class="card"><div class="card-icon">✍️</div><div class="card-body"><h3>Hikaye Oluşturucu</h3><p>Kendi hikayeni yaz!</p></div></a>
+      <a href="orman-sakinleri.html" class="card"><div class="card-icon">🌳</div><div class="card-body"><h3>Orman Sakinleri</h3><p>İnteraktif Hikaye Kitabı</p></div></a>
+      <a href="mavis-kitap.html" class="card"><div class="card-icon">🐦</div><div class="card-body"><h3>Maviş ve Gizemli Bahçe</h3><p>27 sayfalık macera hikayesi 🗝️🦋</p></div></a>
+      <div class="card yakinda"><div class="card-icon">📖</div><div class="card-body"><h3>Hikaye Okuma</h3><span class="yakinda-badge">Yakında</span></div></div>
+    </div>
+  </div>
+
+  <div id="page-oyun" class="page-section">
+    <a class="back-btn" href="#" onclick="showHome();return false;">← Ana Sayfa</a>
+    <div class="cat-hero oyun"><span class="cat-hero-icon">🎮</span><div><h2>Oyunlar</h2><p>Eğlenceli interaktif oyunlar</p></div></div>
+    <div class="cards tema-o">
+      <a href="adam-asmaca.html" class="card"><div class="card-icon">🪢</div><div class="card-body"><h3>Adam Asmaca</h3><p>Kelime tahmin oyunu</p></div></a>
+      <a href="kim-yanlis.html" class="card"><div class="card-icon">🥸</div><div class="card-body"><h3>Kim Yanlış Söylüyor</h3><p>2 doğru 1 yanlış bul</p></div></a>
+      <a href="bayrak-oyunu.html" class="card"><div class="card-icon">🏳️</div><div class="card-body"><h3>Bayrak Oyunu</h3><p>Ülke bayraklarını tanı</p></div></a>
+      <a href="kart-cevirmece.html" class="card"><div class="card-icon">🃏</div><div class="card-body"><h3>Kart Çevirmece</h3><p>Hafıza eşleştirme oyunu</p></div></a>
+      <a href="giyinme-oyunu.html" class="card"><div class="card-icon">📸</div><div class="card-body"><h3>Kız Giydirme</h3><p>Mevsime göre giydir</p></div></a>
+      <a href="hikaye-olusturucu.html" class="card"><div class="card-icon">🎡</div><div class="card-body"><h3>Hikaye Oluşturucu</h3><p>Çarklarla hikaye yaz</p></div></a>
+      <a href="turkce_oyunlar.html" class="card"><div class="card-icon">🎮</div><div class="card-body"><h3>Türkçe Oyunları</h3><p>Quiz Eşleştirme Yetenek</p></div></a>
+      <a href="dinleme-kosesi.html" class="card"><div class="card-icon">🎧</div><div class="card-body"><h3>Dinleme Köşesi</h3><p>Hikaye Dinle, Sayı Oku</p></div></a>
+      <a href="pasaparola.html" class="card"><div class="card-icon">🔠</div><div class="card-body"><h3>Pasaparola</h3><p>Harf bilgi yarışması</p></div></a>
+    </div>
+  </div>
+
+  <div id="page-ingilizce" class="page-section">
+    <a class="back-btn" href="#" onclick="showHome();return false;">← Ana Sayfa</a>
+    <div class="cat-hero ingilizce"><span class="cat-hero-icon">🇬🇧</span><div><h2>İngilizce</h2><p>Sıfırdan ileri seviyeye, herkes için İngilizce</p></div></div>
+    <div class="cards tema-i">
+      <a href="ingilizce-full.html" class="card"><div class="card-icon"><img src="icon_gen_ingilizce.png" alt=""></div><div class="card-body"><h3>İngilizce Öğreniyorum</h3><p>A1'den B2'ye · Kelime, Dilbilgisi, Okuma, Oyun, AI Pratik</p></div></a>
+    </div>
+  </div>
+
 </div>
 
-<!-- SINIFLAR -->
-<section id="siniflar">
-  <p class="section-title">📚 Sınıflar</p>
-  <div class="divider" style="background: linear-gradient(90deg,var(--s1),var(--s4));"></div>
-  <p class="section-sub">Sınıfına tıkla, derslerini seç ve materyali indir!</p>
-
-  <div class="classes-grid">
-
-    <!-- 1. SINIF -->
-    <div class="class-card c1">
-      <div class="class-card-header">
-        <div class="class-icon">🐣</div>
-        <div>
-          <h3>1. Sınıf</h3>
-          <p>Maarif Modeli Müfredatı</p>
-        </div>
-      </div>
-      <div class="subjects-list">
-        <a href="javascript:void(0)" class="subject-btn" style="color:var(--s1)">📝 Türkçe <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🔢 Matematik <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🌿 Hayat Bilgisi <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🎨 Görsel Sanatlar <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🎵 Müzik <span class="arrow">▶</span></a>
-      </div>
-    </div>
-
-    <!-- 2. SINIF -->
-    <div class="class-card c2">
-      <div class="class-card-header">
-        <div class="class-icon">🌱</div>
-        <div>
-          <h3>2. Sınıf</h3>
-          <p>Maarif Modeli Müfredatı</p>
-        </div>
-      </div>
-      <div class="subjects-list">
-        <a href="javascript:void(0)" class="subject-btn">📝 Türkçe (Tema 1–8) <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🔢 Matematik <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🌿 Hayat Bilgisi <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🎨 Görsel Sanatlar <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🎵 Müzik <span class="arrow">▶</span></a>
-      </div>
-    </div>
-
-    <!-- 3. SINIF -->
-    <div class="class-card c3">
-      <div class="class-card-header">
-        <div class="class-icon">🌳</div>
-        <div>
-          <h3>3. Sınıf</h3>
-          <p>Maarif Modeli Müfredatı</p>
-        </div>
-      </div>
-      <div class="subjects-list">
-        <a href="javascript:void(0)" class="subject-btn">📝 Türkçe <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🔢 Matematik <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🌿 Hayat Bilgisi <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🔬 Fen Bilimleri <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🌍 Sosyal Bilgiler <span class="arrow">▶</span></a>
-      </div>
-    </div>
-
-    <!-- 4. SINIF -->
-    <div class="class-card c4">
-      <div class="class-card-header">
-        <div class="class-icon">🎓</div>
-        <div>
-          <h3>4. Sınıf</h3>
-          <p>Maarif Modeli Müfredatı</p>
-        </div>
-      </div>
-      <div class="subjects-list">
-        <a href="javascript:void(0)" class="subject-btn">📝 Türkçe <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🔢 Matematik <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🔬 Fen Bilimleri <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🌍 Sosyal Bilgiler <span class="arrow">▶</span></a>
-        <a href="javascript:void(0)" class="subject-btn">🕌 Din Kültürü <span class="arrow">▶</span></a>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- HIZLI ERİŞİM -->
-<section id="hizli" style="background:linear-gradient(135deg,#fff8e1,#fce4ec);border-radius:32px;padding:48px 32px;">
-  <p class="section-title">⚡ Hızlı Erişim</p>
-  <div class="divider" style="background: linear-gradient(90deg,var(--orange),var(--pink));"></div>
-  <p class="section-sub">Sık kullanılan bölümlere tek tıkla ulaş</p>
-
-  <div class="quick-grid">
-    <a href="javascript:void(0)" class="quick-card qc1">
-      <div class="qicon">🎗️</div>
-      <h4>Belirli Gün ve Haftalar</h4>
-      <p>23 Nisan, 10 Kasım, Öğretmenler Günü ve daha fazlası</p>
-    </a>
-    <a href="javascript:void(0)" class="quick-card qc2">
-      <div class="qicon">💎</div>
-      <h4>Değerler Eğitimi (ÇEDES)</h4>
-      <p>Aylık etkinlikler ve raporlar</p>
-    </a>
-    <a href="javascript:void(0)" class="quick-card qc3">
-      <div class="qicon">📖</div>
-      <h4>Kitap Okuma</h4>
-      <p>Okuma listeleri, anlama soruları, etkinlik kitapları</p>
-    </a>
-    <a href="javascript:void(0)" class="quick-card qc4">
-      <div class="qicon">🗓️</div>
-      <h4>Yıllık Planlar</h4>
-      <p>Tüm dersler için hazır yıllık planlar</p>
-    </a>
-    <a href="javascript:void(0)" class="quick-card qc5">
-      <div class="qicon">🖨️</div>
-      <h4>Baskıya Hazır Etkinlikler</h4>
-      <p>PDF formatında indirip doğrudan yazdır</p>
-    </a>
-  </div>
-</section>
-
-<!-- OYUNLAR -->
-<section id="oyunlar">
-  <p class="section-title">🎮 Eğitici Oyunlar</p>
-  <div class="divider" style="background: linear-gradient(90deg,#667eea,#764ba2);"></div>
-  <p class="section-sub">Öğrenirken eğlenen öğrenciler unutmaz!</p>
-
-  <div class="games-grid">
-    <a href="javascript:void(0)" class="game-card g1">
-      <div class="gicon">🔢</div>
-      <h4>Matematik Oyunları</h4>
-      <p>Toplama, çıkarma, çarpma egzersizleri</p>
-    </a>
-    <a href="javascript:void(0)" class="game-card g2">
-      <div class="gicon">📝</div>
-      <h4>Türkçe Oyunları</h4>
-      <p>Kelime bulmaca, hece eşleştirme</p>
-    </a>
-    <a href="javascript:void(0)" class="game-card g3">
-      <div class="gicon">🧩</div>
-      <h4>Bulmacalar</h4>
-      <p>Hayat bilgisi ve genel kültür</p>
-    </a>
-    <a href="javascript:void(0)" class="game-card g4">
-      <div class="gicon">🎯</div>
-      <h4>Quiz Yarışması</h4>
-      <p>Tüm derslerden karışık sorular</p>
-    </a>
-  </div>
-</section>
-
-<!-- HAKKIMDA -->
-<section id="hakkimda">
-  <p class="section-title">👋 Hakkımda</p>
-  <div class="divider" style="background: linear-gradient(90deg,var(--s3),var(--teal));"></div>
-
-  <div class="about-box">
-    <div class="about-avatar">👨‍🏫</div>
-    <div class="about-text">
-      <h3>Hasan Tutus</h3>
-      <p>
-        İlkokul öğretmeniyim. Maarif Modeli müfredatıyla
-        ilkokul öğrencileri için özgün materyaller hazırlıyor, bunları tüm öğretmenlerle
-        paylaşıyorum. Bu sitede 1.–4. sınıf için Türkçe, Matematik, Hayat Bilgisi ve daha
-        birçok derse ait etkinlik, baskıya hazır materyal ve oyunlar bulabilirsiniz.
-      </p>
-      <div class="about-tags">
-        <span class="about-tag">📚 Maarif Modeli</span>
-        <span class="about-tag">🎓 İlkokul 1–4. Sınıf</span>
-        <span class="about-tag">🐙 GitHub</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
 <footer>
-  <p>© 2025 <span>Hasan Tutus</span></p>
-  <p style="margin-top:6px;font-size:.8rem;opacity:.6;">Tüm materyaller ücretsizdir. Kaynak göstererek kullanabilirsiniz. 🌟</p>
+  <p>© 2026 <strong>Dijital Öğretmen</strong> · İlkokul Eğitim Materyalleri</p>
+  <p style="margin-top:6px;font-size:.78rem;opacity:.6;">Tüm materyaller ücretsizdir. 🌟</p>
 </footer>
 
+<script>
+function toggleSinif(n) {
+  const card = document.getElementById('card-' + n);
+  const isOpen = card.classList.contains('open');
+  document.querySelectorAll('.sinif-card').forEach(c => c.classList.remove('open'));
+  if (!isOpen) card.classList.add('open');
+}
+function showPage(id) {
+  document.querySelectorAll('.page-section').forEach(p => p.classList.remove('aktif'));
+  const el = document.getElementById('page-' + id);
+  if (el) el.classList.add('aktif');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function showHome() {
+  showPage('home');
+  setTimeout(() => {
+    document.querySelectorAll('.sinif-card').forEach(c => c.classList.remove('open'));
+    document.getElementById('card-2').classList.add('open');
+  }, 50);
+}
+
+(function(){
+  const params = new URLSearchParams(window.location.search);
+  const target = params.get('page');
+  if (target && document.getElementById('page-' + target)) {
+    showPage(target);
+  }
+})();
+</script>
 </body>
 </html>
-
