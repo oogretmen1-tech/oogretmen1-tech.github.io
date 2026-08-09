@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eş Anlamlı Kelimeler - 2. Sınıf</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#4D96FF; --blue-deep:#2F6FDB; --dark:#2D2D2D;
+  --cream:#EFF6FF; --green:#4CAF50; --red:#E57373; --gold:#F9C846;
+}
+*{box-sizing:border-box; margin:0; padding:0; font-family:"Nunito",sans-serif;}
+body{background:linear-gradient(180deg,#EFF6FF,#fff); color:var(--dark); min-height:100vh;}
+header{background:linear-gradient(135deg,var(--blue),var(--blue-deep)); color:#fff; padding:30px 16px 26px; text-align:center;}
+header h1{font-family:"Baloo 2",cursive; font-size:1.7em; margin-bottom:6px;}
+header p{opacity:.92; font-weight:600;}
+.tabs{display:flex; justify-content:center; gap:10px; padding:16px; background:#fff; position:sticky; top:0; z-index:10; box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.tab-btn{border:none; padding:10px 20px; border-radius:20px; background:#eee; font-weight:700; cursor:pointer; font-size:.95em;}
+.tab-btn.active{background:var(--blue); color:#fff;}
+.panel{display:none; max-width:760px; margin:22px auto; padding:0 16px 50px;}
+.panel.active{display:block;}
+.intro{background:#fff; border-radius:16px; padding:20px; box-shadow:0 4px 14px rgba(0,0,0,.06); margin-bottom:20px; line-height:1.7;}
+.intro h2{font-family:"Baloo 2",cursive; color:var(--blue-deep); margin-bottom:8px;}
+
+.card-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:14px;}
+.pair-card{background:#fff; border-radius:14px; padding:16px; box-shadow:0 3px 10px rgba(0,0,0,.07); display:flex; align-items:center; justify-content:space-between; gap:10px; font-weight:700; font-size:1.05em;}
+.pair-card .arrow{color:var(--gold); font-size:1.3em;}
+.pair-card span{flex:1; text-align:center;}
+
+.quiz-card{background:#fff; border-radius:18px; padding:26px 22px; box-shadow:0 6px 18px rgba(0,0,0,.08);}
+.quiz-progress{font-weight:700; color:#888; margin-bottom:10px; font-size:.85em;}
+.quiz-q{font-family:"Baloo 2",cursive; font-size:1.3em; color:var(--blue-deep); margin-bottom:20px; text-align:center;}
+.quiz-q strong{color:var(--dark);}
+.quiz-opts{display:flex; flex-direction:column; gap:10px;}
+.quiz-opt{padding:13px 16px; border-radius:12px; border:2px solid #ddd; background:#fafafa; font-weight:700; cursor:pointer; font-size:1em; text-align:center;}
+.quiz-opt:hover{border-color:var(--blue);}
+.quiz-opt.correct{background:#DCF5E0; border-color:var(--green);}
+.quiz-opt.wrong{background:#FBDADA; border-color:var(--red);}
+.quiz-footer{display:flex; justify-content:space-between; align-items:center; margin-top:20px;}
+.score{font-weight:800; color:var(--blue-deep);}
+.next-btn{background:var(--blue); color:#fff; border:none; padding:10px 20px; border-radius:20px; font-weight:700; cursor:pointer; display:none;}
+.quiz-done{text-align:center;}
+.quiz-done h2{font-family:"Baloo 2",cursive; font-size:1.6em; color:var(--blue-deep); margin-bottom:10px;}
+.restart-btn{margin-top:16px; background:var(--gold); color:#5c4300; border:none; padding:12px 24px; border-radius:22px; font-weight:800; cursor:pointer;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🔤 Eş Anlamlı Kelimeler</h1>
+  <p>2. Sınıf Türkçe</p>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('ogren', this)">📖 Öğren</button>
+  <button class="tab-btn" onclick="showTab('alistirma', this)">🎯 Alıştırma</button>
+</div>
+
+<div class="panel active" id="ogren">
+  <div class="intro">
+    <h2>Eş anlamlı kelime nedir?</h2>
+    <p>Yazılışı farklı, anlamı aynı ya da çok yakın olan kelimelere <strong>eş anlamlı (anlamdaş) kelimeler</strong> denir. Aşağıdaki kelime çiftlerini inceleyip öğrendikten sonra "Alıştırma" sekmesinden kendini test edebilirsin.</p>
+  </div>
+  <div class="card-grid" id="cardGrid"></div>
+</div>
+
+<div class="panel" id="alistirma">
+  <div class="quiz-card" id="quizArea"></div>
+</div>
+
+<script>
+const pairs = [
+  {w:"akıllı", s:"zeki"},
+  {w:"arkadaş", s:"dost"},
+  {w:"cevap", s:"yanıt"},
+  {w:"hızlı", s:"çabuk"},
+  {w:"şehir", s:"kent"},
+  {w:"ülke", s:"yurt"},
+  {w:"doğa", s:"tabiat"},
+  {w:"millet", s:"ulus"},
+  {w:"güzel", s:"hoş"},
+  {w:"mutlu", s:"sevinçli"},
+  {w:"yardım", s:"destek"},
+  {w:"üzgün", s:"kederli"},
+  {w:"sınır", s:"hudut"},
+  {w:"gerçek", s:"hakikat"},
+  {w:"cesur", s:"yiğit"},
+  {w:"korku", s:"dehşet"}
+];
+
+function showTab(id, btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+const grid = document.getElementById('cardGrid');
+pairs.forEach(p=>{
+  const d = document.createElement('div');
+  d.className = 'pair-card';
+  d.innerHTML = '<span>'+p.w+'</span><span class="arrow">➜</span><span>'+p.s+'</span>';
+  grid.appendChild(d);
+});
+
+function shuffle(arr){ return [...arr].sort(()=>Math.random()-0.5); }
+
+let quizOrder = [];
+let qIndex = 0;
+let score = 0;
+let answered = false;
+
+function startQuiz(){
+  quizOrder = shuffle(pairs);
+  qIndex = 0;
+  score = 0;
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const area = document.getElementById('quizArea');
+  if(qIndex >= quizOrder.length){
+    area.innerHTML = '<div class="quiz-done"><h2>🎉 Tamamladın!</h2><p>Puanın: <span class="score">'+score+' / '+quizOrder.length+'</span></p><button class="restart-btn" onclick="startQuiz()">🔄 Yeniden Başla</button></div>';
+    return;
+  }
+  answered = false;
+  const item = quizOrder[qIndex];
+  let wrongPool = pairs.filter(p=>p.s !== item.s).map(p=>p.s);
+  wrongPool = shuffle(wrongPool).slice(0,2);
+  const opts = shuffle([item.s, ...wrongPool]);
+  area.innerHTML =
+    '<div class="quiz-progress">Soru '+(qIndex+1)+' / '+quizOrder.length+'</div>'+
+    '<div class="quiz-q"><strong>'+item.w+'</strong> kelimesinin eş anlamlısı hangisidir?</div>'+
+    '<div class="quiz-opts">'+opts.map(o=>'<button class="quiz-opt" onclick="answer(this,\''+o+'\',\''+item.s+'\')">'+o+'</button>').join('')+'</div>'+
+    '<div class="quiz-footer"><span class="score">Puan: '+score+' / '+quizOrder.length+'</span><button class="next-btn" id="nextBtn" onclick="nextQuestion()">Sonraki ➜</button></div>';
+}
+
+function answer(btn, chosen, correct){
+  if(answered) return;
+  answered = true;
+  const allOpts = document.querySelectorAll('.quiz-opt');
+  allOpts.forEach(o=>{
+    o.onclick = null;
+    if(o.textContent === correct) o.classList.add('correct');
+  });
+  if(chosen === correct){
+    score++;
+  } else {
+    btn.classList.add('wrong');
+  }
+  document.getElementById('nextBtn').style.display = 'inline-block';
+}
+
+function nextQuestion(){
+  qIndex++;
+  renderQuestion();
+}
+
+startQuiz();
+</script>
+</body>
+</html>
