@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Practice AI Bot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .back-home {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            background: #fff;
+            color: #667eea;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,.18);
+            z-index: 10;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 30px;
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .chat-box {
+            height: 400px;
+            overflow-y: auto;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: #f9f9f9;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 15px;
+            max-width: 80%;
+            word-wrap: break-word;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-message {
+            background: #667eea;
+            color: white;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .bot-message {
+            background: #e8e8e8;
+            color: #333;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        #micBtn {
+            background: #667eea;
+            color: white;
+        }
+
+        #micBtn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        #micBtn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #micBtn.listening {
+            background: #ef4444;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        #stopBtn {
+            background: #ef4444;
+            color: white;
+        }
+
+        #stopBtn:hover {
+            background: #dc2626;
+        }
+
+        .status {
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            background: #f0f0f0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .status.active {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .status.error {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .settings {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+
+        .settings label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .settings select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <a class="back-home" href="index.html">← Dijital Öğretmen</a>
+    <div class="container">
+        <h1>🎙️ English Practice Bot</h1>
+        <p class="subtitle">Speak in English and the AI will respond!</p>
+
+        <div class="chat-box" id="chatBox">
+            <div class="message bot-message">
+                👋 Hello! I'm your English practice partner. Click the microphone button and start speaking in English. I'll listen and respond to help you practice!
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="micBtn">🎤 Start Speaking</button>
+            <button id="stopBtn" style="display:none;">⏹️ Stop</button>
+        </div>
+
+        <div class="status" id="status">Ready to listen</div>
+
+        <div class="settings">
+            <label for="voiceSelect">AI Voice:</label>
+            <select id="voiceSelect"></select>
+        </div>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chatBox');
+        const micBtn = document.getElementById('micBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const status = document.getElementById('status');
+        const voiceSelect = document.getElementById('voiceSelect');
+
+        // Speech Recognition (Dinleme)
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        
+        if (!SpeechRecognition) {
+            status.textContent = '❌ Your browser does not support speech recognition. Please use Chrome or Edge.';
+            status.className = 'status error';
+            micBtn.disabled = true;
+        }
+
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'en-US';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        // Speech Synthesis (Konuşma)
+        const synth = window.speechSynthesis;
+        let voices = [];
+
+        function loadVoices() {
+            voices = synth.getVoices().filter(voice => voice.lang.startsWith('en'));
+            voiceSelect.innerHTML = '';
+            voices.forEach((voice, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = `${voice.name} (${voice.lang})`;
+                voiceSelect.appendChild(option);
+            });
+        }
+
+        // Sesler yüklendiğinde
+        if (synth.onvoiceschanged !== undefined) {
+            synth.onvoiceschanged = loadVoices;
+        }
+        loadVoices();
+
+        function addMessage(text, isUser) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            messageDiv.textContent = (isUser ? '🗣️ You: ' : '🤖 AI: ') + text;
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            const selectedVoice = voices[voiceSelect.value];
+            if (selectedVoice) {
+                utterance.voice = selectedVoice;
+            }
+            utterance.rate = 0.9;
+            utterance.pitch = 1;
+
+            utterance.onstart = () => {
+                status.textContent = '🔊 AI is speaking...';
+                status.className = 'status active';
+            };
+
+            utterance.onend = () => {
+                status.textContent = 'Ready to listen';
+                status.className = 'status';
+            };
+
+            synth.speak(utterance);
+        }
+
+        function generateResponse(userText) {
+            const lowerText = userText.toLowerCase();
+            
+            // Basit AI cevapları
+            const responses = {
+                greetings: [
+                    "Hello! How are you doing today?",
+                    "Hi there! Nice to meet you!",
+                    "Hey! How can I help you practice English today?"
+                ],
+                howAreYou: [
+                    "I'm doing great, thank you for asking! How about you?",
+                    "I'm wonderful! Thanks for asking. What would you like to talk about?",
+                    "I'm doing well! How are you feeling today?"
+                ],
+                name: [
+                    "I'm your English practice AI assistant. You can call me Practice Bot!",
+                    "My name is Practice Bot, and I'm here to help you improve your English!"
+                ],
+                help: [
+                    "Just speak naturally about any topic! You can tell me about your day, ask questions, or practice conversations.",
+                    "I'm here to help you practice English. Talk about anything - hobbies, weather, travel, or ask me questions!"
+                ],
+                weather: [
+                    "I can't check the actual weather, but we can practice talking about it! What's the weather like where you are?",
+                    "Weather is a great topic! Do you prefer sunny days or rainy days?"
+                ],
+                goodbye: [
+                    "Goodbye! Great practice session today!",
+                    "See you later! Keep practicing!",
+                    "Bye! You did a great job today!"
+                ]
+            };
+
+            // Anahtar kelime kontrolü
+            if (lowerText.match(/hello|hi|hey/)) {
+                return responses.greetings[Math.floor(Math.random() * responses.greetings.length)];
+            } else if (lowerText.match(/how are you|how're you/)) {
+                return responses.howAreYou[Math.floor(Math.random() * responses.howAreYou.length)];
+            } else if (lowerText.match(/your name|who are you|what's your name/)) {
+                return responses.name[Math.floor(Math.random() * responses.name.length)];
+            } else if (lowerText.match(/help|what can|how do/)) {
+                return responses.help[Math.floor(Math.random() * responses.help.length)];
+            } else if (lowerText.match(/weather|sunny|rainy|cold|hot/)) {
+                return responses.weather[Math.floor(Math.random() * responses.weather.length)];
+            } else if (lowerText.match(/bye|goodbye|see you/)) {
+                return responses.goodbye[Math.floor(Math.random() * responses.goodbye.length)];
+            } else {
+                // Genel cevaplar
+                const general = [
+                    "That's interesting! Can you tell me more about that?",
+                    "I see! What else would you like to talk about?",
+                    "Great! How does that make you feel?",
+                    "Interesting point! Could you explain that further?",
+                    "I understand. What do you think about it?",
+                    "That's a good topic! What's your opinion on it?"
+                ];
+                return general[Math.floor(Math.random() * general.length)];
+            }
+        }
+
+        micBtn.addEventListener('click', () => {
+            recognition.start();
+            micBtn.classList.add('listening');
+            micBtn.textContent = '🎤 Listening...';
+            micBtn.disabled = true;
+            stopBtn.style.display = 'block';
+            status.textContent = '🎤 Listening... Speak now!';
+            status.className = 'status active';
+        });
+
+        stopBtn.addEventListener('click', () => {
+            recognition.stop();
+            synth.cancel();
+        });
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            addMessage(transcript, true);
+            
+            const response = generateResponse(transcript);
+            addMessage(response, false);
+            
+            setTimeout(() => {
+                speak(response);
+            }, 500);
+        };
+
+        recognition.onerror = (event) => {
+            status.textContent = '❌ Error: ' + event.error;
+            status.className = 'status error';
+            micBtn.classList.remove('listening');
+            micBtn.textContent = '🎤 Start Speaking';
+            micBtn.disabled = false;
+            stopBtn.style.display = 'none';
+        };
+
+        recognition.onend = () => {
+            micBtn.classList.remove('listening');
+            micBtn.textContent = '🎤 Start Speaking';
+            micBtn.disabled = false;
+            stopBtn.style.display = 'none';
+            if (status.textContent.includes('Listening')) {
+                status.textContent = 'Ready to listen';
+                status.className = 'status';
+            }
+        };
+    </script>
+</body>
+</html>
