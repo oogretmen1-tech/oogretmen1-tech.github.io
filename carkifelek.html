@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Çarkıfelek – 2. Sınıf</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap');
+  :root{--bg:#0f1b35;--card:#162040;--a1:#ff6b6b;--a2:#ffd93d;--a3:#6bcb77;--a4:#4d96ff;--a5:#ff922b;--a6:#cc5de8;--shadow:0 8px 32px rgba(0,0,0,.4)}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Nunito',sans-serif;background:var(--bg);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px;overflow-x:hidden}
+  h1{font-family:'Fredoka One',cursive;font-size:2.8rem;color:var(--a2);text-shadow:0 0 30px rgba(255,217,61,.5);margin-bottom:6px;letter-spacing:2px;position:relative;z-index:1}
+  .subtitle{color:rgba(255,255,255,.5);font-size:.95rem;margin-bottom:24px;position:relative;z-index:1;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+  .main-layout{display:flex;gap:32px;align-items:flex-start;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;width:100%;max-width:1200px}
+  .wheel-section{display:flex;flex-direction:column;align-items:center;gap:20px}
+  .wheel-container{position:relative;width:400px;height:400px}
+  .wheel-pointer{position:absolute;top:-18px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:18px solid transparent;border-right:18px solid transparent;border-top:36px solid var(--a2);z-index:10;filter:drop-shadow(0 4px 8px rgba(255,217,61,.6))}
+  canvas#wheel{border-radius:50%;box-shadow:0 0 0 6px rgba(255,255,255,.1),var(--shadow);cursor:pointer}
+  .spin-btn{font-family:'Fredoka One',cursive;font-size:1.5rem;padding:14px 48px;border:none;border-radius:50px;background:linear-gradient(135deg,var(--a2),var(--a5));color:#1a1a1a;cursor:pointer;box-shadow:0 6px 24px rgba(255,217,61,.4);transition:all .2s;letter-spacing:1px}
+  .spin-btn:hover:not(:disabled){transform:translateY(-3px);box-shadow:0 10px 32px rgba(255,217,61,.6)}
+  .spin-btn:disabled{opacity:.5;cursor:not-allowed}
+  .question-section{flex:1;min-width:320px;max-width:480px;display:flex;flex-direction:column;gap:16px}
+  .category-badge{display:inline-block;padding:6px 20px;border-radius:50px;font-weight:800;font-size:.85rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;opacity:0;transition:opacity .4s}
+  .question-card{background:var(--card);border-radius:24px;padding:28px;box-shadow:var(--shadow);border:2px solid rgba(255,255,255,.06);min-height:120px;display:flex;align-items:center;justify-content:center;text-align:center}
+  .question-text{font-size:1.4rem;font-weight:700;color:#fff;line-height:1.5;opacity:0;transition:opacity .5s}
+  .options-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .option-btn{background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.1);border-radius:16px;padding:14px 16px;color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;transition:all .2s;text-align:center;line-height:1.3}
+  .option-btn:hover:not(:disabled){background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3);transform:translateY(-2px)}
+  .option-btn.correct{background:rgba(107,203,119,.25);border-color:var(--a3);color:var(--a3)}
+  .option-btn.wrong{background:rgba(255,107,107,.2);border-color:var(--a1);color:var(--a1)}
+  .option-btn:disabled{cursor:default}
+  .teams-section{background:var(--card);border-radius:24px;padding:24px;box-shadow:var(--shadow);border:2px solid rgba(255,255,255,.06);min-width:200px}
+  .teams-title{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--a2);margin-bottom:16px;text-align:center;letter-spacing:1px}
+  .team{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-radius:12px;margin-bottom:10px;font-weight:700;font-size:1rem;border:2px solid transparent;cursor:pointer;transition:all .2s}
+  .team.active{border-color:currentColor;background:rgba(255,255,255,.07)}
+  .team-score{font-family:'Fredoka One',cursive;font-size:1.5rem}
+  .score-btns{display:flex;gap:6px;margin-top:4px}
+  .score-btn{background:rgba(255,255,255,.1);border:none;border-radius:8px;color:white;font-size:1rem;width:32px;height:32px;cursor:pointer;font-weight:800;transition:all .15s}
+  .score-btn:hover{background:rgba(255,255,255,.25);transform:scale(1.1)}
+  .next-btn{font-family:'Fredoka One',cursive;font-size:1.1rem;padding:12px 28px;border:none;border-radius:50px;background:linear-gradient(135deg,var(--a4),var(--a6));color:white;cursor:pointer;box-shadow:0 4px 16px rgba(77,150,255,.35);transition:all .2s;display:none;margin:0 auto;letter-spacing:1px}
+  .next-btn:hover{transform:translateY(-2px)}
+  .result-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:100;opacity:0;pointer-events:none;transition:opacity .3s}
+  .result-overlay.show{opacity:1;pointer-events:all}
+  .result-box{background:var(--card);border-radius:28px;padding:40px 60px;text-align:center;border:3px solid;box-shadow:0 20px 60px rgba(0,0,0,.6);transform:scale(.8);transition:transform .3s}
+  .result-overlay.show .result-box{transform:scale(1)}
+  .result-emoji{font-size:4rem;margin-bottom:12px}
+  .result-text{font-family:'Fredoka One',cursive;font-size:2rem;margin-bottom:8px}
+  .result-answer{font-size:1rem;color:rgba(255,255,255,.7);font-weight:600}
+  .idle-message{color:rgba(255,255,255,.3);font-size:1.1rem;font-weight:600;font-style:italic}
+  .confetti-piece{position:fixed;width:10px;height:10px;border-radius:2px;animation:confetti-fall 1.5s ease-in forwards;pointer-events:none;z-index:200}
+  @keyframes confetti-fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+  .landing-hint{color:rgba(255,255,255,.4);font-size:.9rem;font-weight:600;text-align:center;margin-top:4px}
+</style>
+</head>
+<body>
+<h1>🎡 Çarkıfelek</h1>
+<p class="subtitle">2. Sınıf · Türkçe · Matematik · Hayat Bilgisi</p>
+<div class="main-layout">
+  <div class="wheel-section">
+    <div class="wheel-container">
+      <div class="wheel-pointer"></div>
+      <canvas id="wheel" width="400" height="400"></canvas>
+    </div>
+    <button class="spin-btn" id="spinBtn" onclick="spin()">🎲 ÇEVİR!</button>
+    <p class="landing-hint" id="landingHint"></p>
+  </div>
+  <div class="question-section">
+    <div><span class="category-badge" id="categoryBadge">–</span></div>
+    <div class="question-card">
+      <div class="question-text" id="questionText"><span class="idle-message">Çarkı çevirerek başlayın! 🎉</span></div>
+    </div>
+    <div class="options-grid" id="optionsGrid"></div>
+    <button class="next-btn" id="nextBtn" onclick="nextRound()">Devam →</button>
+  </div>
+  <div class="teams-section">
+    <div class="teams-title">🏆 Puanlar</div>
+    <div id="teamsContainer"></div>
+    <div style="margin-top:16px;text-align:center">
+      <button onclick="resetScores()" style="background:rgba(255,255,255,.07);border:none;border-radius:10px;color:rgba(255,255,255,.4);padding:8px 18px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:.85rem">🔄 Sıfırla</button>
+    </div>
+  </div>
+</div>
+<div class="result-overlay" id="resultOverlay">
+  <div class="result-box" id="resultBox">
+    <div class="result-emoji" id="resultEmoji"></div>
+    <div class="result-text" id="resultText"></div>
+    <div class="result-answer" id="resultAnswer"></div>
+  </div>
+</div>
+<script>
+const questions={
+  turkce:[
+    {q:'"Kedi" kelimesini heceleyelim. Kaç hece var?',opts:['1 hece','2 hece','3 hece','4 hece'],ans:1},
+    {q:'"Araba" kelimesinde kaç tane sesli harf var?',opts:['1','2','3','4'],ans:2},
+    {q:'Hangisi bir isimdir?',opts:['Koşmak','Güzel','Elma','Hızlı'],ans:2},
+    {q:'"Büyük" kelimesinin zıt anlamlısı nedir?',opts:['Uzun','Küçük','Hızlı','İnce'],ans:1},
+    {q:'Cümle hangi harfle başlar?',opts:['Küçük harf','Büyük harf','Rakam','Hepsi olur'],ans:1},
+    {q:'"Top" kelimesine "-lar" eklersek ne olur?',opts:['Toplar','Toplur','Toptur','Topar'],ans:0},
+    {q:'Hangisi soru cümlesidir?',opts:['Eve gittim.','Gel buraya!','Adın ne?','Çok güzel.'],ans:2},
+    {q:'"Anne" kelimesinde kaç harf var?',opts:['3','4','5','6'],ans:1},
+    {q:'Aşağıdakilerden hangisi hayvan ismidir?',opts:['Masa','Kelebek','Kitap','Kalem'],ans:1},
+    {q:'"Gül-" fiilinden türetilen isim hangisidir?',opts:['Gülüş','Gülüyor','Güldü','Gülecek'],ans:0}
+  ],
+  matematik:[
+    {q:'24 + 13 = ?',opts:['36','37','38','34'],ans:1},
+    {q:'50 – 20 = ?',opts:['20','25','30','70'],ans:2},
+    {q:'3 × 4 = ?',opts:['7','10','12','14'],ans:2},
+    {q:'Hangi sayı 10\'dan büyük, 15\'ten küçüktür?',opts:['9','12','15','16'],ans:1},
+    {q:'18 sayısının onlar basamağı kaçtır?',opts:['8','1','18','0'],ans:1},
+    {q:'5 + 5 + 5 = ?',opts:['10','15','20','25'],ans:1},
+    {q:'Çantada 8 elma var. 3 tanesi yendi. Kaç kaldı?',opts:['4','5','11','3'],ans:1},
+    {q:'40 sayısını ikiye bölelim. Sonuç?',opts:['10','20','80','4'],ans:1},
+    {q:'Hangi şeklin 4 köşesi vardır?',opts:['Üçgen','Daire','Kare','Beşgen'],ans:2},
+    {q:'7 + 8 = ?',opts:['13','14','15','16'],ans:2}
+  ],
+  hayat:[
+    {q:'Hangi mevsimde kar yağar?',opts:['Yaz','İlkbahar','Sonbahar','Kış'],ans:3},
+    {q:'Dişlerimizi günde kaç kez fırçalamalıyız?',opts:['1 kez','2 kez','5 kez','Haftada bir'],ans:1},
+    {q:'Trafik ışığında kırmızı ne anlama gelir?',opts:['Geç','Dur','Yavaşla','Koş'],ans:1},
+    {q:'Hangi hayvan yumurtadan çıkar?',opts:['Kedi','Köpek','Tavuk','İnek'],ans:2},
+    {q:'Bitkiler büyümek için ne kullanır?',opts:['Sadece su','Güneş ve su','Sadece toprak','Hava yok'],ans:1},
+    {q:'Hangi organ nefes almamızı sağlar?',opts:['Kalp','Mide','Akciğer','Beyin'],ans:2},
+    {q:'Türk bayrağının renkleri hangileridir?',opts:['Mavi-Beyaz','Kırmızı-Beyaz','Sarı-Kırmızı','Yeşil-Beyaz'],ans:1},
+    {q:'Hangi besin sağlıklıdır?',opts:['Cips','Meyve','Şeker','Gazoz'],ans:1},
+    {q:'Dünyamız kaç mevsime ayrılır?',opts:['2','3','4','5'],ans:2},
+    {q:'Hangi organ kanı vücuda pompalar?',opts:['Akciğer','Mide','Kalp','Böbrek'],ans:2}
+  ]
+};
+
+const segments=[
+  {label:'Türkçe',key:'turkce',color:'#ff6b6b',icon:'📚'},
+  {label:'Matematik',key:'matematik',color:'#ffd93d',icon:'🔢'},
+  {label:'Hayat Bilgisi',key:'hayat',color:'#6bcb77',icon:'🌍'},
+  {label:'Türkçe',key:'turkce',color:'#ff922b',icon:'📝'},
+  {label:'Matematik',key:'matematik',color:'#4d96ff',icon:'➕'},
+  {label:'Hayat Bilgisi',key:'hayat',color:'#cc5de8',icon:'🌱'}
+];
+
+const catColors={turkce:{bg:'#ff6b6b',text:'#1a1a1a'},matematik:{bg:'#ffd93d',text:'#1a1a1a'},hayat:{bg:'#6bcb77',text:'#1a1a1a'}};
+const teams=[{name:'🔴 Takım 1',color:'#ff6b6b',score:0},{name:'🔵 Takım 2',color:'#4d96ff',score:0},{name:'🟢 Takım 3',color:'#6bcb77',score:0}];
+let activeTeam=0;
+
+function renderTeams(){
+  const c=document.getElementById('teamsContainer');c.innerHTML='';
+  teams.forEach((t,i)=>{
+    const div=document.createElement('div');
+    div.className='team'+(i===activeTeam?' active':'');
+    div.style.color=t.color;
+    div.onclick=()=>{activeTeam=i;renderTeams()};
+    div.innerHTML=`<span>${t.name}</span><div style="display:flex;align-items:center;gap:8px"><div class="score-btns"><button class="score-btn" onclick="event.stopPropagation();changeScore(${i},-1)">−</button><button class="score-btn" onclick="event.stopPropagation();changeScore(${i},1)">+</button></div><span class="team-score">${t.score}</span></div>`;
+    c.appendChild(div);
+  });
+}
+function changeScore(i,d){teams[i].score=Math.max(0,teams[i].score+d);renderTeams()}
+function resetScores(){teams.forEach(t=>t.score=0);activeTeam=0;renderTeams()}
+
+const canvas=document.getElementById('wheel');
+const ctx=canvas.getContext('2d');
+const cx=canvas.width/2,cy=canvas.height/2,r=cx-4;
+const segAngle=(2*Math.PI)/segments.length;
+let currentAngle=0,spinning=false;
+
+function drawWheel(angle){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  segments.forEach((seg,i)=>{
+    const start=angle+i*segAngle,end=start+segAngle,mid=start+segAngle/2;
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,end);ctx.closePath();
+    ctx.fillStyle=seg.color;ctx.fill();
+    ctx.strokeStyle='rgba(0,0,0,.25)';ctx.lineWidth=2;ctx.stroke();
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(mid);ctx.textAlign='right';
+    ctx.fillStyle='rgba(0,0,0,.75)';ctx.font='bold 13px Nunito,sans-serif';ctx.fillText(seg.label,r-14,4);
+    ctx.font='20px serif';ctx.fillText(seg.icon,r-80,5);ctx.restore();
+  });
+  ctx.beginPath();ctx.arc(cx,cy,28,0,2*Math.PI);ctx.fillStyle='#0f1b35';ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,.15)';ctx.lineWidth=3;ctx.stroke();
+  ctx.font='bold 18px Nunito';ctx.fillStyle='rgba(255,255,255,.7)';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🎡',cx,cy);
+}
+
+let usedIndices={turkce:[],matematik:[],hayat:[]};
+function getQuestion(key){
+  const pool=questions[key];
+  if(usedIndices[key].length>=pool.length)usedIndices[key]=[];
+  let idx;do{idx=Math.floor(Math.random()*pool.length)}while(usedIndices[key].includes(idx));
+  usedIndices[key].push(idx);return pool[idx];
+}
+function getLandedSegment(angle){
+  let a=((-angle-Math.PI/2)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
+  return Math.floor(a/segAngle)%segments.length;
+}
+
+function spin(){
+  if(spinning)return;spinning=true;
+  document.getElementById('spinBtn').disabled=true;
+  document.getElementById('nextBtn').style.display='none';
+  document.getElementById('optionsGrid').innerHTML='';
+  document.getElementById('questionText').style.opacity=0;
+  document.getElementById('questionText').innerHTML='';
+  document.getElementById('categoryBadge').style.opacity=0;
+  document.getElementById('landingHint').textContent='';
+  const totalRotation=2*Math.PI*(5+Math.random()*5);
+  const duration=3500+Math.random()*1000;
+  const startAngle=currentAngle,startTime=performance.now();
+  function easeOut(t){return 1-Math.pow(1-t,4)}
+  function animate(now){
+    const elapsed=now-startTime,t=Math.min(elapsed/duration,1);
+    currentAngle=startAngle+totalRotation*easeOut(t);drawWheel(currentAngle);
+    if(t<1){requestAnimationFrame(animate)}
+    else{spinning=false;const seg=segments[getLandedSegment(currentAngle)];showQuestion(seg)}
+  }
+  requestAnimationFrame(animate);
+}
+
+let currentQ=null,answered=false;
+function showQuestion(seg){
+  currentQ=getQuestion(seg.key);answered=false;
+  const badge=document.getElementById('categoryBadge'),cc=catColors[seg.key];
+  badge.textContent=seg.icon+' '+seg.label;badge.style.background=cc.bg;badge.style.color=cc.text;badge.style.opacity=1;
+  document.getElementById('landingHint').textContent=seg.icon+' '+seg.label+' sorusu geliyor!';
+  setTimeout(()=>{
+    const qt=document.getElementById('questionText');qt.innerHTML=currentQ.q;qt.style.opacity=1;
+    const grid=document.getElementById('optionsGrid');grid.innerHTML='';
+    currentQ.opts.forEach((opt,i)=>{
+      const btn=document.createElement('button');btn.className='option-btn';btn.textContent=opt;
+      btn.onclick=()=>checkAnswer(i,btn);grid.appendChild(btn);
+    });
+  },400);
+}
+
+function checkAnswer(chosen,btn){
+  if(answered)return;answered=true;
+  const correct=currentQ.ans;
+  document.querySelectorAll('.option-btn').forEach((b,i)=>{b.disabled=true;if(i===correct)b.classList.add('correct')});
+  if(chosen===correct){btn.classList.add('correct');showResult(true,'');teams[activeTeam].score++;renderTeams();spawnConfetti()}
+  else{btn.classList.add('wrong');showResult(false,'Doğru cevap: '+currentQ.opts[correct])}
+  document.getElementById('nextBtn').style.display='block';
+}
+
+function showResult(correct,hint){
+  const overlay=document.getElementById('resultOverlay'),box=document.getElementById('resultBox');
+  document.getElementById('resultEmoji').textContent=correct?'🎉':'😅';
+  document.getElementById('resultText').textContent=correct?'Bravo! Doğru!':'Yanlış...';
+  document.getElementById('resultAnswer').textContent=hint;
+  box.style.borderColor=correct?'#6bcb77':'#ff6b6b';
+  document.getElementById('resultText').style.color=correct?'#6bcb77':'#ff6b6b';
+  overlay.classList.add('show');setTimeout(()=>overlay.classList.remove('show'),1600);
+}
+
+function nextRound(){
+  document.getElementById('nextBtn').style.display='none';
+  document.getElementById('spinBtn').disabled=false;
+  activeTeam=(activeTeam+1)%teams.length;renderTeams();
+}
+
+function spawnConfetti(){
+  const colors=['#ff6b6b','#ffd93d','#6bcb77','#4d96ff','#cc5de8','#ff922b'];
+  for(let i=0;i<30;i++)setTimeout(()=>{
+    const el=document.createElement('div');el.className='confetti-piece';
+    el.style.left=Math.random()*100+'vw';el.style.top='-20px';
+    el.style.background=colors[Math.floor(Math.random()*colors.length)];
+    el.style.animationDuration=(1+Math.random())+'s';
+    document.body.appendChild(el);setTimeout(()=>el.remove(),2500);
+  },i*40);
+}
+
+drawWheel(currentAngle);renderTeams();
+</script>
+</body>
+</html>
