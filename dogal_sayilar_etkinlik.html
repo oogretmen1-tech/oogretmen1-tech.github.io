@@ -1,0 +1,1864 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3. Sınıf Doğal Sayılar - İnteraktif Matematik</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .nav-btn {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .nav-btn.active {
+            transform: scale(1.05);
+        }
+
+        .btn-review { background: #ffd93d; color: #333; }
+        .btn-hundreds { background: #6bcf7f; color: white; }
+        .btn-thousands { background: #4d96ff; color: white; }
+        .btn-games { background: #ff6b9d; color: white; }
+        .btn-print { background: #c44569; color: white; }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .lesson-box {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border-left: 5px solid #667eea;
+        }
+
+        .lesson-title {
+            font-size: 1.8em;
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .lesson-title::before {
+            content: "📚";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .number-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .number-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .number-card:hover {
+            transform: scale(1.1) rotate(3deg);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        }
+
+        .base-value-demo {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            border: 3px dashed #667eea;
+        }
+
+        .base-column {
+            text-align: center;
+        }
+
+        .base-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+
+        .base-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .cube-big {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5em;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .cubes-row {
+            display: flex;
+            gap: 3px;
+        }
+
+        .cube-medium {
+            width: 30px;
+            height: 80px;
+            background: linear-gradient(135deg, #6bcf7f 0%, #42b883 100%);
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .cube-small {
+            width: 15px;
+            height: 15px;
+            background: linear-gradient(135deg, #ffd93d 0%, #ffb347 100%);
+            border-radius: 3px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .interactive-number {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .digit-box {
+            text-align: center;
+        }
+
+        .digit-input {
+            width: 80px;
+            height: 80px;
+            font-size: 2.5em;
+            text-align: center;
+            border: 3px solid #667eea;
+            border-radius: 15px;
+            font-weight: bold;
+            color: #667eea;
+            transition: all 0.3s;
+        }
+
+        .digit-input:focus {
+            outline: none;
+            border-color: #f5576c;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(245, 87, 108, 0.5);
+        }
+
+        .digit-label {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.1em;
+        }
+
+        .game-area {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .game-title {
+            font-size: 2em;
+            color: #2d3436;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .draggable {
+            padding: 15px 25px;
+            margin: 10px;
+            background: white;
+            border-radius: 10px;
+            cursor: move;
+            display: inline-block;
+            font-size: 1.3em;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+
+        .draggable:hover {
+            transform: scale(1.05);
+        }
+
+        .drop-zone {
+            min-height: 100px;
+            border: 3px dashed #2d3436;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            background: rgba(255,255,255,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .drop-zone.drag-over {
+            background: rgba(108, 207, 127, 0.3);
+            border-color: #6bcf7f;
+        }
+
+        .feedback {
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .feedback.success {
+            background: #6bcf7f;
+            color: white;
+            display: block;
+            animation: bounceIn 0.5s;
+        }
+
+        .feedback.error {
+            background: #ff6b9d;
+            color: white;
+            display: block;
+            animation: shake 0.5s;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .check-btn {
+            background: #6bcf7f;
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.3em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .check-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .print-section {
+            background: white;
+            padding: 20px;
+        }
+
+        .worksheet {
+            background: white;
+            padding: 40px;
+            margin: 20px 0;
+            border: 2px solid #333;
+            border-radius: 10px;
+        }
+
+        .worksheet-header {
+            text-align: center;
+            border-bottom: 3px solid #333;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .worksheet-title {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .student-info {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+
+        .exercise {
+            margin: 30px 0;
+            page-break-inside: avoid;
+        }
+
+        .exercise-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .exercise-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .exercise-item {
+            border: 2px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+            
+            .nav-buttons, .no-print {
+                display: none !important;
+            }
+            
+            .section {
+                display: block !important;
+            }
+            
+            .worksheet {
+                page-break-after: always;
+                border: 2px solid #000;
+            }
+        }
+
+        .score-board {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .star {
+            font-size: 2em;
+            display: inline-block;
+            animation: rotate 2s infinite linear;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .comparison-game {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .number-box-compare {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            font-size: 3em;
+            font-weight: bold;
+            min-width: 150px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .symbol-choices {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .symbol-btn {
+            background: white;
+            border: 3px solid #667eea;
+            color: #667eea;
+            padding: 20px 40px;
+            font-size: 2.5em;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .symbol-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .symbol-btn.selected {
+            background: #6bcf7f;
+            border-color: #6bcf7f;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 3. Sınıf Doğal Sayılar Macerası 🎨</h1>
+            <p>2. Sınıftan Tekrar ile Başlayalım!</p>
+        </div>
+
+        <div class="nav-buttons no-print">
+            <button class="nav-btn btn-review active" onclick="showSection('review')">
+                🔄 2. Sınıf Tekrar
+            </button>
+            <button class="nav-btn btn-hundreds" onclick="showSection('hundreds')">
+                💯 Yüzler Basamağı
+            </button>
+            <button class="nav-btn btn-thousands" onclick="showSection('thousands')">
+                🎯 1000'e Kadar Sayılar
+            </button>
+            <button class="nav-btn btn-games" onclick="showSection('games')">
+                🎮 Oyunlar
+            </button>
+            <button class="nav-btn btn-print" onclick="showSection('print')">
+                🖨️ Yazdırılabilir Çalışma Kağıtları
+            </button>
+        </div>
+
+        <!-- 2. SINIF TEKRAR BÖLÜMÜ -->
+        <div id="review" class="section active">
+            <div class="lesson-box">
+                <div class="lesson-title">2. Sınıfı Hatırlayalım: 0-100 Arası Sayılar</div>
+                <p style="font-size: 1.2em; line-height: 1.8; margin-bottom: 20px;">
+                    Merhaba küçük matematikçiler! 🎉 3. sınıfa hoş geldiniz! Ama önce 2. sınıfta öğrendiklerimizi 
+                    hatırlayalım. Hazır mısınız?
+                </p>
+
+                <div class="number-grid">
+                    <div class="number-card" onclick="speakNumber(10)">10</div>
+                    <div class="number-card" onclick="speakNumber(20)">20</div>
+                    <div class="number-card" onclick="speakNumber(30)">30</div>
+                    <div class="number-card" onclick="speakNumber(40)">40</div>
+                    <div class="number-card" onclick="speakNumber(50)">50</div>
+                    <div class="number-card" onclick="speakNumber(60)">60</div>
+                    <div class="number-card" onclick="speakNumber(70)">70</div>
+                    <div class="number-card" onclick="speakNumber(80)">80</div>
+                    <div class="number-card" onclick="speakNumber(90)">90</div>
+                    <div class="number-card" onclick="speakNumber(100)">100</div>
+                </div>
+
+                <div class="lesson-title" style="margin-top: 40px;">Onlar ve Birler Basamağı</div>
+                <p style="font-size: 1.2em; margin-bottom: 20px;">
+                    2. sınıfta iki basamaklı sayıları öğrenmiştik. Hadi hatırlayalım! 👇
+                </p>
+
+                <div class="base-value-demo">
+                    <div class="base-column">
+                        <div class="base-title">ONLAR</div>
+                        <div class="base-visual">
+                            <div class="cubes-row">
+                                <div class="cube-medium"></div>
+                                <div class="cube-medium"></div>
+                                <div class="cube-medium"></div>
+                            </div>
+                        </div>
+                        <p style="margin-top: 10px; font-size: 1.5em; color: #42b883; font-weight: bold;">3</p>
+                    </div>
+
+                    <div style="font-size: 3em; color: #667eea;">+</div>
+
+                    <div class="base-column">
+                        <div class="base-title">BİRLER</div>
+                        <div class="base-visual">
+                            <div class="cubes-row">
+                                <div class="cube-small"></div>
+                                <div class="cube-small"></div>
+                                <div class="cube-small"></div>
+                                <div class="cube-small"></div>
+                                <div class="cube-small"></div>
+                            </div>
+                        </div>
+                        <p style="margin-top: 10px; font-size: 1.5em; color: #ffb347; font-weight: bold;">5</p>
+                    </div>
+
+                    <div style="font-size: 3em; color: #667eea;">=</div>
+
+                    <div class="base-column">
+                        <div class="base-title">SONUÇ</div>
+                        <div class="cube-big">35</div>
+                        <p style="margin-top: 10px; font-size: 1.2em;">Otuz beş</p>
+                    </div>
+                </div>
+
+                <div class="lesson-title" style="margin-top: 40px;">Şimdi Sen Dene!</div>
+                <div class="interactive-number">
+                    <div class="digit-box">
+                        <input type="number" class="digit-input" id="tens-review" min="0" max="9" value="0" 
+                               oninput="updateReviewNumber()">
+                        <div class="digit-label">ONLAR</div>
+                    </div>
+                    <div class="digit-box">
+                        <input type="number" class="digit-input" id="ones-review" min="0" max="9" value="0" 
+                               oninput="updateReviewNumber()">
+                        <div class="digit-label">BİRLER</div>
+                    </div>
+                </div>
+                <div id="review-result" style="text-align: center; font-size: 2.5em; font-weight: bold; 
+                     color: #667eea; margin: 20px 0;">
+                    Sayı: 0 (Sıfır)
+                </div>
+            </div>
+        </div>
+
+        <!-- YÜZLER BASAMAĞI BÖLÜMÜ -->
+        <div id="hundreds" class="section">
+            <div class="lesson-box">
+                <div class="lesson-title">Yüzler Basamağını Tanıyalım!</div>
+                <p style="font-size: 1.3em; line-height: 1.8; margin-bottom: 20px;">
+                    🎊 Artık üç basamaklı sayılara geçiyoruz! Yüzler basamağı çok heyecan verici! 
+                    <br><br>
+                    <strong>Yüzler basamağı</strong>, sayının en solundaki rakamdır ve 100'lük grupları gösterir.
+                </p>
+
+                <div class="base-value-demo">
+                    <div class="base-column">
+                        <div class="base-title">YÜZLER</div>
+                        <div class="base-visual">
+                            <div class="cube-big">100</div>
+                            <div class="cube-big">100</div>
+                        </div>
+                        <p style="margin-top: 10px; font-size: 1.5em; color: #f5576c; font-weight: bold;">2</p>
+                    </div>
+
+                    <div style="font-size: 3em; color: #667eea;">+</div>
+
+                    <div class="base-column">
+                        <div class="base-title">ONLAR</div>
+                        <div class="base-visual">
+                            <div class="cubes-row">
+                                <div class="cube-medium"></div>
+                                <div class="cube-medium"></div>
+                                <div class="cube-medium"></div>
+                                <div class="cube-medium"></div>
+                            </div>
+                        </div>
+                        <p style="margin-top: 10px; font-size: 1.5em; color: #42b883; font-weight: bold;">4</p>
+                    </div>
+
+                    <div style="font-size: 3em; color: #667eea;">+</div>
+
+                    <div class="base-column">
+                        <div class="base-title">BİRLER</div>
+                        <div class="base-visual">
+                            <div class="cubes-row">
+                                <div class="cube-small"></div>
+                                <div class="cube-small"></div>
+                                <div class="cube-small"></div>
+                                <div class="cube-small"></div>
+                                <div class="cube-small"></div>
+                                <div class="cube-small"></div>
+                                <div class="cube-small"></div>
+                            </div>
+                        </div>
+                        <p style="margin-top: 10px; font-size: 1.5em; color: #ffb347; font-weight: bold;">7</p>
+                    </div>
+
+                    <div style="font-size: 3em; color: #667eea;">=</div>
+
+                    <div class="base-column">
+                        <div class="base-title">SONUÇ</div>
+                        <div class="cube-big" style="width: 120px; height: 120px; font-size: 2em;">247</div>
+                        <p style="margin-top: 10px; font-size: 1.2em;">İki yüz kırk yedi</p>
+                    </div>
+                </div>
+
+                <div class="lesson-title" style="margin-top: 40px;">İnteraktif Sayı Oluşturucu</div>
+                <p style="font-size: 1.2em; margin-bottom: 20px; text-align: center;">
+                    Aşağıdaki kutulara rakamlar girerek kendi üç basamaklı sayını oluştur! 🎨
+                </p>
+                <div class="interactive-number">
+                    <div class="digit-box">
+                        <input type="number" class="digit-input" id="hundreds-digit" min="0" max="9" value="0" 
+                               oninput="updateHundredsNumber()">
+                        <div class="digit-label">YÜZLER</div>
+                    </div>
+                    <div class="digit-box">
+                        <input type="number" class="digit-input" id="tens-digit" min="0" max="9" value="0" 
+                               oninput="updateHundredsNumber()">
+                        <div class="digit-label">ONLAR</div>
+                    </div>
+                    <div class="digit-box">
+                        <input type="number" class="digit-input" id="ones-digit" min="0" max="9" value="0" 
+                               oninput="updateHundredsNumber()">
+                        <div class="digit-label">BİRLER</div>
+                    </div>
+                </div>
+                <div id="hundreds-result" style="text-align: center; font-size: 2.5em; font-weight: bold; 
+                     color: #667eea; margin: 20px 0;">
+                    Sayı: 0 (Sıfır)
+                </div>
+            </div>
+        </div>
+
+        <!-- 1000'E KADAR SAYILAR BÖLÜMÜ -->
+        <div id="thousands" class="section">
+            <div class="lesson-box">
+                <div class="lesson-title">1000'e Kadar Sayılar</div>
+                <p style="font-size: 1.3em; line-height: 1.8; margin-bottom: 20px;">
+                    🌟 Şimdi en büyük maceraya çıkıyoruz! 100'den 1000'e kadar olan sayıları öğreneceğiz!
+                    <br><br>
+                    <strong>100, 200, 300...</strong> şeklinde yüzlerle sayabiliriz!
+                </p>
+
+                <div class="number-grid">
+                    <div class="number-card" onclick="speakNumber(100)" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">100</div>
+                    <div class="number-card" onclick="speakNumber(200)" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">200</div>
+                    <div class="number-card" onclick="speakNumber(300)" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">300</div>
+                    <div class="number-card" onclick="speakNumber(400)" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">400</div>
+                    <div class="number-card" onclick="speakNumber(500)" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">500</div>
+                    <div class="number-card" onclick="speakNumber(600)" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">600</div>
+                    <div class="number-card" onclick="speakNumber(700)" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">700</div>
+                    <div class="number-card" onclick="speakNumber(800)" style="background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);">800</div>
+                    <div class="number-card" onclick="speakNumber(900)" style="background: linear-gradient(135deg, #fdcbf1 0%, #e6dee9 100%);">900</div>
+                    <div class="number-card" onclick="speakNumber(1000)" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-size: 1.3em;">1000</div>
+                </div>
+
+                <div class="lesson-title" style="margin-top: 40px;">Sayıları Karşılaştırma</div>
+                <p style="font-size: 1.2em; margin-bottom: 20px; text-align: center;">
+                    Hangi sayı daha büyük? <strong>&gt;</strong> (büyüktür), <strong>&lt;</strong> (küçüktür), 
+                    <strong>=</strong> (eşittir) işaretlerini kullanacağız!
+                </p>
+
+                <div class="comparison-game">
+                    <div class="number-box-compare" id="compare-num1">345</div>
+                    <div class="symbol-choices">
+                        <button class="symbol-btn" onclick="checkComparison('>')">></button>
+                        <button class="symbol-btn" onclick="checkComparison('<')"><</button>
+                        <button class="symbol-btn" onclick="checkComparison('=')">=</button>
+                    </div>
+                    <div class="number-box-compare" id="compare-num2">567</div>
+                </div>
+                <div id="comparison-feedback" class="feedback"></div>
+                <button class="check-btn" onclick="newComparison()">
+                    Yeni Soru 🎲
+                </button>
+            </div>
+
+            <!-- Sayı Sıralaması Oyunu -->
+            <div class="lesson-box" style="margin-top: 30px;">
+                <div class="lesson-title">Sayıları Sıralama Oyunu</div>
+                <p style="font-size: 1.2em; margin-bottom: 20px; text-align: center;">
+                    Aşağıdaki sayıları küçükten büyüğe sürükle-bırak ile sırala! 🎯
+                </p>
+                
+                <div style="text-align: center; margin: 20px 0;">
+                    <div id="draggable-numbers" style="margin-bottom: 20px;">
+                        <!-- Sayılar buraya dinamik olarak eklenecek -->
+                    </div>
+                </div>
+                
+                <div class="drop-zone" id="sort-zone">
+                    Sayıları buraya sürükle
+                </div>
+                
+                <button class="check-btn" onclick="checkSorting()">Kontrol Et ✓</button>
+                <div id="sorting-feedback" class="feedback"></div>
+            </div>
+        </div>
+
+        <!-- OYUNLAR BÖLÜMÜ -->
+        <div id="games" class="section">
+            <div class="score-board">
+                <span class="star">⭐</span> Puan: <span id="total-score">0</span> <span class="star">⭐</span>
+            </div>
+
+            <!-- Sayı Treni Oyunu -->
+            <div class="game-area">
+                <div class="game-title">🚂 Sayı Treni Tamamlama Oyunu</div>
+                <p style="text-align: center; font-size: 1.2em; margin-bottom: 20px;">
+                    Trenin eksik vagonlarını tamamla! Her doğru cevap 10 puan! 🎉
+                </p>
+                
+                <div id="train-game" style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 10px; margin: 20px 0;">
+                    <!-- Tren vagonları buraya eklenecek -->
+                </div>
+                
+                <button class="check-btn" onclick="checkTrain()">Treni Kontrol Et 🚂</button>
+                <div id="train-feedback" class="feedback"></div>
+            </div>
+
+            <!-- Basamak Değer Dedektifi -->
+            <div class="game-area" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); margin-top: 30px;">
+                <div class="game-title">🕵️ Basamak Değer Dedektifi</div>
+                <p style="text-align: center; font-size: 1.2em; margin-bottom: 20px;">
+                    İpuçlarını oku ve gizli sayıyı bul! Her ipucu bir basamağı gösteriyor! 🔍
+                </p>
+                
+                <div style="background: white; padding: 30px; border-radius: 15px; max-width: 600px; margin: 0 auto;">
+                    <div id="clues" style="font-size: 1.2em; line-height: 2; margin-bottom: 20px;">
+                        <!-- İpuçları buraya eklenecek -->
+                    </div>
+                    
+                    <div style="text-align: center; margin: 30px 0;">
+                        <label style="font-size: 1.3em; font-weight: bold; color: #667eea;">Gizli Sayı:</label>
+                        <input type="number" id="detective-answer" 
+                               style="width: 150px; height: 60px; font-size: 2em; text-align: center; 
+                               border: 3px solid #667eea; border-radius: 10px; margin-left: 15px;">
+                    </div>
+                    
+                    <button class="check-btn" onclick="checkDetective()">Cevabı Kontrol Et 🔍</button>
+                    <div id="detective-feedback" class="feedback"></div>
+                </div>
+                
+                <button class="check-btn" style="background: #4d96ff;" onclick="newDetectiveQuestion()">
+                    Yeni Gizli Sayı 🎲
+                </button>
+            </div>
+
+            <!-- Sayı Apartmanı Oyunu -->
+            <div class="game-area" style="background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); margin-top: 30px;">
+                <div class="game-title">🏢 Sayı Apartmanı</div>
+                <p style="text-align: center; font-size: 1.2em; margin-bottom: 20px;">
+                    Her kat bir yüzlük grubu! Sayılar hangi katta oturuyor?
+                </p>
+                
+                <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;">
+                    <div style="background: white; padding: 20px; border-radius: 15px; min-width: 300px;">
+                        <div style="border: 3px solid #333; border-radius: 10px; overflow: hidden;">
+                            <div class="apartment-floor" style="background: #ff6b9d; color: white; padding: 15px; border-bottom: 2px solid #333;">
+                                <strong>9. KAT</strong> - 900-999
+                            </div>
+                            <div class="apartment-floor" style="background: #f093fb; color: white; padding: 15px; border-bottom: 2px solid #333;">
+                                <strong>8. KAT</strong> - 800-899
+                            </div>
+                            <div class="apartment-floor" style="background: #4facfe; color: white; padding: 15px; border-bottom: 2px solid #333;">
+                                <strong>7. KAT</strong> - 700-799
+                            </div>
+                            <div class="apartment-floor" style="background: #43e97b; color: white; padding: 15px; border-bottom: 2px solid #333;">
+                                <strong>6. KAT</strong> - 600-699
+                            </div>
+                            <div class="apartment-floor" style="background: #fa709a; color: white; padding: 15px; border-bottom: 2px solid #333;">
+                                <strong>5. KAT</strong> - 500-599
+                            </div>
+                            <div class="apartment-floor" style="background: #fee140; color: #333; padding: 15px; border-bottom: 2px solid #333;">
+                                <strong>4. KAT</strong> - 400-499
+                            </div>
+                            <div class="apartment-floor" style="background: #30cfd0; color: white; padding: 15px; border-bottom: 2px solid #333;">
+                                <strong>3. KAT</strong> - 300-399
+                            </div>
+                            <div class="apartment-floor" style="background: #a8edea; color: #333; padding: 15px; border-bottom: 2px solid #333;">
+                                <strong>2. KAT</strong> - 200-299
+                            </div>
+                            <div class="apartment-floor" style="background: #fecfef; color: #333; padding: 15px; border-bottom: 2px solid #333;">
+                                <strong>1. KAT</strong> - 100-199
+                            </div>
+                            <div class="apartment-floor" style="background: #e6dee9; color: #333; padding: 15px;">
+                                <strong>GİRİŞ</strong> - 0-99
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: white; padding: 30px; border-radius: 15px; min-width: 350px;">
+                        <h3 style="color: #667eea; margin-bottom: 20px;">Bu sayı hangi katta oturuyor?</h3>
+                        <div id="apartment-question" style="font-size: 3em; font-weight: bold; color: #f5576c; text-align: center; margin: 30px 0;">
+                            456
+                        </div>
+                        <select id="apartment-answer" style="width: 100%; padding: 15px; font-size: 1.2em; border: 3px solid #667eea; border-radius: 10px;">
+                            <option value="">Kat Seç...</option>
+                            <option value="ground">Giriş (0-99)</option>
+                            <option value="1">1. Kat (100-199)</option>
+                            <option value="2">2. Kat (200-299)</option>
+                            <option value="3">3. Kat (300-399)</option>
+                            <option value="4">4. Kat (400-499)</option>
+                            <option value="5">5. Kat (500-599)</option>
+                            <option value="6">6. Kat (600-699)</option>
+                            <option value="7">7. Kat (700-799)</option>
+                            <option value="8">8. Kat (800-899)</option>
+                            <option value="9">9. Kat (900-999)</option>
+                        </select>
+                        <button class="check-btn" onclick="checkApartment()">Kontrol Et 🏢</button>
+                        <div id="apartment-feedback" class="feedback"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hızlı Matematik Yarışması -->
+            <div class="game-area" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); margin-top: 30px;">
+                <div class="game-title">⚡ Hızlı Matematik Yarışması</div>
+                <p style="text-align: center; font-size: 1.2em; margin-bottom: 20px;">
+                    30 saniyede kaç soruyu doğru cevaplayabilirsin? ⏱️
+                </p>
+                
+                <div style="background: white; padding: 30px; border-radius: 15px; max-width: 600px; margin: 0 auto;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 30px; font-size: 1.5em; font-weight: bold;">
+                        <div style="color: #667eea;">⏱️ Süre: <span id="timer">30</span>s</div>
+                        <div style="color: #6bcf7f;">✓ Doğru: <span id="correct-count">0</span></div>
+                        <div style="color: #ff6b9d;">✗ Yanlış: <span id="wrong-count">0</span></div>
+                    </div>
+                    
+                    <div id="quiz-question" style="font-size: 2em; text-align: center; margin: 30px 0; color: #333; min-height: 80px;">
+                        BAŞLA butonuna tıkla!
+                    </div>
+                    
+                    <div id="quiz-options" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 30px 0;">
+                        <!-- Şıklar buraya eklenecek -->
+                    </div>
+                    
+                    <button class="check-btn" id="quiz-start-btn" onclick="startQuiz()">
+                        Yarışmayı Başlat! 🚀
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- YAZDIR BÖLÜMÜ -->
+        <div id="print" class="section">
+            <div class="no-print" style="text-align: center; margin-bottom: 30px;">
+                <h2 style="color: #667eea; margin-bottom: 20px;">📄 Yazdırılabilir Çalışma Kağıtları</h2>
+                <p style="font-size: 1.2em; margin-bottom: 20px;">
+                    Öğretmenler için hazır çalışma kağıtları! Yazdır butonuna tıklayın veya CTRL+P yapın.
+                </p>
+                <button onclick="window.print()" class="check-btn" style="background: #c44569;">
+                    🖨️ Tümünü Yazdır
+                </button>
+            </div>
+
+            <!-- Çalışma Kağıdı 1: Basamak Değeri -->
+            <div class="worksheet">
+                <div class="worksheet-header">
+                    <div class="worksheet-title">ÇALIŞMA KAĞIDI 1: BASAMAK DEĞERİ</div>
+                    <div class="student-info">
+                        <span>Adı Soyadı: _______________________</span>
+                        <span>Sınıfı: 3-___</span>
+                        <span>Tarihi: ___/___/______</span>
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-title">🎯 Alıştırma 1: Basamak Değerlerini Yaz</div>
+                    <div class="exercise-items">
+                        <div class="exercise-item">
+                            <strong>1)</strong> 345 = ___ yüzlük + ___ onluk + ___ birlik
+                            <br><br>345 = ___ + ___ + ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>2)</strong> 678 = ___ yüzlük + ___ onluk + ___ birlik
+                            <br><br>678 = ___ + ___ + ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>3)</strong> 502 = ___ yüzlük + ___ onluk + ___ birlik
+                            <br><br>502 = ___ + ___ + ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>4)</strong> 890 = ___ yüzlük + ___ onluk + ___ birlik
+                            <br><br>890 = ___ + ___ + ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>5)</strong> 123 = ___ yüzlük + ___ onluk + ___ birlik
+                            <br><br>123 = ___ + ___ + ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>6)</strong> 709 = ___ yüzlük + ___ onluk + ___ birlik
+                            <br><br>709 = ___ + ___ + ___
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-title">🎯 Alıştırma 2: Basamak Değerinden Sayı Oluştur</div>
+                    <div class="exercise-items">
+                        <div class="exercise-item">
+                            <strong>1)</strong> 4 yüzlük + 5 onluk + 6 birlik = ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>2)</strong> 7 yüzlük + 2 onluk + 9 birlik = ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>3)</strong> 3 yüzlük + 0 onluk + 8 birlik = ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>4)</strong> 9 yüzlük + 9 onluk + 9 birlik = ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>5)</strong> 600 + 40 + 3 = ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>6)</strong> 800 + 0 + 5 = ___
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Çalışma Kağıdı 2: Karşılaştırma -->
+            <div class="worksheet">
+                <div class="worksheet-header">
+                    <div class="worksheet-title">ÇALIŞMA KAĞIDI 2: SAYILARI KARŞILAŞTIRMA</div>
+                    <div class="student-info">
+                        <span>Adı Soyadı: _______________________</span>
+                        <span>Sınıfı: 3-___</span>
+                        <span>Tarihi: ___/___/______</span>
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-title">🎯 Alıştırma 1: Boşluklara &gt;, &lt; veya = işaretini koy</div>
+                    <div class="exercise-items">
+                        <div class="exercise-item">
+                            <strong>1)</strong> 345 ___ 543
+                        </div>
+                        <div class="exercise-item">
+                            <strong>2)</strong> 678 ___ 678
+                        </div>
+                        <div class="exercise-item">
+                            <strong>3)</strong> 891 ___ 819
+                        </div>
+                        <div class="exercise-item">
+                            <strong>4)</strong> 456 ___ 654
+                        </div>
+                        <div class="exercise-item">
+                            <strong>5)</strong> 777 ___ 777
+                        </div>
+                        <div class="exercise-item">
+                            <strong>6)</strong> 234 ___ 432
+                        </div>
+                        <div class="exercise-item">
+                            <strong>7)</strong> 500 ___ 499
+                        </div>
+                        <div class="exercise-item">
+                            <strong>8)</strong> 123 ___ 321
+                        </div>
+                        <div class="exercise-item">
+                            <strong>9)</strong> 909 ___ 990
+                        </div>
+                        <div class="exercise-item">
+                            <strong>10)</strong> 550 ___ 550
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-title">🎯 Alıştırma 2: Sayıları Küçükten Büyüğe Sırala</div>
+                    <div class="exercise-items">
+                        <div class="exercise-item">
+                            <strong>1)</strong> 567, 234, 789<br><br>
+                            ___ < ___ < ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>2)</strong> 123, 321, 213<br><br>
+                            ___ < ___ < ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>3)</strong> 890, 809, 980<br><br>
+                            ___ < ___ < ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>4)</strong> 456, 654, 546<br><br>
+                            ___ < ___ < ___
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-title">🎯 Alıştırma 3: En Büyük ve En Küçük Sayıyı Bul</div>
+                    <div class="exercise-items">
+                        <div class="exercise-item">
+                            <strong>1)</strong> 345, 543, 435, 354<br><br>
+                            En büyük: ___<br>
+                            En küçük: ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>2)</strong> 678, 876, 687, 768<br><br>
+                            En büyük: ___<br>
+                            En küçük: ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>3)</strong> 123, 321, 213, 312<br><br>
+                            En büyük: ___<br>
+                            En küçük: ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>4)</strong> 505, 550, 500, 555<br><br>
+                            En büyük: ___<br>
+                            En küçük: ___
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Çalışma Kağıdı 3: Sayı Örüntüleri -->
+            <div class="worksheet">
+                <div class="worksheet-header">
+                    <div class="worksheet-title">ÇALIŞMA KAĞIDI 3: SAYI ÖRÜNTÜLERİ</div>
+                    <div class="student-info">
+                        <span>Adı Soyadı: _______________________</span>
+                        <span>Sınıfı: 3-___</span>
+                        <span>Tarihi: ___/___/______</span>
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-title">🎯 Alıştırma 1: Örüntüyü Tamamla</div>
+                    <div class="exercise-items">
+                        <div class="exercise-item">
+                            <strong>1)</strong> 100, 110, 120, ___, ___, ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>2)</strong> 200, 250, 300, ___, ___, ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>3)</strong> 900, 800, 700, ___, ___, ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>4)</strong> 105, 205, 305, ___, ___, ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>5)</strong> 555, 565, 575, ___, ___, ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>6)</strong> 999, 899, 799, ___, ___, ___
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-title">🎯 Alıştırma 2: Boşlukları Doldur</div>
+                    <div class="exercise-items">
+                        <div class="exercise-item">
+                            <strong>1)</strong> 345, ___, 365, 375, ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>2)</strong> 500, ___, 700, 800, ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>3)</strong> 125, 225, ___, 425, ___
+                        </div>
+                        <div class="exercise-item">
+                            <strong>4)</strong> 980, 970, ___, 950, ___
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Çalışma Kağıdı 4: Sayı Dedektifi -->
+            <div class="worksheet">
+                <div class="worksheet-header">
+                    <div class="worksheet-title">ÇALIŞMA KAĞIDI 4: SAYI DEDEKTİFİ</div>
+                    <div class="student-info">
+                        <span>Adı Soyadı: _______________________</span>
+                        <span>Sınıfı: 3-___</span>
+                        <span>Tarihi: ___/___/______</span>
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-title">🕵️ İpuçlarını oku ve gizli sayıları bul!</div>
+                    
+                    <div class="exercise-item" style="margin-bottom: 30px; padding: 20px; border: 2px solid #667eea; border-radius: 10px;">
+                        <strong>GÖREV 1:</strong><br><br>
+                        ✓ Üç basamaklı bir sayıyım<br>
+                        ✓ Yüzler basamağım 4<br>
+                        ✓ Onlar basamağım, yüzler basamağımdan 1 fazla<br>
+                        ✓ Birler basamağım 7<br><br>
+                        <strong>Ben kimim? ___</strong>
+                    </div>
+
+                    <div class="exercise-item" style="margin-bottom: 30px; padding: 20px; border: 2px solid #667eea; border-radius: 10px;">
+                        <strong>GÖREV 2:</strong><br><br>
+                        ✓ 300'den büyük, 400'den küçüğüm<br>
+                        ✓ Onlar basamağım 6<br>
+                        ✓ Rakamlarımın toplamı 12<br><br>
+                        <strong>Ben kimim? ___</strong>
+                    </div>
+
+                    <div class="exercise-item" style="margin-bottom: 30px; padding: 20px; border: 2px solid #667eea; border-radius: 10px;">
+                        <strong>GÖREV 3:</strong><br><br>
+                        ✓ Yüzler basamağım 7<br>
+                        ✓ Onlar basamağım 0<br>
+                        ✓ Birler basamağım, yüzler basamağımın yarısı<br><br>
+                        <strong>Ben kimim? ___</strong>
+                    </div>
+
+                    <div class="exercise-item" style="margin-bottom: 30px; padding: 20px; border: 2px solid #667eea; border-radius: 10px;">
+                        <strong>GÖREV 4:</strong><br><br>
+                        ✓ En büyük üç basamaklı sayıyım<br>
+                        ✓ Tüm rakamlarım aynı<br><br>
+                        <strong>Ben kimim? ___</strong>
+                    </div>
+
+                    <div class="exercise-item" style="margin-bottom: 30px; padding: 20px; border: 2px solid #667eea; border-radius: 10px;">
+                        <strong>GÖREV 5:</strong><br><br>
+                        ✓ 500 ile 600 arasındayım<br>
+                        ✓ Onlar ve birler basamağım aynı<br>
+                        ✓ Onlar basamağım tek sayı<br>
+                        ✓ Rakamlarımın toplamı 13<br><br>
+                        <strong>Ben kimim? ___</strong>
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-title">🎨 Şimdi Sen Bir Gizli Sayı Oluştur!</div>
+                    <div class="exercise-item" style="padding: 20px; border: 2px dashed #667eea; border-radius: 10px;">
+                        <strong>Gizli Sayım: ___</strong><br><br>
+                        İpucu 1: _________________________________<br><br>
+                        İpucu 2: _________________________________<br><br>
+                        İpucu 3: _________________________________<br><br>
+                        <em>Arkadaşına ver ve tahmin etmesini iste!</em>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Çalışma Kağıdı 5: Renkli Etkinlik -->
+            <div class="worksheet">
+                <div class="worksheet-header">
+                    <div class="worksheet-title">ÇALIŞMA KAĞIDI 5: RENKLİ ETKİNLİK</div>
+                    <div class="student-info">
+                        <span>Adı Soyadı: _______________________</span>
+                        <span>Sınıfı: 3-___</span>
+                        <span>Tarihi: ___/___/______</span>
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-title">🎨 Basamak Değerini Boyayalım!</div>
+                    <p style="margin-bottom: 20px;">
+                        <strong>Yönerge:</strong> Her sayının basamak değerini göster ve kutucukları boya!<br>
+                        Yüzlükler = Kırmızı, Onluklar = Mavi, Birlikler = Sarı
+                    </p>
+
+                    <div class="exercise-item" style="margin-bottom: 30px; padding: 20px;">
+                        <strong>Örnek: 234</strong><br><br>
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <div>
+                                Yüzlükler (Kırmızı):<br>
+                                <div style="display: flex; gap: 3px; margin-top: 5px;">
+                                    <div style="width: 30px; height: 30px; border: 2px solid black;"></div>
+                                    <div style="width: 30px; height: 30px; border: 2px solid black;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                Onluklar (Mavi):<br>
+                                <div style="display: flex; gap: 3px; margin-top: 5px;">
+                                    <div style="width: 30px; height: 30px; border: 2px solid black;"></div>
+                                    <div style="width: 30px; height: 30px; border: 2px solid black;"></div>
+                                    <div style="width: 30px; height: 30px; border: 2px solid black;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                Birlikler (Sarı):<br>
+                                <div style="display: flex; gap: 3px; margin-top: 5px;">
+                                    <div style="width: 30px; height: 30px; border: 2px solid black;"></div>
+                                    <div style="width: 30px; height: 30px; border: 2px solid black;"></div>
+                                    <div style="width: 30px; height: 30px; border: 2px solid black;"></div>
+                                    <div style="width: 30px; height: 30px; border: 2px solid black;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="exercise-item" style="margin-bottom: 30px; padding: 20px;">
+                        <strong>1) 156</strong><br><br>
+                        Yüzlükler: ☐<br>
+                        Onluklar: ☐☐☐☐☐<br>
+                        Birlikler: ☐☐☐☐☐☐
+                    </div>
+
+                    <div class="exercise-item" style="margin-bottom: 30px; padding: 20px;">
+                        <strong>2) 423</strong><br><br>
+                        Yüzlükler: ☐☐☐☐<br>
+                        Onluklar: ☐☐<br>
+                        Birlikler: ☐☐☐
+                    </div>
+
+                    <div class="exercise-item" style="margin-bottom: 30px; padding: 20px;">
+                        <strong>3) 789</strong><br><br>
+                        Yüzlükler: ☐☐☐☐☐☐☐<br>
+                        Onluklar: ☐☐☐☐☐☐☐☐<br>
+                        Birlikler: ☐☐☐☐☐☐☐☐☐
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-title">🏢 Sayı Apartmanı Bulmacası</div>
+                    <p style="margin-bottom: 20px;">
+                        Sayıları doğru katlara yerleştir!
+                    </p>
+
+                    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                        <tr style="border: 2px solid black;">
+                            <td style="border: 2px solid black; padding: 15px; background: #f0f0f0;"><strong>9. KAT (900-999)</strong></td>
+                            <td style="border: 2px solid black; padding: 15px;">___, ___, ___</td>
+                        </tr>
+                        <tr style="border: 2px solid black;">
+                            <td style="border: 2px solid black; padding: 15px; background: #f0f0f0;"><strong>8. KAT (800-899)</strong></td>
+                            <td style="border: 2px solid black; padding: 15px;">___, ___, ___</td>
+                        </tr>
+                        <tr style="border: 2px solid black;">
+                            <td style="border: 2px solid black; padding: 15px; background: #f0f0f0;"><strong>7. KAT (700-799)</strong></td>
+                            <td style="border: 2px solid black; padding: 15px;">___, ___, ___</td>
+                        </tr>
+                        <tr style="border: 2px solid black;">
+                            <td style="border: 2px solid black; padding: 15px; background: #f0f0f0;"><strong>6. KAT (600-699)</strong></td>
+                            <td style="border: 2px solid black; padding: 15px;">___, ___, ___</td>
+                        </tr>
+                        <tr style="border: 2px solid black;">
+                            <td style="border: 2px solid black; padding: 15px; background: #f0f0f0;"><strong>5. KAT (500-599)</strong></td>
+                            <td style="border: 2px solid black; padding: 15px;">___, ___, ___</td>
+                        </tr>
+                        <tr style="border: 2px solid black;">
+                            <td style="border: 2px solid black; padding: 15px; background: #f0f0f0;"><strong>4. KAT (400-499)</strong></td>
+                            <td style="border: 2px solid black; padding: 15px;">___, ___, ___</td>
+                        </tr>
+                        <tr style="border: 2px solid black;">
+                            <td style="border: 2px solid black; padding: 15px; background: #f0f0f0;"><strong>3. KAT (300-399)</strong></td>
+                            <td style="border: 2px solid black; padding: 15px;">___, ___, ___</td>
+                        </tr>
+                        <tr style="border: 2px solid black;">
+                            <td style="border: 2px solid black; padding: 15px; background: #f0f0f0;"><strong>2. KAT (200-299)</strong></td>
+                            <td style="border: 2px solid black; padding: 15px;">___, ___, ___</td>
+                        </tr>
+                        <tr style="border: 2px solid black;">
+                            <td style="border: 2px solid black; padding: 15px; background: #f0f0f0;"><strong>1. KAT (100-199)</strong></td>
+                            <td style="border: 2px solid black; padding: 15px;">___, ___, ___</td>
+                        </tr>
+                    </table>
+
+                    <p style="margin-top: 20px; padding: 15px; background: #fffacd; border: 2px solid #ffd700; border-radius: 10px;">
+                        <strong>Kullanılacak Sayılar:</strong><br>
+                        234, 567, 891, 123, 456, 789, 345, 678, 912, 555, 777, 333, 666, 888, 999, 111, 222, 444
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global Variables
+        let score = 0;
+        let currentComparison = { num1: 0, num2: 0, answer: '' };
+        let sortingArray = [];
+        let currentDetective = { answer: 0, clues: [] };
+        let trainPattern = [];
+        let apartmentNumber = 0;
+        
+        // Quiz Variables
+        let quizTimer;
+        let quizTimeLeft = 30;
+        let quizCorrect = 0;
+        let quizWrong = 0;
+        let quizRunning = false;
+        let currentQuizQuestion = {};
+
+        // Section Navigation
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+
+            // Initialize section-specific content
+            if (sectionId === 'games') {
+                initializeGames();
+            }
+        }
+
+        // Number to Turkish Text
+        function numberToTurkish(num) {
+            const ones = ['', 'bir', 'iki', 'üç', 'dört', 'beş', 'altı', 'yedi', 'sekiz', 'dokuz'];
+            const tens = ['', 'on', 'yirmi', 'otuz', 'kırk', 'elli', 'altmış', 'yetmiş', 'seksen', 'doksan'];
+            const hundreds = ['', 'yüz', 'iki yüz', 'üç yüz', 'dört yüz', 'beş yüz', 'altı yüz', 'yedi yüz', 'sekiz yüz', 'dokuz yüz'];
+
+            if (num === 0) return 'sıfır';
+            if (num === 1000) return 'bin';
+
+            let result = '';
+            
+            const h = Math.floor(num / 100);
+            const t = Math.floor((num % 100) / 10);
+            const o = num % 10;
+
+            if (h > 0) result += hundreds[h] + ' ';
+            if (t > 0) result += tens[t] + ' ';
+            if (o > 0) result += ones[o];
+
+            return result.trim();
+        }
+
+        // Speak Number (Visual Feedback)
+        function speakNumber(num) {
+            const text = numberToTurkish(num);
+            alert(`${num} = ${text}`);
+        }
+
+        // Review Section - Update Number
+        function updateReviewNumber() {
+            const tens = parseInt(document.getElementById('tens-review').value) || 0;
+            const ones = parseInt(document.getElementById('ones-review').value) || 0;
+            const number = tens * 10 + ones;
+            const text = numberToTurkish(number);
+            document.getElementById('review-result').innerHTML = `Sayı: ${number} (${text})`;
+        }
+
+        // Hundreds Section - Update Number
+        function updateHundredsNumber() {
+            const hundreds = parseInt(document.getElementById('hundreds-digit').value) || 0;
+            const tens = parseInt(document.getElementById('tens-digit').value) || 0;
+            const ones = parseInt(document.getElementById('ones-digit').value) || 0;
+            const number = hundreds * 100 + tens * 10 + ones;
+            const text = numberToTurkish(number);
+            
+            let breakdown = '';
+            if (hundreds > 0) breakdown += `${hundreds * 100}`;
+            if (tens > 0) breakdown += ` + ${tens * 10}`;
+            if (ones > 0) breakdown += ` + ${ones}`;
+            if (!breakdown) breakdown = '0';
+
+            document.getElementById('hundreds-result').innerHTML = 
+                `Sayı: ${number} (${text})<br><small style="color: #999;">${breakdown}</small>`;
+        }
+
+        // Comparison Game
+        function newComparison() {
+            const num1 = Math.floor(Math.random() * 900) + 100;
+            const num2 = Math.floor(Math.random() * 900) + 100;
+            
+            currentComparison.num1 = num1;
+            currentComparison.num2 = num2;
+            
+            if (num1 > num2) currentComparison.answer = '>';
+            else if (num1 < num2) currentComparison.answer = '<';
+            else currentComparison.answer = '=';
+            
+            document.getElementById('compare-num1').textContent = num1;
+            document.getElementById('compare-num2').textContent = num2;
+            document.getElementById('comparison-feedback').style.display = 'none';
+            
+            document.querySelectorAll('.symbol-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+        }
+
+        function checkComparison(symbol) {
+            document.querySelectorAll('.symbol-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+            
+            const feedback = document.getElementById('comparison-feedback');
+            
+            if (symbol === currentComparison.answer) {
+                feedback.className = 'feedback success';
+                feedback.innerHTML = '🎉 Harika! Doğru cevap! +10 puan';
+                score += 10;
+                updateScore();
+                setTimeout(newComparison, 2000);
+            } else {
+                feedback.className = 'feedback error';
+                feedback.innerHTML = '❌ Tekrar dene! Sayıları dikkatlice karşılaştır.';
+            }
+        }
+
+        // Sorting Game
+        function initializeSorting() {
+            sortingArray = [];
+            for (let i = 0; i < 5; i++) {
+                sortingArray.push(Math.floor(Math.random() * 900) + 100);
+            }
+            
+            const container = document.getElementById('draggable-numbers');
+            container.innerHTML = '';
+            
+            sortingArray.forEach(num => {
+                const div = document.createElement('div');
+                div.className = 'draggable';
+                div.textContent = num;
+                div.draggable = true;
+                div.addEventListener('dragstart', handleDragStart);
+                container.appendChild(div);
+            });
+            
+            document.getElementById('sort-zone').innerHTML = 'Sayıları buraya sürükle';
+            document.getElementById('sorting-feedback').style.display = 'none';
+        }
+
+        function handleDragStart(e) {
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', e.target.innerHTML);
+            e.target.style.opacity = '0.4';
+        }
+
+        function handleDragEnd(e) {
+            e.target.style.opacity = '1';
+        }
+
+        function handleDragOver(e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            e.dataTransfer.dropEffect = 'move';
+            e.target.classList.add('drag-over');
+            return false;
+        }
+
+        function handleDragLeave(e) {
+            e.target.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            }
+            e.target.classList.remove('drag-over');
+            
+            const data = e.dataTransfer.getData('text/html');
+            const div = document.createElement('div');
+            div.className = 'draggable';
+            div.textContent = data;
+            div.draggable = true;
+            div.addEventListener('dragstart', handleDragStart);
+            div.addEventListener('dragend', handleDragEnd);
+            
+            if (e.target.className.includes('drop-zone')) {
+                e.target.appendChild(div);
+            }
+            
+            return false;
+        }
+
+        function checkSorting() {
+            const dropZone = document.getElementById('sort-zone');
+            const numbers = Array.from(dropZone.querySelectorAll('.draggable')).map(el => parseInt(el.textContent));
+            
+            if (numbers.length !== sortingArray.length) {
+                alert('Lütfen tüm sayıları sıralama alanına sürükle!');
+                return;
+            }
+            
+            const sorted = [...numbers].sort((a, b) => a - b);
+            const isCorrect = JSON.stringify(numbers) === JSON.stringify(sorted);
+            
+            const feedback = document.getElementById('sorting-feedback');
+            
+            if (isCorrect) {
+                feedback.className = 'feedback success';
+                feedback.innerHTML = '🎊 Mükemmel! Sayıları doğru sıraladın! +20 puan';
+                score += 20;
+                updateScore();
+                setTimeout(() => {
+                    initializeSorting();
+                }, 3000);
+            } else {
+                feedback.className = 'feedback error';
+                feedback.innerHTML = '❌ Sıralama doğru değil. Sayıları küçükten büyüğe sırala!';
+            }
+        }
+
+        // Detective Game
+        function generateDetective() {
+            const hundreds = Math.floor(Math.random() * 9) + 1;
+            const tens = Math.floor(Math.random() * 10);
+            const ones = Math.floor(Math.random() * 10);
+            
+            currentDetective.answer = hundreds * 100 + tens * 10 + ones;
+            currentDetective.clues = [
+                `✓ Üç basamaklı bir sayıyım`,
+                `✓ Yüzler basamağım ${hundreds}`,
+                `✓ Onlar basamağım ${tens}`,
+                `✓ Birler basamağım ${ones}`
+            ];
+            
+            const cluesDiv = document.getElementById('clues');
+            cluesDiv.innerHTML = currentDetective.clues.map(clue => `<div>${clue}</div>`).join('');
+            document.getElementById('detective-answer').value = '';
+            document.getElementById('detective-feedback').style.display = 'none';
+        }
+
+        function checkDetective() {
+            const answer = parseInt(document.getElementById('detective-answer').value);
+            const feedback = document.getElementById('detective-feedback');
+            
+            if (!answer) {
+                alert('Lütfen bir sayı gir!');
+                return;
+            }
+            
+            if (answer === currentDetective.answer) {
+                feedback.className = 'feedback success';
+                feedback.innerHTML = `🕵️ Harika dedektif! Gizli sayıyı buldun! ${currentDetective.answer} +15 puan`;
+                score += 15;
+                updateScore();
+            } else {
+                feedback.className = 'feedback error';
+                feedback.innerHTML = '❌ Bu sayı değil! İpuçlarını tekrar oku!';
+            }
+        }
+
+        function newDetectiveQuestion() {
+            generateDetective();
+        }
+
+        // Train Game
+        function generateTrain() {
+            const patterns = [
+                { start: 100, step: 10, count: 6 },
+                { start: 200, step: 50, count: 5 },
+                { start: 500, step: 100, count: 5 },
+                { start: 150, step: 25, count: 6 }
+            ];
+            
+            const pattern = patterns[Math.floor(Math.random() * patterns.length)];
+            trainPattern = [];
+            
+            for (let i = 0; i < pattern.count; i++) {
+                trainPattern.push(pattern.start + (i * pattern.step));
+            }
+            
+            const trainDiv = document.getElementById('train-game');
+            trainDiv.innerHTML = '';
+            
+            trainPattern.forEach((num, index) => {
+                const wagon = document.createElement('div');
+                
+                if (index % 2 === 1) {
+                    wagon.style.cssText = `
+                        background: white;
+                        border: 3px solid #667eea;
+                        padding: 20px;
+                        border-radius: 10px;
+                        min-width: 80px;
+                        text-align: center;
+                    `;
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.className = 'train-input';
+                    input.style.cssText = `
+                        width: 80px;
+                        height: 50px;
+                        font-size: 1.5em;
+                        text-align: center;
+                        border: 2px solid #667eea;
+                        border-radius: 5px;
+                    `;
+                    input.dataset.answer = num;
+                    wagon.appendChild(input);
+                } else {
+                    wagon.style.cssText = `
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        color: white;
+                        padding: 20px;
+                        border-radius: 10px;
+                        font-size: 1.8em;
+                        font-weight: bold;
+                        min-width: 80px;
+                        text-align: center;
+                    `;
+                    wagon.textContent = num;
+                }
+                
+                trainDiv.appendChild(wagon);
+            });
+            
+            document.getElementById('train-feedback').style.display = 'none';
+        }
+
+        function checkTrain() {
+            const inputs = document.querySelectorAll('.train-input');
+            let allCorrect = true;
+            
+            inputs.forEach(input => {
+                const answer = parseInt(input.dataset.answer);
+                const value = parseInt(input.value);
+                
+                if (value !== answer) {
+                    allCorrect = false;
+                }
+            });
+            
+            const feedback = document.getElementById('train-feedback');
+            
+            if (allCorrect) {
+                feedback.className = 'feedback success';
+                feedback.innerHTML = '🚂 Harika! Treni tamamladın! +15 puan';
+                score += 15;
+                updateScore();
+                setTimeout(generateTrain, 3000);
+            } else {
+                feedback.className = 'feedback error';
+                feedback.innerHTML = '❌ Bazı vagonlar yanlış. Örüntüyü kontrol et!';
+            }
+        }
+
+        // Apartment Game
+        function generateApartment() {
+            apartmentNumber = Math.floor(Math.random() * 1000);
+            document.getElementById('apartment-question').textContent = apartmentNumber;
+            document.getElementById('apartment-answer').value = '';
+            document.getElementById('apartment-feedback').style.display = 'none';
+        }
+
+        function checkApartment() {
+            const answer = document.getElementById('apartment-answer').value;
+            let correctFloor;
+            
+            if (apartmentNumber < 100) correctFloor = 'ground';
+            else correctFloor = Math.floor(apartmentNumber / 100).toString();
+            
+            const feedback = document.getElementById('apartment-feedback');
+            
+            if (answer === correctFloor) {
+                feedback.className = 'feedback success';
+                feedback.innerHTML = '🏢 Doğru! Sayı doğru katta! +10 puan';
+                score += 10;
+                updateScore();
+                setTimeout(generateApartment, 2000);
+            } else {
+                feedback.className = 'feedback error';
+                feedback.innerHTML = '❌ Yanlış kat! Yüzler basamağına bak!';
+            }
+        }
+
+        // Quiz Game
+        function startQuiz() {
+            if (quizRunning) return;
+            
+            quizRunning = true;
+            quizTimeLeft = 30;
+            quizCorrect = 0;
+            quizWrong = 0;
+            
+            document.getElementById('timer').textContent = quizTimeLeft;
+            document.getElementById('correct-count').textContent = quizCorrect;
+            document.getElementById('wrong-count').textContent = quizWrong;
+            document.getElementById('quiz-start-btn').style.display = 'none';
+            
+            generateQuizQuestion();
+            
+            quizTimer = setInterval(() => {
+                quizTimeLeft--;
+                document.getElementById('timer').textContent = quizTimeLeft;
+                
+                if (quizTimeLeft <= 0) {
+                    endQuiz();
+                }
+            }, 1000);
+        }
+
+        function generateQuizQuestion() {
+            const types = ['comparison', 'place-value', 'addition', 'subtraction'];
+            const type = types[Math.floor(Math.random() * types.length)];
+            
+            let question, correctAnswer, options;
+            
+            if (type === 'comparison') {
+                const num1 = Math.floor(Math.random() * 900) + 100;
+                const num2 = Math.floor(Math.random() * 900) + 100;
+                question = `${num1} ___ ${num2}`;
+                correctAnswer = num1 > num2 ? '>' : (num1 < num2 ? '<' : '=');
+                options = ['>', '<', '=', '≠'];
+            } else if (type === 'place-value') {
+                const num = Math.floor(Math.random() * 900) + 100;
+                const digit = Math.floor(num / 100);
+                question = `${num} sayısının yüzler basamağı kaçtır?`;
+                correctAnswer = digit.toString();
+                options = [digit, digit + 1, digit - 1, digit + 2].map(n => n.toString());
+            } else if (type === 'addition') {
+                const num1 = Math.floor(Math.random() * 500) + 100;
+                const num2 = Math.floor(Math.random() * 300) + 50;
+                correctAnswer = (num1 + num2).toString();
+                question = `${num1} + ${num2} = ?`;
+                options = [correctAnswer, (num1 + num2 + 10).toString(), (num1 + num2 - 10).toString(), (num1 + num2 + 50).toString()];
+            } else {
+                const num1 = Math.floor(Math.random() * 500) + 400;
+                const num2 = Math.floor(Math.random() * 200) + 50;
+                correctAnswer = (num1 - num2).toString();
+                question = `${num1} - ${num2} = ?`;
+                options = [correctAnswer, (num1 - num2 + 10).toString(), (num1 - num2 - 10).toString(), (num1 - num2 + 50).toString()];
+            }
+            
+            // Shuffle options
+            options.sort(() => Math.random() - 0.5);
+            
+            currentQuizQuestion = { question, correctAnswer, options };
+            
+            document.getElementById('quiz-question').textContent = question;
+            
+            const optionsDiv = document.getElementById('quiz-options');
+            optionsDiv.innerHTML = '';
+            
+            options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'symbol-btn';
+                btn.textContent = option;
+                btn.onclick = () => checkQuizAnswer(option);
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function checkQuizAnswer(answer) {
+            if (!quizRunning) return;
+            
+            if (answer === currentQuizQuestion.correctAnswer) {
+                quizCorrect++;
+                document.getElementById('correct-count').textContent = quizCorrect;
+                score += 5;
+                updateScore();
+            } else {
+                quizWrong++;
+                document.getElementById('wrong-count').textContent = quizWrong;
+            }
+            
+            generateQuizQuestion();
+        }
+
+        function endQuiz() {
+            clearInterval(quizTimer);
+            quizRunning = false;
+            
+            document.getElementById('quiz-question').innerHTML = `
+                <div style="text-align: center;">
+                    <h2>⏰ Süre Bitti!</h2>
+                    <p style="font-size: 1.5em; margin: 20px 0;">
+                        ✓ Doğru: ${quizCorrect}<br>
+                        ✗ Yanlış: ${quizWrong}<br>
+                        <strong>Toplam Puan: ${quizCorrect * 5}</strong>
+                    </p>
+                </div>
+            `;
+            
+            document.getElementById('quiz-options').innerHTML = '';
+            document.getElementById('quiz-start-btn').style.display = 'block';
+        }
+
+        // Score Management
+        function updateScore() {
+            document.getElementById('total-score').textContent = score;
+        }
+
+        // Initialize Games
+        function initializeGames() {
+            generateTrain();
+            generateDetective();
+            generateApartment();
+            newComparison();
+            initializeSorting();
+            
+            // Setup drag and drop
+            const dropZone = document.getElementById('sort-zone');
+            dropZone.addEventListener('dragover', handleDragOver);
+            dropZone.addEventListener('dragleave', handleDragLeave);
+            dropZone.addEventListener('drop', handleDrop);
+        }
+
+        // Initialize on page load
+        window.onload = function() {
+            newComparison();
+        };
+    </script>
+</body>
+</html>
