@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uzunluk ve Kütle – 2. Sınıf</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--sari:#FFD93D;--kirmizi:#FF6B6B;--mavi:#4ECDC4;--yesil:#6BCB77;--mor:#C77DFF;--turuncu:#FF9F43;--bg:#FFFBF0;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);}
+header{background:linear-gradient(160deg,#6BCB77,#4ECDC4,#C77DFF);padding:28px 16px 18px;text-align:center;position:relative;overflow:hidden;}
+header h1{font-family:'Fredoka One',cursive;font-size:clamp(2rem,6vw,3rem);color:#fff;text-shadow:3px 4px 0 rgba(0,0,0,.15);position:relative;z-index:1;}
+header p{color:rgba(255,255,255,.92);font-weight:700;font-size:1rem;margin-top:5px;position:relative;z-index:1;}
+.dl-btn{display:inline-block;margin-top:12px;background:#fff;color:var(--yesil);font-family:'Fredoka One',cursive;font-size:1rem;padding:10px 26px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.15);transition:transform .2s;position:relative;z-index:1;}
+.dl-btn:hover{transform:translateY(-3px);}
+nav{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;padding:12px 10px;background:#fff;border-bottom:3px solid #f0e8d8;position:sticky;top:0;z-index:100;box-shadow:0 3px 12px rgba(0,0,0,.08);}
+nav button{font-family:'Fredoka One',cursive;font-size:.82rem;padding:8px 13px;border:3px solid transparent;border-radius:50px;cursor:pointer;transition:all .2s;background:#f5f0e8;color:#7a5c3a;}
+nav button.active,nav button:hover{background:var(--yesil);color:#fff;border-color:#55b863;transform:translateY(-2px);}
+.section{display:none;padding:24px 14px 50px;max-width:880px;margin:0 auto;}
+.section.active{display:block;animation:pop .35s ease;}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border-radius:24px;padding:24px;margin-bottom:20px;box-shadow:0 5px 24px rgba(0,0,0,.07);border:2px solid #f0e8d8;}
+.card-title{font-family:'Fredoka One',cursive;font-size:1.45rem;margin-bottom:14px;}
+.info{border-radius:14px;padding:14px 18px;margin:10px 0;font-size:1rem;font-weight:700;line-height:1.65;}
+.info-sari{background:#fffbe6;border-left:5px solid var(--sari);color:#856404;}
+.info-mavi{background:#e8fafa;border-left:5px solid var(--mavi);color:#0e7490;}
+.info-yesil{background:#f0fdf4;border-left:5px solid var(--yesil);color:#166534;}
+.info-mor{background:#faf5ff;border-left:5px solid var(--mor);color:#6b21a8;}
+.info-kirmizi{background:#fff1f1;border-left:5px solid var(--kirmizi);color:#991b1b;}
+.info-turuncu{background:#fff7ed;border-left:5px solid var(--turuncu);color:#9a3412;}
+.btn{font-family:'Fredoka One',cursive;padding:10px 22px;border:none;border-radius:50px;cursor:pointer;font-size:.95rem;transition:all .2s;margin:4px;}
+.btn-y{background:var(--yesil);color:#fff;}.btn-y:hover{background:#55b863;transform:translateY(-2px);}
+.btn-m{background:var(--mavi);color:#fff;}.btn-m:hover{background:#3ab8b0;transform:translateY(-2px);}
+.btn-t{background:var(--turuncu);color:#fff;}.btn-t:hover{background:#e8892a;transform:translateY(-2px);}
+.btn-k{background:var(--kirmizi);color:#fff;}.btn-k:hover{background:#e05555;transform:translateY(-2px);}
+.btn-g{background:#94a3b8;color:#fff;}.btn-g:hover{background:#7a8fa3;transform:translateY(-2px);}
+.ctrl{text-align:center;margin:14px 0;}
+.story-box{background:linear-gradient(135deg,#f0fdf4,#e8fdf0);border:2px solid var(--yesil);border-radius:18px;padding:18px 20px;margin:14px 0;position:relative;}
+.story-box::before{content:'📖';position:absolute;top:-14px;left:16px;font-size:1.4rem;background:#fff;padding:0 4px;}
+.story-box p{font-size:1rem;font-weight:700;line-height:1.7;color:#064e3b;}
+
+/* CETVEL */
+.cetvel-wrap{margin:16px 0;overflow-x:auto;}
+.cetvel{display:flex;align-items:flex-end;background:linear-gradient(to bottom,#F5DEB3,#DEB887);border-radius:6px;padding:8px 4px 4px;border:2px solid #8B4513;position:relative;min-width:320px;height:60px;}
+.cetvel-cm{display:flex;align-items:flex-end;gap:0;}
+.cetvel-birim{width:30px;display:flex;flex-direction:column;align-items:center;flex-shrink:0;}
+.cetvel-cizgi{background:#2c3e50;border-radius:1px;}
+.cetvel-sayi{font-family:'Fredoka One',cursive;font-size:.65rem;color:#2c3e50;margin-top:2px;}
+.olcum-nesne{height:12px;border-radius:3px;margin-bottom:4px;transition:width .5s cubic-bezier(.34,1.56,.64,1);}
+
+/* TERAZİ */
+.terazi-wrap{display:flex;justify-content:center;margin:16px 0;}
+.terazi-sahne{display:flex;flex-direction:column;align-items:center;}
+.terazi-kol{width:240px;height:8px;background:linear-gradient(90deg,#8B4513,#D2691E);border-radius:4px;position:relative;transition:transform .6s cubic-bezier(.34,1.56,.64,1);}
+.terazi-destek{width:8px;height:48px;background:#8B4513;border-radius:3px;margin:0 auto;}
+.terazi-taban{width:60px;height:10px;background:#8B4513;border-radius:5px;margin:0 auto;}
+.kefe{border-radius:8px;padding:12px;min-width:90px;min-height:50px;border:2px solid;display:flex;flex-direction:column;align-items:center;gap:4px;transition:all .4s;}
+.kefe-icerik{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;}
+.kefe-agirlik{font-family:'Fredoka One',cursive;font-size:.9rem;margin-top:4px;}
+.kefeler{display:flex;justify-content:space-around;width:240px;margin-top:4px;}
+
+/* KARŞILAŞTIRMA */
+.kars-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin:14px 0;}
+.kars-kutu{border-radius:16px;padding:16px;text-align:center;border:2px solid;}
+.kars-isaret{font-family:'Fredoka One',cursive;font-size:2rem;text-align:center;color:var(--mavi);}
+
+/* QUIZ */
+.quiz-soru{padding:16px 18px;background:#f0fdf4;border-radius:14px;border:2px solid var(--yesil);margin-bottom:14px;}
+.quiz-soru p{font-size:1rem;font-weight:800;color:#166534;margin-bottom:10px;}
+.quiz-sec{display:flex;flex-wrap:wrap;gap:7px;}
+.quiz-btn{font-family:'Fredoka One',cursive;padding:9px 20px;border:3px solid var(--yesil);border-radius:50px;background:#fff;cursor:pointer;font-size:.95rem;transition:all .2s;color:var(--yesil);}
+.quiz-btn:hover{background:var(--yesil);color:#fff;}
+.quiz-btn.dogru{background:#27AE60!important;color:#fff!important;border-color:#1e8449!important;}
+.quiz-btn.yanlis{background:#E74C3C!important;color:#fff!important;border-color:#c0392b!important;}
+.quiz-fb{font-size:.92rem;font-weight:800;margin-top:7px;}
+.quiz-skor{text-align:center;font-size:1.3rem;font-weight:900;padding:18px;border-radius:16px;background:#f0fdf4;border:3px solid var(--yesil);color:#166534;display:none;margin-top:14px;font-family:'Fredoka One',cursive;}
+</style>
+</head>
+<body>
+<header>
+  <h1>📏 Uzunluk ve Kütle</h1>
+  <p>2. Sınıf Matematik · Taylıca İlkokulu</p>
+  <button class="dl-btn" onclick="indir()">⬇ Sayfayı İndir</button>
+</header>
+<nav>
+  <button class="active" onclick="goster('uzunluk',this)">📏 Uzunluk</button>
+  <button onclick="goster('cetvel',this)">📐 Cetvel Oyunu</button>
+  <button onclick="goster('kutle',this)">⚖️ Kütle</button>
+  <button onclick="goster('terazi',this)">⚖️ Terazi Oyunu</button>
+  <button onclick="goster('alistirma',this)">🎯 Alıştırma</button>
+</nav>
+
+<!-- 1. UZUNLUK -->
+<div id="uzunluk" class="section active">
+  <div class="card">
+    <div class="card-title" style="color:var(--yesil)">📏 Uzunluk Nedir?</div>
+    <div class="story-box">
+      <p>Ali ile Zeynep boy ölçüsüne baktı. Ali 120 cm, Zeynep 115 cm. Ali daha uzun! Masanın kenarı 80 cm. Kitap rafı 1 metre 20 santimetre. Uzunlukları ölçmek için <b>cetvel</b> kullanırız!</p>
+    </div>
+    <div class="info info-yesil">Uzunluk birimi: <b>santimetre (cm)</b> ve <b>metre (m)</b></div>
+    <div class="info info-mavi">1 metre = 100 santimetre</div>
+    <div class="info info-sari">Kısa şeyler için cm, uzun şeyler için m kullanırız.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;">
+      <div style="background:#f0fdf4;border:2px solid var(--yesil);border-radius:16px;padding:12px;">
+        <div style="font-family:'Fredoka One',cursive;color:var(--yesil);margin-bottom:8px;">cm ile ölçülür:</div>
+        <div style="font-weight:700;line-height:2;">✏️ Kalem (~17 cm)<br>📚 Kitap (~21 cm)<br>👋 El (~15 cm)</div>
+      </div>
+      <div style="background:#e8fafa;border:2px solid var(--mavi);border-radius:16px;padding:12px;">
+        <div style="font-family:'Fredoka One',cursive;color:var(--mavi);margin-bottom:8px;">m ile ölçülür:</div>
+        <div style="font-weight:700;line-height:2;">🚪 Kapı (~2 m)<br>🏫 Sınıf (~7 m)<br>🌳 Ağaç (~5 m)</div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--turuncu)">🔄 Dönüşüm</div>
+    <div class="info info-turuncu">1 m = 100 cm · 2 m = 200 cm · 150 cm = 1 m 50 cm</div>
+    <div id="donusumOyun" style="margin:14px 0;"></div>
+    <div class="ctrl"><button class="btn btn-y" onclick="donusumYeni()">▶ Yeni Soru</button></div>
+    <div id="donusumFb" style="font-family:'Fredoka One',cursive;font-size:1.1rem;text-align:center;margin-top:8px;min-height:28px;"></div>
+  </div>
+</div>
+
+<!-- 2. CETVEL OYUNU -->
+<div id="cetvel" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--mavi)">📐 Cetvelle Ölç!</div>
+    <div class="info info-mavi">Cetvel 0'dan başlar. Nesnenin başını 0'a koy, sonunu oku — işte uzunluğu!</div>
+    <div class="cetvel-wrap">
+      <div class="cetvel" id="cetvelDiv"></div>
+    </div>
+    <div id="cetvelSenaryo" class="info info-sari" style="font-size:1.05rem;text-align:center;margin-top:10px;"></div>
+    <div id="nesneOlcum" style="margin:10px 0;display:flex;justify-content:center;align-items:center;gap:8px;"></div>
+    <div class="ctrl">
+      <button class="btn btn-m" onclick="cetvelGoster()">📏 Ölçümü Göster</button>
+      <button class="btn btn-t" onclick="cetvelYeni()">▶ Yeni Nesne</button>
+    </div>
+    <div id="cetvelFb" style="font-family:'Fredoka One',cursive;font-size:1.1rem;text-align:center;margin-top:8px;color:var(--yesil);min-height:28px;"></div>
+  </div>
+</div>
+
+<!-- 3. KÜTLE -->
+<div id="kutle" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--mor)">⚖️ Kütle (Ağırlık) Nedir?</div>
+    <div class="story-box">
+      <p>Annem elinde bir karpuz tuttu, sonra bir çilek. "Karpuz çok daha ağır!" dedi. Kütleyi ölçmek için <b>terazi</b> kullanırız. Birim olarak <b>gram (g)</b> ve <b>kilogram (kg)</b> kullanırız.</p>
+    </div>
+    <div class="info info-mor">Kütle birimi: <b>gram (g)</b> ve <b>kilogram (kg)</b></div>
+    <div class="info info-mavi">1 kilogram = 1000 gram</div>
+    <div class="info info-sari">Hafif şeyler için g, ağır şeyler için kg kullanırız.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;">
+      <div style="background:#faf5ff;border:2px solid var(--mor);border-radius:16px;padding:12px;">
+        <div style="font-family:'Fredoka One',cursive;color:var(--mor);margin-bottom:8px;">gram (g):</div>
+        <div style="font-weight:700;line-height:2;">🍬 Şeker (~5 g)<br>✏️ Kalem (~10 g)<br>🍎 Elma (~150 g)</div>
+      </div>
+      <div style="background:#e8fafa;border:2px solid var(--mavi);border-radius:16px;padding:12px;">
+        <div style="font-family:'Fredoka One',cursive;color:var(--mavi);margin-bottom:8px;">kilogram (kg):</div>
+        <div style="font-weight:700;line-height:2;">🎒 Okul çantası (~3 kg)<br>🐕 Köpek (~10 kg)<br>👦 Çocuk (~25 kg)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. TERAZİ OYUNU -->
+<div id="terazi" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--turuncu)">⚖️ Terazi ile Karşılaştır!</div>
+    <div class="info info-turuncu">İki nesneyi karşılaştır! Hangisi daha ağır? Terazi hangi tarafa eğilir?</div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--mavi)">🎮 Terazi Dengesi</div>
+    <div id="teraziSenaryo" class="info info-sari" style="font-size:1.05rem;text-align:center;"></div>
+    <div class="terazi-wrap">
+      <div class="terazi-sahne">
+        <div style="display:flex;justify-content:space-around;width:260px;margin-bottom:-4px;">
+          <div style="width:4px;height:30px;background:#8B4513;border-radius:2px;"></div>
+          <div style="width:4px;height:30px;background:#8B4513;border-radius:2px;"></div>
+        </div>
+        <div class="terazi-kol" id="tKol"></div>
+        <div class="terazi-destek"></div>
+        <div class="terazi-taban"></div>
+        <div class="kefeler">
+          <div class="kefe" style="background:#fff1f1;border-color:var(--kirmizi);">
+            <div class="kefe-icerik" id="kSol"></div>
+            <div class="kefe-agirlik" style="color:var(--kirmizi)" id="kSolA">?</div>
+          </div>
+          <div class="kefe" style="background:#f0fdf4;border-color:var(--yesil);">
+            <div class="kefe-icerik" id="kSag"></div>
+            <div class="kefe-agirlik" style="color:var(--yesil)" id="kSagA">?</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="tSonuc" class="info info-yesil" style="display:none;text-align:center;font-family:'Fredoka One',cursive;margin-top:10px;"></div>
+    <div class="ctrl">
+      <button class="btn btn-y" onclick="teraziGoster()">⚖️ Tart!</button>
+      <button class="btn btn-t" onclick="teraziYeni()">▶ Yeni Soru</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--mor)">🔄 Hangisi Daha Ağır?</div>
+    <div class="kars-grid" id="karsGrid"></div>
+    <div class="ctrl">
+      <button class="btn btn-m" id="agirBtn" onclick="agirKontrol('sol')">⬅️ Sol Daha Ağır</button>
+      <button class="btn btn-y" id="esitBtn" onclick="agirKontrol('esit')">= Eşit</button>
+      <button class="btn btn-t" id="sagBtn" onclick="agirKontrol('sag')">Sağ Daha Ağır ➡️</button>
+    </div>
+    <div id="karsFb" style="font-family:'Fredoka One',cursive;font-size:1.1rem;text-align:center;margin-top:8px;min-height:28px;"></div>
+    <div class="ctrl"><button class="btn btn-t" onclick="karsYeni()">▶ Yeni Soru</button></div>
+  </div>
+</div>
+
+<!-- 5. ALIŞTIRMA -->
+<div id="alistirma" class="section">
+  <div class="card">
+    <div class="card-title" style="color:var(--kirmizi)">🎯 Alıştırma Zamanı!</div>
+    <div class="info info-yesil">Uzunluk ve kütle konusunu test edelim!</div>
+  </div>
+  <div id="quizKutu"></div>
+  <div class="quiz-skor" id="quizSkor"></div>
+  <div class="ctrl"><button class="btn btn-k" onclick="quizBasla()">🔄 Tekrar Başla</button></div>
+</div>
+
+<script>
+function goster(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+function indir(){const blob=new Blob([document.documentElement.outerHTML],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='uzunluk-kutle-2sinif.html';a.click();}
+
+// CETVEL
+(function(){
+  const c=document.getElementById('cetvelDiv');
+  for(let i=0;i<=10;i++){
+    const b=document.createElement('div');b.className='cetvel-birim';
+    const cizgi=document.createElement('div');cizgi.className='cetvel-cizgi';
+    cizgi.style.cssText='width:2px;height:'+(i%5===0?'22px':'14px')+';';
+    const sayi=document.createElement('div');sayi.className='cetvel-sayi';sayi.textContent=i;
+    b.appendChild(cizgi);b.appendChild(sayi);c.appendChild(b);
+  }
+})();
+
+const cetvelNesneler=[
+  {ad:"Kalem ✏️",cm:7,renk:"#FFD93D"},
+  {ad:"Silgi 🖊️",cm:4,renk:"#FF6B6B"},
+  {ad:"Cetvel 📏",cm:10,renk:"#4ECDC4"},
+  {ad:"Kitap 📚",cm:6,renk:"#6BCB77"},
+  {ad:"Makas ✂️",cm:8,renk:"#C77DFF"},
+];
+let cIdx=0,cGosterildi=false;
+function cetvelBasla(idx){
+  cIdx=idx%cetvelNesneler.length; cGosterildi=false;
+  const n=cetvelNesneler[cIdx];
+  document.getElementById('cetvelSenaryo').textContent=n.ad+' — kaç cm?';
+  const div=document.getElementById('nesneOlcum');
+  div.innerHTML='<span style="font-weight:800;">'+n.ad+'</span><div style="height:20px;border-radius:4px;background:'+n.renk+';width:0;transition:width .8s ease;border:2px solid '+n.renk+'cc;" id="nesneBar"></div>';
+  document.getElementById('cetvelFb').textContent='';
+}
+function cetvelGoster(){
+  const n=cetvelNesneler[cIdx];
+  const bar=document.getElementById('nesneBar');
+  if(bar)setTimeout(()=>bar.style.width=(n.cm*30)+'px',50);
+  document.getElementById('cetvelFb').textContent='📏 '+n.ad+' = '+n.cm+' cm';
+}
+function cetvelYeni(){cetvelBasla(cIdx+1);}
+cetvelBasla(0);
+
+// DÖNÜŞÜM
+const donusumSorular=[
+  {soru:"1 m = ? cm",cevap:100,ipucu:"1 metre = 100 santimetre"},
+  {soru:"2 m = ? cm",cevap:200,ipucu:"2 × 100 = 200 cm"},
+  {soru:"150 cm = ? m ? cm",cevap:150,goster:"1 m 50 cm",ipucu:"100 cm = 1 m, kalan 50 cm"},
+  {soru:"3 m = ? cm",cevap:300,ipucu:"3 × 100 = 300 cm"},
+  {soru:"250 cm = ? m ? cm",cevap:250,goster:"2 m 50 cm",ipucu:"200 cm = 2 m, kalan 50 cm"},
+];
+let dIdx=0;
+function donusumYeni(){
+  dIdx=(dIdx+1)%donusumSorular.length;
+  const q=donusumSorular[dIdx];
+  const div=document.getElementById('donusumOyun');
+  div.innerHTML='<div style="font-family:\'Fredoka One\',cursive;font-size:1.3rem;text-align:center;color:var(--turuncu);margin-bottom:10px;">'+q.soru+'</div>'
+    +'<div style="display:flex;gap:8px;justify-content:center;">'
+    +'<button class="btn btn-y" onclick="donusumGoster()">💡 Göster</button>'
+    +'</div>';
+  document.getElementById('donusumFb').textContent='';
+}
+function donusumGoster(){
+  const q=donusumSorular[dIdx];
+  document.getElementById('donusumFb').innerHTML='✅ <span style="color:#166534">'+q.ipucu+(q.goster?' → <b>'+q.goster+'</b>':'')+'</span>';
+}
+donusumYeni();
+
+// TERAZİ
+const teraziSorular=[
+  {sol:{nesne:"🍎",ad:"Elma",agirlik:150},sag:{nesne:"🍇",ad:"Üzüm",agirlik:200},agir:"sag"},
+  {sol:{nesne:"📚",ad:"Kitap",agirlik:300},sag:{nesne:"✏️",ad:"Kalem",agirlik:10},agir:"sol"},
+  {sol:{nesne:"🎒",ad:"Çanta",agirlik:2000},sag:{nesne:"🍬",ad:"Şeker",agirlik:5},agir:"sol"},
+  {sol:{nesne:"🐕",ad:"Köpek",agirlik:5000},sag:{nesne:"🐱",ad:"Kedi",agirlik:3000},agir:"sol"},
+  {sol:{nesne:"🏀",ad:"Basketbol",agirlik:600},sag:{nesne:"⚽",ad:"Futbol topu",agirlik:430},agir:"sol"},
+];
+let tIdx=0;
+function teraziBasla(idx){
+  tIdx=idx%teraziSorular.length;
+  const q=teraziSorular[tIdx];
+  document.getElementById('teraziSenaryo').innerHTML='<b>'+q.sol.nesne+' '+q.sol.ad+'</b> ile <b>'+q.sag.nesne+' '+q.sag.ad+'</b> hangisi daha ağır?';
+  document.getElementById('kSol').innerHTML='<span style="font-size:2rem;">'+q.sol.nesne+'</span>';
+  document.getElementById('kSag').innerHTML='<span style="font-size:2rem;">'+q.sag.nesne+'</span>';
+  document.getElementById('kSolA').textContent=q.sol.ad;
+  document.getElementById('kSagA').textContent=q.sag.ad;
+  document.getElementById('tKol').style.transform='';
+  document.getElementById('tSonuc').style.display='none';
+}
+function teraziGoster(){
+  const q=teraziSorular[tIdx];
+  const kol=document.getElementById('tKol');
+  if(q.agir==='sol'){kol.style.transform='rotate(8deg)';}
+  else if(q.agir==='sag'){kol.style.transform='rotate(-8deg)';}
+  else{kol.style.transform='';}
+  document.getElementById('kSolA').textContent=q.sol.ad+' ('+q.sol.agirlik+'g)';
+  document.getElementById('kSagA').textContent=q.sag.ad+' ('+q.sag.agirlik+'g)';
+  const sonuc=document.getElementById('tSonuc');sonuc.style.display='block';
+  const agirNesne=q.agir==='sol'?q.sol.nesne+' '+q.sol.ad:q.sag.nesne+' '+q.sag.ad;
+  sonuc.innerHTML='⚖️ '+agirNesne+' daha ağır!';
+}
+function teraziYeni(){teraziBasla(tIdx+1);}
+teraziBasla(0);
+
+// KARŞILAŞTIRMA
+const karsSorular=[
+  {sol:{nesne:"🍎",ad:"Elma",kg:0.15},sag:{nesne:"🍉",ad:"Karpuz",kg:5},dogru:"sag"},
+  {sol:{nesne:"🎒",ad:"Okul Çantası",kg:3},sag:{nesne:"✏️",ad:"Kalem",kg:0.01},dogru:"sol"},
+  {sol:{nesne:"🐘",ad:"Fil",kg:5000},sag:{nesne:"🐭",ad:"Fare",kg:0.02},dogru:"sol"},
+  {sol:{nesne:"📱",ad:"Telefon",kg:0.2},sag:{nesne:"💻",ad:"Laptop",kg:2},dogru:"sag"},
+];
+let kIdx=0;
+function karsBasla(idx){
+  kIdx=idx%karsSorular.length;
+  const q=karsSorular[kIdx];
+  document.getElementById('karsGrid').innerHTML='<div style="background:#fff1f1;border:2px solid var(--kirmizi);border-radius:16px;padding:14px;text-align:center;"><div style="font-size:2.5rem;">'+q.sol.nesne+'</div><div style="font-weight:800;font-size:.9rem;color:var(--kirmizi);">'+q.sol.ad+'</div></div>'
+    +'<div class="kars-isaret">?</div>'
+    +'<div style="background:#f0fdf4;border:2px solid var(--yesil);border-radius:16px;padding:14px;text-align:center;"><div style="font-size:2.5rem;">'+q.sag.nesne+'</div><div style="font-weight:800;font-size:.9rem;color:var(--yesil);">'+q.sag.ad+'</div></div>';
+  document.getElementById('karsFb').textContent='';
+}
+function agirKontrol(taraf){
+  const q=karsSorular[kIdx];
+  const fb=document.getElementById('karsFb');
+  const agirNesne=q.dogru==='sol'?q.sol.nesne+' '+q.sol.ad:q.sag.nesne+' '+q.sag.ad;
+  if(taraf===q.dogru){fb.innerHTML='<span style="color:#166534">✅ Doğru! '+agirNesne+' daha ağır!</span>';}
+  else if(taraf==='esit'&&q.dogru==='esit'){fb.innerHTML='<span style="color:#166534">✅ Doğru! Eşit ağırlıkta!</span>';}
+  else{fb.innerHTML='<span style="color:#991b1b">❌ Tekrar dene! '+agirNesne+' daha ağır!</span>';}
+  document.getElementById('karsGrid').querySelector('.kars-isaret').textContent=q.dogru==='sol'?'>':q.dogru==='sag'?'<':'=';
+}
+function karsYeni(){karsBasla(kIdx+1);}
+karsBasla(0);
+
+// QUIZ
+const quizData=[
+  {s:"📏 1 metre kaç santimetredir?",o:["10 cm","50 cm","100 cm","1000 cm"],c:"100 cm"},
+  {s:"⚖️ 1 kilogram kaç gramdır?",o:["10 g","100 g","500 g","1000 g"],c:"1000 g"},
+  {s:"📏 Hangisi cm ile ölçülür?",o:["Sınıfın uzunluğu","Kalem","Futbol sahası","Yol"],c:"Kalem"},
+  {s:"⚖️ Hangisi kg ile ölçülür?",o:["Şeker","Kalem","Okul çantası","Kağıt"],c:"Okul çantası"},
+  {s:"📏 50 cm + 50 cm = ?",o:["50 cm","75 cm","1 m","2 m"],c:"1 m"},
+  {s:"⚖️ 3 kg = ? g",o:["300 g","3000 g","30 g","300 g"],c:"3000 g"},
+  {s:"📏 2 m = ? cm",o:["20 cm","200 cm","2000 cm","20000 cm"],c:"200 cm"},
+  {s:"⚖️ Elma 150 g, karpuz 5 kg. Hangisi daha ağır?",o:["Elma","Karpuz","Eşit","Bilinmez"],c:"Karpuz"},
+  {s:"📏 Masanın uzunluğu 120 cm = ? m ? cm",o:["1 m 20 cm","2 m","12 m","1 m 2 cm"],c:"1 m 20 cm"},
+  {s:"⚖️ 500 g + 500 g = ?",o:["500 g","1 kg","2 kg","5 kg"],c:"1 kg"},
+];
+let qCevap=[];
+function quizBasla(){
+  qCevap=[];document.getElementById('quizSkor').style.display='none';
+  const k=document.getElementById('quizKutu');k.innerHTML='';
+  quizData.forEach((q,qi)=>{
+    const sh=[...q.o].sort(()=>Math.random()-.5);
+    const div=document.createElement('div');div.className='quiz-soru';
+    div.innerHTML='<p>'+(qi+1)+'. '+q.s+'</p><div class="quiz-sec">'+sh.map(o=>'<button class="quiz-btn" data-qi="'+qi+'" data-v="'+o+'" onclick="qCev(this,'+qi+',\''+o+'\',\''+q.c+'\')">'+o+'</button>').join('')+'</div><div class="quiz-fb" id="qf'+qi+'"></div>';
+    k.appendChild(div);
+  });
+}
+function qCev(el,qi,val,dogru){
+  document.querySelectorAll('[data-qi="'+qi+'"]').forEach(b=>b.disabled=true);
+  if(val==dogru){el.classList.add('dogru');document.getElementById('qf'+qi).innerHTML='✅ <span style="color:#166534">Doğru!</span>';qCevap[qi]=true;}
+  else{el.classList.add('yanlis');document.getElementById('qf'+qi).innerHTML='❌ <span style="color:#991b1b">Doğrusu: '+dogru+'</span>';qCevap[qi]=false;document.querySelector('[data-qi="'+qi+'"][data-v="'+dogru+'"]').classList.add('dogru');}
+  if(qCevap.filter(x=>x!==undefined).length===quizData.length){
+    const puan=qCevap.filter(Boolean).length;const sk=document.getElementById('quizSkor');sk.style.display='block';
+    sk.innerHTML='🏆 Sonuç: '+puan+'/'+quizData.length+' doğru! '+(puan>=9?'Mükemmel! 🌟':puan>=7?'Çok iyi! 👍':puan>=5?'İyi! 💪':'Biraz daha çalışalım! 📚');
+  }
+}
+quizBasla();
+</script>
+</body>
+</html>
