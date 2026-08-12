@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3. Sınıf Çarpma İşlemi - İnteraktif Matematik</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .nav-btn {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            color: white;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .nav-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .nav-btn.active {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        .btn-table { background: #667eea; }
+        .btn-rhythm { background: #f093fb; }
+        .btn-grid { background: #4facfe; }
+        .btn-groups { background: #43e97b; }
+        .btn-practice { background: #ffd93d; color: #333; }
+        .btn-games { background: #fa709a; }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .lesson-box {
+            background: #f0f4ff;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border-left: 5px solid #667eea;
+        }
+
+        .lesson-title {
+            font-size: 1.8em;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        /* ÇARPIM TABLOSU */
+        .table-container {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 40px;
+            border-radius: 20px;
+            margin: 30px 0;
+        }
+
+        .table-selector {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .table-btn {
+            background: white;
+            border: 3px solid #667eea;
+            color: #667eea;
+            padding: 15px 25px;
+            font-size: 1.3em;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+
+        .table-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .table-btn.active-table {
+            background: #667eea;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .multiplication-table {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .table-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            margin: 10px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            color: white;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .table-row:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .table-result {
+            background: white;
+            color: #667eea;
+            padding: 5px 15px;
+            border-radius: 8px;
+        }
+
+        /* RİTMİK SAYMA */
+        .rhythm-container {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 40px;
+            border-radius: 20px;
+            margin: 30px 0;
+        }
+
+        .rhythm-display {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .rhythm-number {
+            font-size: 6em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 30px 0;
+            animation: pulse 0.5s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .rhythm-text {
+            font-size: 2em;
+            color: #636e72;
+            margin: 20px 0;
+        }
+
+        .control-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 50px;
+            font-size: 1.5em;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            margin: 10px;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        .control-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .speed-control {
+            margin: 20px 0;
+        }
+
+        .speed-btn {
+            background: #4facfe;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .speed-btn.active-speed {
+            background: #0984e3;
+        }
+
+        /* GÖRSEL IZGARA */
+        .grid-container {
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+            padding: 40px;
+            border-radius: 20px;
+            margin: 30px 0;
+        }
+
+        .grid-controls {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .grid-display {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 400px;
+        }
+
+        .visual-grid {
+            display: grid;
+            gap: 5px;
+            margin: 20px 0;
+        }
+
+        .grid-cell {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            animation: popIn 0.3s;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+
+        .number-input {
+            width: 100px;
+            height: 60px;
+            font-size: 2em;
+            text-align: center;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            margin: 10px;
+        }
+
+        /* GRUPLAR HALİNDE ÇARPMA */
+        .groups-container {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            padding: 40px;
+            border-radius: 20px;
+            margin: 30px 0;
+        }
+
+        .groups-display {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+        }
+
+        .group-box {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            margin: 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: slideIn 0.5s;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-50px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .group-item {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .emoji-item {
+            font-size: 2.5em;
+            margin: 5px;
+        }
+
+        /* PRATİK VE OYUNLAR */
+        .score-board {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .practice-area {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 40px;
+            border-radius: 20px;
+            min-height: 300px;
+        }
+
+        .question-box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .question-text {
+            font-size: 3em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        .answer-input {
+            width: 200px;
+            height: 100px;
+            font-size: 3em;
+            text-align: center;
+            border: 4px solid #667eea;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .check-btn {
+            background: linear-gradient(135deg, #43e97b 0%, #38a169 100%);
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.3em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            margin: 10px;
+        }
+
+        .check-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .feedback {
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .feedback.success {
+            background: #43e97b;
+            color: white;
+            display: block;
+            animation: bounceIn 0.5s;
+        }
+
+        .feedback.error {
+            background: #ff6b9d;
+            color: white;
+            display: block;
+            animation: shake 0.5s;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .game-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            max-width: 600px;
+            margin: 30px auto;
+        }
+
+        .memory-card {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            color: white;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .memory-card:hover {
+            transform: scale(1.05);
+        }
+
+        .memory-card.flipped {
+            background: white;
+            color: #667eea;
+            border: 3px solid #667eea;
+        }
+
+        .memory-card.matched {
+            background: #43e97b;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.8em; }
+            .nav-btn { padding: 10px 15px; font-size: 0.9em; }
+            .rhythm-number { font-size: 4em; }
+            .question-text { font-size: 2em; }
+            .memory-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✖️ 3. Sınıf Çarpma İşlemi Macerası ✖️</h1>
+            <p>Çarpım Tablosu, Ritmik Sayma ve Eğlenceli Oyunlar!</p>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="nav-btn btn-table active" onclick="showSection('table')">📊 Çarpım Tablosu</button>
+            <button class="nav-btn btn-rhythm" onclick="showSection('rhythm')">🎵 Ritmik Sayma</button>
+            <button class="nav-btn btn-grid" onclick="showSection('grid')">📐 Görsel Izgara</button>
+            <button class="nav-btn btn-groups" onclick="showSection('groups')">👥 Gruplar</button>
+            <button class="nav-btn btn-practice" onclick="showSection('practice')">✍️ Pratik Yap</button>
+            <button class="nav-btn btn-games" onclick="showSection('games')">🎮 Oyunlar</button>
+        </div>
+
+        <!-- ÇARPIM TABLOSU SECTION -->
+        <div id="table" class="section active">
+            <div class="lesson-box">
+                <div class="lesson-title">📊 İnteraktif Çarpım Tablosu</div>
+                <p style="font-size: 1.2em; line-height: 1.8;">
+                    Hangi çarpım tablosunu öğrenmek istersin? Tıkla ve ezberle! 🎯
+                </p>
+            </div>
+
+            <div class="table-container">
+                <div class="table-selector">
+                    <h2 style="color: #2d3436; margin-bottom: 20px;">Çarpım Tablosunu Seç:</h2>
+                    <button class="table-btn active-table" onclick="showTable(1)">1</button>
+                    <button class="table-btn" onclick="showTable(2)">2</button>
+                    <button class="table-btn" onclick="showTable(3)">3</button>
+                    <button class="table-btn" onclick="showTable(4)">4</button>
+                    <button class="table-btn" onclick="showTable(5)">5</button>
+                    <button class="table-btn" onclick="showTable(6)">6</button>
+                    <button class="table-btn" onclick="showTable(7)">7</button>
+                    <button class="table-btn" onclick="showTable(8)">8</button>
+                    <button class="table-btn" onclick="showTable(9)">9</button>
+                    <button class="table-btn" onclick="showTable(10)">10</button>
+                </div>
+
+                <div class="multiplication-table" id="table-display"></div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="control-btn" onclick="readTableAloud()">
+                        🔊 Sesli Oku
+                    </button>
+                    <button class="control-btn" style="background: #43e97b;" onclick="testTable()">
+                        🎯 Tablonu Test Et
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RİTMİK SAYMA SECTION -->
+        <div id="rhythm" class="section">
+            <div class="lesson-box">
+                <div class="lesson-title">🎵 Ritmik Sayma ile Çarpma</div>
+                <p style="font-size: 1.2em; line-height: 1.8;">
+                    Seçtiğin sayıyla ritmik olarak say! Müzik gibi ezberle! 🎶
+                </p>
+            </div>
+
+            <div class="rhythm-container">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h2 style="color: #2d3436; margin-bottom: 20px;">Hangi Sayıyla Sayalım?</h2>
+                    <button class="table-btn" onclick="setRhythm(2)">2'şer</button>
+                    <button class="table-btn" onclick="setRhythm(3)">3'er</button>
+                    <button class="table-btn" onclick="setRhythm(4)">4'er</button>
+                    <button class="table-btn" onclick="setRhythm(5)">5'er</button>
+                    <button class="table-btn" onclick="setRhythm(6)">6'şar</button>
+                    <button class="table-btn" onclick="setRhythm(7)">7'şer</button>
+                    <button class="table-btn" onclick="setRhythm(8)">8'er</button>
+                    <button class="table-btn" onclick="setRhythm(9)">9'ar</button>
+                    <button class="table-btn" onclick="setRhythm(10)">10'ar</button>
+                </div>
+
+                <div class="rhythm-display">
+                    <div class="rhythm-text" id="rhythm-text">Yukarıdan bir sayı seç!</div>
+                    <div class="rhythm-number" id="rhythm-number">0</div>
+                    <div class="rhythm-text" id="rhythm-count"></div>
+
+                    <div style="margin-top: 30px;">
+                        <button class="control-btn" id="rhythm-start-btn" onclick="startRhythm()">
+                            ▶️ Başlat
+                        </button>
+                        <button class="control-btn" id="rhythm-pause-btn" onclick="pauseRhythm()" style="display: none; background: #ff6b9d;">
+                            ⏸️ Durdur
+                        </button>
+                        <button class="control-btn" style="background: #636e72;" onclick="resetRhythm()">
+                            🔄 Sıfırla
+                        </button>
+                    </div>
+
+                    <div class="speed-control">
+                        <p style="font-size: 1.2em; margin-bottom: 10px;">⚡ Hız:</p>
+                        <button class="speed-btn" onclick="setSpeed(1500)">Yavaş</button>
+                        <button class="speed-btn active-speed" onclick="setSpeed(1000)">Normal</button>
+                        <button class="speed-btn" onclick="setSpeed(500)">Hızlı</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GÖRSEL IZGARA SECTION -->
+        <div id="grid" class="section">
+            <div class="lesson-box">
+                <div class="lesson-title">📐 Görsel Izgara ile Çarpma</div>
+                <p style="font-size: 1.2em; line-height: 1.8;">
+                    Çarpma işlemini görsel ızgara ile gör! 3 x 4 = 3 satır, 4 sütun! 🎨
+                </p>
+            </div>
+
+            <div class="grid-container">
+                <div class="grid-controls">
+                    <h3 style="color: #667eea; margin-bottom: 20px;">Çarpma İşlemini Gir:</h3>
+                    <div>
+                        <input type="number" id="grid-num1" class="number-input" value="3" min="1" max="10">
+                        <span style="font-size: 2em; font-weight: bold; color: #667eea;">✖️</span>
+                        <input type="number" id="grid-num2" class="number-input" value="4" min="1" max="10">
+                    </div>
+                    <button class="control-btn" onclick="createGrid()">
+                        🎨 Izgarayı Oluştur
+                    </button>
+                </div>
+
+                <div class="grid-display">
+                    <div id="visual-grid-container"></div>
+                    <div id="grid-result" style="font-size: 2.5em; font-weight: bold; color: #667eea; margin-top: 30px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GRUPLAR SECTION -->
+        <div id="groups" class="section">
+            <div class="lesson-box">
+                <div class="lesson-title">👥 Gruplar Halinde Çarpma</div>
+                <p style="font-size: 1.2em; line-height: 1.8;">
+                    3 sepet var, her sepette 5 elma! Toplam kaç elma? 3 × 5 = 15 🍎
+                </p>
+            </div>
+
+            <div class="groups-container">
+                <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; margin-bottom: 30px;">
+                    <h3 style="color: #667eea; margin-bottom: 20px;">Grup ve Eşya Sayısını Seç:</h3>
+                    <div>
+                        <input type="number" id="groups-count" class="number-input" value="3" min="1" max="10">
+                        <span style="font-size: 1.5em; font-weight: bold; color: #667eea;">grup, her grupta</span>
+                        <input type="number" id="items-count" class="number-input" value="5" min="1" max="10">
+                        <span style="font-size: 1.5em; font-weight: bold; color: #667eea;">eşya</span>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <button class="table-btn" onclick="createGroups('🍎')">🍎 Elma</button>
+                        <button class="table-btn" onclick="createGroups('⚽')">⚽ Top</button>
+                        <button class="table-btn" onclick="createGroups('🌟')">🌟 Yıldız</button>
+                        <button class="table-btn" onclick="createGroups('🎈')">🎈 Balon</button>
+                        <button class="table-btn" onclick="createGroups('🍭')">🍭 Şeker</button>
+                    </div>
+                </div>
+
+                <div class="groups-display" id="groups-display"></div>
+            </div>
+        </div>
+
+        <!-- PRATİK SECTION -->
+        <div id="practice" class="section">
+            <div class="score-board">
+                ⭐ Puan: <span id="practice-score">0</span> ⭐
+            </div>
+
+            <div class="lesson-box">
+                <div class="lesson-title">✍️ Çarpma Pratiği</div>
+                <p style="font-size: 1.2em; line-height: 1.8;">
+                    Soruları çöz, çarpma tablosunu pekiştir! 🏆
+                </p>
+            </div>
+
+            <div style="text-align: center; margin: 30px 0;">
+                <button class="table-btn" style="font-size: 1.2em; padding: 15px 30px;" onclick="generatePractice('easy')">
+                    😊 Kolay (1-5)
+                </button>
+                <button class="table-btn" style="font-size: 1.2em; padding: 15px 30px;" onclick="generatePractice('medium')">
+                    🤔 Orta (1-10)
+                </button>
+                <button class="table-btn" style="font-size: 1.2em; padding: 15px 30px;" onclick="generatePractice('hard')">
+                    🔥 Zor (Karışık)
+                </button>
+            </div>
+
+            <div class="practice-area" id="practice-area">
+                <div style="text-align: center; padding: 50px; font-size: 2em; color: #2d3436;">
+                    👆 Yukarıdan bir zorluk seviyesi seç!
+                </div>
+            </div>
+
+            <div id="practice-feedback" class="feedback"></div>
+        </div>
+
+        <!-- OYUNLAR SECTION -->
+        <div id="games" class="section">
+            <div class="score-board">
+                🎮 Oyun Puanı: <span id="game-score">0</span> 🎮
+            </div>
+
+            <!-- Hafıza Oyunu -->
+            <div class="game-card">
+                <h2 style="text-align: center; font-size: 2.5em; color: #667eea; margin-bottom: 20px;">
+                    🧠 Çarpma Hafıza Oyunu
+                </h2>
+                <p style="text-align: center; font-size: 1.3em; margin-bottom: 30px;">
+                    Eşleşen çarpma işlemlerini bul! (Örnek: 3×4 ile 12)
+                </p>
+                
+                <div class="memory-grid" id="memory-grid"></div>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="control-btn" onclick="initMemoryGame()">
+                        🎮 Yeni Oyun
+                    </button>
+                </div>
+                
+                <div id="memory-feedback" class="feedback"></div>
+            </div>
+
+            <!-- Hızlı Çarpma -->
+            <div class="game-card" style="background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);">
+                <h2 style="text-align: center; font-size: 2.5em; color: #2d3436; margin-bottom: 20px;">
+                    ⚡ Hızlı Çarpma Yarışı
+                </h2>
+                <p style="text-align: center; font-size: 1.3em; margin-bottom: 30px;">
+                    60 saniyede kaç soruyu doğru cevaplayabilirsin?
+                </p>
+
+                <div style="background: white; padding: 30px; border-radius: 15px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 30px; font-size: 1.5em; font-weight: bold;">
+                        <div style="color: #667eea;">⏱️ Süre: <span id="race-timer">60</span>
+s</div>
+                        <div style="color: #43e97b;">✓ Doğru: <span id="race-correct">0</span></div>
+                        <div style="color: #636e72;">✗ Yanlış: <span id="race-wrong">0</span></div>
+                    </div>
+
+                    <div id="race-question" style="font-size: 3em; text-align: center; margin: 40px 0; color: #667eea; font-weight: bold;">
+                        Yarışı Başlat!
+                    </div>
+
+                    <input type="number" id="race-answer" class="answer-input" placeholder="?" disabled>
+
+                    <div style="text-align: center;">
+                        <button class="control-btn" id="race-start-btn" onclick="startRace()">
+                            🚀 Yarışı Başlat!
+                        </button>
+                        <button class="check-btn" id="race-submit-btn" onclick="checkRaceAnswer()" style="display: none;">
+                            ✓ Cevabı Gönder
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Balon Patlatma -->
+            <div class="game-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                <h2 style="text-align: center; font-size: 2.5em; color: #2d3436; margin-bottom: 20px;">
+                    🎈 Doğru Balonu Patlat
+                </h2>
+                <p style="text-align: center; font-size: 1.3em; margin-bottom: 30px;">
+                    Doğru sonucu olan balona tıkla!
+                </p>
+
+                <div style="background: white; padding: 30px; border-radius: 15px;">
+                    <div id="balloon-question" style="text-align: center; font-size: 3em; font-weight: bold; color: #fa709a; margin-bottom: 40px;">
+                        3 × 7 = ?
+                    </div>
+
+                    <div id="balloons-container" style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 30px; min-height: 200px;"></div>
+
+                    <button class="control-btn" onclick="generateBalloonGame()" style="margin: 20px auto; display: block;">
+                        🎈 Yeni Soru
+                    </button>
+                </div>
+
+                <div id="balloon-feedback" class="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global Variables
+        let practiceScore = 0;
+        let gameScore = 0;
+        let currentTable = 1;
+        let rhythmInterval = null;
+        let rhythmNumber = 0;
+        let rhythmStep = 2;
+        let rhythmCount = 0;
+        let rhythmSpeed = 1000;
+        let rhythmRunning = false;
+        let currentPracticeQuestion = {};
+        let raceTimer = null;
+        let raceTimeLeft = 60;
+        let raceCorrect = 0;
+        let raceWrong = 0;
+        let raceRunning = false;
+        let memoryCards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+
+        // SECTION NAVIGATION
+        function showSection(sectionId) {
+            var sections = document.querySelectorAll('.section');
+            for (var i = 0; i < sections.length; i++) {
+                sections[i].classList.remove('active');
+            }
+            
+            var buttons = document.querySelectorAll('.nav-btn');
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove('active');
+            }
+            
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+
+            if (sectionId === 'games') {
+                initMemoryGame();
+                generateBalloonGame();
+            }
+        }
+
+        // ÇARPIM TABLOSU FUNCTIONS
+        function showTable(num) {
+            currentTable = num;
+            
+            var buttons = document.querySelectorAll('.table-btn');
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove('active-table');
+            }
+            event.target.classList.add('active-table');
+
+            var tableDisplay = document.getElementById('table-display');
+            tableDisplay.innerHTML = '<h2 style="text-align: center; color: #667eea; margin-bottom: 30px;">' + num + ' Çarpım Tablosu</h2>';
+
+            for (var i = 1; i <= 10; i++) {
+                var row = document.createElement('div');
+                row.className = 'table-row';
+                row.innerHTML = '<span>' + num + ' × ' + i + ' =</span><span class="table-result">' + (num * i) + '</span>';
+                tableDisplay.appendChild(row);
+            }
+        }
+
+        function readTableAloud() {
+            if ('speechSynthesis' in window) {
+                var text = currentTable + ' çarpım tablosu. ';
+                for (var i = 1; i <= 10; i++) {
+                    text += currentTable + ' çarpı ' + i + ' eşittir ' + (currentTable * i) + '. ';
+                }
+                var utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'tr-TR';
+                utterance.rate = 0.8;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('Tarayıcınız ses okuma özelliğini desteklemiyor.');
+            }
+        }
+
+        function testTable() {
+            var randomNum = Math.floor(Math.random() * 10) + 1;
+            var answer = prompt(currentTable + ' × ' + randomNum + ' = ?');
+            if (answer == (currentTable * randomNum)) {
+                alert('🎉 Doğru! Harikasın!');
+            } else {
+                alert('❌ Yanlış! Doğru cevap: ' + (currentTable * randomNum));
+            }
+        }
+
+        // RİTMİK SAYMA FUNCTIONS
+        function setRhythm(num) {
+            rhythmStep = num;
+            resetRhythm();
+            document.getElementById('rhythm-text').textContent = num + "'şer/er sayalım!";
+            
+            var buttons = document.querySelectorAll('#rhythm .table-btn');
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove('active-table');
+            }
+            event.target.classList.add('active-table');
+        }
+
+        function startRhythm() {
+            if (rhythmStep === 0) {
+                alert('Önce yukarıdan bir sayı seç!');
+                return;
+            }
+
+            rhythmRunning = true;
+            document.getElementById('rhythm-start-btn').style.display = 'none';
+            document.getElementById('rhythm-pause-btn').style.display = 'inline-block';
+
+            rhythmInterval = setInterval(function() {
+                rhythmCount++;
+                rhythmNumber = rhythmStep * rhythmCount;
+                document.getElementById('rhythm-number').textContent = rhythmNumber;
+                document.getElementById('rhythm-count').textContent = rhythmStep + ' × ' + rhythmCount + ' = ' + rhythmNumber;
+                
+                if ('speechSynthesis' in window) {
+                    var utterance = new SpeechSynthesisUtterance(rhythmNumber.toString());
+                    utterance.lang = 'tr-TR';
+                    utterance.rate = 1;
+                    window.speechSynthesis.speak(utterance);
+                }
+            }, rhythmSpeed);
+        }
+
+        function pauseRhythm() {
+            rhythmRunning = false;
+            clearInterval(rhythmInterval);
+            document.getElementById('rhythm-start-btn').style.display = 'inline-block';
+            document.getElementById('rhythm-pause-btn').style.display = 'none';
+        }
+
+        function resetRhythm() {
+            pauseRhythm();
+            rhythmNumber = 0;
+            rhythmCount = 0;
+            document.getElementById('rhythm-number').textContent = '0';
+            document.getElementById('rhythm-count').textContent = '';
+        }
+
+        function setSpeed(speed) {
+            rhythmSpeed = speed;
+            var buttons = document.querySelectorAll('.speed-btn');
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove('active-speed');
+            }
+            event.target.classList.add('active-speed');
+            
+            if (rhythmRunning) {
+                pauseRhythm();
+                startRhythm();
+            }
+        }
+
+        // GÖRSEL IZGARA FUNCTIONS
+        function createGrid() {
+            var num1 = parseInt(document.getElementById('grid-num1').value) || 0;
+            var num2 = parseInt(document.getElementById('grid-num2').value) || 0;
+
+            if (num1 < 1 || num1 > 10 || num2 < 1 || num2 > 10) {
+                alert('Lütfen 1-10 arası sayılar gir!');
+                return;
+            }
+
+            var container = document.getElementById('visual-grid-container');
+            container.innerHTML = '';
+
+            var grid = document.createElement('div');
+            grid.className = 'visual-grid';
+            grid.style.gridTemplateColumns = 'repeat(' + num2 + ', 40px)';
+
+            var cellNumber = 1;
+            for (var i = 0; i < num1; i++) {
+                for (var j = 0; j < num2; j++) {
+                    var cell = document.createElement('div');
+                    cell.className = 'grid-cell';
+                    cell.textContent = cellNumber;
+                    cell.style.animationDelay = (i * num2 + j) * 0.05 + 's';
+                    grid.appendChild(cell);
+                    cellNumber++;
+                }
+            }
+
+            container.appendChild(grid);
+
+            document.getElementById('grid-result').innerHTML = 
+                '<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; display: inline-block;">' +
+                num1 + ' × ' + num2 + ' = <strong style="font-size: 1.5em;">' + (num1 * num2) + '</strong>' +
+                '</div>';
+        }
+
+        // GRUPLAR FUNCTIONS
+        function createGroups(emoji) {
+            var groupsCount = parseInt(document.getElementById('groups-count').value) || 0;
+            var itemsCount = parseInt(document.getElementById('items-count').value) || 0;
+
+            if (groupsCount < 1 || groupsCount > 10 || itemsCount < 1 || itemsCount > 10) {
+                alert('Lütfen 1-10 arası sayılar gir!');
+                return;
+            }
+
+            var display = document.getElementById('groups-display');
+            display.innerHTML = '<h2 style="text-align: center; color: #2d3436; margin-bottom: 30px;">' +
+                groupsCount + ' grup × ' + itemsCount + ' eşya = ' + (groupsCount * itemsCount) + ' toplam</h2>';
+
+            for (var i = 0; i < groupsCount; i++) {
+                var groupBox = document.createElement('div');
+                groupBox.className = 'group-box';
+                groupBox.style.animationDelay = (i * 0.1) + 's';
+
+                var groupTitle = document.createElement('div');
+                groupTitle.style.cssText = 'color: white; font-size: 1.2em; font-weight: bold; margin-bottom: 10px; text-align: center;';
+                groupTitle.textContent = 'Grup ' + (i + 1);
+                groupBox.appendChild(groupTitle);
+
+                for (var j = 0; j < itemsCount; j++) {
+                    var item = document.createElement('span');
+                    item.className = 'emoji-item';
+                    item.textContent = emoji;
+                    groupBox.appendChild(item);
+                }
+
+                display.appendChild(groupBox);
+            }
+
+            var resultBox = document.createElement('div');
+            resultBox.style.cssText = 'background: white; padding: 30px; margin: 30px auto; border-radius: 15px; text-align: center; max-width: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);';
+            resultBox.innerHTML = '<div style="font-size: 2.5em; font-weight: bold; color: #667eea;">' +
+                groupsCount + ' × ' + itemsCount + ' = ' + (groupsCount * itemsCount) + '</div>' +
+                '<div style="font-size: 1.3em; color: #636e72; margin-top: 15px;">' +
+                groupsCount + ' grup, her grupta ' + itemsCount + ' ' + emoji + ' var!</div>';
+            display.appendChild(resultBox);
+        }
+
+        // PRATİK FUNCTIONS
+        function generatePractice(level) {
+            var num1, num2;
+
+            if (level === 'easy') {
+                num1 = Math.floor(Math.random() * 5) + 1;
+                num2 = Math.floor(Math.random() * 5) + 1;
+            } else if (level === 'medium') {
+                num1 = Math.floor(Math.random() * 10) + 1;
+                num2 = Math.floor(Math.random() * 10) + 1;
+            } else {
+                num1 = Math.floor(Math.random() * 12) + 1;
+                num2 = Math.floor(Math.random() * 12) + 1;
+            }
+
+            currentPracticeQuestion = { num1: num1, num2: num2, answer: num1 * num2, level: level };
+
+            var practiceArea = document.getElementById('practice-area');
+            practiceArea.innerHTML = 
+                '<div class="question-box">' +
+                '<div class="question-text">' + num1 + ' × ' + num2 + ' = ?</div>' +
+                '<input type="number" id="practice-input" class="answer-input" placeholder="?" autofocus>' +
+                '<br>' +
+                '<button class="check-btn" onclick="checkPracticeAnswer()">✓ Kontrol Et</button>' +
+                '<button class="check-btn" style="background: #4facfe;" onclick="generatePractice(\'' + level + '\')">⏭️ Yeni Soru</button>' +
+                '</div>';
+
+            document.getElementById('practice-feedback').style.display = 'none';
+
+            var input = document.getElementById('practice-input');
+            if (input) {
+                input.focus();
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        checkPracticeAnswer();
+                    }
+                });
+            }
+        }
+
+        function checkPracticeAnswer() {
+            var input = document.getElementById('practice-input');
+            if (!input) return;
+
+            var userAnswer = parseInt(input.value);
+            var feedback = document.getElementById('practice-feedback');
+
+            if (!userAnswer && userAnswer !== 0) {
+                alert('Lütfen bir cevap yaz!');
+                return;
+            }
+
+            if (userAnswer === currentPracticeQuestion.answer) {
+                feedback.className = 'feedback success';
+                feedback.innerHTML = '🎉 Mükemmel! Doğru cevap! +10 puan';
+                practiceScore += 10;
+                document.getElementById('practice-score').textContent = practiceScore;
+                
+                setTimeout(function() {
+                    generatePractice(currentPracticeQuestion.level);
+                }, 2000);
+            } else {
+                feedback.className = 'feedback error';
+                feedback.innerHTML = '❌ Yanlış! Doğru cevap: ' + currentPracticeQuestion.answer;
+            }
+        }
+
+        // MEMORY GAME FUNCTIONS
+        function initMemoryGame() {
+            matchedPairs = 0;
+            flippedCards = [];
+            memoryCards = [];
+
+            var pairs = [
+                ['2×3', '6'], ['3×4', '12'], ['4×5', '20'], ['5×6', '30'],
+                ['2×7', '14'], ['3×8', '24'], ['4×6', '24'], ['5×5', '25']
+            ];
+
+            var selectedPairs = [];
+            for (var i = 0; i < 6; i++) {
+                selectedPairs.push(pairs[i]);
+            }
+
+            var allCards = [];
+            for (var i = 0; i < selectedPairs.length; i++) {
+                allCards.push({ text: selectedPairs[i][0], pair: i });
+                allCards.push({ text: selectedPairs[i][1], pair: i });
+            }
+
+            for (var i = allCards.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = allCards[i];
+                allCards[i] = allCards[j];
+                allCards[j] = temp;
+            }
+
+            memoryCards = allCards;
+
+            var grid = document.getElementById('memory-grid');
+            grid.innerHTML = '';
+
+            for (var i = 0; i < memoryCards.length; i++) {
+                var card = document.createElement('div');
+                card.className = 'memory-card';
+                card.textContent = '?';
+                card.dataset.index = i;
+                card.onclick = function() { flipCard(parseInt(this.dataset.index)); };
+                grid.appendChild(card);
+            }
+
+            document.getElementById('memory-feedback').style.display = 'none';
+        }
+
+        function flipCard(index) {
+            if (flippedCards.length >= 2) return;
+            
+            var cards = document.querySelectorAll('.memory-card');
+            var card = cards[index];
+            
+            if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
+
+            card.classList.add('flipped');
+            card.textContent = memoryCards[index].text;
+            flippedCards.push(index);
+
+            if (flippedCards.length === 2) {
+                setTimeout(checkMatch, 1000);
+            }
+        }
+
+        function checkMatch() {
+            var cards = document.querySelectorAll('.memory-card');
+            var index1 = flippedCards[0];
+            var index2 = flippedCards[1];
+            var card1 = cards[index1];
+            var card2 = cards[index2];
+
+            if (memoryCards[index1].pair === memoryCards[index2].pair) {
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                matchedPairs++;
+                gameScore += 20;
+                document.getElementById('game-score').textContent = gameScore;
+
+                if (matchedPairs === 6) {
+                    var feedback = document.getElementById('memory-feedback');
+                    feedback.className = 'feedback success';
+                    feedback.innerHTML = '🎉 Tebrikler! Tüm eşleşmeleri buldun! +120 puan';
+                }
+            } else {
+                card1.classList.remove('flipped');
+                card2.classList.remove('flipped');
+                card1.textContent = '?';
+                card2.textContent = '?';
+            }
+
+            flippedCards = [];
+        }
+
+        // RACE GAME FUNCTIONS
+        function startRace() {
+            if (raceRunning) return;
+
+            raceRunning = true;
+            raceTimeLeft = 60;
+            raceCorrect = 0;
+            raceWrong = 0;
+
+            document.getElementById('race-timer').textContent = raceTimeLeft;
+            document.getElementById('race-correct').textContent = raceCorrect;
+            document.getElementById('race-wrong').textContent = raceWrong;
+            
+            var answerInput = document.getElementById('race-answer');
+            answerInput.disabled = false;
+            answerInput.value = '';
+            
+            document.getElementById('race-start-btn').style.display = 'none';
+            document.getElementById('race-submit-btn').style.display = 'inline-block';
+
+            generateRaceQuestion();
+
+            raceTimer = setInterval(function() {
+                raceTimeLeft--;
+                document.getElementById('race-timer').textContent = raceTimeLeft;
+
+                if (raceTimeLeft <= 0) {
+                    endRace();
+                }
+            }, 1000);
+
+            answerInput.focus();
+        }
+
+        function generateRaceQuestion() {
+            var num1 = Math.floor(Math.random() * 10) + 1;
+            var num2 = Math.floor(Math.random() * 10) + 1;
+
+            currentRaceQuestion = { num1: num1, num2: num2, answer: num1 * num2 };
+
+            document.getElementById('race-question').textContent = num1 + ' × ' + num2 + ' = ?';
+            document.getElementById('race-answer').value = '';
+            document.getElementById('race-answer').focus();
+        }
+
+        function checkRaceAnswer() {
+            if (!raceRunning) return;
+
+            var userAnswer = parseInt(document.getElementById('race-answer').value);
+
+            if (!userAnswer && userAnswer !== 0) return;
+
+            if (userAnswer === currentRaceQuestion.answer) {
+                raceCorrect++;
+                document.getElementById('race-correct').textContent = raceCorrect;
+                gameScore += 5;
+                document.getElementById('game-score').textContent = gameScore;
+            } else {
+                raceWrong++;
+                document.getElementById('race-wrong').textContent = raceWrong;
+            }
+
+            generateRaceQuestion();
+        }
+
+        function endRace() {
+            clearInterval(raceTimer);
+            raceRunning = false;
+
+            document.getElementById('race-question').innerHTML = 
+                '<div style="text-align: center;">' +
+                '<h2>⏰ Süre Bitti!</h2>' +
+                '<p style="font-size: 1.5em; margin: 20px 0;">' +
+                '✓ Doğru: ' + raceCorrect + '<br>' +
+                '✗ Yanlış: ' + raceWrong + '<br>' +
+                '<strong style="color: #43e97b;">Kazandığın Puan: ' + (raceCorrect * 5) + '</strong>' +
+                '</p></div>';
+
+            document.getElementById('race-answer').disabled = true;
+            document.getElementById('race-submit-btn').style.display = 'none';
+            document.getElementById('race-start-btn').style.display = 'inline-block';
+        }
+
+        // BALLOON GAME FUNCTIONS
+        function generateBalloonGame() {
+            var num1 = Math.floor(Math.random() * 10) + 1;
+            var num2 = Math.floor(Math.random() * 10) + 1;
+            var correctAnswer = num1 * num2;
+
+            document.getElementById('balloon-question').textContent = num1 + ' × ' + num2 + ' = ?';
+
+            var wrongAnswers = [
+                correctAnswer + Math.floor(Math.random() * 10) + 5,
+                correctAnswer - Math.floor(Math.random() * 10) - 5,
+                correctAnswer + Math.floor(Math.random() * 5) + 2
+            ];
+
+            var allAnswers = [correctAnswer].concat(wrongAnswers);
+            for (var i = allAnswers.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = allAnswers[i];
+                allAnswers[i] = allAnswers[j];
+                allAnswers[j] = temp;
+            }
+
+            var container = document.getElementById('balloons-container');
+            container.innerHTML = '';
+
+            for (var i = 0; i < allAnswers.length; i++) {
+                var balloon = document.createElement('div');
+                balloon.style.cssText = 
+                    'width: 100px; height: 120px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); ' +
+                    'border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; cursor: pointer; display: flex; ' +
+                    'align-items: center; justify-content: center; font-size: 2em; font-weight: bold; ' +
+                    'color: white; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: all 0.3s; position: relative;';
+                balloon.textContent = allAnswers[i];
+                
+                balloon.onmouseover = function() {
+                    this.style.transform = 'translateY(-10px) scale(1.1)';
+                };
+                balloon.onmouseout = function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                };
+                
+                (function(answer) {
+                    balloon.onclick = function() {
+                        checkBalloon(answer, correctAnswer, this);
+                    };
+                })(allAnswers[i]);
+                
+                container.appendChild(balloon);
+            }
+
+            document.getElementById('balloon-feedback').style.display = 'none';
+        }
+
+        function checkBalloon(selected, correct, balloonElement) {
+            var feedback = document.getElementById('balloon-feedback');
+
+            if (selected === correct) {
+                balloonElement.style.animation = 'bounceIn 0.5s';
+                balloonElement.style.background = 'linear-gradient(135deg, #43e97b 0%, #38a169 100%)';
+                balloonElement.textContent = '💥';
+
+                feedback.className = 'feedback success';
+                feedback.innerHTML = '🎉 Doğru! Balonu patlattın! +15 puan';
+                gameScore += 15;
+                document.getElementById('game-score').textContent = gameScore;
+
+                setTimeout(function() {
+                    generateBalloonGame();
+                }, 2000);
+            } else {
+                balloonElement.style.animation = 'shake 0.5s';
+                feedback.className = 'feedback error';
+                feedback.innerHTML = '❌ Yanlış balon! Tekrar dene!';
+                setTimeout(function() {
+                    balloonElement.style.animation = '';
+                }, 500);
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            showTable(1);
+        });
+
+        // Enter key support for race game
+        document.addEventListener('DOMContentLoaded', function() {
+            var raceAnswer = document.getElementById('race-answer');
+            if (raceAnswer) {
+                raceAnswer.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' && raceRunning) {
+                        checkRaceAnswer();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
