@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3. Sınıf Dört İşlem Problemleri</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .nav-btn {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            color: white;
+            background: #95a5a6;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .nav-btn.active {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        .btn-toplama { background: #43e97b; }
+        .btn-cikarma { background: #f093fb; }
+        .btn-carpma { background: #4facfe; }
+        .btn-bolme { background: #ffd93d; color: #333; }
+        .btn-karisik { background: #ff6b9d; }
+        .btn-problemler { background: #667eea; }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .lesson-box {
+            background: #f0f8ff;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border-left: 5px solid #667eea;
+        }
+
+        .lesson-title {
+            font-size: 1.8em;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .score-board {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .problem-container {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 40px;
+            border-radius: 20px;
+            margin: 30px 0;
+        }
+
+        .problem-box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .problem-text {
+            font-size: 1.8em;
+            line-height: 2;
+            color: #2d3436;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .problem-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            font-size: 3em;
+        }
+
+        .answer-input {
+            width: 200px;
+            height: 100px;
+            font-size: 3em;
+            text-align: center;
+            border: 4px solid #667eea;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .check-btn {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.3em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            margin: 10px;
+        }
+
+        .check-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .feedback {
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .feedback.success {
+            background: #43e97b;
+            color: white;
+            display: block;
+            animation: bounceIn 0.5s;
+        }
+
+        .feedback.error {
+            background: #ff6b9d;
+            color: white;
+            display: block;
+            animation: shake 0.5s;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .practice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .practice-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+
+        .practice-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .practice-question {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 15px 0;
+        }
+
+        .practice-input {
+            width: 100px;
+            height: 60px;
+            font-size: 2em;
+            text-align: center;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .level-selector {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .level-btn {
+            padding: 20px 40px;
+            font-size: 1.3em;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            color: white;
+        }
+
+        .level-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .emoji-display {
+            font-size: 3em;
+            margin: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.8em; }
+            .nav-btn { padding: 10px 15px; font-size: 0.9em; }
+            .problem-text { font-size: 1.3em; }
+            .answer-input { width: 150px; height: 80px; font-size: 2em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔢 3. Sınıf Dört İşlem Problemleri 🔢</h1>
+            <p>Toplama, Çıkarma, Çarpma ve Bölme ile Problem Çöz! 🎯</p>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="nav-btn btn-toplama active" onclick="showSection('toplama', this)">➕ Toplama</button>
+            <button class="nav-btn btn-cikarma" onclick="showSection('cikarma', this)">➖ Çıkarma</button>
+            <button class="nav-btn btn-carpma" onclick="showSection('carpma', this)">✖️ Çarpma</button>
+            <button class="nav-btn btn-bolme" onclick="showSection('bolme', this)">➗ Bölme</button>
+            <button class="nav-btn btn-karisik" onclick="showSection('karisik', this)">🎲 Karışık İşlemler</button>
+            <button class="nav-btn btn-problemler" onclick="showSection('problemler', this)">📖 Kelime Problemleri</button>
+        </div>
+
+        <!-- TOPLAMA SECTION -->
+        <div id="toplama" class="section active">
+            <div class="score-board">
+                ⭐ Puan: <span id="score-toplama">0</span> ⭐
+            </div>
+
+            <div class="lesson-box">
+                <div class="lesson-title">➕ Toplama İşlemleri</div>
+                <p style="font-size: 1.3em; line-height: 2;">
+                    İki veya daha fazla sayıyı bir araya getiriyoruz! 🎁
+                </p>
+            </div>
+
+            <div class="level-selector">
+                <button class="level-btn" style="background: #43e97b;" onclick="generateProblems('toplama', 'easy')">
+                    😊 Kolay (0-50)
+                </button>
+                <button class="level-btn" style="background: #4facfe;" onclick="generateProblems('toplama', 'medium')">
+                    🤔 Orta (0-100)
+                </button>
+                <button class="level-btn" style="background: #ff6b9d;" onclick="generateProblems('toplama', 'hard')">
+                    😎 Zor (0-500)
+                </button>
+            </div>
+
+            <div class="problem-container">
+                <div id="toplama-problems" style="text-align: center; padding: 50px; font-size: 2em; color: #2d3436;">
+                    👆 Yukarıdan bir zorluk seviyesi seç!
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <button class="check-btn" onclick="checkAnswers('toplama')">
+                    ✓ Cevapları Kontrol Et
+                </button>
+            </div>
+
+            <div id="feedback-toplama" class="feedback"></div>
+        </div>
+
+        <!-- ÇIKARMA SECTION -->
+        <div id="cikarma" class="section">
+            <div class="score-board">
+                ⭐ Puan: <span id="score-cikarma">0</span> ⭐
+            </div>
+
+            <div class="lesson-box">
+                <div class="lesson-title">➖ Çıkarma İşlemleri</div>
+                <p style="font-size: 1.3em; line-height: 2;">
+                    Büyük sayıdan küçük sayıyı çıkarıyoruz! 📉
+                </p>
+            </div>
+
+            <div class="level-selector">
+                <button class="level-btn" style="background: #43e97b;" onclick="generateProblems('cikarma', 'easy')">
+                    😊 Kolay (0-50)
+                </button>
+                <button class="level-btn" style="background: #4facfe;" onclick="generateProblems('cikarma', 'medium')">
+                    🤔 Orta (0-100)
+                </button>
+                <button class="level-btn" style="background: #ff6b9d;" onclick="generateProblems('cikarma', 'hard')">
+                    😎 Zor (0-500)
+                </button>
+            </div>
+
+            <div class="problem-container">
+                <div id="cikarma-problems" style="text-align: center; padding: 50px; font-size: 2em; color: #2d3436;">
+                    👆 Yukarıdan bir zorluk seviyesi seç!
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <button class="check-btn" onclick="checkAnswers('cikarma')">
+                    ✓ Cevapları Kontrol Et
+                </button>
+            </div>
+
+            <div id="feedback-cikarma" class="feedback"></div>
+        </div>
+
+        <!-- ÇARPMA SECTION -->
+        <div id="carpma" class="section">
+            <div class="score-board">
+                ⭐ Puan: <span id="score-carpma">0</span> ⭐
+            </div>
+
+            <div class="lesson-box">
+                <div class="lesson-title">✖️ Çarpma İşlemleri</div>
+                <p style="font-size: 1.3em; line-height: 2;">
+                    Aynı sayıyı tekrar tekrar topluyoruz! ⚡
+                </p>
+            </div>
+
+            <div class="level-selector">
+                <button class="level-btn" style="background: #43e97b;" onclick="generateProblems('carpma', 'easy')">
+                    😊 Kolay (Çarpım Tablosu)
+                </button>
+                <button class="level-btn" style="background: #4facfe;" onclick="generateProblems('carpma', 'medium')">
+                    🤔 Orta (0-100)
+                </button>
+                <button class="level-btn" style="background: #ff6b9d;" onclick="generateProblems('carpma', 'hard')">
+                    😎 Zor (Büyük Sayılar)
+                </button>
+            </div>
+
+            <div class="problem-container">
+                <div id="carpma-problems" style="text-align: center; padding: 50px; font-size: 2em; color: #2d3436;">
+                    👆 Yukarıdan bir zorluk seviyesi seç!
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <button class="check-btn" onclick="checkAnswers('carpma')">
+                    ✓ Cevapları Kontrol Et
+                </button>
+            </div>
+
+            <div id="feedback-carpma" class="feedback"></div>
+        </div>
+
+        <!-- BÖLME SECTION -->
+        <div id="bolme" class="section">
+            <div class="score-board">
+                ⭐ Puan: <span id="score-bolme">0</span> ⭐
+            </div>
+
+            <div class="lesson-box">
+                <div class="lesson-title">➗ Bölme İşlemleri</div>
+                <p style="font-size: 1.3em; line-height: 2;">
+                    Eşit gruplara paylaştırıyoruz! 🎁
+                </p>
+            </div>
+
+            <div class="level-selector">
+                <button class="level-btn" style="background: #43e97b;" onclick="generateProblems('bolme', 'easy')">
+                    😊 Kolay (Kalansız)
+                </button>
+                <button class="level-btn" style="background: #4facfe;" onclick="generateProblems('bolme', 'medium')">
+                    🤔 Orta (Basit)
+                </button>
+                <button class="level-btn" style="background: #ff6b9d;" onclick="generateProblems('bolme', 'hard')">
+                    😎 Zor (Büyük Sayılar)
+                </button>
+            </div>
+
+            <div class="problem-container">
+                <div id="bolme-problems" style="text-align: center; padding: 50px; font-size: 2em; color: #2d3436;">
+                    👆 Yukarıdan bir zorluk seviyesi seç!
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <button class="check-btn" onclick="checkAnswers('bolme')">
+                    ✓ Cevapları Kontrol Et
+                </button>
+            </div>
+
+            <div id="feedback-bolme" class="feedback"></div>
+        </div>
+
+        <!-- KARIŞIK İŞLEMLER SECTION -->
+        <div id="karisik" class="section">
+            <div class="score-board">
+                ⭐ Puan: <span id="score-karisik">0</span> ⭐
+            </div>
+
+            <div class="lesson-box">
+                <div class="lesson-title">🎲 Karışık İşlemler</div>
+                <p style="font-size: 1.3em; line-height: 2;">
+                    Tüm işlemler bir arada! Hepsini biliyorsun! 💪
+                </p>
+            </div>
+
+            <div class="level-selector">
+                <button class="level-btn" style="background: #43e97b;" onclick="generateProblems('karisik', 'easy')">
+                    😊 Kolay
+                </button>
+                <button class="level-btn" style="background: #4facfe;" onclick="generateProblems('karisik', 'medium')">
+                    🤔 Orta
+                </button>
+                <button class="level-btn" style="background: #ff6b9d;" onclick="generateProblems('karisik', 'hard')">
+                    😎 Zor
+                </button>
+            </div>
+
+            <div class="problem-container">
+                <div id="karisik-problems" style="text-align: center; padding: 50px; font-size: 2em; color: #2d3436;">
+                    👆 Yukarıdan bir zorluk seviyesi seç!
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <button class="check-btn" onclick="checkAnswers('karisik')">
+                    ✓ Cevapları Kontrol Et
+                </button>
+            </div>
+
+            <div id="feedback-karisik" class="feedback"></div>
+        </div>
+
+        <!-- KELİME PROBLEMLERİ SECTION -->
+        <div id="problemler" class="section">
+            <div class="score-board">
+                ⭐ Puan: <span id="score-problemler">0</span> ⭐
+            </div>
+
+            <div class="lesson-box">
+                <div class="lesson-title">📖 Kelime Problemleri</div>
+                <p style="font-size: 1.3em; line-height: 2;">
+                    Günlük hayattan hikayelerle matematik! Problemi oku, işlemi bul, çöz! 🧠
+                </p>
+            </div>
+
+            <div class="level-selector">
+                <button class="level-btn" style="background: #43e97b;" onclick="generateWordProblems('easy')">
+                    😊 Kolay
+                </button>
+                <button class="level-btn" style="background: #4facfe;" onclick="generateWordProblems('medium')">
+                    🤔 Orta
+                </button>
+                <button class="level-btn" style="background: #ff6b9d;" onclick="generateWordProblems('hard')">
+                    😎 Zor
+                </button>
+            </div>
+
+            <div class="problem-container">
+                <div id="problemler-content" style="text-align: center; padding: 50px; font-size: 2em; color: #2d3436;">
+                    👆 Yukarıdan bir zorluk seviyesi seç!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var scores = {
+            toplama: 0,
+            cikarma: 0,
+            carpma: 0,
+            bolme: 0,
+            karisik: 0,
+            problemler: 0
+        };
+
+        var currentProblems = {};
+
+        function showSection(sectionId, buttonElement) {
+            var sections = document.querySelectorAll('.section');
+            for (var i = 0; i < sections.length; i++) {
+                sections[i].classList.remove('active');
+            }
+            
+            var buttons = document.querySelectorAll('.nav-btn');
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove('active');
+            }
+            
+            document.getElementById(sectionId).classList.add('active');
+            buttonElement.classList.add('active');
+        }
+
+        function generateProblems(type, level) {
+            var container = document.getElementById(type + '-problems');
+            container.innerHTML = '';
+
+            currentProblems[type] = [];
+
+            var numProblems = 6;
+            var grid = document.createElement('div');
+            grid.className = 'practice-grid';
+
+            for (var i = 0; i < numProblems; i++) {
+                var problem = generateSingleProblem(type, level);
+                currentProblems[type].push(problem);
+
+                var card = document.createElement('div');
+                card.className = 'practice-card';
+
+                var question = document.createElement('div');
+                question.className = 'practice-question';
+                question.textContent = problem.question;
+                card.appendChild(question);
+
+                var input = document.createElement('input');
+                input.type = 'number';
+                input.className = 'practice-input';
+                input.id = type + '-answer-' + i;
+                input.placeholder = '?';
+                card.appendChild(input);
+
+                grid.appendChild(card);
+            }
+
+            container.appendChild(grid);
+
+            document.getElementById('feedback-' + type).style.display = 'none';
+        }
+
+        function generateSingleProblem(type, level) {
+            var num1, num2, answer, question, operation;
+
+            if (type === 'toplama') {
+                if (level === 'easy') {
+                    num1 = Math.floor(Math.random() * 30) + 5;
+                    num2 = Math.floor(Math.random() * 30) + 5;
+                } else if (level === 'medium') {
+                    num1 = Math.floor(Math.random() * 60) + 20;
+                    num2 = Math.floor(Math.random() * 60) + 20;
+                } else {
+                    num1 = Math.floor(Math.random() * 300) + 100;
+                    num2 = Math.floor(Math.random() * 300) + 100;
+                }
+                answer = num1 + num2;
+                question = num1 + ' + ' + num2 + ' = ?';
+                operation = '+';
+
+            } else if (type === 'cikarma') {
+                if (level === 'easy') {
+                    num1 = Math.floor(Math.random() * 40) + 10;
+                    num2 = Math.floor(Math.random() * num1);
+                } else if (level === 'medium') {
+                    num1 = Math.floor(Math.random() * 80) + 20;
+                    num2 = Math.floor(Math.random() * num1);
+                } else {
+                    num1 = Math.floor(Math.random() * 400) + 100;
+                    num2 = Math.floor(Math.random() * num1);
+                }
+                answer = num1 - num2;
+                question = num1 + ' - ' + num2 + ' = ?';
+                operation = '-';
+
+            } else if (type === 'carpma') {
+                if (level === 'easy') {
+                    num1 = Math.floor(Math.random() * 9) + 2;
+                    num2 = Math.floor(Math.random() * 9) + 2;
+                } else if (level === 'medium') {
+                    num1 = Math.floor(Math.random() * 12) + 3;
+                    num2 = Math.floor(Math.random() * 12) + 3;
+                } else {
+                    num1 = Math.floor(Math.random() * 20) + 10;
+                    num2 = Math.floor(Math.random() * 9) + 2;
+                }
+                answer = num1 * num2;
+                question = num1 + ' × ' + num2 + ' = ?';
+                operation = '×';
+
+            } else if (type === 'bolme') {
+                if (level === 'easy') {
+                    num2 = Math.floor(Math.random() * 5) + 2;
+                    var multiplier = Math.floor(Math.random() * 8) + 2;
+                    num1 = num2 * multiplier;
+                } else if (level === 'medium') {
+                    num2 = Math.floor(Math.random() * 8) + 2;
+                    var multiplier = Math.floor(Math.random() * 10) + 2;
+                    num1 = num2 * multiplier;
+                } else {
+                    num2 = Math.floor(Math.random() * 10) + 5;
+                    var multiplier = Math.floor(Math.random() * 15) + 5;
+                    num1 = num2 * multiplier;
+                }
+                answer = num1 / num2;
+                question = num1 + ' ÷ ' + num2 + ' = ?';
+                operation = '÷';
+
+            } else if (type === 'karisik') {
+                var operations = ['+', '-', '×', '÷'];
+                operation = operations[Math.floor(Math.random() * operations.length)];
+
+                if (operation === '+') {
+                    if (level === 'easy') {
+                        num1 = Math.floor(Math.random() * 30) + 5;
+                        num2 = Math.floor(Math.random() * 30) + 5;
+                    } else if (level === 'medium') {
+                        num1 = Math.floor(Math.random() * 60) + 20;
+                        num2 = Math.floor(Math.random() * 60) + 20;
+                    } else {
+                        num1 = Math.floor(Math.random() * 200) + 50;
+                        num2 = Math.floor(Math.random() * 200) + 50;
+                    }
+                    answer = num1 + num2;
+                    question = num1 + ' + ' + num2 + ' = ?';
+                } else if (operation === '-') {
+                    if (level === 'easy') {
+                        num1 = Math.floor(Math.random() * 40) + 10;
+                        num2 = Math.floor(Math.random() * num1);
+                    } else if (level === 'medium') {
+                        num1 = Math.floor(Math.random() * 80) + 20;
+                        num2 = Math.floor(Math.random() * num1);
+                    } else {
+                        num1 = Math.floor(Math.random() * 300) + 100;
+                        num2 = Math.floor(Math.random() * num1);
+                    }
+                    answer = num1 - num2;
+                    question = num1 + ' - ' + num2 + ' = ?';
+                } else if (operation === '×') {
+                    if (level === 'easy') {
+                        num1 = Math.floor(Math.random() * 8) + 2;
+                        num2 = Math.floor(Math.random() * 8) + 2;
+                    } else if (level === 'medium') {
+                        num1 = Math.floor(Math.random() * 12) + 3;
+                        num2 = Math.floor(Math.random() * 12) + 3;
+                    } else {
+                        num1 = Math.floor(Math.random() * 15) + 10;
+                        num2 = Math.floor(Math.random() * 8) + 2;
+                    }
+                    answer = num1 * num2;
+                    question = num1 + ' × ' + num2 + ' = ?';
+                } else {
+                    if (level === 'easy') {
+                        num2 = Math.floor(Math.random() * 5) + 2;
+                        var multiplier = Math.floor(Math.random() * 8) + 2;
+                        num1 = num2 * multiplier;
+                    } else if (level === 'medium') {
+                        num2 = Math.floor(Math.random() * 8) + 2;
+                        var multiplier = Math.floor(Math.random() * 10) + 2;
+                        num1 = num2 * multiplier;
+                    } else {
+                        num2 = Math.floor(Math.random() * 10) + 5;
+                        var multiplier = Math.floor(Math.random() * 12) +
+ 3;
+                        num1 = num2 * multiplier;
+                    }
+                    answer = num1 / num2;
+                    question = num1 + ' ÷ ' + num2 + ' = ?';
+                }
+            }
+
+            return { num1: num1, num2: num2, answer: answer, question: question, operation: operation };
+        }
+
+        function checkAnswers(type) {
+            if (!currentProblems[type] || currentProblems[type].length === 0) {
+                alert('Önce bir zorluk seviyesi seç!');
+                return;
+            }
+
+            var correct = 0;
+            var total = currentProblems[type].length;
+
+            for (var i = 0; i < total; i++) {
+                var input = document.getElementById(type + '-answer-' + i);
+                var userAnswer = parseInt(input.value);
+                var correctAnswer = currentProblems[type][i].answer;
+
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                    input.style.border = '4px solid #43e97b';
+                } else {
+                    input.style.border = '4px solid #ff6b9d';
+                }
+            }
+
+            var feedback = document.getElementById('feedback-' + type);
+            var points = correct * 10;
+
+            if (correct === total) {
+                feedback.className = 'feedback success';
+                feedback.innerHTML = '🎉 Mükemmel! Hepsini doğru yaptın! +' + points + ' puan!';
+                scores[type] += points;
+            } else {
+                feedback.className = 'feedback error';
+                feedback.innerHTML = '✓ Doğru: ' + correct + ' / ✗ Yanlış: ' + (total - correct) + '<br>+' + points + ' puan kazandın!';
+                scores[type] += points;
+            }
+
+            document.getElementById('score-' + type).textContent = scores[type];
+        }
+
+        function generateWordProblems(level) {
+            var container = document.getElementById('problemler-content');
+            container.innerHTML = '';
+
+            var problems = getWordProblems(level);
+            
+            for (var i = 0; i < problems.length; i++) {
+                var problemBox = document.createElement('div');
+                problemBox.className = 'problem-box';
+
+                var emoji = document.createElement('div');
+                emoji.style.cssText = 'font-size: 4em; text-align: center; margin-bottom: 20px;';
+                emoji.textContent = problems[i].emoji;
+                problemBox.appendChild(emoji);
+
+                var text = document.createElement('div');
+                text.className = 'problem-text';
+                text.textContent = problems[i].text;
+                problemBox.appendChild(text);
+
+                var inputDiv = document.createElement('div');
+                inputDiv.style.textAlign = 'center';
+
+                var input = document.createElement('input');
+                input.type = 'number';
+                input.className = 'answer-input';
+                input.id = 'problem-answer-' + i;
+                input.placeholder = '?';
+                inputDiv.appendChild(input);
+
+                problemBox.appendChild(inputDiv);
+
+                var checkBtn = document.createElement('button');
+                checkBtn.className = 'check-btn';
+                checkBtn.textContent = '✓ Kontrol Et';
+                checkBtn.onclick = (function(index, answer) {
+                    return function() {
+                        checkWordProblem(index, answer);
+                    };
+                })(i, problems[i].answer);
+                problemBox.appendChild(checkBtn);
+
+                var feedbackDiv = document.createElement('div');
+                feedbackDiv.id = 'feedback-problem-' + i;
+                feedbackDiv.className = 'feedback';
+                problemBox.appendChild(feedbackDiv);
+
+                container.appendChild(problemBox);
+            }
+        }
+
+        function getWordProblems(level) {
+            var problems = [];
+
+            if (level === 'easy') {
+                problems = [
+                    {
+                        emoji: '🍎',
+                        text: 'Ahmet\'in 12 elması var. Ayşe\'nin 8 elması var. İkisinin toplam kaç elması var?',
+                        answer: 20
+                    },
+                    {
+                        emoji: '🎈',
+                        text: 'Parti için 25 balon aldık. 9 balon patladı. Kaç balon kaldı?',
+                        answer: 16
+                    },
+                    {
+                        emoji: '🍬',
+                        text: '3 arkadaşın her birinin 5 şekeri var. Toplam kaç şeker var?',
+                        answer: 15
+                    },
+                    {
+                        emoji: '🍪',
+                        text: '18 kurabiyeyi 3 arkadaş eşit paylaşacak. Her birine kaç kurabiye düşer?',
+                        answer: 6
+                    }
+                ];
+            } else if (level === 'medium') {
+                problems = [
+                    {
+                        emoji: '📚',
+                        text: 'Kitaplıkta 45 hikaye kitabı ve 32 bilim kitabı var. Toplam kaç kitap var?',
+                        answer: 77
+                    },
+                    {
+                        emoji: '🚗',
+                        text: 'Otoparktaki 68 arabadan 29 tanesi çıktı. Kaç araba kaldı?',
+                        answer: 39
+                    },
+                    {
+                        emoji: '🎁',
+                        text: 'Her kutuda 8 oyuncak var. 7 kutu varsa toplam kaç oyuncak var?',
+                        answer: 56
+                    },
+                    {
+                        emoji: '🍕',
+                        text: '48 pizza dilimini 6 kişiye eşit paylaştırdık. Her kişiye kaç dilim düştü?',
+                        answer: 8
+                    }
+                ];
+            } else {
+                problems = [
+                    {
+                        emoji: '🏫',
+                        text: 'Okulda 3 sınıf var. Her sınıfta 24 öğrenci var. Okulda toplam kaç öğrenci var?',
+                        answer: 72
+                    },
+                    {
+                        emoji: '🌳',
+                        text: 'Bahçede 156 ağaç vardı. 48 ağaç kesildi. Kaç ağaç kaldı?',
+                        answer: 108
+                    },
+                    {
+                        emoji: '💰',
+                        text: 'Ali\'nin 245 lirası var. Mehmet\'in 189 lirası var. İkisinin toplam kaç lirası var?',
+                        answer: 434
+                    },
+                    {
+                        emoji: '🎯',
+                        text: '120 topu 5 sepete eşit koyduk. Her sepette kaç top var?',
+                        answer: 24
+                    },
+                    {
+                        emoji: '🍓',
+                        text: 'Pazardan 96 çilek aldık. Her gün 12 çilek yedik. Kaç gün yetecek?',
+                        answer: 8
+                    }
+                ];
+            }
+
+            return problems;
+        }
+
+        function checkWordProblem(index, correctAnswer) {
+            var input = document.getElementById('problem-answer-' + index);
+            var userAnswer = parseInt(input.value);
+            var feedback = document.getElementById('feedback-problem-' + index);
+
+            if (!userAnswer && userAnswer !== 0) {
+                alert('Lütfen bir cevap yaz!');
+                return;
+            }
+
+            if (userAnswer === correctAnswer) {
+                feedback.className = 'feedback success';
+                feedback.innerHTML = '🎉 Harika! Doğru cevap! +15 puan';
+                scores.problemler += 15;
+                document.getElementById('score-problemler').textContent = scores.problemler;
+                input.style.border = '4px solid #43e97b';
+            } else {
+                feedback.className = 'feedback error';
+                feedback.innerHTML = '❌ Yanlış! Doğru cevap: ' + correctAnswer;
+                input.style.border = '4px solid #ff6b9d';
+            }
+        }
+    </script>
+</body>
+</html>
