@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🕐 Saat ve Takvim Öğreniyorum</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .nav-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .nav-btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .lesson-box {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .lesson-title {
+            font-size: 2.5em;
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .card h3 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .clock {
+            width: 200px;
+            height: 200px;
+            border: 8px solid #333;
+            border-radius: 50%;
+            position: relative;
+            margin: 20px auto;
+            background: white;
+        }
+
+        .clock-center {
+            width: 15px;
+            height: 15px;
+            background: #333;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom center;
+            background: #333;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .hour-hand {
+            width: 6px;
+            height: 60px;
+            background: #333;
+        }
+
+        .minute-hand {
+            width: 4px;
+            height: 80px;
+            background: #666;
+        }
+
+        .second-hand {
+            width: 2px;
+            height: 90px;
+            background: #ff0000;
+        }
+
+        .digital {
+            font-size: 2em;
+            font-weight: bold;
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 3px solid #333;
+        }
+
+        .info-box {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: left;
+            line-height: 1.8;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            margin: 10px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .calendar {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-day {
+            padding: 15px;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            background: white;
+        }
+
+        .calendar-day:hover {
+            background: #f0f0f0;
+        }
+
+        .calendar-day.today {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+        }
+
+        .calendar-day.weekend {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: white;
+        }
+
+        .quiz-area {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .quiz-question {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .quiz-option {
+            padding: 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+            background: #e0e0e0;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-option:hover {
+            background: #ffeaa7;
+            transform: scale(1.05);
+        }
+
+        .quiz-option.correct {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+        }
+
+        .quiz-option.wrong {
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff9a9e 100%);
+            color: white;
+        }
+
+        .score {
+            font-size: 2em;
+            font-weight: bold;
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2em; }
+            .nav-btn { font-size: 0.9em; padding: 10px 15px; }
+            .clock { width: 150px; height: 150px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🕐 SAAT ve TAKVİM ÖĞRENİYORUM</h1>
+            <p style="font-size: 1.3em;">Eğlenceli ve İnteraktif Öğrenme! 🎉</p>
+        </div>
+
+        <div class="nav-container">
+            <button class="nav-btn active" onclick="showTab(1)">⏰ Tam & Yarım Saat</button>
+            <button class="nav-btn" onclick="showTab(2)">🕐 Çeyrek Saat</button>
+            <button class="nav-btn" onclick="showTab(3)">🎨 Canlı Saat</button>
+            <button class="nav-btn" onclick="showTab(4)">📅 Takvim</button>
+            <button class="nav-btn" onclick="showTab(5)">⏱️ Zaman Birimleri</button>
+            <button class="nav-btn" onclick="showTab(6)">🏠 Günlük Hayat</button>
+            <button class="nav-btn" onclick="showTab(7)">🎮 Oyun</button>
+        </div>
+
+        <!-- TAB 1: TAM & YARIM SAAT -->
+        <div id="tab1" class="tab-content active">
+            <div class="lesson-box">
+                <div class="lesson-title">⏰ TAM ve YARIM SAAT</div>
+                <p style="text-align: center; font-size: 1.5em; color: white;">Saat okumayı öğrenelim! 🕐</p>
+            </div>
+
+            <div class="content-grid">
+                <div class="card">
+                    <h3 style="color: #667eea;">🕐 12:00</h3>
+                    <div class="clock">
+                        <div class="clock-center"></div>
+                        <div class="hand hour-hand" style="transform: translateX(-50%) rotate(0deg);"></div>
+                        <div class="hand minute-hand" style="transform: translateX(-50%) rotate(0deg);"></div>
+                    </div>
+                    <div class="digital">12:00</div>
+                    <div class="info-box">
+                        <strong>⏰ Akrep:</strong> 12'yi gösteriyor<br>
+                        <strong>🕐 Yelkovan:</strong> 12'yi gösteriyor
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="color: #43e97b;">🕒 3:00</h3>
+                    <div class="clock">
+                        <div class="clock-center"></div>
+                        <div class="hand hour-hand" style="transform: translateX(-50%) rotate(90deg);"></div>
+                        <div class="hand minute-hand" style="transform: translateX(-50%) rotate(0deg);"></div>
+                    </div>
+                    <div class="digital">3:00</div>
+                    <div class="info-box">
+                        <strong>⏰ Akrep:</strong> 3'ü gösteriyor<br>
+                        <strong>🕐 Yelkovan:</strong> 12'yi gösteriyor
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="color: #fa709a;">🕕 6:00</h3>
+                    <div class="clock">
+                        <div class="clock-center"></div>
+                        <div class="hand hour-hand" style="transform: translateX(-50%) rotate(180deg);"></div>
+                        <div class="hand minute-hand" style="transform: translateX(-50%) rotate(0deg);"></div>
+                    </div>
+                    <div class="digital">6:00</div>
+                    <div class="info-box">
+                        <strong>⏰ Akrep:</strong> 6'yı gösteriyor<br>
+                        <strong>🕐 Yelkovan:</strong> 12'yi gösteriyor
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="color: #ffd93d;">🕘 9:00</h3>
+                    <div class="clock">
+                        <div class="clock-center"></div>
+                        <div class="hand hour-hand" style="transform: translateX(-50%) rotate(270deg);"></div>
+                        <div class="hand minute-hand" style="transform: translateX(-50%) rotate(0deg);"></div>
+                    </div>
+                    <div class="digital">9:00</div>
+                    <div class="info-box">
+                        <strong>⏰ Akrep:</strong> 9'u gösteriyor<br>
+                        <strong>🕐 Yelkovan:</strong> 12'yi gösteriyor
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-box" style="margin-top: 30px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                <h3 style="text-align: center; font-size: 2em; color: white;">YARIM SAAT (30 Dakika)</h3>
+            </div>
+
+            <div class="content-grid">
+                <div class="card">
+                    <h3 style="color: #667eea;">🕜 1:30</h3>
+                    <div class="clock">
+                        <div class="clock-center"></div>
+                        <div class="hand hour-hand" style="transform: translateX(-50%) rotate(45deg);"></div>
+                        <div class="hand minute-hand" style="transform: translateX(-50%) rotate(180deg);"></div>
+                    </div>
+                    <div class="digital">1:30</div>
+                    <div class="info-box">
+                        <strong>⏰ Akrep:</strong> 1 ile 2 arasında<br>
+                        <strong>🕐 Yelkovan:</strong> 6'yı gösteriyor
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="color: #43e97b;">🕞 3:30</h3>
+                    <div class="clock">
+                        <div class="clock-center"></div>
+                        <div class="hand hour-hand" style="transform: translateX(-50%) rotate(105deg);"></div>
+                        <div class="hand minute-hand" style="transform: translateX(-50%) rotate(180deg);"></div>
+                    </div>
+                    <div class="digital">3:30</div>
+                    <div class="info-box">
+                        <strong>⏰ Akrep:</strong> 3 ile 4 arasında<br>
+                        <strong>🕐 Yelkovan:</strong> 6'yı gösteriyor
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: ÇEYREK SAAT -->
+        <div id="tab2" class="tab-content">
+            <div class="lesson-box">
+                <div class="lesson-title">🕐 ÇEYREK GEÇE ve ÇEYREK KALA</div>
+            </div>
+
+            <div class="content-grid">
+                <div class="card">
+                    <h3 style="color: #667eea;">🕐 2:15 (Çeyrek Geçe)</h3>
+                    <div class="clock">
+                        <div class="clock-center"></div>
+                        <div class="hand hour-hand" style="transform: translateX(-50%) rotate(67.5deg);"></div>
+                        <div class="hand minute-hand" style="transform: translateX(-50%) rotate(90deg);"></div>
+                    </div>
+                    <div class="digital">2:15</div>
+                    <div class="info-box">
+                        <strong>⏰ Akrep:</strong> 2 ile 3 arasında<br>
+                        <strong>🕐 Yelkovan:</strong> 3'ü gösteriyor (15 dakika)
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="color: #43e97b;">🕐 2:45 (Çeyrek Kala)</h3>
+                    <div class="clock">
+                        <div class="clock-center"></div>
+                        <div class="hand hour-hand" style="transform: translateX(-50%) rotate(82.5deg);"></div>
+                        <div class="hand minute-hand" style="transform: translateX(-50%) rotate(270deg);"></div>
+                    </div>
+                    <div class="digital">2:45</div>
+                    <div class="info-box">
+                        <strong>⏰ Akrep:</strong> 2 ile 3 arasında (3'e yakın)<br>
+                        <strong>🕐 Yelkovan:</strong> 9'u gösteriyor (45 dakika)
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="color: #fa709a;">🕐 5:15</h3>
+                    <div class="clock">
+                        <div class="clock-center"></div>
+                        <div class="hand hour-hand" style="transform: translateX(-50%) rotate(157.5deg);"></div>
+                        <div class="hand minute-hand" style="transform: translateX(-50%) rotate(90deg);"></div>
+                    </div>
+                    <div class="digital">5:15</div>
+                    <div class="info-box">
+                        <strong>⏰ Akrep:</strong> 5 ile 6 arasında<br>
+                        <strong>🕐 Yelkovan:</strong> 3'ü gösteriyor
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="color: #ffd93d;">🕐 8:45</h3>
+                    <div class="clock">
+                        <div class="clock-center"></div>
+                        <div class="hand hour-hand" style="transform: translateX(-50%) rotate(262.5deg);"></div>
+                        <div class="hand minute-hand" style="transform: translateX(-50%) rotate(270deg);"></div>
+                    </div>
+                    <div class="digital">8:45</div>
+                    <div class="info-box">
+                        <strong>⏰ Akrep:</strong> 8 ile 9 arasında<br>
+                        <strong>🕐 Yelkovan:</strong> 9'u gösteriyor
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: CANLI SAAT -->
+        <div id="tab3" class="tab-content">
+            <div class="lesson-box">
+                <div class="lesson-title">🎨 SAATİ KENDİN AYARLA</div>
+            </div>
+
+            <div style="background: white; padding: 40px; border-radius: 20px;">
+                <div class="clock" style="width: 300px; height: 300px;">
+                    <div class="clock-center"></div>
+                    <div class="hand hour-hand" id="interactive-hour" style="height: 80px;"></div>
+                    <div class="hand minute-hand" id="interactive-minute" style="height: 100px;"></div>
+                </div>
+                <div class="digital" id="interactive-time">12:00</div>
+
+                <div style="margin: 30px 0;">
+                    <label style="font-size: 1.3em; font-weight: bold;">⏰ SAAT (0-11):</label>
+                    <input type="range" id="hour-slider" min="0" max="11" value="0" 
+                           style="width: 100%; height: 40px; margin: 10px 0;"
+                           oninput="updateInteractiveClock()">
+                    <div id="hour-display" style="text-align: center; font-size: 1.5em; font-weight: bold;">0</div>
+                </div>
+
+                <div style="margin: 30px 0;">
+                    <label style="font-size: 1.3em; font-weight: bold;">🕐 DAKİKA (0-59):</label>
+                    <input type="range" id="minute-slider" min="0" max="59" value="0" 
+                           style="width: 100%; height: 40px; margin: 10px 0;"
+                           oninput="updateInteractiveClock()">
+                    <div id="minute-display" style="text-align: center; font-size: 1.5em; font-weight: bold;">0</div>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn" onclick="setQuickTime(3, 0)">🕐 3:00</button>
+                    <button class="btn" onclick="setQuickTime(3, 30)">🕐 3:30</button>
+                    <button class="btn" onclick="setQuickTime(6, 15)">🕐 6:15</button>
+                    <button class="btn" onclick="setQuickTime(9, 45)">🕐 9:45</button>
+                </div>
+            </div>
+
+            <div class="lesson-box" style="margin-top: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="lesson-title">⏰ GERÇEK ZAMANLI SAAT</div>
+            </div>
+
+            <div style="background: white; padding: 40px; border-radius: 20px;">
+                <div class="clock" style="width: 300px; height: 300px;">
+                    <div class="clock-center"></div>
+                    <div class="hand hour-hand" id="real-hour" style="height: 80px;"></div>
+                    <div class="hand minute-hand" id="real-minute" style="height: 100px;"></div>
+                    <div class="hand second-hand" id="real-second" style="height: 110px;"></div>
+                </div>
+                <div class="digital" id="real-time">12:00:00</div>
+                <div style="text-align: center; font-size: 1.5em; font-weight: bold; margin-top: 20px;" id="real-date"></div>
+            </div>
+        </div>
+
+        <!-- TAB 4: TAKVİM -->
+        <div id="tab4" class="tab-content">
+            <div class="lesson-box">
+                <div class="lesson-title">📅 HAFTANIN GÜNLERİ</div>
+            </div>
+
+            <div class="content-grid">
+                <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    <h3>📅 PAZARTESİ</h3>
+                    <p style="font-size: 1.2em; margin-top: 10px;">Haftanın 1. günü</p>
+                </div>
+                <div class="card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white;">
+                    <h3>📅 SALI</h3>
+                    <p style="font-size: 1.2em; margin-top: 10px;">Haftanın 2. günü</p>
+                </div>
+                <div class="card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white;">
+                    <h3>📅 ÇARŞAMBA</h3>
+                    <p style="font-size: 1.2em; margin-top: 10px;">Haftanın 3. günü</p>
+                </div>
+                <div class="card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">
+                    <h3>📅 PERŞEMBE</h3>
+                    <p style="font-size: 1.2em; margin-top: 10px;">Haftanın 4. günü</p>
+                </div>
+                <div class="card" style="background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%); color: white;">
+                    <h3>📅 CUMA</h3>
+                    <p style="font-size: 1.2em; margin-top: 10px;">Haftanın 5. günü</p>
+                </div>
+                <div class="card" style="background: linear-gradient(135deg, #ff6b6b 0%, #ffa502 100%); color: white;">
+                    <h3>🎉 CUMARTESİ</h3>
+                    <p style="font-size: 1.2em; margin-top: 10px;">Hafta sonu!</p>
+                </div>
+                <div class="card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+                    <h3>🎉 PAZAR</h3>
+                    <p style="font-size: 1.2em; margin-top: 10px;">Hafta sonu!</p>
+                </div>
+            </div>
+
+            <div class="lesson-box" style="margin-top: 30px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                <div class="lesson-title">📆 İNTERAKTİF TAKVİM</div>
+            </div>
+
+            <div class="calendar">
+                <div class="calendar-header">
+                    <button class="btn" onclick="changeMonth(-1)">⬅️ Önceki</button>
+                    <h2 id="calendar-title" style="font-size: 2em;">Ocak 2024</h2>
+                    <button class="btn" onclick="changeMonth(1)">Sonraki ➡️</button>
+                </div>
+
+                <div class="calendar-grid" style="margin-bottom: 10px;">
+                    <div style="padding: 10px; text-align: center; font-weight: bold; background: #667eea; color: white; border-radius: 5px;">Pzt</div>
+                    <div style="padding: 10px; text-align: center; font-weight: bold; background: #667eea; color: white; border-radius: 5px;">Sal</div>
+                    <div style="padding: 10px; text-align: center; font-weight: bold; background: #667eea; color: white; border-radius: 5px;">Çar</div>
+                    <div style="padding: 10px; text-align: center; font-weight: bold; background: #667eea; color: white; border-radius: 5px;">Per</div>
+                    <div style="padding: 10px; text-align: center; font-weight: bold; background: #667eea; color: white; border-radius: 5px;">Cum</div>
+                    <div style="padding: 10px; text-align: center; font-weight: bold; background: #ff6b9d; color: white; border-radius: 5px;">Cmt</div>
+                    <div style="padding: 10px; text-align: center; font-weight: bold; background: #f093fb; color: white; border-radius: 5px;">Paz</div>
+                </div>
+
+                <div class="calendar-grid" id="calendar-days"></div>
+
+                <div class="info-box" style="margin-top: 20px; font-size: 1.2em;">
+                    <div id="selected-info">Bir güne tıklayın!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: ZAMAN BİRİMLERİ -->
+        <div id="tab5" class="tab-content">
+            <div class="lesson-box">
+                <div class="lesson-title">⏱️ ZAMAN BİRİMLERİ</div>
+            </div>
+
+            <div style="background: white; padding: 30px; border-radius: 20px;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                        <th style="padding: 20px; font-size: 1.5em; border-radius: 10px 0 0 0;">⏰ BİRİM</th>
+                        <th style="padding: 20px; font-size: 1.5em; border-radius: 0 10px 0 0;">🔢 DEĞER</th>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 20px; font-size: 1.3em; font-weight: bold;">1 Dakika</td>
+                        <td style="padding: 20px; font-size: 1.5em; font-weight: bold; color: #43e97b;">60 Saniye</td>
+                    </tr>
+                    <tr style="background: white;">
+                        <td style="padding: 20px; font-size: 1.3em; font-weight: bold;">1 Saat</td>
+                        <td style="padding: 20px; font-size: 1.5em; font-weight: bold; color: #667eea;">60 Dakika</td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 20px; font-size: 1.3em; font-weight: bold;">1 Gün</td>
+                        <td style="padding: 20px; font-size: 1.5em; font-weight: bold; color: #fa709a;">24 Saat</td>
+                    </tr>
+                    <tr style="background: white;">
+                        <td style="padding: 20px; font-size: 1.3em; font-weight: bold;">1 Hafta</td>
+                        <td style="padding: 20px; font-size: 1.5em; font-weight: bold; color: #ffd93d;">7 Gün</td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 20px; font-size: 1.3em; font-weight: bold;">1 Ay</td>
+                        <td style="padding: 20px; font-size: 1.5em; font-weight: bold; color: #ff6b6b;">28-31 Gün</td>
+                    </tr>
+                    <tr style="background: white;">
+                        <td style="padding: 20px; font-size: 1.3em; font-weight: bold;">1 Yıl</td>
+                        <td style="padding: 20px; font-size: 1.5em; font-weight: bold; color: #f093fb;">365 Gün / 12 Ay</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="lesson-box" style="margin-top: 30px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                <h3 style="text-align: center; font-size: 2em; color: white;">📝 ÖRNEKLER</h3>
+            </div>
+
+            <div class="content-grid">
+                <div class="card">
+                    <h3 style="color: #667eea;">⏱️ Dakika ➡️ Saniye</h3>
+                    <div class="info-box">
+                        <strong style="font-size: 1.3em;">3 dakika = ?</strong><br><br>
+                        3 × 60 = <strong style="color: #43e97b; font-size: 1.5em;">180 saniye</strong>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="color: #43e97b;">⏰ Saat ➡️ Dakika</h3>
+                    <div class="info-box">
+                        <strong style="font-size: 1.3em;">2 saat = ?</strong><br><br>
+                        2 × 60 = <strong style="color: #667eea; font-size: 1.5em;">120 dakika</strong>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="color: #fa709a;">📅 Gün ➡️ Saat</h3>
+                    <div class="info-box">
+                        <strong style="font-size: 1.3em;">3 gün = ?</strong><br><br>
+                        3 × 24 = <strong style="color: #fa709a; font-size: 1.5em;">72 saat</strong>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="color: #ffd93d;">🗓️ Hafta ➡️ Gün</h3>
+                    <div class="info-box">
+                        <strong style="font-size: 1.3em;">4 hafta = ?</strong><br><br>
+                        4 × 7 = <strong style="color: #ffd93d; font-size: 1.5em;">28 gün</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 6: GÜNLÜK HAYAT -->
+        <div id="tab6" class="tab-content">
+            <div class="lesson-box">
+                <div class="lesson-title">🏠 GÜNLÜK HAYATTA ZAMAN</div>
+            </div>
+
+            <div class="content-grid">
+                <div class="card" style="background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%);">
+                    <h3>🌅 SABAH</h3>
+                    <p style="font-size: 1.3em; margin: 10px 0;"><strong>06:00 - 12:00</strong></p>
+                    <p style="font-size: 1.1em;">Gün ışıyor ☀️</p>
+                </div>
+
+                <div class="card" style="background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);">
+                    <h3>☀️ ÖĞLE</h3>
+                    <p style="font-size: 1.3em; margin: 10px 0;"><strong>12:00 - 13:00</strong></p>
+                    <p style="font-size: 1.1em;">Güneş tepede ☀️</p>
+                </div>
+
+                <div class="card" style="background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);">
+                    <h3>🌇 ÖĞLEDEN SONRA</h3>
+                    <p style="font-size: 1.3em; margin: 10px 0;"><strong>13:00 - 18:00</strong></p>
+                    <p style="font-size: 1.1em;">Güneş batıyor 🌅</p>
+                </div>
+
+                <div class="card" style="background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);">
+                    <h3>🌆 AKŞAM</h3>
+                    <p style="font-size: 1.3em; margin: 10px 0;"><strong>18:00 - 21:00</strong></p>
+                    <p style="font-size: 1.1em;">Güneş battı 🌙</p>
+                </div>
+
+                <div class="card" style="background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%);">
+                    <h3>🌙 GECE</h3>
+                    <p style="font-size: 1.3em; margin: 10px 0;"><strong>21:00 - 06:00</strong></p>
+                    <p style="font-size: 1.1em;">Karanlık 🌟</p>
+                </div>
+
+                <div class="card" style="background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%);">
+                    <h3>🌃 GECE YARISI</h3>
+                    <p style="font-size: 1.3em; margin: 10px 0;"><strong>00:00</strong></p>
+                    <p style="font-size: 1.1em;">Yeni gün başlıyor ⏰</p>
+                </div>
+            </div>
+
+            <div class="lesson-box" style="margin-top: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <h3 style="text-align: center; font-size: 2em; color: white;">📚 GÜNLÜK AKTİVİTELER</h3>
+            </div>
+
+            <div class="content-grid">
+                <div class="card">
+                    <h3>🛏️ Sabah Kalkma</h3>
+                    <p style="font-size: 1.3em; margin: 10px 0;">⏰ <strong>07:00</strong></p>
+                    <p>Günaydın! ☀️</p>
+                </div>
+
+                <div class="card">
+                    <h3>🥐 Kahvaltı</h3>
+                    <p style="font-size: 1.3em; margin: 10px 0;">⏰ <strong>07:30</strong></p>
+                    <p>Güne enerjik başla! 🥛</p>
+                </div>
+
+                <div class="card">
+                    <h3>🏫 Okul Başlangıç</h3>
+                    <p style="font-size: 1.3em; margin: 10px 0;">⏰ <strong>08:00</strong></p>
+                    <p>Dersler başladı! 📚</p>
+                </div>
+
+                <div class="card">
+                    <h3>🍽️ Öğle Yemeği</h3>
+                    <p style="font-size: 1.3em; margin: 10px 0;">⏰ <strong>12:00</strong></p>
+                    <p>Afiyet olsun! 🍕</p>
+                </div>
+
+                <div class="card">
+                    <h3>🏡 Okul Bitiş</h3>
+                    <p style="font-size: 1.3em; margin: 10px 0;">⏰ <strong>15:00</strong></p>
+                    <p>Eve dönüş! 🚌</p>
+                </div>
+
+                <div class="card">
+                    <h3>⚽ Oyun Zamanı</h3>
+                    <p style="font-size: 1.3em; margin: 10px 0;">⏰ <strong>17:00</strong></p>
+                    <p>Eğlen! 🎮</p>
+                </div>
+
+                <div class="card">
+                    <h3>🍲 Akşam Yemeği</h3>
+                    <p style="font-size: 1.3em; margin: 10px 0;">⏰ <strong>19:00</strong></p>
+                    <p>Aile ile birlikte! 👨‍👩‍👧‍👦</p>
+                </div>
+
+                <div class="card">
+                    <h3>😴 Uyku Zamanı</h3>
+                    <p style="font-size: 1.3em; margin: 10px 0;">⏰ <strong>21:00</strong></p>
+                    <p>İyi geceler! 🌙</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 7: OYUN -->
+        <div id="tab7" class="tab-content">
+            <div class="lesson-box">
+                <div class="lesson-title">🎮 SAAT OKUMA OYUNU</div>
+            </div>
+
+            <div class="quiz-area">
+                <div class="score">🏆 PUAN: <span id="score">0</span></div>
+
+                <div class="quiz-question" id="question">Saat kaç?</div>
+
+                <div class="clock" style="width: 250px; height: 250px; margin: 30px auto;">
+                    <div class="clock-center"></div>
+                    <div class="hand hour-hand" id="quiz-hour" style="height: 70px;"></div>
+                    <div class="hand minute-hand" id="quiz-minute" style="height: 90px;"></div>
+                </div>
+
+                <div class="quiz-options" id="options"></div>
+
+                <div id="feedback" style="font-size: 1.5em; font-weight: bold; margin: 20px 0; min-height: 50px;"></div>
+
+                <button class="btn" onclick="newQuestion()">➡️ Yeni Soru</button>
+                <button class="btn" onclick="resetScore()">🔄 Puanı Sıfırla</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // SEKME DEĞİŞTİRME
+        function showTab(tabNum) {
+            // Tüm sekmeleri gizle
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Tüm butonları pasif yap
+            const btns = document.querySelectorAll('.nav-btn');
+            btns.forEach(btn => btn.classList.remove('active'));
+
+            // Seçili sekmeyi göster
+            document.getElementById('tab' + tabNum).classList.add('active');
+            btns[tabNum - 1].classList.add('active');
+
+            // Tab 3 ise gerçek zamanlı saati başlat
+            if (tabNum === 3) {
+                startRealClock();
+            }
+        }
+
+        // İNTERAKTİF SAAT GÜNCELLEME
+        function updateInteractiveClock() {
+            const hour = parseInt(document.getElementById('hour-slider').value);
+            const minute = parseInt(document.getElementById('minute-slider').value);
+
+            document.getElementById('hour-display').textContent = hour;
+            document.getElementById('minute-display').textContent = minute;
+
+            const displayHour = hour === 0 ? 12 : hour;
+            const displayMinute = minute < 10 ? '0' + minute : minute;
+            document.getElementById('interactive-time').textContent = displayHour + ':' + displayMinute;
+
+            const hourDeg = (hour * 30) + (minute * 0.5);
+            const minuteDeg = minute * 6;
+
+            document.getElementById('interactive-hour').style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
+            document.getElementById('interactive-minute').style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
+        }
+
+        function setQuickTime(h, m) {
+            document.getElementById('hour-slider').value = h;
+            document.getElementById('minute-slider').value = m;
+            updateInteractiveClock();
+        }
+
+        // GERÇEK ZAMANLI SAAT
+        function startRealClock() {
+            updateRealClock();
+            setInterval(updateRealClock, 1000);
+        }
+
+        function updateRealClock() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+
+            // Dijital saat
+            const h = hours < 10 ? '0' + hours : hours;
+            const m = minutes < 10 ? '0' + minutes : minutes;
+            const s = seconds < 10 ? '0' + seconds : seconds;
+            document.getElementById('real-time').textContent = h + ':' + m + ':' + s;
+
+            // Tarih
+            const days = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
+            const months = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+            const dateStr = days[now.getDay()] + ', ' + now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+            document.getElementById('real-date').textContent = dateStr;
+
+            // Analog saat
+            const hourDeg = (hours % 12) * 30 + minutes * 0.5;
+            const minuteDeg = minutes * 6 + seconds * 0.1;
+            const secondDeg = seconds * 6;
+
+            document.getElementById('real-hour').style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
+            document.getElementById('real-minute').style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
+            document.getElementById('real-second').style.transform = `translateX(-50%) rotate(${secondDeg}deg)`;
+        }
+
+        // TAKVİM
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+
+        function changeMonth(direction) {
+            currentMonth += direction;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            } else if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar();
+        }
+
+        function renderCalendar() {
+            const months = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+            document.getElementById('calendar-title').textContent = months[currentMonth] + ' ' + currentYear;
+
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            const lastDay = new Date(currentYear, currentMonth + 1, 0);
+            let startDay = firstDay.getDay();
+            startDay = startDay === 0 ? 6 : startDay - 1; // Pazartesi'yi 0 yap
+
+            const daysInMonth = lastDay.getDate();
+            const calendarDays = document.getElementById('calendar-days');
+            calendarDays.innerHTML = '';
+
+            const today = new Date();
+
+            // Önceki ayın boş günleri
+            for (let i = 0; i < startDay; i++) {
+                const emptyDiv = document.createElement('div');
+                emptyDiv.style.visibility = 'hidden';
+                calendarDays.appendChild(emptyDiv);
+            }
+
+            // Bu ayın günleri
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'calendar-day';
+                dayDiv.textContent = day;
+
+                const dayOfWeek = (startDay + day - 1) % 7;
+                if (dayOfWeek === 5 || dayOfWeek === 6) {
+                    dayDiv.classList.add('weekend');
+                }
+
+                if (day === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) {
+                    dayDiv.classList.add('today');
+                }
+
+                dayDiv.onclick = function() {
+                    const days = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'];
+                    document.getElementById('selected-info').innerHTML = `
+                        <strong style="font-size: 1.5em; color: #667eea;">${day} ${months[currentMonth]} ${currentYear}</strong><br>
+                        <strong style="color: ${dayOfWeek >= 5 ? '#ff6b6b' : '#43e97b'};">${days[dayOfWeek]}</strong>
+                        ${dayOfWeek >= 5 ? ' 🎉 Hafta Sonu!' : ' 📚 Hafta İçi'}
+                    `;
+                };
+
+                calendarDays.appendChild(dayDiv);
+            }
+        }
+
+        // OYUN
+        let score = 0;
+        let correctAnswer = '';
+
+        function newQuestion() {
+            const types = [
+                { h: 0, m: 0, t: '12:00' },
+                { h: 3, m: 0, t: '3:00' },
+                { h: 6, m: 0, t: '6:00' },
+                { h: 9, m: 0, t: '9:00' },
+                { h: 1, m: 30, t: '1:30' },
+                { h: 3, m: 30, t: '3:30' },
+                { h: 2, m: 15, t: '2:15' },
+                { h: 5, m: 15, t: '5:15' },
+                { h: 2, m: 45, t: '2:45' },
+                { h: 8, m: 45, t: '8:45' }
+            ];
+
+            const selected = types[Math.floor(Math.random() * types.length)];
+            correctAnswer = selected.t;
+
+            const hourDeg = (selected.h * 30) + (selected.m * 0.5);
+            const minuteDeg = selected.m * 6;
+
+            document.getElementById('quiz-hour').style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
+            document.getElementById('quiz-minute').style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
+
+            // Seçenekler oluştur
+            const options = [correctAnswer];
+            while (options.length < 4) {
+                const randomType = types[Math.floor(Math.random() * types.length)];
+                if (!options.includes(randomType.t)) {
+                    options.push(randomType.t);
+                }
+            }
+
+            // Karıştır
+            options.sort(() => Math.random() - 0.5);
+
+            // Göster
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            options.forEach(opt => {
+                const optDiv = document.createElement('div');
+                optDiv.className = 'quiz-option';
+                optDiv.textContent = opt;
+                optDiv.onclick = function() {
+                    checkAnswer(opt, optDiv);
+                };
+                optionsDiv.appendChild(optDiv);
+            });
+
+            document.getElementById('feedback').textContent = '';
+        }
+
+        function checkAnswer(answer, element) {
+            const allOptions = document.querySelectorAll('.quiz-option');
+            allOptions.forEach(opt => opt.onclick = null);
+
+            if (answer === correctAnswer) {
+                element.classList.add('correct');
+                document.getElementById('feedback').innerHTML = '🎉 <span style="color: #43e97b;">DOĞRU!</span> +10 puan!';
+                score += 10;
+                document.getElementById('score').textContent = score;
+            } else {
+                element.classList.add('wrong');
+                document.getElementById('feedback').innerHTML = '❌ <span style="color: #ff6b6b;">Yanlış!</span> Doğru cevap: ' + correctAnswer;
+                allOptions.forEach(opt => {
+                    if (opt.textContent === correctAnswer) {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+        }
+
+        function resetScore() {
+            score = 0;
+            document.getElementById('score').textContent = score;
+            newQuestion();
+        }
+
+        // SAYFA YÜKLENDİĞİNDE
+        window.onload = function() {
+            showTab(1);
+            renderCalendar();
+            newQuestion();
+        };
+    </script>
+</body>
+</html>

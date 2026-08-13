@@ -1,0 +1,2017 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📏⚖️ 3. Sınıf Uzunluk ve Ağırlık Ölçme</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 30px;
+            border-radius: 15px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            border-radius: 15px;
+        }
+
+        .nav-btn {
+            padding: 18px 35px;
+            font-size: 1.2em;
+            border: 3px solid white;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            color: white;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        .nav-btn.active {
+            transform: scale(1.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 4px solid #fff;
+        }
+
+        .btn-uzunluk1 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .btn-uzunluk2 { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .btn-uzunluk3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .btn-agirlik1 { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+        .btn-agirlik2 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .btn-agirlik3 { background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%); }
+        .btn-gunluk { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        .btn-oyun { background: linear-gradient(135deg, #ffd93d 0%, #ff6b6b 100%); }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .lesson-box {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .lesson-title {
+            font-size: 2.8em;
+            color: #2d3436;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .visual-card {
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .visual-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .unit-title {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        .ruler {
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            border-radius: 10px;
+            margin: 20px 0;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .ruler-marks {
+            display: flex;
+            justify-content: space-between;
+            height: 100%;
+            padding: 0 10px;
+            align-items: flex-end;
+        }
+
+        .ruler-mark {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-weight: bold;
+            color: #2d3436;
+        }
+
+        .ruler-mark .line {
+            width: 2px;
+            background: #2d3436;
+            margin-bottom: 5px;
+        }
+
+        .ruler-mark.big .line {
+            height: 30px;
+        }
+
+        .ruler-mark.small .line {
+            height: 15px;
+        }
+
+        .scale {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .scale-needle {
+            position: absolute;
+            width: 4px;
+            height: 80px;
+            background: #f5576c;
+            transform-origin: bottom center;
+            border-radius: 5px;
+        }
+
+        .scale-display {
+            background: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            z-index: 10;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            font-size: 1.3em;
+            line-height: 2;
+            border-left: 5px solid #667eea;
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .example-item {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+
+        .example-item:hover {
+            transform: scale(1.15) rotate(3deg);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .example-emoji {
+            font-size: 5em;
+            margin: 15px 0;
+        }
+
+        .example-text {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2d3436;
+            line-height: 1.6;
+        }
+
+        .comparison-box {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .comparison-item {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .comparison-symbol {
+            font-size: 5em;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .interactive-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px 45px;
+            font-size: 1.4em;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            margin: 10px;
+        }
+
+        .interactive-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        .conversion-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            margin: 30px 0;
+        }
+
+        .conversion-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            font-size: 1.4em;
+            text-align: center;
+        }
+
+        .conversion-table td {
+            padding: 25px;
+            text-align: center;
+            font-size: 1.3em;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .conversion-table tr:hover {
+            background: #fff9e6;
+            transform: scale(1.02);
+        }
+
+        .game-area {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 40px;
+            border-radius: 20px;
+            margin: 30px 0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .score-board {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .quiz-question {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            margin: 25px 0;
+            text-align: center;
+            font-size: 2em;
+            font-weight: bold;
+            color: #2d3436;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .quiz-option {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            text-align: center;
+            font-size: 1.4em;
+            font-weight: bold;
+            border: 3px solid transparent;
+        }
+
+        .quiz-option:hover {
+            transform: scale(1.08);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 3px solid #667eea;
+        }
+
+        .quiz-option.correct {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            animation: bounceIn 0.6s;
+        }
+
+        .quiz-option.wrong {
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff9a9e 100%);
+            color: white;
+            animation: shake 0.5s;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-15px); }
+            75% { transform: translateX(15px); }
+        }
+
+        .feedback {
+            text-align: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 25px 0;
+            padding: 25px;
+            border-radius: 15px;
+            display: none;
+        }
+
+        .feedback.success {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            display: block;
+            animation: bounceIn 0.6s;
+        }
+
+        .feedback.error {
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff9a9e 100%);
+            color: white;
+            display: block;
+            animation: shake 0.5s;
+        }
+
+        .measuring-tool {
+            width: 100%;
+            max-width: 600px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .measuring-line {
+            width: 100%;
+            height: 60px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 10px;
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .length-display {
+            background: #ffeaa7;
+            padding: 20px 40px;
+            border-radius: 10px;
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #2d3436;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2em; }
+            .nav-btn { padding: 12px 20px; font-size: 1em; }
+            .content-grid { grid-template-columns: 1fr; }
+            .lesson-title { font-size: 2em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📏⚖️ 3. SINIF UZUNLUK ve AĞIRLIK ÖLÇME 📐🍎</h1>
+            <p style="font-size: 1.5em;">Ölçme ve Tartma Dünyası!</p>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="nav-btn btn-uzunluk1 active" onclick="gosterSekme('uzunluk1')">📏 UZUNLUK BİRİMLERİ</button>
+            <button class="nav-btn btn-uzunluk2" onclick="gosterSekme('uzunluk2')">📐 CETVELLE ÖLÇME</button>
+            <button class="nav-btn btn-uzunluk3" onclick="gosterSekme('uzunluk3')">📊 UZUNLUK KARŞILAŞTIRMA</button>
+            <button class="nav-btn btn-agirlik1" onclick="gosterSekme('agirlik1')">⚖️ AĞIRLIK BİRİMLERİ</button>
+            <button class="nav-btn btn-agirlik2" onclick="gosterSekme('agirlik2')">🍎 TERAZİYLE TARTMA</button>
+            <button class="nav-btn btn-agirlik3" onclick="gosterSekme('agirlik3')">📈 AĞIRLIK KARŞILAŞTIRMA</button>
+            <button class="nav-btn btn-gunluk" onclick="gosterSekme('gunluk')">🏠 Günlük Hayat</button>
+            <button class="nav-btn btn-oyun" onclick="gosterSekme('oyun')">🎮 Oyunlar</button>
+        </div>
+
+        <!-- UZUNLUK BİRİMLERİ BÖLÜMÜ -->
+        <div id="uzunluk1" class="section active">
+            <div class="lesson-box">
+                <div class="lesson-title">📏 UZUNLUK BİRİMLERİ</div>
+                <p style="font-size: 1.6em; line-height: 2.2; text-align: center; color: #2d3436;">
+                    Uzunluk, bir şeyin <strong>başından sonuna kadar olan mesafe</strong>dir! 📐<br>
+                    Uzunluğu ölçmek için <strong>metre (m)</strong> ve <strong>santimetre (cm)</strong> kullanırız! 📏
+                </p>
+            </div>
+
+            <div class="content-grid">
+                <div class="visual-card">
+                    <div class="unit-title" style="color: #43e97b;">📏 SANTİMETRE (cm)</div>
+                    <div class="example-emoji">📏</div>
+                    <div class="info-box">
+                        <strong style="color: #43e97b; font-size: 1.4em;">📌 SANTİMETRE (cm):</strong><br>
+                        💡 Küçük şeyleri ölçmek için kullanırız<br>
+                        💡 Cetveldeki her bir büyük çizgi = 1 cm<br>
+                        💡 Kısa: <strong>cm</strong><br><br>
+                        <strong>Örnekler:</strong><br>
+                        ✏️ Kalem: 15 cm<br>
+                        📱 Telefon: 14 cm<br>
+                        ✋ El genişliği: 8 cm
+                    </div>
+                </div>
+
+                <div class="visual-card">
+                    <div class="unit-title" style="color: #667eea;">📐 METRE (m)</div>
+                    <div class="example-emoji">📐</div>
+                    <div class="info-box">
+                        <strong style="color: #667eea; font-size: 1.4em;">📌 METRE (m):</strong><br>
+                        💡 Büyük şeyleri ölçmek için kullanırız<br>
+                        💡 1 metre = 100 santimetre<br>
+                        💡 Kısa: <strong>m</strong><br><br>
+                        <strong>Örnekler:</strong><br>
+                        🚪 Kapı yüksekliği: 2 m<br>
+                        📏 Masa uzunluğu: 1 m<br>
+                        🏫 Sınıf boyu: 8 m
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-box" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                <h3 style="text-align: center; font-size: 2.5em; color: white; margin-bottom: 30px;">
+                    🔄 DÖNÜŞÜM: Metre ↔ Santimetre
+                </h3>
+                <div style="background: white; padding: 40px; border-radius: 15px;">
+                    <div style="text-align: center; font-size: 3em; font-weight: bold; color: #43e97b; margin: 30px 0;">
+                        1 m = 100 cm
+                    </div>
+                    <div style="text-align: center; font-size: 3em; font-weight: bold; color: #667eea; margin: 30px 0;">
+                        100 cm = 1 m
+                    </div>
+
+                    <table class="conversion-table">
+                        <thead>
+                            <tr>
+                                <th>METRE (m)</th>
+                                <th>↔</th>
+                                <th>SANTİMETRE (cm)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>1 m</strong></td>
+                                <td>=</td>
+                                <td><strong>100 cm</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>2 m</strong></td>
+                                <td>=</td>
+                                <td><strong>200 cm</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>3 m</strong></td>
+                                <td>=</td>
+                                <td><strong>300 cm</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>5 m</strong></td>
+                                <td>=</td>
+                                <td><strong>500 cm</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>10 m</strong></td>
+                                <td>=</td>
+                                <td><strong>1000 cm</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="background: #ffeaa7; padding: 30px; border-radius: 15px; margin-top: 30px; font-size: 1.4em; line-height: 2.2;">
+                        <strong style="font-size: 1.5em;">💡 KOLAY KURAL:</strong><br>
+                        📏 <strong>Metreden santimetreye:</strong> 100 ile çarp<br>
+                        <span style="color: #667eea;">Örnek: 3 m = 3 × 100 = 300 cm</span><br><br>
+                        📐 <strong>Santimetreden metreye:</strong> 100'e böl<br>
+                        <span style="color: #43e97b;">Örnek: 400 cm = 400 ÷ 100 = 4 m</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-box" style="margin-top: 40px;">
+                <h3 style="text-align: center; font-size: 2.5em; color: #2d3436; margin-bottom: 30px;">
+                    📏 UZUNLUK ÖRNEKLERİ
+                </h3>
+                <div class="examples-grid">
+                    <div class="example-item">
+                        <div class="example-emoji">✏️</div>
+                        <div class="example-text">Kalem<br>15 cm</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">📱</div>
+                        <div class="example-text">Telefon<br>14 cm</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">📖</div>
+                        <div class="example-text">Kitap<br>25 cm</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🚪</div>
+                        <div class="example-text">Kapı<br>2 m</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">📏</div>
+                        <div class="example-text">Masa<br>120 cm (1.2 m)</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🏫</div>
+                        <div class="example-text">Tahta<br>3 m</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">👕</div>
+                        <div class="example-text">Tişört<br>60 cm</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🎒</div>
+                        <div class="example-text">Çanta<br>40 cm</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CETVELLE ÖLÇME BÖLÜMÜ -->
+        <div id="uzunluk2" class="section">
+            <div class="lesson-box">
+                <div class="lesson-title">📐 CETVELLE ÖLÇME</div>
+                <p style="font-size: 1.6em; line-height: 2.2; text-align: center; color: #2d3436;">
+                    Cetvel, uzunluk ölçmek için kullandığımız araçtır! 📏<br>
+                    Cetveldeki çizgileri sayarak ölçüm yaparız! 🎯
+                </p>
+            </div>
+
+            <div class="lesson-box" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                <h3 style="text-align: center; font-size: 2.5em; color: white; margin-bottom: 30px;">
+                    📏 CETVEL NASIL KULLANILIR?
+                </h3>
+                <div style="background: white; padding: 40px; border-radius: 15px;">
+                    <div class="ruler">
+                        <div class="ruler-marks">
+                            <div class="ruler-mark big"><div class="line"></div><span>0</span></div>
+                            <div class="ruler-mark small"><div class="line"></div></div>
+                            <div class="ruler-mark big"><div class="line"></div><span>1</span></div>
+                            <div class="ruler-mark small"><div class="line"></div></div>
+                            <div class="ruler-mark big"><div class="line"></div><span>2</span></div>
+                            <div class="ruler-mark small"><div class="line"></div></div>
+                            <div class="ruler-mark big"><div class="line"></div><span>3</span></div>
+                            <div class="ruler-mark small"><div class="line"></div></div>
+                            <div class="ruler-mark big"><div class="line"></div><span>4</span></div>
+                            <div class="ruler-mark small"><div class="line"></div></div>
+                            <div class="ruler-mark big"><div class="line"></div><span>5</span></div>
+                        </div>
+                    </div>
+
+                    <div style="font-size: 1.4em; line-height: 2.5; margin-top: 30px;">
+                        <div style="background: #e8f4f8; padding: 25px; border-radius: 15px; margin: 15px 0; border-left: 5px solid #667eea;">
+                            <strong style="color: #667eea; font-size: 1.3em;">1️⃣ ADIM 1:</strong><br>
+                            Ölçeceğin şeyin bir ucunu cetvelin <strong>0 (sıfır)</strong> noktasına koy
+                        </div>
+                        <div style="background: #ffe8f0; padding: 25px; border-radius: 15px; margin: 15px 0; border-left: 5px solid #f5576c;">
+                            <strong style="color: #f5576c; font-size: 1.3em;">2️⃣ ADIM 2:</strong><br>
+                            Şeyin diğer ucu cetvelin hangi sayısına geliyorsa onu oku
+                        </div>
+                        <div style="background: #ffeaa7; padding: 25px; border-radius: 15px; margin: 15px 0; border-left: 5px solid #fdcb6e;">
+                            <strong style="color: #2d3436; font-size: 1.3em;">3️⃣ ADIM 3:</strong><br>
+                            Okuduğun sayıyı söyle ve <strong>"cm"</strong> ekle
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                <div class="visual-card">
+                    <h3 style="color: #43e97b; font-size: 2em;">✏️ ÖRNEK: Kalem Ölçme</h3>
+                    <div style="margin: 30px 0;">
+                        <div style="width: 80%; height: 20px; background: #ffd93d; margin: 20px auto; border-radius: 5px;"></div>
+                        <div class="ruler">
+                            <div class="ruler-marks">
+                                <div class="ruler-mark big"><div class="line"></div><span>0</span></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark big"><div class="line"></div><span>5</span></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark big"><div class="line"></div><span>10</span></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark big"><div class="line"></div><span>15</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <strong style="font-size: 1.3em;">📏 Kalem uzunluğu:</strong><br>
+                        0'dan başlayıp 15'e kadar gidiyor<br>
+                        <strong style="color: #43e97b; font-size: 1.5em;">Cevap: 15 cm</strong>
+                    </div>
+                </div>
+
+                <div class="visual-card">
+                    <h3 style="color: #667eea; font-size: 2em;">📖 ÖRNEK: Kitap Ölçme</h3>
+                    <div style="margin: 30px 0;">
+                        <div style="width: 100%; height: 30px; background: #ff6b6b; margin: 20px auto; border-radius: 5px;"></div>
+                        <div class="ruler">
+                            <div class="ruler-marks">
+                                <div class="ruler-mark big"><div class="line"></div><span>0</span></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark big"><div class="line"></div><span>5</span></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark big"><div class="line"></div><span>10</span></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark big"><div class="line"></div><span>15</span></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark small"><div class="line"></div></div>
+                                <div class="ruler-mark big"><div class="line"></div><span>20</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <strong style="font-size: 1.3em;">📖 Kitap uzunluğu:</strong><br>
+                        0'dan başlayıp 20'ye kadar gidiyor<br>
+                        <strong style="color: #667eea; font-size: 1.5em;">Cevap: 20 cm</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px;">
+                <h3 style="text-align: center; font-size: 2.5em; color: #667eea; margin-bottom: 30px;">
+                    🎨 İnteraktif: Kalem Ölçme Oyunu!
+                </h3>
+                <div class="measuring-tool">
+                    <p style="text-align: center; font-size: 1.4em; margin-bottom: 20px;">
+                        📏 Kaydırıcıyı hareket ettirerek kalemi ölç!
+                    </p>
+                    <input type="range" id="ruler-slider" min="5" max="30" value="15" 
+                           style="width: 100%; height: 30px; margin: 20px 0;" 
+                           oninput="updateRuler(this.value)">
+                    <div class="measuring-line" id="measuring-line" style="width: 50%;"></div>
+                    <div class="length-display" id="length-display">15 cm</div>
+                    <button class="interactive-btn" onclick="checkRulerAnswer()">✅ Cevabı Kontrol Et</button>
+                    <div id="ruler-feedback" style="text-align: center; font-size: 1.5em; font-weight: bold; margin-top: 20px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UZUNLUK KARŞILAŞTIRMA BÖLÜMÜ -->
+        <div id="uzunluk3" class="section">
+            <div class="lesson-box">
+                <div class="lesson-title">📊 UZUNLUK KARŞILAŞTIRMA</div>
+                <p style="font-size: 1.6em; line-height: 2.2; text-align: center; color: #2d3436;">
+                    İki şeyin uzunluğunu karşılaştırarak hangisinin <strong>daha uzun</strong> veya <strong>daha kısa</strong> olduğunu bulabiliriz! 📐🔍
+                </p>
+            </div>
+
+            <div class="lesson-box" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                <h3 style="text-align: center; font-size: 2.5em; color: white; margin-bottom: 30px;">
+                    🔍 KARŞILAŞTIRMA SEMBOLLERİ
+                </h3>
+                <div style="background: white; padding: 40px; border-radius: 15px;">
+                    <div class="comparison-box">
+                        <div class="comparison-item">
+                            <div class="comparison-symbol">&gt;</div>
+                            <div style="font-size: 1.5em; margin-top: 20px;">
+                                <strong>Büyüktür</strong><br>
+                                Daha uzun
+                            </div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-symbol">&lt;</div>
+                            <div style="font-size: 1.5em; margin-top: 20px;">
+                                <strong>Küçüktür</strong><br>
+                                Daha kısa
+                            </div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-symbol">=</div>
+                            <div style="font-size: 1.5em; margin-top: 20px;">
+                                <strong>Eşittir</strong><br>
+                                Aynı uzunluk
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                <div class="visual-card">
+                    <h3 style="color: #43e97b; font-size: 2em;">📏 ÖRNEK 1</h3>
+                    <div style="margin: 30px 0;">
+                        <div style="width: 80%; height: 30px; background: #ffd93d; margin: 20px auto; border-radius: 5px;">
+                            <div style="text-align: center; line-height: 30px; font-weight: bold;">Kalem: 15 cm</div>
+                        </div>
+                        <div style="width: 60%; height: 30px; background: #ff6b6b; margin: 20px auto; border-radius: 5px;">
+                            <div style="text-align: center; line-height: 30px; font-weight: bold; color: white;">Silgi: 10 cm</div>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <strong style="font-size: 1.5em;">Karşılaştırma:</strong><br>
+                        15 cm <strong style="color: #43e97b; font-size: 2em;">&gt;</strong> 10 cm<br>
+                        <strong style="color: #43e97b;">Kalem daha uzun!</strong>
+                    </div>
+                </div>
+
+                <div class="visual-card">
+                    <h3 style="color: #667eea; font-size: 2em;">📐 ÖRNEK 2</h3>
+                    <div style="margin: 30px 0;">
+                        <div style="width: 50%; height: 30px; background: #4facfe; margin: 20px auto; border-radius: 5px;">
+                            <div style="text-align: center; line-height: 30px; font-weight: bold; color: white;">Defter: 25 cm</div>
+                        </div>
+                        <div style="width: 70%; height: 30px; background: #43e97b; margin: 20px auto; border-radius: 5px;">
+                            <div style="text-align: center; line-height: 30px; font-weight: bold; color: white;">Kitap: 30 cm</div>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <strong style="font-size: 1.5em;">Karşılaştırma:</strong><br>
+                        25 cm <strong style="color: #667eea; font-size: 2em;">&lt;</strong> 30 cm<br>
+                        <strong style="color: #667eea;">Defter daha kısa!</strong>
+                    </div>
+                </div>
+
+                <div class="visual-card">
+                    <h3 style="color: #fa709a; font-size: 2em;">📏 ÖRNEK 3</h3>
+                    <div style="margin: 30px 0;">
+                        <div style="width: 70%; height: 30px; background: #ffd93d; margin: 20px auto; border-radius: 5px;">
+                            <div style="text-align: center; line-height: 30px; font-weight: bold;">Masa: 100 cm</div>
+                        </div>
+                        <div style="width: 70%; height: 30px; background: #a29bfe; margin: 20px auto; border-radius: 5px;">
+                            <div style="text-align: center; line-height: 30px; font-weight: bold; color: white;">Sandalye: 1 m</div>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <strong style="font-size: 1.5em;">Karşılaştırma:</strong><br>
+                        100 cm <strong style="color: #fa709a; font-size: 2em;">=</strong> 1 m<br>
+                        (Çünkü 1 m = 100 cm)<br>
+                        <strong style="color: #fa709a;">İkisi de eşit!</strong>
+                    </div>
+                </div>
+
+                <div class="visual-card">
+                    <h3 style="color: #ff6b6b; font-size: 2em;">📊 ÖRNEK 4</h3>
+                    <div style="margin: 30px 0;">
+                        <div style="width: 90%; height: 30px; background: #43e97b; margin: 20px auto; border-radius: 5px;">
+                            <div style="text-align: center; line-height: 30px; font-weight: bold; color: white;">Kapı: 2 m (200 cm)</div>
+                        </div>
+                        <div style="width: 40%; height: 30px; background: #4facfe; margin: 20px auto; border-radius: 5px;">
+                            <div style="text-align: center; line-height: 30px; font-weight: bold; color: white;">Pencere: 120 cm</div>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <strong style="font-size: 1.5em;">Karşılaştırma:</strong><br>
+                        200 cm <strong style="color: #ff6b6b; font-size: 2em;">&gt;</strong> 120 cm<br>
+                        <strong style="color: #ff6b6b;">Kapı daha uzun!</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-box" style="margin-top: 40px; background: linear-gradient(135deg, #ffd93d 0%, #ff6b6b 100%);">
+                <h3 style="text-align: center; font-size: 2.5em; color: white; margin-bottom: 30px;">
+                    💡 ÖNEMLİ: Karşılaştırma Kuralları
+                </h3>
+                <div style="background: white; padding: 40px; border-radius: 15px; font-size: 1.4em; line-height: 2.5;">
+                    <div style="background: #e8f4f8; padding: 25px; border-radius: 15px; margin: 15px 0; border-left: 5px solid #667eea;">
+                        <strong style="color: #667eea; font-size: 1.3em;">1️⃣ Aynı birimi kullan!</strong><br>
+                        Karşılaştırırken <strong>her iki taraf da aynı birim</strong> olmalı<br>
+                        ✅ 150 cm ile 200 cm karşılaştırılır<br>
+                        ❌ 1 m ile 80 cm direkt karşılaştırılamaz (önce dönüştür!)
+                    </div>
+                    <div style="background: #ffe8f0; padding: 25px; border-radius: 15px; margin: 15px 0; border-left: 5px solid #f5576c;">
+                        <strong style="color: #f5576c; font-size: 1.3em;">2️⃣ Farklı birimler varsa dönüştür!</strong><br>
+                        Örnek: 2 m ile 150 cm karşılaştır<br>
+                        2 m = 200 cm'ye çevir<br>
+                        Sonra: 200 cm > 150 cm
+                    </div>
+                    <div style="background: #ffeaa7; padding: 25px; border-radius: 15px; margin: 15px 0; border-left: 5px solid #fdcb6e;">
+                        <strong style="color: #2d3436; font-size: 1.3em;">3️⃣ Sembollere dikkat!</strong><br>
+                        <strong>&gt;</strong> işareti büyük sayıya bakar<br>
+                        <strong>&lt;</strong> işareti küçük sayıya bakar<br>
+                        <strong>=</strong> iki taraf eşit
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AĞIRLIK BİRİMLERİ BÖLÜMÜ -->
+        <div id="agirlik1" class="section">
+            <div class="lesson-box">
+                <div class="lesson-title">⚖️ AĞIRLIK BİRİMLERİ</div>
+                <p style="font-size: 1.6em; line-height: 2.2; text-align: center; color: #2d3436;">
+                    Ağırlık, bir şeyin <strong>ne kadar ağır olduğunu</strong> gösterir! ⚖️<br>
+                    Ağırlığı ölçmek için <strong>kilogram (kg)</strong> ve <strong>gram (g)</strong> kullanırız! 🍎
+                </p>
+            </div>
+
+            <div class="content-grid">
+                <div class="visual-card">
+                    <div class="unit-title" style="color: #ff9a9e;">⚖️ GRAM (g)</div>
+                    <div class="example-emoji">🍎</div>
+                    <div class="info-box">
+                        <strong style="color: #ff9a9e; font-size: 1.4em;">📌 GRAM (g):</strong><br>
+                        💡 Hafif şeyleri tartmak için kullanırız<br>
+                        💡 Çok küçük bir ağırlık birimi<br>
+                        💡 Kısa: <strong>g</strong><br><br>
+                        <strong>Örnekler:</strong><br>
+                        🍎 Elma: 150 g<br>
+                        🍫 Çikolata: 50 g<br>
+                        ✏️ Kalem: 10 g
+                    </div>
+                </div>
+
+                <div class="visual-card">
+                    <div class="unit-title" style="color: #667eea;">⚖️ KİLOGRAM (kg)</div>
+                    <div class="example-emoji">🎒</div>
+                    <div class="info-box">
+                        <strong style="color: #667eea; font-size: 1.4em;">📌 KİLOGRAM (kg):</strong><br>
+                        💡 Ağır şeyleri tartmak için kullanırız<br>
+                        💡 1 kilogram = 1000 gram<br>
+                        💡 Kısa: <strong>kg</strong><br><br>
+                        <strong>Örnekler:</strong><br>
+                        🎒 Çanta: 2 kg<br>
+                        🍉 Karpuz: 5 kg<br>
+                        👶 Bebek: 3 kg
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-box" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
+                <h3 style="text-align: center; font-size: 2.5em; color: white; margin-bottom: 30px;">
+                    🔄 DÖNÜŞÜM: Kilogram ↔ Gram
+                </h3>
+                <div style="background: white; padding: 40px; border-radius: 15px;">
+                    <div style="text-align: center; font-size: 3em; font-weight: bold; color: #ff9a9e; margin: 30px 0;">
+                        1 kg = 1000 g
+                    </div>
+                    <div style="text-align: center; font-size: 3em; font-weight: bold; color: #667eea; margin: 30px 0;">
+                        1000 g = 1 kg
+                    </div>
+
+                    <table class="conversion-table">
+                        <thead>
+                            <tr>
+                                <th>KİLOGRAM (kg)</th>
+                                <th>↔</th>
+                                <th>GRAM (g)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>1 kg</strong></td>
+                                <td>=</td>
+                                <td><strong>1000 g</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>2 kg</strong></td>
+                                <td>=</td>
+                                <td><strong>2000 g</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>3 kg</strong></td>
+                                <td>=</td>
+                                <td><strong>3000 g</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>5 kg</strong></td>
+                                <td>=</td>
+                                <td><strong>5000 g</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>10 kg</strong></td>
+                                <td>=</td>
+                                <td><strong>10000 g</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="background: #ffeaa7; padding: 30px; border-radius: 15px; margin-top: 30px; font-size: 1.4em; line-height: 2.2;">
+                        <strong style="font-size: 1.5em;">💡 KOLAY KURAL:</strong><br>
+                        ⚖️ <strong>Kilogramdan grama:</strong> 1000 ile çarp<br>
+                        <span style="color: #667eea;">Örnek: 4 kg = 4 × 1000 = 4000 g</span><br><br>
+                        🍎 <strong>Gramdan kilograma:</strong> 1000'e böl<br>
+                        <span style="color: #ff9a9e;">Örnek: 3000 g = 3000 ÷ 1000 = 3 kg</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-box" style="margin-top: 40px;">
+                <h3 style="text-align: center; font-size: 2.5em; color: #2d3436; margin-bottom: 30px;">
+                    ⚖️ AĞIRLIK ÖRNEKLERİ
+                </h3>
+                <div class="examples-grid">
+                    <div class="example-item">
+                        <div class="example-emoji">🍎</div>
+                        <div class="example-text">Elma<br>150 g</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🍌</div>
+                        <div class="example-text">Muz<br>120 g</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🍫</div>
+                        <div class="example-text">Çikolata<br>50 g</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🍉</div>
+                        <div class="example-text">Karpuz<br>5 kg</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🎒</div>
+                        <div class="example-text">Çanta<br>2 kg</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">📚</div>
+                        <div class="example-text">Kitap<br>300 g</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">👶</div>
+                        <div class="example-text">Bebek<br>3 kg</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🍞</div>
+                        <div class="example-text">Ekmek<br>400 g</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TERAZİYLE TARTMA BÖLÜMÜ -->
+        <div id="agirlik2" class="section">
+            <div class="lesson-box">
+                <div class="lesson-title">🍎 TERAZİYLE TARTMA</div>
+                <p style="font-size: 1.6em; line-height: 2.2; text-align: center; color: #2d3436;">
+                    Terazi, ağırlık ölçmek için kullandığımız araçtır! ⚖️<br>
+                    Terazideki sayıyı okuyarak ağırlığı öğreniriz! 🎯
+                </p>
+            </div>
+
+            <div class="lesson-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <h3 style="text-align: center; font-size: 2.5em; color: white; margin-bottom: 30px;">
+                    ⚖️ TERAZİ TÜRLERİ
+                </h3>
+                <div class="content-grid">
+                    <div class="visual-card">
+                        <h3 style="color: #43e97b; font-size: 2em;">⚖️ Kefeli Terazi</h3>
+                        <div class="scale">
+                            <div class="scale-needle" style="transform: rotate(45deg);"></div>
+                            <div class="scale-display">1 kg</div>
+                        </div>
+                        <div class="info-box">
+                            <strong>📌 Kefeli Terazi:</strong><br>
+                            💡 İki kefesi vardır<br>
+                            💡 İki taraf eşit olunca dengede olur<br>
+                            💡 Ağırlıkları karşılaştırmaya yarar
+                        </div>
+                    </div>
+
+                    <div class="visual-card">
+                        <h3 style="color: #667eea; font-size: 2em;">📊 Dijital Terazi</h3>
+                        <div style="width: 200px; height: 150px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); margin: 20px auto; border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                            <div style="background: white; padding: 20px; border-radius: 10px; font-size: 2.5em; font-weight: bold; color: #667eea;">
+                                2.5 kg
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            <strong>📌 Dijital Terazi:</strong><br>
+                            💡 Ekranda sayı gösterir<br>
+                            💡 Direkt ağırlığı yazar<br>
+                            💡 Kolay okunur
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                <div class="visual-card">
+                    <h3 style="color: #ff9a9e; font-size: 2em;">🍎 ÖRNEK 1: Elma Tartma</h3>
+                    <div class="scale" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <div class="scale-needle" style="transform: rotate(30deg);"></div>
+                        <div class="scale-display" style="color: #43e97b;">150 g</div>
+                    </div>
+                    <div class="info-box">
+                        <strong style="font-size: 1.3em;">🍎 Elma ağırlığı:</strong><br>
+                        Terazi <strong>150 g</strong> gösteriyor<br>
+                        <strong style="color: #43e97b; font-size: 1.5em;">Cevap: 150 gram</strong>
+                    </div>
+                </div>
+
+                <div class="visual-card">
+                    <h3 style="color: #667eea; font-size: 2em;">🍉 ÖRNEK 2: Karpuz Tartma</h3>
+                    <div class="scale" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                        <div class="scale-needle" style="transform: rotate(90deg);"></div>
+                        <div class="scale-display" style="color: #fa709a;">5 kg</div>
+                    </div>
+                    <div class="info-box">
+                        <strong style="font-size: 1.3em;">🍉 Karpuz ağırlığı:</strong><br>
+                        Terazi <strong>5 kg</strong> gösteriyor<br>
+                        <strong style="color: #667eea; font-size: 1.5em;">Cevap: 5 kilogram</strong>
+                    </div>
+                </div>
+
+                <div class="visual-card">
+                    <h3 style="color: #ffd93d; font-size: 2em;">📚 ÖRNEK 3: Kitap Tartma</h3>
+                    <div class="scale" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <div class="scale-needle" style="transform: rotate(60deg);"></div>
+                        <div class="scale-display" style="color: #4facfe;">300 g</div>
+                    </div>
+                    <div class="info-box">
+                        <strong style="font-size: 1.3em;">📚 Kitap ağırlığı:</strong><br>
+                        Terazi <strong>300 g</strong> gösteriyor<br>
+                        <strong style="color: #ffd93d; font-size: 1.5em;">Cevap: 300 gram</strong>
+                    </div>
+                </div>
+
+                <div class="visual-card">
+                    <h3 style="color: #a29bfe; font-size: 2em;">🎒 ÖRNEK 4: Çanta Tartma</h3>
+                    <div class="scale" style="background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);">
+                        <div class="scale-needle" style="transform: rotate(75deg);"></div>
+                        <div class="scale-display" style="color: #a29bfe;">2 kg</div>
+                    </div>
+                    <div class="info-box">
+                        <strong style="font-size: 1.3em;">🎒 Çanta ağırlığı:</strong><br>
+                        Terazi <strong>2 kg</strong> gösteriyor<br>
+                        <strong style="color: #a29bfe; font-size: 1.5em;">Cevap: 2 kilogram</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px;">
+                <h3 style="text-align: center; font-size: 2.5em; color: #667eea; margin-bottom: 30px;">
+                    ⚖️ İnteraktif: Terazi Oyunu!
+                </h3>
+                <div class="measuring-tool">
+                    <p style="text-align: center; font-size: 1.4em; margin-bottom: 20px;">
+                        ⚖️ Kaydırıcıyı hareket ettirerek tartım yap!
+                    </p>
+                    <input type="range" id="scale-slider" min="100" max="5000" step="100" value="1000" 
+                           style="width: 100%; height: 30px; margin: 20px 0;" 
+                           oninput="updateScale(this.value)">
+                    <div class="scale" id="game-scale" style="margin: 30px auto;">
+                        <div class="scale-needle" id="game-needle" style="transform: rotate(45deg);"></div>
+                        <div class="scale-display" id="game-scale-display">1000 g</div>
+                    </div>
+                    <button class="interactive-btn" onclick="checkScaleAnswer()">✅ Cevabı Kontrol Et</button>
+                    <div id="scale-feedback" style="text-align: center; font-size: 1.5em; font-weight: bold; margin-top: 20px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AĞIRLIK KARŞILAŞTIRMA BÖLÜMÜ -->
+        <div id="agirlik3" class="section">
+            <div class="lesson-box">
+                <div class="lesson-title">📈 AĞIRLIK KARŞILAŞTIRMA</div>
+                <p style="font-size: 1.6em; line-height: 2.2; text-align: center; color: #2d3436;">
+                    İki şeyin ağırlığını karşılaştırarak hangisinin <strong>daha ağır</strong> veya <strong>daha hafif</strong> olduğunu bulabiliriz! ⚖️🔍
+                </p>
+            </div>
+
+            <div class="lesson-box" style="background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);">
+                <h3 style="text-align: center; font-size: 2.5em; color: white; margin-bottom: 30px;">
+                    🔍 KARŞILAŞTIRMA SEMBOLLERİ
+                </h3>
+                <div style="background: white; padding: 40px; border-radius: 15px;">
+                    <div class="comparison-box">
+                        <div class="comparison-item">
+                            <div class="comparison-symbol">&gt;</div>
+                            <div style="font-size: 1.5em; margin-top: 20px;">
+                                <strong>Büyüktür</strong><br>
+                                Daha ağır
+                            </div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-symbol">&lt;</div>
+                            <div style="font-size: 1.5em; margin-top: 20px;">
+                                <strong>Küçüktür</strong><br>
+                                Daha hafif
+                            </div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-symbol">=</div>
+                            <div style="font-size: 1.5em; margin-top: 20px;">
+                                <strong>Eşittir</strong><br>
+                                Aynı ağırlık
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                <div class="visual-card">
+                    <h3 style="color: #43e97b; font-size: 2em;">🍎 ÖRNEK 1</h3>
+                    <div style="margin: 30px 0;">
+                        <div class="example-emoji">🍎</div>
+                        <div style="font-size: 1.5em; font-weight: bold; margin: 10px 0;">Elma: 150 g</div>
+                        <div class="comparison-symbol" style="font-size: 3em; color: #43e97b;">&gt;</div>
+                        <div class="example-emoji">🍫</div>
+                        <div style="font-size: 1.5em; font-weight: bold; margin: 10px 0;">Çikolata: 50 g</div>
+                    </div>
+                    <div class="info-box">
+                        <strong style="font-size: 1.5em;">Karşılaştırma:</strong><br>
+                        150 g <strong style="color: #43e97b; font-size: 2em;">&gt;</strong> 50 g<br>
+                        <strong style="color: #43e97b;">Elma daha ağır!</strong>
+                    </div>
+                </div>
+
+                <div class="visual-card">
+                    <h3 style="color: #667eea; font-size: 2em;">📚 ÖRNEK 2</h3>
+                    <div style="margin: 30px 0;">
+                        <div class="example-emoji">📖</div>
+                        <div style="font-size: 1.5em; font-weight: bold; margin: 10px 0;">Defter: 200 g</div>
+                        <div class="comparison-symbol" style="font-size: 3em; color: #667eea;">&lt;</div>
+                        <div class="example-emoji">📚</div>
+                        <div style="font-size: 1.5em; font-weight: bold; margin: 10px 0;">Kitap: 300 g</div>
+                    </div>
+                    <div class="info-box">
+                        <strong style="font-size: 1.5em;">Karşılaştırma:</strong><br>
+                        200 g <strong style="color: #667eea; font-size: 2em;">&lt;</strong> 300 g<br>
+                        <strong style="color: #667eea;">Defter daha hafif!</strong>
+                    </div>
+                </div>
+
+                <div class="visual-card">
+                    <h3 style="color: #fa709a; font-size: 2em;">⚖️ ÖRNEK 3</h3>
+                    <div style="margin: 30px 0;">
+                        <div class="example-emoji">🎒</div>
+                        <div style="font-size: 1.5em; font-weight: bold; margin: 10px 0;">Çanta: 2000 g</div>
+                        <div class="comparison-symbol" style="font-size: 3em; color: #fa709a;">=</div>
+                        <div class="example-emoji">🧳</div>
+                        <div style="font-size: 1.5em; font-weight: bold; margin: 10px 0;">Valiz: 2 kg</div>
+                    </div>
+                    <div class="info-box">
+                        <strong style="font-size: 1.5em;">Karşılaştırma:</strong><br>
+                        2000 g <strong style="color: #fa709a; font-size: 2em;">=</strong> 2 kg<br>
+                        (Çünkü 2 kg = 2000 g)<br>
+                        <strong style="color: #fa709a;">İkisi de eşit!</strong>
+                    </div>
+                </div>
+
+                <div class="visual-card">
+                    <h3 style="color: #ff6b6b; font-size: 2em;">🍉 ÖRNEK 4</h3>
+                    <div style="margin: 30px 0;">
+                        <div class="example-emoji">🍉</div>
+                        <div style="font-size: 1.5em; font-weight: bold; margin: 10px 0;">Karpuz: 5 kg (5000 g)</div>
+                        <div class="comparison-symbol" style="font-size: 3em; color: #ff6b6b;">&gt;</div>
+                        <div class="example-emoji">🍎</div>
+                        <div style="font-size: 1.5em; font-weight: bold; margin: 10px 0;">Elma: 150 g</div>
+                    </div>
+                    <div class="info-box">
+                        <strong style="font-size: 1.5em;">Karşılaştırma:</strong><br>
+                        5000 g <strong style="color: #ff6b6b; font-size: 2em;">&gt;</strong> 150 g<br>
+                        <strong style="color: #ff6b6b;">Karpuz çok daha ağır!</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-box" style="margin-top: 40px; background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                <h3 style="text-align: center; font-size: 2.5em; color: #2d3436; margin-bottom: 30px;">
+                    💡 ÖNEMLİ: Karşılaştırma Kuralları
+                </h3>
+                <div style="background: white; padding: 40px; border-radius: 15px; font-size: 1.4em; line-height: 2.5;">
+                    <div style="background: #e8f4f8; padding: 25px; border-radius: 15px; margin: 15px 0; border-left: 5px solid #667eea;">
+                        <strong style="color: #667eea; font-size: 1.3em;">1️⃣ Aynı birimi kullan!</strong><br>
+                        Karşılaştırırken <strong>her iki taraf da aynı birim</strong> olmalı<br>
+                        ✅ 1500 g ile 2000 g karşılaştırılır<br>
+                        ❌ 2 kg ile 800 g direkt karşılaştırılamaz (önce dönüştür!)
+                    </div>
+                    <div style="background: #ffe8f0; padding: 25px; border-radius: 15px; margin: 15px 0; border-left: 5px solid #f5576c;">
+                        <strong style="color: #f5576c; font-size: 1.3em;">2️⃣ Farklı birimler varsa dönüştür!</strong><br>
+                        Örnek: 3 kg ile 2500 g karşılaştır<br>
+                        3 kg = 3000 g'a çevir<br>
+                        Sonra: 3000 g > 2500 g
+                    </div>
+                    <div style="background: #ffeaa7; padding: 25px; border-radius: 15px; margin: 15px 0; border-left: 5px solid #fdcb6e;">
+                        <strong style="color: #2d3436; font-size: 1.3em;">3️⃣ Hafif-Ağır kelimeleri!</strong><br>
+                        <strong>Hafif:</strong> Az ağırlık (küçük sayı)<br>
+                        <strong>Ağır:</strong> Çok ağırlık (büyük sayı)<br>
+                        Örnek: 100 g hafif, 5 kg ağır
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GÜNLÜK HAYAT BÖLÜMÜ -->
+        <div id="gunluk" class="section">
+            <div class="lesson-box">
+                <div class="lesson-title">🏠 GÜNLÜK HAYATTA ÖLÇME</div>
+                <p style="font-size: 1.6em; line-height: 2.2; text-align: center; color: #2d3436;">
+                    Uzunluk ve ağırlık ölçümlerini her gün kullanıyoruz! 🎯<br>
+                    Hayatımızdaki ölçme örneklerini görelim! 🌟
+                </p>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); padding: 40px; border-radius: 20px; margin: 30px 0;">
+                <h2 style="text-align: center; font-size: 2.5em; color: white; margin-bottom: 30px;">
+                    📏 UZUNLUK - Günlük Hayat
+                </h2>
+                <div class="examples-grid">
+                    <div class="example-item">
+                        <div class="example-emoji">📐</div>
+                        <div class="example-text">Okul Defteri<br>25 cm</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">✏️</div>
+                        <div class="example-text">Kalem<br>15 cm</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">📱</div>
+                        <div class="example-text">Telefon<br>14 cm</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">📺</div>
+                        <div class="example-text">TV Genişliği<br>120 cm (1.2 m)</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🚪</div>
+                        <div class="example-text">Kapı Yüksekliği<br>2 m (200 cm)</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🪟</div>
+                        <div class="example-text">Pencere<br>150 cm</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🛏️</div>
+                        <div class="example-text">Yatak Uzunluğu<br>2 m</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">📏</div>
+                        <div class="example-text">Masa<br>120 cm</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px; border-radius: 20px; margin: 30px 0;">
+                <h2 style="text-align: center; font-size: 2.5em; color: white; margin-bottom: 30px;">
+                    ⚖️ AĞIRLIK - Günlük Hayat
+                </h2>
+                <div class="examples-grid">
+                    <div class="example-item">
+                        <div class="example-emoji">🍎</div>
+                        <div class="example-text">Elma<br>150 g</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🍌</div>
+                        <div class="example-text">Muz<br>120 g</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🍫</div>
+                        <div class="example-text">Çikolata<br>50 g</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🍉</div>
+                        <div class="example-text">Karpuz<br>5 kg</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🎒</div>
+                        <div class="example-text">Okul Çantası<br>2 kg</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">📚</div>
+                        <div class="example-text">Kitap<br>300 g</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">👶</div>
+                        <div class="example-text">Bebek<br>3 kg</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🍞</div>
+                        <div class="example-text">Ekmek<br>400 g</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); padding: 40px; border-radius: 20px; margin: 30px 0;">
+                <h2 style="text-align: center; font-size: 2.5em; color: white; margin-bottom: 30px;">
+                    🏪 Markette Alışveriş
+                </h2>
+                <div style="background: white; padding: 40px; border-radius: 15px; font-size: 1.5em; line-height: 2.8;">
+                    <p>🛒 "Bir kilo elma aldım." → <strong style="color: #43e97b;">1 kg = 1000 g</strong></p>
+                    <p>🛒 "Yarım kilo domates aldım." → <strong style="color: #667eea;">500 g</strong></p>
+                    <p>🛒 "250 gramlık paket çikolata aldım." → <strong style="color: #ffd93d;">250 g</strong></p>
+                    <p>🛒 "5 kiloluk karpuz aldım." → <strong style="color: #ff6b6b;">5 kg = 5000 g</strong></p>
+                    <p>🛒 "400 gramlık ekmek aldım." → <strong style="color: #4facfe;">400 g</strong></p>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 40px; border-radius: 20px; margin: 30px 0;">
+                <h2 style="text-align: center; font-size: 2.5em; color: white; margin-bottom: 30px;">
+                    🏫 Okulda Ölçme
+                </h2>
+                <div style="background: white; padding: 40px; border-radius: 15px; font-size: 1.5em; line-height: 2.8;">
+                    <p>📏 "Tahtanın uzunluğu 3 metre." → <strong style="color: #43e97b;">3 m = 300 cm</strong></p>
+                    <p>📐 "Cetvelim 30 santimetre." → <strong style="color: #667eea;">30 cm</strong></p>
+                    <p>🎒 "Çantam 2 kilogram." → <strong style="color: #ffd93d;">2 kg = 2000 g</strong></p>
+                    <p>📖 "Kitabım 300 gram." → <strong style="color: #ff6b6b;">300 g</strong></p>
+                    <p>📏 "Sınıfın boyu 8 metre." → <strong style="color: #4facfe;">8 m = 800 cm</strong></p>
+                </div>
+            </div>
+
+            <div class="lesson-box" style="margin-top: 40px;">
+                <h3 style="text-align: center; font-size: 2.5em; color: #2d3436; margin-bottom: 30px;">
+                    🗣️ Günlük Cümleler
+                </h3>
+                <div style="background: white; padding: 40px; border-radius: 15px; font-size: 1.5em; line-height: 2.8;">
+                    <p>🗣️ "Kalemim <strong style="color: #43e97b;">15 santimetre</strong> uzunluğunda."</p>
+                    <p>🗣️ "Masanın yüksekliği <strong style="color: #667eea;">1 metre</strong>."</p>
+                    <p>🗣️ "Elmayı tarttık, <strong style="color: #fa709a;">150 gram</strong> çıktı."</p>
+                    <p>🗣️ "Çantam <strong style="color: #4facfe;">2 kilogram</strong> ağır."</p>
+                    <p>🗣️ "Karpuz <strong style="color: #ffd93d;">5 kilo</strong>, çok ağır!"</p>
+                    <p>🗣️ "Boyum <strong style="color: #a29bfe;">120 santimetre</strong>."</p>
+                    <p>🗣️ "Ekmek <strong style="color: #fd79a8;">400 gram</strong>lık."</p>
+                    <p>🗣️ "Kapının yüksekliği <strong style="color: #43e97b;">2 metre</strong>."</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- OYUNLAR BÖLÜMÜ -->
+        <div id="oyun" class="section">
+            <div class="score-board">
+                🎮 Oyun Puanı: <span id="game-score">0</span> 🎮
+            </div>
+
+            <!-- OYUN 1: UZUNLUK BİRİM DÖNÜŞÜMÜ -->
+            <div class="game-area">
+                <h2 style="text-align: center; font-size: 2.5em; color: #2d3436; margin-bottom: 20px;">
+                    📏 Oyun 1: Uzunluk Birimi Dönüşümü
+                </h2>
+                <p style="text-align: center; font-size: 1.4em; margin-bottom: 30px;">
+                    Metre ile santimetre arasında dönüşüm yap!
+                </p>
+
+                <div class="quiz-question" id="length-question"></div>
+                <div class="quiz-options" id="length-options"></div>
+
+                <button class="interactive-btn" onclick="yeniUzunlukSorusu()">
+                    🔄 Yeni Soru
+                </button>
+
+                <div id="length-feedback" class="feedback"></div>
+            </div>
+
+            <!-- OYUN 2: AĞIRLIK BİRİM DÖNÜŞÜMÜ -->
+            <div class="game-area" style="margin-top: 40px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                <h2 style="text-align: center; font-size: 2.5em; color: white; margin-bottom: 20px;">
+                    ⚖️ Oyun 2: Ağırlık Birimi Dönüşümü
+                </h2>
+                <p style="text-align: center; font-size: 1.4em; color: white; margin-bottom: 30px;">
+                    Kilogram ile gram arasında dönüşüm yap!
+                </p>
+
+                <div class="quiz-question" id="weight-question"></div>
+                <div class="quiz-options" id="weight-options"></div>
+
+                <button class="interactive-btn" onclick="yeniAgirlikSorusu()">
+                    🔄 Yeni Soru
+                </button>
+
+                <div id="weight-feedback" class="feedback"></div>
+            </div>
+
+            <!-- OYUN 3: UZUNLUK KARŞILAŞTIRMA -->
+            <div class="game-area" style="margin-top: 40px; background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
+                <h2 style="text-align: center; font-size: 2.5em; color: white; margin-bottom: 20px;">
+                    📊 Oyun 3: Uzunluk Karşılaştırma
+                </h2>
+                <p style="text-align: center; font-size: 1.4em; color: white; margin-bottom: 30px;">
+                    Hangi sembol doğru? (&gt;, &lt;, =)
+                </p>
+
+                <div class="quiz-question" id="compare-length-question"></div>
+                <div class="quiz-options" id="compare-length-options"></div>
+
+                <button class="interactive-btn" onclick="yeniUzunlukKarsilastirmaSoru()">
+                    🔄 Yeni Soru
+                </button>
+
+                <div id="compare-length-feedback" class="feedback"></div>
+            </div>
+
+            <!-- OYUN 4: AĞIRLIK KARŞILAŞTIRMA -->
+            <div class="game-area" style="margin-top: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <h2 style="text-align: center; font-size: 2.5em; color: white; margin-bottom: 20px;">
+                    📈 Oyun 4: Ağırlık Karşılaştırma
+                </h2>
+                <p style="text-align: center; font-size: 1.4em; color: white; margin-bottom: 30px;">
+                    Hangi sembol doğru? (&gt;, &lt;, =)
+                </p>
+
+                <div class="quiz-question" id="compare-weight-question"></div>
+                <div class="quiz-options" id="compare-weight-options"></div>
+
+                <button class="interactive-btn" onclick="yeniAgirlikKarsilastirmaSoru()">
+                    🔄 Yeni Soru
+                </button>
+
+                <div id="compare-weight-feedback" class="feedback"></div>
+            </div>
+
+            <!-- OYUN 5: GÜNLÜK HAYAT ÖLÇME -->
+            <div class="game-area" style="margin-top: 40px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                <h2 style="text-align: center; font-size: 2.5em; color: white; margin-bottom: 20px;">
+                    🏪 Oyun 5: Günlük Hayat Ölçme
+                </h2>
+                <p style="text-align: center; font-size: 1.4em; color: white; margin-bottom: 30px;">
+                    Bu nesnenin uzunluğu veya ağırlığı ne kadar?
+                </p>
+
+                <div class="quiz-question" id="daily-measure-question"></div>
+                <div class="quiz-options" id="daily-measure-options"></div>
+
+                <button class="interactive-btn" onclick="yeniGunlukOlcmeSoru()">
+                    🔄 Yeni Soru
+                </button>
+
+                <div id="daily-measure-feedback" class="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var oyunPuani = 0;
+
+        // SEKME DEĞİŞTİRME FONKSİYONU
+        function gosterSekme(sekmeId) {
+            // Tüm sekmeleri gizle
+            var sekmeler = document.querySelectorAll('.section');
+            for (var i = 0; i < sekmeler.length; i++) {
+                sekmeler[i].classList.remove('active');
+            }
+            
+            // Tüm butonların active sınıfını kaldır
+            var butonlar = document.querySelectorAll('.nav-btn');
+            for (var i = 0; i < butonlar.length; i++) {
+                butonlar[i].classList.remove('active');
+            }
+            
+            // Seçilen sekmeyi göster
+            document.getElementById(sekmeId).classList.add('active');
+            
+            // Tıklanan butonu aktif yap
+            event.target.classList.add('active');
+        }
+
+        // CETVEL ÖLÇME OYUNU
+        function updateRuler(value) {
+            document.getElementById('measuring-line').style.width = (value * 2) + '%';
+            document.getElementById('length-display').textContent = value + ' cm';
+            document.getElementById('ruler-feedback').textContent = '';
+        }
+
+        function checkRulerAnswer() {
+            var value = document.getElementById('ruler-slider').value;
+            var feedback = document.getElementById('ruler-feedback');
+            
+            if (value == 15) {
+                feedback.style.color = '#43e97b';
+                feedback.textContent = '🎉 Mükemmel! Kalem tam 15 cm! +10 puan';
+                oyunPuani += 10;
+                document.getElementById('game-score').textContent = oyunPuani;
+            } else if (value >= 13 && value <= 17) {
+                feedback.style.color = '#ffd93d';
+                feedback.textContent = '👍 Yakın! Ama tam olarak 15 cm olmalı!';
+            } else {
+                feedback.style.color = '#ff6b6b';
+                feedback.textContent = '❌ Tekrar dene! İpucu: 15 cm';
+            }
+        }
+
+        // TERAZİ OYUNU
+        function updateScale(value) {
+            var angle = (value / 5000) * 180;
+            document.getElementById('game-needle').style.transform = 'rotate(' + angle + 'deg)';
+            
+            if (value >= 1000) {
+                var kg = (value / 1000).toFixed(1);
+                document.getElementById('game-scale-display').textContent = kg + ' kg';
+            } else {
+                document.getElementById('game-scale-display').textContent = value + ' g';
+            }
+            document.getElementById('scale-feedback').textContent = '';
+        }
+
+        function checkScaleAnswer() {
+            var value = document.getElementById('scale-slider').value;
+            var feedback = document.getElementById('scale-feedback');
+            
+            if (value == 1000) {
+                feedback.style.color = '#43e97b';
+                feedback.textContent = '🎉 Harika! Tam 1 kg (1000 g)! +10 puan';
+                oyunPuani += 10;
+                document.getElementById('game-score').textContent = oyunPuani;
+            } else if (value >= 900 && value <= 1100) {
+                feedback.style.color = '#ffd93d';
+                feedback.textContent = '👍 Çok yakın! Ama tam 1 kg (1000 g) olmalı!';
+            } else {
+                feedback.style.color = '#ff6b6b';
+                feedback.textContent = '❌ Tekrar dene! İpucu: 1000 g = 1 kg';
+            }
+        }
+
+        // OYUN 1: UZUNLUK BİRİM DÖNÜŞÜMÜ
+        var uzunlukSorulari = [
+            { soru: '2 m = ? cm', cevap: '200 cm', secenekler: ['100 cm', '200 cm', '20 cm', '2000 cm'] },
+            { soru: '3 m = ? cm', cevap: '300 cm', secenekler: ['30 cm', '300 cm', '3000 cm', '3 cm'] },
+            { soru: '5 m = ? cm', cevap: '500 cm', secenekler: ['50 cm', '500 cm', '5000 cm', '5 cm'] },
+            { soru: '1 m = ? cm', cevap: '100 cm', secenekler: ['10 cm', '100 cm', '1000 cm', '1 cm'] },
+            { soru: '100 cm = ? m', cevap: '1 m', secenekler: ['10 m', '1 m', '100 m', '0.1 m'] },
+            { soru: '200 cm = ? m', cevap: '2 m', secenekler: ['20 m', '2 m', '200 m', '0.2 m'] },
+            { soru: '300 cm = ? m', cevap: '3 m', secenekler: ['30 m', '3 m', '300 m', '0.3 m'] },
+            { soru: '500 cm = ? m', cevap: '5 m', secenekler: ['50 m', '5 m', '500 m', '0.5 m'] },
+            { soru: '4 m = ? cm', cevap: '400 cm', secenekler: ['40 cm', '400 cm', '4000 cm', '4 cm'] },
+            { soru: '600 cm = ? m', cevap: '6 m', secenekler: ['60 m', '6 m', '600 m', '0.6 m'] }
+        ];
+
+        function yeniUzunlukSorusu() {
+            var soru = uzunlukSorulari[Math.floor(Math.random() * uzunlukSorulari.length)];
+            
+            document.getElementById('length-question').textContent = soru.soru;
+            document.getElementById('length-feedback').style.display = 'none';
+
+            var seceneklerContainer = document.getElementById('length-options');
+            seceneklerContainer.innerHTML = '';
+
+            var karisik = soru.secenekler.sort(function() { return Math.random() - 0.5; });
+
+            for (var i = 0; i < karisik.length; i++) {
+                var secenek = document.createElement('div');
+                secenek.className = 'quiz-option';
+                secenek.textContent = karisik[i];
+                secenek.onclick = (function(sec, cev, soruMetni) {
+                    return function() {
+                        uzunlukCevapKontrol(sec, cev, soruMetni);
+                    };
+                })(karisik[i], soru.cevap, soru.soru);
+                seceneklerContainer.appendChild(secenek);
+            }
+        }
+
+        function uzunlukCevapKontrol(secilen, dogru, soru) {
+            var feedback = document.getElementById('length-feedback');
+            var secenekler = document.querySelectorAll('#length-options .quiz-option');
+            
+            for (var i = 0; i < secenekler.length; i++) {
+                secenekler[i].onclick = null;
+            }
+
+            if (secilen === dogru) {
+                feedback.className = 'feedback success';
+                feedback.textContent = '🎉 Harika! Doğru cevap! +15 puan';
+                oyunPuani += 15;
+                document.getElementById('game-score').textContent = oyunPuani;
+                
+                for (var i = 0; i < secenekler.length; i++) {
+                    if (secenekler[i].textContent === secilen) {
+                        secenekler[i].classList.add('correct');
+                    }
+                }
+            } else {
+                feedback.className = 'feedback error';
+                feedback.textContent = '❌ Yanlış! Doğru cevap: ' + dogru;
+                
+                for (var i = 0; i < secenekler.length; i++) {
+                    if (secenekler[i].textContent === secilen) {
+                        secenekler[i].classList.add('wrong');
+                    }
+                    if (secenekler[i].textContent === dogru) {
+                        secenekler[i].classList.add('correct');
+                    }
+                }
+            }
+        }
+
+        // OYUN 2: AĞIRLIK BİRİM DÖNÜŞÜMÜ
+        var agirlikSorulari = [
+            { soru: '2 kg = ? g', cevap: '2000 g', secenekler: ['200 g', '2000 g', '20 g', '20000 g'] },
+            { soru: '3 kg = ? g', cevap: '3000 g', secenekler: ['300 g', '3000 g', '30000 g', '30 g'] },
+            { soru: '5 kg = ? g', cevap: '5000 g', secenekler: ['500 g', '5000 g', '50000 g', '50 g'] },
+            { soru: '1 kg = ? g', cevap: '1000 g', secenekler: ['100 g', '1000 g', '10000 g', '10 g'] },
+            { soru: '1000 g = ? kg', cevap: '1 kg', secenekler: ['10 kg', '1 kg', '100 kg', '0.1 kg'] },
+            { soru: '2000 g = ? kg', cevap: '2 kg', secenekler: ['20 kg', '2 kg', '200 kg', '0.2 kg'] },
+            { soru: '3000 g = ? kg', cevap: '3 kg', secenekler: ['30 kg', '3 kg', '300 kg', '0.3 kg'] },
+            { soru: '5000 g = ? kg', cevap: '5 kg', secenekler: ['50 kg', '5 kg', '500 kg', '0.5 kg'] },
+            { soru: '4 kg = ? g', cevap: '4000 g', secenekler: ['400 g', '4000 g', '40000 g', '40 g'] },
+            { soru: '6000 g = ? kg', cevap: '6 kg', secenekler: ['60 kg', '6 kg', '600 kg', '0.6 kg'] }
+        ];
+
+        function yeniAgirlikSorusu() {
+            var soru = agirlikSorulari[Math.floor(Math.random() * agirlikSorulari.length)];
+            
+            document.getElementById('weight-question').textContent = soru.soru;
+            document.getElementById('weight-feedback').style.display = 'none';
+
+            var seceneklerContainer = document.getElementById('weight-options');
+            seceneklerContainer.innerHTML = '';
+
+            var karisik = soru.secenekler.sort(function() { return Math.random() - 0.5; });
+
+            for (var i = 0; i < karisik.length; i++) {
+                var secenek = document.createElement('div');
+                secenek.className = 'quiz-option';
+                secenek.textContent = karisik[i];
+                secenek.onclick = (function(sec, cev) {
+                    return function() {
+                        agirlikCevapKontrol(sec, cev);
+                    };
+                })(karisik[i], soru.cevap);
+                seceneklerContainer.appendChild(secenek);
+            }
+        }
+
+        function agirlikCevapKontrol(secilen, dogru) {
+            var feedback = document.getElementById('weight-feedback');
+            var secenekler = document.querySelectorAll('#weight-options .quiz-option');
+            
+            for (var i = 0; i < secenekler.length; i++) {
+                secenekler[i].onclick = null;
+            }
+
+            if (secilen === dogru) {
+                feedback.className = 'feedback success';
+                feedback.textContent = '🎉 Mükemmel! Doğru cevap! +15 puan';
+                oyunPuani += 15;
+                document.getElementById('game-score').textContent = oyunPuani;
+                
+                for (var i = 0; i < secenekler.length; i++) {
+                    if (secenekler[i].textContent === secilen) {
+                        secenekler[i].classList.add('correct');
+                    }
+                }
+            } else {
+                feedback.className = 'feedback error';
+                feedback.textContent = '❌ Yanlış! Doğru cevap: ' + dogru;
+                
+                for (var i = 0; i < secenekler.length; i++) {
+                    if (secenekler[i].textContent === secilen) {
+                        secenekler[i].classList.add('wrong');
+                    }
+                    if (secenekler[i].textContent === dogru) {
+                        secenekler[i].classList.add('correct');
+                    }
+                }
+            }
+        }
+
+        // OYUN 3: UZUNLUK KARŞILAŞTIRMA
+        var uzunlukKarsilastirmaSorulari = [
+            { sol: '150 cm', sag: '200 cm', cevap: '<', secenekler: ['<', '>', '='] },
+            { sol: '2 m', sag: '150 cm', cevap: '>', secenekler: ['<', '>', '='] },
+            { sol: '100 cm', sag: '1 m', cevap: '=', secenekler: ['<', '>', '='] },
+            { sol: '3 m', sag: '250 cm', cevap: '>', secenekler: ['<', '>', '='] },
+            { sol: '50 cm', sag: '100 cm', cevap: '<', secenekler: ['<', '>', '='] },
+            { sol: '200 cm', sag: '2 m', cevap: '=', secenekler: ['<', '>', '='] },
+            { sol: '4 m', sag: '350 cm', cevap: '>', secenekler: ['<', '>', '='] },
+            { sol: '120 cm', sag: '150 cm', cevap: '<', secenekler: ['<', '>', '='] },
+            { sol: '300 cm', sag: '3 m', cevap: '=', secenekler: ['<', '>', '='] },
+            { sol: '5 m', sag: '400 cm', cevap: '>', secenekler: ['<', '>', '='] }
+        ];
+
+        function yeniUzunlukKarsilastirmaSoru() {
+            var soru = uzunlukKarsilastirmaSorulari[Math.floor(Math.random() * uzunlukKarsilastirmaSorulari.length)];
+            
+            document.getElementById('compare-length-question').innerHTML = 
+                '<div style="font-size: 2em;">' + soru.sol + ' <strong style="color: #ff6b6b;">?</strong> ' + soru.sag + '</div>';
+            document.getElementById('compare-length-feedback').style.display = 'none';
+
+            var seceneklerContainer = document.getElementById('compare-length-options');
+            seceneklerContainer.innerHTML = '';
+
+            var karisik = soru.secenekler.sort(function() { return Math.random() - 0.5; });
+
+            for (var i = 0; i < karisik.length; i++) {
+                var secenek = document.createElement('div');
+                secenek.className = 'quiz-option';
+                secenek.innerHTML = '<div style="font-size: 4em;">' + karisik[i] + '</div>';
+                secenek.onclick = (function(sec, cev, soruObj) {
+                    return function() {
+                        uzunlukKarsilastirmaCevapKontrol(sec, cev, soruObj);
+                    };
+                })(karisik[i], soru.cevap, soru);
+                seceneklerContainer.appendChild(secenek);
+            }
+        }
+
+        function uzunlukKarsilastirmaCevapKontrol(secilen, dogru, soruObj) {
+            var feedback = document.getElementById('compare-length-feedback');
+            var secenekler = document.querySelectorAll('#compare-length-options .quiz-option');
+            
+            for (var i = 0; i < secenekler.length; i++) {
+                secenekler[i].onclick = null;
+            }
+
+            if (secilen === dogru) {
+                feedback.className = 'feedback success';
+                feedback.innerHTML = '🎉 Mükemmel! Doğru sembol! +20 puan<br>' + 
+                                    soruObj.sol + ' ' + dogru + ' ' + soruObj.sag;
+                oyunPuani += 20;
+                document.getElementById('game-score').textContent = oyunPuani;
+                
+                for (var i = 0; i < secenekler.length; i++) {
+                    if (secenekler[i].textContent.trim() === secilen) {
+                        secenekler[i].classList.add('correct');
+                    }
+                }
+            } else {
+                feedback.className = 'feedback error';
+                feedback.innerHTML = '❌ Yanlış! Doğru sembol: ' + dogru + '<br>' +
+                                    soruObj.sol + ' ' + dogru + ' ' + soruObj.sag;
+                
+                for (var i = 0; i < secenekler.length; i++) {
+                    if (secenekler[i].textContent.trim() === secilen) {
+                        secenekler[i].classList.add('wrong');
+                    }
+                    if (secenekler[i].textContent.trim() === dogru) {
+                        secenekler[i].classList.add('correct');
+                    }
+                }
+            }
+        }
+
+        // OYUN 4: AĞIRLIK KARŞILAŞTIRMA
+        var agirlikKarsilastirmaSorulari = [
+            { sol: '1500 g', sag: '2000 g', cevap: '<', secenekler: ['<', '>', '='] },
+            { sol: '3 kg', sag: '2500 g', cevap: '>', secenekler: ['<', '>', '='] },
+            { sol: '1000 g', sag: '1 kg', cevap: '=', secenekler: ['<', '>', '='] },
+            { sol: '4 kg', sag: '3500 g', cevap: '>', secenekler: ['<', '>', '='] },
+            { sol: '500 g', sag: '1000 g', cevap: '<', secenekler: ['<', '>', '='] },
+            { sol: '2000 g', sag: '2 kg', cevap: '=', secenekler: ['<', '>', '='] },
+            { sol: '5 kg', sag: '4500 g', cevap: '>', secenekler: ['<', '>', '='] },
+            { sol: '1200 g', sag: '1500 g', cevap: '<', secenekler: ['<', '>', '='] },
+            { sol: '3000 g', sag: '3 kg', cevap: '=', secenekler: ['<', '>', '='] },
+            { sol: '6 kg', sag: '5000 g', cevap: '>', secenekler: ['<', '>', '='] }
+        ];
+
+        function yeniAgirlikKarsilastirmaSoru() {
+            var soru = agirlikKarsilastirmaSorulari[Math.floor(Math.random() * agirlikKarsilastirmaSorulari.length)];
+            
+            document.getElementById('compare-weight-question').innerHTML = 
+                '<div style="font-size: 2em;">' + soru.sol + ' <strong style="color: #ff6b6b;">?</strong> ' + soru.sag + '</div>';
+            document.getElementById('compare-weight-feedback').style.display = 'none';
+
+            var seceneklerContainer = document.getElementById('compare-weight-options');
+            seceneklerContainer.innerHTML = '';
+
+            var karisik = soru.secenekler.sort(function() { return Math.random() - 0.5; });
+
+            for (var i = 0; i < karisik.length; i++) {
+                var secenek = document.createElement('div');
+                secenek.className = 'quiz-option';
+                secenek.innerHTML = '<div style="font-size: 4em;">' + karisik[i] + '</div>';
+                secenek.onclick = (function(sec, cev, soruObj) {
+                    return function() {
+                        agirlikKarsilastirmaCevapKontrol(sec, cev, soruObj);
+                    };
+                })(karisik[i], soru.cevap, soru);
+                seceneklerContainer.appendChild(secenek);
+            }
+        }
+
+        function agirlikKarsilastirmaCevapKontrol(secilen, dogru, soruObj) {
+            var feedback = document.getElementById('compare-weight-feedback');
+            var secenekler = document.querySelectorAll('#compare-weight-options .quiz-option');
+            
+            for (var i = 0; i < secenekler.length; i++) {
+                secenekler[i].onclick = null;
+            }
+
+            if (secilen === dogru) {
+                feedback.className = 'feedback success';
+                feedback.innerHTML = '🎉 Harika! Doğru sembol! +20 puan<br>' + 
+                                    soruObj.sol + ' ' + dogru + ' ' + soruObj.sag;
+                oyunPuani += 20;
+                document.getElementById('game-score').textContent = oyunPuani;
+                
+                for (var i = 0; i < secenekler.length; i++) {
+                    if (secenekler[i].textContent.trim() === secilen) {
+                        secenekler[i].classList.add('correct');
+                    }
+                }
+            } else {
+                feedback.className = 'feedback error';
+                feedback.innerHTML = '❌ Yanlış! Doğru sembol: ' + dogru + '<br>' +
+                                    soruObj.sol + ' ' + dogru + ' ' + soruObj.sag;
+                
+                for (var i = 0; i < secenekler.length; i++) {
+                    if (secenekler[i].textContent.trim() === secilen) {
+                        secenekler[i].classList.add('wrong');
+                    }
+                    if (secenekler[i].textContent.trim() === dogru) {
+                        secenekler[i].classList.add('correct');
+                    }
+                }
+            }
+        }
+
+        // OYUN 5: GÜNLÜK HAYAT ÖLÇME
+        var gunlukOlcmeSorulari = [
+            { nesne: '✏️ Kalem', cevap: '15 cm', secenekler: ['15 cm', '15 m', '150 cm', '1.5 m'], emoji: '✏️' },
+            { nesne: '📱 Telefon', cevap: '14 cm', secenekler: ['14 cm', '14 m', '140 cm', '1.4 m'], emoji: '📱' },
+            { nesne: '🚪 Kapı yüksekliği', cevap: '2 m', secenekler: ['2 m', '20 m', '200 m', '20 cm'], emoji: '🚪' },
+            { nesne: '🍎 Elma', cevap: '150 g', secenekler: ['150 g', '1.5 kg', '15 g', '1500 g'], emoji: '🍎' },
+            { nesne: '🍉 Karpuz', cevap: '5 kg', secenekler: ['5 kg', '500 g', '50 kg', '5000 kg'], emoji: '🍉' },
+            { nesne: '🎒 Okul çantası', cevap: '2 kg', secenekler: ['2 kg', '200 g', '20 kg', '2000 kg'], emoji: '🎒' },
+            { nesne: '📚 Kitap', cevap: '300 g', secenekler: ['300 g', '3 kg', '30 g', '3000 g'], emoji: '📚' },
+            { nesne: '📏 Masa uzunluğu', cevap: '120 cm', secenekler: ['120 cm', '12 m', '1.2 cm', '1200 cm'], emoji: '📏' },
+            { nesne: '🍫 Çikolata', cevap: '50 g', secenekler: ['50 g', '5 kg', '500 g', '5 g'], emoji: '🍫' },
+            { nesne: '🍞 Ekmek', cevap: '400 g', secenekler: ['400 g', '4 kg', '40 g', '4000 g'], emoji: '🍞' }
+        ];
+
+        function yeniGunlukOlcmeSoru() {
+            var soru = gunlukOlcmeSorulari[Math.floor(Math.random() * gunlukOlcmeSorulari.length)];
+            
+            document.getElementById('daily-measure-question').innerHTML = 
+                '<div style="font-size: 5em; margin: 20px 0;">' + soru.emoji + '</div>' +
+                '<div style="font-size: 2em;">' + soru.nesne + '</div>' +
+                '<p style="margin-top: 20px; font-size: 1.3em;">Bu nesnenin uzunluğu/ağırlığı ne kadar?</p>';
+            document.getElementById('daily-measure-feedback').style.display = 'none';
+
+            var seceneklerContainer = document.getElementById('daily-measure-options');
+            seceneklerContainer.innerHTML = '';
+
+            var karisik = soru.secenekler.sort(function() { return Math.random() - 0.5; });
+
+            for (var i = 0; i < karisik.length; i++) {
+                var secenek = document.createElement('div');
+                secenek.className = 'quiz-option';
+                secenek.innerHTML = '<div style="font-size: 2em;">' + karisik[i] + '</div>';
+                secenek.onclick = (function(sec, cev, nesne) {
+                    return function() {
+                        gunlukOlcmeCevapKontrol(sec, cev, nesne);
+                    };
+                })(karisik[i], soru.cevap, soru.nesne);
+                seceneklerContainer.appendChild(secenek);
+            }
+        }
+
+        function gunlukOlcmeCevapKontrol(secilen, dogru, nesne) {
+            var feedback = document.getElementById('daily-measure-feedback');
+            var secenekler = document.querySelectorAll('#daily-measure-options .quiz-option');
+            
+            for (var i = 0; i < secenekler.length; i++) {
+                secenekler[i].onclick = null;
+            }
+
+            if (secilen === dogru) {
+                feedback.className = 'feedback success';
+                feedback.innerHTML = '🎉 Süper! Doğru cevap! +25 puan<br>' + 
+                                    nesne + ' = ' + dogru;
+                oyunPuani += 25;
+                document.getElementById('game-score').textContent = oyunPuani;
+                
+                for (var i = 0; i < secenekler.length; i++) {
+                    if (secenekler[i].textContent.trim() === secilen) {
+                        secenekler[i].classList.add('correct');
+                    }
+                }
+            } else {
+                feedback.className = 'feedback error';
+                feedback.innerHTML = '❌ Yanlış! Doğru cevap: ' + dogru;
+                
+                for (var i = 0; i < secenekler.length; i++) {
+                    if (secenekler[i].textContent.trim() === secilen) {
+                        secenekler[i].classList.add('wrong');
+                    }
+                    if (secenekler[i].textContent.trim() === dogru) {
+                        secenekler[i].classList.add('correct');
+                    }
+                }
+            }
+        }
+
+        // Sayfa yüklendiğinde ilk sekmeyi aktif yap ve oyunları başlat
+        window.onload = function() {
+            document.getElementById('uzunluk1').classList.add('active');
+            yeniUzunlukSorusu();
+            yeniAgirlikSorusu();
+            yeniUzunlukKarsilastirmaSoru();
+            yeniAgirlikKarsilastirmaSoru();
+            yeniGunlukOlcmeSoru();
+        };
+    </script>
+</body>
+</html>
