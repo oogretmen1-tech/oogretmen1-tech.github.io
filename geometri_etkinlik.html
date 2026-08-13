@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3. Sınıf Geometri - Şekiller ve Cisimler</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .nav-btn {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            color: white;
+            background: #95a5a6;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .nav-btn.active {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        .btn-duzlem { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .btn-ucboyut { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .btn-gunluk { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .btn-oyun { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .lesson-box {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .lesson-title {
+            font-size: 2em;
+            color: #2d3436;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .shapes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .shape-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .shape-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .shape-visual {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .shape-name {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 15px 0;
+        }
+
+        .shape-info {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #2d3436;
+            margin: 15px 0;
+        }
+
+        .shape-3d {
+            width: 250px;
+            height: 250px;
+            margin: 20px auto;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .interactive-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            margin: 10px;
+        }
+
+        .interactive-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .example-item {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+
+        .example-item:hover {
+            transform: scale(1.1);
+        }
+
+        .example-emoji {
+            font-size: 4em;
+            margin: 10px 0;
+        }
+
+        .example-text {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2d3436;
+        }
+
+        .game-area {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 40px;
+            border-radius: 20px;
+            margin: 30px 0;
+        }
+
+        .quiz-question {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2d3436;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .quiz-option {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .quiz-option:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .quiz-option.correct {
+            background: #43e97b;
+            color: white;
+            animation: bounceIn 0.5s;
+        }
+
+        .quiz-option.wrong {
+            background: #ff6b9d;
+            color: white;
+            animation: shake 0.5s;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .score-board {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .feedback {
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .feedback.success {
+            background: #43e97b;
+            color: white;
+            display: block;
+        }
+
+        .feedback.error {
+            background: #ff6b9d;
+            color: white;
+            display: block;
+        }
+
+        /* ŞEKİL ÇİZİMLERİ */
+        .square {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 20px auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: rotate 4s infinite linear;
+        }
+
+        .rectangle {
+            width: 200px;
+            height: 120px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            margin: 20px auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: rotate 4s infinite linear;
+        }
+
+        .circle {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 50%;
+            margin: 20px auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .triangle {
+            width: 0;
+            height: 0;
+            border-left: 75px solid transparent;
+            border-right: 75px solid transparent;
+            border-bottom: 150px solid #43e97b;
+            margin: 20px auto;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3));
+            animation: rotate 4s infinite linear;
+        }
+
+        .pentagon {
+            width: 150px;
+            height: 150px;
+            background: #ffd93d;
+            clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+            margin: 20px auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: rotate 4s infinite linear;
+        }
+
+        .hexagon {
+            width: 150px;
+            height: 130px;
+            background: #fa709a;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            margin: 20px auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: rotate 4s infinite linear;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* 3D CİSİMLER */
+        .cube-3d {
+            width: 150px;
+            height: 150px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotate3d 6s infinite linear;
+            margin: 50px auto;
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: rgba(102, 126, 234, 0.8);
+            border: 2px solid #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: white;
+            font-weight: bold;
+        }
+
+        .cube-face.front { transform: translateZ(75px); }
+        .cube-face.back { transform: translateZ(-75px) rotateY(180deg); }
+        .cube-face.right { transform: rotateY(90deg) translateZ(75px); }
+        .cube-face.left { transform: rotateY(-90deg) translateZ(75px); }
+        .cube-face.top { transform: rotateX(90deg) translateZ(75px); }
+        .cube-face.bottom { transform: rotateX(-90deg) translateZ(75px); }
+
+        @keyframes rotate3d {
+            0% { transform: rotateX(0deg) rotateY(0deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg); }
+        }
+
+        .sphere-3d {
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle at 30% 30%, #4facfe, #00f2fe, #0575e6);
+            border-radius: 50%;
+            margin: 50px auto;
+            box-shadow: 
+                inset -25px -25px 40px rgba(0,0,0,0.5),
+                0 10px 30px rgba(0,0,0,0.3);
+            animation: pulse 3s infinite;
+        }
+
+        .cylinder-3d {
+            width: 120px;
+            height: 180px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 60px 60px 0 0;
+            position: relative;
+            margin: 50px auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .cylinder-3d::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 120px;
+            height: 40px;
+            background: radial-gradient(ellipse at center, #ffd4e5 0%, #f093fb 100%);
+            border-radius: 50%;
+            transform: translateY(-20px);
+        }
+
+        .cylinder-3d::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 120px;
+            height: 40px;
+            background: linear-gradient(135deg, #d16ba5 0%, #c94b4b 100%);
+            border-radius: 50%;
+        }
+
+        .cone-3d {
+            width: 0;
+            height: 0;
+            border-left: 75px solid transparent;
+            border-right: 75px solid transparent;
+            border-bottom: 180px solid #ffd93d;
+            position: relative;
+            margin: 50px auto;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3));
+        }
+
+        .cone-3d::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: -75px;
+            width: 150px;
+            height: 40px;
+            background: radial-gradient(ellipse at center, #ffe57f 0%, #ffd93d 100%);
+            border-radius: 50%;
+        }
+
+        .pyramid-3d {
+            width: 0;
+            height: 0;
+            border-left: 100px solid transparent;
+            border-right: 100px solid transparent;
+            border-bottom: 180px solid #43e97b;
+            position: relative;
+            margin: 50px auto;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3));
+            animation: rotate 6s infinite linear;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.8em; }
+            .nav-btn { padding: 10px 15px; font-size: 0.9em; }
+            .shapes-grid { grid-template-columns: 1fr; }
+            .shape-visual { width: 150px; height: 150px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📐 3. Sınıf Geometri 📐</h1>
+            <p>Şekiller ve Cisimler ile Geometri Dünyası! 🌟</p>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="nav-btn btn-duzlem active" onclick="showSection('duzlem', this)">⬜ Düzlem Şekiller</button>
+            <button class="nav-btn btn-ucboyut" onclick="showSection('ucboyut', this)">🧊 3D Cisimler</button>
+            <button class="nav-btn btn-gunluk" onclick="showSection('gunluk', this)">🏠 Günlük Hayattan Örnekler</button>
+            <button class="nav-btn btn-oyun" onclick="showSection('oyun', this)">🎮 Eğlenceli Oyunlar</button>
+        </div>
+
+        <!-- DÜZLEM ŞEKİLLER SECTION -->
+        <div id="duzlem" class="section active">
+            <div class="lesson-box">
+                <div class="lesson-title">⬜ Düzlem (Düz) Geometrik Şekiller</div>
+                <p style="font-size: 1.3em; line-height: 2; text-align: center; color: #2d3436;">
+                    Düzlem şekiller, kağıt üzerinde çizebileceğimiz düz şekillerdir! <br>
+                    Her şeklin kenar sayısı ve köşe sayısı vardır! 📏
+                </p>
+            </div>
+
+            <div class="shapes-grid">
+                <!-- KARE -->
+                <div class="shape-card">
+                    <div class="shape-name">🟦 KARE</div>
+                    <div class="shape-visual">
+                        <div class="square"></div>
+                    </div>
+                    <div class="shape-info">
+                        <strong>4 kenarı vardır</strong><br>
+                        <strong>4 köşesi vardır</strong><br>
+                        <strong>Tüm kenarları eşittir!</strong><br>
+                        <strong>Tüm köşeleri dik açıdır</strong>
+                    </div>
+                    <div style="margin-top: 15px; font-size: 1.5em;">
+                        📏 Kenar: 4 | 📐 Köşe: 4
+                    </div>
+                </div>
+
+                <!-- DİKDÖRTGEN -->
+                <div class="shape-card">
+                    <div class="shape-name">🟪 DİKDÖRTGEN</div>
+                    <div class="shape-visual">
+                        <div class="rectangle"></div>
+                    </div>
+                    <div class="shape-info">
+                        <strong>4 kenarı vardır</strong><br>
+                        <strong>4 köşesi vardır</strong><br>
+                        <strong>Karşılıklı kenarlar eşittir</strong><br>
+                        <strong>Tüm köşeleri dik açıdır</strong>
+                    </div>
+                    <div style="margin-top: 15px; font-size: 1.5em;">
+                        📏 Kenar: 4 | 📐 Köşe: 4
+                    </div>
+                </div>
+
+                <!-- DAİRE -->
+                <div class="shape-card">
+                    <div class="shape-name">🔵 DAİRE</div>
+                    <div class="shape-visual">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="shape-info">
+                        <strong>Kenarı yoktur!</strong><br>
+                        <strong>Köşesi yoktur!</strong><br>
+                        <strong>Yuvarlak bir şekildir</strong><br>
+                        <strong>Orta noktasından her yere uzaklığı eşittir</strong>
+                    </div>
+                    <div style="margin-top: 15px; font-size: 1.5em;">
+                        📏 Kenar: 0 | 📐 Köşe: 0
+                    </div>
+                </div>
+
+                <!-- ÜÇGEN -->
+                <div class="shape-card">
+                    <div class="shape-name">🟢 ÜÇGEN</div>
+                    <div class="shape-visual">
+                        <div class="triangle"></div>
+                    </div>
+                    <div class="shape-info">
+                        <strong>3 kenarı vardır</strong><br>
+                        <strong>3 köşesi vardır</strong><br>
+                        <strong>En az kenarlı çokgendir</strong><br>
+                        <strong>Farklı türleri vardır</strong>
+                    </div>
+                    <div style="margin-top: 15px; font-size: 1.5em;">
+                        📏 Kenar: 3 | 📐 Köşe: 3
+                    </div>
+                </div>
+
+                <!-- BEŞGEN -->
+                <div class="shape-card">
+                    <div class="shape-name">🟡 BEŞGEN</div>
+                    <div class="shape-visual">
+                        <div class="pentagon"></div>
+                    </div>
+                    <div class="shape-info">
+                        <strong>5 kenarı vardır</strong><br>
+                        <strong>5 köşesi vardır</strong><br>
+                        <strong>Yıldız şekline benzer</strong><br>
+                        <strong>Pentagon binası beşgen şeklindedir</strong>
+                    </div>
+                    <div style="margin-top: 15px; font-size: 1.5em;">
+                        📏 Kenar: 5 | 📐 Köşe: 5
+                    </div>
+                </div>
+
+                <!-- ALTIGEN -->
+                <div class="shape-card">
+                    <div class="shape-name">🔴 ALTIGEN</div>
+                    <div class="shape-visual">
+                        <div class="hexagon"></div>
+                    </div>
+                    <div class="shape-info">
+                        <strong>6 kenarı vardır</strong><br>
+                        <strong>6 köşesi vardır</strong><br>
+                        <strong>Arı peteği altıgen şeklindedir</strong><br>
+                        <strong>Futbol topunda da vardır</strong>
+                    </div>
+                    <div style="margin-top: 15px; font-size: 1.5em;">
+                        📏 Kenar: 6 | 📐 Köşe: 6
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-box" style="margin-top: 40px;">
+                <h3 style="text-align: center; font-size: 1.8em; color: #2d3436; margin-bottom: 20px;">
+                    🎯 Hızlı Özet Tablosu
+                </h3>
+                <table style="width: 100%; border-collapse: collapse; font-size: 1.3em;">
+                    <tr style="background: #667eea; color: white;">
+                        <th style="padding: 15px; border: 2px solid white;">Şekil</th>
+                        <th style="padding: 15px; border: 2px solid white;">Kenar Sayısı</th>
+                        <th style="padding: 15px; border: 2px solid white;">Köşe Sayısı</th>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 15px; border: 2px solid #ddd; font-weight: bold;">🔺 Üçgen</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">3</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">3</td>
+                    </tr>
+                    <tr style="background: white;">
+                        <td style="padding: 15px; border: 2px solid #ddd; font-weight: bold;">🟦 Kare</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">4</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">4</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 15px; border: 2px solid #ddd; font-weight: bold;">🟪 Dikdörtgen</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">4</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">4</td>
+                    </tr>
+                    <tr style="background: white;">
+                        <td style="padding: 15px; border: 2px solid #ddd; font-weight: bold;">🟡 Beşgen</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">5</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">5</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 15px; border: 2px solid #ddd; font-weight: bold;">🔴 Altıgen</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">6</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">6</td>
+                    </tr>
+                    <tr style="background: white;">
+                        <td style="padding: 15px; border: 2px solid #ddd; font-weight: bold;">🔵 Daire</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">0</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">0</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- 3D CİSİMLER SECTION -->
+        <div id="ucboyut" class="section">
+            <div class="lesson-box">
+                <div class="lesson-title">🧊 Üç Boyutlu (3D) Geometrik Cisimler</div>
+                <p style="font-size: 1.3em; line-height: 2; text-align: center; color: #2d3436;">
+                    3D cisimler, ellerimizle tutabileceğimiz, hacmi olan şekillerdir! <br>
+                    Yüz, kenar ve köşeleri vardır! 📦
+                </p>
+            </div>
+
+            <div class="shapes-grid">
+                <!-- KÜP -->
+                <div class="shape-card">
+                    <div class="shape-name">🧊 KÜP</div>
+                    <div class="shape-visual">
+                        <div class="cube-3d">
+                            <div class="cube-face front">Ön</div>
+                            <div class="cube-face back">Arka</div>
+                            <div class="cube-face right">Sağ</div>
+                            <div class="cube-face left">Sol</div>
+                            <div class="cube-face top">Üst</div>
+                            <div class="cube-face bottom">Alt</div>
+                        </div>
+                    </div>
+                    <div class="shape-info">
+                        <strong>6 yüzü vardır</strong><br>
+                        <strong>12 kenarı vardır</strong><br>
+                        <strong>8 köşesi vardır</strong><br>
+                        <strong>Tüm yüzleri kare şeklindedir</strong>
+                    </div>
+                    <div style="margin-top: 15px; font-size: 1.3em;">
+                        📦 Yüz: 6 | 📏 Kenar: 12 | 📐 Köşe: 8
+                    </div>
+                </div>
+
+                <!-- DİKDÖRTGEN PRIZMA -->
+                <div class="shape-card">
+                    <div class="shape-name">📦 DİKDÖRTGEN PRİZMA</div>
+                    <div class="shape-visual">
+                        <div style="width: 180px; height: 120px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); margin: 30px auto; border-radius: 10px; box-shadow: 0
+10px 30px rgba(0,0,0,0.3); transform: perspective(600px) rotateY(-15deg) rotateX(10deg);"></div>
+                    </div>
+                    <div class="shape-info">
+                        <strong>6 yüzü vardır</strong><br>
+                        <strong>12 kenarı vardır</strong><br>
+                        <strong>8 köşesi vardır</strong><br>
+                        <strong>Yüzleri dikdörtgen şeklindedir</strong><br>
+                        <strong>⚠️ Küpten farkı: Kenarları eşit değildir!</strong>
+                    </div>
+                    <div style="margin-top: 15px; font-size: 1.3em;">
+                        📦 Yüz: 6 | 📏 Kenar: 12 | 📐 Köşe: 8
+                    </div>
+                </div>
+
+                <!-- KÜRE -->
+                <div class="shape-card">
+                    <div class="shape-name">⚽ KÜRE</div>
+                    <div class="shape-visual">
+                        <div class="sphere-3d"></div>
+                    </div>
+                    <div class="shape-info">
+                        <strong>Yüzü yoktur (yuvarlak yüzey)</strong><br>
+                        <strong>Kenarı yoktur</strong><br>
+                        <strong>Köşesi yoktur</strong><br>
+                        <strong>Her tarafı yuvarlaktır</strong><br>
+                        <strong>Dairenin 3D halidir</strong>
+                    </div>
+                    <div style="margin-top: 15px; font-size: 1.3em;">
+                        🔵 Tamamen Yuvarlak!
+                    </div>
+                </div>
+
+                <!-- SİLİNDİR -->
+                <div class="shape-card">
+                    <div class="shape-name">🥫 SİLİNDİR</div>
+                    <div class="shape-visual">
+                        <div class="cylinder-3d"></div>
+                    </div>
+                    <div class="shape-info">
+                        <strong>3 yüzü vardır</strong><br>
+                        <strong>2 kenarı vardır (yuvarlak)</strong><br>
+                        <strong>Köşesi yoktur</strong><br>
+                        <strong>Üst ve alt yüzleri daire şeklindedir</strong><br>
+                        <strong>Yan yüzü kavislidir</strong>
+                    </div>
+                    <div style="margin-top: 15px; font-size: 1.3em;">
+                        📦 Yüz: 3 | 🔵 Alt-Üst: Daire
+                    </div>
+                </div>
+
+                <!-- KONİ -->
+                <div class="shape-card">
+                    <div class="shape-name">🍦 KONİ</div>
+                    <div class="shape-visual">
+                        <div class="cone-3d"></div>
+                    </div>
+                    <div class="shape-info">
+                        <strong>2 yüzü vardır</strong><br>
+                        <strong>1 kenarı vardır (yuvarlak)</strong><br>
+                        <strong>1 köşesi vardır (tepe noktası)</strong><br>
+                        <strong>Alt yüzü daire şeklindedir</strong><br>
+                        <strong>Yukarı doğru incelen şekildir</strong>
+                    </div>
+                    <div style="margin-top: 15px; font-size: 1.3em;">
+                        📦 Yüz: 2 | 📐 Köşe: 1 (Tepe)
+                    </div>
+                </div>
+
+                <!-- PİRAMİT -->
+                <div class="shape-card">
+                    <div class="shape-name">🔺 PİRAMİT</div>
+                    <div class="shape-visual">
+                        <div class="pyramid-3d"></div>
+                    </div>
+                    <div class="shape-info">
+                        <strong>5 yüzü vardır</strong><br>
+                        <strong>8 kenarı vardır</strong><br>
+                        <strong>5 köşesi vardır</strong><br>
+                        <strong>Alt yüzü kare, yan yüzleri üçgendir</strong><br>
+                        <strong>Mısır piramitleri bu şekildedir!</strong>
+                    </div>
+                    <div style="margin-top: 15px; font-size: 1.3em;">
+                        📦 Yüz: 5 | 📏 Kenar: 8 | 📐 Köşe: 5
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-box" style="margin-top: 40px;">
+                <h3 style="text-align: center; font-size: 1.8em; color: #2d3436; margin-bottom: 20px;">
+                    🎯 3D Cisimler Karşılaştırma Tablosu
+                </h3>
+                <table style="width: 100%; border-collapse: collapse; font-size: 1.2em;">
+                    <tr style="background: #667eea; color: white;">
+                        <th style="padding: 15px; border: 2px solid white;">Cisim</th>
+                        <th style="padding: 15px; border: 2px solid white;">Yüz</th>
+                        <th style="padding: 15px; border: 2px solid white;">Kenar</th>
+                        <th style="padding: 15px; border: 2px solid white;">Köşe</th>
+                        <th style="padding: 15px; border: 2px solid white;">Özellik</th>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 15px; border: 2px solid #ddd; font-weight: bold;">🧊 Küp</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">6</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">12</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">8</td>
+                        <td style="padding: 15px; border: 2px solid #ddd;">Tüm kenarları eşit</td>
+                    </tr>
+                    <tr style="background: white;">
+                        <td style="padding: 15px; border: 2px solid #ddd; font-weight: bold;">📦 Dikdörtgen Prizma</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">6</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">12</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">8</td>
+                        <td style="padding: 15px; border: 2px solid #ddd;">Kenarları farklı uzunlukta</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 15px; border: 2px solid #ddd; font-weight: bold;">⚽ Küre</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">0</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">0</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">0</td>
+                        <td style="padding: 15px; border: 2px solid #ddd;">Tamamen yuvarlak</td>
+                    </tr>
+                    <tr style="background: white;">
+                        <td style="padding: 15px; border: 2px solid #ddd; font-weight: bold;">🥫 Silindir</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">3</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">2</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">0</td>
+                        <td style="padding: 15px; border: 2px solid #ddd;">Alt-üst daire, yan kavisli</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 15px; border: 2px solid #ddd; font-weight: bold;">🍦 Koni</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">2</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">1</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">1</td>
+                        <td style="padding: 15px; border: 2px solid #ddd;">Altta daire, tepede köşe</td>
+                    </tr>
+                    <tr style="background: white;">
+                        <td style="padding: 15px; border: 2px solid #ddd; font-weight: bold;">🔺 Piramit</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">5</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">8</td>
+                        <td style="padding: 15px; border: 2px solid #ddd; text-align: center;">5</td>
+                        <td style="padding: 15px; border: 2px solid #ddd;">Altta kare, yanlarda üçgen</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="lesson-box" style="margin-top: 40px; background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
+                <h3 style="text-align: center; font-size: 1.8em; color: #2d3436; margin-bottom: 20px;">
+                    ⚠️ ÖNEMLİ FARKLAR!
+                </h3>
+                <div style="background: white; padding: 30px; border-radius: 15px; margin: 20px 0;">
+                    <h4 style="font-size: 1.5em; color: #667eea; margin-bottom: 15px;">🧊 KÜP vs 📦 DİKDÖRTGEN PRİZMA</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                        <div style="background: #e8f4f8; padding: 20px; border-radius: 10px;">
+                            <div style="font-size: 3em; text-align: center;">🧊</div>
+                            <h5 style="text-align: center; color: #667eea; font-size: 1.3em; margin: 10px 0;">KÜP</h5>
+                            <ul style="font-size: 1.2em; line-height: 2;">
+                                <li>✅ Tüm kenarları eşittir</li>
+                                <li>✅ Tüm yüzleri kare</li>
+                                <li>✅ Zar küptür</li>
+                                <li>✅ Rubik küpü küptür</li>
+                            </ul>
+                        </div>
+                        <div style="background: #ffe8f0; padding: 20px; border-radius: 10px;">
+                            <div style="font-size: 3em; text-align: center;">📦</div>
+                            <h5 style="text-align: center; color: #f5576c; font-size: 1.3em; margin: 10px 0;">DİKDÖRTGEN PRİZMA</h5>
+                            <ul style="font-size: 1.2em; line-height: 2;">
+                                <li>✅ Kenarları farklı uzunlukta</li>
+                                <li>✅ Yüzleri dikdörtgen</li>
+                                <li>✅ Kutu prizmadır</li>
+                                <li>✅ Dolap prizmadır</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GÜNLÜK HAYATTAN ÖRNEKLER SECTION -->
+        <div id="gunluk" class="section">
+            <div class="lesson-box">
+                <div class="lesson-title">🏠 Günlük Hayatta Geometri</div>
+                <p style="font-size: 1.3em; line-height: 2; text-align: center; color: #2d3436;">
+                    Etrafımızda her yerde geometrik şekiller var! <br>
+                    Gelin birlikte bulalım! 🔍
+                </p>
+            </div>
+
+            <!-- DÜZLEM ŞEKİLLER ÖRNEKLER -->
+            <div style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); padding: 40px; border-radius: 20px; margin: 30px 0;">
+                <h2 style="text-align: center; font-size: 2em; color: #2d3436; margin-bottom: 30px;">
+                    ⬜ Düzlem Şekiller - Günlük Örnekler
+                </h2>
+
+                <h3 style="font-size: 1.8em; color: #667eea; margin: 30px 0 20px 0; text-align: center;">🟦 KARE Örnekleri</h3>
+                <div class="examples-grid">
+                    <div class="example-item">
+                        <div class="example-emoji">🎲</div>
+                        <div class="example-text">Zar</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🧇</div>
+                        <div class="example-text">Waffle</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🪟</div>
+                        <div class="example-text">Pencere</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🧈</div>
+                        <div class="example-text">Peynir Dilimi</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">⏹️</div>
+                        <div class="example-text">Kare Buton</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🔲</div>
+                        <div class="example-text">Kare Kutu</div>
+                    </div>
+                </div>
+
+                <h3 style="font-size: 1.8em; color: #f5576c; margin: 30px 0 20px 0; text-align: center;">🟪 DİKDÖRTGEN Örnekleri</h3>
+                <div class="examples-grid">
+                    <div class="example-item">
+                        <div class="example-emoji">📱</div>
+                        <div class="example-text">Telefon</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">📺</div>
+                        <div class="example-text">Televizyon</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">📚</div>
+                        <div class="example-text">Kitap</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🚪</div>
+                        <div class="example-text">Kapı</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">💳</div>
+                        <div class="example-text">Kart</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🖼️</div>
+                        <div class="example-text">Tablo</div>
+                    </div>
+                </div>
+
+                <h3 style="font-size: 1.8em; color: #4facfe; margin: 30px 0 20px 0; text-align: center;">🔵 DAİRE Örnekleri</h3>
+                <div class="examples-grid">
+                    <div class="example-item">
+                        <div class="example-emoji">⚽</div>
+                        <div class="example-text">Top</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🍕</div>
+                        <div class="example-text">Pizza</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🎯</div>
+                        <div class="example-text">Hedef Tahtası</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🪙</div>
+                        <div class="example-text">Para</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🍪</div>
+                        <div class="example-text">Kurabiye</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">☀️</div>
+                        <div class="example-text">Güneş</div>
+                    </div>
+                </div>
+
+                <h3 style="font-size: 1.8em; color: #43e97b; margin: 30px 0 20px 0; text-align: center;">🟢 ÜÇGEN Örnekleri</h3>
+                <div class="examples-grid">
+                    <div class="example-item">
+                        <div class="example-emoji">🔺</div>
+                        <div class="example-text">Uyarı İşareti</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🎄</div>
+                        <div class="example-text">Çam Ağacı</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🍕</div>
+                        <div class="example-text">Pizza Dilimi</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">⛺</div>
+                        <div class="example-text">Çadır</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🏔️</div>
+                        <div class="example-text">Dağ</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🔼</div>
+                        <div class="example-text">Ok İşareti</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3D CİSİMLER ÖRNEKLER -->
+            <div style="background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%); padding: 40px; border-radius: 20px; margin: 30px 0;">
+                <h2 style="text-align: center; font-size: 2em; color: #2d3436; margin-bottom: 30px;">
+                    🧊 3D Cisimler - Günlük Örnekler
+                </h2>
+
+                <h3 style="font-size: 1.8em; color: #667eea; margin: 30px 0 20px 0; text-align: center;">🧊 KÜP Örnekleri</h3>
+                <div class="examples-grid">
+                    <div class="example-item">
+                        <div class="example-emoji">🎲</div>
+                        <div class="example-text">Zar</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🧊</div>
+                        <div class="example-text">Buz Küpü</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🧩</div>
+                        <div class="example-text">Rubik Küpü</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">📦</div>
+                        <div class="example-text">Küp Kutu</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🧀</div>
+                        <div class="example-text">Küp Peynir</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🎁</div>
+                        <div class="example-text">Küp Hediye</div>
+                    </div>
+                </div>
+
+                <h3 style="font-size: 1.8em; color: #f5576c; margin: 30px 0 20px 0; text-align: center;">📦 DİKDÖRTGEN PRİZMA Örnekleri</h3>
+                <div class="examples-grid">
+                    <div class="example-item">
+                        <div class="example-emoji">📦</div>
+                        <div class="example-text">Kargo Kutusu</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">📚</div>
+                        <div class="example-text">Kitap</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🧱</div>
+                        <div class="example-text">Tuğla</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">📱</div>
+                        <div class="example-text">Telefon</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🏢</div>
+                        <div class="example-text">Bina</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🗄️</div>
+                        <div class="example-text">Dolap</div>
+                    </div>
+                </div>
+
+                <h3 style="font-size: 1.8em; color: #4facfe; margin: 30px 0 20px 0; text-align: center;">⚽ KÜRE Örnekleri</h3>
+                <div class="examples-grid">
+                    <div class="example-item">
+                        <div class="example-emoji">⚽</div>
+                        <div class="example-text">Futbol Topu</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🏀</div>
+                        <div class="example-text">Basketbol Topu</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🌍</div>
+                        <div class="example-text">Dünya</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🍊</div>
+                        <div class="example-text">Portakal</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🫧</div>
+                        <div class="example-text">Sabun Köpüğü</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🔮</div>
+                        <div class="example-text">Cam Küre</div>
+                    </div>
+                </div>
+
+                <h3 style="font-size: 1.8em; color: #fa709a; margin: 30px 0 20px 0; text-align: center;">🥫 SİLİNDİR Örnekleri</h3>
+                <div class="examples-grid">
+                    <div class="example-item">
+                        <div class="example-emoji">🥫</div>
+                        <div class="example-text">Konserve</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🕯️</div>
+                        <div class="example-text">Mum</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🥤</div>
+                        <div class="example-text">İçecek Kutusu</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🪔</div>
+                        <div class="example-text">Silindir Kap</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🛢️</div>
+                        <div class="example-text">Varil</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🎩</div>
+                        <div class="example-text">Silindir Şapka</div>
+                    </div>
+                </div>
+
+                <h3 style="font-size: 1.8em; color: #ffd93d; margin: 30px 0 20px 0; text-align: center;">🍦 KONİ Örnekleri</h3>
+                <div class="examples-grid">
+                    <div class="example-item">
+                        <div class="example-emoji">🍦</div>
+                        <div class="example-text">Dondurma</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🎉</div>
+                        <div class="example-text">Parti Şapkası</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🚧</div>
+                        <div class="example-text">Trafik Konisi</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🌲</div>
+                        <div class="example-text">Çam Ağacı</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🎺</div>
+                        <div class="example-text">Trompet Ucu</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🏔️</div>
+                        <div class="example-text">Dağ Zirvesi</div>
+                    </div>
+                </div>
+
+                <h3 style="font-size: 1.8em; color: #43e97b; margin: 30px 0 20px 0; text-align: center;">🔺 PİRAMİT Örnekleri</h3>
+                <div class="examples-grid">
+                    <div class="example-item">
+                        <div class="example-emoji">🏜️</div>
+                        <div class="example-text">Mısır Piramitleri</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">⛰️</div>
+                        <div class="example-text">Piramit Dağ</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🏕️</div>
+                        <div class="example-text">Çadır</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🔺</div>
+                        <div class="example-text">Piramit Kutu</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🎄</div>
+                        <div class="example-text">Noel Ağacı</div>
+                    </div>
+                    <div class="example-item">
+                        <div class="example-emoji">🏛️</div>
+                        <div class="example-text">Tarihi Yapı</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OYUNLAR SECTION -->
+        <div id="oyun" class="section">
+            <div class="score-board">
+                🎮 Oyun Puanı: <span id="game-score">0</span> 🎮
+            </div>
+
+            <!-- OYUN 1: ŞEKİL BULMA -->
+            <div class="game-area">
+                <h2 style="text-align: center; font-size: 2.5em; color: #2d3436; margin-bottom: 20px;">
+                    🔍 Şekil Bulma Oyunu
+                </h2>
+                <p style="text-align: center; font-size: 1.3em; margin-bottom: 30px;">
+                    Hangi şekil sorulduğunu bil ve doğru şekle tıkla!
+                </p>
+
+                <div class="quiz-question" id="shape-question">
+                    Soru yükleniyor...
+                </div>
+
+                <div class="quiz-options" id="shape-options">
+                    <!-- Seçenekler buraya gelecek -->
+                </div>
+
+                <button class="interactive-btn" onclick="newShapeQuestion()">
+                    🔄 Yeni Soru
+                </button>
+
+                <div id="shape-feedback" class="feedback"></div>
+            </div>
+
+            <!-- OYUN 2: 3D CİSİM EŞLEŞTIRME -->
+            <div class="game-area" style="margin-top: 40px;">
+                <h2 style="text-align: center; font-size: 2.5em; color: #2d3436; margin-bottom: 20px;">
+                    🧩 Cisim Eşleştirme Oyunu
+                </h2>
+                <p style="text-align: center; font-size: 1.3em; margin-bottom: 30px;">
+                    Günlük hayattan nesneyi doğru geometrik cisimle eşleştir!
+                </p>
+
+                <div class="quiz-question" id="match-question">
+                    Soru yükleniyor...
+                </div>
+
+                <div class="quiz-options" id="match-options">
+                    <!-- Seçenekler buraya gelecek -->
+                </div>
+
+                <button class="interactive-btn" onclick="newMatchQuestion()">
+                    🔄 Yeni Soru
+                </button>
+
+                <div id="match-feedback" class="feedback"></div>
+            </div>
+
+            <!-- OYUN 3: KENAR-KÖŞE SAYMA -->
+            <div class="game-area" style="margin-top: 40px;">
+                <h2 style="text-align: center; font-size: 2.5em; color: #2d3436; margin-bottom: 20px;">
+                    🔢 Kenar ve Köşe Sayma
+                </h2>
+                <p style="text-align: center; font-size: 1.3em; margin-bottom: 30px;">
+                    Şeklin kaç kenarı ve köşesi var? Doğru sayıyı seç!
+                </p>
+
+                <div class="quiz-question" id="count-question">
+                    Soru yükleniyor...
+                </div>
+
+                <div style="background: white; padding: 30px; border-radius: 15px; margin: 30px 0;">
+                    <div id="count-shape-display" style="text-align: center; font-size: 3em;">
+                        <!-- Şekil buraya gelecek -->
+                    </div>
+                </div>
+
+                <div class="quiz-options" id="count-options">
+                    <!-- Seçenekler buraya gelecek -->
+                </div>
+
+                <button class="interactive-btn" onclick="newCountQuestion()">
+                    🔄 Yeni Soru
+                </button>
+
+                <div id="count-feedback" class="feedback"></div>
+            </div>
+
+            <!-- OYUN 4: KÜP vs PRİZMA -->
+            <div class="game-area" style="margin-top: 40px; background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
+                <h2 style="text-align: center; font-size: 2.5em; color: #2d3436; margin-bottom: 20px;">
+                    🧊 Küp mü? Prizma mı?
+                </h2>
+                <p style="text-align: center; font-size: 1.3em; margin-bottom: 30px;">
+                    Bu nesne KÜP mü yoksa DİKDÖRTGEN PRİZMA mı?
+                </p>
+
+                <div class="quiz-question" id="cube-question">
+                    Soru yükleniyor...
+                </div>
+
+                <div class="quiz-options" id="cube-options">
+                    <!-- Seçenekler buraya gelecek -->
+                </div>
+
+                <button class="interactive-btn" onclick="newCubeQuestion()">
+                    🔄 Yeni Soru
+                </button>
+
+                <div id="cube-feedback" class="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var gameScore = 0;
+
+        // SEKMELERİ DEĞİŞTİRME FONKSİYONU
+        function showSection(sectionId, buttonElement) {
+            // Tüm section'ları gizle
+            var sections = document.querySelectorAll('.section');
+            for (var i = 0; i < sections.length; i++) {
+                sections[i].classList.remove('active');
+            }
+            
+            // Tüm butonlardan active class'ını kaldır
+            var buttons = document.querySelectorAll('.nav-btn');
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove('active');
+            }
+            
+            // Seçilen section'ı göster
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Seçilen butona active class ekle
+            buttonElement.classList.add('active');
+
+            // Oyun sekmesi açıldığında oyunları başlat
+            if (sectionId === 'oyun') {
+                setTimeout(function() {
+                    newShapeQuestion();
+                    newMatchQuestion();
+                    newCountQuestion();
+                    newCubeQuestion();
+                }, 100);
+            }
+        }
+
+        // OYUN 1: ŞEKİL BULMA
+        var shapeQuestions = [
+            { question: "4 kenarı eşit olan şekil hangisidir?", answer: "🟦 Kare", options: ["🟦 Kare", "🟪 Dikdörtgen", "🔵 Daire", "🟢 Üçgen"] },
+            { question: "Hiç kenarı ve köşesi olmayan şekil hangisidir?", answer: "🔵 Daire", options: ["🟦 Kare", "🟪 Dikdörtgen", "🔵 Daire", "🟢 Üçgen"] },
+            { question: "3 kenarı olan şekil hangisidir?", answer: "🟢 Üçgen", options: ["🟦 Kare", "🔵 Daire", "🟢 Üçgen", "🟡 Beşgen"] },
+            { question: "6 kenarı olan şekil hangisidir?", answer: "🔴 Altıgen", options: ["🟢 Üçgen", "🟡 Beşgen", "🔴 Altıgen", "🟦 Kare"] },
+            { question: "Karşılıklı kenarları eşit olan 4 kenarlı şekil hangisidir?", answer: "🟪 Dikdörtgen", options: ["🟦 Kare", "🟪 Dikdörtgen", "🔵 Daire", "🟢 Üçgen"] },
+            { question: "5 kenarı olan şekil hangisidir?", answer: "🟡 Beşgen", options: ["🟦 Kare", "🟡 Beşgen", "🔴 Altıgen", "🟢 Üçgen"] }
+        ];
+
+        function newShapeQuestion() {
+            var question = shapeQuestions[Math.floor(Math.random() * shapeQuestions.length)];
+            document.getElementById('shape-question').textContent = question.question;
+            document.getElementById('shape-feedback').style.display = 'none';
+
+            var optionsContainer = document.getElementById('shape-options');
+            optionsContainer.innerHTML = '';
+
+            var shuffled = question.options.sort(function() { return Math.random() - 0.5; });
+
+            for (var i = 0; i < shuffled.length; i++) {
+                var option = document.createElement('div');
+                option.className = 'quiz-option';
+                option.innerHTML = '<div style="font-size: 3em;">' + shuffled[i].split(' ')[0] + '</div>' +
+                                 '<div style="font-size: 1.5em; font-weight: bold; margin-top: 10px;">' + 
+                                 shuffled[i].split(' ')[1] + '</div>';
+                option.onclick = (function(opt, ans) {
+                    return function() {
+                        checkShapeAnswer(opt, ans);
+                    };
+                })(shuffled[i], question.answer);
+                optionsContainer.appendChild(option);
+            }
+        }
+
+        function checkShapeAnswer(selected, correct) {
+            var feedback = document.getElementById('shape-feedback');
+            var options = document.querySelectorAll('#shape-options .quiz-option');
+            
+            for (var i = 0; i < options.length; i++) {
+                options[i].onclick = null;
+            }
+
+            if (selected === correct) {
+                feedback.className = 'feedback success';
+                feedback.textContent = '🎉 Harika! Doğru cevap! +10 puan';
+                gameScore += 10;
+                document.getElementById('game-score').textContent = gameScore;
+                
+                for (var i = 0; i < options.length; i++) {
+                    if (options[i].textContent.includes(selected.split(' ')[1])) {
+                        options[i].classList.add('correct');
+                    }
+                }
+            } else {
+                feedback.className = 'feedback error';
+                feedback.textContent = '❌ Yanlış! Doğru cevap: ' + correct;
+                
+                for (var i = 0; i < options.length; i++) {
+                    if (options[i].textContent.includes(selected.split(' ')[1])) {
+                        options[i].classList.add('wrong');
+                    }
+                    if (options[i].textContent.includes(correct.split(' ')[1])) {
+                        options[i].classList.add('correct');
+                    }
+                }
+            }
+        }
+
+        // OYUN 2: 3D CİSİM EŞLEŞTIRME
+        var matchQuestions = [
+            { question: "Futbol topu hangi geometrik cisimdir?", emoji: "⚽", answer: "Küre", options: ["Küp", "Küre", "Silindir", "Koni"] },
+            { question: "Zar hangi geometrik cisimdir?", emoji: "🎲", answer: "Küp", options: ["Küp", "Küre", "Piramit", "Prizma"] },
+            { question: "Dondurma külahı hangi geometrik cisimdir?", emoji: "🍦", answer: "Koni", options: ["Küp", "Silindir", "Koni", "Piramit"] },
+            { question: "Konserve kutusu hangi geometrik cisimdir?", emoji: "🥫", answer: "Silindir", options: ["Küp", "Küre", "Silindir", "Koni"] },
+            { question: "Mısır piramitleri hangi geometrik cisimdir?", emoji: "🏜️", answer: "Piramit", options: ["Küp", "Prizma", "Piramit", "Koni"] },
+            { question: "Kargo kutusu hangi geometrik cisimdir?", emoji: "📦", answer: "Prizma", options: ["Küp", "Prizma", "Silindir", "Küre"] },
+            { question: "Portakal hangi geometrik cisimdir?", emoji: "🍊", answer: "Küre", options: ["Küp", "Küre", "Silindir", "Piramit"] },
+            { question: "Kitap hangi geometrik cisimdir?", emoji: "📚", answer: "Prizma", options: ["Küp", "Prizma", "Silindir", "Piramit"] }
+        ];
+
+        function newMatchQuestion() {
+            var question = matchQuestions[Math.floor(Math.random() * matchQuestions.length)];
+            document.getElementById('match-question').innerHTML = 
+                '<div style="font-size: 4em; margin: 20px 0;">' + question.emoji + '</div>' +
+                '<div style="font-size: 1.5em;">' + question.question + '</div>';
+            document.getElementById('match-feedback').style.display = 'none';
+
+            var optionsContainer = document.getElementById('match-options');
+            optionsContainer.innerHTML = '';
+
+            var shuffled = question.options.sort(function() { return Math.random() - 0.5; });
+
+            for (var i = 0; i < shuffled.length; i++) {
+                var option = document.createElement('div');
+                option.className = 'quiz-option';
+                option.innerHTML = '<div style="font-size: 2em; font-weight: bold;">' + shuffled[i] + '</div>';
+                option.onclick = (function(opt, ans) {
+                    return function() {
+                        checkMatchAnswer(opt, ans);
+                    };
+                })(shuffled[i], question.answer);
+                optionsContainer.appendChild(option);
+            }
+        }
+
+        function checkMatchAnswer(selected, correct) {
+            var feedback = document.getElementById('match-feedback');
+            var options = document.querySelectorAll('#match-options .quiz-option');
+            
+            for (var i = 0; i < options.length; i++) {
+                options[i].onclick = null;
+            }
+
+            if (selected === correct) {
+                feedback.className = 'feedback success';
+                feedback.textContent = '🎉 Mükemmel! Doğru eşleştirdin! +15 puan';
+                gameScore += 15;
+                document.getElementById('game-score').textContent = gameScore;
+                
+                for (var i = 0; i < options.length; i++) {
+                    if (options[i].textContent.trim() === selected) {
+                        options[i].classList.add('correct');
+                    }
+                }
+            } else {
+                feedback.className = 'feedback error';
+                feedback.textContent = '❌ Yanlış! Doğru cevap: ' + correct;
+                
+                for (var i = 0; i < options.length; i++) {
+                    if (options[i].textContent.trim() === selected) {
+                        options[i].classList.add('wrong');
+                    }
+                    if (options[i].textContent.trim() === correct) {
+                        options[i].classList.add('correct');
+                    }
+                }
+            }
+        }
+
+        // OYUN 3: KENAR-KÖŞE SAYMA
+        var countQuestions = [
+            { shape: "Kare", emoji: "🟦", question: "Kaç kenarı var?", type: "kenar", answer: "4", options: ["3", "4", "5", "6"] },
+            { shape: "Kare", emoji: "🟦", question: "Kaç köşesi var?", type: "köşe", answer: "4", options: ["3", "4", "5", "6"] },
+            { shape: "Üçgen", emoji: "🔺", question: "Kaç kenarı var?", type: "kenar", answer: "3", options: ["3", "4", "5", "6"] },
+            { shape: "Üçgen", emoji: "🔺", question: "Kaç köşesi var?", type: "köşe", answer: "3", options: ["3", "4", "5", "6"] },
+            { shape: "Beşgen", emoji: "⭐", question: "Kaç kenarı var?", type: "kenar", answer: "5", options: ["3", "4", "5", "6"] },
+            { shape: "Altıgen", emoji: "⬡", question: "Kaç kenarı var?", type: "kenar", answer: "6", options: ["4", "5", "6", "8"] },
+            { shape: "Daire", emoji: "🔵", question: "Kaç kenarı var?", type: "kenar", answer: "0", options: ["0", "1", "3", "4"] },
+            { shape: "Daire", emoji: "🔵", question: "Kaç köşesi var?", type: "köşe", answer: "0", options: ["0", "1", "3", "4"] }
+        ];
+
+        function newCountQuestion() {
+            var question = countQuestions[Math.floor(Math.random() * countQuestions.length)];
+            document.getElementById('count-question').innerHTML = 
+                '<strong>' + question.shape + '</strong> şeklinin ' + question.question;
+            document.getElementById('count-shape-display').textContent = question.emoji;
+            document.getElementById('count-feedback').style.display = 'none';
+
+            var optionsContainer = document.getElementById('count-options');
+            optionsContainer.innerHTML = '';
+
+            var shuffled = question.options.sort(function() { return Math.random() - 0.5; });
+
+            for (var i = 0; i < shuffled.length; i++) {
+                var option = document.createElement('div');
+                option.className = 'quiz-option';
+                option.innerHTML = '<div style="font-size: 3em; font-weight: bold;">' + shuffled[i] + '</div>';
+                option.onclick = (function(opt, ans) {
+                    return function() {
+                        checkCountAnswer(opt, ans);
+                    };
+                })(shuffled[i], question.answer);
+                optionsContainer.appendChild(option);
+            }
+        }
+
+        function checkCountAnswer(selected, correct) {
+            var feedback = document.getElementById('count-feedback');
+            var options = document.querySelectorAll('#count-options .quiz-option');
+            
+            for (var i = 0; i < options.length; i++) {
+                options[i].onclick = null;
+            }
+
+            if (selected === correct) {
+                feedback.className = 'feedback success';
+                feedback.textContent = '🎉 Süper! Doğru saydın! +10 puan';
+                gameScore += 10;
+                document.getElementById('game-score').textContent = gameScore;
+                
+                for (var i = 0; i < options.length; i++) {
+                    if (options[i].textContent.trim() === selected) {
+                        options[i].classList.add('correct');
+                    }
+                }
+            } else {
+                feedback.className = 'feedback error';
+                feedback.textContent = '❌ Yanlış! Doğru cevap: ' + correct;
+                
+                for (var i = 0; i < options.length; i++) {
+                    if (options[i].textContent.trim() === selected) {
+                        options[i].classList.add('wrong');
+                    }
+                    if (options[i].textContent.trim() === correct) {
+                        options[i].classList.add('correct');
+                    }
+                }
+            }
+        }
+
+        // OYUN 4: KÜP vs PRİZMA
+        var cubeQuestions = [
+            { question: "Zar", emoji: "🎲", answer: "Küp", reason: "Tüm kenarları eşittir" },
+            { question: "Rubik Küpü", emoji: "🧩", answer: "Küp", reason: "Tüm yüzleri kare ve eşittir" },
+            { question: "Buz Küpü", emoji: "🧊", answer: "Küp", reason: "Tüm kenarları eşittir" },
+            { question: "Kargo Kutusu", emoji: "📦", answer: "Prizma", reason: "Kenarları farklı uzunlukta" },
+            { question: "Kitap", emoji: "📚", answer: "Prizma", reason: "Yüzleri dikdörtgen" },
+            { question: "Tuğla", emoji: "🧱", answer: "Prizma", reason: "Kenarları farklı uzunlukta" },
+            { question: "Telefon", emoji: "📱", answer: "Prizma", reason: "Yüzleri dikdörtgen" },
+            { question: "Küp Peynir", emoji: "🧀", answer: "Küp", reason: "Tüm kenarları eşittir" }
+        ];
+
+        function newCubeQuestion() {
+            var question = cubeQuestions[Math.floor(Math.random() * cubeQuestions.length)];
+            document.getElementById('cube-question').innerHTML = 
+                '<div style="font-size: 5em; margin: 20px 0;">' + question.emoji + '</div>' +
+                '<div style="font-size: 1.8em;"><strong>' + question.question + '</strong> hangi geometrik cisimdir?</div>';
+            document.getElementById('cube-feedback').style.display = 'none';
+
+            var optionsContainer = document.getElementById('cube-options');
+            optionsContainer.innerHTML = '';
+
+            var options = ["Küp", "Dikdörtgen Prizma"];
+            var shuffled = options.sort(function() { return Math.random() - 0.5; });
+
+            for (var i = 0; i < shuffled.length; i++) {
+                var option = document.createElement('div');
+                option.className = 'quiz-option';
+                option.style.fontSize = '1.8em';
+                option.style.fontWeight = 'bold';
+                option.innerHTML = (shuffled[i] === "Küp" ? "🧊 " : "📦 ") + shuffled[i];
+                option.onclick = (function(opt, ans, reason) {
+                    return function() {
+                        checkCubeAnswer(opt, ans, reason);
+                    };
+                })(shuffled[i], question.answer, question.reason);
+                optionsContainer.appendChild(option);
+            }
+        }
+
+        function checkCubeAnswer(selected, correct, reason) {
+            var feedback = document.getElementById('cube-feedback');
+            var options = document.querySelectorAll('#cube-options .quiz-option');
+            
+            for (var i = 0; i < options.length; i++) {
+                options[i].onclick = null;
+            }
+
+            if (selected === correct) {
+                feedback.className = 'feedback success';
+                feedback.innerHTML = '🎉 Harika! Doğru cevap!<br>💡 ' + reason + '<br>+20 puan';
+                gameScore += 20;
+                document.getElementById('game-score').textContent = gameScore;
+                
+                for (var i = 0; i < options.length; i++) {
+                    if (options[i].textContent.includes(selected)) {
+                        options[i].classList.add('correct');
+                    }
+                }
+            } else {
+                feedback.className = 'feedback error';
+                feedback.innerHTML = '❌ Yanlış! Doğru cevap: ' + correct + '<br>💡 ' + reason;
+                
+                for (var i = 0; i < options.length; i++) {
+                    if (options[i].textContent.includes(selected)) {
+                        options[i].classList.add('wrong');
+                    }
+                    if (options[i].textContent.includes(correct)) {
+                        options[i].classList.add('correct');
+                    }
+                }
+            }
+        }
+
+        // Sayfa yüklendiğinde ilk oyunu başlat
+        window.onload = function() {
+            newShapeQuestion();
+            newMatchQuestion();
+            newCountQuestion();
+            newCubeQuestion();
+        };
+    </script>
+</body>
+</html>
