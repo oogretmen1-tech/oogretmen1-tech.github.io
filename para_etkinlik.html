@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💰 Paramızı Öğreniyorum - Türk Lirası</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', Arial, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 20px;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .nav-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .nav-btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .lesson-box {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .lesson-title {
+            font-size: 2.5em;
+            text-align: center;
+            color: white;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .money-card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .money-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .money-img {
+            width: 100%;
+            max-width: 250px;
+            height: 150px;
+            margin: 15px auto;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            border: 4px solid #333;
+        }
+
+        .coin {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 15px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            border: 5px solid #8B4513;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .info-box {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: left;
+            line-height: 1.8;
+        }
+
+        /* MARKET OYUNU */
+        .market {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+        }
+
+        .market-header {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .wallet {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #27ae60;
+        }
+
+        .cart-total {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .product {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .product:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .product-icon {
+            font-size: 4em;
+            margin-bottom: 10px;
+        }
+
+        .product-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #333;
+        }
+
+        .product-price {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #27ae60;
+            margin: 10px 0;
+        }
+
+        .product-quantity {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .qty-btn {
+            width: 35px;
+            height: 35px;
+            border: none;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .qty-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .qty-display {
+            font-size: 1.3em;
+            font-weight: bold;
+            min-width: 40px;
+        }
+
+        .cart-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .cart-title {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .cart-items {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+            margin: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #ec7063 100%);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f39c12 0%, #f5b041 100%);
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .payment-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .payment-section.active {
+            display: block;
+        }
+
+        .money-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .money-option {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .money-option:hover {
+            border-color: #f093fb;
+            transform: scale(1.05);
+        }
+
+        .money-option.selected {
+            border-color: #27ae60;
+            background: #d5f4e6;
+        }
+
+        .result-box {
+            background: #e8f4f8;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+            font-size: 1.3em;
+            text-align: center;
+            display: none;
+        }
+
+        .result-box.active {
+            display: block;
+        }
+
+        .result-box.success {
+            background: linear-gradient(135deg, #d5f4e6 0%, #a8e6cf 100%);
+        }
+
+        .result-box.error {
+            background: linear-gradient(135deg, #fadbd8 0%, #f8b4b4 100%);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2em; }
+            .nav-btn { font-size: 0.9em; padding: 10px 15px; }
+            .products-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💰 PARAMIZI ÖĞRENİYORUM</h1>
+            <h2>🇹🇷 TÜRK LİRASI (₺)</h2>
+            <p style="font-size: 1.3em;">Para Birimleri, Alışveriş ve Hesaplama! 🛒</p>
+        </div>
+
+        <div class="nav-container">
+            <button class="nav-btn active" onclick="showTab(1)">🪙 Bozuk Paralar</button>
+            <button class="nav-btn" onclick="showTab(2)">💵 Kağıt Paralar</button>
+            <button class="nav-btn" onclick="showTab(3)">🧮 Para Hesaplama</button>
+            <button class="nav-btn" onclick="showTab(4)">🛒 Market Oyunu</button>
+            <button class="nav-btn" onclick="showTab(5)">💡 Örnekler</button>
+        </div>
+
+        <!-- TAB 1: BOZUK PARALAR -->
+        <div id="tab1" class="tab-content active">
+            <div class="lesson-box">
+                <div class="lesson-title">🪙 BOZUK PARALARIMIZ</div>
+                <p style="text-align: center; font-size: 1.5em; color: white;">Türk Lirası Madeni Paralar</p>
+            </div>
+
+            <div class="content-grid">
+                <div class="money-card">
+                    <h3 style="color: #8B4513; font-size: 1.8em;">1 Kuruş</h3>
+                    <div class="coin" style="background: linear-gradient(135deg, #CD7F32 0%, #8B4513 100%);">
+                        1kr
+                    </div>
+                    <div class="info-box">
+                        <strong>Değer:</strong> 0,01 ₺<br>
+                        <strong>Renk:</strong> Bakır (Kahverengi)<br>
+                        <strong>Kullanım:</strong> En küçük para
+                    </div>
+                </div>
+
+                <div class="money-card">
+                    <h3 style="color: #8B4513; font-size: 1.8em;">5 Kuruş</h3>
+                    <div class="coin" style="background: linear-gradient(135deg, #CD7F32 0%, #8B4513 100%);">
+                        5kr
+                    </div>
+                    <div class="info-box">
+                        <strong>Değer:</strong> 0,05 ₺<br>
+                        <strong>Renk:</strong> Bakır (Kahverengi)<br>
+                        <strong>Örnek:</strong> 1kr × 5 = 5kr
+                    </div>
+                </div>
+
+                <div class="money-card">
+                    <h3 style="color: #C0C0C0; font-size: 1.8em;">10 Kuruş</h3>
+                    <div class="coin" style="background: linear-gradient(135deg, #C0C0C0 0%, #A8A8A8 100%);">
+                        10kr
+                    </div>
+                    <div class="info-box">
+                        <strong>Değer:</strong> 0,10 ₺<br>
+                        <strong>Renk:</strong> Gümüş<br>
+                        <strong>Örnek:</strong> 5kr × 2 = 10kr
+                    </div>
+                </div>
+
+                <div class="money-card">
+                    <h3 style="color: #C0C0C0; font-size: 1.8em;">25 Kuruş</h3>
+                    <div class="coin" style="background: linear-gradient(135deg, #C0C0C0 0%, #A8A8A8 100%);">
+                        25kr
+                    </div>
+                    <div class="info-box">
+                        <strong>Değer:</strong> 0,25 ₺<br>
+                        <strong>Renk:</strong> Gümüş<br>
+                        <strong>Örnek:</strong> 10kr × 2 + 5kr = 25kr
+                    </div>
+                </div>
+
+                <div class="money-card">
+                    <h3 style="color: #C0C0C0; font-size: 1.8em;">50 Kuruş</h3>
+                    <div class="coin" style="background: linear-gradient(135deg, #C0C0C0 0%, #A8A8A8 100%);">
+                        50kr
+                    </div>
+                    <div class="info-box">
+                        <strong>Değer:</strong> 0,50 ₺ (Yarım Lira)<br>
+                        <strong>Renk:</strong> Gümüş<br>
+                        <strong>Örnek:</strong> 25kr × 2 = 50kr
+                    </div>
+                </div>
+
+                <div class="money-card">
+                    <h3 style="color: #FFD700; font-size: 1.8em;">1 Lira (₺)</h3>
+                    <div class="coin" style="background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);">
+                        1₺
+                    </div>
+                    <div class="info-box">
+                        <strong>Değer:</strong> 1,00 ₺<br>
+                        <strong>Renk:</strong> Altın sarısı<br>
+                        <strong>Örnek:</strong> 50kr × 2 = 1₺
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-box" style="margin-top: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <h3 style="text-align: center; font-size: 2em; color: white;">📊 KURUŞ ve LİRA İLİŞKİSİ</h3>
+            </div>
+
+            <div style="background: white; padding: 30px; border-radius: 20px;">
+                <div style="font-size: 1.5em; text-align: center; line-height: 2.5;">
+                    <strong style="color: #e74c3c;">100 Kuruş</strong> = <strong style="color: #27ae60;">1 Lira (₺)</strong><br><br>
+                    <strong style="color: #e74c3c;">50 Kuruş</strong> = <strong style="color: #27ae60;">0,50 ₺</strong> (Yarım Lira)<br><br>
+                    <strong style="color: #e74c3c;">25 Kuruş</strong> = <strong style="color: #27ae60;">0,25 ₺</strong> (Çeyrek Lira)
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: KAĞIT PARALAR -->
+        <div id="tab2" class="tab-content">
+            <div class="lesson-box">
+                <div class="lesson-title">💵 KAĞIT PARALARIMIZ</div>
+                <p style="text-align: center; font-size: 1.5em; color: white;">Türk Lirası Banknotları</p>
+            </div>
+
+            <div class="content-grid">
+                <div class="money-card">
+                    <h3 style="color: #e74c3c; font-size: 2em;">5 TL</h3>
+                    <div class="money-img" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);">
+                        5₺
+                    </div>
+                    <div class="info-box">
+                        <strong>Değer:</strong> 5 Lira<br>
+                        <strong>Renk:</strong> Kırmızı/Mor<br>
+                        <strong>Örnek:</strong> 1₺ × 5 = 5₺
+                    </div>
+                </div>
+
+                <div class="money-card">
+                    <h3 style="color: #9b59b6; font-size: 2em;">10 TL</h3>
+                    <div class="money-img" style="background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);">
+                        10₺
+                    </div>
+                    <div class="info-box">
+                        <strong>Değer:</strong> 10 Lira<br>
+                        <strong>Renk:</strong> Mor<br>
+                        <strong>Örnek:</strong> 5₺ × 2 = 10₺
+                    </div>
+                </div>
+
+                <div class="money-card">
+                    <h3 style="color: #e67e22; font-size: 2em;">20 TL</h3>
+                    <div class="money-img" style="background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);">
+                        20₺
+                    </div>
+                    <div class="info-box">
+                        <strong>Değer:</strong> 20 Lira<br>
+                        <strong>Renk:</strong> Turuncu<br>
+                        <strong>Örnek:</strong> 10₺ × 2 = 20₺
+                    </div>
+                </div>
+
+                <div class="money-card">
+                    <h3 style="color: #27ae60; font-size: 2em;">50 TL</h3>
+                    <div class="money-img" style="background: linear-gradient(135deg, #27ae60 0%, #229954 100%);">
+                        50₺
+                    </div>
+                    <div class="info-box">
+                        <strong>Değer:</strong> 50 Lira<br>
+                        <strong>Renk:</strong> Yeşil<br>
+                        <strong>Örnek:</strong> 20₺ + 20₺ + 10₺ = 50₺
+                    </div>
+                </div>
+
+                <div class="money-card">
+                    <h3 style="color: #3498db; font-size: 2em;">100 TL</h3>
+                    <div class="money-img" style="background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);">
+                        100₺
+                    </div>
+                    <div class="info-box">
+                        <strong>Değer:</strong> 100 Lira<br>
+                        <strong>Renk:</strong> Mavi<br>
+                        <strong>Örnek:</strong> 50₺ × 2 = 100₺
+                    </div>
+                </div>
+
+                <div class="money-card">
+                    <h3 style="color: #95a5a6; font-size: 2em;">200 TL</h3>
+                    <div class="money-img" style="background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);">
+                        200₺
+                    </div>
+                    <div class="info-box">
+                        <strong>Değer:</strong> 200 Lira<br>
+                        <strong>Renk:</strong> Gri<br>
+                        <strong>Örnek:</strong> 100₺ × 2 = 200₺
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: PARA HESAPLAMA -->
+        <div id="tab3" class="tab-content">
+            <div class="lesson-box">
+                <div class="lesson-title">🧮 PARA HESAPLAMA</div>
+                <p style="text-align: center; font-size: 1.5em; color: white;">Toplama, Çıkarma ve Para Üstü</p>
+            </div>
+
+            <div class="content-grid">
+                <div class="money-card">
+                    <h3 style="color: #27ae60;">➕ TOPLAMA</h3>
+                    <div class="info-box">
+                        <strong style="font-size: 1.3em;">Örnek 1:</strong><br>
+                        5₺ + 10₺ = <strong style="color: #27ae60; font-size: 1.5em;">15₺</strong><br><br>
+                        <strong style="font-size: 1.3em;">Örnek 2:</strong><br>
+                        20₺ + 50₺ = <strong style="color: #27ae60; font-size: 1.5em;">70₺</strong><br><br>
+                        <strong style="font-size: 1.3em;">Örnek 3:</strong><br>
+                        0,50₺ + 0,50₺ = <strong style="color: #27ae60; font-size: 1.5em;">1₺</strong>
+                    </div>
+                </div>
+
+                <div class="money-card">
+                    <h3 style="color: #e74c3c;">➖ ÇIKARMA</h3>
+                    <div class="info-box">
+                        <strong style="font-size: 1.3em;">Örnek 1:</strong><br>
+                        10₺ - 5₺ = <strong style="color: #e74c3c; font-size: 1.5em;">5₺</strong><br><br>
+                        <strong style="font-size: 1.3em;">Örnek 2:</strong><br>
+                        50₺ - 20₺ = <strong style="color: #e74c3c; font-size: 1.5em;">30₺</strong><br><br>
+                        <strong style="font-size: 1.3em;">Örnek 3:</strong><br>
+                        1₺ - 0,25₺ = <strong style="color: #e74c3c; font-size: 1.5em;">0,75₺</strong>
+                    </div>
+                </div>
+
+                <div class="money-card">
+                    <h3 style="color: #3498db;">💸 PARA ÜSTÜ</h3>
+                    <div class="info-box">
+                        <strong style="font-size: 1.3em;">Örnek 1:</strong><br>
+                        Ürün: 7₺, Verilen: 10₺<br>
+                        Para Üstü: <strong style="color: #3498db; font-size: 1.5em;">3₺</strong><br><br>
+                        <strong style="font-size: 1.3em;">Örnek 2:</strong><br>
+                        Ürün: 35₺, Verilen: 50₺<br>
+                        Para Üstü: <strong style="color: #3498db; font-size: 1.5em;">15₺</strong>
+                    </div>
+                </div>
+
+                <div class="money-card">
+                    <h3 style="color: #f39c12;">🔢 ÇARPMA</h3>
+                    <div class="info-box">
+                        <strong style="font-size: 1.3em;">Örnek 1:</strong><br>
+                        3 × 5₺ = <strong style="color: #f39c12; font-size: 1.5em;">15₺</strong><br>
+                        (3 adet 5 liralık)<br><br>
+                        <strong style="font-size: 1.3em;">Örnek 2:</strong><br>
+                        4 × 10₺ = <strong style="color: #f39c12; font-size: 1.5em;">40₺</strong><br>
+                        (4 adet 10 liralık)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: MARKET OYUNU -->
+        <div id="tab4" class="tab-content">
+            <div class="lesson-box">
+                <div class="lesson-title">🛒 SANAL MARKET OYUNU</div>
+                <p style="text-align: center; font-size: 1.5em; color: white;">Alışveriş Yap ve Para Üstünü Hesapla!</p>
+            </div>
+
+            <div class="market">
+                <div class="market-header">
+                    <div class="wallet">
+                        💰 Cüzdanım: <span id="wallet-amount">100</span> ₺
+                    </div>
+                    <div class="cart-total">
+                        🛒 Sepet Toplamı: <span id="cart-total">0</span> ₺
+                    </div>
+                    <button class="btn btn-danger" onclick="resetMarket()">🔄 Yeniden Başla</button>
+                </div>
+
+                <h3 style="color: white; text-align: center; font-size: 2em; margin: 20px 0;">📦 ÜRÜNLER</h3>
+
+                <div class="products-grid">
+                    <div class="product" id="product-ekmek">
+                        <div class="product-icon">🍞</div>
+                        <div class="product-name">Ekmek</div>
+                        <div class="product-price">5 ₺</div>
+                        <div class="product-quantity">
+                            <button class="qty-btn" onclick="updateQuantity('ekmek', -1)">-</button>
+                            <span class="qty-display" id="qty-ekmek">0</span>
+                            <button class="qty-btn" onclick="updateQuantity('ekmek', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="product" id="product-sut">
+                        <div class="product-icon">🥛</div>
+                        <div class="product-name">Süt</div>
+                        <div class="product-price">15 ₺</div>
+                        <div class="product-quantity">
+                            <button class="qty-btn" onclick="updateQuantity('sut', -1)">-</button>
+                            <span class="qty-display" id="qty-sut">0</span>
+                            <button class="qty-btn" onclick="updateQuantity('sut', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="product" id="product-peynir">
+                        <div class="product-icon">🧀</div>
+                        <div class="product-name">Peynir</div>
+                        <div class="product-price">25 ₺</div>
+                        <div class="product-quantity">
+                            <button class="qty-btn" onclick="updateQuantity('peynir', -1)">-</button>
+                            <span class="qty-display" id="qty-peynir">0</span>
+                            <button class="qty-btn" onclick="updateQuantity('peynir', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="product" id="product-elma">
+                        <div class="product-icon">🍎</div>
+                        <div class="product-name">Elma (1kg)</div>
+                        <div class="product-price">12 ₺</div>
+                        <div class="product-quantity">
+                            <button class="qty-btn" onclick="updateQuantity('elma', -1)">-</button>
+                            <span class="qty-display" id="qty-elma">0</span>
+                            <button class="qty-btn" onclick="updateQuantity('elma', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="product" id="product-domates">
+                        <div class="product-icon">🍅</div>
+                        <div class="product-name">Domates (1kg)</div>
+                        <div class="product-price">18 ₺</div>
+                        <div class="product-quantity">
+                            <button class="qty-btn" onclick="updateQuantity('domates', -1)">-</button>
+                            <span class="qty-display" id="qty-domates">0</span>
+                            <button class="qty-btn" onclick="updateQuantity('domates', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="product" id="product-cikolata">
+                        <div class="product-icon">🍫</div>
+                        <div class="product-name">Çikolata</div>
+                        <div class="product-price">8 ₺</div>
+                        <div class="product-quantity">
+                            <button class="qty-btn" onclick="updateQuantity('cikolata', -1)">-</button>
+                            <span class="qty-display" id="qty-cikolata">0</span>
+                            <button class="qty-btn" onclick="updateQuantity('cikolata', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="product" id="product-su">
+                        <div class="product-icon">💧</div>
+                        <div class="product-name">Su (1.5L)</div>
+                        <div class="product-price">3 ₺</div>
+                        <div class="product-quantity">
+                            <button class="qty-btn" onclick="updateQuantity('su', -1)">-</button>
+                            <span class="qty-display" id="qty-su">0</span>
+                            <button class="qty-btn" onclick="updateQuantity('su', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="product" id="product-makarna">
+                        <div class="product-icon">🍝</div>
+                        <div class="product-name">Makarna</div>
+                        <div class="product-price">10 ₺</div>
+                        <div class="product-quantity">
+                            <button class="qty-btn" onclick="updateQuantity('makarna', -1)">-</button>
+                            <span class="qty-display" id="qty-makarna">0</span>
+                            <button class="qty-btn" onclick="updateQuantity('makarna', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="product" id="product-yumurta">
+                        <div class="product-icon">🥚</div>
+                        <div class="product-name">Yumurta (10'lu)</div>
+                        <div class="product-price">20 ₺</div>
+                        <div class="product-quantity">
+                            <button class="qty-btn" onclick="updateQuantity('yumurta', -1)">-</button>
+                            <span class="qty-display" id="qty-yumurta">0</span>
+                            <button class="qty-btn" onclick="updateQuantity('yumurta', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="product" id="product-bisküvi">
+                        <div class="product-icon">🍪</div>
+                        <div class="product-name">Bisküvi</div>
+                        <div class="product-price">7 ₺</div>
+                        <div class="product-quantity">
+                            <button class="qty-btn" onclick="updateQuantity('bisküvi', -1)">-</button>
+                            <span class="qty-display" id="qty-bisküvi">0</span>
+                            <button class="qty-btn" onclick="updateQuantity('bisküvi', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="product" id="product-meyvesuyu">
+                        <div class="product-icon">🧃</div>
+                        <div class="product-name">Meyve Suyu</div>
+                        <div class="product-price">6 ₺</div>
+                        <div class="product-quantity">
+                            <button class="qty-btn" onclick="updateQuantity('meyvesuyu', -1)">-</button>
+                            <span class="qty-display" id="qty-meyvesuyu">0</span>
+                            <button class="qty-btn" onclick="updateQuantity('meyvesuyu', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="product" id="product-cips">
+                        <div class="product-icon">🥔</div>
+                        <div class="product-name">Cips</div>
+                        <div class="product-price">9 ₺</div>
+                        <div class="product-quantity">
+                            <button class="qty-btn" onclick="updateQuantity('cips', -1)">-</button>
+                            <span class="qty-display" id="qty-cips">0</span>
+                            <button class="qty-btn" onclick="updateQuantity('cips', 1)">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cart-section">
+                    <div class="cart-title">🛒 SEPETİM</div>
+                    <div class="cart-items" id="cart-items">
+                        <p style="text-align: center; color: #999; font-size: 1.2em;">Sepetiniz boş</p>
+                    </div>
+                    <div style="text-align: center; font-size: 2em; font-weight: bold; margin: 20px 0; padding: 20px; background: #f5f5f5; border-radius: 10px;">
+                        TOPLAM: <span id="final-total" style="color: #e74c3c;">0</span> ₺
+                    </div>
+                    <div style="text-align: center;">
+                        <button class="btn btn-primary" onclick="showPayment()" style="font-size: 1.5em; padding: 20px 40px;">
+                            💳 ÖDEME YAP
+                        </button>
+                    </div>
+                </div>
+
+                <div class="payment-section" id="payment-section">
+                    <div class="cart-title">💰 ÖDEME EKRANI</div>
+                    
+                    <div style="background: #e8f4f8; padding: 20px; border-radius: 10px; margin: 20px 0; text-align: center; font-size: 1.5em;">
+                        <strong>Ödenecek Tutar:</strong> <span id="payment-amount" style="color: #e74c3c; font-size: 1.8em; font-weight: bold;">0</span> ₺
+                    </div>
+
+                    <h3 style="text-align: center; margin: 20px 0; font-size: 1.5em;">Hangi paralarla ödemek istersin?</h3>
+
+                    <div class="money-selector" id="money-selector">
+                        <!-- Kağıt Paralar -->
+                        <div class="money-option" onclick="selectMoney('bill', 100, this)">
+                            <div style="font-size: 2em; margin: 10px 0;">💵</div>
+                            <strong style="font-size: 1.3em;">100 ₺</strong>
+                            <div style="margin-top: 10px;">Adet: <span id="count-bill-100">0</span></div>
+                        </div>
+                        <div class="money-option" onclick="selectMoney('bill', 50, this)">
+                            <div style="font-size: 2em; margin: 10px 0;">💵</div>
+                            <strong style="font-size: 1.3em;">50 ₺</strong>
+                            <div style="margin-top: 10px;">Adet: <span id="count-bill-50">0</span></div>
+                        </div>
+                        <div class="money-option" onclick="selectMoney('bill', 20, this)">
+                            <div style="font-size: 2em; margin: 10px 0;">💵</div>
+                            <strong style="font-size: 1.3em;">20 ₺</strong>
+                            <div style="margin-top: 10px;">Adet: <span id="count-bill-20">0</span></div>
+                        </div>
+                        <div class="money-option" onclick="selectMoney('bill', 10, this)">
+                            <div style="font-size: 2em; margin: 10px 0;">💵</div>
+                            <strong style="font-size: 1.3em;">10 ₺</strong>
+                            <div style="margin-top: 10px;">Adet: <span id="count-bill-10">0</span></div>
+                        </div>
+                        <div class="money-option" onclick="selectMoney('bill', 5, this)">
+                            <div style="font-size: 2em; margin: 10px 0;">💵</div>
+                            <strong style="font-size: 1.3em;">5 ₺</strong>
+                            <div style="margin-top: 10px;">Adet: <span id="count-bill-5">0</span></div>
+                        </div>
+
+                        <!-- Bozuk Paralar -->
+                        <div class="money-option" onclick="selectMoney('coin', 1, this)">
+                            <div style="font-size: 2em; margin: 10px 0;">🪙</div>
+                            <strong style="font-size: 1.3em;">1 ₺</strong>
+                            <div style="margin-top: 10px;">Adet: <span id="count-coin-1">0</span></div>
+                        </div>
+                        <div class="money-option" onclick="selectMoney('coin', 0.5, this)">
+                            <div style="font-size: 2em; margin: 10px 0;">🪙</div>
+                            <strong style="font-size: 1.3em;">50 Kr</strong>
+                            <div style="margin-top: 10px;">Adet: <span id="count-coin-0.5">0</span></div>
+                        </div>
+                        <div class="money-option" onclick="selectMoney('coin', 0.25, this)">
+                            <div style="font-size: 2em; margin: 10px 0;">🪙</div>
+                            <strong style="font-size: 1.3em;">25 Kr</strong>
+                            <div style="margin-top: 10px;">Adet: <span id="count-coin-0.25">0</span></div>
+                        </div>
+                    </div>
+
+                    <div style="background: #fff3cd; padding: 20px; border-radius: 10px; margin: 20px 0; text-align: center; font-size: 1.5em; border: 3px solid #ffc107;">
+                        <strong>Verdiğiniz Para:</strong> <span id="given-amount" style="color: #27ae60; font-size: 1.8em; font-weight: bold;">0</span> ₺
+                    </div>
+
+                    <div style="text-align: center;">
+                        <button class="btn btn-primary" onclick="completePayment()" style="font-size: 1.5em; padding: 20px 40px;">
+                            ✅ ÖDEMEYİ TAMAMLA
+                        </button>
+                        <button class="btn btn-warning" onclick="resetPayment()" style="font-size: 1.3em; padding: 15px 30px;">
+                            🔄 Paraları Sıfırla
+                        </button>
+                        <button class="btn btn-danger" onclick="cancelPayment()" style="font-size: 1.3em; padding: 15px 30px;">
+                            ❌ İptal
+                        </button>
+                    </div>
+                </div>
+
+                <div class="result-box" id="result-box"></div>
+            </div>
+        </div>
+
+        <!-- TAB 5: ÖRNEKLER -->
+        <div id="tab5" class="tab-content">
+            <div class="lesson-box">
+                <div class="lesson-title">💡 GÜNLÜK HAYATTAN ÖRNEKLER</div>
+            </div>
+
+            <div class="content-grid">
+                <div class="money-card">
+                    <h3 style="color: #e74c3c;">🍦 DONDURMA ALIYORUM</h3>
+                    <div class="info-box">
+                        <strong style="font-size: 1.3em;">Durum:</strong><br>
+                        Dondurma fiyatı: <strong style="color: #e74c3c;">15 ₺</strong><br>
+                        Elimde: <strong style="color: #27ae60;">20 ₺</strong><br><br>
+                        <strong style="font-size: 1.3em;">Para Üstü:</strong><br>
+                        20 - 15 = <strong style="color: #3498db; font-size: 1.8em;">5 ₺</strong>
+                    </div>
+                </div>
+
+                <div class="money-card">
+                    <h3 style="color: #27ae60;">🎒 OKUL MALZEMESİ</h3>
+                    <div class="info-box">
+                        <strong style="font-size: 1.3em;">Alışveriş Listesi:</strong><br>
+                        Defter: 8 ₺<br>
+                        Kalem: 5 ₺<br>
+                        Silgi: 2 ₺<br><br>
+                        <strong style="font-size: 1.3em;">Toplam:</strong><br>
+                        8 + 5 + 2 = <strong style="color: #27ae60; font-size: 1.8em;">15 ₺</strong>
+                    </div>
+                </div>
+
+                <div class="money-card">
+                    <h3 style="color: #3498db;">🚌 OTOBÜS BİLETİ</h3>
+                    <div class="info-box">
+                        <strong style="font-size: 1.3em;">Durum:</strong><br>
+                        1 bilet: <strong style="color: #e74c3c;">10 ₺</strong><br>
+                        3 kişi için bilet?<br><br>
+                        <strong style="font-size: 1.3em;">Hesaplama:</strong><br>
+                        10 × 3 = <strong style="color: #3498db; font-size: 1.8em;">30 ₺</strong>
+                    </div>
+                </div>
+
+                <div class="money-card">
+                    <h3 style="color: #f39c12;">🍕 PİZZA SİPARİŞİ</h3>
+                    <div class="info-box">
+                        <strong style="font-size: 1.3em;">Durum:</strong><br>
+                        Pizza: <strong style="color: #e74c3c;">45 ₺</strong><br>
+                        İçecek: <strong style="color: #e74c3c;">10 ₺</strong><br>
+                        Elimde: <strong style="color: #27ae60;">100 ₺</strong><br><br>
+                        <strong style="font-size: 1.3em;">Para Üstü:</strong><br>
+                        100 - (45 + 10) = <strong style="color: #f39c12; font-size: 1.8em;">45 ₺</strong>
+                    </div>
+                </div>
+
+                <div class="money-card">
+                    <h3 style="color: #9b59b6;">🎮 OYUN ALIYORUM</h3>
+                    <div class="info-box">
+                        <strong style="font-size: 1.3em;">Durum:</strong><br>
+                        Oyun fiyatı: <strong style="color: #e74c3c;">85 ₺</strong><br>
+                        Biriktirdiğim: <strong style="color: #27ae60;">60 ₺</strong><br><br>
+                        <strong style="font-size: 1.3em;">Eksik:</strong><br>
+                        85 - 60 = <strong style="color: #9b59b6; font-size: 1.8em;">25 ₺</strong>
+                    </div>
+                </div>
+
+                <div class="money-card">
+                    <h3 style="color: #e67e22;">💰 KUMBARADA BİRİKTİRME</h3>
+                    <div class="info-box">
+                        <strong style="font-size: 1.3em;">Durum:</strong><br>
+                        Her gün: <strong style="color: #27ae60;">5 ₺</strong><br>
+                        1 hafta boyunca?<br><br>
+                        <strong style="font-size: 1.3em;">Birikim:</strong><br>
+                        5 × 7 = <strong style="color: #e67e22; font-size: 1.8em;">35 ₺</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-box" style="margin-top: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <h3 style="text-align: center; font-size: 2em; color: white;">📚 PARA KULLANIM İPUÇLARI</h3>
+            </div>
+
+            <div style="background: white; padding: 30px; border-radius: 20px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    <div style="background: linear-gradient(135deg, #d5f4e6 0%, #a8e6cf 100%); padding: 25px; border-radius: 15px;">
+                        <h3 style="font-size: 1.5em; margin-bottom: 15px;">💡 BİRİKTİRME</h3>
+                        <p style="font-size: 1.2em; line-height: 1.8;">
+                            Her gün küçük miktarlar biriktir. Küçük paralar zamanla büyük olur! 🐷
+                        </p>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #fadbd8 0%, #f8b4b4 100%); padding: 25px; border-radius: 15px;">
+                        <h3 style="font-size: 1.5em; margin-bottom: 15px;">🛒 PLANLAMA</h3>
+                        <p style="font-size: 1.2em; line-height: 1.8;">
+                            Alışverişe çıkmadan önce ne alacağını planla ve listene sadık kal! 📝
+                        </p>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); padding: 25px; border-radius: 15px;">
+                        <h3 style="font-size: 1.5em; margin-bottom: 15px;">🧮 HESAPLAMA</h3>
+                        <p style="font-size: 1.2em; line-height: 1.8;">
+                            Alışveriş yaparken toplamı kafandan hesaplamaya çalış. Bu matematik pratiğin geliştirir! 🎯
+                        </p>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%); padding: 25px; border-radius: 15px;">
+                        <h3 style="font-size: 1.5em; margin-bottom: 15px;">💸 PARA ÜSTÜ</h3>
+                        <p style="font-size: 1.2em; line-height: 1.8;">
+                            Para üstünü her zaman kontrol et. Doğru para aldığından emin ol! ✅
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ÜRÜN VERİLERİ
+        const products = {
+            ekmek: { name: 'Ekmek', price: 5, icon: '🍞' },
+            sut: { name: 'Süt', price: 15, icon: '🥛' },
+            peynir: { name: 'Peynir', price: 25, icon: '🧀' },
+            elma: { name: 'Elma', price: 12, icon: '🍎' },
+            domates: { name: 'Domates', price: 18, icon: '🍅' },
+            cikolata: { name: 'Çikolata', price: 8, icon: '🍫' },
+            su: { name: 'Su', price: 3, icon: '💧' },
+            makarna: { name: 'Makarna', price: 10, icon: '🍝' },
+            yumurta: { name: 'Yumurta', price: 20, icon: '🥚' },
+            bisküvi: { name: 'Bisküvi', price: 7, icon: '🍪' },
+            meyvesuyu: { name: 'Meyve Suyu', price: 6, icon: '🧃' },
+            cips: { name: 'Cips', price: 9, icon: '🥔' }
+        };
+
+        let cart = {};
+        let wallet = 100;
+        let selectedMoney = {};
+
+        // SEKME DEĞİŞTİRME
+        function showTab(tabNum) {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            const btns = document.querySelectorAll('.nav-btn');
+            btns.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById('tab' + tabNum).classList.add('active');
+            btns[tabNum - 1].classList.add('active');
+        }
+
+        // MİKTAR GÜNCELLEME
+        function updateQuantity(productId, change) {
+            const qtyElement = document.getElementById('qty-' + productId);
+            let currentQty = parseInt(qtyElement.textContent);
+            let newQty = currentQty + change;
+
+            if (newQty < 0) newQty = 0;
+
+            qtyElement.textContent = newQty;
+
+            if (newQty > 0) {
+                cart[productId] = newQty;
+            } else {
+                delete cart[productId];
+            }
+
+            updateCart();
+        }
+
+        // SEPETİ GÜNCELLE
+        function updateCart() {
+            let total = 0;
+            const cartItemsDiv = document.getElementById('cart-items');
+            cartItemsDiv.innerHTML = '';
+
+            if (Object.keys(cart).length === 0) {
+                cartItemsDiv.innerHTML = '<p style="text-align: center; color: #999; font-size: 1.2em;">Sepetiniz boş</p>';
+            } else {
+                for (let productId in cart) {
+                    const product = products[productId];
+                    const quantity = cart[productId];
+                    const itemTotal = product.price * quantity;
+                    total += itemTotal;
+
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'cart-item';
+                    itemDiv.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 2em;">${product.icon}</span>
+                            <div>
+                                <strong style="font-size: 1.2em;">${product.name}</strong><br>
+                                <span style="color: #666;">${quantity} adet × ${product.price} ₺</span>
+                            </div>
+                        </div>
+                        <div style="font-size: 1.3em; font-weight: bold; color: #27ae60;">
+                            ${itemTotal} ₺
+                        </div>
+                    `;
+                    cartItemsDiv.appendChild(itemDiv);
+                }
+            }
+
+            document.getElementById('cart-total').textContent = total;
+            document.getElementById('final-total').textContent = total;
+        }
+
+        // ÖDEME EKRANINI GÖSTER
+        function showPayment() {
+            const total = parseFloat(document.getElementById('cart-total').textContent);
+
+            if (total === 0) {
+                alert('❌ Sepetiniz boş! Lütfen ürün ekleyin.');
+                return;
+            }
+
+            if (total > wallet) {
+                alert('❌ Cüzdanınızda yeterli para yok!');
+                return;
+            }
+
+            document.getElementById('payment-amount').textContent = total;
+            document.getElementById('payment-section').classList.add('active');
+            document.getElementById('result-box').classList.remove('active');
+            resetPayment();
+
+            // Sayfayı ödeme bölümüne kaydır
+            document.getElementById('payment-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // PARA SEÇİMİ
+        function selectMoney(type, value, element) {
+            const key = type + '-' + value;
+            
+            if (!selectedMoney[key]) {
+                selectedMoney[key] = 0;
+            }
+            
+            selectedMoney[key]++;
+            
+            const countElement = document.getElementById('count-' + key);
+            countElement.textContent = selectedMoney[key];
+            
+            updateGivenAmount();
+        }
+
+        // VERİLEN PARAYI GÜNCELLE
+        function updateGivenAmount() {
+            let total = 0;
+            
+            for (let key in selectedMoney) {
+                const value = parseFloat(key.split('-')[1]);
+                const count = selectedMoney[key];
+                total += value * count;
+            }
+            
+            document.getElementById('given-amount').textContent = total.toFixed(2);
+        }
+
+        // ÖDEMEYİ TAMAMLA
+        function completePayment() {
+            const paymentAmount = parseFloat(document.getElementById('payment-amount').textContent);
+            const givenAmount = parseFloat(document.getElementById('given-amount').textContent);
+            const resultBox = document.getElementById('result-box');
+
+            if (givenAmount < paymentAmount) {
+                resultBox.className = 'result-box active error';
+                resultBox.innerHTML = `
+                    <h2 style="font-size: 2.5em; margin-bottom: 20px;">❌ YETERSİZ PARA!</h2>
+                    <p style="font-size: 1.5em;">
+                        Ödenecek: <strong style="color: #e74c3c;">${paymentAmount} ₺</strong><br>
+                        Verilen: <strong style="color: #e74c3c;">${givenAmount} ₺</strong><br>
+                        Eksik: <strong style="color: #e74c3c; font-size: 1.8em;">${(paymentAmount - givenAmount).toFixed(2)} ₺</strong>
+                    </p>
+                `;
+                resultBox.scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+
+            const change = givenAmount - paymentAmount;
+            wallet -= paymentAmount;
+
+            resultBox.className = 'result-box active success';
+            resultBox.innerHTML = `
+                <h2 style="font-size: 2.5em; margin-bottom: 20px;">✅ ÖDEME BAŞARILI!</h2>
+                <p style="font-size: 1.5em; line-height: 2;">
+                    Ödenecek: <strong>${paymentAmount} ₺</strong><br>
+                    Verilen: <strong>${givenAmount} ₺</strong><br>
+                    Para Üstü: <strong style="color: #27ae60; font-size: 2em;">${change.toFixed(2)} ₺</strong>
+                </p>
+                <p style="font-size: 1.3em; margin-top: 20px; color: #666;">
+                    Kalan Cüzdan: <strong style="color: #27ae60;">${wallet} ₺</strong>
+                </p>
+                <button class="btn btn-primary" onclick="finishShopping()" style="margin-top: 30px; font-size: 1.3em;">
+                    🎉 ALIŞVERİŞİ BİTİR
+                </button>
+            `;
+
+            document.getElementById('wallet-amount').textContent = wallet;
+            resultBox.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ALIŞVERİŞİ BİTİR
+        function finishShopping() {
+            cart = {};
+            for (let productId in products) {
+                const qtyElement = document.getElementById('qty-' + productId);
+                if (qtyElement) {
+                    qtyElement.textContent = '0';
+                }
+            }
+            updateCart();
+            document.getElementById('payment-section').classList.remove('active');
+            document.getElementById('result-box').classList.remove('active');
+            resetPayment();
+            
+            alert('🎉 Alışverişiniz tamamlandı! Tekrar bekleriz! 🛒');
+        }
+
+        // ÖDEMEYİ SIFIRLA
+        function resetPayment() {
+            selectedMoney = {};
+            
+            // Tüm para sayaçlarını sıfırla
+            const counters = document.querySelectorAll('[id^="count-"]');
+            counters.forEach(counter => {
+                counter.textContent = '0';
+            });
+            
+            document.getElementById('given-amount').textContent = '0';
+            
+            // Seçili para stillerini kaldır
+            const moneyOptions = document.querySelectorAll('.money-option');
+            moneyOptions.forEach(option => {
+                option.classList.remove('selected');
+            });
+        }
+
+        // ÖDEMEYİ İPTAL ET
+        function cancelPayment() {
+            document.getElementById('payment-section').classList.remove('active');
+            document.getElementById('result-box').classList.remove('active');
+            resetPayment();
+        }
+
+        // MARKETİ SIFIRLA
+        function resetMarket() {
+            cart = {};
+            wallet = 100;
+            selectedMoney = {};
+            
+            // Tüm ürün miktarlarını sıfırla
+            for (let productId in products) {
+                const qtyElement = document.getElementById('qty-' + productId);
+                if (qtyElement) {
+                    qtyElement.textContent = '0';
+                }
+            }
+            
+            updateCart();
+            document.getElementById('wallet-amount').textContent = wallet;
+            document.getElementById('payment-section').classList.remove('active');
+            document.getElementById('result-box').classList.remove('active');
+            resetPayment();
+            
+            alert('🔄 Market sıfırlandı! Yeni alışverişe başlayabilirsin! 🛒');
+        }
+
+        // SAYFA YÜKLENDİĞİNDE
+        window.onload = function() {
+            showTab(1);
+            updateCart();
+        };
+    </script>
+</body>
+</html>
