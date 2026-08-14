@@ -1,270 +1,994 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bayrak Oyunu 🏳️</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
-<style>
-* { box-sizing:border-box; margin:0; padding:0; }
-body { background:linear-gradient(135deg,#0a0a2e,#1a1a4e); min-height:100vh; font-family:'Nunito',sans-serif; color:#fff; }
-.header { text-align:center; padding:24px 20px 14px; }
-.header h1 { font-family:'Fredoka One',cursive; font-size:2.2rem; color:#ffd700; }
-.header p { color:rgba(255,255,255,.6); font-weight:700; font-size:14px; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bayrak Yarışı - Ülkeleri Tahmin Et!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-.score-row { display:flex; justify-content:center; gap:20px; margin-bottom:18px; padding:0 16px; }
-.sc { text-align:center; background:rgba(255,255,255,.08); border-radius:14px; padding:10px 18px; }
-.sc-num { font-family:'Fredoka One',cursive; font-size:26px; color:#ffd700; }
-.sc-lbl { font-size:11px; font-weight:800; color:rgba(255,255,255,.5); text-transform:uppercase; }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
 
-.game { max-width:640px; margin:0 auto; padding:0 16px 40px; }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
 
-.mode-row { display:flex; gap:8px; justify-content:center; margin-bottom:18px; flex-wrap:wrap; }
-.mode-btn { background:rgba(255,255,255,.1); border:2px solid rgba(255,255,255,.2); color:#fff; border-radius:20px; padding:8px 18px; font-family:'Nunito',sans-serif; font-size:13px; font-weight:800; cursor:pointer; transition:all .2s; }
-.mode-btn.active { background:#ffd700; color:#1a1a3e; border-color:#ffd700; }
+        .main-menu {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+        }
 
-.flag-display {
-  text-align:center; margin-bottom:22px;
-  background:rgba(255,255,255,.06); border:2px solid rgba(255,255,255,.12);
-  border-radius:20px; padding:24px;
-}
-.flag-emoji { font-size:96px; display:block; margin-bottom:10px; line-height:1.2; transition:all .3s; }
-.flag-question { font-family:'Fredoka One',cursive; font-size:18px; color:rgba(255,255,255,.7); }
-.flag-hint { font-size:13px; color:rgba(255,255,255,.45); margin-top:6px; font-weight:700; }
+        h1 {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
 
-.options { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
-.opt-btn {
-  background:rgba(255,255,255,.08); border:2.5px solid rgba(255,255,255,.18);
-  color:#fff; border-radius:14px; padding:14px 10px;
-  font-family:'Nunito',sans-serif; font-size:15px; font-weight:800;
-  cursor:pointer; transition:all .2s; text-align:center;
-}
-.opt-btn:hover { background:rgba(255,255,255,.18); transform:translateY(-2px); }
-.opt-btn.correct { background:rgba(76,175,80,.3); border-color:#4caf50; color:#a5d6a7; }
-.opt-btn.wrong { background:rgba(239,83,80,.3); border-color:#ef5350; color:#ef9a9a; }
-.opt-btn:disabled { cursor:not-allowed; }
+        .subtitle {
+            font-size: 1.3em;
+            color: #666;
+            margin-bottom: 40px;
+        }
 
-.feedback { border-radius:14px; padding:14px; text-align:center; margin-bottom:14px; display:none; }
-.feedback.show { display:block; }
-.feedback.ok { background:rgba(76,175,80,.2); border:2px solid #4caf50; }
-.feedback.no { background:rgba(239,83,80,.2); border:2px solid #ef5350; }
-.feedback-title { font-family:'Fredoka One',cursive; font-size:20px; margin-bottom:4px; }
-.feedback-info { font-size:13px; font-weight:700; color:rgba(255,255,255,.7); }
+        .mode-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
 
-.next-btn {
-  display:block; width:100%; background:#ffd700; color:#1a1a3e; border:none;
-  border-radius:20px; padding:13px; font-family:'Fredoka One',cursive; font-size:19px;
-  cursor:pointer; display:none;
-}
-.next-btn.show { display:block; }
-.next-btn:hover { background:#ffecb3; }
+        .mode-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 40px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+            border: 4px solid transparent;
+        }
 
-.progress { background:rgba(255,255,255,.1); border-radius:10px; height:8px; margin-bottom:16px; overflow:hidden; }
-.progress-bar { height:100%; background:linear-gradient(135deg,#ffd700,#ff9800); border-radius:10px; transition:width .4s; }
-</style>
+        .mode-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(245, 87, 108, 0.5);
+            border-color: #fff;
+        }
+
+        .mode-card h2 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .mode-card p {
+            font-size: 1.2em;
+            line-height: 1.6;
+        }
+
+        .game-screen {
+            display: none;
+        }
+
+        .game-header {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 15px;
+            font-size: 1.3em;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .timer {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            font-size: 2em;
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .score {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .game-area {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .two-player-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .player-section {
+            border: 4px solid #667eea;
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s;
+        }
+
+        .player-section.active {
+            border-color: #f5576c;
+            background: #fff5f8;
+            box-shadow: 0 0 30px rgba(245, 87, 108, 0.3);
+        }
+
+        .player-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .player-name {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .player-score {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #f5576c;
+        }
+
+        .flag-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .flag {
+            width: 400px;
+            height: 270px;
+            border: 5px solid #333;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            object-fit: cover;
+            margin: 0 auto;
+            display: block;
+            background: white;
+        }
+
+        .question-number {
+            font-size: 1.5em;
+            color: #666;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .option-btn {
+            padding: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: 3px solid #667eea;
+            background: white;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #333;
+        }
+
+        .option-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .option-btn.correct {
+            background: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+            animation: correctPulse 0.5s;
+        }
+
+        .option-btn.wrong {
+            background: #f44336;
+            color: white;
+            border-color: #f44336;
+            animation: wrongShake 0.5s;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .result-screen {
+            display: none;
+            text-align: center;
+        }
+
+        .result-title {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .final-score {
+            font-size: 4em;
+            font-weight: bold;
+            color: #f5576c;
+            margin: 20px 0;
+        }
+
+        .result-details {
+            background: #f0f0f0;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: 1.3em;
+        }
+
+        .result-detail {
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            font-size: 1.5em;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            margin: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
+        }
+
+        .back-btn {
+            background: #666;
+            padding: 15px 30px;
+            font-size: 1.2em;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50 0%, #8BC34A 100%);
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .difficulty-selector {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .difficulty-btn {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border: 3px solid #667eea;
+            background: white;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .difficulty-btn.selected {
+            background: #667eea;
+            color: white;
+        }
+
+        .streak-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ff9800;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            font-size: 1.5em;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(255, 152, 0, 0.4);
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .flag {
+                width: 100%;
+                max-width: 350px;
+                height: auto;
+            }
+
+            .two-player-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .options {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <!-- Ana Menü -->
+        <div id="main-menu" class="main-menu">
+            <h1>🏁 Bayrak Yarışı 🏁</h1>
+            <p class="subtitle">Dünyadan 195 ülke bayrağını tahmin et!</p>
+            
+            <div class="mode-selection">
+                <div class="mode-card" onclick="startGame('single')">
+                    <h2>⏱️</h2>
+                    <h3>Tekli Oyun</h3>
+                    <p>Süreye karşı yarış! 60 saniyede kaç bayrağı doğru tahmin edebilirsin?</p>
+                </div>
+                
+                <div class="mode-card" onclick="startGame('versus')">
+                    <h2>⚔️</h2>
+                    <h3>İkili Oyun</h3>
+                    <p>Arkadaşınla yarış! İlk 10 puanı alan kazanır!</p>
+                </div>
+            </div>
+        </div>
 
-<div class="header">
-  <h1>🏳️ Bayrak Oyunu</h1>
-  <p>Bayrağı gör, ülkeyi bul!</p>
-</div>
+        <!-- Oyun Ekranı -->
+        <div id="game-screen" class="game-screen">
+            <div class="game-header">
+                <div class="game-info">
+                    <button class="btn-primary back-btn" onclick="backToMenu()">◀ Geri</button>
+                    <div class="info-box timer" id="timer">60</div>
+                    <div class="info-box score" id="score">Skor: 0</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress">0%</div>
+                </div>
+            </div>
 
-<div class="game">
-  <div class="mode-row">
-    <button class="mode-btn active" onclick="setMode('bayrak',this)">🏳️ Bayrağı Bul</button>
-    <button class="mode-btn" onclick="setMode('ulke',this)">🗺️ Ülkeyi Bul</button>
-    <button class="mode-btn" onclick="setMode('karısık',this)">🎲 Karışık</button>
-  </div>
+            <div class="game-area">
+                <!-- Tekli Oyun İçeriği -->
+                <div id="single-game">
+                    <div class="question-number" id="question-num">Soru 1</div>
+                    <div class="flag-container">
+                        <img class="flag" id="flag-img" src="" alt="Bayrak">
+                    </div>
+                    <div class="options" id="options"></div>
+                </div>
 
-  <div class="score-row">
-    <div class="sc"><div class="sc-num" id="correct">0</div><div class="sc-lbl">Doğru</div></div>
-    <div class="sc"><div class="sc-num" id="wrong">0</div><div class="sc-lbl">Yanlış</div></div>
-    <div class="sc"><div class="sc-num" id="streak">0</div><div class="sc-lbl">Seri 🔥</div></div>
-    <div class="sc"><div class="sc-num" id="qnum">1</div><div class="sc-lbl">Soru</div></div>
-  </div>
+                <!-- İkili Oyun İçeriği -->
+                <div id="versus-game" style="display: none;">
+                    <div class="question-number" id="versus-question-num">Soru 1</div>
+                    <div class="flag-container">
+                        <img class="flag" id="versus-flag-img" src="" alt="Bayrak">
+                    </div>
+                    
+                    <div class="two-player-layout">
+                        <div class="player-section active" id="player1-section">
+                            <div class="player-header">
+                                <div class="player-name">👤 Oyuncu 1</div>
+                                <div class="player-score" id="player1-score">0</div>
+                            </div>
+                            <div class="options" id="player1-options"></div>
+                        </div>
 
-  <div class="progress"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+                        <div class="player-section" id="player2-section">
+                            <div class="player-header">
+                                <div class="player-name">👤 Oyuncu 2</div>
+                                <div class="player-score" id="player2-score">0</div>
+                            </div>
+                            <div class="options" id="player2-options"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-  <div class="flag-display">
-    <span class="flag-emoji" id="flagEmoji">🇹🇷</span>
-    <div class="flag-question" id="flagQuestion">Bu hangi ülkenin bayrağı?</div>
-    <div class="flag-hint" id="flagHint"></div>
-  </div>
+        <!-- Sonuç Ekranı -->
+        <div id="result-screen" class="main-menu result-screen">
+            <div class="result-title" id="result-title">🏆 Tebrikler! 🏆</div>
+            <div class="final-score" id="final-score">0 Puan</div>
+            <div class="result-details" id="result-details"></div>
+            <button class="btn-primary" onclick="backToMenu()">🏠 Ana Menü</button>
+            <button class="btn-primary" onclick="restartGame()">🔄 Tekrar Oyna</button>
+        </div>
+    </div>
 
-  <div class="options" id="options"></div>
+    <div class="streak-indicator" id="streak">🔥 Seri: 0</div>
 
-  <div class="feedback" id="feedback">
-    <div class="feedback-title" id="feedbackTitle"></div>
-    <div class="feedback-info" id="feedbackInfo"></div>
-  </div>
+    <script>
+        // 195 Ülke Bayrağı Verisi
+        const countries = [
+            // Avrupa
+            { name: 'Türkiye', code: 'tr', region: 'Avrupa' },
+            { name: 'Almanya', code: 'de', region: 'Avrupa' },
+            { name: 'Fransa', code: 'fr', region: 'Avrupa' },
+            { name: 'İngiltere', code: 'gb', region: 'Avrupa' },
+            { name: 'İtalya', code: 'it', region: 'Avrupa' },
+            { name: 'İspanya', code: 'es', region: 'Avrupa' },
+            { name: 'Hollanda', code: 'nl', region: 'Avrupa' },
+            { name: 'Belçika', code: 'be', region: 'Avrupa' },
+            { name: 'Portekiz', code: 'pt', region: 'Avrupa' },
+            { name: 'Yunanistan', code: 'gr', region: 'Avrupa' },
+            { name: 'İsviçre', code: 'ch', region: 'Avrupa' },
+            { name: 'Avusturya', code: 'at', region: 'Avrupa' },
+            { name: 'Polonya', code: 'pl', region: 'Avrupa' },
+            { name: 'Çek Cumhuriyeti', code: 'cz', region: 'Avrupa' },
+            { name: 'Romanya', code: 'ro', region: 'Avrupa' },
+            { name: 'Macaristan', code: 'hu', region: 'Avrupa' },
+            { name: 'Bulgaristan', code: 'bg', region: 'Avrupa' },
+            { name: 'İsveç', code: 'se', region: 'Avrupa' },
+            { name: 'Norveç', code: 'no', region: 'Avrupa' },
+            { name: 'Danimarka', code: 'dk', region: 'Avrupa' },
+            { name: 'Finlandiya', code: 'fi', region: 'Avrupa' },
+            { name: 'İrlanda', code: 'ie', region: 'Avrupa' },
+            { name: 'Ukrayna', code: 'ua', region: 'Avrupa' },
+            { name: 'Rusya', code: 'ru', region: 'Avrupa' },
+            { name: 'Sırbistan', code: 'rs', region: 'Avrupa' },
+            { name: 'Hırvatistan', code: 'hr', region: 'Avrupa' },
+            { name: 'Slovakya', code: 'sk', region: 'Avrupa' },
+            { name: 'Slovenya', code: 'si', region: 'Avrupa' },
+            { name: 'Arnavutluk', code: 'al', region: 'Avrupa' },
+            { name: 'Bosna Hersek', code: 'ba', region: 'Avrupa' },
+            { name: 'Karadağ', code: 'me', region: 'Avrupa' },
+            { name: 'Makedonya', code: 'mk', region: 'Avrupa' },
+            { name: 'İzlanda', code: 'is', region: 'Avrupa' },
+            { name: 'Estonya', code: 'ee', region: 'Avrupa' },
+            { name: 'Letonya', code: 'lv', region: 'Avrupa' },
+            { name: 'Litvanya', code: 'lt', region: 'Avrupa' },
+            { name: 'Lüksemburg', code: 'lu', region: 'Avrupa' },
+            { name: 'Malta', code: 'mt', region: 'Avrupa' },
+            { name: 'Kıbrıs', code: 'cy', region: 'Avrupa' },
+            { name: 'Moldova', code: 'md', region: 'Avrupa' },
+            { name: 'Belarus', code: 'by', region: 'Avrupa' },
+            
+            // Asya
+            { name: 'Çin', code: 'cn', region: 'Asya' },
+            { name: 'Japonya', code: 'jp', region: 'Asya' },
+            { name: 'Güney Kore', code: 'kr', region: 'Asya' },
+            { name: 'Hindistan', code: 'in', region: 'Asya' },
+            { name: 'Pakistan', code: 'pk', region: 'Asya' },
+            { name: 'Bangladeş', code: 'bd', region: 'Asya' },
+            { name: 'Endonezya', code: 'id', region: 'Asya' },
+            { name: 'Tayland', code: 'th', region: 'Asya' },
+            { name: 'Vietnam', code: 'vn', region: 'Asya' },
+            { name: 'Filipinler', code: 'ph', region: 'Asya' },
+            { name: 'Malezya', code: 'my', region: 'Asya' },
+            { name: 'Singapur', code: 'sg', region: 'Asya' },
+            { name: 'Myanmar', code: 'mm', region: 'Asya' },
+            { name: 'Kamboçya', code: 'kh', region: 'Asya' },
+            { name: 'Laos', code: 'la', region: 'Asya' },
+            { name: 'Nepal', code: 'np', region: 'Asya' },
+            { name: 'Sri Lanka', code: 'lk', region: 'Asya' },
+            { name: 'Afganistan', code: 'af', region: 'Asya' },
+            { name: 'İran', code: 'ir', region: 'Asya' },
+            { name: 'Irak', code: 'iq', region: 'Asya' },
+            { name: 'Suudi Arabistan', code: 'sa', region: 'Asya' },
+            { name: 'İsrail', code: 'il', region: 'Asya' },
+            { name: 'Ürdün', code: 'jo', region: 'Asya' },
+            { name: 'Lübnan', code: 'lb', region: 'Asya' },
+            { name: 'Suriye', code: 'sy', region: 'Asya' },
+            { name: 'Yemen', code: 'ye', region: 'Asya' },
+            { name: 'Umman', code: 'om', region: 'Asya' },
+            { name: 'Kuveyt', code: 'kw', region: 'Asya' },
+            { name: 'Katar', code: 'qa', region: 'Asya' },
+            { name: 'Bahreyn', code: 'bh', region: 'Asya' },
+            { name: 'BAE', code: 'ae', region: 'Asya' },
+            { name: 'Ermenistan', code: 'am', region: 'Asya' },
+            { name: 'Azerbaycan', code: 'az', region: 'Asya' },
+            { name: 'Gürcistan', code: 'ge', region: 'Asya' },
+            { name: 'Kazakistan', code: 'kz', region: 'Asya' },
+            { name: 'Özbekistan', code: 'uz', region: 'Asya' },
+            { name: 'Türkmenistan', code: 'tm', region: 'Asya' },
+            { name: 'Kırgızistan', code: 'kg', region: 'Asya' },
+            { name: 'Tacikistan', code: 'tj', region: 'Asya' },
+            { name: 'Moğolistan', code: 'mn', region: 'Asya' },
+            { name: 'Kuzey Kore', code: 'kp', region: 'Asya' },
+            { name: 'Brunei', code: 'bn', region: 'Asya' },
+            { name: 'Doğu Timor', code: 'tl', region: 'Asya' },
+            { name: 'Maldivler', code: 'mv', region: 'Asya' },
+            
+            // Afrika
+            { name: 'Mısır', code: 'eg', region: 'Afrika' },
+            { name: 'Güney Afrika', code: 'za', region: 'Afrika' },
+            { name: 'Nijerya', code: 'ng', region: 'Afrika' },
+            { name: 'Kenya', code: 'ke', region: 'Afrika' },
+            { name: 'Etiyopya', code: 'et', region: 'Afrika' },
+            { name: 'Tanzanya', code: 'tz', region: 'Afrika' },
+            { name: 'Uganda', code: 'ug', region: 'Afrika' },
+            { name: 'Cezayir', code: 'dz', region: 'Afrika' },
+            { name: 'Fas', code: 'ma', region: 'Afrika' },
+            { name: 'Tunus', code: 'tn', region: 'Afrika' },
+            { name: 'Libya', code: 'ly', region: 'Afrika' },
+            { name: 'Sudan', code: 'sd', region: 'Afrika' },
+            { name: 'Somali', code: 'so', region: 'Afrika' },
+            { name: 'Gana', code: 'gh', region: 'Afrika' },
+            { name: 'Fildişi Sahili', code: 'ci', region: 'Afrika' },
+            { name: 'Kamerun', code: 'cm', region: 'Afrika' },
+            { name: 'Angola', code: 'ao', region: 'Afrika' },
+            { name: 'Mozambik', code: 'mz', region: 'Afrika' },
+            { name: 'Zambiya', code: 'zm', region: 'Afrika' },
+            { name: 'Zimbabve', code: 'zw', region: 'Afrika' },
+            { name: 'Botsvana', code: 'bw', region: 'Afrika' },
+            { name: 'Namibya', code: 'na', region: 'Afrika' },
+            { name: 'Senegal', code: 'sn', region: 'Afrika' },
+            { name: 'Mali', code: 'ml', region: 'Afrika' },
+            { name: 'Burkina Faso', code: 'bf', region: 'Afrika' },
+            { name: 'Nijer', code: 'ne', region: 'Afrika' },
+            { name: 'Çad', code: 'td', region: 'Afrika' },
+            { name: 'Benin', code: 'bj', region: 'Afrika' },
+            { name: 'Togo', code: 'tg', region: 'Afrika' },
+            { name: 'Sierra Leone', code: 'sl', region: 'Afrika' },
+            { name: 'Liberya', code: 'lr', region: 'Afrika' },
+            { name: 'Gine', code: 'gn', region: 'Afrika' },
+            { name: 'Madagaskar', code: 'mg', region: 'Afrika' },
+            { name: 'Kongo', code: 'cg', region: 'Afrika' },
+            { name: 'Kongo Dem. Cum.', code: 'cd', region: 'Afrika' },
+            { name: 'Gabon', code: 'ga', region: 'Afrika' },
+            { name: 'Ruanda', code: 'rw', region: 'Afrika' },
+            { name: 'Burundi', code: 'bi', region: 'Afrika' },
+            { name: 'Malavi', code: 'mw', region: 'Afrika' },
+            { name: 'Eritre', code: 'er', region: 'Afrika' },
+            { name: 'Mauritius', code: 'mu', region: 'Afrika' },
+            { name: 'Seyşeller', code: 'sc', region: 'Afrika' },
+            { name: 'Gambiya', code: 'gm', region: 'Afrika' },
+            { name: 'Gine-Bissau', code: 'gw', region: 'Afrika' },
+            { name: 'Ekvator Ginesi', code: 'gq', region: 'Afrika' },
+            { name: 'Orta Afrika Cum.', code: 'cf', region: 'Afrika' },
+            { name: 'Güney Sudan', code: 'ss', region: 'Afrika' },
+            { name: 'Lesotho', code: 'ls', region: 'Afrika' },
+            { name: 'Svaziland', code: 'sz', region: 'Afrika' },
+            { name: 'Cibuti', code: 'dj', region: 'Afrika' },
+            { name: 'Komor', code: 'km', region: 'Afrika' },
+            
+            // Amerika
+            { name: 'ABD', code: 'us', region: 'Amerika' },
+            { name: 'Kanada', code: 'ca', region: 'Amerika' },
+            { name: 'Meksika', code: 'mx', region: 'Amerika' },
+            { name: 'Brezilya', code: 'br', region: 'Amerika' },
+            { name: 'Arjantin', code: 'ar', region: 'Amerika' },
+            { name: 'Şili', code: 'cl', region: 'Amerika' },
+            { name: 'Kolombiya', code: 'co', region: 'Amerika' },
+            { name: 'Peru', code: 'pe', region: 'Amerika' },
+            { name: 'Venezuela', code: 've', region: 'Amerika' },
+            { name: 'Ekvador', code: 'ec', region: 'Amerika' },
+            { name: 'Bolivya', code: 'bo', region: 'Amerika' },
+            { name: 'Paraguay', code: 'py', region: 'Amerika' },
+            { name: 'Uruguay', code: 'uy', region: 'Amerika' },
+            { name: 'Guyana', code: 'gy', region: 'Amerika' },
+            { name: 'Surinam', code: 'sr', region: 'Amerika' },
+            { name: 'Küba', code: 'cu', region: 'Amerika' },
+            { name: 'Jamaika', code: 'jm', region: 'Amerika' },
+            { name: 'Haiti', code: 'ht', region: 'Amerika' },
+            { name: 'Dominik Cumhuriyeti', code: 'do', region: 'Amerika' },
+            { name: 'Panama', code: 'pa', region: 'Amerika' },
+            { name: 'Kosta Rika', code: 'cr', region: 'Amerika' },
+            { name: 'Guatemala', code: 'gt', region: 'Amerika' },
+            { name: 'Honduras', code: 'hn', region: 'Amerika' },
+            { name: 'El Salvador', code: 'sv', region: 'Amerika' },
+            { name: 'Nikaragua', code: 'ni', region: 'Amerika' },
+            { name: 'Belize', code: 'bz', region: 'Amerika' },
+            { name: 'Trinidad ve Tobago', code: 'tt', region: 'Amerika' },
+            { name: 'Barbados', code: 'bb', region: 'Amerika' },
+            { name: 'Bahamas', code: 'bs', region: 'Amerika' },
+            { name: 'Grenada', code: 'gd', region: 'Amerika' },
+            { name: 'Saint Lucia', code: 'lc', region: 'Amerika' },
+            { name: 'Saint Vincent', code: 'vc', region: 'Amerika' },
+            { name: 'Dominika', code: 'dm', region: 'Amerika' },
+            { name: 'Antigua ve Barbuda', code: 'ag', region: 'Amerika' },
+            { name: 'Saint Kitts ve Nevis', code: 'kn', region: 'Amerika' },
+            
+            // Okyanusya
+            { name: 'Avustralya', code: 'au', region: 'Okyanusya' },
+            { name: 'Yeni Zelanda', code: 'nz', region: 'Okyanusya' },
+            { name: 'Papua Yeni Gine', code: 'pg', region: 'Okyanusya' },
+            { name: 'Fiji', code: 'fj', region: 'Okyanusya' },
+            { name: 'Samoa', code: 'ws', region: 'Okyanusya' },
+            { name: 'Solomon Adaları', code: 'sb', region: 'Okyanusya' },
+            { name: 'Vanuatu', code: 'vu', region: 'Okyanusya' },
+            { name: 'Tonga', code: 'to', region: 'Okyanusya' },
+            { name: 'Mikronezya', code: 'fm', region: 'Okyanusya' },
+            { name: 'Kiribati', code: 'ki', region: 'Okyanusya' },
+            { name: 'Marshall Adaları', code: 'mh', region: 'Okyanusya' },
+            { name: 'Palau', code: 'pw', region: 'Okyanusya' },
+            { name: 'Nauru', code: 'nr', region: 'Okyanusya' },
+            { name: 'Tuvalu', code: 'tv', region: 'Okyanusya' }
+        ];
 
-  <button class="next-btn" id="nextBtn" onclick="nextQ()">➡️ Sonraki</button>
-</div>
+        let gameMode = '';
+        let currentQuestion = 0;
+        let score = 0;
+        let timer = 60;
+        let timerInterval;
+        let correctAnswer = '';
+        let usedCountries = [];
+        let totalQuestions = 0;
+        let correctAnswers = 0;
+        let wrongAnswers = 0;
+        let streak = 0;
+        let maxStreak = 0;
+        
+        // İkili oyun için
+        let player1Score = 0;
+        let player2Score = 0;
+        let currentPlayer = 1;
 
-<script>
+        function startGame(mode) {
+            gameMode = mode;
+            document.getElementById('main-menu').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'block';
+            
+            // Reset
+            currentQuestion = 0;
+            score = 0;
+            player1Score = 0;
+            player2Score = 0;
+            currentPlayer = 1;
+            usedCountries = [];
+            correctAnswers = 0;
+            wrongAnswers = 0;
+            totalQuestions = 0;
+            streak = 0;
+            maxStreak = 0;
+            
+            if (mode === 'single') {
+                timer = 60;
+                document.getElementById('single-game').style.display = 'block';
+                document.getElementById('versus-game').style.display = 'none';
+                document.getElementById('timer').style.display = 'block';
+                startTimer();
+                loadQuestion();
+            } else {
+                document.getElementById('single-game').style.display = 'none';
+                document.getElementById('versus-game').style.display = 'block';
+                document.getElementById('timer').style.display = 'none';
+                document.getElementById('score').textContent = 'İlk 10 puana ulaşan kazanır!';
+                loadVersusQuestion();
+            }
+        }
 
-// === SES EFEKTLERİ ===
-var _aC=null;
-function _aG(){if(!_aC)_aC=new(window.AudioContext||window.webkitAudioContext)();return _aC;}
-function _s(fr,du,tp,vl){try{var c=_aG(),t=c.currentTime,off=0;fr.forEach(function(f,i){var o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.type=tp||'sine';o.frequency.value=f;var d=du[i]||0.15;g.gain.setValueAtTime(vl||0.3,t+off);g.gain.exponentialRampToValueAtTime(0.001,t+off+d);o.start(t+off);o.stop(t+off+d);off+=d;});}catch(e){}}
-function sesDogru(){_s([440,554,659],[0.1,0.1,0.18],'sine',0.35);}
-function sesYanlis(){_s([300,220,160],[0.1,0.12,0.22],'sawtooth',0.25);}
-function sesKazan(){_s([523,659,784,1047,784,1047],[0.1,0.1,0.1,0.18,0.1,0.28],'sine',0.4);}
-function sesTikla(){_s([440,520],[0.06,0.08],'sine',0.2);}
-function sesEslesti(){_s([659,784,1047],[0.1,0.1,0.2],'sine',0.38);}
-// =====================
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timer--;
+                document.getElementById('timer').textContent = timer + 's';
+                
+                if (timer <= 10) {
+                    document.getElementById('timer').style.background = 'linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%)';
+                }
+                
+                if (timer <= 0) {
+                    clearInterval(timerInterval);
+                    endGame();
+                }
+            }, 1000);
+        }
 
-var countries = [
-  {name:'Türkiye', flag:'🇹🇷', capital:'Ankara', continent:'Asya/Avrupa'},
-  {name:'Almanya', flag:'🇩🇪', capital:'Berlin', continent:'Avrupa'},
-  {name:'Fransa', flag:'🇫🇷', capital:'Paris', continent:'Avrupa'},
-  {name:'İtalya', flag:'🇮🇹', capital:'Roma', continent:'Avrupa'},
-  {name:'İspanya', flag:'🇪🇸', capital:'Madrid', continent:'Avrupa'},
-  {name:'İngiltere', flag:'🇬🇧', capital:'Londra', continent:'Avrupa'},
-  {name:'ABD', flag:'🇺🇸', capital:'Washington', continent:'Amerika'},
-  {name:'Japonya', flag:'🇯🇵', capital:'Tokyo', continent:'Asya'},
-  {name:'Çin', flag:'🇨🇳', capital:'Pekin', continent:'Asya'},
-  {name:'Rusya', flag:'🇷🇺', capital:'Moskova', continent:'Asya/Avrupa'},
-  {name:'Brezilya', flag:'🇧🇷', capital:'Brasilia', continent:'Amerika'},
-  {name:'Kanada', flag:'🇨🇦', capital:'Ottawa', continent:'Amerika'},
-  {name:'Avustralya', flag:'🇦🇺', capital:'Kanberra', continent:'Okyanusya'},
-  {name:'Mısır', flag:'🇪🇬', capital:'Kahire', continent:'Afrika'},
-  {name:'Hindistan', flag:'🇮🇳', capital:'Yeni Delhi', continent:'Asya'},
-  {name:'Meksika', flag:'🇲🇽', capital:'Meksiko', continent:'Amerika'},
-  {name:'Arjantin', flag:'🇦🇷', capital:'Buenos Aires', continent:'Amerika'},
-  {name:'Yunanistan', flag:'🇬🇷', capital:'Atina', continent:'Avrupa'},
-  {name:'Portekiz', flag:'🇵🇹', capital:'Lizbon', continent:'Avrupa'},
-  {name:'Hollanda', flag:'🇳🇱', capital:'Amsterdam', continent:'Avrupa'},
-  {name:'İsviçre', flag:'🇨🇭', capital:'Bern', continent:'Avrupa'},
-  {name:'Norveç', flag:'🇳🇴', capital:'Oslo', continent:'Avrupa'},
-  {name:'İsveç', flag:'🇸🇪', capital:'Stockholm', continent:'Avrupa'},
-  {name:'Polonya', flag:'🇵🇱', capital:'Varşova', continent:'Avrupa'},
-  {name:'Kore', flag:'🇰🇷', capital:'Seul', continent:'Asya'},
-  {name:'Suudi Arabistan', flag:'🇸🇦', capital:'Riyad', continent:'Asya'},
-  {name:'Güney Afrika', flag:'🇿🇦', capital:'Pretoria', continent:'Afrika'},
-  {name:'Nijerya', flag:'🇳🇬', capital:'Abuja', continent:'Afrika'},
-];
+        function getRandomCountries(count) {
+            const available = countries.filter(c => !usedCountries.includes(c.code));
+            
+            if (available.length < count) {
+                usedCountries = [];
+                return getRandomCountries(count);
+            }
+            
+            const shuffled = available.sort(() => Math.random() - 0.5);
+            return shuffled.slice(0, count);
+        }
 
-var mode = 'bayrak';
-var correctCount=0, wrongCount=0, streakCount=0, qNum=0;
-var currentAnswer='', answered=false;
-var usedIdx=[];
+        function loadQuestion() {
+            currentQuestion++;
+            totalQuestions++;
+            
+            const selected = getRandomCountries(4);
+            correctAnswer = selected[0];
+            usedCountries.push(correctAnswer.code);
+            
+            const shuffled = selected.sort(() => Math.random() - 0.5);
+            
+            document.getElementById('question-num').textContent = `Soru ${currentQuestion}`;
+            document.getElementById('flag-img').src = `https://flagcdn.com/w640/${correctAnswer.code}.png`;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            shuffled.forEach(country => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = country.name;
+                btn.onclick = () => checkAnswer(country, btn);
+                optionsContainer.appendChild(btn);
+            });
+            
+            updateProgress();
+        }
 
-function setMode(m, btn) {
-  mode = m;
-  document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.remove('active');});
-  btn.classList.add('active');
-  usedIdx=[]; correctCount=0; wrongCount=0; streakCount=0; qNum=0;
-  document.getElementById('correct').textContent=0;
-  document.getElementById('wrong').textContent=0;
-  document.getElementById('streak').textContent=0;
-  nextQ();
-}
+        function loadVersusQuestion() {
+            currentQuestion++;
+            totalQuestions++;
+            
+            const selected = getRandomCountries(4);
+            correctAnswer = selected[0];
+            usedCountries.push(correctAnswer.code);
+            
+            const shuffled = selected.sort(() => Math.random() - 0.5);
+            
+            document.getElementById('versus-question-num').textContent = `Soru ${currentQuestion}`;
+            document.getElementById('versus-flag-img').src = `https://flagcdn.com/w640/${correctAnswer.code}.png`;
+            
+            // Her iki oyuncu için de aynı seçenekleri göster
+            ['player1', 'player2'].forEach(player => {
+                const optionsContainer = document.getElementById(`${player}-options`);
+                optionsContainer.innerHTML = '';
+                
+                shuffled.forEach(country => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.textContent = country.name;
+                    btn.onclick = () => checkVersusAnswer(player, country, btn);
+                    optionsContainer.appendChild(btn);
+                });
+            });
+            
+            updateProgress();
+        }
 
-function nextQ() {
-  answered=false;
-  document.getElementById('feedback').classList.remove('show');
-  document.getElementById('nextBtn').classList.remove('show');
+        function checkAnswer(country, btn) {
+            const allBtns = document.querySelectorAll('#options .option-btn');
+            allBtns.forEach(b => b.disabled = true);
+            
+            if (country.code === correctAnswer.code) {
+                btn.classList.add('correct');
+                score += 10;
+                correctAnswers++;
+                streak++;
+                maxStreak = Math.max(maxStreak, streak);
+                
+                if (streak >= 3) {
+                    document.getElementById('streak').textContent = `🔥 Seri: ${streak}`;
+                    document.getElementById('streak').style.display = 'block';
+                    setTimeout(() => {
+                        document.getElementById('streak').style.display = 'none';
+                    }, 2000);
+                }
+            } else {
+                btn.classList.add('wrong');
+                wrongAnswers++;
+                streak = 0;
+                
+                // Doğru cevabı göster
+                allBtns.forEach(b => {
+                    if (b.textContent === correctAnswer.name) {
+                        b.classList.add('correct');
+                    }
+                });
+            }
+            
+            document.getElementById('score').textContent = `Skor: ${score}`;
+            
+            setTimeout(() => {
+                if (timer > 0) {
+                    loadQuestion();
+                }
+            }, 1500);
+        }
 
-  // Mevcut modu belirle
-  var actualMode = mode;
-  if(mode==='karısık') actualMode = Math.random()>.5?'bayrak':'ulke';
+        function checkVersusAnswer(player, country, btn) {
+            const playerNum = player === 'player1' ? 1 : 2;
+            
+            // Sadece aktif oyuncu cevap verebilir
+            if (playerNum !== currentPlayer) return;
+            
+            const allBtns = document.querySelectorAll(`#${player}-options .option-btn`);
+            allBtns.forEach(b => b.disabled = true);
+            
+            if (country.code === correctAnswer.code) {
+                btn.classList.add('correct');
+                
+                if (player === 'player1') {
+                    player1Score++;
+                    document.getElementById('player1-score').textContent = player1Score;
+                } else {
+                    player2Score++;
+                    document.getElementById('player2-score').textContent = player2Score;
+                }
+                
+                correctAnswers++;
+                score += 10;
+            } else {
+                btn.classList.add('wrong');
+                wrongAnswers++;
+                
+                // Doğru cevabı göster
+                allBtns.forEach(b => {
+                    if (b.textContent === correctAnswer.name) {
+                        b.classList.add('correct');
+                    }
+                });
+            }
+            
+            // Oyuncu değiştir
+            setTimeout(() => {
+                if (player1Score >= 10 || player2Score >= 10) {
+                    endVersusGame();
+                } else {
+                    currentPlayer = currentPlayer === 1 ? 2 : 1;
+                    updateActivePlayer();
+                    loadVersusQuestion();
+                }
+            }, 1500);
+        }
 
-  // Ülke seç
-  var available = countries.filter(function(_,i){return !usedIdx.includes(i);});
-  if(available.length<4){usedIdx=[];available=countries;}
-  var correctIdx = Math.floor(Math.random()*available.length);
-  var correct = available[correctIdx];
-  usedIdx.push(countries.indexOf(correct));
+        function updateActivePlayer() {
+            if (currentPlayer === 1) {
+                document.getElementById('player1-section').classList.add('active');
+                document.getElementById('player2-section').classList.remove('active');
+            } else {
+                document.getElementById('player1-section').classList.remove('active');
+                document.getElementById('player2-section').classList.add('active');
+            }
+        }
 
-  qNum++;
-  document.getElementById('qnum').textContent=qNum;
-  document.getElementById('progressBar').style.width = Math.min(qNum/28*100,100)+'%';
+        function updateProgress() {
+            const progress = (correctAnswers / totalQuestions) * 100;
+            const progressBar = document.getElementById('progress');
+            progressBar.style.width = progress + '%';
+            progressBar.textContent = Math.round(progress) + '%';
+        }
 
-  if(actualMode==='bayrak') {
-    // Bayrağı göster, ülkeyi bul
-    document.getElementById('flagEmoji').textContent = correct.flag;
-    document.getElementById('flagQuestion').textContent = 'Bu hangi ülkenin bayrağı?';
-    document.getElementById('flagHint').textContent = '🌍 '+correct.continent;
-    currentAnswer = correct.name;
+        function endGame() {
+            clearInterval(timerInterval);
+            document.getElementById('game-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            
+            const accuracy = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
+            
+            document.getElementById('result-title').textContent = score >= 100 ? '🏆 Muhteşem! 🏆' : score >= 50 ? '👏 İyi İş! 👏' : '💪 Tekrar Dene! 💪';
+            document.getElementById('final-score').textContent = score + ' Puan';
+            
+            document.getElementById('result-details').innerHTML = `
+                <div class="result-detail">
+                    <span>📊 Toplam Soru:</span>
+                    <span>${totalQuestions}</span>
+                </div>
+                <div class="result-detail">
+                    <span>✅ Doğru Cevap:</span>
+                    <span>${correctAnswers}</span>
+                </div>
+                <div class="result-detail">
+                    <span>❌ Yanlış Cevap:</span>
+                    <span>${wrongAnswers}</span>
+                </div>
+                <div class="result-detail">
+                    <span>🎯 Doğruluk Oranı:</span>
+                    <span>${accuracy}%</span>
+                </div>
+                <div class="result-detail">
+                    <span>🔥 En Uzun Seri:</span>
+                    <span>${maxStreak}</span>
+                </div>
+                <div class="result-detail">
+                    <span>⏱️ Süre:</span>
+                    <span>${60 - timer} saniye</span>
+                </div>
+            `;
+        }
 
-    // 4 seçenek
-    var opts = [correct];
-    var others = countries.filter(function(c){return c.name!==correct.name;});
-    shuffle(others);
-    opts = opts.concat(others.slice(0,3));
-    shuffle(opts);
+        function endVersusGame() {
+            document.getElementById('game-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            
+            const winner = player1Score >= 10 ? 1 : 2;
+            const accuracy = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
+            
+            document.getElementById('result-title').textContent = `🏆 Oyuncu ${winner} Kazandı! 🏆`;
+            document.getElementById('final-score').textContent = `${player1Score} - ${player2Score}`;
+            
+            document.getElementById('result-details').innerHTML = `
+                <div class="result-detail">
+                    <span>👤 Oyuncu 1 Skoru:</span>
+                    <span>${player1Score}</span>
+                </div>
+                <div class="result-detail">
+                    <span>👤 Oyuncu 2 Skoru:</span>
+                    <span>${player2Score}</span>
+                </div>
+                <div class="result-detail">
+                    <span>📊 Toplam Soru:</span>
+                    <span>${totalQuestions}</span>
+                </div>
+                <div class="result-detail">
+                    <span>✅ Doğru Cevap:</span>
+                    <span>${correctAnswers}</span>
+                </div>
+                <div class="result-detail">
+                    <span>❌ Yanlış Cevap:</span>
+                    <span>${wrongAnswers}</span>
+                </div>
+                <div class="result-detail">
+                    <span>🎯 Doğruluk Oranı:</span>
+                    <span>${accuracy}%</span>
+                </div>
+            `;
+        }
 
-    buildOptions(opts.map(function(c){return c.name;}), correct.name, correct);
-  } else {
-    // Ülkeyi göster, bayrağı bul
-    document.getElementById('flagEmoji').textContent = '🌍';
-    document.getElementById('flagQuestion').textContent = correct.name + ' ülkesinin bayrağı hangisi?';
-    document.getElementById('flagHint').textContent = '🏛️ Başkent: '+correct.capital;
-    currentAnswer = correct.flag;
+        function backToMenu() {
+            clearInterval(timerInterval);
+            document.getElementById('main-menu').style.display = 'block';
+            document.getElementById('game-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'none';
+        }
 
-    var opts = [correct];
-    var others = countries.filter(function(c){return c.name!==correct.name;});
-    shuffle(others);
-    opts = opts.concat(others.slice(0,3));
-    shuffle(opts);
-
-    buildOptions(opts.map(function(c){return c.flag;}), correct.flag, correct);
-  }
-}
-
-function buildOptions(opts, answer, countryData) {
-  var container = document.getElementById('options');
-  container.innerHTML='';
-  opts.forEach(function(opt) {
-    var btn=document.createElement('button');
-    btn.className='opt-btn';
-    btn.textContent=opt;
-    btn.style.fontSize = opt.length<=4?'32px':'15px';
-    btn.onclick=function(){
-      if(answered) return;
-      answered=true;
-      if(opt===answer) {
-        btn.classList.add('correct');
-        correctCount++; streakCount++;
-        document.getElementById('correct').textContent=correctCount;
-        document.getElementById('streak').textContent=streakCount;
-        showFeedback(true,'🎉 Doğru!','🏛️ '+countryData.name+' · Başkent: '+countryData.capital+' · '+countryData.continent);
-      } else {
-        btn.classList.add('wrong');
-        wrongCount++; streakCount=0;
-        document.getElementById('wrong').textContent=wrongCount;
-        document.getElementById('streak').textContent=streakCount;
-        // Doğruyu vurgula
-        Array.from(container.children).forEach(function(b){
-          if(b.textContent===answer) b.classList.add('correct');
-        });
-        showFeedback(false,'❌ Yanlış!','Doğrusu: '+countryData.flag+' '+countryData.name+' · Başkent: '+countryData.capital);
-      }
-      Array.from(container.children).forEach(function(b){b.disabled=true;});
-      document.getElementById('nextBtn').classList.add('show');
-    };
-    container.appendChild(btn);
-  });
-}
-
-function showFeedback(ok, title, info) {
-  var fb=document.getElementById('feedback');
-  fb.className='feedback show '+(ok?'ok':'no');
-  document.getElementById('feedbackTitle').textContent=title;
-  document.getElementById('feedbackInfo').textContent=info;
-}
-
-function shuffle(arr) {
-  for(var i=arr.length-1;i>0;i--){
-    var j=Math.floor(Math.random()*(i+1));
-    var t=arr[i]; arr[i]=arr[j]; arr[j]=t;
-  }
-  return arr;
-}
-
-nextQ();
-</script>
+        function restartGame() {
+            document.getElementById('result-screen').style.display = 'none';
+            startGame(gameMode);
+        }
+    </script>
 </body>
 </html>
