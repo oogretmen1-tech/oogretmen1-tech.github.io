@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orman Sakinleri - İnteraktif Hikaye Kitabı | Dijital Öğretmen</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --s2:#FFD93D; --s3:#6BCB77; --orange:#F59E0B; --dark:#2D2D2D;
+  --bg:#FDF6E9; --card-shadow:0 10px 28px rgba(120,80,20,.14);
+  --wood:#8B5E34; --wood-deep:#6B4423;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:"Nunito",sans-serif; color:var(--dark); min-height:100vh;
+  background:
+    radial-gradient(circle at 8% 12%, rgba(107,203,119,.16) 0, transparent 45%),
+    radial-gradient(circle at 92% 85%, rgba(245,158,11,.16) 0, transparent 45%),
+    var(--bg);
+}
+h1,h2,h3{font-family:"Baloo 2",cursive;}
+
+.back-btn{
+  display:inline-flex; align-items:center; gap:8px;
+  background:#fff; border:3px solid var(--dark); color:var(--dark);
+  font-family:"Nunito",sans-serif; font-size:14px; font-weight:800;
+  padding:8px 18px; border-radius:30px; cursor:pointer;
+  margin:18px 0 0 18px; text-decoration:none; transition:all .2s;
+}
+.back-btn:hover{background:var(--dark); color:#fff; transform:translateX(-3px);}
+
+.hikaye-hero{
+  max-width:760px; margin:18px auto 8px; padding:22px 26px;
+  border-radius:24px; color:#fff; display:flex; align-items:center; gap:16px;
+  background:linear-gradient(135deg,var(--orange),var(--s2));
+  box-shadow:0 8px 24px rgba(0,0,0,.14);
+}
+.hikaye-hero .icon{font-size:42px; flex-shrink:0;}
+.hikaye-hero h1{font-size:1.5rem; font-weight:800; line-height:1.15; color:#3a2a06;}
+.hikaye-hero p{font-size:.85rem; font-weight:700; color:#5a4210; margin-top:4px;}
+
+.book-wrap{max-width:760px; margin:0 auto; padding:20px 16px 10px; position:relative;}
+
+.book-card{
+  position:relative; background:#fff; border-radius:26px;
+  box-shadow:var(--card-shadow); overflow:hidden;
+  border:1px solid #EFE2C8;
+}
+.book-topbar{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 14px; background:linear-gradient(90deg,#FFF7E3,#FFF1CE);
+  border-bottom:2px solid #F3E4BE;
+}
+.page-badge{
+  font-family:"Baloo 2",cursive; font-weight:800; font-size:.85rem;
+  color:var(--wood-deep); background:#fff; padding:4px 14px; border-radius:20px;
+  border:2px solid #F0DFB4;
+}
+.listen-btn{
+  border:none; cursor:pointer; font-size:1.1rem; width:40px; height:40px;
+  border-radius:50%; background:#fff; border:2px solid #F0DFB4;
+  display:flex; align-items:center; justify-content:center; transition:all .2s;
+}
+.listen-btn:hover{background:var(--s2);}
+.listen-btn.speaking{background:var(--s3); border-color:var(--s3); animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.08);}}
+
+.progress-track{height:8px; background:#F3E4BE; position:relative;}
+.progress-fill{
+  height:100%; background:linear-gradient(90deg,var(--s3),var(--orange));
+  width:5.5%; transition:width .3s ease; position:relative;
+}
+.progress-bird{
+  position:absolute; top:-13px; right:-11px; font-size:16px;
+  transform:scaleX(-1); transition:none;
+}
+
+.page-image-wrap{
+  background:#111; display:flex; align-items:center; justify-content:center;
+  min-height:280px; padding:0;
+}
+.page-image-wrap img{
+  width:100%; max-height:min(72vh,620px); object-fit:contain; display:block;
+  opacity:1; transition:opacity .25s ease; background:#111;
+}
+
+.text-toggle-row{display:flex; justify-content:center; padding:12px;}
+.toggle-text-btn{
+  border:2px solid var(--orange); background:#FFF7E3; color:var(--wood-deep);
+  font-family:"Nunito",sans-serif; font-weight:800; font-size:.85rem;
+  padding:8px 18px; border-radius:20px; cursor:pointer; transition:all .2s;
+}
+.toggle-text-btn:hover{background:var(--orange); color:#fff;}
+
+.text-panel{
+  max-height:0; overflow:hidden; transition:max-height .3s ease;
+  padding:0 22px; background:#FFFBF0;
+}
+.text-panel.open{max-height:900px; padding:6px 22px 20px;}
+.text-panel p{font-size:.95rem; line-height:1.7; margin-bottom:10px; color:#3a2f1e;}
+
+.nav-row{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  margin:16px 4px 0;
+}
+.nav-btn{
+  flex:1; font-family:"Baloo 2",cursive; font-weight:700; font-size:1rem;
+  padding:14px 10px; border-radius:18px; border:none; cursor:pointer;
+  color:#fff; background:linear-gradient(135deg,var(--wood),var(--wood-deep));
+  box-shadow:3px 3px 0 rgba(0,0,0,.15); transition:transform .15s;
+}
+.nav-btn:active{transform:translateY(2px); box-shadow:1px 1px 0 rgba(0,0,0,.15);}
+.nav-btn:disabled{opacity:.35; cursor:default; box-shadow:none;}
+.nav-btn.next{background:linear-gradient(135deg,var(--orange),#E08A00);}
+
+.swipe-hint{
+  text-align:center; font-size:.75rem; color:#8a7a5c; margin:10px 0 0; font-weight:700;
+}
+
+.activity-section{
+  max-width:760px; margin:34px auto 20px; padding:26px 24px;
+  background:#fff; border-radius:24px; box-shadow:var(--card-shadow);
+  border:1px solid #EFE2C8;
+}
+.activity-section h2{font-size:1.3rem; margin-bottom:14px; color:var(--wood-deep);}
+.activity-section ul{list-style:none; display:flex; flex-direction:column; gap:10px;}
+.activity-section li{
+  background:#FFF7E3; border-left:4px solid var(--orange); border-radius:12px;
+  padding:12px 16px; font-size:.92rem; line-height:1.5;
+}
+.restart-btn{
+  display:block; margin:20px auto 0; font-family:"Baloo 2",cursive; font-weight:700;
+  font-size:1rem; padding:12px 26px; border-radius:24px; border:none; cursor:pointer;
+  color:#fff; background:linear-gradient(135deg,var(--s3),#3fae52);
+}
+
+footer{text-align:center; color:#a08d63; font-size:.8rem; padding:20px; opacity:.8;}
+
+@media (max-width:480px){
+  .hikaye-hero{margin:14px 12px 6px; padding:16px 18px;}
+  .hikaye-hero h1{font-size:1.2rem;}
+}
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="index.html?page=hikaye">← Ana Sayfa</a>
+
+<div class="hikaye-hero">
+  <div class="icon">🌳</div>
+  <div>
+    <h1>Orman Sakinleri</h1>
+    <p>İnteraktif Hikaye Kitabı · Dostluk, Paylaşma ve Empati</p>
+  </div>
+</div>
+
+<div class="book-wrap">
+  <div class="book-card" id="bookCard">
+    <div class="book-topbar">
+      <span class="page-badge" id="pageBadge">1 / 18</span>
+      <button class="listen-btn" id="listenBtn" title="Sesli dinle">🔊</button>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill">
+        <span class="progress-bird">🐦</span>
+      </div>
+    </div>
+    <div class="page-image-wrap">
+      <img id="pageImg" src="orman-sakinleri-01.png" alt="Orman Sakinleri - Sayfa 1">
+    </div>
+    <div class="text-toggle-row">
+      <button class="toggle-text-btn" id="toggleTextBtn">📖 Metni Oku</button>
+    </div>
+    <div class="text-panel" id="textPanel"></div>
+  </div>
+
+  <div class="nav-row">
+    <button class="nav-btn prev" id="prevBtn">◀ Önceki</button>
+    <button class="nav-btn next" id="nextBtn">Sonraki ▶</button>
+  </div>
+  <p class="swipe-hint">👉 Sayfayı kaydırarak veya ok tuşlarıyla da çevirebilirsin</p>
+</div>
+
+<section class="activity-section" id="activitySection">
+  <h2>🤔 Düşünelim ve Konuşalım</h2>
+  <ul>
+    <li>Hayvanlar Minik Serçe'ye neden bir yer vermek istemedi? Sence bu adil miydi?</li>
+    <li>Minik Serçe neden hayvanları birbirine düşürdü? O anda ne hissetmişti?</li>
+    <li>Sen Minik Serçe'nin yerinde olsaydın ne yapardın?</li>
+    <li>Bilge Kaplumbağa'nın "Orman hepimizindir" sözü sana neyi hatırlatıyor?</li>
+    <li>Sınıfımızda kimseyi dışlamamak için neler yapabiliriz?</li>
+  </ul>
+  <button class="restart-btn" id="restartBtn">🔁 Hikayeyi Baştan Oku</button>
+</section>
+
+<footer>Orman Sakinleri · İnteraktif Hikaye Kitabı</footer>
+
+<script>
+const pages = [
+{img:'orman-sakinleri-01.png', text:`Orman Sakinleri\n\nBir dostluk ve paylaşma hikâyesi. Hazır mısın? Hikâyemiz başlıyor!`},
+{img:'orman-sakinleri-02.png', text:`Bir varmış, bir yokmuş... Evvel zaman içinde, dev ağaçların gökyüzünü kucakladığı kocaman bir orman varmış. Bu ormanda filler, maymunlar, köstebekler ve karıncalar hep beraber yaşayıp gidermiş.\n\nAma bir gün, huzur dolu bu ormanda hiç beklenmedik bir tartışma çıkıvermiş.`},
+{img:'orman-sakinleri-03.png', text:`"Amma da Uzattın Ha!"\n\nSincap, meşe ağacının en yüksek dalında kıtır kıtır cevizlerini yiyormuş. Ama o sırada elinden kayan kocaman bir ceviz, "Tak!" diye aşağıda uyuklayan Tavşan'ın tam kafasına düşmüş. Tavşan yerinden öyle bir fırlamış ki, can acısıyla ve sinirden küplere binmiş.\n\n"Hey! Kafama kim taş attı?" diye bağırmış.\n\nSincap yukarıdan aşağıya bakmış, hiç de oralı olmamış: "Taş değil o Tavşan, alt tarafı bir ceviz düştü işte, kusura bakma!" demiş.`},
+{img:'orman-sakinleri-04.png', text:`Tavşan iyice kızmış: "Ceviz ya da taş, kafam şişti be! Bir özür bile dilemeyecek misin?"\n\nSincap omuz silkmiş: "İyi tamam, kusura bakma dedik herhalde! Amma da uzattın ha, sanki dünya yıkıldı. Git başka yerde uyu sen de!"\n\nTavşan bu cevaba çok bozulmuş: "Hem suçlusun hem de ne biçim konuşuyorsun!" demiş. Bunlar başlamışlar tartışmaya.\n\nSesler yükselince ormandaki herkes toplanmış. Maymunlar dallardan sarkmış, karıncalar işi gücü bırakıp bakmaya başlamışlar. Bakmışlar ki bu kavga bitecek gibi değil, "Haydi," demişler, "Bilge Kaplumbağa'ya gidelim."`},
+{img:'orman-sakinleri-05.png', text:`O sırada Minik Serçe bir dalın ucunda pır pır ederek bekliyormuş. Sıra ona gelecek diye kalbi heyecandan küt küt atıyormuş. Tam o sırada Fil hortumunu havaya kaldırmış: "Durun bir dakika!" diye bağırmış.\n\n"Arkadaşlar, birini unuttuk! Bilge Kaplumbağa'ya neresini vereceğiz?"\n\nSerçe bir anda donup kalmış, "Beni unuttular mı?" diye düşünmüş. Bilge Kaplumbağa ise hafifçe gülümsemiş: "Düşünmeniz yeter arkadaşlar," demiş. "Ama benim yerle yurtla işim olmaz. Ben evimi sırtımda taşırım. Nereye gitsem yuvam orasıdır. Siz yeter ki huzurla paylaşın," demiş ve oradan uzaklaşmış.`},
+{img:'orman-sakinleri-06.png', text:`"Peki Ya Ben?"\n\nKaplumbağa gözden kaybolur kaybolmaz Serçe hemen öne atılmış: "Arkadaşlar! Peki ya ben? Bana nerede yer verdiniz? Ben nerede kalacağım?"\n\nHayvanlar bir anda ciddileşmişler. "Sana yer falan yok!" demişler. "Sen kış gelince, rüzgar esince buraları bırakıp sıcak yerlere kaçıyorsun. Biz burada karın, dondurucu soğuğun sıkıntısını çekerken sen oralarda keyif çatıyorsun. Soğuğun cefasını çekmeyene, bu ormanda bir dal bile yok!"`},
+{img:'orman-sakinleri-07.png', text:`Minik Serçe duyduklarına inanamamış. Kimsenin ona sahip çıkmadığını görünce çok ama çok üzülmüş. Kanatlarını arkasına doğru çekmiş, boynunu bükmüş ve tek bir kelime bile etmeden ormanın derinliklerine doğru uçmuş.\n\nAma içindeki o hüzün, yolda giderken yavaş yavaş büyük bir kızgınlığa dönüşmüş.`},
+{img:'orman-sakinleri-08.png', text:`Ormanda Sonbahar\n\nMinik Serçe'nin ormandan ayrılmasının üzerinden uzun zaman geçmiş. Günler günleri kovalamış, o sıcak yeşil bahar yerini serin sarı bahara bırakmış. Ağaçların yaprakları sararıp dökülmüş; güneş küsmüş gibi bulutların arkasına saklanıyormuş, eskisi gibi ısıtmıyormuş. Artık sonbahar iyice kapıya dayanmış.\n\nOrmandaki hayvanlar kendi aralarında konuşurken: "Bakın, rüzgar sertleşti, kuşlar çoktan göç yoluna düştü. O Minik Serçe de şimdi sıcak diyarlara varmıştır, madem ormanda yer istiyorsa sıcak soğuk demeden ormanda bizle kalsaydı," diyorlarmış. Yakında yaşanacaklardan habersiz sohbetlerine devam etmişler.`},
+{img:'orman-sakinleri-09.png', text:`Arıların Çalınan Balları\n\nBir sabah, işçi arılar çiçeklerden topladıkları polenlerle neşe içinde kovanlarına dönmüşler. Ama kovanın önüne geldiklerinde gördüklerine inanamamışlar! Kovanın altı delinmiş, o canım balların çoğu yere dökülmüş, kalanlar ise sanki birisi tarafından gizlice boşaltılmıştı.\n\n"Kim yaptı bunu? Emeklerimize kim kıydı?" diye ağlaşırken, tam o sırada işçi arılardan birisi bağırmış: "Bakın! Burada bir iz var!"`},
+{img:'orman-sakinleri-10.png', text:`Yere dökülen yapış yapış ballar, toprakta belirgin bir yol oluşturmuştu. Arılar ve toplanan diğer hayvanlar hemen bu bal izlerini takip etmeye başlamışlar. İzler, ormanın derinliklerine doğru uzanıyor, uzanıyor ve sonunda tam Ayı'nın mağarasının kapısında bitiyormuş!\n\nAyı, mağarasından esneyerek çıktığında karşısında öfkeli bir kalabalık bulmuş.\n\nKraliçe Arı: "Hey Bal Hırsızı seni! Nerde ballarımız?"\n\nAyı şaşkın şaşkın bakmış: "Benim haberim bile yok, bütün gece uyuyordum!" demiş ama kimse ona inanmamış. Çünkü izler tam onun kapısını gösteriyormuş.`},
+{img:'orman-sakinleri-11.png', text:`Ormandaki bu kavga sadece Ayı ile Arılar arasında yaşanmamış, ormanın her bir köşesinde sesler yükseliyormuş. Sincap kışlık cevizlerini kontrol etmek için ağaç kovuğuna bakmış ama koca ceviz yığını sanki buhar olup uçmuş! "Kim yaptı bunu?" diye bağırmış ama rüzgarın uğultusundan başka cevap alamamış.\n\nKedi ve Köpek cephesinde ise ipler tamamen kopmuş. Köpeğin en değer verdiği kemik, sabahleyin Kedi'nin yastığının tam altında çıkmış! Köpek öfkeyle havlamış, Kedi ise şaşkınlıktan ne diyeceğini bilememiş.\n\nOrmanda artık huzurdan eser kalmamış. Herkes birbirine şüpheyle bakıyor, "Kim bozdu bu düzeni?" diye fısıldaşıyormuş. Rüzgarın sürüklediği küçücük bir kuş tüyünden başka hiçbir ipucu yokmuş.`},
+{img:'orman-sakinleri-12.png', text:`Ormandaki Soğuk Sessizlik\n\nGünler günleri kovalamış, ormanın o eski neşesinden eser kalmamış. Bilge Kaplumbağa, uzun bir uykudan uyanır gibi kabuğundan kafasını yavaşça dışarı çıkarmış. "Hımm," diye mırıldanmış kendi kendine, "Sonbahar gelmiş, artık serin rüzgarlar kapıda."\n\nEtrafta hiç kimse olmadığını, kuş seslerinin kesildiğini görünce, herkesin soğuktan yuvasına çekildiğini sanmış. Tam o sırada, yüksek bir ağacın tepesinde bir gölge, bir kuş silüeti görür gibi olmuş. Ama o bakınca gölge bir anda saklanıvermiş.\n\n"Herhalde yaşlandım, hayal görüyorum," diye düşünerek ağır adımlarla ormanın içine doğru tın tın yürümeye devam etmiş.`},
+{img:'orman-sakinleri-13.png', text:`Sessizlik Değil, Büyük Bir Gerginlik\n\nAncak Kaplumbağa yürüdükçe tuhaf bir şeyler olduğunu fark etmiş. Bu sessizlik, sonbaharla gelen soğukların sessizliği değilmiş. Her yer darmadağınıkmış; Arıların kovanı delinmiş, Ayı'nın mağara kapısı taşlarla dolmuş, Sincap ise ağacının dalında kendi kendine söylenip duruyormuş.\n\nBilge Kaplumbağa, eskiden harıl harıl çalışan Karıncaların yanına varmış. Bakmış ki onlar da neşeyle yiyecek taşımıyor, yüzleri asık bir şekilde yuvalarının önünde bekliyorlarmış.\n\n"Selam olsun Karıncalar," demiş Bilge Kaplumbağa. "Nedir bu ormandaki dilsiz sessizlik?"`},
+{img:'orman-sakinleri-14.png', text:`Neden Kimsenin Sesi Soluğu Çıkmıyor?\n\nKarıncalar başlarını sallayarak cevap vermişler: "Haberin yok mu Bilge Kaplumbağa? Ormanda huzur diye bir şey kalmadı! Arılar Ayı'ya düşman oldu, Sincap Tavşan'ı suçluyor, Kedi ile Köpek birbirine girdi. Kimse kimseye güvenmiyor."\n\nBilge Kaplumbağa derin bir düşünceye dalmış. Birden ağacın tepesinde gördüğü o kaçan gölge tekrar aklına gelmiş. "Acaba..." diye geçirmiş içinden.\n\nOrmandaki bu küskünlüğün böyle gitmeyeceğini anlamış. Hemen bir plan yapmış ve tüm hayvanları orman meydanına çağırmış. Kimse gelmek istememiş ama "Bilge Kaplumbağa çağırıyorsa önemli bir şey vardır," diyerek birer birer yuvalarından çıkmışlar.`},
+{img:'orman-sakinleri-15.png', text:`Ormandaki Büyük Oyun\n\nMeydana geldiklerinde bir de ne görsünler! Kaplumbağa oraya çeşit çeşit meyveler, taze otlar ve ballar dizdirmiş. Herkese bir görev vermiş; Filler su taşıyor, Maymunlar meyveleri paylaştırıyor, Tavşanlar ve Sincaplar yan yana oturmuş fındık kırıyormuş. Herkes sanki o kavgalar hiç yaşanmamış gibi yeniden gülmeye başlamış.\n\nAğaçların en koyu gölgesinde saklanan Minik Serçe, aşağıyı izlerken donup kalmış. "Nasıl olur?" diye geçirmiş içinden. "Ben onları birbirine düşürmüştüm, şimdi nasıl böyle el ele eğleniyorlar?"\n\nSerçe bu neşeli tabloya bakarken hüzünlenmiş; aslında o da kalabalığın içinde olmak, onlarla birlikte gülmek istiyormuş. Kendi düşüncelerine öyle dalmış ki, arkasından sessizce yaklaşan Bilge Kaplumbağa'yı hiç fark etmemiş.`},
+{img:'orman-sakinleri-16.png', text:`Karşılaşma ve Büyük Yüzleşme\n\nBilge Kaplumbağa, Serçe'nin yanına gelmiş ve yumuşak bir sesle, "Eskisi gibi neşeliler, değil mi?" demiş. Serçe korkuyla yerinden sıçramış ama artık kaçacak yer kalmadığını anlamış. Kaplumbağa onu meydanın tam ortasına götürmüş.\n\nHayvanlar Serçe'yi görünce bir anda susmuşlar. Sincap öfkeyle: "Cevizlerimi sen mi sakladın?" Arılar: "Ballarımızı sen mi döktün?" Hepsi bir ağızdan Serçe'ye kızmaya başlamışlar.\n\nMinik Serçe, dolan gözleriyle hepsine bakmış ve titreyen bir sesle konuşmuş: "Evet, ben yaptım... Ama beni buraya sığdırmadınız. 'Sana burada bir dal bile yok' dediniz. Ben de o kadar üzüldüm, o kadar kırıldım ki, size ne kadar yalnız hissettiğimi böyle anlatmak istedim."`},
+{img:'orman-sakinleri-17.png', text:`"Orman Hepimizindir"\n\nBilge Kaplumbağa tüm hayvanları etrafına toplamış ve o unutulmaz konuşmasını yapmış: "Bakın orman sakinleri! Bu koca orman ne Sincabındır, ne Filindir, ne de Arınındır. Orman hepimizindir! Birimiz eksik olursak, orman hep biraz yarım kalır. Kimse kimseden üstün değildir, burası hepimizin evidir."\n\nBu bilge sözler meydandaki herkesin kalbine dokunmuş. Sincap, Tavşan'a bakmış; Kedi, Köpek'in patisini sıkmış. Önce onlar Serçe'den, sonra Serçe onlardan özür dilemiş. Herkes yaptığı hataları anlamış.\n\nO günden sonra ormanda mevsim ne olursa olsun dostluk ateşi hiç sönmemiş. Minik Serçe de artık her dönüşünde en sıcak dostluklarla karşılanmış. Gökten üç elma düşmüş; biri bu masalı anlatana, biri dinleyenlere, biri de paylaşmayı bilen tüm çocuklara...`},
+{img:'orman-sakinleri-18.png', text:`Hikâyemiz burada mutlu sonla bitiyor. Unutmayalım: Orman hepimizindir, sınıfımız da hepimizindir!`}
+];
+
+let current = 0;
+const pageImg = document.getElementById('pageImg');
+const pageBadge = document.getElementById('pageBadge');
+const progressFill = document.getElementById('progressFill');
+const textPanel = document.getElementById('textPanel');
+const toggleTextBtn = document.getElementById('toggleTextBtn');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const listenBtn = document.getElementById('listenBtn');
+const bookCard = document.getElementById('bookCard');
+const activitySection = document.getElementById('activitySection');
+const restartBtn = document.getElementById('restartBtn');
+
+function render(){
+  const p = pages[current];
+  pageImg.style.opacity = 0;
+  const tempImg = new Image();
+  tempImg.onload = () => { pageImg.src = p.img; pageImg.style.opacity = 1; };
+  tempImg.src = p.img;
+  pageImg.alt = `Orman Sakinleri - Sayfa ${current+1}`;
+  pageBadge.textContent = `${current+1} / ${pages.length}`;
+  progressFill.style.width = `${((current+1)/pages.length)*100}%`;
+  textPanel.innerHTML = p.text.split('\n\n').map(par => `<p>${par.replace(/\n/g,'<br>')}</p>`).join('');
+  prevBtn.disabled = current === 0;
+  nextBtn.textContent = current === pages.length - 1 ? 'Bitti ✔' : 'Sonraki ▶';
+  if ('speechSynthesis' in window){ window.speechSynthesis.cancel(); }
+  listenBtn.classList.remove('speaking');
+  if (pages[current+1]){ const im = new Image(); im.src = pages[current+1].img; }
+}
+
+function goNext(){
+  if (current < pages.length - 1){ current++; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+  else { activitySection.scrollIntoView({behavior:'smooth'}); }
+}
+function goPrev(){
+  if (current > 0){ current--; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+}
+
+prevBtn.addEventListener('click', goPrev);
+nextBtn.addEventListener('click', goNext);
+
+toggleTextBtn.addEventListener('click', () => {
+  textPanel.classList.toggle('open');
+  toggleTextBtn.textContent = textPanel.classList.contains('open') ? '🙈 Metni Gizle' : '📖 Metni Oku';
+});
+
+restartBtn.addEventListener('click', () => {
+  current = 0; render(); window.scrollTo({top:0,behavior:'smooth'});
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') goNext();
+  if (e.key === 'ArrowLeft') goPrev();
+});
+
+let touchStartX = 0;
+bookCard.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, {passive:true});
+bookCard.addEventListener('touchend', (e) => {
+  const dx = e.changedTouches[0].screenX - touchStartX;
+  if (Math.abs(dx) > 40){ dx < 0 ? goNext() : goPrev(); }
+}, {passive:true});
+
+if ('speechSynthesis' in window){
+  listenBtn.addEventListener('click', () => {
+    if (window.speechSynthesis.speaking){
+      window.speechSynthesis.cancel();
+      listenBtn.classList.remove('speaking');
+      return;
+    }
+    const text = pages[current].text.replace(/\n+/g, ' ');
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'tr-TR';
+    utter.rate = 0.95;
+    const voices = window.speechSynthesis.getVoices();
+    const trVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('tr'));
+    if (trVoice) utter.voice = trVoice;
+    utter.onend = () => listenBtn.classList.remove('speaking');
+    window.speechSynthesis.speak(utter);
+    listenBtn.classList.add('speaking');
+  });
+} else {
+  listenBtn.style.display = 'none';
+}
+
+render();
+</script>
+</body>
+</html>
