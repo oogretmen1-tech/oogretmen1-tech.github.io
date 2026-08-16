@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Bırak Son Kez Kötüler Kazansın | Dijital Öğretmen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-1:#0b0f1e;
+  --navy-2:#161d38;
+  --navy-3:#212a4d;
+  --gold:#e3b04b;
+  --gold-soft:#f3d896;
+  --red:#e2504f;
+  --red-deep:#b5342f;
+  --ink:#f1f0f6;
+  --ink-dim:#aeb4d1;
+  --line:rgba(255,255,255,.12);
+  --accent:var(--red);
+  --accent-soft:rgba(226,80,79,.16);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overscroll-behavior:none;}
+body{
+  font-family:"Nunito",sans-serif;
+  background:
+    radial-gradient(900px 600px at 12% -8%, #2a3462 0%, transparent 60%),
+    radial-gradient(800px 600px at 108% 108%, #34204a 0%, transparent 55%),
+    linear-gradient(180deg,var(--navy-1),var(--navy-2));
+  background-attachment:fixed;
+  color:var(--ink);
+  height:100vh;width:100vw;overflow:hidden;
+  -webkit-tap-highlight-color:transparent;
+  transition:background 1s ease;
+}
+body.warm{ --accent:var(--gold); --accent-soft:rgba(227,176,75,.18); }
+
+/* ===== TOP BAR ===== */
+.topbar{
+  position:fixed; top:0; left:0; right:0; z-index:50;
+  display:flex; align-items:center; gap:14px;
+  padding:14px 18px 10px;
+}
+.progress-track{
+  flex:1; height:3px; background:rgba(255,255,255,.14); border-radius:3px; overflow:hidden;
+}
+.progress-fill{
+  height:100%; width:4.16%;
+  background:linear-gradient(90deg,var(--red),var(--gold));
+  transition:width .45s cubic-bezier(.65,0,.35,1);
+  border-radius:3px;
+}
+.topbar .counter{
+  font-size:.72rem; font-weight:800; letter-spacing:.04em; color:var(--ink-dim);
+  white-space:nowrap; min-width:44px; text-align:right;
+}
+.close-btn{
+  display:flex; align-items:center; justify-content:center;
+  width:32px; height:32px; border-radius:50%;
+  background:rgba(255,255,255,.08); border:1px solid var(--line);
+  color:var(--ink-dim); text-decoration:none; font-size:.95rem;
+  flex-shrink:0; transition:all .2s;
+}
+.close-btn:hover{ background:rgba(255,255,255,.16); color:#fff; }
+
+/* ===== STAGE ===== */
+.stage{
+  position:relative; height:100vh; width:100vw;
+  display:flex; align-items:center; justify-content:center;
+  padding:64px 0 56px;
+  touch-action:pan-y;
+}
+.page{
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  padding:20px 22px;
+  opacity:0; pointer-events:none;
+  transform:translateX(24px) scale(.985);
+  transition:opacity .5s ease, transform .5s cubic-bezier(.22,.8,.32,1);
+}
+.page.active{ opacity:1; pointer-events:auto; transform:translateX(0) scale(1); }
+.page.leaving-left{ transform:translateX(-24px) scale(.985); }
+
+.page-inner{
+  position:relative; z-index:2;
+  max-width:520px; width:100%;
+  text-align:center;
+}
+.icon-wrap{
+  position:absolute; z-index:1; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  pointer-events:none;
+}
+.icon-wrap svg{
+  width:min(78vw,420px); height:min(78vw,420px);
+  fill:none; stroke:var(--accent); stroke-width:1.4; opacity:.10;
+  transition:stroke 1s ease;
+}
+
+.kicker{
+  font-size:.72rem; font-weight:800; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--accent); margin-bottom:14px; transition:color 1s ease;
+}
+.chapter-title{
+  font-family:"Anton",sans-serif; font-weight:400; text-transform:uppercase;
+  font-size:clamp(1.9rem,7.5vw,2.7rem); line-height:1.05; letter-spacing:.01em;
+  margin-bottom:22px; color:#fff;
+}
+.para{
+  font-size:1.02rem; line-height:1.75; color:var(--ink-dim);
+  margin-bottom:16px; text-align:left;
+}
+.para:last-child{ margin-bottom:0; }
+.quote{
+  font-family:"Nunito",sans-serif; font-style:italic; font-weight:600;
+  font-size:1.12rem; line-height:1.6; color:var(--ink);
+  border-left:3px solid var(--accent); padding:2px 0 2px 16px;
+  margin:18px 0; text-align:left; transition:border-color 1s ease;
+}
+.note{
+  margin-top:26px; padding:16px 18px; border-radius:14px;
+  background:rgba(227,176,75,.09); border:1px solid rgba(227,176,75,.28);
+  text-align:left; font-size:.9rem; line-height:1.6; color:var(--gold-soft);
+}
+.note b{ display:block; font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
+
+/* ---- COVER ---- */
+.page.cover .page-inner{ max-width:440px; }
+.cover-kicker{ font-size:.7rem; letter-spacing:.3em; text-transform:uppercase; color:var(--red); margin-bottom:18px; font-weight:800; }
+.cover-title{
+  font-family:"Anton",sans-serif; text-transform:uppercase;
+  font-size:clamp(2.1rem,10vw,3.1rem); line-height:1.08; color:#fff;
+  text-shadow:0 0 40px rgba(226,80,79,.35);
+}
+.cover-title span{ color:var(--red); }
+.cover-sub{ margin-top:22px; font-size:.95rem; color:var(--ink-dim); }
+.cover-author{ margin-top:6px; font-size:.85rem; font-weight:800; letter-spacing:.06em; color:var(--gold-soft); }
+.cover-btn{
+  margin-top:38px; display:inline-flex; align-items:center; gap:10px;
+  background:linear-gradient(135deg,var(--red),var(--red-deep)); color:#fff;
+  font-family:"Nunito",sans-serif; font-weight:800; font-size:.92rem;
+  padding:14px 30px; border-radius:30px; border:none; cursor:pointer;
+  box-shadow:0 10px 26px rgba(226,80,79,.35);
+}
+
+/* ---- TITLE / EPIGRAPH PAGE ---- */
+.page.titlepage .chapter-title{ font-size:clamp(1.7rem,6.6vw,2.3rem); }
+.epigraph{
+  font-style:italic; font-weight:700; font-size:1.15rem; line-height:1.55;
+  color:var(--gold-soft); margin:22px 0 26px;
+}
+.epigraph::before,.epigraph::after{ content:'"'; color:var(--gold); }
+
+/* ---- NAV ARROWS (desktop) ---- */
+.arrow{
+  position:fixed; top:50%; transform:translateY(-50%); z-index:40;
+  width:42px; height:42px; border-radius:50%;
+  background:rgba(255,255,255,.06); border:1px solid var(--line);
+  color:var(--ink-dim); display:flex; align-items:center; justify-content:center;
+  cursor:pointer; font-size:1.1rem; transition:all .2s;
+}
+.arrow:hover{ background:rgba(255,255,255,.14); color:#fff; }
+.arrow.left{ left:14px; } .arrow.right{ right:14px; }
+.arrow.hidden{ opacity:0; pointer-events:none; }
+@media (max-width:760px){ .arrow{ display:none; } }
+
+/* ---- SWIPE HINT ---- */
+.swipe-hint{
+  position:fixed; bottom:16px; left:0; right:0; text-align:center; z-index:40;
+  font-size:.72rem; color:var(--ink-dim); letter-spacing:.05em;
+  opacity:0; transition:opacity .6s ease; pointer-events:none;
+}
+.swipe-hint.show{ opacity:.75; }
+
+/* tap zones */
+.tapzone{ position:absolute; top:0; bottom:0; width:26%; z-index:5; }
+.tapzone.l{ left:0; } .tapzone.r{ right:0; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="close-btn" href="index.html?page=hikaye" title="Ana sayfaya dön">✕</a>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="counter" id="counter">1 / 24</div>
+</div>
+
+<div class="stage" id="stage">
+  <div class="tapzone l" id="tapLeft"></div>
+  <div class="tapzone r" id="tapRight"></div>
+  <div class="arrow left" id="btnPrev">‹</div>
+  <div class="arrow right" id="btnNext">›</div>
+</div>
+
+<div class="swipe-hint" id="swipeHint">kaydırarak ya da oklarla devam et →</div>
+
+<script>
+const ICONS = {
+  medal:`<circle cx="50" cy="62" r="22"/><path d="M50 40 L50 82 M34 62 L66 62"/><path d="M37 16 L46 48 L30 58 Z"/><path d="M63 16 L54 48 L70 58 Z"/>`,
+  mask:`<ellipse cx="39" cy="50" rx="25" ry="33"/><ellipse cx="63" cy="55" rx="25" ry="33"/><path d="M27 44 q6 -7 12 0 M49 49 q6 -7 12 0"/><path d="M29 66 q10 9 20 0"/>`,
+  crack:`<path d="M50 50 L18 18 M50 50 L12 54 M50 50 L28 88 M50 50 L68 92 M50 50 L90 58 M50 50 L84 16 M50 50 L50 8 M50 50 L8 34" stroke-linecap="round"/>`,
+  footprints:`<ellipse cx="34" cy="28" rx="11" ry="17" transform="rotate(-14 34 28)"/><ellipse cx="66" cy="66" rx="11" ry="17" transform="rotate(14 66 66)"/>`,
+  hand:`<path d="M30 82 L30 46 Q30 36 38 36 Q46 36 46 46 L46 56 M46 46 Q46 36 54 36 Q62 36 62 46 L62 59 M62 46 Q62 38 70 38 Q78 38 78 48 L78 76 Q78 89 62 89 L45 89 Q30 89 30 76 Z" stroke-linecap="round" stroke-linejoin="round"/>`,
+  hourglass:`<path d="M24 14 H76 L52 50 L76 86 H24 L48 50 Z" stroke-linejoin="round"/><line x1="24" y1="14" x2="76" y2="14"/><line x1="24" y1="86" x2="76" y2="86"/>`,
+  seed:`<ellipse cx="50" cy="70" rx="10" ry="15"/><path d="M50 55 Q50 30 50 14"/><path d="M50 30 Q34 24 28 10"/><path d="M50 42 Q66 36 72 22"/>`,
+  heart:`<path d="M50 87 C18 60 8 39 8 24 C8 8 24 3 35 11 C43 16 50 27 50 27 C50 27 57 16 65 11 C76 3 92 8 92 24 C92 39 82 60 50 87 Z" stroke-linejoin="round"/>`,
+  scale:`<line x1="50" y1="8" x2="50" y2="88"/><line x1="18" y1="24" x2="82" y2="24"/><path d="M18 24 L8 50 Q18 61 28 50 Z" stroke-linejoin="round"/><path d="M82 24 L72 50 Q82 61 92 50 Z" stroke-linejoin="round"/><line x1="33" y1="92" x2="67" y2="92"/>`,
+  book:`<path d="M50 22 C39 13 18 13 10 20 V78 C19 71 39 71 50 80 C61 71 81 71 90 78 V20 C82 13 61 13 50 22 Z" stroke-linejoin="round"/><line x1="50" y1="22" x2="50" y2="80"/>`,
+  tear:`<path d="M50 8 C67 34 80 52 80 69 C80 87 66 96 50 96 C34 96 20 87 20 69 C20 52 33 34 50 8 Z" stroke-linejoin="round"/>`
+};
+
+const PAGES = [
+{type:'cover', kicker:'BİR HİKÂYE', title:['BIRAK SON KEZ','<span>KÖTÜLER</span> KAZANSIN'], sub:'Kaybederken bile kazanılabilecek bir şeyler vardır.', author:'Hasan Tutuş', icon:'medal', mood:'tense'},
+
+{type:'titlepage', title:'KAZANAN KÖTÜLER,<br>KAYBEDEN İYİLER', epigraph:'Bazen kaybetmek, gerçekten kazanmanın ilk adımıdır.', author:'Hasan Tutuş', icon:'crack', mood:'tense'},
+
+{type:'text', kicker:'İTHAF', icon:'book', mood:'tense', paragraphs:[
+  {t:'Bu kitap, duygularını kabul etmeye ve anlamaya çalışan tüm çocuklara adanmıştır.'},
+  {t:'Hayat her zaman masallardaki gibi bitmez. Bazen iyiler kazanmaz, bazen kötüler kazanır. Her kayıp bir ders, her ders bir hazine olabilir. Ve bazen kaybederken elde ettiklerin, kazanarak elde edeceklerinden daha kıymetlidir.'}
+]},
+
+{type:'chapter', title:'ÖNSÖZ', icon:'book', mood:'tense', paragraphs:[
+  {t:'Sevgili küçük okuyucu,'},
+  {t:'Hepimiz zaman zaman kaybederiz; bu seni kötü yapmaz. Kaybetmek, bazen en kıymetli dersleri getirir.'},
+  {t:'Haksızlığa uğrayabilirsin. Birileri sana kötülük edebilir. Hak etmediğin bir şekilde kaybedebilirsin. Öfke, üzüntü, hayal kırıklığı hissetmen çok doğal.'},
+  {t:'Asıl güzellik ise şurada başlar: O anı yaşadığında bir şeyler öğrenirsin. Kalbinde bir şeyler değişir. Belki merhamet, belki sabır, belki de insanların gerçek yüzünü görme gücünü kazanırsın.'},
+  {t:'İşte bu, hayatın sana verdiği en büyük hazine.'},
+  {q:'Haydi, şimdi Efe\u2019nin hikâyesini birlikte okuyalım…'}
+]},
+
+{type:'chapter', title:'YARIŞMA GÜNÜ', icon:'medal', mood:'tense', paragraphs:[
+  {q:'Efe sabah okula giderken cebindeki mavi taşı okşadı. Büyükannesi ona bunun özel olduğunu söylemişti: “Bu taş seni korur. Asıl güç ise senin içinde. Bazen en büyük güç sabretmektir.”'},
+  {t:'Bugün okulda büyük yarışma vardı. Kim en hızlı koşar, kim en yükseğe atlar, kim en uzağa zıplar… Kazanan büyük altın madalyayı alacak ve herkes onu alkışlayacaktı.'}
+]},
+
+{type:'text', icon:'mask', mood:'tense', paragraphs:[
+  {t:'Efe derin bir nefes aldı; heyecan ve korku iç içeydi. “Ya kaybedersem?” diye sordu kendi kendine. Karnında hafif bir çarpıntı, sanki kusacak gibiydi.'},
+  {t:'Sınıfa girdiğinde köşede Kerem\u2019i gördü. Kerem hem güçlüydü hem de kaba; hep başkalarının emeklerini boşa çıkarırdı, oyunlarda hile yapar ve yakalanınca “Ben yapmadım!” derdi.'}
+]},
+
+{type:'text', icon:'mask', mood:'tense', paragraphs:[
+  {q:'Kerem birden ayağa kalktı, yüksek sesle, “Bugün ben kazanacağım, herkes beni alkışlasın!” dedi.'},
+  {t:'Efe sustu. O sadece sakin ve kararlı bir şekilde en iyisini yapmayı düşünüyordu.'}
+]},
+
+{type:'chapter', title:'YARIŞMA BAŞLADI', icon:'footprints', mood:'tense', paragraphs:[
+  {t:'Efe hazırlandı; nefesini tuttu, bekledi. Düdük sesiyle birlikte hızlıca koşmaya başladı.'},
+  {t:'Yarış sırasında Kerem, Efe\u2019nin koluna dokundu. Efe sendeledi ama toparlandı. Önde bitiren Kerem oldu.'}
+]},
+
+{type:'text', icon:'mask', mood:'tense', paragraphs:[
+  {q:'Kerem “Kazandım!” diye bağırdı.'},
+  {t:'Efe, Kerem\u2019in yaptığını söylemek istediyse de sustu. Sinirinden ağlamak üzereydi ama bastırdı. Kerem\u2019in hile yaptığı açıktı; kimse görmemişti. “Öğretmen nasıl görmedi?” diye geçti aklından. İçindeki ses “Git ve söyle” dedi; Efe büyükannesinin öğüdünü hatırladı: “Sabretmek bazen en güçlü seçenektir.”'}
+]},
+
+{type:'text', icon:'footprints', mood:'tense', paragraphs:[
+  {t:'Sıradaki yarış uzun atlamaydı. Efe tüm gücünü topladı ve atladı — iyi bir atlayıştı. Kural hatası yoktu, sıra Kerem\u2019e gelmişti. Kerem, sıçrama tahtasındaki çizgiyi fark ettirmeden aştı ve Efe\u2019nin çok önündeki alana indi. Bu yarışı Kerem kazandı.'},
+  {t:'Efe\u2019nin içindeki acı daha da büyüdü. Şimdi sadece üzgün değildi, aynı zamanda öfkeliydi de. Elleri yumruk oldu. Dişlerini sıktı.'},
+  {q:'“Neden ben bu kadar uğraşıyorum?” diye düşündü. “Nasılsa hile yapan kazanıyor…”'},
+  {t:'Öğle teneffüsünde, en iyi arkadaşı Zeynep yanına geldi.'}
+]},
+
+{type:'text', icon:'scale', mood:'tense', paragraphs:[
+  {q:'“Üzgün görünüyorsun,” dedi Zeynep.'},
+  {q:'Efe başını salladı. “Kerem hile yapıyor ama kimse fark etmiyor. Elimden geleni yapıyorum, yine de kaybediyorum. Bu adil değil.”'},
+  {q:'Zeynep Efe\u2019nin eline dokundu. “Biliyorum, peki sence Kerem şimdi gerçekten mutlu mudur?”'}
+]},
+
+{type:'text', icon:'scale', mood:'tense', paragraphs:[
+  {q:'Efe şaşırdı. “Ne demek istiyorsun?”'},
+  {q:'“Bak ona,” dedi Zeynep. “Gerçekten mutlu mu yoksa sadece kazanmanın peşinde mi?”'},
+  {t:'Efe, Kerem\u2019e baktı. Madalya elindeydi ama sevinç yoktu; yerine ince bir kaygı vardı.'},
+  {q:'Zeynep usulca, “Belki kaybederken bile bir şey kazanırsın,” dedi. “Ama o, kazanırken bile kaybediyor.”'}
+]},
+
+{type:'chapter', title:'SON YARIŞMA', icon:'footprints', mood:'tense', paragraphs:[
+  {t:'Öğleden sonra son yarışma vardı: Engelli koşu. Bu en zor yarışmaydı ve kazanan, büyük altın madalyayı alacaktı.'},
+  {t:'Efe yorgundu. İçi hâlâ acıyordu. Ama yine de yarışmak istedi.'},
+  {t:'Düdük çaldığında, koşmaya başladı. İlk engeli atladı. İkinci engeli atladı. Üçüncüsünde sendeledi ama düşmedi.'},
+  {t:'Ama sonra, tam dördüncü engelde ayağı takıldı. Yere düştü. Dizinde acı hissetti. Kalktı ama artık çok gerideydi.'}
+]},
+
+{type:'text', icon:'crack', mood:'tense', paragraphs:[
+  {t:'Kerem önde koşuyordu. Aniden bir engel çıkınca tökezledi ve düştü.'},
+  {q:'Efe\u2019nin içinde bir ses belirdi: “Git — şimdi kazanabilirsin!”'},
+  {t:'Ama Efe bakınca gördü ki Kerem\u2019in ayak bileği kötü dönmüştü. Acıyla yerde oturuyordu.'},
+  {t:'Efe durdu. Koşmaya devam edip yarışı kazanmak mümkün olabilirdi. Ama…'}
+]},
+
+{type:'text', icon:'hand', mood:'tense', paragraphs:[
+  {t:'O anda Efe anladı: bu, sadece hız yarışı değildi; sınavdı. Eğer Kerem\u2019i bırakıp gitseydi, belki kazanacaktı ama kendinden bir parça kaybedecekti. Efe dönüp Kerem\u2019in yanına gitti.'},
+  {q:'“Kaldır beni!” Kerem seslendi. “Kazanmam gerek!”'},
+  {t:'Efe elini uzattı ve Kerem\u2019i kaldırdı. Birlikte ağır adımlarla çizgiye doğru ilerlediler. Ama diğer çocuklar çoktan çizgiyi geçmişti — yarışma sona ermişti.'}
+]},
+
+{type:'chapter', title:'KAYBETMEK', icon:'crack', mood:'tense', paragraphs:[
+  {t:'Efe ve Kerem son kalanlardandı. Madalya uçup gitti. Alkışlar dağıldı. Her şey bir anda yok oldu.'},
+  {t:'Efe\u2019nin içinde bir boşluk oluştu. Göğsünde ağır bir sancı vardı; gözleri ıslanıyordu. Tutamadı kendini.'},
+  {q:'“Ben kaybettim,” dedi usulca. “Her şeyi kaybettim.”'}
+]},
+
+{type:'text', icon:'tear', mood:'tense', paragraphs:[
+  {t:'Kerem hiçbir şey söylemedi. Sadece topallayarak uzaklaştı; teşekkür bile etmedi.'},
+  {t:'Efe köşeye çekildi, oturdu ve ağlamaya başladı. Hayal kırıklığı, öfke, üzüntü… hepsi birer birer dışarı dökülüyordu.'},
+  {t:'Ağladıkça fark etti: içindeki ağırlık yavaşça hafifliyordu. Gözyaşları sadece acıyı değil, başka şeyleri de temizliyordu.'}
+]},
+
+{type:'chapter', title:'BİR YIL SONRA', icon:'hourglass', mood:'warm', paragraphs:[
+  {t:'Yıl geçti. Kerem kazandı; madalya ve alkışlar onun olmuştu. Fakat bir yıl sonra bile aynıydı: hile, kabalık ve yalnızlık onunlaydı.'},
+  {t:'Efe ise kaybettiğinde öğrendi. Merhamet göstermenin ve doğrulukla yaşamanın verdiği sükûnet, ona güven ve sevgi getirmişti. Arkadaşları yanında, öğretmenleri takdirinde, ailesi gururla bakıyordu.'}
+]},
+
+{type:'text', icon:'heart', mood:'warm', paragraphs:[
+  {t:'Ama en önemlisi, Efe kendisiyle barış içindeydi. Gece yatağına gittiğinde, başını yastığa koyduğunda, içi huzurluydu.'},
+  {t:'Bir gün, okulda yeni bir çocuk geldi. Adı Can\u2019dı ve çok utangaçtı. Kimse onunla konuşmuyordu.'},
+  {q:'Kerem, Can\u2019la alay etti. “Bak, yeni çocuk ne kadar garip!” dedi.'},
+  {q:'Ama Efe, Can\u2019ın yanına gitti. “Merhaba,” dedi. “Ben Efe. Seninle arkadaş olmak ister misin?”'},
+  {t:'O gün, Efe ve Can arkadaş oldular. Ve Can, Efe\u2019ye bir şey söyledi:'},
+  {q:'“Sen çok iyi birisin. Keşke herkes senin gibi olsa.”'}
+]},
+
+{type:'text', icon:'seed', mood:'warm', paragraphs:[
+  {q:'Kerem başını eğdi. “Özür dilerim.”'},
+  {t:'Ve o andan itibaren, Kerem yavaş yavaş değişmeye başladı. Hile yapmayı bıraktı. Başkalarına karşı daha nazik olmaya çalıştı. Zordu. Çok zordu. Ama Efe, ona sabırla yardım etti.'}
+]},
+
+{type:'text', icon:'hand', mood:'warm', paragraphs:[
+  {t:'O gün Kerem, evine ağlayarak döndü. İçinde bir şeyler kırılmış, sessiz bir boşluk kalmıştı. Ama bu kırılma, beklenmedik bir başlangıca dönüşecekti.'},
+  {t:'Ertesi sabah Kerem, Efe\u2019nin kapısına gitti.'},
+  {q:'“Efe,” dedi. Sesi kırılgandı. “O yarışmada... sana hile yaptım. Sen biliyordun ama kimseye söylemedin. Neden?”'},
+  {q:'Efe gözlerini Kerem\u2019e dikti. “Çünkü ben seni cezalandırmaya çalışmıyordum,” dedi sakin bir sesle. “Hayat zaten insanların yaptıklarıyla karşılık verir. Benim görevim, sadece doğru olanı söylemekti.”'}
+]},
+
+{type:'chapter', title:'KEREM\u2019İN DEĞİŞİMİ', icon:'seed', mood:'warm', paragraphs:[
+  {t:'Zamanla Kerem yalnızlaştığını fark etti. Herkes Efe\u2019yi seviyor, Kerem\u2019den ise uzak duruyordu.'},
+  {t:'Yine hile yaparken yakalandı; öğretmeni onu sınıfta bıraktı.'},
+  {q:'“Kerem,” dedi öğretmen, “burada kal.”'},
+  {q:'Sınıfta öğretmen konuştu: “Senin yeteneğin var, ama hile seni baltalıyor. Güven bir kere sarsılırsa, geri kazanmak zor olur.”'}
+]},
+
+{type:'chapter', title:'KAPANIŞ MESAJI', icon:'book', mood:'warm', paragraphs:[
+  {t:'Sevgili okuyucu,'},
+  {t:'Efe gibi bazen sen de kaybedebilirsin. Bu, normaldir — kaybetmek kötü değildir.'},
+  {t:'Unutma: Sana haksızlık yapıldığında aynı şekilde karşılık vermek zorunda değilsin. Hayat, insanların hak ettiğini gösterir. Senin görevin doğru olanı yapmaktır.'},
+  {t:'Doğru olanı seçtiğinde kazandığın şeyler farklıdır: İç huzur, sabır, merhamet ve önemli bir ders.'},
+  {t:'Bu ders, sana asıl değeri verir. Kötülüğe kötülükle değil, iyilikle cevap vermeyi öğrendiğinde gerçek güç sende olur.'},
+  {q:'Bazen en güzel zafer, kaybettiğin anda nasıl biri olduğundur. O kaybediş, bazen en büyük hazinedir.'}
+]},
+
+{type:'chapter', title:'HİKÂYENİN ÖZETİ', icon:'book', mood:'warm', last:true, paragraphs:[
+  {t:'Efe dürüst, yardımsever ve cesur bir çocuktur. Okulda büyük bir yarışma vardır ve Kerem, hile yaparak kazanır. Efe kaybeder ve içindeki acıyı yaşar.'},
+  {t:'Ama Efe, kötülüğe kötülükle değil, iyilikle cevap vermeyi seçer. Sabreder, bekler. Ve zamanla, hayat Kerem\u2019e dersini verir.'},
+  {t:'Bir yıl sonra, Kerem değişir. Efe\u2019nin sabrı ve merhameti, ona en büyük dersi verir. Ve Efe, kaybederken kazandığı hazinenin değerini anlar: Sabır, merhamet ve huzur.'},
+  {t:'Bu hikâye, çocuklara kötülüğe karşı mücadele etmenin en güçlü yolunun, iyilik ve sabır olduğunu öğretir.'},
+  {q:'“Kaybederken bile kazanabileceğin en büyük hazine, senin içindeki iyiliktir.”'},
+  {note:'Çocuklarınızla bu kitabı okuduktan sonra, duygularını konuşun. Onlara sorun: “Sen Efe\u2019nin yerinde olsaydın ne yapardın? Sabretmek kolay mı?” Duygusal farkındalık, konuşarak başlar.'}
+]}
+];
+
+const total = PAGES.length;
+let current = 0;
+const stage = document.getElementById('stage');
+const progressFill = document.getElementById('progressFill');
+const counter = document.getElementById('counter');
+const swipeHint = document.getElementById('swipeHint');
+
+function iconSVG(name){
+  return `<svg viewBox="0 0 100 100">${ICONS[name]||''}</svg>`;
+}
+
+function buildPageEl(p, idx){
+  const el = document.createElement('div');
+  el.className = 'page';
+  el.dataset.idx = idx;
+
+  let inner = '';
+  if(p.icon){ inner += `<div class="icon-wrap">${iconSVG(p.icon)}</div>`; }
+
+  if(p.type === 'cover'){
+    inner += `<div class="page-inner">
+      <div class="cover-kicker">${p.kicker}</div>
+      <div class="cover-title">${p.title[0]}<br>${p.title[1]}</div>
+      <div class="cover-sub">${p.sub}</div>
+      <div class="cover-author">${p.author}</div>
+      <button class="cover-btn" id="startBtn">Hikâyeyi Aç ›</button>
+    </div>`;
+  } else if(p.type === 'titlepage'){
+    inner += `<div class="page-inner">
+      <div class="chapter-title">${p.title}</div>
+      <div class="epigraph">${p.epigraph}</div>
+      <div class="cover-author">${p.author}</div>
+    </div>`;
+  } else {
+    let body = '';
+    if(p.kicker) body += `<div class="kicker">${p.kicker}</div>`;
+    if(p.title) body += `<div class="chapter-title">${p.title}</div>`;
+    (p.paragraphs||[]).forEach(seg=>{
+      if(seg.q) body += `<div class="quote">${seg.q}</div>`;
+      else if(seg.note) body += `<div class="note"><b>Ebeveynlere ve Öğretmenlere Not</b>${seg.note}</div>`;
+      else body += `<p class="para">${seg.t}</p>`;
+    });
+    inner += `<div class="page-inner">${body}</div>`;
+  }
+  el.innerHTML = inner;
+  return el;
+}
+
+function render(idx, dir){
+  stage.querySelectorAll('.page').forEach(n=>n.remove());
+  const el = buildPageEl(PAGES[idx], idx);
+  stage.appendChild(el);
+  requestAnimationFrame(()=>{ el.classList.add('active'); });
+
+  document.body.classList.toggle('warm', PAGES[idx].mood === 'warm');
+  progressFill.style.width = ((idx+1)/total*100) + '%';
+  counter.textContent = (idx+1) + ' / ' + total;
+
+  document.getElementById('btnPrev').classList.toggle('hidden', idx===0);
+  document.getElementById('btnNext').classList.toggle('hidden', idx===total-1);
+
+  if(idx===0){
+    const btn = document.getElementById('startBtn');
+    if(btn) btn.addEventListener('click', ()=>go(1));
+    swipeHint.classList.remove('show');
+    setTimeout(()=>swipeHint.classList.add('show'), 900);
+  } else {
+    swipeHint.classList.remove('show');
+  }
+}
+
+function go(step){
+  const next = current + step;
+  if(next < 0 || next >= total) return;
+  current = next;
+  render(current);
+}
+
+document.getElementById('btnPrev').addEventListener('click', ()=>go(-1));
+document.getElementById('btnNext').addEventListener('click', ()=>go(1));
+document.getElementById('tapLeft').addEventListener('click', ()=>go(-1));
+document.getElementById('tapRight').addEventListener('click', ()=>go(1));
+
+document.addEventListener('keydown', e=>{
+  if(e.key === 'ArrowRight') go(1);
+  if(e.key === 'ArrowLeft') go(-1);
+});
+
+let touchX = null;
+stage.addEventListener('touchstart', e=>{ touchX = e.touches[0].clientX; }, {passive:true});
+stage.addEventListener('touchend', e=>{
+  if(touchX===null) return;
+  const dx = e.changedTouches[0].clientX - touchX;
+  if(Math.abs(dx) > 45){ go(dx < 0 ? 1 : -1); }
+  touchX = null;
+}, {passive:true});
+
+render(0);
+</script>
+</body>
+</html>
