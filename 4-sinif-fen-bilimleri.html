@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4. Sınıf Fen Bilimleri | Konu Defteri</title>
+<style>
+  :root{
+    --primary:#1e3a5f;
+    --primary-light:#2c5282;
+    --accent:#0d9488;
+    --accent-light:#14b8a6;
+    --bg:#f1f5f9;
+    --card:#ffffff;
+    --text:#1e293b;
+    --text-light:#5b6472;
+    --border:#e2e8f0;
+    --danger:#dc2626;
+    --ok:#059669;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Segoe UI',Verdana,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.55;
+  }
+  header{
+    background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);
+    color:#fff;
+    padding:28px 18px 22px;
+    text-align:center;
+  }
+  header h1{margin:0 0 6px;font-size:1.5rem;letter-spacing:.3px;}
+  header p{margin:0;font-size:.95rem;opacity:.85;}
+
+  .tabbar{
+    display:flex;
+    overflow-x:auto;
+    gap:8px;
+    padding:14px 12px;
+    background:#fff;
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    z-index:20;
+    -webkit-overflow-scrolling:touch;
+  }
+  .tabbar::-webkit-scrollbar{height:6px;}
+  .tabbar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+  .tab-btn{
+    flex:0 0 auto;
+    border:1px solid var(--border);
+    background:#f8fafc;
+    color:var(--primary);
+    padding:9px 14px;
+    border-radius:20px;
+    font-size:.82rem;
+    font-weight:600;
+    cursor:pointer;
+    white-space:nowrap;
+    transition:.15s;
+  }
+  .tab-btn.active{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#fff;
+  }
+
+  main{max-width:820px;margin:0 auto;padding:18px 14px 60px;}
+
+  .unit{display:none;animation:fade .25s ease;}
+  .unit.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+  .unit-head{
+    background:var(--card);
+    border-radius:14px;
+    padding:18px 20px;
+    margin-bottom:16px;
+    border-left:6px solid var(--accent);
+    box-shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  .unit-eyebrow{
+    font-size:.72rem;
+    font-weight:700;
+    letter-spacing:1.5px;
+    color:var(--accent);
+    text-transform:uppercase;
+  }
+  .unit-head h2{margin:4px 0 8px;font-size:1.3rem;color:var(--primary);}
+  .unit-head p{margin:0;color:var(--text-light);font-size:.95rem;}
+
+  .section-block{
+    background:var(--card);
+    border-radius:14px;
+    padding:20px;
+    margin-bottom:16px;
+    box-shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  .section-label{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:.72rem;
+    font-weight:700;
+    letter-spacing:1.4px;
+    text-transform:uppercase;
+    color:var(--primary);
+    margin-bottom:14px;
+  }
+  .section-label .dot{
+    width:10px;height:10px;border-radius:3px;background:var(--accent);display:inline-block;
+  }
+
+  .konu-sub{margin-bottom:16px;}
+  .konu-sub:last-child{margin-bottom:0;}
+  .konu-sub h3{
+    margin:0 0 6px;
+    font-size:1.02rem;
+    color:var(--primary-light);
+    border-bottom:2px solid var(--bg);
+    padding-bottom:6px;
+  }
+  .konu-sub p{margin:0;font-size:.95rem;color:var(--text);}
+
+  figure{margin:14px 0;text-align:center;}
+  figure img{
+    width:100%;
+    max-height:280px;
+    object-fit:cover;
+    border-radius:12px;
+    display:block;
+  }
+  figcaption{
+    font-size:.78rem;
+    color:var(--text-light);
+    margin-top:6px;
+  }
+
+  /* Quiz */
+  .quiz-item{margin-bottom:18px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+  .quiz-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+  .quiz-q{font-weight:600;margin-bottom:10px;font-size:.95rem;}
+  .quiz-opts{display:grid;gap:8px;}
+  .quiz-opt{
+    text-align:left;
+    padding:10px 12px;
+    border:1.5px solid var(--border);
+    border-radius:9px;
+    background:#f8fafc;
+    cursor:pointer;
+    font-size:.9rem;
+    color:var(--text);
+    transition:.15s;
+  }
+  .quiz-opt:hover{border-color:var(--accent);}
+  .quiz-opt.correct{background:#ecfdf5;border-color:var(--ok);color:#065f46;font-weight:600;}
+  .quiz-opt.wrong{background:#fef2f2;border-color:var(--danger);color:#991b1b;}
+  .quiz-opt.disabled{pointer-events:none;opacity:.75;}
+  .quiz-explain{
+    margin-top:8px;
+    font-size:.85rem;
+    color:var(--primary-light);
+    background:#f0fdfa;
+    border-left:3px solid var(--accent);
+    padding:8px 10px;
+    border-radius:6px;
+    display:none;
+  }
+
+  /* Matching game */
+  .match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .match-col{display:flex;flex-direction:column;gap:8px;}
+  .match-card{
+    padding:10px 10px;
+    border:1.5px solid var(--border);
+    border-radius:9px;
+    background:#f8fafc;
+    font-size:.85rem;
+    cursor:pointer;
+    text-align:center;
+    transition:.15s;
+    min-height:44px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .match-card.selected{border-color:var(--accent);background:#ccfbf1;}
+  .match-card.matched{border-color:var(--ok);background:#ecfdf5;color:#065f46;font-weight:600;cursor:default;}
+  .match-card.shake{animation:shake .3s;border-color:var(--danger);}
+  @keyframes shake{25%{transform:translateX(-4px);}75%{transform:translateX(4px);}}
+  .match-status{margin-top:12px;font-size:.85rem;color:var(--text-light);text-align:center;}
+
+  /* Worksheet */
+  .ws-item{margin-bottom:14px;}
+  .ws-item p.q{font-weight:600;margin:0 0 6px;font-size:.93rem;}
+  .ws-reveal{
+    font-size:.85rem;
+    color:var(--primary);
+    background:var(--bg);
+    border-radius:8px;
+    padding:8px 10px;
+    display:none;
+  }
+  .ws-toggle{
+    border:none;background:none;color:var(--accent);font-weight:600;font-size:.82rem;
+    cursor:pointer;padding:0;
+  }
+  .ws-note{
+    margin-top:6px;font-size:.82rem;color:var(--text-light);font-style:italic;
+  }
+
+  .reset-btn{
+    display:block;margin:14px auto 0;
+    background:none;border:1.5px solid var(--border);color:var(--text-light);
+    padding:7px 14px;border-radius:8px;font-size:.8rem;cursor:pointer;
+  }
+
+  footer{text-align:center;padding:18px;color:var(--text-light);font-size:.8rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>4. Sınıf Fen Bilimleri</h1>
+  <p>Konu Anlatımı · Etkinlik · Oyun · Çalışma Kağıdı — Tüm Üniteler</p>
+</header>
+
+<div class="tabbar" id="tabbar"></div>
+
+<main id="main"></main>
+
+<footer>4. Sınıf Fen Bilimleri Konu Defteri</footer>
+
+<script>
+const UNITS = [
+{
+  no:1, id:"u1", title:"Bilime Yolculuk",
+  intro:"Bilim insanları çevrelerini merak eder, sorular sorar ve bu soruların yanıtını bulmak için düzenli adımlar izler. Bu ünitede sen de küçük bir bilim insanı gibi düşünmeyi öğreneceksin.",
+  image:{url:"https://images.pexels.com/photos/8471842/pexels-photo-8471842.jpeg?auto=compress&cs=tinysrgb&w=800",
+         caption:"Bir öğrenci büyüteç kullanarak gözlem yapıyor. (Fotoğraf: Pexels)"},
+  sections:[
+    {h:"Bilimsel Yöntem Basamakları", p:"Bir bilim insanı bir olayı incelerken belirli bir sıra izler: önce gözlem yapar, sonra “Acaba neden böyle oluyor?” diye soru sorar, bir tahminde bulunur (hipotez), bu tahminini denemek için deney yapar, deney sonucunda topladığı bilgileri değerlendirir ve bir sonuca ulaşır. Bu sıralı adımlara bilimsel yöntem denir."},
+    {h:"Duyu Organlarımızla Gözlem", p:"Gözlem yaparken beş duyu organımızı kullanırız: gözlerimizle rengi ve şekli görürüz, kulaklarımızla sesi duyarız, burnumuzla kokuyu alırız, dilimizle tadı algılarız, derimizle dokuyu ve sıcaklığı hissederiz. Doğru gözlem yapabilmek için dikkatli olmalı ve gördüklerimizi not almalıyız."},
+    {h:"Bilim İnsanının Araç Gereçleri", p:"Bilim insanları gözlemlerini daha hassas yapabilmek için çeşitli araçlar kullanır: büyüteç küçük nesneleri büyütüp görmemizi sağlar, terazi bir maddenin kütlesini ölçer, termometre sıcaklığı ölçer, kronometre ise zamanı ölçer."},
+    {h:"Güvenli Bilim İnsanı Olmak", p:"Deney yaparken güvenlik kurallarına uymak çok önemlidir: öğretmenin izni olmadan hiçbir malzeme denenmemeli, keskin ve sıcak nesnelere dikkatli yaklaşılmalı, deney sonrasında eller mutlaka yıkanmalıdır."}
+  ],
+  quiz:[
+    {q:"Bir bilim insanının bir olayı inceleyerek izlediği sıralı adımlara ne denir?", o:["Bilimsel yöntem","Günlük rutin","Ders programı","Oyun kuralı"], c:0, e:"Gözlem, soru, tahmin, deney ve sonuç adımlarının tamamına bilimsel yöntem denir."},
+    {q:"Küçük bir karıncanın bacaklarını daha yakından incelemek için hangi araç kullanılır?", o:["Termometre","Büyüteç","Terazi","Kronometre"], c:1, e:"Büyüteç küçük nesneleri büyütüp ayrıntılarını görmemizi sağlar."},
+    {q:"Bir çorbanın sıcak mı soğuk mu olduğunu anlamak hangi duyu organıyla ilgilidir?", o:["Göz","Kulak","Deri","Burun"], c:2, e:"Derimiz sıcaklık ve dokunma duyusunu algılar."},
+    {q:"Bilimsel yöntemde ilk adım nedir?", o:["Sonuç yazmak","Gözlem yapmak","Ödül almak","Deneyi bitirmek"], c:1, e:"Bilimsel yöntemin ilk adımı gözlem yapmaktır."}
+  ],
+  match:[
+    {l:"Büyüteç", r:"Küçük nesneleri büyütür"},
+    {l:"Terazi", r:"Kütle/ağırlık ölçer"},
+    {l:"Termometre", r:"Sıcaklık ölçer"},
+    {l:"Kronometre", r:"Zamanı ölçer"}
+  ],
+  ws:[
+    {q:"Bilimsel yöntemin beş adımını sırasıyla yaz.", a:"Gözlem → soru sorma → tahmin (hipotez) → deney → sonuç."},
+    {q:"Beş duyu organımızı ve her biriyle neyi algıladığımızı yaz.", a:"Göz: görme, kulak: işitme, burun: koklama, dil: tatma, deri: dokunma/sıcaklık."},
+    {q:"Deney yaparken uyulması gereken iki güvenlik kuralı yaz.", a:"Örnek: Öğretmen izni olmadan malzeme denenmez; deney sonrası eller yıkanır."},
+    {q:"Sınıfında bir deney yapmak istesen önce hangi adımı uygularsın? Neden?", a:"Açık uçlu soru: Önce gözlem/soru adımının açıklanması beklenir."}
+  ]
+},
+{
+  no:2, id:"u2", title:"Sağlıklı Besleniyorum",
+  intro:"Vücudumuzun büyümesi, gelişmesi ve enerji kazanması için dengeli beslenmesi gerekir. Bu ünitede besin gruplarını ve sağlıklı beslenme alışkanlıklarını öğreneceğiz.",
+  image:{url:"https://images.pexels.com/photos/5966430/pexels-photo-5966430.jpeg?auto=compress&cs=tinysrgb&w=800",
+         caption:"Farklı besin gruplarından oluşan renkli bir tabak. (Fotoğraf: Pexels)"},
+  sections:[
+    {h:"Besin Grupları", p:"Yediğimiz besinler vücudumuza farklı görevler için gereklidir: karbonhidratlar (ekmek, pirinç, makarna) bize enerji verir; proteinler (et, yumurta, kuru baklagiller) büyüme ve onarım için gereklidir; yağlar uzun süreli enerji depolar; vitaminler ve mineraller (sebze, meyve) vücut çalışmasını düzenler; su ise yaşamsal işlevler için vazgeçilmezdir."},
+    {h:"Dengeli Beslenme", p:"Sağlıklı bir beslenme için her öğünde besin gruplarından yeterli miktarda tüketmeliyiz. Şekerli, çok yağlı ve tuzlu besinlerin fazla tüketilmesi sağlığımızı olumsuz etkiler. Taze sebze ve meyveleri her gün tüketmeye özen göstermeliyiz."},
+    {h:"Besinlerin Saklanması ve Hijyen", p:"Besinleri doğru koşullarda saklamak bozulmalarını önler: bazı besinler buzdolabında, bazıları serin ve kuru bir yerde saklanmalıdır. Yemek yemeden önce ellerimizi yıkamak, sebze ve meyveleri iyice temizlemek hastalıklardan korunmamızı sağlar."},
+    {h:"Öğün Düzeni", p:"Kahvaltı, öğle ve akşam yemeği gibi düzenli öğünler yemek, öğün atlamamak ve yeterli su tüketmek sağlıklı yaşamın önemli parçalarıdır."}
+  ],
+  quiz:[
+    {q:"Vücuda hızlı enerji sağlayan besin grubu hangisidir?", o:["Karbonhidrat","Vitamin","Su","Mineral"], c:0, e:"Ekmek, pirinç gibi karbonhidratlar vücuda hızlı enerji sağlar."},
+    {q:"Büyüme ve doku onarımı için en çok hangi besin gerekir?", o:["Yağ","Protein","Şeker","Tuz"], c:1, e:"Et, yumurta, baklagiller gibi proteinler büyüme ve onarım için gereklidir."},
+    {q:"Aşağıdakilerden hangisi vitamin ve mineral bakımından zengindir?", o:["Sebze-meyve","Şekerleme","Gazlı içecek","Cips"], c:0, e:"Sebze ve meyveler vitamin-mineral bakımından zengindir."},
+    {q:"Yemekten önce yapılması gereken hijyen kuralı nedir?", o:["Televizyon izlemek","Elleri yıkamak","Uyumak","Koşmak"], c:1, e:"Yemekten önce elleri yıkamak hastalıklardan korunmamızı sağlar."}
+  ],
+  match:[
+    {l:"Ekmek, pirinç", r:"Karbonhidrat"},
+    {l:"Et, yumurta", r:"Protein"},
+    {l:"Sebze, meyve", r:"Vitamin-mineral"},
+    {l:"Su", r:"Yaşamsal denge"}
+  ],
+  ws:[
+    {q:"Beş besin grubunu ve birer örnek besin yaz.", a:"Karbonhidrat-ekmek, protein-yumurta, yağ-zeytinyağı, vitamin/mineral-portakal, su."},
+    {q:"Neden her gün sebze ve meyve tüketmeliyiz?", a:"Vitamin ve mineral ihtiyacımızı karşılamak, vücudumuzu hastalıklara karşı güçlendirmek için."},
+    {q:"Bir günlük dengeli bir kahvaltı menüsü öner.", a:"Açık uçlu: örneğin yumurta, peynir, zeytin, domates-salatalık, tam buğday ekmeği, süt."},
+    {q:"Besinleri saklarken nelere dikkat etmeliyiz?", a:"Buzdolabında saklanması gerekenleri soğukta tutmak, son kullanma tarihine bakmak, kapalı kaplarda saklamak."}
+  ]
+},
+{
+  no:3, id:"u3", title:"Dünya'mızı Keşfedelim",
+  intro:"Üzerinde yaşadığımız Dünya; karaları, suları ve farklı yer şekilleriyle kocaman bir gezegendir. Bu ünitede Dünya'mızı daha yakından tanıyacağız.",
+  image:{url:"https://images.pexels.com/photos/30596277/pexels-photo-30596277.jpeg?auto=compress&cs=tinysrgb&w=800",
+         caption:"Uzaydan görülen Dünya; kıtalar ve okyanuslar. (Fotoğraf: Pexels)"},
+  sections:[
+    {h:"Dünya'nın Şekli ve Katmanları", p:"Dünya, uzaydan bakıldığında mavi ve yeşil renkleriyle bir küreye benzer. Dünya'nın en dışında ince bir katı tabaka olan yer kabuğu, onun altında sıcak ve yarı katı manto, en merkezde ise çekirdek bulunur."},
+    {h:"Karalar ve Sular", p:"Dünya yüzeyinin büyük bir bölümü sularla kaplıdır: okyanuslar, denizler, göller ve nehirler. Geri kalan bölüm ise yedi büyük kara parçasından oluşur; bunlara kıta denir (Asya, Afrika, Avrupa, Kuzey Amerika, Güney Amerika, Avustralya, Antarktika)."},
+    {h:"Yer Şekilleri", p:"Kara parçaları üzerinde farklı yer şekilleri bulunur: dağlar çevresine göre yüksekte kalan yerlerdir, ovalar düz ve geniş alanlardır, platolar yüksek düzlüklerdir, vadiler ise iki yamaç arasında kalan çukur alanlardır."},
+    {h:"Hava Durumu ve İklim", p:"Güneş, Dünya'yı ısıtarak hava olaylarını oluşturur: yağmur, kar, rüzgar gibi. Bir bölgenin uzun yıllar boyunca gösterdiği ortalama hava koşullarına iklim denir."}
+  ],
+  quiz:[
+    {q:"Dünya'nın en dışındaki katı tabakaya ne denir?", o:["Manto","Çekirdek","Yer kabuğu","Atmosfer"], c:2, e:"Yer kabuğu, Dünya'nın en dışındaki ince katı tabakadır."},
+    {q:"Aşağıdakilerden hangisi bir kıta değildir?", o:["Asya","Afrika","Akdeniz","Avrupa"], c:2, e:"Akdeniz bir deniz adıdır, kıta değildir."},
+    {q:"Çevresine göre yüksekte kalan yer şekline ne denir?", o:["Ova","Dağ","Vadi","Plato"], c:1, e:"Dağlar çevresine göre yüksekte kalan yer şekilleridir."},
+    {q:"Bir bölgenin uzun yıllardaki ortalama hava koşuluna ne denir?", o:["Mevsim","İklim","Rüzgar","Nem"], c:1, e:"Uzun yıllar boyunca gözlenen ortalama hava koşullarına iklim denir."}
+  ],
+  match:[
+    {l:"Dağ", r:"Çevresine göre yüksek arazi"},
+    {l:"Ova", r:"Düz ve geniş alan"},
+    {l:"Vadi", r:"İki yamaç arasındaki çukur"},
+    {l:"Plato", r:"Yüksek düzlük"}
+  ],
+  ws:[
+    {q:"Dünya'nın üç katmanını sırasıyla yaz.", a:"Yer kabuğu, manto, çekirdek."},
+    {q:"Dünya üzerindeki yedi kıtanın adını yaz.", a:"Asya, Afrika, Avrupa, Kuzey Amerika, Güney Amerika, Avustralya, Antarktika."},
+    {q:"Dört yer şekli çeşidini ve kısaca özelliklerini yaz.", a:"Dağ (yüksek), ova (düz-geniş), vadi (çukur), plato (yüksek düzlük)."},
+    {q:"Hava durumu ile iklim arasındaki fark nedir?", a:"Hava durumu kısa süreli, iklim ise uzun yıllardaki ortalama durumdur."}
+  ]
+},
+{
+  no:4, id:"u4", title:"Maddenin Değişimi",
+  intro:"Çevremizdeki her şey maddeden oluşur ve madde farklı hâllerde bulunabilir. Bu ünitede maddenin hâllerini ve bu hâller arasındaki değişimleri inceleyeceğiz.",
+  image:{url:"https://images.pexels.com/photos/434259/pexels-photo-434259.jpeg?auto=compress&cs=tinysrgb&w=800",
+         caption:"Katı hâldeki buz küpleri. (Fotoğraf: Pexels)"},
+  image2:{url:"https://images.pexels.com/photos/20008786/pexels-photo-20008786.jpeg?auto=compress&cs=tinysrgb&w=800",
+         caption:"Kaynayan suda oluşan buhar — gaz hâli. (Fotoğraf: Pexels)"},
+  sections:[
+    {h:"Maddenin Hâlleri", p:"Madde üç temel hâlde bulunur: katı hâlde maddenin belirli bir şekli ve hacmi vardır (taş, buz); sıvı hâlde madde bulunduğu kabın şeklini alır ama hacmi değişmez (su, süt); gaz hâlde ise madde bulunduğu her yeri doldurur, belirli bir şekli ve hacmi yoktur (hava, su buharı)."},
+    {h:"Isı ile Hâl Değişimi", p:"Maddeler ısı alıp vererek hâl değiştirebilir: katı madde ısı alınca erir ve sıvı hâle geçer (buzun erimesi); sıvı madde ısı verince donar ve katı hâle geçer (suyun donması); sıvı madde ısı alınca buharlaşır ve gaz hâline geçer (suyun kaynaması); gaz madde ısı verince yoğunlaşır ve sıvı hâle geçer (buğulanma)."},
+    {h:"Günlük Hayattan Örnekler", p:"Dondurmanın erimesi, çamaşırların kuruması (buharlaşma), kışın camların buğulanması (yoğunlaşma), suyun buz kalıplarında donması gibi olaylar hâl değişimine örnektir."},
+    {h:"Fiziksel Değişim", p:"Maddenin hâl değişimi sırasında maddenin türü değişmez, sadece dış görünüşü değişir; buna fiziksel değişim denir. Su; buz olsa da su buharı olsa da hep aynı maddedir."}
+  ],
+  quiz:[
+    {q:"Belirli şekli ve hacmi olan madde hâli hangisidir?", o:["Sıvı","Gaz","Katı","Hiçbiri"], c:2, e:"Katı hâldeki maddenin belirli bir şekli ve hacmi vardır."},
+    {q:"Buzun ısı alarak sıvı hâle geçmesine ne denir?", o:["Donma","Erime","Buharlaşma","Yoğunlaşma"], c:1, e:"Katı maddenin ısı alarak sıvı hâle geçmesine erime denir."},
+    {q:"Suyun kaynayarak gaz hâline geçmesine ne denir?", o:["Erime","Donma","Buharlaşma","Yoğunlaşma"], c:2, e:"Sıvının ısı alarak gaz hâline geçmesine buharlaşma denir."},
+    {q:"Camın buğulanması hangi olaya örnektir?", o:["Erime","Donma","Buharlaşma","Yoğunlaşma"], c:3, e:"Gazın ısı vererek sıvı hâle geçmesine yoğunlaşma denir."}
+  ],
+  match:[
+    {l:"Katı", r:"Belirli şekil ve hacim"},
+    {l:"Sıvı", r:"Kabın şeklini alır"},
+    {l:"Gaz", r:"Bulunduğu yeri doldurur"},
+    {l:"Isı verme", r:"Donma / yoğunlaşma"}
+  ],
+  ws:[
+    {q:"Maddenin üç hâlini birer örnekle yaz.", a:"Katı: buz, sıvı: su, gaz: su buharı."},
+    {q:"Erime ve donma arasındaki farkı açıkla.", a:"Erime: katıdan sıvıya (ısı alır); donma: sıvıdan katıya (ısı verir)."},
+    {q:"Günlük hayattan bir buharlaşma örneği ver.", a:"Örnek: ıslak çamaşırın güneşte kuruması."},
+    {q:"Hâl değişiminde maddenin türü değişir mi? Açıkla.", a:"Hayır, sadece dış görünüşü değişir; bu bir fiziksel değişimdir."}
+  ]
+},
+{
+  no:5, id:"u5", title:"Mıknatısı Keşfediyorum",
+  intro:"Mıknatıslar bazı maddeleri çekme özelliğine sahiptir ve günlük hayatımızda birçok yerde karşımıza çıkar. Bu ünitede mıknatısların özelliklerini keşfedeceğiz.",
+  image:{url:"https://images.pexels.com/photos/3203659/pexels-photo-3203659.jpeg?auto=compress&cs=tinysrgb&w=800",
+         caption:"Elde tutulan bir pusula; iğnesi mıknatıs özelliği taşır. (Fotoğraf: Pexels)"},
+  sections:[
+    {h:"Mıknatıs ve Kutupları", p:"Her mıknatısın iki kutbu vardır: Kuzey (K) ve Güney (G) kutbu. Mıknatısın çekme gücü kutuplarında en fazladır."},
+    {h:"Çeken ve İten Kutuplar", p:"Aynı kutuplar (K-K veya G-G) birbirini iter, farklı kutuplar (K-G) birbirini çeker. Bu kural, mıknatısların birbirine nasıl davrandığını anlamamızı sağlar."},
+    {h:"Mıknatısın Çektiği Maddeler", p:"Mıknatıslar sadece demir, çelik, nikel gibi bazı metalleri çeker. Tahta, plastik, cam, kağıt gibi maddeleri çekmez."},
+    {h:"Mıknatısın Kullanım Alanları", p:"Mıknatıslar pusulada yön bulmada, buzdolabı kapaklarında, hoparlörlerde, kapı mandallarında ve birçok elektrikli araçta kullanılır. Pusuladaki iğne, Dünya'nın manyetik alanı sayesinde her zaman kuzeyi gösterir."}
+  ],
+  quiz:[
+    {q:"Bir mıknatısın kaç kutbu vardır?", o:["1","2","3","4"], c:1, e:"Her mıknatısın Kuzey ve Güney olmak üzere iki kutbu vardır."},
+    {q:"Aynı kutuplar birbirine ne yapar?", o:["Çeker","İter","Etkilemez","Birleşir"], c:1, e:"Aynı kutuplar (K-K veya G-G) birbirini iter."},
+    {q:"Mıknatıs aşağıdakilerden hangisini çeker?", o:["Tahta parçası","Demir çivi","Plastik kaşık","Kağıt"], c:1, e:"Mıknatıslar demir gibi metalleri çeker."},
+    {q:"Pusula iğnesi her zaman hangi yönü gösterir?", o:["Güney","Doğu","Kuzey","Batı"], c:2, e:"Pusula iğnesi, Dünya'nın manyetik alanı sayesinde kuzeyi gösterir."}
+  ],
+  match:[
+    {l:"K-G kutupları", r:"Birbirini çeker"},
+    {l:"K-K kutupları", r:"Birbirini iter"},
+    {l:"Demir", r:"Mıknatısla çekilir"},
+    {l:"Pusula", r:"Yön bulmada kullanılır"}
+  ],
+  ws:[
+    {q:"Mıknatısın iki kutbunun adını yaz.", a:"Kuzey (K) kutbu ve Güney (G) kutbu."},
+    {q:"Mıknatısın çektiği üç madde örneği ver.", a:"Demir, çelik, nikel."},
+    {q:"Pusula nasıl çalışır, kısaca açıkla.", a:"Pusulanın mıknatıslı iğnesi Dünya'nın manyetik alanına göre yönelerek kuzeyi gösterir."},
+    {q:"Evinde/okulunda mıknatıs kullanılan iki eşya örneği bul.", a:"Örnek: buzdolabı kapağı, kalem kutusu mandalı, hoparlör."}
+  ]
+},
+{
+  no:6, id:"u6", title:"Enerji Dedektifleri",
+  intro:"Enerji, çevremizdeki her hareketin ve olayın gerçekleşmesini sağlayan güçtür. Bu ünitede enerji türlerini ve enerji kaynaklarını tanıyacağız.",
+  image:{url:"https://images.pexels.com/photos/9800092/pexels-photo-9800092.jpeg?auto=compress&cs=tinysrgb&w=800",
+         caption:"Rüzgar türbinleri ve güneş panelleriyle temiz enerji üretimi. (Fotoğraf: Pexels)"},
+  sections:[
+    {h:"Enerji Türleri", p:"Enerji farklı biçimlerde bulunur: ısı enerjisi (güneşin ısıtması), ışık enerjisi (lamba), ses enerjisi (müzik), hareket enerjisi (koşan bir çocuk), elektrik enerjisi (evimizdeki prizler). Enerji bir türden başka bir türe dönüşebilir; örneğin elektrik enerjisi lambada ışık enerjisine dönüşür."},
+    {h:"Yenilenebilir Enerji Kaynakları", p:"Doğada tükenmeyen ya da kısa sürede yenilenen enerji kaynaklarına yenilenebilir enerji denir: güneş enerjisi, rüzgar enerjisi ve su enerjisi bunlara örnektir."},
+    {h:"Yenilenemez Enerji Kaynakları", p:"Doğada oluşumu milyonlarca yıl süren ve tükenebilen kaynaklara yenilenemez enerji denir: kömür, petrol ve doğal gaz gibi."},
+    {h:"Enerji Tasarrufu", p:"Enerji kaynaklarının bilinçli kullanılması gelecek nesiller için önemlidir. Kullanılmayan ışıkları söndürmek, elektronik cihazları gereksiz yere açık bırakmamak enerji tasarrufuna örnektir."}
+  ],
+  quiz:[
+    {q:"Aşağıdakilerden hangisi yenilenebilir enerji kaynağıdır?", o:["Kömür","Petrol","Güneş","Doğal gaz"], c:2, e:"Güneş enerjisi, doğada tükenmeyen bir kaynak olduğu için yenilenebilirdir."},
+    {q:"Lambanın ışık vermesi hangi enerji dönüşümüne örnektir?", o:["Işıktan elektriğe","Elektrikten ışığa","Sesten ısıya","Hareketten sese"], c:1, e:"Lambada elektrik enerjisi ışık enerjisine dönüşür."},
+    {q:"Milyonlarca yılda oluşan ve tükenebilen kaynaklara ne denir?", o:["Yenilenebilir","Yenilenemez","Sonsuz","Doğal"], c:1, e:"Kömür, petrol gibi kaynaklar yenilenemez enerji kaynaklarıdır."},
+    {q:"Enerji tasarrufu için ne yapılmalıdır?", o:["Işıkları gereksiz yere açık bırakmak","Kullanılmayan cihazları kapatmak","Suyu boşa akıtmak","Hiçbiri"], c:1, e:"Kullanılmayan cihazları kapatmak enerji tasarrufu sağlar."}
+  ],
+  match:[
+    {l:"Güneş", r:"Yenilenebilir enerji"},
+    {l:"Kömür", r:"Yenilenemez enerji"},
+    {l:"Rüzgar türbini", r:"Elektrik üretir"},
+    {l:"Işık", r:"Bir enerji türü"}
+  ],
+  ws:[
+    {q:"Beş enerji türü örneği yaz.", a:"Isı, ışık, ses, hareket, elektrik enerjisi."},
+    {q:"Yenilenebilir ve yenilenemez enerji arasındaki farkı açıkla.", a:"Yenilenebilir kaynaklar tükenmez/kısa sürede yenilenir (güneş, rüzgar); yenilenemez kaynaklar milyonlarca yılda oluşur ve tükenebilir (kömür, petrol)."},
+    {q:"Evinde enerji tasarrufu için yapabileceğin iki şey yaz.", a:"Örnek: kullanılmayan odanın ışığını söndürmek, cihazları bekleme modunda bırakmamak."},
+    {q:"Rüzgar enerjisi nasıl elektriğe dönüştürülür? (Kısaca)", a:"Rüzgar, türbinin kanatlarını döndürür; bu hareket enerjisi jeneratör aracılığıyla elektrik enerjisine dönüştürülür."}
+  ]
+},
+{
+  no:7, id:"u7", title:"Işığın Peşinde",
+  intro:"Işık, çevremizi görebilmemizi sağlayan enerji türüdür. Bu ünitede ışığın kaynaklarını, yayılmasını ve davranışlarını inceleyeceğiz.",
+  image:{url:"https://images.pexels.com/photos/3845162/pexels-photo-3845162.jpeg?auto=compress&cs=tinysrgb&w=800",
+         caption:"Cam bir prizmadan geçen ışığın renklerine ayrılması. (Fotoğraf: Pexels)"},
+  sections:[
+    {h:"Işık Kaynakları", p:"Kendiliğinden ışık yayan kaynaklara doğal ışık kaynağı denir (Güneş, yıldızlar, ateş böceği); insanlar tarafından üretilen ışık kaynaklarına ise yapay ışık kaynağı denir (ampul, mum, el feneri)."},
+    {h:"Işığın Yayılması ve Gölge", p:"Işık, kaynağından her yöne düz bir çizgi hâlinde yayılır. Işığın önüne opak (ışık geçirmeyen) bir cisim konursa cismin arkasında gölge oluşur."},
+    {h:"Işığın Yansıması", p:"Işık, düz ve parlak bir yüzeye (ayna gibi) çarptığında yansır. Pürüzlü yüzeyler ışığı dağınık şekilde yansıtır, bu yüzden görüntü net oluşmaz."},
+    {h:"Işığın Kırılması", p:"Işık, havadan suya ya da cam gibi farklı bir ortama geçerken yön değiştirir; buna kırılma denir. Yağmur damlacıkları güneş ışığını kırıp yansıttığında gökkuşağı oluşur; bir prizmadan geçen beyaz ışık da renklerine ayrılır."}
+  ],
+  quiz:[
+    {q:"Kendiliğinden ışık yayan kaynağa ne denir?", o:["Yapay ışık kaynağı","Doğal ışık kaynağı","Yansıyan ışık","Kırılan ışık"], c:1, e:"Güneş gibi kendiliğinden ışık yayan kaynaklar doğal ışık kaynağıdır."},
+    {q:"Opak bir cismin arkasında oluşan karanlık alana ne denir?", o:["Yansıma","Kırılma","Gölge","Aydınlık"], c:2, e:"Işık geçirmeyen cisimlerin arkasında gölge oluşur."},
+    {q:"Işığın ayna gibi parlak bir yüzeye çarpıp geri dönmesine ne denir?", o:["Kırılma","Yansıma","Yayılma","Emilme"], c:1, e:"Işığın parlak yüzeyden geri dönmesine yansıma denir."},
+    {q:"Gökkuşağı hangi olayla oluşur?", o:["Yansıma","Gölge","Kırılma","Karışma"], c:2, e:"Güneş ışığının yağmur damlacıklarında kırılıp ayrılmasıyla gökkuşağı oluşur."}
+  ],
+  match:[
+    {l:"Güneş", r:"Doğal ışık kaynağı"},
+    {l:"Ampul", r:"Yapay ışık kaynağı"},
+    {l:"Ayna", r:"Işığı yansıtır"},
+    {l:"Prizma", r:"Işığı kırıp ayırır"}
+  ],
+  ws:[
+    {q:"İki doğal, iki yapay ışık kaynağı örneği yaz.", a:"Doğal: Güneş, yıldızlar. Yapay: ampul, mum."},
+    {q:"Gölge nasıl oluşur, açıkla.", a:"Işığın önüne opak bir cisim konduğunda, cismin arkasında ışığın ulaşamadığı karanlık bir alan oluşur."},
+    {q:"Yansıma ile kırılma arasındaki farkı yaz.", a:"Yansıma: ışığın yüzeyden geri dönmesi. Kırılma: ışığın farklı bir ortama geçerken yön değiştirmesi."},
+    {q:"Gökkuşağının nasıl oluştuğunu kısaca anlat.", a:"Güneş ışığı yağmur damlacıklarında kırılıp yansıyarak renklerine ayrılır ve gökkuşağı oluşur."}
+  ]
+},
+{
+  no:8, id:"u8", title:"Sürdürülebilir Şehirler ve Topluluklar",
+  intro:"Doğal kaynaklarımızı gelecek nesillere aktarabilmek için bilinçli tüketmemiz ve şehirlerimizi doğayla uyumlu geliştirmemiz gerekir. Bu ünitede sürdürülebilirlik kavramını öğreneceğiz.",
+  image:{url:"https://images.pexels.com/photos/10840656/pexels-photo-10840656.jpeg?auto=compress&cs=tinysrgb&w=800",
+         caption:"Farklı atık türleri için ayrılmış renkli geri dönüşüm kutuları. (Fotoğraf: Pexels)"},
+  sections:[
+    {h:"Sürdürülebilirlik Nedir?", p:"Doğal kaynakları, gelecek nesillerin ihtiyaçlarını da düşünerek bilinçli kullanmaya sürdürülebilirlik denir. Su, enerji ve doğal kaynakları israf etmeden kullanmak bu kavramın temelidir."},
+    {h:"Geri Dönüşüm", p:"Kullanılmış kağıt, cam, plastik ve metal gibi atıklar ayrıştırılıp işlenerek yeniden kullanılabilir hâle getirilir. Bu işleme geri dönüşüm denir ve doğal kaynakların korunmasına yardımcı olur."},
+    {h:"Doğal Kaynakları Koruma", p:"Suyu gereksiz yere akıtmamak, elektriği tasarruflu kullanmak, ağaç dikmek ve çöpleri doğru şekilde atmak doğal kaynakları korumaya katkı sağlar."},
+    {h:"Sürdürülebilir Şehirler", p:"Yeşil alanları çok olan, bisiklet yollarına sahip, toplu taşımayı destekleyen ve geri dönüşümü yaygınlaştıran şehirlere sürdürülebilir şehir denir. Bu şehirlerde hem insanlar hem de doğa daha sağlıklı bir gelecek kazanır."}
+  ],
+  quiz:[
+    {q:"Doğal kaynakları gelecek nesilleri de düşünerek kullanmaya ne denir?", o:["İsraf","Sürdürülebilirlik","Tüketim","Üretim"], c:1, e:"Kaynakları gelecek nesilleri düşünerek bilinçli kullanmaya sürdürülebilirlik denir."},
+    {q:"Kullanılmış kağıt, cam ve plastiğin yeniden işlenmesine ne denir?", o:["Çöp","Geri dönüşüm","Yakma","Depolama"], c:1, e:"Atıkların yeniden kullanılabilir hâle getirilmesine geri dönüşüm denir."},
+    {q:"Aşağıdakilerden hangisi doğal kaynakları koruma davranışıdır?", o:["Musluğu boşuna açık bırakmak","Işıkları gereksiz yere yakmak","Suyu tasarruflu kullanmak","Çöpü doğaya atmak"], c:2, e:"Suyu tasarruflu kullanmak doğal kaynakları koruma davranışıdır."},
+    {q:"Sürdürülebilir bir şehrin özelliği nedir?", o:["Yeşil alanı az olması","Bisiklet yolu olmaması","Geri dönüşümün yaygın olması","Toplu taşımanın olmaması"], c:2, e:"Sürdürülebilir şehirlerde geri dönüşüm yaygındır."}
+  ],
+  match:[
+    {l:"Kağıt/cam/plastik", r:"Geri dönüştürülebilir"},
+    {l:"Su tasarrufu", r:"Doğal kaynağı koruma"},
+    {l:"Bisiklet yolu", r:"Sürdürülebilir şehir özelliği"},
+    {l:"İsraf", r:"Kaynakların bilinçsiz tüketimi"}
+  ],
+  ws:[
+    {q:"Sürdürülebilirlik kavramını kendi cümlenle açıkla.", a:"Doğal kaynakları, gelecek nesilleri de düşünerek bilinçli ve tasarruflu kullanmaktır."},
+    {q:"Evde uygulayabileceğin iki geri dönüşüm örneği yaz.", a:"Örnek: kağıt/karton atıkları ayrı biriktirmek, plastik şişeleri geri dönüşüm kutusuna atmak."},
+    {q:"Su tasarrufu için üç öneri yaz.", a:"Örnek: musluğu diş fırçalarken kapatmak, kısa duş almak, damlayan musluğu tamir ettirmek."},
+    {q:"Sürdürülebilir bir şehirde neler olmalı? Üç özellik say.", a:"Yeşil alanlar, bisiklet yolları, yaygın geri dönüşüm ve toplu taşıma."}
+  ]
+}
+];
+
+/* ---------- RENDER ---------- */
+const tabbar = document.getElementById('tabbar');
+const main = document.getElementById('main');
+
+UNITS.forEach((u,idx)=>{
+  const btn = document.createElement('button');
+  btn.className = 'tab-btn' + (idx===0?' active':'');
+  btn.textContent = u.no + '. Ünite';
+  btn.title = u.title;
+  btn.onclick = ()=>showUnit(idx);
+  tabbar.appendChild(btn);
+
+  const wrap = document.createElement('section');
+  wrap.className = 'unit' + (idx===0?' active':'');
+  wrap.id = u.id;
+  wrap.innerHTML = renderUnit(u);
+  main.appendChild(wrap);
+});
+
+function showUnit(idx){
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active', i===idx));
+  document.querySelectorAll('.unit').forEach((s,i)=>s.classList.toggle('active', i===idx));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function renderUnit(u){
+  let konu = u.sections.map(s=>`
+    <div class="konu-sub">
+      <h3>${s.h}</h3>
+      <p>${s.p}</p>
+    </div>`).join('');
+
+  let img2 = u.image2 ? `
+    <figure>
+      <img src="${u.image2.url}" alt="${u.title}" loading="lazy">
+      <figcaption>${u.image2.caption}</figcaption>
+    </figure>` : '';
+
+  return `
+    <div class="unit-head">
+      <div class="unit-eyebrow">${u.no}. Ünite</div>
+      <h2>${u.title}</h2>
+      <p>${u.intro}</p>
+    </div>
+
+    <div class="section-block">
+      <div class="section-label"><span class="dot"></span>Konu Anlatımı</div>
+      <figure>
+        <img src="${u.image.url}" alt="${u.title}" loading="lazy">
+        <figcaption>${u.image.caption}</figcaption>
+      </figure>
+      ${konu}
+      ${img2}
+    </div>
+
+    <div class="section-block">
+      <div class="section-label"><span class="dot"></span>Etkinlik — Ne Öğrendik?</div>
+      <div class="quiz-box" id="quiz-${u.id}"></div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-label"><span class="dot"></span>Oyun — Eşleştirme</div>
+      <div class="match-box" id="match-${u.id}"></div>
+      <button class="reset-btn" onclick="renderMatch('${u.id}')">Oyunu Yeniden Başlat</button>
+    </div>
+
+    <div class="section-block">
+      <div class="section-label"><span class="dot"></span>Çalışma Kağıdı</div>
+      <div class="ws-box" id="ws-${u.id}"></div>
+    </div>
+  `;
+}
+
+/* ---------- QUIZ ENGINE ---------- */
+function renderQuiz(unit){
+  const box = document.getElementById('quiz-'+unit.id);
+  box.innerHTML = unit.quiz.map((item,qi)=>`
+    <div class="quiz-item">
+      <div class="quiz-q">${qi+1}. ${item.q}</div>
+      <div class="quiz-opts" id="qopts-${unit.id}-${qi}">
+        ${item.o.map((opt,oi)=>`<button class="quiz-opt" onclick="answerQuiz('${unit.id}',${qi},${oi})">${opt}</button>`).join('')}
+      </div>
+      <div class="quiz-explain" id="qexp-${unit.id}-${qi}">${item.e}</div>
+    </div>
+  `).join('');
+}
+function answerQuiz(uid,qi,oi){
+  const unit = UNITS.find(u=>u.id===uid);
+  const correct = unit.quiz[qi].c;
+  const optsWrap = document.getElementById(`qopts-${uid}-${qi}`);
+  const btns = optsWrap.querySelectorAll('.quiz-opt');
+  btns.forEach((b,i)=>{
+    b.classList.add('disabled');
+    if(i===correct) b.classList.add('correct');
+    else if(i===oi) b.classList.add('wrong');
+  });
+  document.getElementById(`qexp-${uid}-${qi}`).style.display='block';
+}
+
+/* ---------- MATCHING ENGINE ---------- */
+function renderMatch(uid){
+  const unit = UNITS.find(u=>u.id===uid);
+  const box = document.getElementById('match-'+uid);
+  const lefts = unit.match.map((p,i)=>({...p,i,side:'l'}));
+  const rights = shuffle(unit.match.map((p,i)=>({...p,i,side:'r'})));
+  box.innerHTML = `
+    <div class="match-wrap">
+      <div class="match-col">${lefts.map(item=>`<div class="match-card" data-i="${item.i}" data-side="l" onclick="pickMatch('${uid}',this)">${item.l}</div>`).join('')}</div>
+      <div class="match-col">${rights.map(item=>`<div class="match-card" data-i="${item.i}" data-side="r" onclick="pickMatch('${uid}',this)">${item.r}</div>`).join('')}</div>
+    </div>
+    <div class="match-status" id="mstat-${uid}">Sol ve sağdan doğru eşi bulup sırayla tıkla.</div>
+  `;
+}
+let matchState = {};
+function pickMatch(uid, el){
+  if(el.classList.contains('matched')) return;
+  if(!matchState[uid]) matchState[uid] = {sel:null, done:0};
+  const st = matchState[uid];
+  const unit = UNITS.find(u=>u.id===uid);
+
+  if(!st.sel){
+    st.sel = el;
+    el.classList.add('selected');
+    return;
+  }
+  if(st.sel === el){ el.classList.remove('selected'); st.sel=null; return; }
+
+  const sideA = st.sel.dataset.side, sideB = el.dataset.side;
+  if(sideA === sideB){
+    st.sel.classList.remove('selected');
+    st.sel = el; el.classList.add('selected');
+    return;
+  }
+  const iA = +st.sel.dataset.i, iB = +el.dataset.i;
+  if(iA === iB){
+    st.sel.classList.remove('selected');
+    st.sel.classList.add('matched');
+    el.classList.add('matched');
+    st.sel = null;
+    st.done++;
+    document.getElementById(`mstat-${uid}`).textContent = st.done===unit.match.length ? 'Tebrikler, tüm eşleri buldun!' : `${st.done}/${unit.match.length} eş bulundu.`;
+  } else {
+    el.classList.add('shake');
+    st.sel.classList.add('shake');
+    setTimeout(()=>{
+      el.classList.remove('shake');
+      st.sel.classList.remove('shake','selected');
+      st.sel = null;
+    }, 350);
+  }
+}
+function shuffle(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+/* ---------- WORKSHEET ENGINE ---------- */
+function renderWs(unit){
+  const box = document.getElementById('ws-'+unit.id);
+  box.innerHTML = unit.ws.map((item,wi)=>`
+    <div class="ws-item">
+      <p class="q">${wi+1}. ${item.q}</p>
+      <button class="ws-toggle" onclick="toggleWs('${unit.id}',${wi})">Örnek cevabı göster</button>
+      <div class="ws-reveal" id="wsr-${unit.id}-${wi}">${item.a}</div>
+    </div>
+  `).join('') + `<p class="ws-note">Bu çalışma kağıdını deftere yazarak da cevaplayabilirsin.</p>`;
+}
+function toggleWs(uid,wi){
+  const el = document.getElementById(`wsr-${uid}-${wi}`);
+  el.style.display = el.style.display==='block' ? 'none' : 'block';
+}
+
+/* ---------- INIT ALL ---------- */
+UNITS.forEach(u=>{
+  renderQuiz(u);
+  renderMatch(u.id);
+  renderWs(u);
+});
+</script>
+</body>
+</html>
