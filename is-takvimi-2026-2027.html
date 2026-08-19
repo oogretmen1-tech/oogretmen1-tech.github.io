@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026-2027 Eğitim Öğretim Yılı İş Takvimi</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 20px;
+        color: #333;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        max-width: 1400px;
+        margin: 0 auto 16px;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 700;
+        background: rgba(255,255,255,.18);
+        padding: 8px 18px;
+        border-radius: 30px;
+        width: fit-content;
+    }
+    .back-link:hover { background: rgba(255,255,255,.3); }
+
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    header {
+        text-align: center;
+        margin-bottom: 40px;
+        padding-bottom: 20px;
+        border-bottom: 4px solid #667eea;
+    }
+
+    header h1 {
+        color: #667eea;
+        font-size: 2.5em;
+        margin-bottom: 10px;
+    }
+
+    header h2 {
+        color: #764ba2;
+        font-size: 1.3em;
+        font-weight: normal;
+    }
+
+    .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .month-card {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .month-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    }
+
+    .month-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .month-header h3 {
+        font-size: 1.8em;
+        margin-bottom: 5px;
+    }
+
+    .holiday-banner {
+        background: #ff6b6b;
+        color: white;
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .ara-tatil-banner {
+        background: #00b894;
+        color: white;
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .values {
+        background: #ffeaa7;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        border-left: 4px solid #fdcb6e;
+    }
+
+    .values strong {
+        color: #d63031;
+    }
+
+    .section {
+        margin-bottom: 15px;
+    }
+
+    .section-title {
+        font-weight: bold;
+        color: #2d3436;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .section-content {
+        padding-left: 10px;
+        color: #555;
+        line-height: 1.6;
+    }
+
+    .section-content ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .section-content li {
+        padding: 5px 0;
+        padding-left: 20px;
+        position: relative;
+    }
+
+    .section-content li:before {
+        content: "•";
+        position: absolute;
+        left: 5px;
+        color: #667eea;
+        font-weight: bold;
+    }
+
+    .important-dates {
+        background: #e8f5e9;
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        border-left: 4px solid #4caf50;
+    }
+
+    .summary-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 15px;
+        margin-top: 40px;
+    }
+
+    .summary-section h3 {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .holidays-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .holidays-table th {
+        background: #764ba2;
+        color: white;
+        padding: 15px;
+        text-align: left;
+    }
+
+    .holidays-table td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #ddd;
+        color: #333;
+    }
+
+    .holidays-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .holidays-table tr:nth-child(even) {
+        background: #f5f7fa;
+    }
+
+    .values-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .value-item {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+        font-weight: bold;
+        color: #667eea;
+    }
+
+    .notes-section {
+        background: #fff3cd;
+        padding: 20px;
+        border-radius: 10px;
+        border-left: 5px solid #ffc107;
+        margin-top: 30px;
+    }
+
+    .notes-section h3 {
+        color: #856404;
+        margin-bottom: 15px;
+    }
+
+    .notes-section ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .notes-section li {
+        padding: 8px 0;
+        padding-left: 25px;
+        position: relative;
+        color: #856404;
+    }
+
+    .notes-section li:before {
+        content: "✅";
+        position: absolute;
+        left: 0;
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+        .back-link { display: none; }
+        .month-card {
+            page-break-inside: avoid;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .calendar-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        header h1 {
+            font-size: 1.8em;
+        }
+        
+        .container {
+            padding: 20px;
+        }
+    }
+</style>
+</head>
+<body>
+    <a class="back-link" href="index.html">← Ana Sayfa</a>
+    <div class="container">
+        <header>
+            <h1>📚 2026-2027 EĞİTİM ÖĞRETİM YILI İŞ TAKVİMİ</h1>
+            <h2>🎓 Türkiye Yüzyılı Maarif Modeli - Değerler Eğitimi Entegreli</h2>
+        </header>
+
+        <div class="calendar-grid">
+            <!-- EYLÜL -->
+            <div class="month-card">
+                <div class="month-header">
+                    <h3>🗓️ EYLÜL 2026</h3>
+                </div>
+                
+                <div class="important-dates">
+                    <strong>📅 7-11 Eylül</strong> → Uyum Programı (İlkokul 1. sınıflar ve anasınıfı)<br>
+                    <strong>📅 14 Eylül (Pazar)</strong> → Tüm sınıflar için eğitim öğretim başlangıcı
+                </div>
+
+                <div class="values">
+                    <strong>💎 Değerler:</strong> Sorumluluk • Vatanseverlik
+                </div>
+
+                <div class="section">
+                    <div class="section-title">🎯 Önemli Günler</div>
+                    <div class="section-content">
+                        <ul>
+                            <li>Son Hafta: Trafik Haftası</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">✨ Etkinlikler</div>
+                    <div class="section-content">
+                        <ul>
+                            <li>Okul açılış törenleri ve uyum programları</li>
+                            <li>Öğrenci tanıma çalışmaları</li>
+                            <li>Maarif Modeli tanıtımı</li>
+                            <li>Veli toplantıları</li>
+                            <li>Sınıf başkanlığı seçimleri</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EKİM -->
+            <div class="month-card">
+                <div class="month-header">
+                    <h3>🗓️ EKİM 2026</h3>
+                </div>
+
+                <div class="holiday-banner">
+                    🎊 28-29 EKİM → CUMHURİYET BAYRAMI
+                </div>
+
+                <div class="values">
+                    <strong>💎 Değerler:</strong> Saygı • Dürüstlük • Vatanseverlik
+                </div>
+
+                <div class="section">
+                    <div class="section-title">🎯 Önemli Günler</div>
+                    <div class="section-content">
+                        <ul>
+                            <li>1-7 Ekim: Dünya Uzay Haftası</li>
+                            <li>4-10 Ekim: Hayvanları Koruma Haftası</li>
+                            <li>13 Ekim: Dünya Afet Azaltma Günü</li>
+                            <li>29 Ekim: Cumhuriyet Bayramı</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">✨ Etkinlikler</div>
+                    <div class="section-content">
+                        <ul>
+                            <li>Cumhuriyet törenleri ve gösterileri</li>
+                            <li>İlk değerlendirme sınavları</li>
+                            <li>Kulüp seçimleri</li>
+                            <li>Proje çalışmaları planlaması</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KASIM -->
+            <div class="month-card">
+                <div class="month-header">
+                    <h3>🗓️ KASIM 2026</h3>
+                </div>
+
+                <div class="ara-tatil-banner">
+                    🌴 16-20 KASIM → 1. DÖNEM ARA TATİL (5 Gün)
+                </div>
+
+                <div class="values">
+                    <strong>💎 Değerler:</strong> Sevgi • Saygı • Empati • Vefa
+                </div>
+
+                <div class="section">
+                    <div class="section-title">🎯 Önemli Günler</div>
+                    <div class="section-content">
+                        <ul>
+                            <li>8 Kasım: Dünya Şehircilik Günü</li>
+                            <li><strong>10 Kasım 09:05: ATATÜRK'Ü ANMA GÜNÜ</strong></li>
+                            <li>12-18 Kasım: Atatürk Haftası</li>
+                            <li>24 Kasım: Öğretmenler Günü</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">✨ Etkinlikler</div>
+                    <div class="section-content">
+                        <ul>
+                            <li>Atatürk'ü anma törenleri</li>
+                            <li>Öğretmenler Günü kutlamaları</li>
+                            <li>Proje çalışmaları başlar</li>
+                            <li>Ara değerlendirme sınavları</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ARALIK -->
+            <div class="month-card">
+                <div class="month-header">
+                    <h3>🗓️ ARALIK 2026</h3>
+                </div>
+
+                <div class="values">
+                    <strong>💎 Değerler:</strong> Yardımseverlik • Dayanışma • Cömertlik
+                </div>
+
+                <div class="section">
+                    <div class="section-title">🎯 Önemli Günler</div>
+                    <div class="section-content">
+                        <ul>
+                            <li>2-9 Aralık: Mevlana Haftası</li>
+                            <li>3 Aralık: Dünya Engelliler Günü</li>
+                            <li>10 Aralık: İnsan Hakları Günü</li>
+                            <li>15 Aralık: Dünya Türkçe Günü</li>
+                            <li>20-27 Aralık: Mehmet Akif Ersoy'u Anma Haftası</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">✨ Etkinlikler</div>
+                    <div class="section-content">
+                        <ul>
+                            <li>Birinci dönem değerlendirme sınavları</li>
+                            <li>Engelliler Haftası etkinlikleri</li>
+                            <li>Sosyal sorumluluk projeleri</li>
+                            <li>Türkçe şöleni ve yarışmalar</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OCAK -->
+            <div class="month-card">
+                <div class="month-header">
+                    <h3>🗓️ OCAK 2027</h3>
+                </div>
+
+                <div class="important-dates">
+                    <strong>📅 22 Ocak (Cuma)</strong> → Birinci Dönem Sonu
+                </div>
+
+                <div class="ara-tatil-banner">
+                    🌴 25 OCAK - 5 ŞUBAT → YARIYIL TATİLİ (12 Gün)
+                </div>
+
+                <div class="values">
+                    <strong>💎 Değerler:</strong> Öz Disiplin • Sabır • Azim
+                </div>
+
+                <div class="section">
+                    <div class="section-title">✨ Etkinlikler</div>
+                    <div class="section-content">
+                        <ul>
+                            <li>Birinci dönem değerlendirme ve karne dağıtımı</li>
+                            <li>Veli görüşmeleri</li>
+                            <li>Gelişim raporları (1-2-3. sınıflar)</li>
+                            <li>Rehberlik toplantıları</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ŞUBAT -->
+            <div class="month-card">
+                <div class="month-header">
+                    <h3>🗓️ ŞUBAT 2027</h3>
+                </div>
+
+                <div class="important-dates">
+                    <strong>📅 8 Şubat (Pazartesi)</strong> → İkinci Dönem Başlangıcı
+                </div>
+
+                <div class="values">
+                    <strong>💎 Değerler:</strong> Çalışkanlık • Azim • Kararlılık
+                </div>
+
+                <div class="section">
+                    <div class="section-title">🎯 Önemli Günler</div>
+                    <div class="section-content">
+                        <ul>
+                            <li>İlk Hafta: Bayrak Sevgisi Haftası</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">✨ Etkinlikler</div>
+                    <div class="section-content">
+                        <ul>
+                            <li>İkinci dönem hedef belirleme</li>
+                            <li>Rehberlik görüşmeleri</li>
+                            <li>STEM ve robotik kodlama atölyeleri</li>
+                            <li>Kulüp faaliyetleri</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MART -->
+            <div class="month-card">
+                <div class="month-header">
+                    <h3>🗓️ MART 2027</h3>
+                </div>
+
+                <div class="ara-tatil-banner">
+                    🌴 8-12 MART → 2. DÖNEM ARA TATİL (5 Gün)
+                </div>
+
+                <div class="holiday-banner" style="margin-top: 10px;">
+                    🌙 RAMAZAN AYI BAŞLANGICI (Tahmini 1-2 Mart)
+                </div>
+
+                <div class="values">
+                    <strong>💎 Değerler:</strong> Merhamet • Hoşgörü • Şükür • Paylaşma
+                </div>
+
+                <div class="section">
+                    <div class="section-title">🎯 Önemli Günler</div>
+                    <div class="section-content">
+                        <ul>
+                            <li><strong>12 Mart: İSTİKLAL MARŞI'NIN KABULÜ</strong></li>
+                            <li>14 Mart: Tıp Bayramı</li>
+                            <li><strong>18 Mart: ÇANAKKALE ZAFERİ</strong></li>
+                            <li>18-24 Mart: Çanakkale Haftası</li>
+                            <li>21 Mart: Nevruz, Dünya Şiir Günü</li>
+                            <li>21-27 Mart: Kütüphane Haftası</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">✨ Etkinlikler</div>
+                    <div class="section-content">
+                        <ul>
+                            <li>İstiklal Marşı anma programları (12 Mart)</li>
+                            <li>Çanakkale Zaferi törenleri (18 Mart)</li>
+                            <li>Ramazan ayı etkinlikleri</li>
+                            <li>İyilik projeleri ve paylaşım kampanyaları</li>
+                            <li>Şiir dinletileri</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NİSAN -->
+            <div class="month-card">
+                <div class="month-header">
+                    <h3>🗓️ NİSAN 2027</h3>
+                </div>
+
+                <div class="holiday-banner">
+                    🎊 31 MART - 3 NİSAN → RAMAZAN BAYRAMI<br>
+                    (Köprü ile 9-10 gün)
+                </div>
+
+                <div class="holiday-banner" style="margin-top: 10px;">
+                    🎉 23 NİSAN → ÇOCUK BAYRAMI
+                </div>
+
+                <div class="values">
+                    <strong>💎 Değerler:</strong> Özgürlük • Adalet • Eşitlik
+                </div>
+
+                <div class="section">
+                    <div class="section-title">🎯 Önemli Günler</div>
+                    <div class="section-content">
+                        <ul>
+                            <li>4 Nisan: Dünya Mayınlara Karşı Farkındalık</li>
+                            <li>7 Nisan: Dünya Sağlık Günü</li>
+                            <li>23 Nisan: Ulusal Egemenlik ve Çocuk Bayramı</li>
+                            <li>23 Nisan Haftası: Çocuk Haftası</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">✨ Etkinlikler</div>
+                    <div class="section-content">
+                        <ul>
+                            <li>Ramazan Bayramı</li>
+                            <li>23 Nisan törenleri ve şenlikleri</li>
+                            <li>Misafir öğrenci programları</li>
+                            <li>Çocuk meclisi</li>
+                            <li>Bahar şenlikleri</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MAYIS -->
+            <div class="month-card">
+                <div class="month-header">
+                    <h3>🗓️ MAYIS 2027</h3>
+                </div>
+
+                <div class="holiday-banner">
+                    🎉 1 MAYIS → İŞÇİ BAYRAMI
+                </div>
+
+                <div class="holiday-banner" style="margin-top: 10px;">
+                    🎉 19 MAYIS → GENÇLİK VE SPOR BAYRAMI
+                </div>
+
+                <div class="values">
+                    <strong>💎 Değerler:</strong> Sağlık • Dayanışma • Dinamizm
+                </div>
+
+                <div class="section">
+                    <div class="section-title">🎯 Önemli Günler</div>
+                    <div class="section-content">
+                        <ul>
+                            <li>3-9 Mayıs: Engelliler Haftası</li>
+                            <li>10 Mayıs: Anneler Günü</li>
+                            <li>15 Mayıs: Uluslararası Aile Günü</li>
+                            <li>19-25 Mayıs: Gençlik Haftası</li>
+                            <li>21 Mayıs: Ahilik Haftası</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">✨ Etkinlikler</div>
+                    <div class="section-content">
+                        <ul>
+                            <li>19 Mayıs törenleri ve spor gösterileri</li>
+                            <li>Gençlik yürüyüşleri</li>
+                            <li>Okullar arası yarışmalar</li>
+                            <li>Proje sunumları</li>
+                            <li>TEKNOFEST hazırlıkları</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HAZİRAN -->
+            <div class="month-card">
+                <div class="month-header">
+                    <h3>🗓️ HAZİRAN 2027</h3>
+                </div>
+
+                <div class="holiday-banner">
+                    🎊 7-11 HAZİRAN → KURBAN BAYRAMI<br>
+                    (Köprü ile 9 gün)
+                </div>
+
+                <div class="important-dates" style="margin-top: 15px;">
+                    <strong>📅 19 Haziran</strong> → 12. Sınıflar mezuniyet<br>
+                    <strong>📅 25 Haziran (Cuma)</strong> → TÜM SINIFLAR EĞİTİM SONU
+                </div>
+
+                <div class="values">
+                    <strong>💎 Değerler:</strong> Başarı • Fedakârlık • Özveride Bulunma
+                </div>
+
+                <div class="section">
+                    <div class="section-title">🎯 Önemli Günler</div>
+                    <div class="section-content">
+                        <ul>
+                            <li>5 Haziran: Dünya Çevre Günü</li>
+                            <li>15 Haziran: Babalar Günü</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">✨ Etkinlikler</div>
+                    <div class="section-content">
+                        <ul>
+                            <li>Kurban Bayramı</li>
+                            <li>Final sınavları</li>
+                            <li>Mezuniyet törenleri (8. ve 12. sınıflar)</li>
+                            <li>Yılsonu gösterileri</li>
+                            <li>Karne töreni (25 Haziran)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TEMMUZ-AĞUSTOS -->
+            <div class="month-card">
+                <div class="month-header">
+                    <h3>🗓️ TEMMUZ-AĞUSTOS 2027</h3>
+                </div>
+
+                <div class="holiday-banner">
+                    🌴 YAZ TATİLİ<br>
+                    26 Haziran - 13 Eylül 2027
+                </div>
+
+                <div class="section">
+                    <div class="section-title">🎯 Önemli Günler</div>
+                    <div class="section-content">
+                        <ul>
+                            <li>1 Temmuz: Denizcilik ve Kabotaj Bayramı</li>
+                            <li><strong>15 Temmuz: Demokrasi ve Milli Birlik Günü</strong></li>
+                            <li>20 Temmuz: Barış ve Özgürlük Bayramı</li>
+                            <li><strong>30 Ağustos: Zafer Bayramı</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">✨ Etkinlikler</div>
+                    <div class="section-content">
+                        <ul>
+                            <li>Yaz okulu programları</li>
+                            <li>DYK kursları</li>
+                            <li>Spor ve sanat kursları</li>
+                            <li>15 Temmuz anma etkinlikleri</li>
+                            <li>30 Ağustos Zafer Bayramı törenleri</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESMİ TATİLLER ÖZETİ -->
+        <div class="summary-section">
+            <h3>📋 RESMİ TATİLLER ve ARA TATİLLER ÖZETİ</h3>
+            <table class="holidays-table">
+                <thead>
+                    <tr>
+                        <th>📅 TARİH</th>
+                        <th>🎊 TATİL</th>
+                        <th>⏱️ SÜRE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>28-29 Ekim 2026</td>
+                        <td>Cumhuriyet Bayramı</td>
+                        <td>2 gün</td>
+                    </tr>
+                    <tr>
+                        <td><strong>16-20 Kasım 2026</strong></td>
+                        <td><strong>1. Dönem Ara Tatil</strong></td>
+                        <td><strong>5 gün</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>25 Ocak - 5 Şubat 2027</strong></td>
+                        <td><strong>Yarıyıl Tatili</strong></td>
+                        <td><strong>12 gün</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>8-12 Mart 2027</strong></td>
+                        <td><strong>2. Dönem Ara Tatil</strong></td>
+                        <td><strong>5 gün</strong></td>
+                    </tr>
+                    <tr>
+                        <td>31 Mart - 3 Nisan 2027*</td>
+                        <td>Ramazan Bayramı</td>
+                        <td>4 gün + köprü</td>
+                    </tr>
+                    <tr>
+                        <td>23 Nisan 2027</td>
+                        <td>Ulusal Egemenlik ve Çocuk Bayramı</td>
+                        <td>1 gün</td>
+                    </tr>
+                    <tr>
+                        <td>1 Mayıs 2027</td>
+                        <td>İşçi Bayramı</td>
+                        <td>1 gün</td>
+                    </tr>
+                    <tr>
+                        <td>19 Mayıs 2027</td>
+                        <td>Gençlik ve Spor Bayramı</td>
+                        <td>1 gün</td>
+                    </tr>
+                    <tr>
+                        <td>7-11 Haziran 2027*</td>
+                        <td>Kurban Bayramı</td>
+                        <td>4 gün + köprü</td>
+                    </tr>
+                    <tr>
+                        <td>15 Temmuz 2027</td>
+                        <td>Demokrasi ve Milli Birlik Günü</td>
+                        <td>1 gün</td>
+                    </tr>
+                    <tr>
+                        <td>30 Ağustos 2027</td>
+                        <td>Zafer Bayramı</td>
+                        <td>1 gün</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="text-align: center; margin-top: 15px; font-size: 0.9em;">
+                (*) Dini bayram tarihleri tahminidir, Diyanet İşleri Başkanlığı tarafından kesinleştirilecektir.
+            </p>
+        </div>
+
+        <!-- MAARİF MODELİ DEĞERLER -->
+        <div class="summary-section">
+            <h3>🌟 TÜRKİYE YÜZYILI MAARİF MODELİ - 10 TEMEL DEĞER</h3>
+            <p style="text-align: center; margin-bottom: 20px;">
+                Erdem-Değer-Eylem çerçevesinde öğrencilere kazandırılacak değerler:
+            </p>
+            <div class="values-grid">
+                <div class="value-item">🤝 Adalet</div>
+                <div class="value-item">💙 Dostluk</div>
+                <div class="value-item">✨ Dürüstlük</div>
+                <div class="value-item">🎯 Öz Denetim</div>
+                <div class="value-item">🕊️ Sabır</div>
+                <div class="value-item">🙏 Saygı</div>
+                <div class="value-item">❤️ Sevgi</div>
+                <div class="value-item">💪 Sorumluluk</div>
+                <div class="value-item">🇹🇷 Vatanseverlik</div>
+                <div class="value-item">🤲 Yardımseverlik</div>
+            </div>
+        </div>
+
+        <!-- ÖNEMLİ NOTLAR -->
+        <div class="notes-section">
+            <h3>📌 ÖNEMLİ NOTLAR</h3>
+            <ul>
+                <li>Uyum Programı: 7-11 Eylül 2026 (İlkokul 1. sınıflar ve anasınıfı)</li>
+                <li>Okulların Açılışı: 14 Eylül 2026 (Tüm sınıflar)</li>
+                <li>1. Dönem Ara Tatil: 16-20 Kasım 2026 (5 gün)</li>
+                <li>1. Dönem Sonu: 22 Ocak 2027</li>
+                <li>Yarıyıl Tatili: 25 Ocak - 5 Şubat 2027 (12 gün)</li>
+                <li>2. Dönem Başlangıcı: 8 Şubat 2027</li>
+                <li>2. Dönem Ara Tatil: 8-12 Mart 2027 (5 gün)</li>
+                <li>2. Dönem Sonu: 25 Haziran 2027</li>
+                <li>Maarif Modeli 2026-2027'de okul öncesi, 1., 5. ve 9. sınıflarda pilot uygulama</li>
+                <li>"Erdem-Değer-Eylem" çerçevesi tüm derslerde entegre</li>
+            </ul>
+        </div>
+
+        <footer style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 2px solid #ddd; color: #666;">
+            <p style="font-size: 1.2em; margin-bottom: 10px;">🎓 Başarılı bir eğitim öğretim yılı dileriz!</p>
+            <p style="font-size: 0.9em;">2026-2027 Eğitim Öğretim Yılı İş Takvimi - MEB Resmi Takvimi</p>
+        </footer>
+    </div>
+</body>
+</html>
