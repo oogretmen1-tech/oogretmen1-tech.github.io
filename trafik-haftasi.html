@@ -1,712 +1,1862 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trafik ve İlk Yardım Haftası</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
-<style>
-:root{--red:#cc0000;--blue:#1565c0;--dark:#1d3557;--green:#1b7a6e;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#1d3557,#457b9d);min-height:100vh;}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trafik ve İlk Yardım Haftası - Eğitim Materyali</title>
+    <style>
+        @media print {
+            body { margin: 0; background: white; }
+            .sayfa { page-break-after: always; }
+            .no-print { display: none; }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .sayfa {
+            background: white;
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto 30px;
+            padding: 20mm;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        .baslik {
+            text-align: center;
+            background: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
+            color: #333;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 4px solid #333;
+        }
+        
+        .baslik h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .baslik p {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        /* TRAFİK IŞIKLARI */
+        .trafik-isigi {
+            width: 120px;
+            height: 320px;
+            background: #2c3e50;
+            border-radius: 20px;
+            padding: 15px;
+            display: inline-block;
+            margin: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            vertical-align: top;
+        }
+        
+        .isik {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            margin: 10px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            border: 4px solid #34495e;
+        }
+        
+        .kirmizi {
+            background: radial-gradient(circle, #ff4444, #cc0000);
+            box-shadow: 0 0 30px rgba(255, 68, 68, 0.8);
+        }
+        
+        .sari {
+            background: radial-gradient(circle, #ffeb3b, #fbc02d);
+            box-shadow: 0 0 30px rgba(255, 235, 59, 0.8);
+        }
+        
+        .yesil {
+            background: radial-gradient(circle, #4caf50, #2e7d32);
+            box-shadow: 0 0 30px rgba(76, 175, 80, 0.8);
+        }
+        
+        /* TRAFİK LEVHALARI */
+        .levha-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        
+        .levha {
+            width: 140px;
+            margin: 15px;
+            text-align: center;
+        }
+        
+        .levha-sekil {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            font-weight: bold;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Yuvarlak Levhalar - Yasak */
+        .yuvarlak {
+            border-radius: 50%;
+            background: white;
+            border: 8px solid #d32f2f;
+        }
+        
+        /* Üçgen Levhalar - Uyarı */
+        .ucgen {
+            width: 0;
+            height: 0;
+            border-left: 60px solid transparent;
+            border-right: 60px solid transparent;
+            border-bottom: 104px solid #ffd700;
+            position: relative;
+            background: none !important;
+            border-top: none;
+            box-shadow: none;
+        }
+        
+        .ucgen-ic {
+            position: absolute;
+            top: 8px;
+            left: -52px;
+            width: 0;
+            height: 0;
+            border-left: 52px solid transparent;
+            border-right: 52px solid transparent;
+            border-bottom: 90px solid white;
+        }
+        
+        .ucgen-icerik {
+            position: absolute;
+            top: 30px;
+            left: -30px;
+            width: 60px;
+            text-align: center;
+            font-size: 40px;
+        }
+        
+        /* Kare Levhalar - Bilgi */
+        .kare {
+            background: #2196F3;
+            border-radius: 10px;
+        }
+        
+        .levha-yazi {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 10px;
+            line-height: 1.3;
+        }
+        
+        /* İLK YARDIM */
+        .ilkyardim-kutu {
+            background: white;
+            border: 4px solid #d32f2f;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .ilkyardim-baslik {
+            background: #d32f2f;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .adim {
+            background: #f0f0f0;
+            border-left: 6px solid #d32f2f;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .adim-numara {
+            background: #d32f2f;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            margin-right: 15px;
+        }
+        
+        .bilgi-kutusu {
+            background: #fff3cd;
+            border: 3px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 16px;
+        }
+        
+        .uyari-kutusu {
+            background: #ffebee;
+            border: 3px solid #d32f2f;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 16px;
+        }
+        
+        .baslik-kucuk {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 22px;
+            font-weight: bold;
+            margin: 20px 0 15px 0;
+            text-align: center;
+        }
+        
+        .ad-soyad {
+            border-bottom: 2px solid #333;
+            width: 300px;
+            margin: 10px auto;
+            padding: 5px;
+            font-size: 16px;
+        }
+        
+        .tarih {
+            position: absolute;
+            top: 20mm;
+            right: 20mm;
+            font-size: 16px;
+            color: #666;
+        }
+        
+        .no-print {
+            text-align: center;
+            margin: 20px;
+        }
+        
+        .no-print button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .no-print button:hover {
+            background: #218838;
+        }
+        
+        .acil-telefon {
+            display: inline-block;
+            background: #d32f2f;
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            font-size: 32px;
+            font-weight: bold;
+            margin: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .acil-telefon-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .yaya-gecidi {
+            width: 100%;
+            height: 100px;
+            background: repeating-linear-gradient(
+                90deg,
+                white 0px,
+                white 40px,
+                #333 40px,
+                #333 80px
+            );
+            border: 4px solid #333;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .yaya-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 60px;
+        }
+        
+        .trafik-kurali {
+            display: flex;
+            align-items: center;
+            background: #e3f2fd;
+            border-left: 6px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .kural-icon {
+            font-size: 40px;
+            margin-right: 20px;
+            min-width: 60px;
+            text-align: center;
+        }
+        
+        .kural-yazi {
+            font-size: 16px;
+            line-height: 1.6;
+        }
 
-.header{text-align:center;padding:26px 16px 14px;color:white;}
-.header h1{font-family:'Baloo 2',cursive;font-size:clamp(20px,5vw,42px);text-shadow:3px 3px 0 rgba(0,0,0,.25);}
-.header p{font-size:13px;opacity:.8;margin-top:4px;}
+        .dogru-yanlis {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
 
-.tabs{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;padding:0 12px 14px;}
-.tab-btn{background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);color:white;padding:9px 16px;border-radius:30px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;}
-.tab-btn:hover{background:rgba(255,255,255,.28);}
-.tab-btn.active{background:white;color:var(--dark);border-color:white;}
+        .durum-kutu {
+            width: 45%;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
 
-.section{display:none;max-width:960px;margin:0 auto;padding:0 14px 40px;}
-.section.active{display:block;}
+        .dogru-kutu {
+            background: #c8e6c9;
+            border: 4px solid #4caf50;
+        }
 
-.card{background:white;border-radius:18px;padding:24px;box-shadow:0 6px 28px rgba(0,0,0,.15);margin-bottom:18px;}
-.sec-label{font-family:'Baloo 2',cursive;font-size:17px;color:white;margin:16px 0 10px;opacity:.9;}
+        .yanlis-kutu {
+            background: #ffcdd2;
+            border: 4px solid #f44336;
+        }
 
-/* ŞİİR */
-.poem-wrap{background:white;border-radius:18px;padding:28px;box-shadow:0 6px 28px rgba(0,0,0,.15);text-align:center;position:relative;overflow:hidden;}
-.poem-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:7px;background:linear-gradient(90deg,var(--red),#f4c430,var(--green));}
-.poem-title{font-family:'Baloo 2',cursive;font-size:22px;color:var(--dark);margin-bottom:4px;}
-.poem-sub{font-size:12px;color:#aaa;margin-bottom:20px;}
-.poem-body{font-size:16px;line-height:2.1;color:#333;white-space:pre-line;display:inline-block;text-align:left;}
-.poem-body b{color:var(--red);}
-.print-btn{margin-top:18px;background:var(--dark);color:white;border:none;padding:10px 26px;border-radius:30px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:inline-block;transition:transform .2s;}
-.print-btn:hover{transform:scale(1.05);}
+        .durum-icon {
+            font-size: 80px;
+            margin: 20px 0;
+        }
 
-/* İŞARET KARTLARI */
-.signs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:14px;}
-.sign-card{background:white;border-radius:14px;padding:18px 10px 14px;text-align:center;box-shadow:0 4px 14px rgba(0,0,0,.12);transition:transform .2s;}
-.sign-card:hover{transform:translateY(-4px);}
-.sign-card svg{width:86px;height:86px;}
-.sign-card .sname{font-weight:800;font-size:13px;color:var(--dark);margin-top:9px;margin-bottom:4px;}
-.sign-card .sdesc{font-size:11px;color:#666;line-height:1.5;}
-.cat-pill{display:inline-block;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;margin-top:6px;}
-.pill-r{background:#fde8e8;color:#a00;}
-.pill-b{background:#e3f0ff;color:var(--blue);}
-.pill-y{background:#fff8dc;color:#7c5800;}
-.pill-p{background:#eef;color:#555;}
-
-/* KURALLAR */
-.rules-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:12px;}
-.rule-row{background:white;border-radius:14px;padding:15px 14px;display:flex;align-items:flex-start;gap:12px;box-shadow:0 3px 10px rgba(0,0,0,.1);}
-.rule-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;flex-shrink:0;color:white;}
-.rule-text{font-size:13px;color:#333;line-height:1.55;font-weight:600;}
-
-/* İLK YARDIM */
-.emerg-box{background:linear-gradient(135deg,#b71c1c,#7f0000);color:white;border-radius:18px;padding:22px;margin-bottom:16px;text-align:center;box-shadow:0 6px 20px rgba(150,0,0,.4);}
-.emerg-box h3{font-family:'Baloo 2',cursive;font-size:20px;margin-bottom:6px;}
-.emerg-box p{font-size:13px;opacity:.85;margin-bottom:14px;}
-.emerg-num{display:inline-block;background:white;color:#b71c1c;font-family:'Baloo 2',cursive;font-size:52px;font-weight:900;padding:10px 36px;border-radius:16px;letter-spacing:4px;}
-
-.ilk-info{background:white;border-radius:16px;padding:20px;box-shadow:0 4px 14px rgba(0,0,0,.1);margin-bottom:14px;}
-.ilk-info h4{font-family:'Baloo 2',cursive;font-size:17px;color:var(--dark);margin-bottom:10px;}
-.ilk-info p{font-size:13px;color:#444;line-height:1.75;margin-bottom:8px;}
-.ilk-info p:last-child{margin-bottom:0;}
-
-.fa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:13px;}
-.fa-card{background:white;border-radius:14px;padding:18px 13px;text-align:center;box-shadow:0 3px 12px rgba(0,0,0,.1);border-top:4px solid var(--green);transition:transform .2s;}
-.fa-card:hover{transform:translateY(-3px);}
-.fa-icon{font-size:36px;margin-bottom:7px;}
-.fa-title{font-weight:800;font-size:13px;color:var(--dark);margin-bottom:5px;}
-.fa-desc{font-size:11px;color:#555;line-height:1.65;}
-
-/* OYUN */
-.game-wrap{background:white;border-radius:18px;padding:24px;box-shadow:0 6px 28px rgba(0,0,0,.15);}
-.game-h{font-family:'Baloo 2',cursive;font-size:20px;color:var(--dark);text-align:center;margin-bottom:4px;}
-.game-d{text-align:center;color:#777;font-size:13px;margin-bottom:14px;}
-.score-row{text-align:center;margin-bottom:12px;}
-.score-pill{background:var(--dark);color:white;padding:6px 18px;border-radius:30px;font-weight:800;font-size:13px;}
-.match-cols{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
-.match-col-h{text-align:center;font-weight:800;font-size:11px;color:#999;margin-bottom:5px;}
-.m-col{display:flex;flex-direction:column;gap:8px;}
-.mitem{border:2px solid #e0e0e0;border-radius:12px;padding:10px 8px;text-align:center;cursor:pointer;font-size:11px;font-weight:700;background:#fafafa;transition:all .2s;line-height:1.4;}
-.mitem svg{width:50px;height:50px;display:block;margin:0 auto 5px;}
-.mitem:hover{background:#f0f4ff;border-color:var(--blue);}
-.mitem.selected{background:#dbeafe;border-color:var(--blue);}
-.mitem.correct{background:#d1fae5;border-color:var(--green);pointer-events:none;}
-.mitem.wrong{background:#fee2e2;border-color:var(--red);animation:shake .3s;}
-@keyframes shake{0%,100%{transform:translateX(0)}30%{transform:translateX(-6px)}70%{transform:translateX(6px)}}
-.reset-btn{display:block;margin:0 auto;background:var(--green);color:white;border:none;padding:10px 28px;border-radius:30px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:transform .2s;}
-.reset-btn:hover{transform:scale(1.05);}
-.res-msg{text-align:center;font-size:15px;font-weight:800;padding:10px;border-radius:12px;margin-bottom:12px;display:none;}
-.res-msg.show{display:block;}
-.res-msg.win{background:#d1fae5;color:#065f46;}
-
-/* PANO */
-.pano-top{text-align:center;background:linear-gradient(135deg,var(--red),var(--dark));color:white;border-radius:14px;padding:20px;margin-bottom:16px;}
-.pano-top h2{font-family:'Baloo 2',cursive;font-size:22px;}
-.pano-items{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:11px;margin-bottom:16px;}
-.pano-item{border:3px dashed #ddd;border-radius:13px;padding:13px 8px;text-align:center;}
-.pano-item svg{width:58px;height:58px;}
-.pano-item .pt{font-size:11px;font-weight:700;color:var(--dark);margin-top:5px;}
-.pano-tip{background:#fff8e1;border-radius:13px;padding:14px;font-size:13px;color:#5f3b00;line-height:1.8;margin-bottom:14px;}
-
-@media print{
-  body{background:white!important;}
-  .tabs,.header{display:none!important;}
-  .section{display:block!important;}
-  .print-btn,.reset-btn{display:none!important;}
-}
-</style>
+        .renk-aciklama {
+            display: inline-block;
+            padding: 15px 25px;
+            margin: 10px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 18px;
+            border: 3px solid #333;
+        }
+    </style>
 </head>
 <body>
 
-<div class="header">
-  <h1>🚦 Trafik ve İlk Yardım Haftası</h1>
-  <p>4 – 10 Mayıs • 2. Sınıf Materyalleri</p>
-</div>
-
-<div class="tabs">
-  <button class="tab-btn active" onclick="showTab('siir',this)">📝 Şiir</button>
-  <button class="tab-btn" onclick="showTab('isaret',this)">🛑 Trafik İşaretleri</button>
-  <button class="tab-btn" onclick="showTab('kurallar',this)">📋 Kurallar</button>
-  <button class="tab-btn" onclick="showTab('ilkyardim',this)">🩺 İlk Yardım</button>
-  <button class="tab-btn" onclick="showTab('oyun',this)">🎮 Oyun</button>
-  <button class="tab-btn" onclick="showTab('pano',this)">🖼️ Pano</button>
-</div>
-
-<!-- ŞİİR -->
-<div class="section active" id="siir">
-  <div class="poem-wrap">
-    <div class="poem-title">🚦 Trafik Şiirim</div>
-    <div class="poem-sub">2. Sınıf • Trafik ve İlk Yardım Haftası</div>
-    <div class="poem-body">Kırmızı ışık yanar mı?
-<b>Dur, bekle, geçme sakın!</b>
-Sarı söyler: hazırlan,
-<b>Yeşilde geç, bak sağa-sola!</b>
-
-Kaldırımda yürü hep,
-Yola çıkma rastgele.
-Yaya geçidinden geç,
-<b>Güvenli ol, emin ol!</b>
-
-Araçta kemer tak her gün,
-Unutma bu basit kuralı.
-Trafik herkesin işi,
-<b>Kurala uymak şart bu yolda!</b>
-
-Biri düşüp yaralanırsa,
-Panik yapma, sakin kal.
-Büyükleri hemen çağır,
-<b>Yoksa ara: Yüz On İki!</b>
-
-Trafik bilmek, kural bilmek,
-İlk yardım öğrenmek de…
-İkisi birden hayat kurtarır,
-<b>Hem seni, hem de beni!</b></div>
-    <br>
-    <button class="print-btn" onclick="window.print()">🖨️ Yazdır</button>
-  </div>
-</div>
-
-<!-- TRAFİK İŞARETLERİ -->
-<div class="section" id="isaret">
-
-  <!-- AÇIKLAMA KUTUSU -->
-  <div class="card" style="margin-bottom:16px;">
-    <div style="font-family:'Baloo 2',cursive;font-size:17px;color:var(--dark);margin-bottom:10px;">Trafik İşaretlerinin Renk ve Şekilleri</div>
-    <div style="display:flex;flex-wrap:wrap;gap:10px;font-size:13px;">
-      <div style="display:flex;align-items:center;gap:7px;background:#fde8e8;padding:7px 12px;border-radius:10px;">
-        <svg width="22" height="22" viewBox="0 0 40 36"><polygon points="20,2 38,34 2,34" fill="white" stroke="#cc0000" stroke-width="4"/></svg>
-        <span><b>Kırmızı Üçgen</b> = Tehlike Uyarısı</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:7px;background:#fde8e8;padding:7px 12px;border-radius:10px;">
-        <svg width="22" height="22" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="white" stroke="#cc0000" stroke-width="4"/></svg>
-        <span><b>Kırmızı Yuvarlak</b> = Yasaklayıcı</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:7px;background:#e3f0ff;padding:7px 12px;border-radius:10px;">
-        <svg width="22" height="22" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#1565c0"/></svg>
-        <span><b>Mavi Yuvarlak</b> = Zorunlu</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:7px;background:#e3f0ff;padding:7px 12px;border-radius:10px;">
-        <svg width="22" height="22" viewBox="0 0 40 40"><rect x="2" y="2" width="36" height="36" rx="4" fill="#1565c0"/></svg>
-        <span><b>Mavi Kare/Dikdörtgen</b> = Bilgi</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="sec-label">⚠️ Tehlike Uyarı İşaretleri — Beyaz zemin, kırmızı kenarlı üçgen</div>
-  <div class="signs-grid">
-
-    <!-- T-11 Yaya Geçidi -->
-    <div class="sign-card">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="50,6 94,88 6,88" fill="white" stroke="#cc0000" stroke-width="6"/>
-        <!-- yaya figürü -->
-        <circle cx="50" cy="34" r="6" fill="black"/>
-        <line x1="50" y1="40" x2="50" y2="57" stroke="black" stroke-width="4.5" stroke-linecap="round"/>
-        <line x1="50" y1="47" x2="41" y2="54" stroke="black" stroke-width="3.5" stroke-linecap="round"/>
-        <line x1="50" y1="47" x2="59" y2="54" stroke="black" stroke-width="3.5" stroke-linecap="round"/>
-        <line x1="50" y1="57" x2="43" y2="68" stroke="black" stroke-width="3.5" stroke-linecap="round"/>
-        <line x1="50" y1="57" x2="57" y2="68" stroke="black" stroke-width="3.5" stroke-linecap="round"/>
-        <!-- zebra çizgileri -->
-        <line x1="35" y1="76" x2="65" y2="76" stroke="black" stroke-width="3"/>
-        <line x1="35" y1="81" x2="65" y2="81" stroke="black" stroke-width="3"/>
-      </svg>
-      <div class="sname">YAYA GEÇİDİ (T-11)</div>
-      <div class="sdesc">İleride yaya geçidi var, dikkatli ol.</div>
-      <span class="cat-pill pill-r">Tehlike Uyarı</span>
+    <div class="no-print">
+        <button onclick="window.print()">🖨️ YAZDIR</button>
     </div>
 
-    <!-- T-12 Okul Geçidi -->
-    <div class="sign-card">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="50,6 94,88 6,88" fill="white" stroke="#cc0000" stroke-width="6"/>
-        <!-- büyük çocuk -->
-        <circle cx="42" cy="33" r="5" fill="black"/>
-        <line x1="42" y1="38" x2="42" y2="53" stroke="black" stroke-width="4" stroke-linecap="round"/>
-        <line x1="42" y1="44" x2="35" y2="51" stroke="black" stroke-width="3" stroke-linecap="round"/>
-        <line x1="42" y1="44" x2="49" y2="51" stroke="black" stroke-width="3" stroke-linecap="round"/>
-        <line x1="42" y1="53" x2="37" y2="64" stroke="black" stroke-width="3" stroke-linecap="round"/>
-        <line x1="42" y1="53" x2="47" y2="64" stroke="black" stroke-width="3" stroke-linecap="round"/>
-        <!-- küçük çocuk -->
-        <circle cx="60" cy="36" r="4" fill="black"/>
-        <line x1="60" y1="40" x2="60" y2="53" stroke="black" stroke-width="3.5" stroke-linecap="round"/>
-        <line x1="60" y1="45" x2="54" y2="51" stroke="black" stroke-width="2.5" stroke-linecap="round"/>
-        <line x1="60" y1="45" x2="66" y2="51" stroke="black" stroke-width="2.5" stroke-linecap="round"/>
-        <line x1="60" y1="53" x2="56" y2="63" stroke="black" stroke-width="2.5" stroke-linecap="round"/>
-        <line x1="60" y1="53" x2="64" y2="63" stroke="black" stroke-width="2.5" stroke-linecap="round"/>
-        <!-- el tutuşu çizgisi -->
-        <line x1="47" y1="46" x2="54" y2="46" stroke="black" stroke-width="2.5"/>
-      </svg>
-      <div class="sname">OKUL GEÇİDİ (T-12)</div>
-      <div class="sdesc">Çocuklar geçiyor, yavaşla!</div>
-      <span class="cat-pill pill-r">Tehlike Uyarı</span>
+    <!-- SAYFA 1: KAPAK VE TRAFİK IŞIKLARI -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2024</div>
+        <div class="baslik">
+            <h1>🚦 TRAFİK VE İLK YARDIM HAFTASI 🚑</h1>
+            <p>Güvenli Yaşam İçin Bilinmesi Gerekenler</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="baslik-kucuk">🚦 TRAFİK IŞIKLARI VE ANLAMLARI</div>
+
+        <div style="text-align: center; margin: 40px 0;">
+            <div class="trafik-isigi">
+                <div class="isik kirmizi">🛑</div>
+                <div class="isik" style="background: #555;"></div>
+                <div class="isik" style="background: #555;"></div>
+            </div>
+            
+            <div class="trafik-isigi">
+                <div class="isik" style="background: #555;"></div>
+                <div class="isik sari">⚠️</div>
+                <div class="isik" style="background: #555;"></div>
+            </div>
+            
+            <div class="trafik-isigi">
+                <div class="isik" style="background: #555;"></div>
+                <div class="isik" style="background: #555;"></div>
+                <div class="isik yesil">✓</div>
+            </div>
+        </div>
+
+        <div style="margin: 30px 0;">
+            <div style="text-align: center;">
+                <div class="renk-aciklama" style="background: #ff4444; color: white;">
+                    🔴 KIRMIZI IŞIK: DUR!
+                </div>
+                <p style="margin: 10px 0; font-size: 16px;">Kırmızı ışıkta kesinlikle durmalı, yolu geçmemelisiniz.</p>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <div class="renk-aciklama" style="background: #ffeb3b; color: #333;">
+                    🟡 SARI IŞIK: DİKKAT!
+                </div>
+                <p style="margin: 10px 0; font-size: 16px;">Sarı ışık, ışıkların değişeceğini gösterir. Hazır ol!</p>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <div class="renk-aciklama" style="background: #4caf50; color: white;">
+                    🟢 YEŞİL IŞIK: GEÇ!
+                </div>
+                <p style="margin: 10px 0; font-size: 16px;">Yeşil ışıkta sağa sola bakarak güvenli bir şekilde geçebilirsiniz.</p>
+            </div>
+        </div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 ÖNEMLİ NOT:</strong> Yeşil ışık yandığında bile yolu geçmeden önce mutlaka sağa ve sola bakın!
+        </div>
+
+        <div class="yaya-gecidi">
+            <div class="yaya-icon">🚶</div>
+        </div>
+        <p style="text-align: center; font-weight: bold; font-size: 18px;">
+            ⬆️ Yaya Geçidi - Sadece buralardan karşıya geçilir!
+        </p>
     </div>
 
-    <!-- T-8 Kaygan Yol -->
-    <div class="sign-card">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="50,6 94,88 6,88" fill="white" stroke="#cc0000" stroke-width="6"/>
-        <!-- kayan araba -->
-        <rect x="30" y="42" width="32" height="16" rx="3" fill="black"/>
-        <rect x="33" y="36" width="20" height="10" rx="2" fill="black"/>
-        <circle cx="36" cy="59" r="5" fill="#555"/>
-        <circle cx="56" cy="59" r="5" fill="#555"/>
-        <!-- kayma izi -->
-        <path d="M 28 65 Q 38 70 48 65 Q 58 60 68 65" stroke="black" stroke-width="3" fill="none" stroke-linecap="round"/>
-        <path d="M 28 72 Q 38 77 48 72 Q 58 67 68 72" stroke="black" stroke-width="2" fill="none" stroke-linecap="round"/>
-      </svg>
-      <div class="sname">KAYGAN YOL (T-8)</div>
-      <div class="sdesc">Yol kaygan, yavaş git!</div>
-      <span class="cat-pill pill-r">Tehlike Uyarı</span>
+    <!-- SAYFA 2: YUVARLAK LEVHALAR - YASAK İŞARETLERİ -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2024</div>
+        <div class="baslik">
+            <h1>🔴 YUVARLAK LEVHALAR</h1>
+            <p>Yasak ve Zorunluluk İşaretleri</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>📌 Yuvarlak Levhalar Nedir?</strong><br>
+            Kırmızı kenarlı yuvarlak levhalar YASAK işaretleridir. Mavi yuvarlak levhalar ise ZORUNLULUK işaretleridir.
+        </div>
+
+        <div class="baslik-kucuk">🚫 KIRMIZI ÇERÇEVE - YASAK İŞARETLERİ</div>
+
+        <div class="levha-container">
+            <div class="levha">
+                <div class="levha-sekil yuvarlak">
+                    <div style="position: relative; width: 100%; height: 100%;">
+                        <div style="position: absolute; top: 50%; left: 10%; right: 10%; height: 8px; background: #d32f2f; transform: rotate(-45deg);"></div>
+                        <div style="font-size: 45px; position: relative; z-index: 1;">🚗</div>
+                    </div>
+                </div>
+                <div class="levha-yazi">GİRİŞ YASAK</div>
+            </div>
+
+            <div class="levha">
+                <div class="levha-sekil yuvarlak">
+                    <div style="position: relative; width: 100%; height: 100%;">
+                        <div style="position: absolute; top: 50%; left: 10%; right: 10%; height: 8px; background: #d32f2f; transform: rotate(-45deg);"></div>
+                        <div style="font-size: 45px; position: relative; z-index: 1;">🚴</div>
+                    </div>
+                </div>
+                <div class="levha-yazi">BİSİKLET YASAK</div>
+            </div>
+
+            <div class="levha">
+                <div class="levha-sekil yuvarlak">
+                    <div style="position: relative; width: 100%; height: 100%;">
+                        <div style="position: absolute; top: 50%; left: 10%; right: 10%; height: 8px; background: #d32f2f; transform: rotate(-45deg);"></div>
+                        <div style="font-size: 45px; position: relative; z-index: 1;">🚶</div>
+                    </div>
+                </div>
+                <div class="levha-yazi">YAYA GEÇİŞİ YASAK</div>
+            </div>
+
+            <div class="levha">
+                <div class="levha-sekil yuvarlak">
+                    <div style="position: relative; width: 100%; height: 100%;">
+                        <div style="position: absolute; top: 50%; left: 10%; right: 10%; height: 8px; background: #d32f2f; transform: rotate(-45deg);"></div>
+                        <div style="font-size: 45px; position: relative; z-index: 1;">📢</div>
+                    </div>
+                </div>
+                <div class="levha-yazi">KORNA ÇALMAK YASAK</div>
+            </div>
+
+            <div class="levha">
+                <div class="levha-sekil yuvarlak" style="background: white;">
+                    <div style="font-size: 50px; font-weight: bold; color: #d32f2f;">50</div>
+                </div>
+                <div class="levha-yazi">AZAMI HIZ SINIRI</div>
+            </div>
+
+            <div class="levha">
+                <div class="levha-sekil yuvarlak" style="background: #d32f2f;">
+                    <div style="width: 80%; height: 10px; background: white; margin: 0 auto;"></div>
+                </div>
+                <div class="levha-yazi">GİRİLMEZ</div>
+            </div>
+        </div>
+
+        <div class="baslik-kucuk">🔵 MAVİ ÇERÇEVE - ZORUNLULUK İŞARETLERİ</div>
+
+        <div class="levha-container">
+            <div class="levha">
+                <div class="levha-sekil" style="background: #2196F3; border-radius: 50%; border: none;">
+                    <div style="font-size: 50px; color: white;">➡️</div>
+                </div>
+                <div class="levha-yazi">SAĞA DÖNÜLMELI</div>
+            </div>
+
+            <div class="levha">
+                <div class="levha-sekil" style="background: #2196F3; border-radius: 50%; border: none;">
+                    <div style="font-size: 50px; color: white;">🚴</div>
+                </div>
+                <div class="levha-yazi">BİSİKLET YOLU</div>
+            </div>
+
+            <div class="levha">
+                <div class="levha-sekil" style="background: #2196F3; border-radius: 50%; border: none;">
+                    <div style="font-size: 50px; color: white;">🚶</div>
+                </div>
+                <div class="levha-yazi">YAYA YOLU</div>
+            </div>
+
+            <div class="levha">
+                <div class="levha-sekil" style="background: #2196F3; border-radius: 50%; border: none;">
+                    <div style="font-size: 40px; font-weight: bold; color: white;">30</div>
+                </div>
+                <div class="levha-yazi">ASGARİ HIZ</div>
+            </div>
+        </div>
+
+        <div class="uyari-kutusu">
+            <strong>⚠️ DİKKAT!</strong><br>
+            Kırmızı kenarlı yuvarlak levhalar yasağı, mavi yuvarlak levhalar zorunluluğu gösterir!
+        </div>
     </div>
 
-    <!-- T-20 Dikkat -->
-    <div class="sign-card">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="50,6 94,88 6,88" fill="white" stroke="#cc0000" stroke-width="6"/>
-        <!-- ünlem işareti -->
-        <rect x="46" y="30" width="8" height="32" rx="4" fill="black"/>
-        <circle cx="50" cy="74" r="5" fill="black"/>
-      </svg>
-      <div class="sname">DİKKAT (T-20)</div>
-      <div class="sdesc">İleride tehlike var, dikkatli ol!</div>
-      <span class="cat-pill pill-r">Tehlike Uyarı</span>
+    <!-- SAYFA 3: ÜÇGEN LEVHALAR - UYARI İŞARETLERİ -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2024</div>
+        <div class="baslik">
+            <h1>⚠️ ÜÇGEN LEVHALAR</h1>
+            <p>Uyarı ve Dikkat İşaretleri</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>📌 Üçgen Levhalar Nedir?</strong><br>
+            Sarı veya beyaz zemin üzerine kırmızı kenarlı üçgen levhalar UYARI işaretleridir. Yaklaşan tehlikeyi önceden bildirirler.
+        </div>
+
+        <div class="baslik-kucuk">⚠️ UYARI İŞARETLERİ</div>
+
+        <div class="levha-container">
+            <div class="levha">
+                <div class="ucgen">
+                    <div class="ucgen-ic"></div>
+                    <div class="ucgen-icerik">👶</div>
+                </div>
+                <div class="levha-yazi" style="margin-top: 15px;">OKUL GEÇİDİ<br>DİKKAT!</div>
+            </div>
+
+            <div class="levha">
+                <div class="ucgen">
+                    <div class="ucgen-ic"></div>
+                    <div class="ucgen-icerik">🚸</div>
+                </div>
+                <div class="levha-yazi" style="margin-top: 15px;">YAYA GEÇİDİ<br>DİKKAT!</div>
+            </div>
+
+            <div class="levha">
+                <div class="ucgen">
+                    <div class="ucgen-ic"></div>
+                    <div class="ucgen-icerik" style="font-size: 60px; top: 25px;">🚧</div>
+                </div>
+                <div class="levha-yazi" style="margin-top: 15px;">YOL ÇALIŞMASI</div>
+            </div>
+
+            <div class="levha">
+                <div class="ucgen">
+                    <div class="ucgen-ic"></div>
+                    <div class="ucgen-icerik" style="font-size: 50px; top: 25px;">⚡</div>
+                </div>
+                <div class="levha-yazi" style="margin-top: 15px;">TEHLİKELİ<br>VİRAJ</div>
+            </div>
+
+            <div class="levha">
+                <div class="ucgen">
+                    <div class="ucgen-ic"></div>
+                    <div class="ucgen-icerik" style="font-size: 50px; top: 25px;">🦌</div>
+                </div>
+                <div class="levha-yazi" style="margin-top: 15px;">HAYVAN<br>GEÇİŞİ</div>
+            </div>
+
+            <div class="levha">
+                <div class="ucgen">
+                    <div class="ucgen-ic"></div>
+                    <div class="ucgen-icerik" style="font-size: 30px; top: 35px; font-weight: bold; color: #d32f2f;">❗❗</div>
+                </div>
+                <div class="levha-yazi" style="margin-top: 15px;">DİĞER<br>TEHLİKELER</div>
+            </div>
+        </div>
+
+        <div class="baslik-kucuk">⛔ ÖNCELİK İŞARETLERİ</div>
+
+        <div class="levha-container">
+            <div class="levha">
+                <div style="width: 120px; height: 120px; background: #ffd700; margin: 0 auto; transform: rotate(45deg); border: 4px solid #d32f2f; box-shadow: 0 5px 15px rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center;">
+                    <div style="transform: rotate(-45deg); font-size: 40px; font-weight: bold; color: #d32f2f;">STOP</div>
+                </div>
+                <div class="levha-yazi">DUR<br>(Mutlaka Durun)</div>
+            </div>
+
+            <div class="levha">
+                <div class="ucgen" style="transform: rotate(180deg);">
+                    <div class="ucgen-ic"></div>
+                </div>
+                <div class="levha-yazi" style="margin-top: 15px;">YOL VER<br>(Öncelik Karşıda)</div>
+            </div>
+
+            <div class="levha">
+                <div style="width: 120px; height: 120px; background: #ffd700; margin: 0 auto; transform: rotate(45deg); border: 4px solid #333; box-shadow: 0 5px 15px rgba(0,0,0,0.2);"></div>
+                <div class="levha-yazi">ANA YOL</div>
+            </div>
+
+            <div class="levha">
+                <div class="levha-sekil" style="background: #2196F3; color: white; font-size: 60px; border: none;">
+                    ⛔
+                </div>
+                <div class="levha-yazi">ÇIKMAZSOKAKYOL</div>
+            </div>
+        </div>
+
+        <div class="uyari-kutusu">
+            <strong>⚠️ ÖNEMLİ!</strong><br>
+            Üçgen levhalar yaklaşan tehlikeyi gösterir. Bu levhaları gördüğünüzde hızınızı azaltın ve dikkatli olun!
+        </div>
     </div>
 
-    <!-- T-15 Yolda Çalışma - SARI zemin -->
-    <div class="sign-card">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="50,6 94,88 6,88" fill="#f4c430" stroke="#cc0000" stroke-width="6"/>
-        <!-- işçi figürü -->
-        <circle cx="50" cy="30" r="6" fill="black"/>
-        <line x1="50" y1="36" x2="50" y2="55" stroke="black" stroke-width="4.5" stroke-linecap="round"/>
-        <line x1="50" y1="43" x2="40" y2="50" stroke="black" stroke-width="3.5" stroke-linecap="round"/>
-        <line x1="40" y1="50" x2="36" y2="60" stroke="black" stroke-width="3" stroke-linecap="round"/>
-        <line x1="50" y1="55" x2="43" y2="66" stroke="black" stroke-width="3.5" stroke-linecap="round"/>
-        <line x1="50" y1="55" x2="57" y2="66" stroke="black" stroke-width="3.5" stroke-linecap="round"/>
-        <!-- kürek -->
-        <line x1="38" y1="58" x2="52" y2="44" stroke="black" stroke-width="3" stroke-linecap="round"/>
-        <ellipse cx="37" cy="60" rx="5" ry="3" fill="black" transform="rotate(-40 37 60)"/>
-      </svg>
-      <div class="sname">YOLDA ÇALIŞMA (T-15)</div>
-      <div class="sdesc">İleride yol çalışması var. (Sarı zemin!)</div>
-      <span class="cat-pill pill-y">Tehlike Uyarı</span>
+    <!-- SAYFA 4: BİLGİ LEVHALARI VE YAYA KURALLARI -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2024</div>
+        <div class="baslik">
+            <h1>ℹ️ BİLGİ LEVHALARI</h1>
+            <p>Mavi Zemin - Bilgilendirme İşaretleri</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>📌 Bilgi Levhaları Nedir?</strong><br>
+            Mavi veya yeşil zemin üzerine beyaz şekiller içeren kare/dikdörtgen levhalar BİLGİ verirler.
+        </div>
+
+        <div class="baslik-kucuk">ℹ️ BİLGİLENDİRME LEVHALARI</div>
+
+        <div class="levha-container">
+            <div class="levha">
+                <div class="levha-sekil kare" style="color: white;">
+                    🏥
+                </div>
+                <div class="levha-yazi">HASTANE</div>
+            </div>
+
+            <div class="levha">
+                <div class="levha-sekil kare" style="color: white;">
+                    ⛽
+                </div>
+                <div class="levha-yazi">AKARYAKIT<br>İSTASYONU</div>
+            </div>
+
+            <div class="levha">
+                <div class="levha-sekil kare" style="color: white;">
+                    🅿️
+                </div>
+                <div class="levha-yazi">OTOPARK</div>
+            </div>
+
+            <div class="levha">
+                <div class="levha-sekil kare" style="color: white;">
+                    🍴
+                </div>
+                <div class="levha-yazi">RESTORAN</div>
+            </div>
+
+            <div class="levha">
+                <div class="levha-sekil kare" style="color: white;">
+                    📞
+                </div>
+                <div class="levha-yazi">TELEFON</div>
+            </div>
+
+            <div class="levha">
+                <div class="levha-sekil kare" style="color: white; background: #4caf50;">
+                    ➡️
+                </div>
+                <div class="levha-yazi">YÖN BİLGİSİ</div>
+            </div>
+        </div>
+
+        <div class="baslik-kucuk">🚶 YAYALAR İÇİN TRAFİK KURALLARI</div>
+
+        <div class="trafik-kurali">
+            <div class="kural-icon">1️⃣</div>
+            <div class="kural-yazi">
+                <strong>Kaldırımda yürüyün:</strong> Her zaman kaldırımın sağ tarafında, yol kenarından uzakta yürüyün.
+            </div>
+        </div>
+
+        <div class="trafik-kurali">
+            <div class="kural-icon">2️⃣</div>
+            <div class="kural-yazi">
+                <strong>Yaya geçidini kullanın:</strong> Karşıya geçmek için mutlaka yaya geçidini veya üst/alt geçitleri kullanın.
+            </div>
+        </div>
+
+        <div class="trafik-kurali">
+            <div class="kural-icon">3️⃣</div>
+            <div class="kural-yazi">
+                <strong>Sağa-sola bakın:</strong> Yaya geçidinde yeşil ışık yansa bile mutlaka önce sağa, sonra sola, sonra tekrar sağa bakın.
+            </div>
+        </div>
+
+        <div class="trafik-kurali">
+            <div class="kural-icon">4️⃣</div>
+            <div class="kural-yazi">
+                <strong>Koşmayın:</strong> Karşıya geçerken koşmayın, hızlı ama sakin adımlarla yürüyün.
+            </div>
+        </div>
+
+        <div class="trafik-kurali">
+            <div class="kural-icon">5️⃣</div>
+            <div class="kural-yazi">
+                <strong>Görünür olun:</strong> Akşam saatlerinde açık renkli giysiler giyin veya reflektörlü malzemeler taşıyın.
+            </div>
+        </div>
+
+        <div class="trafik-kurali">
+            <div class="kural-icon">6️⃣</div>
+            <div class="kural-yazi">
+                <strong>Dikkat dağıtıcılardan kaçının:</strong> Yolda yürürken veya geçerken telefon, müzik veya oyunla ilgilenmeyin.
+            </div>
+        </div>
+
+        <div class="uyari-kutusu">
+            <strong>🚨 ASLA UNUTMA!</strong><br>
+            Trafik işaretlerine uymak ve kurallara dikkat etmek hayatınızı kurtarabilir!
+        </div>
     </div>
 
-    <!-- T-21 Kontrolsüz Kavşak -->
-    <div class="sign-card">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="50,6 94,88 6,88" fill="white" stroke="#cc0000" stroke-width="6"/>
-        <!-- X işareti -->
-        <line x1="34" y1="38" x2="66" y2="74" stroke="black" stroke-width="6" stroke-linecap="round"/>
-        <line x1="66" y1="38" x2="34" y2="74" stroke="black" stroke-width="6" stroke-linecap="round"/>
-      </svg>
-      <div class="sname">KONTROLSÜZ KAVŞAK (T-21)</div>
-      <div class="sdesc">Kontrolsüz kavşak var, yavaşla.</div>
-      <span class="cat-pill pill-r">Tehlike Uyarı</span>
+    <!-- SAYFA 5: SÜRÜCÜLER İÇİN KURALLAR -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2024</div>
+        <div class="baslik">
+            <h1>🚗 SÜRÜCÜLER İÇİN TRAFİK KURALLARI</h1>
+            <p>Güvenli Sürüş İlkeleri</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="baslik-kucuk">🚗 TEMEL SÜRÜŞ KURALLARI</div>
+
+        <div class="trafik-kurali">
+            <div class="kural-icon">🔴</div>
+            <div class="kural-yazi">
+                <strong>Emniyet Kemeri:</strong> Araç hareket etmeden önce sürücü ve tüm yolcuların emniyet kemerini takması zorunludur.
+            </div>
+        </div>
+
+        <div class="trafik-kurali">
+            <div class="kural-icon">⚡</div>
+            <div class="kural-yazi">
+                <strong>Hız Sınırı:</strong> Belirlenen hız sınırlarına uyun. Şehir içinde genellikle 50 km/s, yerleşim alanı dışında 90 km/s'dir.
+            </div>
+        </div>
+
+        <div class="trafik-kurali">
+            <div class="kural-icon">🚸</div>
+            <div class="kural-yazi">
+                <strong>Yaya Önceliği:</strong> Yaya geçitlerinde yayaların her zaman geçiş önceliği vardır. Mutlaka durun ve geçmelerini bekleyin.
+            </div>
+        </div>
+
+        <div class="trafik-kurali">
+            <div class="kural-icon">🔄</div>
+            <div class="kural-yazi">
+                <strong>Güvenli Takip Mesafesi:</strong> Öndeki araçla aranızda en az 2-3 saniye mesafe bırakın.
+            </div>
+        </div>
+
+        <div class="trafik-kurali">
+            <div class="kural-icon">📵</div>
+            <div class="kural-yazi">
+                <strong>Telefon Kullanımı:</strong> Sürüş sırasında telefon kullanmak yasaktır. Eller serbest sistem kullanın.
+            </div>
+        </div>
+
+        <div class="trafik-kurali">
+            <div class="kural-icon">🍺</div>
+            <div class="kural-yazi">
+                <strong>Alkol ve Uyuşturucu:</strong> Alkol veya uyuşturucu etkisi altında araç kullanmak kesinlikle yasaktır ve ağır cezası vardır.
+            </div>
+        </div>
+
+        <div class="trafik-kurali">
+            <div class="kural-icon">💡</div>
+            <div class="kural-yazi">
+                <strong>Aydınlatma:</strong> Hava karardığında, sisli ve yağışlı havalarda farları yakın. Gündüz de gündüz farı kullanın.
+            </div>
+        </div>
+
+        <div class="trafik-kurali">
+            <div class="kural-icon">🔊</div>
+            <div class="kural-yazi">
+                <strong>Korna Kullanımı:</strong> Sadece tehlike anında korna çalın. Yerleşim yerlerinde gereksiz korna yasaktır.
+            </div>
+        </div>
+
+        <div class="baslik-kucuk">👶 ÇOCUK GÜVENLİĞİ</div>
+
+        <div class="dogru-yanlis">
+            <div class="durum-kutu dogru-kutu">
+                <div class="durum-icon">✅</div>
+                <strong style="font-size: 18px;">DOĞRU</strong>
+                <p style="margin-top: 15px;">Çocuklar yaşlarına uygun çocuk koltuğunda veya emniyet kemerli arka koltukta oturmalı.</p>
+            </div>
+
+            <div class="durum-kutu yanlis-kutu">
+                <div class="durum-icon">❌</div>
+                <strong style="font-size: 18px;">YANLIŞ</strong>
+                <p style="margin-top: 15px;">Çocukların ön koltukta veya ayakta seyahat etmesi tehlikelidir ve yasaktır.</p>
+            </div>
+        </div>
+
+        <div class="bilgi-kutusu">
+            <strong>👶 ÖNEMLİ:</strong> 12 yaşından küçük ve 150 cm'den kısa çocuklar ön koltukta yolculuk edemez!
+        </div>
+
+        <div class="uyari-kutusu">
+            <strong>⚠️ DİKKAT!</strong><br>
+            Trafik kuralları can güvenliğiniz içindir. Her kural bir can kurtarır!
+        </div>
     </div>
 
-  </div>
+    <!-- SAYFA 6: İLK YARDIM - TEMEL BİLGİLER -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2024</div>
+        <div class="baslik" style="background: linear-gradient(135deg, #d32f2f 0%, #ff6b6b 100%);">
+            <h1 style="color: white;">🚑 İLK YARDIM</h1>
+            <p style="color: white;">Hayat Kurtaran Bilgiler</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
 
-  <div class="sec-label">🚫 Trafik Tanzim İşaretleri — Yasaklayıcı (Kırmızı yuvarlak)</div>
-  <div class="signs-grid">
+        <div class="ilkyardim-kutu">
+            <div class="ilkyardim-baslik">
+                ❤️ İLK YARDIM NEDİR?
+            </div>
+            <p style="font-size: 16px; line-height: 1.8;">
+                İlk yardım, yaralanan veya aniden hastalanı n bir kişiye tıbbi yardım gelinceye kadar yapılan müdahalelerdir. 
+                Doğru ilk yardım hayat kurtarır!
+            </p>
+        </div>
 
-    <!-- TT-2 DUR -->
-    <div class="sign-card">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <!-- Sekizgen - gerçek DUR işareti -->
-        <polygon points="32,8 68,8 92,32 92,68 68,92 32,92 8,68 8,32" fill="#cc0000"/>
-        <polygon points="34,13 66,13 87,34 87,66 66,87 34,87 13,66 13,34" fill="#cc0000" stroke="white" stroke-width="2"/>
-        <text x="50" y="58" text-anchor="middle" fill="white" font-family="Arial Black,sans-serif" font-size="24" font-weight="900">DUR</text>
-      </svg>
-      <div class="sname">DUR (TT-2)</div>
-      <div class="sdesc">Tamamen dur, geçiş hakkı ver!</div>
-      <span class="cat-pill pill-r">Tanzim</span>
+        <div class="baslik-kucuk">📋 İLK YARDIMIN TEMEL İLKELERİ</div>
+
+        <div class="adim">
+            <span class="adim-numara">1</span>
+            <strong style="font-size: 18px;">OLAY YERİ GÜVENLİĞİ</strong>
+            <p style="margin-top: 10px;">Önce kendi güvenliğinizi sağlayın. Kendiniz zarar görürseniz kimseye yardım edemezsiniz.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">2</span>
+            <strong style="font-size: 18px;">DURUMU DEĞERLENDİRİN</strong>
+            <p style="margin-top: 10px;">Yaralının bilinci açık mı? Nefes alıyor mu? Kanama var mı? Hızlıca kontrol edin.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">3</span>
+            <strong style="font-size: 18px;">YARDIM ÇAĞIRIN</strong>
+            <p style="margin-top: 10px;">Hemen 112 Acil Sağlık hizmetlerini arayın. Yerinizi ve durumu net bir şekilde anlatın.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">4</span>
+            <strong style="font-size: 18px;">MÜDAHALE EDİN</strong>
+            <p style="margin-top: 10px;">Bildiğiniz temel ilk yardım uygulamalarını yapın. Emin olmadığınız şeyleri yapmayın.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">5</span>
+            <strong style="font-size: 18px;">YARALININ YANINDA KALIN</strong>
+            <p style="margin-top: 10px;">Ambulans gelene kadar yaralıyı yalnız bırakmayın. Sakinleştirin ve konuşun.</p>
+        </div>
+
+        <div class="acil-telefon-container">
+            <div class="acil-telefon">
+                📞 112
+            </div>
+            <div class="acil-telefon" style="background: #1976d2;">
+                👮 155
+            </div>
+            <div class="acil-telefon" style="background: #ff6f00;">
+                🚒 110
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <p style="font-size: 18px; font-weight: bold;">
+                112: Ambulans | 155: Polis | 110: İtfaiye
+            </p>
+        </div>
+
+        <div class="uyari-kutusu">
+            <strong>⚠️ ÇOK ÖNEMLİ!</strong><br>
+            Eğitim almadan profesyonel müdahale gerektiren işlemler yapmayın. Temel ilk yardım bilgisi hayat kurtarır!
+        </div>
     </div>
 
-    <!-- TT-1 Yolver -->
-    <div class="sign-card">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <!-- Aşağı bakan üçgen, beyaz zemin kırmızı kenar -->
-        <polygon points="50,88 6,14 94,14" fill="white" stroke="#cc0000" stroke-width="7"/>
-      </svg>
-      <div class="sname">YOLVER (TT-1)</div>
-      <div class="sdesc">Karşıdan gelene yol ver.</div>
-      <span class="cat-pill pill-r">Tanzim</span>
+    <!-- SAYFA 7: İLK YARDIM UYGULAMALARI -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2024</div>
+        <div class="baslik" style="background: linear-gradient(135deg, #d32f2f 0%, #ff6b6b 100%);">
+            <h1 style="color: white;">🩹 TEMEL İLK YARDIM UYGULAMALARI</h1>
+            <p style="color: white;">Sık Karşılaşılan Durumlar</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="baslik-kucuk">🩸 KANAMA</div>
+
+        <div class="adim">
+            <span class="adim-numara">1</span>
+            <strong>Temiz bir bez veya gazlı bezle kanamayı durdurun.</strong>
+            <p style="margin-top: 10px;">Kanayan bölgeye temiz bir bez koyun ve sıkıca bastırın. 10-15 dakika baskı uygulayın.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">2</span>
+            <strong>Kanayan bölgeyi kalbin üstüne kaldırın.</strong>
+            <p style="margin-top: 10px;">Mümkünse yaralı kolu veya bacağı yukarı kaldırın.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">3</span>
+            <strong>Bez ıslandıysa üzerine yeni bez ekleyin.</strong>
+            <p style="margin-top: 10px;">İlk bezi çıkarmayın, üzerine yenisini ekleyip basmaya devam edin.</p>
+        </div>
+
+        <div class="baslik-kucuk">🔥 YANMA</div>
+
+        <div class="adim">
+            <span class="adim-numara">1</span>
+            <strong>Hemen soğuk suyla yıkayın.</strong>
+            <p style="margin-top: 10px;">Yanan bölgeyi 10-15 dakika soğuk (buz gibi değil) akan suyla yıkayın.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">2</span>
+            <strong>Temiz bir bezle örtün.</strong>
+            <p style="margin-top: 10px;">Yanan bölgeyi temiz, yapışmayan bir bezle kapatın.</p>
+        </div>
+
+        <div class="uyari-kutusu">
+            <strong>❌ YANLIŞ:</strong> Yanığa diş macunu, yoğurt, yumurta sürmeyin! Sadece soğuk su ve temiz örtü kullanın.
+        </div>
+
+        <div class="baslik-kucuk">🤕 BAYILMA</div>
+
+        <div class="adim">
+            <span class="adim-numara">1</span>
+            <strong>Kişiyi sırt üstü yatırın.</strong>
+            <p style="margin-top: 10px;">Düz bir zemine sırtüstü uzatın.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">2</span>
+            <strong>Bacaklarını kaldırın.</strong>
+            <p style="margin-top: 10px;">Bacakları 20-30 cm yukarı kaldırın (bir yastık altına koyabilirsiniz).</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">3</span>
+            <strong>Sıkı giysilerini gevşetin.</strong>
+            <p style="margin-top: 10px;">Kemer, kravat gibi sıkan giysileri açın. Hava alsın.</p>
+        </div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 BİLGİ:</strong> Bayılan kişiye su içirmeyin veya koklatmayın. 112'yi arayın ve yardım bekleyin.
+        </div>
     </div>
 
-    <!-- TT-4 Girişi Olmayan Yol -->
-    <div class="sign-card">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="50" cy="50" r="44" fill="white" stroke="#cc0000" stroke-width="7"/>
-        <rect x="18" y="42" width="64" height="16" rx="3" fill="#cc0000"/>
-      </svg>
-      <div class="sname">GİRİŞİ OLMAYAN YOL (TT-4)</div>
-      <div class="sdesc">Bu yola araç giremez.</div>
-      <span class="cat-pill pill-r">Tanzim</span>
+    <!-- SAYFA 8: İLK YARDIM ÇANTASI VE BURUN KANAMASI -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2024</div>
+        <div class="baslik" style="background: linear-gradient(135deg, #d32f2f 0%, #ff6b6b 100%);">
+            <h1 style="color: white;">🧰 İLK YARDIM ÇANTASI</h1>
+            <p style="color: white;">Mutlaka Bulundurulması Gerekenler</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="ilkyardim-kutu">
+            <div class="ilkyardim-baslik">
+                🩹 İLK YARDIM ÇANTASINDA NELER OLMALI?
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+                <div class="trafik-kurali" style="display: block;">
+                    <div style="font-size: 40px; text-align: center;">🩹</div>
+                    <div style="text-align: center; margin-top: 10px; font-weight: bold;">Yara Bandı ve Flaster</div>
+                </div>
+
+                <div class="trafik-kurali" style="display: block;">
+                    <div style="font-size: 40px; text-align: center;">🧴</div>
+                    <div style="text-align: center; margin-top: 10px; font-weight: bold;">Antiseptik Solüsyon</div>
+                </div>
+
+                <div class="trafik-kurali" style="display: block;">
+                    <div style="font-size: 40px; text-align: center;">🧻</div>
+                    <div style="text-align: center; margin-top: 10px; font-weight: bold;">Steril Gazlı Bez</div>
+                </div>
+
+                <div class="trafik-kurali" style="display: block;">
+                    <div style="font-size: 40px; text-align: center;">🧤</div>
+                    <div style="text-align: center; margin-top: 10px; font-weight: bold;">Eldiven (Lateks)</div>
+                </div>
+
+                <div class="trafik-kurali" style="display: block;">
+                    <div style="font-size: 40px; text-align: center;">✂️</div>
+                    <div style="text-align: center; margin-top: 10px; font-weight: bold;">Makas ve Pens</div>
+                </div>
+
+                <div class="trafik-kurali" style="display: block;">
+                    <div style="font-size: 40px; text-align: center;">🌡️</div>
+                    <div style="text-align: center; margin-top: 10px; font-weight: bold;">Ateş Ölçer</div>
+                </div>
+
+                <div class="trafik-kurali" style="display: block;">
+                    <div style="font-size: 40px; text-align: center;">💊</div>
+                    <div style="text-align: center; margin-top: 10px; font-weight: bold;">Ağrı Kesici (Parasetamol)</div>
+                </div>
+
+                <div class="trafik-kurali" style="display: block;">
+                    <div style="font-size: 40px; text-align: center;">🧊</div>
+                    <div style="text-align: center; margin-top: 10px; font-weight: bold;">Soğuk Kompres</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="baslik-kucuk">🩸 BURUN KANAMASI</div>
+
+        <div class="dogru-yanlis">
+            <div class="durum-kutu yanlis-kutu">
+                <div class="durum-icon">❌</div>
+                <strong style="font-size: 18px;">YANLIŞ</strong>
+                <div style="margin-top: 20px; font-size: 50px;">⬆️</div>
+                <p style="margin-top: 15px;">Başı geriye yatırmak yanlıştır. Kan yutulur ve mide bulantısı yapar.</p>
+            </div>
+
+            <div class="durum-kutu dogru-kutu">
+                <div class="durum-icon">✅</div>
+                <strong style="font-size: 18px;">DOĞRU</strong>
+                <div style="margin-top: 20px; font-size: 50px;">⬇️</div>
+                <p style="margin-top: 15px;">Başı hafifçe öne eğin ve burun kanatlarını 5-10 dakika sıkın.</p>
+            </div>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">1</span>
+            <strong>Oturun ve başınızı hafif öne eğin.</strong>
+            <p style="margin-top: 10px;">Ayakta durmayın, oturun. Başınızı hafifçe öne eğin ki kan yutmayın.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">2</span>
+            <strong>Burun kanatlarını sıkın.</strong>
+            <p style="margin-top: 10px;">Başparmak ve işaret parmağınızla burun kanatlarını 5-10 dakika sıkın.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">3</span>
+            <strong>Ense ve buruna soğuk uygulayın.</strong>
+            <p style="margin-top: 10px;">Buz veya soğuk bez ile ense ve burun kökü ne kompres yapın.</p>
+        </div>
+
+        <div class="uyari-kutusu">
+            <strong>⚠️ UYARI!</strong> Burun kanaması 15-20 dakikadan fazla sürerse veya çok fazla kan kaybı varsa 112'yi arayın!
+        </div>
     </div>
 
-    <!-- Hız Sınırı 30 -->
-    <div class="sign-card">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="50" cy="50" r="44" fill="white" stroke="#cc0000" stroke-width="7"/>
-        <text x="50" y="64" text-anchor="middle" fill="black" font-family="Arial Black,sans-serif" font-size="36" font-weight="900">30</text>
-      </svg>
-      <div class="sname">HIZ SINIRI (TT-29)</div>
-      <div class="sdesc">Saatte 30 km'yi geçme!</div>
-      <span class="cat-pill pill-r">Tanzim</span>
+    <!-- SAYFA 9: KARARLIK VE BOĞULMA -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2024</div>
+        <div class="baslik" style="background: linear-gradient(135deg, #d32f2f 0%, #ff6b6b 100%);">
+            <h1 style="color: white;">🆘 ACİL DURUMLAR</h1>
+            <p style="color: white;">Karanlık, Boğulma ve Elektrik Çarpması</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="baslik-kucuk">😵 KARANLIK (HİPOGLİSEMİ)</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Karanlık Nedir?</strong><br>
+            Kan şekerinin hızla düşmesi sonucu oluşan durumdur. Özellikle şeker hastaları ve aç kalanlar da görülür.
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">1</span>
+            <strong>Kişiye oturun veya uzanın.</strong>
+            <p style="margin-top: 10px;">Hemen oturmasını veya yere uzanmasını sağlayın. Düşerek yaralanmasını önleyin.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">2</span>
+            <strong>Şekerli bir şey verin.</strong>
+            <p style="margin-top: 10px;">Eğer bilinci açıksa şekerli su, meyve suyu veya şeker verin. Hızla etkili olur.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">3</span>
+            <strong>Dinlenmesini sağlayın.</strong>
+            <p style="margin-top: 10px;">5-10 dakika dinlenmesini bekleyin. Durum düzelmezse 112'yi arayın.</p>
+        </div>
+
+        <div class="uyari-kutusu">
+            <strong>❌ DİKKAT!</strong> Bilinci kapalı kişinin ağzına hiçbir şey koymayın! Boğulabilir.
+        </div>
+
+        <div class="baslik-kucuk">😮 BOĞULMA (HEİMLİCH MAN EVRASI)</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Boğulma Nedir?</strong><br>
+            Yemek veya yabancı bir cismin hava yolunu tıkaması sonucu nefes alamama durumudur.
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">1</span>
+            <strong>Öksürmeye teşvik edin.</strong>
+            <p style="margin-top: 10px;">Kişi öksürebiliyorsa müdahale etmeyin, öksürmesini sağlayın.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">2</span>
+            <strong>Sırt vuruşları yapın.</strong>
+            <p style="margin-top: 10px;">Öne eğilerek kürek kemikleri arasına 5 kez sert vurun.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">3</span>
+            <strong>Heimlich manevrası uygulayın.</strong>
+            <p style="margin-top: 10px;">Arkadan sarılıp göğüs kemiği altından yukarı doğru 5 kez bastırın.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">4</span>
+            <strong>Sırt vuruşu ve Heimlich'i tekrarlayın.</strong>
+            <p style="margin-top: 10px;">Cisim çıkana veya ambulans gelene kadar tekrarlayın.</p>
+        </div>
+
+        <div class="baslik-kucuk">⚡ ELEKTRİK ÇARPMASI</div>
+
+        <div class="adim">
+            <span class="adim-numara">1</span>
+            <strong>ELEKTRİĞİ KAPATTIN!</strong>
+            <p style="margin-top: 10px;">Önce elektrik kaynağını kesin. Anahtarı kapatın veya fişi çekin.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">2</span>
+            <strong>Kişiye çıplak elle dokunmayın!</strong>
+            <p style="margin-top: 10px;">Elektrik kesilmeden kişiye dokunmayın. Tahta veya plastik bir şey kullanın.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">3</span>
+            <strong>112'yi arayın ve ilk yardım yapın.</strong>
+            <p style="margin-top: 10px;">Ambulans çağırın. Bilinç ve nefes kontrolü yapın. Gerekirse CPR uygulayın.</p>
+        </div>
+
+        <div class="uyari-kutusu">
+            <strong>⚡ ÇOK TEHLİKELİ!</strong> Yüksek voltaj hatlarına asla yaklaşmayın! En az 20 metre uzakta durun ve 112'yi arayın.
+        </div>
     </div>
 
-    <!-- TT-12 Yaya Giremez -->
-    <div class="sign-card">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="50" cy="50" r="44" fill="white" stroke="#cc0000" stroke-width="7"/>
-        <!-- yaya figürü siyah -->
-        <circle cx="50" cy="26" r="7" fill="black"/>
-        <line x1="50" y1="33" x2="50" y2="52" stroke="black" stroke-width="5" stroke-linecap="round"/>
-        <line x1="50" y1="41" x2="41" y2="48" stroke="black" stroke-width="4" stroke-linecap="round"/>
-        <line x1="50" y1="41" x2="59" y2="48" stroke="black" stroke-width="4" stroke-linecap="round"/>
-        <line x1="50" y1="52" x2="43" y2="64" stroke="black" stroke-width="4" stroke-linecap="round"/>
-        <line x1="50" y1="52" x2="57" y2="64" stroke="black" stroke-width="4" stroke-linecap="round"/>
-        <!-- kırmızı eğik çizgi -->
-        <line x1="18" y1="18" x2="82" y2="82" stroke="#cc0000" stroke-width="8" stroke-linecap="round"/>
-      </svg>
-      <div class="sname">YAYA GİREMEZ (TT-12)</div>
-      <div class="sdesc">Yayalar bu yola giremez.</div>
-      <span class="cat-pill pill-r">Tanzim</span>
+    <!-- SAYFA 10: KALP MASAJI VE SUNI SOLUNUM -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2024</div>
+        <div class="baslik" style="background: linear-gradient(135deg, #d32f2f 0%, #ff6b6b 100%);">
+            <h1 style="color: white;">❤️ KALP MASAJI (CPR)</h1>
+            <p style="color: white;">Temel Yaşam Desteği</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 CPR (Kardiyopulmoner Resüsitasyon) Nedir?</strong><br>
+            Kalbi durmuş veya nefes almayan bir kişinin hayatta kalmasını sağlamak için yapılan göğüs masajı ve suni solunum işlemidir. Eğitim almadan sadece göğüs basıları yapılabilir.
+        </div>
+
+        <div class="baslik-kucuk">🔍 ÖNCE KONTROL EDİN</div>
+
+        <div class="adim">
+            <span class="adim-numara">1</span>
+            <strong>BİLİNÇ KONTROLÜ</strong>
+            <p style="margin-top: 10px;">Kişinin omzuna dokunun ve yüksek sesle "İyi misiniz?" diye sorun. Cevap vermiyorsa bilinç kapalı demektir.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">2</span>
+            <strong>NEFES KONTROLÜ</strong>
+            <p style="margin-top: 10px;">Başını hafif geriye yatırın. 10 saniye boyunca göğsüne bakın: Kalıyor mu, iniyor mu? Nefes sesi var mı?</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">3</span>
+            <strong>YARDIM ÇAĞIRIN</strong>
+            <p style="margin-top: 10px;">Hemen 112'yi arayın veya birine aratın. Telefonu hoparlöre alıp CPR'a başlayın.</p>
+        </div>
+
+        <div class="baslik-kucuk">💪 GÖĞÜS BASISI (KALP MASAJI)</div>
+
+        <div class="adim">
+            <span class="adim-numara">1</span>
+            <strong>Doğru pozisyonu bulun</strong>
+            <p style="margin-top: 10px;">Kişiyi sert zemine sırtüstü yatırın. Göğüs kemiğinin (sternum) alt yarısının ortasına bir elinizin topuğunu koyun.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">2</span>
+            <strong>El pozisyonu</strong>
+            <p style="margin-top: 10px;">Diğer elinizi üstteki elin üzerine koyun. Parmaklarınızı birleştirin veya kenetleyin. Kollarınız düz olmalı.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">3</span>
+            <strong>Basın - 30 kez</strong>
+            <p style="margin-top: 10px;">Vücut ağırlığınızı kullanarak göğsü 5-6 cm bastırın. Dakikada 100-120 bası hızında (hızlı ritim). 30 bası yapın.</p>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <div style="display: inline-block; background: #ffebee; border: 4px solid #d32f2f; border-radius: 20px; padding: 30px;">
+                <div style="font-size: 80px; margin-bottom: 20px;">❤️</div>
+                <div style="font-size: 32px; font-weight: bold; color: #d32f2f;">30 BASI</div>
+                <div style="font-size: 18px; margin-top: 10px;">Hızlı ve Güçlü</div>
+                <div style="font-size: 16px; margin-top: 5px; color: #666;">♪ "Stayin' Alive" ritmi</div>
+            </div>
+        </div>
+
+        <div class="baslik-kucuk">😮 SUNI SOLUNUM (Eğitim Almışsanız)</div>
+
+        <div class="adim">
+            <span class="adim-numara">4</span>
+            <strong>Hava yolunu açın</strong>
+            <p style="margin-top: 10px;">Başı geriye yatırın, çeneyi yukarı kaldırın. Burnunu tıkayın.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">5</span>
+            <strong>2 nefes verin</strong>
+            <p style="margin-top: 10px;">Ağzından 1 saniye üfleyin, göğsün kalktığını görün. 2 kez tekrarlayın.</p>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <div style="display: inline-block; background: #e3f2fd; border: 4px solid #2196F3; border-radius: 20px; padding: 30px;">
+                <div style="font-size: 80px; margin-bottom: 20px;">💨</div>
+                <div style="font-size: 32px; font-weight: bold; color: #2196F3;">2 NEFES</div>
+                <div style="font-size: 18px; margin-top: 10px;">Her biri 1 saniye</div>
+            </div>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">6</span>
+            <strong>Döngüyü tekrarlayın</strong>
+            <p style="margin-top: 10px;">30 göğüs basısı + 2 nefes = 1 döngü. Ambulans gelene kadar veya kişi nefes alana kadar devam edin.</p>
+        </div>
+
+        <div class="uyari-kutusu">
+            <strong>⚠️ ÖNEMLİ!</strong><br>
+            • Eğitim almadıysanız sadece göğüs basıları yapın, nefes vermeyin!<br>
+            • Çocuk ve bebeklerde teknik farklıdır, mutlaka eğitim alın!<br>
+            • CPR çok yorucudur, mümkünse 2 dakikada bir değişin.
+        </div>
     </div>
 
-  </div>
+    <!-- SAYFA 11: KIRIK VE BURKULMA -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2024</div>
+        <div class="baslik" style="background: linear-gradient(135deg, #d32f2f 0%, #ff6b6b 100%);">
+            <h1 style="color: white;">🦴 KIRIK VE BURKULMA</h1>
+            <p style="color: white;">Kas-İskelet Sistemi Yaralanmaları</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
 
-  <div class="sec-label">🔵 Zorunlu Yön İşaretleri — Mavi daire (emredici)</div>
-  <div class="signs-grid">
+        <div class="baslik-kucuk">🦴 KIRIK BELİRTİLERİ</div>
 
-    <!-- TT-35c İleri Mecburi Yön -->
-    <div class="sign-card">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="50" cy="50" r="44" fill="#1565c0"/>
-        <polygon points="50,18 68,52 59,52 59,78 41,78 41,52 32,52" fill="white"/>
-      </svg>
-      <div class="sname">İLERİ MECBURİ YÖN (TT-35c)</div>
-      <div class="sdesc">Bu yönde gitmek zorundasın.</div>
-      <span class="cat-pill pill-b">Zorunlu</span>
+        <div class="trafik-kurali">
+            <div class="kural-icon">😣</div>
+            <div class="kural-yazi">
+                <strong>Şiddetli Ağrı:</strong> Kırık bölgede çok şiddetli ağrı olur, dokunmak bile ağrıtır.
+            </div>
+        </div>
+
+        <div class="trafik-kurali">
+            <div class="kural-icon">🔴</div>
+            <div class="kural-yazi">
+                <strong>Şişlik ve Morarma:</strong> Yaralı bölgede hızla şişlik ve morarma oluşur.
+            </div>
+        </div>
+
+        <div class="trafik-kurali">
+            <div class="kural-icon">📐</div>
+            <div class="kural-yazi">
+                <strong>Şekil Bozukluğu:</strong> Kol veya bacak anormal bir şekilde görünür, eğri durabilir.
+            </div>
+        </div>
+
+        <div class="trafik-kurali">
+            <div class="kural-icon">🚫</div>
+            <div class="kural-yazi">
+                <strong>Hareket Edememe:</strong> Kırık olan uzvu hareket ettirememe veya üzerine basam ama.
+            </div>
+        </div>
+
+        <div class="baslik-kucuk">🩹 KIRIK İLK YARDIM</div>
+
+        <div class="adim">
+            <span class="adim-numara">1</span>
+            <strong>HAREKET ETTİRMEYİN!</strong>
+            <p style="margin-top: 10px;">Kırık olduğundan şüphelendiğiniz uzvu kesinlikle hareket ettirmeyin. Kişiyi de mümkünse hareket ettirmeyin.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">2</span>
+            <strong>112'yi arayın</strong>
+            <p style="margin-top: 10px;">Hemen ambulans çağırın. Kırıkta profesyonel taşıma çok önemlidir.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">3</span>
+            <strong>Ateli uygulayın (biliyorsanız)</strong>
+            <p style="margin-top: 10px;">Kırık bölgenin üst ve alt eklemini de içine alacak şekilde tahta, karton veya gazete ile ateli yapın. Sıkı bağlamayın.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">4</span>
+            <strong>Soğuk uygulayın</strong>
+            <p style="margin-top: 10px;">Şişliği azaltmak için buz veya soğuk kompres uygulayın (direkt değil, bez içinde).</p>
+        </div>
+
+        <div class="uyari-kutusu">
+            <strong>❌ ASLA YAPMAYIN!</strong><br>
+            • Kırık kemiği yerine oturtmaya çalışmayın!<br>
+            • Açık kırıkta dışarı çıkmış kemiğe dokunmayın!<br>
+            • Yaralıyı taşımaya çalışmayın, ambulansı bekleyin!
+        </div>
+
+        <div class="baslik-kucuk">🤕 BURKULMA VE İNCİNME</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Burkulma Nedir?</strong><br>
+            Eklem çevresindeki bağların zarar görmesidir. En çok ayak bileği ve el bileğinde görülür.
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <div style="background: #e8f5e9; border: 4px solid #4caf50; border-radius: 20px; padding: 30px; display: inline-block;">
+                <div style="font-size: 48px; font-weight: bold; color: #4caf50; margin-bottom: 20px;">R.I.C.E.</div>
+                <div style="text-align: left; font-size: 18px; line-height: 2;">
+                    <p><strong style="color: #4caf50;">R</strong>est (Dinlenme) - Hareketi durdurun</p>
+                    <p><strong style="color: #4caf50;">I</strong>ce (Buz) - Soğuk uygulayın (15-20 dk)</p>
+                    <p><strong style="color: #4caf50;">C</strong>ompression (Baskı) - Elastik bandajla sarın</p>
+                    <p><strong style="color: #4caf50;">E</strong>levation (Yükseltme) - Yukarı kaldırın</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">1</span>
+            <strong>Hemen dinlendirin</strong>
+            <p style="margin-top: 10px;">Burkulan ayak veya eli kullanmayı bırakın. Üzerine basmayın, hareket ettirmeyin.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">2</span>
+            <strong>Buz uygulayın</strong>
+            <p style="margin-top: 10px;">İlk 48 saat her 2-3 saatte bir 15-20 dakika soğuk uygulayın. Buzu direkt değil, havlu içinde tutun.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">3</span>
+            <strong>Sıkıca sarın</strong>
+            <p style="margin-top: 10px;">Elastik bandaj ile burkulan yeri sarın ama çok sıkı değil (parmaklar morarmamalı).</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">4</span>
+            <strong>Yukarı kaldırın</strong>
+            <p style="margin-top: 10px;">Şişliği azaltmak için burkulan bölgeyi kalp seviyesinden yukarı tutun.</p>
+        </div>
+
+        <div class="bilgi-kutusu">
+            <strong>🏥 DOKTORA NE ZAMAN?</strong><br>
+            • Şiddetli ağrı ve şişlik varsa<br>
+            • Üzerine hiç basamıyorsanız<br>
+            • 48 saat sonra düzelme yoksa<br>
+            • Eklem şekli bozulmuşsa → HEMEN doktora gidin!
+        </div>
     </div>
 
-    <!-- TT-39a Mecburi Yaya Yolu -->
-    <div class="sign-card">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="50" cy="50" r="44" fill="#1565c0"/>
-        <circle cx="50" cy="22" r="8" fill="white"/>
-        <line x1="50" y1="30" x2="50" y2="52" stroke="white" stroke-width="6" stroke-linecap="round"/>
-        <line x1="50" y1="40" x2="40" y2="48" stroke="white" stroke-width="5" stroke-linecap="round"/>
-        <line x1="50" y1="40" x2="60" y2="48" stroke="white" stroke-width="5" stroke-linecap="round"/>
-        <line x1="50" y1="52" x2="42" y2="66" stroke="white" stroke-width="5" stroke-linecap="round"/>
-        <line x1="50" y1="52" x2="58" y2="66" stroke="white" stroke-width="5" stroke-linecap="round"/>
-      </svg>
-      <div class="sname">MECBURİ YAYA YOLU (TT-39a)</div>
-      <div class="sdesc">Yayaların kullanması zorunlu yol.</div>
-      <span class="cat-pill pill-b">Zorunlu</span>
+    <!-- SAYFA 12: ZEHİRLENME VE ISIRMA -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2024</div>
+        <div class="baslik" style="background: linear-gradient(135deg, #d32f2f 0%, #ff6b6b 100%);">
+            <h1 style="color: white;">☠️ ZEHİRLENME VE ISIRMA</h1>
+            <p style="color: white;">Acil Durumlar</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="baslik-kucuk">☠️ ZEHİRLENME</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Zehirlenme Türleri:</strong><br>
+            • Ağız yoluyla (ilaç, temizlik maddesi, yiyecek)<br>
+            • Solunum yoluyla (gaz, duman)<br>
+            • Deri yoluyla (kimyasal madde teması)<br>
+            • Enjeksiyon yoluyla (böcek, yılan ısırması)
+        </div>
+
+        <div class="acil-telefon-container">
+            <div class="acil-telefon" style="background: #6a1b9a;">
+                ☎️ 114
+            </div>
+            <p style="margin-top: 15px; font-size: 20px; font-weight: bold;">
+                ZEHİR DANIŞMA MERKEZİ - 7/24 Hizmet
+            </p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">1</span>
+            <strong>114 Zehir Danışma'yı arayın</strong>
+            <p style="margin-top: 10px;">Önce 114'ü arayın ve uzman tavsiyesi alın. Zehrin türünü, miktarını ve ne zaman alındığını söyleyin.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">2</span>
+            <strong>Zehir maddesini saklayın</strong>
+            <p style="margin-top: 10px;">İlaç kutusu, temizlik maddesi şişesi gibi zehir kaynağını saklayın. Hastaneye götürün.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">3</span>
+            <strong>Bilinç ve solunum kontrolü yapın</strong>
+            <p style="margin-top: 10px;">Kişinin bilinci yerinde mi, nefes alıyor mu kontrol edin. Gerekirse CPR'a hazır olun.</p>
+        </div>
+
+        <div class="uyari-kutusu">
+            <strong>❌ ASLA YAPMAYIN!</strong><br>
+            • Uzman tavsiyesi olmadan kusturmaya çalışmayın!<br>
+            • Süt, su, yoğurt gibi şeyler içirmeyin!<br>
+            • "Panzehir" diye bir şey vermeyin!<br>
+            → ÖNCE 114 ARAYIN, TALİMAT ALIN!
+        </div>
+
+        <div class="baslik-kucuk">🐝 BÖCEK SOKM ASI</div>
+
+        <div class="adim">
+            <span class="adim-numara">1</span>
+            <strong>İğneyi çıkarın</strong>
+            <p style="margin-top: 10px;">Arı iğnesi kalmışsa tırnak veya kartla kazıyarak çıkarın. Pensetle çekmeyin (zehir kesesi patlar).</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">2</span>
+            <strong>Soğuk uygulayın</strong>
+            <p style="margin-top: 10px;">Buz veya soğuk kompres ile şişliği azaltın. 15-20 dakika uygulayın.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">3</span>
+            <strong>Temizleyin</strong>
+            <p style="margin-top: 10px;">Sabunlu suyla ısırılan bölgeyi yıkayın. Enfeksiyonu önleyin.</p>
+        </div>
+
+        <div class="dogru-yanlis">
+            <div class="durum-kutu dogru-kutu">
+                <div class="durum-icon">✅</div>
+                <strong style="font-size: 18px;">NORMAL REAKS İYON</strong>
+                <p style="margin-top: 15px; line-height: 1.6;">
+                    • Kızarıklık<br>
+                    • Hafif şişlik<br>
+                    • Ağrı ve kaşıntı<br>
+                    → Evde tedavi edilir
+                </p>
+            </div>
+
+            <div class="durum-kutu yanlis-kutu">
+                <div class="durum-icon">🚨</div>
+                <strong style="font-size: 18px;">ALERJİK REAKS İYON</strong>
+                <p style="margin-top: 15px; line-height: 1.6;">
+                    • Nefes darlığı<br>
+                    • Yüz, dudak şişmesi<br>
+                    • Hızlı nabız, bayılma<br>
+                    → HEMEN 112 ARAYIN!
+                </p>
+            </div>
+        </div>
+
+        <div class="baslik-kucuk">🐍 YILAN ISIRMASI</div>
+
+        <div class="adim">
+            <span class="adim-numara">1</span>
+            <strong>Hemen 112'yi arayın</strong>
+            <p style="margin-top: 10px;">Yılan ısırması çok tehlikelidir. Hemen ambulans çağırın.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">2</span>
+            <strong>Hareketsiz kalın</strong>
+            <p style="margin-top: 10px;">Zehrin yayılmaması için ısırılan uzvu hareket ettirmeyin. Mümkünse kalp seviyesinin altında tutun.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">3</span>
+            <strong>Takı ve sıkan giysileri çıkarın</strong>
+            <p style="margin-top: 10px;">Şişlik olacağı için yüzük, saat, bilezik gibi şeyleri hemen çıkarın.</p>
+        </div>
+
+        <div class="uyari-kutusu">
+            <strong>❌ FİLMLERDEKİ GİBİ YAPMAYIN!</strong><br>
+            • Yılan ısırması yerini kesmeyin, ağızla emmeyin!<br>
+            • Turnike (sıkı bağlama) yapmayın!<br>
+            • Buz uygulamayın!<br>
+            → SADECE HAREKETSİZ KALIP AMBULANS BEKLEYİN!
+        </div>
     </div>
 
-    <!-- TT-38a Mecburi Bisiklet Yolu -->
-    <div class="sign-card">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="50" cy="50" r="44" fill="#1565c0"/>
-        <!-- bisiklet -->
-        <circle cx="35" cy="65" r="12" fill="none" stroke="white" stroke-width="4"/>
-        <circle cx="65" cy="65" r="12" fill="none" stroke="white" stroke-width="4"/>
-        <line x1="35" y1="65" x2="50" y2="42" stroke="white" stroke-width="4" stroke-linecap="round"/>
-        <line x1="50" y1="42" x2="65" y2="65" stroke="white" stroke-width="4" stroke-linecap="round"/>
-        <line x1="42" y1="52" x2="58" y2="52" stroke="white" stroke-width="4" stroke-linecap="round"/>
-        <circle cx="50" cy="34" r="5" fill="white"/>
-      </svg>
-      <div class="sname">MECBURİ BİSİKLET YOLU (TT-38a)</div>
-      <div class="sdesc">Bisikletliler bu yolu kullanmalı.</div>
-      <span class="cat-pill pill-b">Zorunlu</span>
+    <!-- SAYFA 13: SICAK ÇARPMAS I VE DONMA -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2024</div>
+        <div class="baslik" style="background: linear-gradient(135deg, #d32f2f 0%, #ff6b6b 100%);">
+            <h1 style="color: white;">🌡️ SICAKLIK SORUNLARI</h1>
+            <p style="color: white;">Sıcak Çarpması ve Donma</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="baslik-kucuk">🥵 SICAK ÇARPMAS I (HIPERTERMІ)</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Sıcak Çarpması Nedir?</strong><br>
+            Vücut ısısının 40°C'nin üzerine çıkması durumudur. Çok tehlikelidir, beyin hasarı yapabilir!
+        </div>
+
+        <div class="trafik-kurali" style="background: #ffebee; border-color: #d32f2f;">
+            <div class="kural-icon">🌡️</div>
+            <div class="kural-yazi">
+                <strong>Belirtiler:</strong> Yüksek ateş (40°C+), kırmızı-kuru cilt, hızlı nabız, baş ağrısı, baş dönmesi, bilinç kaybı
+            </div>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">1</span>
+            <strong>Hemen 112'yi arayın</strong>
+            <p style="margin-top: 10px;">Sıcak çarpması hayati tehlikedir. Acil tıbbi yardım gereklidir.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">2</span>
+            <strong>Serin yere taşıyın</strong>
+            <p style="margin-top: 10px;">Kişiyi hemen gölgelik, serin bir yere alın. Kliması olan bir ortam idealdir.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">3</span>
+            <strong>Giysilerini çıkarın</strong>
+            <p style="margin-top: 10px;">Kalın, fazla giysileri çıkarın. Sadece iç çamaşırla bırakın.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">4</span>
+            <strong>Soğutun (hızlı ama kontrollü)</strong>
+            <p style="margin-top: 10px;">Islak havluyla tüm vücudu silin. Koltuk altı, kasıklar, boyun bölgelerine soğuk kompres yapın. Vantilatör ile hava üfleyin.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">5</span>
+            <strong>Bilinci açıksa su verin</strong>
+            <p style="margin-top: 10px;">Eğer bilinç li ise yavaş yavaş ılık su içirin. Buzlu su değil!</p>
+        </div>
+
+        <div class="uyari-kutusu">
+            <strong>⚠️ DİKKAT!</strong><br>
+            • Çok hızlı soğutma (buz banyosu) şok yapabilir!<br>
+            • Aspirin veya ibuprofen vermeyin!<br>
+            • Bilinç kapalıysa ağzına hiçbir şey koymayın!
+        </div>
+
+        <div class="baslik-kucuk">🧊 DONMA (HİPOTERMİ)</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Hipotermi Nedir?</strong><br>
+            Vücut ısısının 35°C'nin altına düşmesidir. Donma tehlikesi yaratır.
+        </div>
+
+        <div class="trafik-kurali" style="background: #e3f2fd; border-color: #2196F3;">
+            <div class="kural-icon">❄️</div>
+            <div class="kural-yazi">
+                <strong>Belirtiler:</strong> Titreme, halsizlik, konuşma güçlüğü, yavaş nabız, solukluk, uyuşukluk
+            </div>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">1</span>
+            <strong>Sıcak ortama alın</strong>
+            <p style="margin-top: 10px;">Kişiyi hemen sıcak bir iç mekana alın. Soğuktan ve rüzgardan koruyun.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">2</span>
+            <strong>Islak giysileri çıkarın</strong>
+            <p style="margin-top: 10px;">Islak ve soğuk giysileri nazikçe çıkarın. Kuru giysiler veya battaniyeyle sarın.</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">3</span>
+            <strong>Yavaş ısıtın</strong>
+            <p style="margin-top: 10px;">Battaniye, kuru giysilerle örün. Sıcak (çok sıcak değil) içecek verin. Soba veya radyatöre yaklaştırmayın!</p>
+        </div>
+
+        <div class="adim">
+            <span class="adim-numara">4</span>
+            <strong>112'yi arayın</strong>
+            <p style="margin-top: 10 px;">Ciddi hipotermide tıbbi yardım gereklidir. Özellikle bilinç bulanıklığı varsa hemen arayın.</p>
+        </div>
+
+        <div class="baslik-kucuk">🧊 DONMUŞ UZUVLAR (Frostbite)</div>
+
+        <div class="dogru-yanlis">
+            <div class="durum-kutu dogru-kutu">
+                <div class="durum-icon">✅</div>
+                <strong style="font-size: 18px;">DOĞRU</strong>
+                <p style="margin-top: 15px;">
+                    • Ilık suyla (37-39°C) yavaşça ısıtın<br>
+                    • Steril gazlı bezle sarın<br>
+                    • Hastaneye götürün
+                </p>
+            </div>
+
+            <div class="durum-kutu yanlis-kutu">
+                <div class="durum-icon">❌</div>
+                <strong style="font-size: 18px;">YANLIŞ</strong>
+                <p style="margin-top: 15px;">
+                    • Sıcak suya sokmayın<br>
+                    • Ovmayın, masaj yapmayın<br>
+                    • Soba/ateşe tutmayın
+                </p>
+            </div>
+        </div>
+
+        <div class="uyari-kutusu">
+            <strong>⚠️ ÖNEMLİ!</strong><br>
+            Donmuş uzvu tekrar dondurma riski varsa ısıtmayın! Bir kez çözülüp tekrar donması daha çok zarar verir.
+        </div>
     </div>
 
-  </div>
+    <!-- SAYFA 14: DEĞERLENDİRME VE TEST -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2024</div>
+        <div class="baslik">
+            <h1>📝 DEĞERLENDİRME TESTİ</h1>
+            <p>Trafik ve İlk Yardım Bilgi Testi</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
 
-  <div class="sec-label">🅿️ Durma ve Park Etme İşaretleri</div>
-  <div class="signs-grid">
+        <div class="baslik-kucuk">🚦 TRAFİK BİLGİSİ SORULARI</div>
 
-    <!-- P-1 Park Etmek Yasaktır -->
-    <div class="sign-card">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="50" cy="50" r="44" fill="#1565c0"/>
-        <!-- eğik kırmızı çizgi -->
-        <line x1="22" y1="22" x2="78" y2="78" stroke="#cc0000" stroke-width="10" stroke-linecap="round"/>
-      </svg>
-      <div class="sname">PARK ETMEK YASAKTIR (P-1)</div>
-      <div class="sdesc">Bu bölgede araç park edilemez.</div>
-      <span class="cat-pill pill-p">Park</span>
+        <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0;">
+            <p style="font-size: 18px; font-weight: bold; margin-bottom: 15px;">1. Trafik ışıklarının anlamlarını eşleştirin:</p>
+            <div style="margin-left: 20px; line-height: 2.5;">
+                <p>🔴 Kırmızı Işık: _________________</p>
+                <p>🟡 Sarı Işık: _________________</p>
+                <p>🟢 Yeşil Işık: _________________</p>
+            </div>
+        </div>
+
+        <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0;">
+            <p style="font-size: 18px; font-weight: bold; margin-bottom: 15px;">2. Aşağıdaki levha türlerini işaretleyin:</p>
+            <div style="margin-left: 20px; line-height: 2.5;">
+                <p>☐ Yuvarlak kırmızı kenarlı levhalar YASAK işaretleridir</p>
+                <p>☐ Üçgen levhalar UYARI işaretleridir</p>
+                <p>☐ Mavi kare levhalar BİLGİ verir</p>
+                <p>☐ STOP levhası sekizgen şeklindedir</p>
+            </div>
+        </div>
+
+        <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0;">
+            <p style="font-size: 18px; font-weight: bold; margin-bottom: 15px;">3. Doğru (D) veya Yanlış (Y) işaretleyin:</p>
+            <div style="margin-left: 20px; line-height: 2.5;">
+                <p>___ Yaya geçidinde yeşil ışıkta sağa sola bakmadan geçebilirim</p>
+                <p>___ Emniyet kemeri takmak zorunludur</p>
+                <p>___ Karşıya geçerken yaya geçidi veya üst geçit kullanmalıyım</p>
+                <p>___ Kaldırımda yürürken sol tarafta yürümeliyim</p>
+            </div>
+        </div>
+
+        <div class="baslik-kucuk">🚑 İLK YARDIM BİLGİSİ SORULARI</div>
+
+        <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0;">
+            <p style="font-size: 18px; font-weight: bold; margin-bottom: 15px;">4. Acil telefon numaralarını yazın:</p>
+            <div style="margin-left: 20px; line-height: 2.5;">
+                <p>Ambulans: ___________</p>
+                <p>Polis: ___________</p>
+                <p>İtfaiye: ___________</p>
+                <p>Zehir Danışma: ___________</p>
+            </div>
+        </div>
+
+        <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0;">
+            <p style="font-size: 18px; font-weight: bold; margin-bottom: 15px;">5. İlk yardımın temel ilkeleri sırasını yazın:</p>
+            <div style="margin-left: 20px; line-height: 2.5;">
+                <p>___ Durumu değerlendirin</p>
+                <p>___ Yardım çağırın (112)</p>
+                <p>___ Olay yeri güvenliği</p>
+                <p>___ Müdahale edin</p>
+                <p>___ Yaralının yanında kalın</p>
+            </div>
+        </div>
+
+        <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0;">
+            <p style="font-size: 18px; font-weight: bold; margin-bottom: 15px;">6. Doğru ilk yardımı seçin (daire içine alın):</p>
+            <div style="margin-left: 20px; line-height: 2;">
+                <p><strong>Burun kanamasında:</strong></p>
+                <p style="margin-left: 20px;">a) Başı geriye yatırırım &nbsp;&nbsp;&nbsp; b) Başı öne eğip burnu sıkarım</p>
+                <p style="margin-top: 15px;"><strong>Yanıkta:</strong></p>
+                <p style="margin-left: 20px;">a) Yoğurt sürerim &nbsp;&nbsp;&nbsp; b) Soğuk suyla yıkarım</p>
+                <p style="margin-top: 15px;"><strong>Kanamalı yarada:</strong></p>
+                <p style="margin-left: 20px;">a) Temiz bezle bastırırım &nbsp;&nbsp;&nbsp; b) Ovalarım</p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; border: 3px solid #4caf50; border-radius: 15px; padding: 20px;">
+            <p style="font-size: 20px; font-weight: bold; margin-bottom: 15px;">PUANLAMAINIZ</p>
+            <p style="font-size: 48px; font-weight: bold; color: #4caf50;">_____ / 100</p>
+            <p style="margin-top: 15px;">Öğretmen İmzası: _____________________</p>
+        </div>
     </div>
 
-    <!-- P-2 Duraklamak ve Park Etmek Yasaktır -->
-    <div class="sign-card">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="50" cy="50" r="44" fill="#1565c0"/>
-        <!-- çapraz kırmızı X -->
-        <line x1="22" y1="22" x2="78" y2="78" stroke="#cc0000" stroke-width="9" stroke-linecap="round"/>
-        <line x1="78" y1="22" x2="22" y2="78" stroke="#cc0000" stroke-width="9" stroke-linecap="round"/>
-      </svg>
-      <div class="sname">DURAKLAMA VE PARK YASAK (P-2)</div>
-      <div class="sdesc">Durmak ve park etmek yasaktır.</div>
-      <span class="cat-pill pill-p">Park</span>
+    <!-- SAYFA 15: SERTIFIKA -->
+    <div class="sayfa" style="display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
+        <div style="width: 90%; background: white; border: 10px solid #FFD700; border-radius: 20px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center;">
+            
+            <div style="font-size: 80px; margin-bottom: 20px;">🏆</div>
+            
+            <h1 style="font-size: 48px; color: #d32f2f; margin-bottom: 10px;">SERTİFİKA</h1>
+            <h2 style="font-size: 28px; color: #666; margin-bottom: 40px;">Trafik ve İlk Yardım Eğitimi</h2>
+            
+            <div style="border-bottom: 3px solid #333; width: 400px; margin: 30px auto; padding-bottom: 10px; font-size: 32px; font-weight: bold;">
+                _____________________
+            </div>
+            <p style="font-size: 18px; color: #666; margin-bottom: 40px;">Adı Soyadı</p>
+            
+            <p style="font-size: 20px; line-height: 2; margin: 30px 0;">
+                Bu sertifika, yukarıda adı geçen kişinin<br>
+                <strong style="color: #d32f2f; font-size: 24px;">TRAFİK VE İLK YARDIM HAFTASI</strong><br>
+                eğitim programını başarıyla tamamladığını<br>
+                göstermektedir.
+            </p>
+            
+            <div style="margin: 50px 0;">
+                <div style="display: flex; justify-content: space-around; align-items: center;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 60px; margin-bottom: 15px;">🚦</div>
+                        <p style="font-weight: bold;">Trafik Kuralları</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 60px; margin-bottom: 15px;">🩹</div>
+                        <p style="font-weight: bold;">İlk Yardım</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 60px; margin-bottom: 15px;">❤️</div>
+                        <p style="font-weight: bold;">Hayat Kurtarma</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 60px; display: flex; justify-content: space-around;">
+                <div>
+                    <div style="border-top: 2px solid #333; width: 200px; margin: 0 auto 10px;">
+                    </div>
+                    <p style="font-weight: bold;">Öğretmen İmzası</p>
+                </div>
+                <div>
+                    <div style="border-top: 2px solid #333; width: 200px; margin: 0 auto 10px;">
+                    </div>
+                    <p style="font-weight: bold;">Okul Müdürü İmzası</p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 40px;">
+                <p style="font-size: 18px;">Tarih: _____ / _____ / 2024</p>
+            </div>
+            
+            <div style="margin-top: 40px; background: #fff3cd; border: 2px solid #ffc107; border-radius: 10px; padding: 20px;">
+                <p style="font-size: 16px; font-weight: bold; color: #856404;">
+                    "Trafik kurallarına uymak ve ilk yardım bilgisi hayat kurtarır!"
+                </p>
+            </div>
+            
+            <div style="margin-top: 30px; display: flex; justify-content: center; gap: 20px;">
+                <span style="font-size: 40px;">⭐</span>
+                <span style="font-size: 40px;">⭐</span>
+                <span style="font-size: 40px;">⭐</span>
+                <span style="font-size: 40px;">⭐</span>
+                <span style="font-size: 40px;">⭐</span>
+            </div>
+        </div>
     </div>
 
-    <!-- P-3a Park Yeri -->
-    <div class="sign-card">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <rect x="6" y="6" width="88" height="88" rx="8" fill="#1565c0"/>
-        <text x="50" y="70" text-anchor="middle" fill="white" font-family="Arial Black,sans-serif" font-size="66" font-weight="900">P</text>
-      </svg>
-      <div class="sname">PARK YERİ (P-3a)</div>
-      <div class="sdesc">Buraya araç park edilebilir.</div>
-      <span class="cat-pill pill-b">Bilgi</span>
+    <div class="no-print">
+        <button onclick="window.print()">🖨️ YAZDIR</button>
     </div>
 
-  </div>
-</div>
-
-<!-- KURALLAR -->
-<div class="section" id="kurallar">
-  <div class="card" style="text-align:center;margin-bottom:16px;">
-    <div style="font-family:'Baloo 2',cursive;font-size:21px;color:var(--dark);margin-bottom:5px;">📋 Trafik Kurallarımız</div>
-    <div style="color:#777;font-size:13px;">Bu kurallar hem sizi hem başkalarını korur!</div>
-  </div>
-  <div class="rules-grid">
-    <div class="rule-row"><div class="rule-num" style="background:#cc0000;">1</div><div class="rule-text">🚦 Trafik ışıklarına uy. Kırmızıda dur, sarıda hazırlan, yeşilde geç.</div></div>
-    <div class="rule-row"><div class="rule-num" style="background:#1565c0;">2</div><div class="rule-text">🚶 Yolda değil kaldırımda yürü. Kaldırım yoksa yolun kenarında, araçlara karşı yürü.</div></div>
-    <div class="rule-row"><div class="rule-num" style="background:#1b7a6e;">3</div><div class="rule-text">👀 Yolu geçmeden önce sağa bak, sola bak, tekrar sağa bak!</div></div>
-    <div class="rule-row"><div class="rule-num" style="background:#e67e22;">4</div><div class="rule-text">🚸 Yolu yaya geçidinden geç. Kırmızı ışıkta sakın geçme!</div></div>
-    <div class="rule-row"><div class="rule-num" style="background:#8e44ad;">5</div><div class="rule-text">🔒 Araçta emniyet kemerini mutlaka tak. Kemer hayat kurtarır!</div></div>
-    <div class="rule-row"><div class="rule-num" style="background:#c0392b;">6</div><div class="rule-text">🎧 Yolda yürürken kulaklık takma, etrafını duymalısın.</div></div>
-    <div class="rule-row"><div class="rule-num" style="background:#2471a3;">7</div><div class="rule-text">🚗 Araçtan inerken kaldırım tarafından in, yola bakan taraftan inme.</div></div>
-    <div class="rule-row"><div class="rule-num" style="background:#117a65;">8</div><div class="rule-text">🌙 Karanlıkta açık renkli giy ki sürücüler seni görsün.</div></div>
-  </div>
-</div>
-
-<!-- İLK YARDIM -->
-<div class="section" id="ilkyardim">
-
-  <!-- 112 KUTUSU -->
-  <div class="emerg-box">
-    <h3>🆘 Kaza Anında Aranacak Numara</h3>
-    <p>Tüm acil durumlarda tek numara:</p>
-    <div class="emerg-num">1 1 2</div>
-    <p style="margin-top:12px;font-size:13px;opacity:.85;">Ambulans • İtfaiye • Polis — hepsi 112'ye bağlı!</p>
-  </div>
-
-  <!-- İlk yardım nedir -->
-  <div class="ilk-info">
-    <h4>🩺 İlk Yardım Nedir?</h4>
-    <p>Olay anında, ambulans gelmeden, ilaç kullanmadan, elimizdeki araç ve gereçlerle yapılan hayat kurtarıcı müdahalelerdir.</p>
-    <p>Bir gün birisinin hayatı sizin ellerinizde olabilir. Bu yüzden ilkyardımı mutlaka öğrenmeliyiz.</p>
-  </div>
-
-  <!-- 112'yi aradığımızda -->
-  <div class="ilk-info">
-    <h4>📞 112'yi Aradığımızda Ne Söylemeliyiz?</h4>
-    <p>✅ Sakin ve anlaşılır bir şekilde olayı anlat.</p>
-    <p>✅ Kaç kişinin yaralandığını ve durumlarını söyle.</p>
-    <p>✅ Olay yerinin adresini ver.</p>
-    <p>✅ 112 telefonu kapatmadan sen de kapatma — daha fazla bilgi isteyebilirler!</p>
-  </div>
-
-  <!-- Duruma göre ne yapmalı -->
-  <div class="fa-grid">
-    <div class="fa-card">
-      <div class="fa-icon">🩹</div>
-      <div class="fa-title">Küçük Kanama</div>
-      <div class="fa-desc">Elle baskı uygulayarak kanı durdur. Büyük kanamalarda temiz bezle baskı yap ve sağlık kuruluşuna git.</div>
-    </div>
-    <div class="fa-card">
-      <div class="fa-icon">👃</div>
-      <div class="fa-title">Burun Kanaması</div>
-      <div class="fa-desc">Başı öne hafifçe eğ. Burun kanatlarını 2 parmak arasında sıkıştır. 5 dakika bas. Kanama devam ederse sağlık kuruluşuna git.</div>
-    </div>
-    <div class="fa-card">
-      <div class="fa-icon">🔥</div>
-      <div class="fa-title">Yanıklar</div>
-      <div class="fa-desc">10-15 dakika hızlı akmayan soğuk su altında tut. Temiz bezle kapat. Yanık kremi dahil HİÇBİR ŞEY sürme! Sağlık kuruluşuna git.</div>
-    </div>
-    <div class="fa-card">
-      <div class="fa-icon">🦠</div>
-      <div class="fa-title">Hastalıklardan Korunma</div>
-      <div class="fa-desc">Yemek öncesi/sonrası ve tuvalet sonrası ellerini sabunla yıka. Tırnak uzatma, dişlerini her gün fırçala.</div>
-    </div>
-    <div class="fa-card">
-      <div class="fa-icon">🚗</div>
-      <div class="fa-title">Trafik Kazası</div>
-      <div class="fa-desc">Araçtan uzak dur. Yaralıyı kesinlikle hareket ettirme. Hemen 112'yi ara. Sakin ol ve yardım bekle.</div>
-    </div>
-    <div class="fa-card">
-      <div class="fa-icon">😮‍💨</div>
-      <div class="fa-title">Boğulma</div>
-      <div class="fa-desc">Öksürmesini söyle. Sırtının ortasına vur. 112'yi ara ve yardım gelene kadar yanında kal.</div>
-    </div>
-  </div>
-</div>
-
-<!-- OYUN -->
-<div class="section" id="oyun">
-  <div class="game-wrap">
-    <div class="game-h">🎮 Trafik İşaretleri Eşleştirme Oyunu</div>
-    <div class="game-d">İşareti gör, doğru anlamını bul! Önce soldan, sonra sağdan seç.</div>
-    <div class="score-row"><span class="score-pill">Puan: <span id="score">0</span> / 6</span></div>
-    <div id="result-msg" class="res-msg"></div>
-    <div class="match-cols">
-      <div>
-        <div class="match-col-h">📌 TRAFİK İŞARETİ</div>
-        <div class="m-col" id="signs"></div>
-      </div>
-      <div>
-        <div class="match-col-h">💬 ANLAMI</div>
-        <div class="m-col" id="meanings"></div>
-      </div>
-    </div>
-    <button class="reset-btn" onclick="resetGame()">🔄 Yeniden Oyna</button>
-  </div>
-</div>
-
-<!-- PANO -->
-<div class="section" id="pano">
-  <div class="card">
-    <div class="pano-top">
-      <h2>🚦 Trafik ve İlk Yardım Haftası</h2>
-      <p style="opacity:.8;font-size:13px;margin-top:4px;">4 – 10 Mayıs</p>
-    </div>
-    <div class="pano-tip">
-      <b>📌 Pano Hazırlama Önerileri:</b><br>
-      • Bu sayfayı yazdırıp pano başlığı olarak kullanabilirsin.<br>
-      • Şiiri büyük puntoda yazdırıp ortaya koy.<br>
-      • Trafik İşaretleri sekmesini yazdırıp, işaretleri kesip renkli kartona yapıştır.<br>
-      • Öğrencilerin boyama veya çizim çalışmalarını etrafına ekle.<br>
-      • 112 numarasını büyük harflerle pano köşesine yaz.
-    </div>
-    <div class="pano-items">
-      <div class="pano-item">
-        <svg viewBox="0 0 60 100"><rect x="18" y="5" width="24" height="90" rx="5" fill="#333"/><circle cx="30" cy="25" r="11" fill="#cc0000"/><circle cx="30" cy="50" r="11" fill="#f4c430"/><circle cx="30" cy="75" r="11" fill="#2a9d8f"/></svg>
-        <div class="pt">Trafik Işığı</div>
-      </div>
-      <div class="pano-item">
-        <svg viewBox="0 0 100 100"><polygon points="32,8 68,8 92,32 92,68 68,92 32,92 8,68 8,32" fill="#cc0000"/><text x="50" y="58" text-anchor="middle" fill="white" font-family="Arial Black" font-size="24" font-weight="900">DUR</text></svg>
-        <div class="pt">DUR</div>
-      </div>
-      <div class="pano-item">
-        <svg viewBox="0 0 100 100"><polygon points="50,6 94,88 6,88" fill="white" stroke="#cc0000" stroke-width="6"/><circle cx="42" cy="33" r="5" fill="black"/><line x1="42" y1="38" x2="42" y2="53" stroke="black" stroke-width="4"/><circle cx="60" cy="36" r="4" fill="black"/><line x1="60" y1="40" x2="60" y2="53" stroke="black" stroke-width="3.5"/><line x1="47" y1="46" x2="54" y2="46" stroke="black" stroke-width="2.5"/></svg>
-        <div class="pt">Okul Geçidi</div>
-      </div>
-      <div class="pano-item">
-        <svg viewBox="0 0 100 100"><polygon points="50,6 94,88 6,88" fill="white" stroke="#cc0000" stroke-width="6"/><circle cx="50" cy="34" r="6" fill="black"/><line x1="50" y1="40" x2="50" y2="57" stroke="black" stroke-width="4.5"/><line x1="50" y1="47" x2="41" y2="54" stroke="black" stroke-width="3.5"/><line x1="50" y1="47" x2="59" y2="54" stroke="black" stroke-width="3.5"/><line x1="50" y1="57" x2="43" y2="68" stroke="black" stroke-width="3.5"/><line x1="50" y1="57" x2="57" y2="68" stroke="black" stroke-width="3.5"/></svg>
-        <div class="pt">Yaya Geçidi</div>
-      </div>
-      <div class="pano-item">
-        <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="white" stroke="#cc0000" stroke-width="7"/><rect x="18" y="42" width="64" height="16" rx="3" fill="#cc0000"/></svg>
-        <div class="pt">Girilmez</div>
-      </div>
-      <div class="pano-item">
-        <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#1565c0"/><line x1="22" y1="22" x2="78" y2="78" stroke="#cc0000" stroke-width="10" stroke-linecap="round"/></svg>
-        <div class="pt">Park Yasak</div>
-      </div>
-      <div class="pano-item">
-        <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="white" stroke="#cc0000" stroke-width="7"/><text x="50" y="64" text-anchor="middle" fill="black" font-family="Arial Black" font-size="36" font-weight="900">50</text></svg>
-        <div class="pt">Hız Sınırı</div>
-      </div>
-      <div class="pano-item">
-        <svg viewBox="0 0 100 60"><rect x="5" y="10" width="90" height="40" rx="6" fill="white" stroke="#ccc" stroke-width="2"/><text x="50" y="38" text-anchor="middle" fill="#cc0000" font-family="Arial Black" font-size="18" font-weight="900">+</text><circle cx="20" cy="52" r="8" fill="#333"/><circle cx="80" cy="52" r="8" fill="#333"/></svg>
-        <div class="pt">Ambulans 112</div>
-      </div>
-    </div>
-    <button class="print-btn" onclick="window.print()">🖨️ Yazdır</button>
-  </div>
-</div>
-
-<script>
-function showTab(id,btn){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  btn.classList.add('active');
-}
-
-// Oyun verileri - gerçek SVG işaretleriyle
-const gamePairs=[
-  {id:0,
-   svg:`<svg viewBox="0 0 100 100"><polygon points="32,8 68,8 92,32 92,68 68,92 32,92 8,68 8,32" fill="#cc0000"/><text x="50" y="58" text-anchor="middle" fill="white" font-family="Arial Black" font-size="24" font-weight="900">DUR</text></svg>`,
-   label:'DUR',meaning:'Tamamen dur!'},
-  {id:1,
-   svg:`<svg viewBox="0 0 100 100"><polygon points="50,6 94,88 6,88" fill="white" stroke="#cc0000" stroke-width="6"/><circle cx="50" cy="34" r="6" fill="black"/><line x1="50" y1="40" x2="50" y2="57" stroke="black" stroke-width="4.5" stroke-linecap="round"/><line x1="50" y1="47" x2="41" y2="54" stroke="black" stroke-width="3.5" stroke-linecap="round"/><line x1="50" y1="47" x2="59" y2="54" stroke="black" stroke-width="3.5" stroke-linecap="round"/><line x1="50" y1="57" x2="43" y2="68" stroke="black" stroke-width="3.5" stroke-linecap="round"/><line x1="50" y1="57" x2="57" y2="68" stroke="black" stroke-width="3.5" stroke-linecap="round"/></svg>`,
-   label:'YAYA GEÇİDİ',meaning:'Yayalar geçiyor, dikkat!'},
-  {id:2,
-   svg:`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="white" stroke="#cc0000" stroke-width="7"/><text x="50" y="64" text-anchor="middle" fill="black" font-family="Arial Black" font-size="36" font-weight="900">30</text></svg>`,
-   label:'HIZ SINIRI',meaning:'Saatte 30 km\'yi geçme!'},
-  {id:3,
-   svg:`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="white" stroke="#cc0000" stroke-width="7"/><rect x="18" y="42" width="64" height="16" rx="3" fill="#cc0000"/></svg>`,
-   label:'GİRİLMEZ',meaning:'Bu yola girilmez.'},
-  {id:4,
-   svg:`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#1565c0"/><polygon points="50,18 68,52 59,52 59,78 41,78 41,52 32,52" fill="white"/></svg>`,
-   label:'İLERİ MECBURİ YÖN',meaning:'Bu yönde git!'},
-  {id:5,
-   svg:`<svg viewBox="0 0 100 100"><polygon points="50,88 6,14 94,14" fill="white" stroke="#cc0000" stroke-width="7"/></svg>`,
-   label:'YOLVER',meaning:'Karşıdan gelene yol ver.'},
-];
-
-let score=0,selSign=null,selMeaning=null,matched=new Set();
-function shuffle(a){return[...a].sort(()=>Math.random()-.5);}
-
-function renderGame(){
-  const sEl=document.getElementById('signs');
-  const mEl=document.getElementById('meanings');
-  sEl.innerHTML=''; mEl.innerHTML='';
-  const sm=shuffle(gamePairs);
-  gamePairs.forEach(p=>{
-    const s=document.createElement('div');
-    s.className='mitem'; s.dataset.id=p.id;
-    s.innerHTML=p.svg+'<span>'+p.label+'</span>';
-    s.onclick=()=>pick(s,p.id,'sign');
-    sEl.appendChild(s);
-  });
-  sm.forEach(p=>{
-    const m=document.createElement('div');
-    m.className='mitem'; m.dataset.id=p.id;
-    m.textContent=p.meaning;
-    m.onclick=()=>pick(m,p.id,'meaning');
-    mEl.appendChild(m);
-  });
-}
-
-function pick(el,id,type){
-  if(matched.has(id)||el.classList.contains('correct'))return;
-  if(type==='sign'){
-    document.getElementById('signs').querySelectorAll('.mitem').forEach(e=>e.classList.remove('selected'));
-    el.classList.add('selected'); selSign={el,id};
-  }else{
-    document.getElementById('meanings').querySelectorAll('.mitem').forEach(e=>e.classList.remove('selected'));
-    el.classList.add('selected'); selMeaning={el,id};
-  }
-  if(selSign&&selMeaning){
-    if(selSign.id===selMeaning.id){
-      selSign.el.classList.remove('selected'); selSign.el.classList.add('correct');
-      selMeaning.el.classList.remove('selected'); selMeaning.el.classList.add('correct');
-      matched.add(selSign.id); score++;
-      document.getElementById('score').textContent=score;
-      if(score===gamePairs.length){
-        const msg=document.getElementById('result-msg');
-        msg.textContent='🎉 Tebrikler! Hepsini doğru eşleştirdin!';
-        msg.className='res-msg show win';
-      }
-    }else{
-      const ss=selSign.el,sm=selMeaning.el;
-      ss.classList.add('wrong'); sm.classList.add('wrong');
-      setTimeout(()=>{ss.classList.remove('wrong','selected');sm.classList.remove('wrong','selected');},700);
-    }
-    selSign=null; selMeaning=null;
-  }
-}
-
-function resetGame(){
-  score=0;selSign=null;selMeaning=null;matched=new Set();
-  document.getElementById('score').textContent='0';
-  document.getElementById('result-msg').className='res-msg';
-  renderGame();
-}
-renderGame();
-</script>
 </body>
 </html>
