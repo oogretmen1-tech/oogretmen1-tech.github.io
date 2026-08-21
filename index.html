@@ -169,7 +169,7 @@ nav {
 .classes-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:24px; }
 .class-card { background:#fff; border-radius:24px; overflow:hidden; box-shadow:var(--card-shadow); transition:transform .25s, box-shadow .25s; }
 .class-card:hover { transform:translateY(-6px); box-shadow:0 16px 36px rgba(0,0,0,.13); }
-.class-card-header { display:flex; align-items:center; gap:14px; padding:22px 22px 16px; border-bottom:3px solid #f0f0f0; }
+.class-card-header { display:flex; align-items:center; gap:14px; padding:22px 22px 16px; border-bottom:3px solid #f0f0f0; cursor:pointer; user-select:none; -webkit-tap-highlight-color:transparent; }
 .class-icon { width:56px; height:56px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:1.8rem; flex-shrink:0; }
 .class-icon svg{ width:34px; height:34px; }
 .tanitim-icon svg{ width:26px; height:26px; }
@@ -178,7 +178,10 @@ nav {
 .mini-ico{ width:17px; height:17px; vertical-align:-3px; margin-right:2px; }
 .class-card-header h3 { font-family:"Baloo 2",cursive; font-size:1.3rem; font-weight:800; }
 .class-card-header p { font-size:.82rem; color:#777; margin-top:2px; }
-.subjects-list { padding: 16px 22px 20px; display: flex; flex-direction: column; gap: 8px; }
+.class-toggle { margin-left:auto; font-size:1.1rem; color:#aaa; transition:transform .3s ease; flex-shrink:0; }
+.class-card.acik .class-toggle { transform:rotate(180deg); color:#666; }
+.subjects-list { max-height:0; opacity:0; padding:0 22px; display:flex; flex-direction:column; gap:8px; overflow:hidden; transition:max-height .35s ease, opacity .25s ease, padding .35s ease; }
+.class-card.acik .subjects-list { max-height:700px; opacity:1; padding:16px 22px 20px; }
 .subject-btn {
   display:flex; align-items:center; justify-content:space-between;
   padding:10px 14px; border-radius:12px; font-weight:700; font-size:.9rem;
@@ -480,73 +483,58 @@ footer span { color:var(--metal-1); font-weight:800; }
     <div class="classes-grid">
 
       <div class="class-card c1">
-        <div class="class-card-header">
+        <div class="class-card-header" onclick="toggleClassCard(this)">
           <div class="class-icon"><svg><use href="#icoSeed" xlink:href="#icoSeed"/></svg></div>
           <div><h3>1. Sınıf</h3><p>Maarif Modeli Müfredatı</p></div>
+          <span class="class-toggle">▼</span>
         </div>
         <div class="subjects-list">
           <a class="subject-btn" href="1-sinif-okuma-yazma-v2.html"><span class="s-label"><img src="icon_subj_turkce.png" alt="">Türkçe</span><span class="arrow">▶</span></a>
           <a class="subject-btn" href="1-sinif-matematik.html"><span class="s-label"><img src="icon_subj_matematik.png" alt="">Matematik</span><span class="arrow">▶</span></a>
           <a class="subject-btn" href="1-sinif-hayat-bilgisi.html"><span class="s-label"><img src="icon_subj_hayatbilgisi.png" alt="">Hayat Bilgisi</span><span class="arrow">▶</span></a>
-          <a class="subject-btn" href="#" onclick="showPage('belirli');return false;"><span class="s-label"><img src="icon_subj_belirli.png" alt="">Belirli Günler</span><span class="arrow">▶</span></a>
-          <a class="subject-btn" href="#" onclick="showPage('cedes');return false;"><span class="s-label"><svg class="mini-ico"><use href="#icoCedes" xlink:href="#icoCedes"/></svg>ÇEDES</span><span class="arrow">▶</span></a>
-          <a class="subject-btn" href="#" onclick="showPage('bilincli');return false;"><span class="s-label">🛡️ Bilinçli Öğrenci</span><span class="arrow">▶</span></a>
-          <a class="subject-btn" href="#" onclick="showPage('oyun');return false;"><span class="s-label">🎮 Oyunlar</span><span class="arrow">▶</span></a>
         </div>
       </div>
 
       <div class="class-card c2">
-        <div class="class-card-header">
+        <div class="class-card-header" onclick="toggleClassCard(this)">
           <div class="class-icon"><svg><use href="#icoSprout" xlink:href="#icoSprout"/></svg></div>
           <div><h3>2. Sınıf</h3><p>Maarif Modeli Müfredatı</p></div>
+          <span class="class-toggle">▼</span>
         </div>
         <div class="subjects-list">
           <a class="subject-btn" href="#" onclick="showPage('turkce');return false;"><span class="s-label"><img src="icon_subj_turkce.png" alt="">Türkçe (Tema 1–8)</span><span class="arrow">▶</span></a>
           <a class="subject-btn" href="#" onclick="showPage('matematik');return false;"><span class="s-label"><img src="icon_subj_matematik.png" alt="">Matematik</span><span class="arrow">▶</span></a>
           <a class="subject-btn" href="#" onclick="showPage('hayat');return false;"><span class="s-label"><img src="icon_subj_hayatbilgisi.png" alt="">Hayat Bilgisi</span><span class="arrow">▶</span></a>
-          <a class="subject-btn" href="#" onclick="showPage('belirli');return false;"><span class="s-label"><img src="icon_subj_belirli.png" alt="">Belirli Günler</span><span class="arrow">▶</span></a>
-          <a class="subject-btn" href="#" onclick="showPage('cedes');return false;"><span class="s-label"><svg class="mini-ico"><use href="#icoCedes" xlink:href="#icoCedes"/></svg>ÇEDES</span><span class="arrow">▶</span></a>
-          <a class="subject-btn" href="#" onclick="showPage('bilincli');return false;"><span class="s-label">🛡️ Bilinçli Öğrenci</span><span class="arrow">▶</span></a>
-          <a class="subject-btn" href="#" onclick="showPage('siir');return false;"><span class="s-label"><img src="icon_tr_siir_sarki.png" alt="">Şiir</span><span class="arrow">▶</span></a>
-          <a class="subject-btn" href="#" onclick="showPage('hikaye');return false;"><span class="s-label">📚 Hikaye</span><span class="arrow">▶</span></a>
-          <a class="subject-btn" href="#" onclick="showPage('oyun');return false;"><span class="s-label">🎮 Oyunlar</span><span class="arrow">▶</span></a>
+          <a class="subject-btn" href="#" onclick="showPage('ingilizce');return false;"><span class="s-label"><img src="icon_gen_ingilizce.png" alt=""> İngilizce</span><span class="arrow">▶</span></a>
         </div>
       </div>
 
       <div class="class-card c3">
-        <div class="class-card-header">
+        <div class="class-card-header" onclick="toggleClassCard(this)">
           <div class="class-icon"><svg><use href="#icoBlossom" xlink:href="#icoBlossom"/></svg></div>
           <div><h3>3. Sınıf</h3><p>Maarif Modeli Müfredatı</p></div>
+          <span class="class-toggle">▼</span>
         </div>
         <div class="subjects-list">
           <a class="subject-btn" href="#" onclick="showPage('turkce3');return false;"><span class="s-label"><img src="icon_subj_turkce.png" alt="">Türkçe</span><span class="arrow">▶</span></a>
           <a class="subject-btn" href="#" onclick="showPage('matematik3');return false;"><span class="s-label"><img src="icon_subj_matematik.png" alt="">Matematik</span><span class="arrow">▶</span></a>
           <a class="subject-btn" href="#" onclick="showPage('hayat3');return false;"><span class="s-label"><img src="icon_subj_hayatbilgisi.png" alt="">Hayat Bilgisi</span><span class="arrow">▶</span></a>
           <a class="subject-btn" href="#" onclick="showPage('fen3');return false;"><span class="s-label"><img src="icon_fen_deney_tup.png" alt="">Fen Bilimleri</span><span class="arrow">▶</span></a>
-          <a class="subject-btn" href="#" onclick="showPage('belirli');return false;"><span class="s-label"><img src="icon_subj_belirli.png" alt="">Belirli Günler</span><span class="arrow">▶</span></a>
-          <a class="subject-btn" href="#" onclick="showPage('cedes');return false;"><span class="s-label"><svg class="mini-ico"><use href="#icoCedes" xlink:href="#icoCedes"/></svg>ÇEDES</span><span class="arrow">▶</span></a>
-          <a class="subject-btn" href="#" onclick="showPage('bilincli');return false;"><span class="s-label">🛡️ Bilinçli Öğrenci</span><span class="arrow">▶</span></a>
-          <a class="subject-btn" href="#" onclick="showPage('hikaye');return false;"><span class="s-label">📚 Hikaye</span><span class="arrow">▶</span></a>
-          <a class="subject-btn" href="#" onclick="showPage('oyun');return false;"><span class="s-label">🎮 Oyunlar</span><span class="arrow">▶</span></a>
           <a class="subject-btn" href="#" onclick="showPage('ingilizce');return false;"><span class="s-label"><img src="icon_gen_ingilizce.png" alt=""> İngilizce</span><span class="arrow">▶</span></a>
         </div>
       </div>
 
       <div class="class-card c4">
-        <div class="class-card-header">
+        <div class="class-card-header" onclick="toggleClassCard(this)">
           <div class="class-icon"><svg><use href="#icoFruit" xlink:href="#icoFruit"/></svg></div>
           <div><h3>4. Sınıf</h3><p>Maarif Modeli Müfredatı</p></div>
+          <span class="class-toggle">▼</span>
         </div>
         <div class="subjects-list">
           <a class="subject-btn" href="4-sinif-turkce.html"><span class="s-label"><img src="icon_subj_turkce.png" alt="">Türkçe</span><span class="arrow">▶</span></a>
           <a class="subject-btn" href="4-sinif-matematik.html"><span class="s-label"><img src="icon_subj_matematik.png" alt="">Matematik</span><span class="arrow">▶</span></a>
           <a class="subject-btn" href="4-sinif-fen-bilimleri.html"><span class="s-label"><img src="icon_fen_deney_tup.png" alt="">Fen Bilimleri</span><span class="arrow">▶</span></a>
           <a class="subject-btn" href="4-sinif-sosyal-bilgiler.html"><span class="s-label">🌍 Sosyal Bilgiler</span><span class="arrow">▶</span></a>
-          <a class="subject-btn" href="#" onclick="showPage('belirli');return false;"><span class="s-label"><img src="icon_subj_belirli.png" alt="">Belirli Günler</span><span class="arrow">▶</span></a>
-          <a class="subject-btn" href="#" onclick="showPage('cedes');return false;"><span class="s-label"><svg class="mini-ico"><use href="#icoCedes" xlink:href="#icoCedes"/></svg>ÇEDES</span><span class="arrow">▶</span></a>
-          <a class="subject-btn" href="#" onclick="showPage('bilincli');return false;"><span class="s-label">🛡️ Bilinçli Öğrenci</span><span class="arrow">▶</span></a>
-          <a class="subject-btn" href="#" onclick="showPage('hikaye');return false;"><span class="s-label">📚 Hikaye</span><span class="arrow">▶</span></a>
-          <a class="subject-btn" href="#" onclick="showPage('oyun');return false;"><span class="s-label">🎮 Oyunlar</span><span class="arrow">▶</span></a>
           <a class="subject-btn" href="#" onclick="showPage('ingilizce');return false;"><span class="s-label"><img src="icon_gen_ingilizce.png" alt=""> İngilizce</span><span class="arrow">▶</span></a>
         </div>
       </div>
@@ -578,6 +566,11 @@ footer span { color:var(--metal-1); font-weight:800; }
         <div class="qicon">📖</div>
         <h4>Sözlük Etkinliği</h4>
         Türkçe Sözlük
+      </a>
+      <a href="#" onclick="showPage('siir');return false;" class="quick-card qc3">
+        <div class="qicon">✨</div>
+        <h4>Şiir</h4>
+        <p>Şiir okuma ve anlama</p>
       </a>
       <a href="#" onclick="showPage('yillikplanlar');return false;" class="quick-card qc4">
         <div class="qicon">🗓️</div>
@@ -1152,6 +1145,18 @@ function showPage(id) {
 function showHome() {
   showPage('home');
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* Sınıf kartlarını akordeon gibi aç/kapa: bir sınıfa tıklanınca dersleri açılır,
+   diğer açık olan sınıf otomatik kapanır. */
+function toggleClassCard(header) {
+  const card = header.closest('.class-card');
+  if (!card) return;
+  const wasOpen = card.classList.contains('acik');
+  document.querySelectorAll('.class-card.acik').forEach(c => {
+    if (c !== card) c.classList.remove('acik');
+  });
+  card.classList.toggle('acik', !wasOpen);
 }
 
 /* Bir alt sayfadan "index.html?page=turkce" gibi bir linkle gelindiyse,
