@@ -1,1433 +1,813 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aralık Ayı Etkinlikleri - Adalet, Dürüstlük, Mütevazılık</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Comic Sans MS', 'Arial', sans-serif;
-            background: linear-gradient(135deg, #d32f2f 0%, #f44336 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 30px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        
-        header {
-            background: linear-gradient(135deg, #c62828 0%, #e53935 100%);
-            color: white;
-            padding: 50px 30px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        header::before {
-            content: '❄️';
-            position: absolute;
-            font-size: 10em;
-            opacity: 0.1;
-            top: -30px;
-            right: 50px;
-            animation: snowfall 5s ease-in-out infinite;
-        }
-        
-        @keyframes snowfall {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(20px) rotate(10deg); }
-        }
-        
-        header h1 {
-            font-size: 3em;
-            margin-bottom: 20px;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
-            position: relative;
-            z-index: 1;
-        }
-        
-        .month-info {
-            background: rgba(255,255,255,0.2);
-            padding: 25px;
-            border-radius: 20px;
-            margin-top: 20px;
-            backdrop-filter: blur(10px);
-            position: relative;
-            z-index: 1;
-        }
-        
-        .month-info h2 {
-            font-size: 2em;
-            margin-bottom: 15px;
-        }
-        
-        .values-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        
-        .value-tag {
-            background: white;
-            color: #c62828;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-size: 1.1em;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: transform 0.3s;
-        }
-        
-        .value-tag:hover {
-            transform: scale(1.1) rotate(-3deg);
-        }
-        
-        .nav-menu {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            padding: 30px;
-            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
-        }
-        
-        .nav-btn {
-            background: white;
-            border: 3px solid #c62828;
-            color: #c62828;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-size: 1.1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        
-        .nav-btn:hover {
-            background: #c62828;
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-        }
-        
-        .nav-btn.active {
-            background: linear-gradient(135deg, #c62828 0%, #e53935 100%);
-            color: white;
-            border-color: #c62828;
-            transform: scale(1.05);
-        }
-        
-        .activity-section {
-            display: none;
-            padding: 40px;
-            animation: fadeIn 0.5s ease-in;
-        }
-        
-        .activity-section.active {
-            display: block;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .activity-card {
-            background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
-            border-radius: 25px;
-            padding: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
-        
-        .activity-title {
-            font-size: 2.5em;
-            text-align: center;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-        }
-        
-        .info-box {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-        
-        .info-item {
-            background: white;
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-        
-        .info-item:hover {
-            transform: translateY(-5px);
-        }
-        
-        .info-item h4 {
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
-        
-        .info-item p {
-            color: #555;
-            font-size: 1.1em;
-            line-height: 1.6;
-        }
-        
-        .steps-container {
-            margin: 40px 0;
-        }
-        
-        .step {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            margin: 25px 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border-left: 6px solid #c62828;
-            position: relative;
-            transition: all 0.3s;
-        }
-        
-        .step:hover {
-            transform: translateX(10px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        }
-        
-        .step-number {
-            position: absolute;
-            left: -20px;
-            top: 20px;
-            background: linear-gradient(135deg, #c62828 0%, #e53935 100%);
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5em;
-            font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-        
-        .step h4 {
-            color: #c62828;
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            padding-left: 40px;
-        }
-        
-        .step p {
-            color: #555;
-            font-size: 1.1em;
-            line-height: 1.8;
-            margin: 8px 0;
-            padding-left: 40px;
-        }
-        
-        .interactive-area {
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            padding: 40px;
-            border-radius: 25px;
-            margin: 30px 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
-        
-        .interactive-title {
-            font-size: 2em;
-            color: #c62828;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #c62828 0%, #e53935 100%);
-            color: white;
-            border: none;
-            padding: 18px 40px;
-            border-radius: 30px;
-            font-size: 1.3em;
-            font-weight: bold;
-            cursor: pointer;
-            margin: 10px;
-            transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            display: inline-block;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        }
-        
-        .quiz-option {
-            background: white;
-            border: 3px solid #c62828;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 15px 0;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 1.1em;
-        }
-        
-        .quiz-option:hover {
-            background: #ffebee;
-            transform: translateX(10px);
-        }
-        
-        .quiz-option.correct {
-            background: #4caf50;
-            color: white;
-            border-color: #4caf50;
-            animation: pulse 0.5s;
-        }
-        
-        .quiz-option.wrong {
-            background: #f44336;
-            color: white;
-            border-color: #f44336;
-            animation: shake 0.5s;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-        
-        .badge {
-            display: inline-block;
-            padding: 15px 30px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 1.2em;
-            margin: 10px;
-            animation: bounceIn 0.6s;
-        }
-        
-        .badge-gold {
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            color: #333;
-            box-shadow: 0 5px 15px rgba(255,215,0,0.4);
-        }
-        
-        .badge-silver {
-            background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
-            color: #333;
-            box-shadow: 0 5px 15px rgba(192,192,192,0.4);
-        }
-        
-        .badge-bronze {
-            background: linear-gradient(135deg, #cd7f32 0%, #ffa500 100%);
-            color: white;
-            box-shadow: 0 5px 15px rgba(205,127,50,0.4);
-        }
-        
-        @keyframes bounceIn {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-        
-        .story-box {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            margin: 20px 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border: 3px solid #c62828;
-        }
-        
-        .story-box h4 {
-            color: #c62828;
-            font-size: 1.6em;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        
-        .story-box p {
-            color: #333;
-            font-size: 1.15em;
-            line-height: 1.9;
-            text-align: justify;
-        }
-        
-        .example-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            margin: 15px 0;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            border-left: 5px solid #c62828;
-        }
-        
-        .example-card h5 {
-            color: #c62828;
-            font-size: 1.3em;
-            margin-bottom: 10px;
-        }
-        
-        .example-card p {
-            color: #555;
-            font-size: 1.05em;
-            line-height: 1.7;
-        }
-        
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 2em;
-            }
-            
-            .activity-title {
-                font-size: 1.8em;
-                flex-direction: column;
-            }
-            
-            .nav-btn {
-                padding: 12px 20px;
-                font-size: 0.95em;
-            }
-            
-            .step-number {
-                left: 10px;
-                top: 10px;
-                width: 40px;
-                height: 40px;
-                font-size: 1.2em;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anneler Günü Etkinlik ve Pano Çalışması</title>
+
+  <style>
+    :root {
+      --pembe: #e96b91;
+      --acik-pembe: #fff0f5;
+      --mor: #8d6bb3;
+      --sari: #ffd166;
+      --yesil: #8fc49a;
+      --metin: #493b47;
+      --beyaz: #fffdfb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f8e9ef;
+      color: var(--metin);
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(1100px, 94%);
+      margin: auto;
+    }
+
+    header {
+      min-height: 390px;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: white;
+      background:
+        linear-gradient(rgba(117, 65, 105, .64), rgba(117, 65, 105, .64)),
+        linear-gradient(135deg, #f095b5, #8e70b2);
+      padding: 55px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before,
+    header::after {
+      content: "♥";
+      position: absolute;
+      color: rgba(255,255,255,.24);
+      font-size: 130px;
+    }
+
+    header::before {
+      left: 4%;
+      top: 25px;
+      transform: rotate(-18deg);
+    }
+
+    header::after {
+      right: 5%;
+      bottom: 10px;
+      transform: rotate(18deg);
+    }
+
+    header h1 {
+      font-family: Georgia, serif;
+      font-size: clamp(2.3rem, 6vw, 4.7rem);
+      margin: 10px 0;
+      letter-spacing: 1px;
+    }
+
+    header p {
+      font-size: 1.25rem;
+      margin: 12px auto;
+      max-width: 720px;
+    }
+
+    .heart {
+      color: #ffd1e0;
+      font-size: 3rem;
+    }
+
+    nav {
+      background: white;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 2px 12px #0001;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    nav a {
+      color: var(--mor);
+      text-decoration: none;
+      font-weight: bold;
+      margin: 0 12px;
+    }
+
+    section {
+      background: var(--beyaz);
+      margin: 28px auto;
+      padding: 30px;
+      border-radius: 24px;
+      box-shadow: 0 5px 20px #75416918;
+    }
+
+    h2 {
+      color: var(--mor);
+      font-family: Georgia, serif;
+      font-size: 2rem;
+      text-align: center;
+      margin-top: 0;
+    }
+
+    h3 {
+      color: var(--pembe);
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--acik-pembe);
+      border: 2px solid #f4b4c8;
+      border-radius: 30px;
+      padding: 7px 15px;
+      color: #a6456b;
+      font-weight: bold;
+      margin: 5px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: #fff6f8;
+      border-left: 6px solid var(--pembe);
+      border-radius: 15px;
+      padding: 18px;
+    }
+
+    .card strong {
+      color: var(--mor);
+    }
+
+    .timeline {
+      border-left: 4px solid var(--pembe);
+      margin: 20px auto;
+      max-width: 800px;
+      padding-left: 25px;
+    }
+
+    .timeline div {
+      position: relative;
+      margin: 20px 0;
+      background: #fff1f5;
+      padding: 14px 18px;
+      border-radius: 12px;
+    }
+
+    .timeline div::before {
+      content: "";
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--pembe);
+      position: absolute;
+      left: -34px;
+      top: 22px;
+      border: 4px solid white;
+    }
+
+    blockquote {
+      background: #fff4c9;
+      border-left: 8px solid var(--sari);
+      padding: 20px;
+      margin: 18px 0;
+      border-radius: 12px;
+      font-family: Georgia, serif;
+      font-size: 1.15rem;
+      font-style: italic;
+    }
+
+    .poem {
+      white-space: pre-line;
+      text-align: center;
+      background: linear-gradient(135deg, #fff0f5, #f5effd);
+      border-radius: 20px;
+      padding: 25px;
+      font-family: Georgia, serif;
+      font-size: 1.2rem;
+    }
+
+    .pano {
+      background:
+        radial-gradient(circle at 10% 15%, #ffd9e5 0 32px, transparent 33px),
+        radial-gradient(circle at 90% 22%, #e8d9fa 0 38px, transparent 39px),
+        linear-gradient(135deg, #ffeaf2, #f4efff);
+      border: 12px solid #d58baa;
+      padding: 28px;
+      min-height: 600px;
+      position: relative;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .pano h2 {
+      display: inline-block;
+      background: white;
+      border: 4px dashed var(--pembe);
+      padding: 13px 25px;
+      border-radius: 18px;
+      color: #b54d77;
+    }
+
+    .pano-message {
+      max-width: 700px;
+      margin: 20px auto;
+      font-family: Georgia, serif;
+      font-size: 1.45rem;
+      background: #ffffffdd;
+      padding: 20px;
+      border-radius: 20px;
+    }
+
+    .flower-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 18px;
+      margin: 25px 0;
+    }
+
+    .flower {
+      width: 120px;
+      height: 120px;
+      background: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px;
+      border: 5px solid #f2a9c1;
+      box-shadow: 0 5px 10px #0001;
+      font-size: .9rem;
+      font-weight: bold;
+    }
+
+    .flower:nth-child(2n) {
+      border-color: #c7abe7;
+      transform: rotate(5deg);
+    }
+
+    .flower:nth-child(3n) {
+      border-color: #f4cc73;
+      transform: rotate(-5deg);
+    }
+
+    .leaf-note {
+      display: inline-block;
+      background: #dff1df;
+      padding: 13px 20px;
+      margin: 7px;
+      border-radius: 50% 10px 50% 10px;
+      color: #3f7650;
+      font-weight: bold;
+    }
+
+    .worksheet {
+      border: 3px solid #765b88;
+      border-radius: 8px;
+      padding: 25px;
+      margin: 25px 0;
+      background: white;
+      min-height: 450px;
+    }
+
+    .worksheet-title {
+      text-align: center;
+      color: #765b88;
+      font-family: Georgia, serif;
+      border-bottom: 2px dashed #d890ad;
+      padding-bottom: 10px;
+    }
+
+    .line {
+      border-bottom: 2px solid #777;
+      height: 35px;
+      margin: 8px 0;
+    }
+
+    .big-heart {
+      width: 150px;
+      height: 135px;
+      margin: 20px auto;
+      position: relative;
+      transform: rotate(-45deg);
+      background: #ffd6e2;
+      border-radius: 12px 0 12px 0;
+      border: 4px solid #d9799a;
+    }
+
+    .big-heart::before,
+    .big-heart::after {
+      content: "";
+      position: absolute;
+      width: 150px;
+      height: 135px;
+      background: #ffd6e2;
+      border: 4px solid #d9799a;
+      border-radius: 50%;
+    }
+
+    .big-heart::before {
+      top: -76px;
+      left: -4px;
+      border-bottom: 0;
+    }
+
+    .big-heart::after {
+      left: 72px;
+      top: 4px;
+      border-left: 0;
+    }
+
+    .heart-text {
+      position: relative;
+      z-index: 2;
+      transform: rotate(45deg);
+      padding-top: 52px;
+      font-weight: bold;
+      color: #a5466c;
+      width: 130px;
+      margin-left: 5px;
+    }
+
+    .drawing-box {
+      height: 180px;
+      border: 3px dashed #aaa;
+      border-radius: 10px;
+      margin-top: 15px;
+    }
+
+    .checklist label {
+      display: block;
+      margin: 12px 0;
+      font-size: 1.05rem;
+    }
+
+    button {
+      border: 0;
+      background: var(--pembe);
+      color: white;
+      padding: 12px 18px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin: 6px;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #c94f78;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    footer {
+      text-align: center;
+      background: #754169;
+      color: white;
+      padding: 30px;
+      margin-top: 35px;
+    }
+
+    @media print {
+      nav, button, .no-print {
+        display: none !important;
+      }
+
+      body {
+        background: white;
+      }
+
+      section {
+        box-shadow: none;
+        page-break-inside: avoid;
+        margin: 0 0 20px;
+      }
+
+      header {
+        min-height: 250px;
+      }
+
+      .worksheet {
+        page-break-before: always;
+      }
+
+      footer {
+        display: none;
+      }
+    }
+  </style>
 </head>
+
 <body>
+
+  <header>
     <div class="container">
-        <header>
-            <h1>🎄 ARALIK AYI ETKİNLİKLERİ ❄️</h1>
-            <div class="month-info">
-                <h2>⭐ Aralık Ayı Değerleri ⭐</h2>
-                <div class="values-tags">
-                    <span class="value-tag">⚖️ Adalet</span>
-                    <span class="value-tag">🤝 Dürüstlük</span>
-                    <span class="value-tag">🌟 Mütevazılık</span>
-                </div>
-            </div>
-        </header>
-
-        <nav class="nav-menu">
-            <button class="nav-btn active" onclick="changeTab(0)">⚖️ Adalet</button>
-            <button class="nav-btn" onclick="changeTab(1)">🤝 Dürüstlük</button>
-            <button class="nav-btn" onclick="changeTab(2)">🌟 Mütevazılık</button>
-            <button class="nav-btn" onclick="changeTab(3)">📊 Günlük Takip</button>
-            <button class="nav-btn" onclick="changeTab(4)">🎯 Aralık Hedeflerim</button>
-        </nav>
-
-        <!-- ETKİNLİK 1: ADALET -->
-        <section class="activity-section active">
-            <div class="activity-card" style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);">
-                <h2 class="activity-title" style="color: #2e7d32;">
-                    <span style="font-size: 1.5em;">⚖️</span>
-                    Adalet Değerini Öğreniyorum
-                </h2>
-                
-                <div class="info-box">
-                    <div class="info-item">
-                        <h4 style="color: #2e7d32;">🎯 Hedef</h4>
-                        <p>Öğrencilere adalet kavramını öğretmek, adil davranmanın önemini anlatmak.</p>
-                    </div>
-                    <div class="info-item">
-                        <h4 style="color: #2e7d32;">⏱️ Süre</h4>
-                        <p>2 ders saati + günlük uygulama</p>
-                    </div>
-                    <div class="info-item">
-                        <h4 style="color: #2e7d32;">👥 Yaş Grubu</h4>
-                        <p>İlkokul (1-4. Sınıflar)</p>
-                    </div>
-                    <div class="info-item">
-                        <h4 style="color: #2e7d32;">🎒 Malzemeler</h4>
-                        <p>Hikaye kitapları, rol yapma kartları, adalet terazisi modeli, çalışma kağıtları</p>
-                    </div>
-                </div>
-
-                <div class="steps-container">
-                    <h3 style="color: #2e7d32; font-size: 2em; margin-bottom: 20px; text-align: center;">📝 Uygulama Adımları</h3>
-                    
-                    <div class="step" style="border-left-color: #2e7d32;">
-                        <span class="step-number" style="background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%);">1</span>
-                        <h4>Adalet Nedir? (20 dk)</h4>
-                        <p>• "Adalet nedir?" sorusunu sorun</p>
-                        <p>• Adalet: Herkese eşit davranmak, doğru olanı yapmak</p>
-                        <p>• Günlük hayattan örnekler:</p>
-                        <p>&nbsp;&nbsp;- Oyuncakları paylaşmak</p>
-                        <p>&nbsp;&nbsp;- Sırada kimseyi geçmemek</p>
-                        <p>&nbsp;&nbsp;- Herkese aynı fırsatı vermek</p>
-                        <p>&nbsp;&nbsp;- Suçsuz birine kızmamak</p>
-                        <p>• Adaletsizlik neden kötüdür?</p>
-                    </div>
-                    
-                    <div class="step" style="border-left-color: #2e7d32;">
-                        <span class="step-number" style="background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%);">2</span>
-                        <h4>Adalet Terazisi Hikayesi (20 dk)</h4>
-                        <p>• Terazi görseli gösterin (iki kefeli terazi)</p>
-                        <p>• Bir tarafta adil davranışlar, diğer tarafta adaletsiz davranışlar</p>
-                        <p>• Öğrencilerden örnekler isteyin:</p>
-                        <p>&nbsp;&nbsp;<strong>Adil:</strong> Pastayı eşit bölmek</p>
-                        <p>&nbsp;&nbsp;<strong>Adaletsiz:</strong> Sadece kendine büyük parça almak</p>
-                        <p>&nbsp;&nbsp;<strong>Adil:</strong> Oyunda kurallara uymak</p>
-                        <p>&nbsp;&nbsp;<strong>Adaletsiz:</strong> Hile yapmak</p>
-                    </div>
-                    
-                    <div class="step" style="border-left-color: #2e7d32;">
-                        <span class="step-number" style="background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%);">3</span>
-                        <h4>Kral Solomon'un Bilgeliği Hikayesi (25 dk)</h4>
-                        <div class="story-box">
-                            <h4>📖 Hikaye: İki Anne ve Bir Bebek</h4>
-                            <p>
-                                Bir zamanlar iki kadın Kral Solomon'a gelir. İkisi de aynı bebeğin annesi olduğunu söyler. 
-                                Kral Solomon düşünür ve der ki: "Bebeği ikiye bölelim, her birine yarısını verelim." 
-                                Gerçek anne hemen "Hayır! Ona zarar vermeyin, diğer kadına verin!" der. 
-                                Sahte anne ise "Olur, bölelim" der. 
-                                Kral Solomon gerçek anneyi anlar çünkü gerçek anne bebeğine zarar gelmesini istemez.
-                            </p>
-                        </div>
-                        <p>• Tartışma soruları:</p>
-                        <p>&nbsp;&nbsp;- Kral Solomon nasıl adil karar verdi?</p>
-                        <p>&nbsp;&nbsp;- Gerçek anne neden bebekten vazgeçti?</p>
-                        <p>&nbsp;&nbsp;- Bu hikayeden ne öğrendik?</p>
-                    </div>
-                    
-                    <div class="step" style="border-left-color: #2e7d32;">
-                        <span class="step-number" style="background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%);">4</span>
-                        <h4>Rol Yapma Etkinliği (25 dk)</h4>
-                        <p>• Öğrencileri gruplara ayırın</p>
-                        <p>• Her gruba farklı senaryo verin:</p>
-                        <div class="example-card">
-                            <h5>Senaryo 1: Kırılan Vazo</h5>
-                            <p>Sınıfta vazo kırıldı. Öğretmen kim kırdı diye soruyor. Sen görmedin ama arkadaşın suçlanıyor. Ne yaparsın?</p>
-                        </div>
-                        <div class="example-card">
-                            <h5>Senaryo 2: Grup Çalışması</h5>
-                            <p>Grup ödevinde bir arkadaşın hiç çalışmadı ama ismini yazmak istiyor. Adil mi?</p>
-                        </div>
-                        <div class="example-card">
-                            <h5>Senaryo 3: Oyun Saati</h5>
-                            <p>Bahçede top oynuyorsunuz. Yeni gelen öğrenci de oynamak istiyor. Ne yaparsınız?</p>
-                        </div>
-                        <p>• Her grup senaryosunu oynar ve çözüm önerir</p>
-                    </div>
-                    
-                    <div class="step" style="border-left-color: #2e7d32;">
-                        <span class="step-number" style="background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%);">5</span>
-                        <h4>Adalet Sözleşmesi (10 dk)</h4>
-                        <p>• Her öğrenci kendi sözleşmesini imzalar:</p>
-                        <div style="background: #fff; padding: 20px; border-radius: 15px; margin: 15px 0; border: 3px solid #2e7d32;">
-                            <p style="font-size: 1.2em; line-height: 2; color: #333;">
-                                <strong>Adalet Sözleşmem</strong><br><br>
-                                "Ben <input type="text" placeholder="İsim" style="border: none; border-bottom: 2px solid #2e7d32; padding: 5px; font-size: 1em;">, Aralık ayında:<br>
-                                ✓ Herkese eşit davranacağım<br>
-                                ✓ Adaletsizlik gördüğümde ses çıkaracağım<br>
-                                ✓ Paylaşırken adil olacağım<br>
-                                ✓ Kimseyi haksız yere suçlamayacağım<br>
-                                ✓ Doğru olanı yapacağım"
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div class="step" style="border-left-color: #2e7d32;">
-                        <span class="step-number" style="background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%);">6</span>
-                        <h4>Adalet Dedektifleri Oyunu (10 dk)</h4>
-                        <p>• Sınıfta "Adalet Dedektifleri" rozeti dağıtın</p>
-                        <p>• Her gün bir öğrenci "Adalet Dedektifi" olur</p>
-                        <p>• Görevleri:</p>
-                        <p>&nbsp;&nbsp;- Adaletli davranışları fark etmek</p>
-                        <p>&nbsp;&nbsp;- Adaletsizlikleri (kibarca) düzeltmek</p>
-                        <p>&nbsp;&nbsp;- Gün sonunda rapor vermek</p>
-                    </div>
-                </div>
-
-                <!-- İNTERAKTİF ADALET OYUNU -->
-                <div class="interactive-area">
-                    <h3 class="interactive-title">🎮 Adalet Bilgi Yarışması</h3>
-                    <p style="text-align: center; font-size: 1.2em; margin-bottom: 30px; color: #333;">
-                        Adalet hakkında ne kadar bilgilisin? Test et!
-                    </p>
-                    
-                    <div id="justiceQuiz">
-                        <div style="background: white; padding: 30px; border-radius: 20px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #2e7d32; font-size: 1.4em; margin-bottom: 20px;">❓ Adalet ne demektir?</h4>
-                            <div class="quiz-option" onclick="answerJustice(this, true, 1)">A) Herkese eşit ve doğru davranmak</div>
-                            <div class="quiz-option" onclick="answerJustice(this, false, 1)">B) Sadece arkadaşlarıma iyi davranmak</div>
-                            <div class="quiz-option" onclick="answerJustice(this, false, 1)">C) Kendime daha fazla vermek</div>
-                        </div>
-                        
-                        <div style="background: white; padding: 30px; border-radius: 20px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #2e7d32; font-size: 1.4em; margin-bottom: 20px;">❓ Pastayı nasıl paylaşmalısın?</h4>
-                            <div class="quiz-option" onclick="answerJustice(this, false, 2)">A) En büyük parçayı kendime alırım</div>
-                            <div class="quiz-option" onclick="answerJustice(this, true, 2)">B) Herkese eşit parçalar veririm</div>
-                            <div class="quiz-option" onclick="answerJustice(this, false, 2)">C) Sadece en iyi arkadaşıma veririm</div>
-                        </div>
-                        
-                        <div style="background: white; padding: 30px; border-radius: 20px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #2e7d32; font-size: 1.4em; margin-bottom: 20px;">❓ Arkadaşın haksız yere suçlanıyor, ne yaparsın?</h4>
-                            <div class="quiz-option" onclick="answerJustice(this, false, 3)">A) Sessiz kalırım</div>
-                            <div class="quiz-option" onclick="answerJustice(this, true, 3)">B) Gerçeği söylerim ve arkadaşımı savunurum</div>
-                            <div class="quiz-option" onclick="answerJustice(this, false, 3)">C) Ben de suçlarım</div>
-                        </div>
-                        
-                        <div style="background: white; padding: 30px; border-radius: 20px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #2e7d32; font-size: 1.4em; margin-bottom: 20px;">❓ Oyunda kuralları kim uygular?</h4>
-                            <div class="quiz-option" onclick="answerJustice(this, false, 4)">A) Sadece ben</div>
-                            <div class="quiz-option" onclick="answerJustice(this, true, 4)">B) Herkes kurallara uymalı</div>
-                            <div class="quiz-option" onclick="answerJustice(this, false, 4)">C) Kural yok, herkes istediğini yapar</div>
-                        </div>
-                        
-                        <div style="background: white; padding: 30px; border-radius: 20px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #2e7d32; font-size: 1.4em; margin-bottom: 20px;">❓ Yeni öğrenci oyuna katılmak istiyor, ne yaparsın?</h4>
-                            <div class="quiz-option" onclick="answerJustice(this, false, 5)">A) Onu oyuna almam</div>
-                            <div class="quiz-option" onclick="answerJustice(this, true, 5)">B) Herkese eşit şans vermek için onu da oyuna alırım</div>
-                            <div class="quiz-option" onclick="answerJustice(this, false, 5)">C) Sadece izlemesine izin veririm</div>
-                        </div>
-                    </div>
-                    
-                    <div style="text-align: center; margin: 30px 0;">
-                        <div id="justiceScore" style="font-size: 2em; color: #2e7d32; font-weight: bold; margin-bottom: 20px;">Doğru Cevap: 0 / 5</div>
-                        <div id="justiceBadge"></div>
-                    </div>
-                    
-                    <button class="btn-primary" onclick="resetJusticeQuiz()">🔄 Testi Yeniden Başlat</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- ETKİNLİK 2: DÜRÜSTLÜK -->
-        <section class="activity-section">
-            <div class="activity-card" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);">
-                <h2 class="activity-title" style="color: #1976d2;">
-                    <span style="font-size: 1.5em;">🤝</span>
-                    Dürüstlük Değerini Öğreniyorum
-                </h2>
-                
-                <div class="info-box">
-                    <div class="info-item">
-                        <h4 style="color: #1976d2;">🎯 Hedef</h4>
-                        <p>Öğrencilere dürüstlük kavramını öğretmek, doğru sözlü olmanın önemini anlatmak.</p>
-                    </div>
-                    <div class="info-item">
-                        <h4 style="color: #1976d2;">⏱️ Süre</h4>
-                        <p>2 ders saati + günlük uygulama</p>
-                    </div>
-                    <div class="info-item">
-                        <h4 style="color: #1976d2;">👥 Yaş Grubu</h4>
-                        <p>İlkokul (1-4. Sınıflar)</p>
-                    </div>
-                    <div class="info-item">
-                        <h4 style="color: #1976d2;">🎒 Malzemeler</h4>
-                        <p>Hikaye kitapları, dürüstlük kartları, masal kitapları, sertifikalar</p>
-                    </div>
-                </div>
-
-                <div class="steps-container">
-                    <h3 style="color: #1976d2; font-size: 2em; margin-bottom: 20px; text-align: center;">📝 Uygulama Adımları</h3>
-                    
-                    <div class="step" style="border-left-color: #1976d2;">
-                        <span class="step-number" style="background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);">1</span>
-                        <h4>Dürüstlük Nedir? (20 dk)</h4>
-                        <p>• "Dürüstlük nedir?" sorusunu sorun</p>
-                        <p>• Dürüstlük: Doğruyu söylemek, yalan söylememek</p>
-                        <p>• Dürüst insan güvenilir bir insandır</p>
-                        <p>• Günlük hayattan örnekler:</p>
-                        <p>&nbsp;&nbsp;- Bir şey kırdığında kabul etmek</p>
-                        <p>&nbsp;&nbsp;- Sınavda kopya çekmemek</p>
-                        <p>&nbsp;&nbsp;- Bulduğun parayı sahibine vermek</p>
-                        <p>&nbsp;&nbsp;- Yanlış yaptığında özür dilemek</p>
-                    </div>
-                    
-                    <div class="step" style="border-left-color: #1976d2;">
-                        <span class="step-number" style="background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);">2</span>
-                        <h4>Pinocchio Hikayesi (25 dk)</h4>
-                        <div class="story-box">
-                            <h4>📖 Hikaye: Pinocchio ve Uzayan Burnu</h4>
-                            <p>
-                                Pinocchio tahta bir kukla idi. Peri onu canlandırdı ama şartı vardı: "Dürüst olursan gerçek çocuk olursun" dedi.
-                                Pinocchio okula gitmek yerine sirke kaçtı ve yalan söyledi. Her yalan söylediğinde burnu uzadı!
-                                Sonunda yalan söylemenin ne kadar kötü olduğunu anladı. Dürüst olmaya başlayınca gerçek çocuk oldu.
-                            </p>
-                        </div>
-                        <p>• Tartışma soruları:</p>
-                        <p>&nbsp;&nbsp;- Pinocchio neden yalan söyledi?</p>
-                        <p>&nbsp;&nbsp;- Burnu neden uzadı?</p>
-                        <p>&nbsp;&nbsp;- Gerçek çocuk olmak için ne yaptı?</p>
-                        <p>&nbsp;&nbsp;- Bu hikayeden ne öğrendik?</p>
-                    </div>
-                    
-                    <div class="step" style="border-left-color: #1976d2;">
-                        <span class="step-number" style="background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);">3</span>
-                        <h4>Dürüstlük Örnekleri (20 dk)</h4>
-                        <p>• Gerçek hayattan örnekler anlatın:</p>
-                        <div class="example-card">
-                            <h5>Örnek 1: Kayıp Cüzdan</h5>
-                            <p>Bir çocuk yolda cüzdan bulur. İçinde çok para vardır. Dürüst çocuk cüzdanı polise teslim eder. Sahibi çok mutlu olur ve çocuğu tebrik eder.</p>
-                        </div>
-                        <div class="example-card">
-                            <h5>Örnek 2: Kırık Vazo</h5>
-                            <p>Ali oynarken annesinin vazosunu kırar. Korkuyor ama dürüst olmaya karar veriyor. Annesine gidip "Anne, üzgünüm, vazoyu ben kırdım" diyor. Annesi ona kızar ama dürüst olduğu için takdir eder.</p>
-                        </div>
-                        <div class="example-card">
-                            <h5>Örnek 3: Kopya Çekme</h5>
-                            <p>Sınavda arkadaşı Ayşe'ye cevapları veriyor. Ayşe "Hayır, kopya çekmek yanlış, kendi bilgimle yapacağım" diyor. Düşük not alsa da dürüst olduğu için gurur duyuyor.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="step" style="border-left-color: #1976d2;">
-                        <span class="step-number" style="background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);">4</span>
-                        <h4>Dürüstlük Tiyatrosu (25 dk)</h4>
-                        <p>• Öğrencileri gruplara ayırın</p>
-                        <p>• Her gruba senaryo verin:</p>
-                        <div class="example-card">
-                            <h5>Senaryo 1: Markette</h5>
-                            <p>Marketten alışveriş yapıyorsun. Kasiyer fazla para üstü verdi. Ne yaparsın?</p>
-                        </div>
-                        <div class="example-card">
-                            <h5>Senaryo 2: Ödevde</h5>
-                            <p>Ödevini yapmadın. Öğretmen neden yapmadığını soruyor. Yalan mı söylersin yoksa doğruyu mu?</p>
-                        </div>
-                        <div class="example-card">
-                            <h5>Senaryo 3: Oyuncak</h5>
-                            <p>Arkadaşının oyuncağını çok beğendin. Kimse görmeden alabilirsin. Ne yaparsın?</p>
-                        </div>
-                        <p>• Her grup senaryosunu oynar</p>
-                        <p>• Dürüst ve dürüst olmayan davranışları karşılaştırın</p>
-                    </div>
-                    
-                    <div class="step" style="border-left-color: #1976d2;">
-                        <span class="step-number" style="background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);">5</span>
-                        <h4>Dürüstlük Sözleşmesi (10 dk)</h4>
-                        <div style="background: #fff; padding: 20px; border-radius: 15px; margin: 15px 0; border: 3px solid #1976d2;">
-                            <p style="font-size: 1.2em; line-height: 2; color: #333;">
-                                <strong>Dürüstlük Sözleşmem</strong><br><br>
-                                "Ben <input type="text" placeholder="İsim" style="border: none; border-bottom: 2px solid #1976d2; padding: 5px; font-size: 1em;">, Aralık ayında:<br>
-                                ✓ Daima doğruyu söyleyeceğim<br>
-                                ✓ Yalan söylemeyeceğim<br>
-                                ✓ Hata yaptığımda kabul edeceğim<br>
-                                ✓ Kopya çekmeyeceğim<br>
-                                ✓ Güvenilir bir insan olacağım"
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div class="step" style="border-left-color: #1976d2;">
-                        <span class="step-number" style="background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);">6</span>
-                        <h4>Dürüstlük Ağacı (10 dk)</h4>
-                        <p>• Sınıfta bir "Dürüstlük Ağacı" yapın (büyük kağıda ağaç çizin)</p>
-                        <p>• Her dürüst davranış için ağaca yaprak ekleyin</p>
-                        <p>• Yaprağa öğrencinin adı ve dürüst davranışı yazılır</p>
-                        <p>• Ay sonunda en çok yaprağı olan "Dürüstlük Şampiyonu" olur</p>
-                    </div>
-                </div>
-
-                <!-- İNTERAKTİF DÜRÜSTLÜK OYUNU -->
-                <div class="interactive-area" style="background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);">
-                    <h3 class="interactive-title" style="color: #1976d2;">🎮 Dürüstlük Bilgi Yarışması</h3>
-                    <p style="text-align: center; font-size: 1.2em; margin-bottom: 30px; color: #333;">
-                        Dürüstlük hakkında ne kadar bilgilisin? Test et!
-                    </p>
-                    
-                    <div id="honestyQuiz">
-                        <div style="background: white; padding: 30px; border-radius: 20px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #1976d2; font-size: 1.4em; margin-bottom: 20px;">❓ Dürüstlük ne demektir?</h4>
-                            <div class="quiz-option" onclick="answerHonesty(this, true, 1)">A) Doğruyu söylemek ve yalan söylememek</div>
-                            <div class="quiz-option" onclick="answerHonesty(this, false, 1)">B) İstediğim zaman yalan söylemek</div>
-                            <div class="quiz-option" onclick="answerHonesty(this, false, 1)">C) Sadece büyüklere doğru söylemek</div>
-                        </div>
-                        
-                        <div style="background: white; padding: 30px; border-radius: 20px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #1976d2; font-size: 1.4em; margin-bottom: 20px;">❓ Pinocchio'nun burnu neden uzadı?</h4>
-                            <div class="quiz-option" onclick="answerHonesty(this, false, 2)">A) Çünkü büyüyordu</div>
-                            <div class="quiz-option" onclick="answerHonesty(this, true, 2)">B) Çünkü yalan söylüyordu</div>
-                            <div class="quiz-option" onclick="answerHonesty(this, false, 2)">C) Çünkü çok yemek yedi</div>
-                        </div>
-                        
-                        <div style="background: white; padding: 30px; border-radius: 20px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #1976d2; font-size: 1.4em; margin-bottom: 20px;">❓ Vazoyu sen kırdın, ne yapmalısın?</h4>
-                            <div class="quiz-option" onclick="answerHonesty(this, false, 3)">A) Kardeşime atmam</div>
-                            <div class="quiz-option" onclick="answerHonesty(this, false, 3)">B) Saklanırım</div>
-                            <div class="quiz-option" onclick="answerHonesty(this, true, 3)">C) Kabul eder ve özür dilerim</div>
-                        </div>
-                        
-                        <div style="background: white; padding: 30px; border-radius: 20px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #1976d2; font-size: 1.4em; margin-bottom: 20px;">❓ Sınavda kopya çekmek doğru mu?</h4>
-                            <div class="quiz-option" onclick="answerHonesty(this, true, 4)">A) Hayır, dürüst olmak gerekir</div>
-                            <div class="quiz-option" onclick="answerHonesty(this, false, 4)">B) Evet, herkes çeker</div>
-                            <div class="quiz-option" onclick="answerHonesty(this, false, 4)">C) Bazen olur</div>
-                        </div>
-                        
-                        <div style="background: white; padding: 30px; border-radius: 20px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #1976d2; font-size: 1.4em; margin-bottom: 20px;">❓ Yolda cüzdan buldun, ne yaparsın?</h4>
-                            <div class="quiz-option" onclick="answerHonesty(this, false, 5)">A) Cebime atarım</div>
-                            <div class="quiz-option" onclick="answerHonesty(this, true, 5)">B) Polise veya sahibine teslim ederim</div>
-                            <div class="quiz-option" onclick="answerHonesty(this, false, 5)">C) Parayı alır, cüzdanı atarım</div>
-                        </div>
-                    </div>
-                    
-                    <div style="text-align: center; margin: 30px 0;">
-                        <div id="honestyScore" style="font-size: 2em; color: #1976d2; font-weight: bold; margin-bottom: 20px;">Doğru Cevap: 0 / 5</div>
-                        <div id="honestyBadge"></div>
-                    </div>
-                    
-                    <button class="btn-primary" style="background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);" onclick="resetHonestyQuiz()">🔄 Testi Yeniden Başlat</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- ETKİNLİK 3: MÜTEVAZıLIK -->
-        <section class="activity-section">
-            <div class="activity-card" style="background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);">
-                <h2 class="activity-title" style="color: #7b1fa2;">
-                    <span style="font-size: 1.5em;">🌟</span>
-                    Mütevazılık Değerini Öğreniyorum
-                </h2>
-                
-                <div class="info-box">
-                    <div class="info-item">
-                        <h4 style="color: #7b1fa2;">🎯 Hedef</h4>
-                        <p>Öğrencilere mütevazılık kavramını öğretmek, alçakgönüllü olmanın önemini anlatmak.</p>
-                    </div>
-                    <div class="info-item">
-                        <h4 style="color: #7b1fa2;">⏱️ Süre</h4>
-                        <p>2 ders saati + günlük uygulama</p>
-                    </div>
-                    <div class="info-item">
-                        <h4 style="color: #7b1fa2;">👥 Yaş Grubu</h4>
-                        <p>İlkokul (1-4. Sınıflar)</p>
-                    </div>
-                    <div class="info-item">
-                        <h4 style="color: #7b1fa2;">🎒 Malzemeler</h4>
-                        <p>Hikaye kitapları, mütevazılık kartları, resim malzemeleri</p>
-                    </div>
-                </div>
-
-                <div class="steps-container">
-                    <h3 style="color: #7b1fa2; font-size: 2em; margin-bottom: 20px; text-align: center;">📝 Uygulama Adımları</h3>
-                    
-                    <div class="step" style="border-left-color: #7b1fa2;">
-                        <span class="step-number" style="background: linear-gradient(135deg, #7b1fa2 0%, #9c27b0 100%);">1</span>
-                        <h4>Mütevazılık Nedir? (20 dk)</h4>
-                        <p>• "Mütevazılık nedir?" sorusunu sorun</p>
-                        <p>• Mütevazılık: Alçakgönüllü olmak, övünmemek</p>
-                        <p>• Mütevazı insan kibirli değildir</p>
-                        <p>• Günlük hayattan örnekler:</p>
-                        <p>&nbsp;&nbsp;- İyi bir şey yaptığında övünmemek</p>
-                        <p>&nbsp;&nbsp;- Başkalarını küçümsememek</p>
-                        <p>&nbsp;&nbsp;- Herkese saygılı olmak</p>
-                        <p>&nbsp;&nbsp;- Hatalarını kabul etmek</p>
-                    </div>
-                    
-                    <div class="step" style="border-left-color: #7b1fa2;">
-                        <span class="step-number" style="background: linear-gradient(135deg, #7b1fa2 0%, #9c27b0 100%);">2</span>
-                        <h4>Kibirli Tavşan ve Kaplumbağa Hikayesi (25 dk)</h4>
-                        <div class="story-box">
-                            <h4>📖 Hikaye: Tavşan ve Kaplumbağa Yarışı</h4>
-                            <p>
-                                Bir tavşan çok hızlı koşabiliyordu ve bununla herkese övünürdü. "Ben en hızlıyım, kimse beni geçemez!" derdi.
-                                Kaplumbağa mütevazı bir şekilde "Yarış yapalım mı?" dedi. Tavşan güldü "Sen mi? Çok yavaşsın!"
-                                Yarış başladı. Tavşan çok önde gitti ve "Zaten kazanacağım" diye uyudu.
-                                Kaplumbağa yavaş ama kararlı yürüdü ve kazandı! Tavşan utandı.
-                            </p>
-                        </div>
-                        <p>• Tartışma soruları:</p>
-                        <p>&nbsp;&nbsp;- Tavşan neden kaybetti?</p>
-                        <p>&nbsp;&nbsp;- Kaplumbağa neden kazandı?</p>
-                        <p>&nbsp;&nbsp;- Kibirli olmak neden kötü?</p>
-                        <p>&nbsp;&nbsp;- Mütevazı olmak neden güzel?</p>
-                    </div>
-                    
-                    <div class="step" style="border-left-color: #7b1fa2;">
-                        <span class="step-number" style="background: linear-gradient(135deg, #7b1fa2 0%, #9c27b0 100%);">3</span>
-                        <h4>Mütevazılık Örnekleri (20 dk)</h4>
-                        <div class="example-card">
-                            <h5>Örnek 1: Futbol Yıldızı</h5>
-                            <p>Mehmet futbolda çok iyi gol atıyor. Ama "Ben tek başıma kazandım!" demiyor. "Takım arkadaşlarım sayesinde" diyor. İşte bu mütevazılık!</p>
-                        </div>
-                        <div class="example-card">
-                            <h5>Örnek 2: Sınıf Birincisi</h5>
-                            <p>Zeynep sınıf birincisi oldu. Arkadaşlarına "Siz çalışmadınız" demiyor. "Hepimiz çalıştık, ben şanslıydım" diyor.</p>
-                        </div>
-                        <div class="example-card">
-                            <h5>Örnek 3: Yardımlaşma</h5>
-                            <p>Can yaşlı bir kadına yardım etti. Teşekkür edilince "Önemli değil, herkes yapardı" dedi. Mütevazı davrandı.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="step" style="border-left-color: #7b1fa2;">
-                        <span class="step-number" style="background: linear-gradient(135deg, #7b1fa2 0%, #9c27b0 100%);">4</span>
-                        <h4>Kibirli vs Mütevazı Oyunu (25 dk)</h4>
-                        <p>• İki grup oluşturun</p>
-                        <p>• Kartlarda durumlar yazsın, gruplar "Kibirli" mi "Mütevazı" mı karar versin:</p>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;">
-                            <div style="background: #ffebee; padding: 15px; border-radius: 10px; border: 2px solid #e53935;">
-                                <strong>❌ Kibirli Davranış:</strong>
-                                <p>• "Ben en iyiyim!"</p>
-                                <p>• "Siz bir şey bilmiyorsunuz"</p>
-                                <p>• "Ben herkesten üstünüm"</p>
-                                <p>• "Sizden daha zenginim"</p>
-                            </div>
-                            <div style="background: #e8f5e9; padding: 15px; border-radius: 10px; border: 2px solid #43a047;">
-                                <strong>✅ Mütevazı Davranış:</strong>
-                                <p>• "Birlikte başardık"</p>
-                                <p>• "Hepimiz öğreniyoruz"</p>
-                                <p>• "Herkes değerlidir"</p>
-                                <p>• "Paylaşmak güzeldir"</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="step" style="border-left-color: #7b1fa2;">
-                        <span class="step-number" style="background: linear-gradient(135deg, #7b1fa2 0%, #9c27b0 100%);">5</span>
-                        <h4>Mütevazılık Sözleşmesi (10 dk)</h4>
-                        <div style="background: #fff; padding: 20px; border-radius: 15px; margin: 15px 0; border: 3px solid #7b1fa2;">
-                            <p style="font-size: 1.2em; line-height: 2; color: #333;">
-                                <strong>Mütevazılık Sözleşmem</strong><br><br>
-                                "Ben <input type="text" placeholder="İsim" style="border: none; border-bottom: 2px solid #7b1fa2; padding: 5px; font-size: 1em;">, Aralık ayında:<br>
-                                ✓ Övünmeyeceğim<br>
-                                ✓ Kibirli olmayacağım<br>
-                                ✓ Herkese saygı göstereceğim<br>
-                                ✓ Başkalarını küçümsemeyeceğim<br>
-                                ✓ Mütevazı olacağım"
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div class="step" style="border-left-color: #7b1fa2;">
-                        <span class="step-number" style="background: linear-gradient(135deg, #7b1fa2 0%, #9c27b0 100%);">6</span>
-                        <h4>Mütevazılık Yıldızları (10 dk)</h4>
-                        <p>• Her hafta en mütevazı öğrenci seçilir</p>
-                        <p>• Kriterleri:</p>
-                        <p>&nbsp;&nbsp;- Övünmeden iyi davranışlar sergileyen</p>
-                        <p>&nbsp;&nbsp;- Başarısını paylaşan</p>
-                        <p>&nbsp;&nbsp;- Arkadaşlarına değer veren</p>
-                        <p>&nbsp;&nbsp;- Hatalarını kabul eden</p>
-                        <p>• Ödül: "Mütevazılık Yıldızı" rozeti</p>
-                    </div>
-                </div>
-
-                <!-- İNTERAKTİF MÜTEVAZıLIK OYUNU -->
-                <div class="interactive-area" style="background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);">
-                    <h3 class="interactive-title" style="color: #7b1fa2;">🎮 Mütevazılık Bilgi Yarışması</h3>
-                    <p style="text-align: center; font-size: 1.2em; margin-bottom: 30
-px; color: #333;">
-                        Mütevazılık hakkında ne kadar bilgilisin? Test et!
-                    </p>
-                    
-                    <div id="humilityQuiz">
-                        <div style="background: white; padding: 30px; border-radius: 20px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #7b1fa2; font-size: 1.4em; margin-bottom: 20px;">❓ Mütevazılık ne demektir?</h4>
-                            <div class="quiz-option" onclick="answerHumility(this, true, 1)">A) Alçakgönüllü olmak ve övünmemek</div>
-                            <div class="quiz-option" onclick="answerHumility(this, false, 1)">B) Kendini herkesten üstün görmek</div>
-                            <div class="quiz-option" onclick="answerHumility(this, false, 1)">C) Hep övünmek</div>
-                        </div>
-                        
-                        <div style="background: white; padding: 30px; border-radius: 20px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #7b1fa2; font-size: 1.4em; margin-bottom: 20px;">❓ Tavşan yarışı neden kaybetti?</h4>
-                            <div class="quiz-option" onclick="answerHumility(this, false, 2)">A) Çünkü yavaştı</div>
-                            <div class="quiz-option" onclick="answerHumility(this, true, 2)">B) Çünkü kibirli davrandı ve uyudu</div>
-                            <div class="quiz-option" onclick="answerHumility(this, false, 2)">C) Çünkü yoruldu</div>
-                        </div>
-                        
-                        <div style="background: white; padding: 30px; border-radius: 20px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #7b1fa2; font-size: 1.4em; margin-bottom: 20px;">❓ Sınavdan yüksek not aldın, ne dersin?</h4>
-                            <div class="quiz-option" onclick="answerHumility(this, false, 3)">A) "Ben en akıllıyım!"</div>
-                            <div class="quiz-option" onclick="answerHumility(this, true, 3)">B) "Çalıştım ve şanslıydım"</div>
-                            <div class="quiz-option" onclick="answerHumility(this, false, 3)">C) "Siz hiç çalışmamışsınız"</div>
-                        </div>
-                        
-                        <div style="background: white; padding: 30px; border-radius: 20px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #7b1fa2; font-size: 1.4em; margin-bottom: 20px;">❓ Arkadaşın senden daha iyi resim yaptı, ne yaparsın?</h4>
-                            <div class="quiz-option" onclick="answerHumility(this, true, 4)">A) Onu tebrik ederim</div>
-                            <div class="quiz-option" onclick="answerHumility(this, false, 4)">B) Kıskanırım ve kötü söz söylerim</div>
-                            <div class="quiz-option" onclick="answerHumility(this, false, 4)">C) "Benim daha güzel" derim</div>
-                        </div>
-                        
-                        <div style="background: white; padding: 30px; border-radius: 20px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #7b1fa2; font-size: 1.4em; margin-bottom: 20px;">❓ Futbol maçını takımın kazandı, ne dersin?</h4>
-                            <div class="quiz-option" onclick="answerHumility(this, false, 5)">A) "Ben kazandırdım!"</div>
-                            <div class="quiz-option" onclick="answerHumility(this, true, 5)">B) "Hep birlikte kazandık!"</div>
-                            <div class="quiz-option" onclick="answerHumility(this, false, 5)">C) "Siz hiç oynamadınız"</div>
-                        </div>
-                    </div>
-                    
-                    <div style="text-align: center; margin: 30px 0;">
-                        <div id="humilityScore" style="font-size: 2em; color: #7b1fa2; font-weight: bold; margin-bottom: 20px;">Doğru Cevap: 0 / 5</div>
-                        <div id="humilityBadge"></div>
-                    </div>
-                    
-                    <button class="btn-primary" style="background: linear-gradient(135deg, #7b1fa2 0%, #9c27b0 100%);" onclick="resetHumilityQuiz()">🔄 Testi Yeniden Başlat</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- ETKİNLİK 4: GÜNLÜK TAKİP -->
-        <section class="activity-section">
-            <div class="activity-card" style="background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);">
-                <h2 class="activity-title" style="color: #e65100;">
-                    <span style="font-size: 1.5em;">📊</span>
-                    Günlük Takip Tablosu
-                </h2>
-
-                <div class="interactive-area" style="background: white;">
-                    <h3 class="interactive-title" style="color: #e65100;">📅 Aralık Ayı - 31 Günlük Takip</h3>
-                    <p style="text-align: center; font-size: 1.2em; margin-bottom: 30px; color: #333;">
-                        Her gün bu değerleri uyguladığında ✓ işareti koy!
-                    </p>
-                    
-                    <div style="overflow-x: auto;">
-                        <table style="width: 100%; border-collapse: collapse; margin: 20px 0; min-width: 800px;">
-                            <thead>
-                                <tr style="background: linear-gradient(135deg, #c62828 0%, #e53935 100%); color: white;">
-                                    <th style="padding: 15px; border: 2px solid #ddd; font-size: 1.2em;">Davranış</th>
-                                    <th style="padding: 15px; border: 2px solid #ddd;">1</th>
-                                    <th style="padding: 15px; border: 2px solid #ddd;">2</th>
-                                    <th style="padding: 15px; border: 2px solid #ddd;">3</th>
-                                    <th style="padding: 15px; border: 2px solid #ddd;">4</th>
-                                    <th style="padding: 15px; border: 2px solid #ddd;">5</th>
-                                    <th style="padding: 15px; border: 2px solid #ddd;">6</th>
-                                    <th style="padding: 15px; border: 2px solid #ddd;">7</th>
-                                    <th style="padding: 15px; border: 2px solid #ddd;">8</th>
-                                    <th style="padding: 15px; border: 2px solid #ddd;">9</th>
-                                    <th style="padding: 15px; border: 2px solid #ddd;">10</th>
-                                    <th style="padding: 15px; border: 2px solid #ddd;">...</th>
-                                    <th style="padding: 15px; border: 2px solid #ddd;">31</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td style="padding: 12px; border: 2px solid #ddd; font-weight: bold; background: #e8f5e9;">⚖️ Adil davrandım</td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;">...</td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                </tr>
-                                <tr style="background: #f5f5f5;">
-                                    <td style="padding: 12px; border: 2px solid #ddd; font-weight: bold; background: #e3f2fd;">🤝 Dürüst davrandım</td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;">...</td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 12px; border: 2px solid #ddd; font-weight: bold; background: #f3e5f5;">🌟 Mütevazı davrandım</td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;">...</td>
-                                    <td style="padding: 12px; border: 2px solid #ddd; text-align: center;"><input type="checkbox" style="width: 20px; height: 20px;"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div style="margin-top: 40px; padding: 30px; background: linear-gradient(135deg, #fff9c4 0%, #ffe082 100%); border-radius: 20px;">
-                        <h4 style="color: #e65100; font-size: 1.8em; margin-bottom: 20px; text-align: center;">🏆 Değerlendirme</h4>
-                        <ul style="font-size: 1.2em; color: #333; line-height: 2;">
-                            <li><strong>80-93 ✓:</strong> 🏆 Harikasın! Değerlerin Şampiyonu!</li>
-                            <li><strong>60-79 ✓:</strong> 🥈 Çok iyi! Biraz daha gayret!</li>
-                            <li><strong>40-59 ✓:</strong> 🥉 İyi! Devam et!</li>
-                            <li><strong>0-39 ✓:</strong> 💪 Daha fazla çalış!</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- HAFTALIK DEĞERLENDİRME -->
-                <div class="interactive-area" style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); margin-top: 30px;">
-                    <h3 class="interactive-title" style="color: #2e7d32;">📝 Haftalık Değerlendirme</h3>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 30px;">
-                        <div style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #2e7d32; font-size: 1.5em; margin-bottom: 15px;">📅 1. Hafta (1-7 Aralık)</h4>
-                            <p style="color: #555; font-size: 1.1em; line-height: 1.8;">
-                                Bu hafta hangi değeri en iyi uyguladın?<br>
-                                <textarea style="width: 100%; padding: 10px; margin-top: 10px; border: 2px solid #2e7d32; border-radius: 10px; font-size: 1em;" rows="3" placeholder="Cevabını yaz..."></textarea>
-                            </p>
-                        </div>
-                        
-                        <div style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #2e7d32; font-size: 1.5em; margin-bottom: 15px;">📅 2. Hafta (8-14 Aralık)</h4>
-                            <p style="color: #555; font-size: 1.1em; line-height: 1.8;">
-                                Hangi konuda daha adil olmaya çalıştın?<br>
-                                <textarea style="width: 100%; padding: 10px; margin-top: 10px; border: 2px solid #2e7d32; border-radius: 10px; font-size: 1em;" rows="3" placeholder="Cevabını yaz..."></textarea>
-                            </p>
-                        </div>
-                        
-                        <div style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #2e7d32; font-size: 1.5em; margin-bottom: 15px;">📅 3. Hafta (15-21 Aralık)</h4>
-                            <p style="color: #555; font-size: 1.1em; line-height: 1.8;">
-                                Dürüstlük konusunda ne yaptın?<br>
-                                <textarea style="width: 100%; padding: 10px; margin-top: 10px; border: 2px solid #2e7d32; border-radius: 10px; font-size: 1em;" rows="3" placeholder="Cevabını yaz..."></textarea>
-                            </p>
-                        </div>
-                        
-                        <div style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #2e7d32; font-size: 1.5em; margin-bottom: 15px;">📅 4. Hafta (22-28 Aralık)</h4>
-                            <p style="color: #555; font-size: 1.1em; line-height: 1.8;">
-                                Mütevazı olmak için ne yaptın?<br>
-                                <textarea style="width: 100%; padding: 10px; margin-top: 10px; border: 2px solid #2e7d32; border-radius: 10px; font-size: 1em;" rows="3" placeholder="Cevabını yaz..."></textarea>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ETKİNLİK 5: ARALIK HEDEFLERİM -->
-        <section class="activity-section">
-            <div class="activity-card" style="background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);">
-                <h2 class="activity-title" style="color: #c2185b;">
-                    <span style="font-size: 1.5em;">🎯</span>
-                    Aralık Ayı Hedeflerim
-                </h2>
-                
-                <div class="interactive-area" style="background: white;">
-                    <h3 class="interactive-title" style="color: #c2185b;">🎯 Kişisel Hedeflerimi Belirliyorum</h3>
-                    <p style="text-align: center; font-size: 1.2em; margin-bottom: 30px; color: #333;">
-                        Aralık ayı boyunca ulaşmak istediğin hedeflerini yaz ve takip et!
-                    </p>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;">
-                        <div style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); padding: 30px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #2e7d32; font-size: 1.6em; margin-bottom: 20px; text-align: center;">⚖️ Adalet Hedefim</h4>
-                            <textarea style="width: 100%; padding: 15px; border: 3px solid #2e7d32; border-radius: 15px; font-size: 1.1em; min-height: 150px;" placeholder="Örnek: Her gün herkese eşit davranacağım ve paylaşırken adil olacağım."></textarea>
-                        </div>
-                        
-                        <div style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); padding: 30px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #1976d2; font-size: 1.6em; margin-bottom: 20px; text-align: center;">🤝 Dürüstlük Hedefim</h4>
-                            <textarea style="width: 100%; padding: 15px; border: 3px solid #1976d2; border-radius: 15px; font-size: 1.1em; min-height: 150px;" placeholder="Örnek: Her zaman doğruyu söyleyeceğim ve yalan söylemeyeceğim."></textarea>
-                        </div>
-                        
-                        <div style="background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); padding: 30px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #7b1fa2; font-size: 1.6em; margin-bottom: 20px; text-align: center;">🌟 Mütevazılık Hedefim</h4>
-                            <textarea style="width: 100%; padding: 15px; border: 3px solid #7b1fa2; border-radius: 15px; font-size: 1.1em; min-height: 150px;" placeholder="Örnek: Övünmeyeceğim ve kibirli davranmayacağım."></textarea>
-                        </div>
-                        
-                        <div style="background: linear-gradient(135deg, #fff9c4 0%, #ffe082 100%); padding: 30px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #f57c00; font-size: 1.6em; margin-bottom: 20px; text-align: center;">📚 Okuma Hedefim</h4>
-                            <textarea style="width: 100%; padding: 15px; border: 3px solid #f57c00; border-radius: 15px; font-size: 1.1em; min-height: 150px;" placeholder="Örnek: Aralık ayında 3 değerler kitabı okuyacağım."></textarea>
-                        </div>
-                        
-                        <div style="background: linear-gradient(135deg, #fff3e0 0%, #ffcc80 100%); padding: 30px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #e65100; font-size: 1.6em; margin-bottom: 20px; text-align: center;">🏠 Aile Hedefim</h4>
-                            <textarea style="width: 100%; padding: 15px; border: 3px solid #e65100; border-radius: 15px; font-size: 1.1em; min-height: 150px;" placeholder="Örnek: Ailemle olan ilişkilerimde dürüst ve adil olacağım."></textarea>
-                        </div>
-                        
-                        <div style="background: linear-gradient(135deg, #fce4ec 0%, #f48fb1 100%); padding: 30px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h4 style="color: #c2185b; font-size: 1.6em; margin-bottom: 20px; text-align: center;">👥 Arkadaşlık Hedefim</h4>
-                            <textarea style="width: 100%; padding: 15px; border: 3px solid #c2185b; border-radius: 15px; font-size: 1.1em; min-height: 150px;" placeholder="Örnek: Arkadaşlarıma mütevazı davranacağım ve herkese eşit davranacağım."></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- BAŞARI SERTİFİKASI -->
-                <div class="interactive-area" style="background: linear-gradient(135deg, #fff9c4 0%, #ffe082 100%); margin-top: 40px;">
-                    <h3 class="interactive-title" style="color: #c62828;">🏆 Aralık Ayı Başarı Sertifikam</h3>
-                    
-                    <div style="background: white; border: 10px solid #c62828; border-radius: 20px; padding: 50px; margin: 30px auto; max-width: 800px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-                        <div style="text-align: center;">
-                            <h2 style="color: #c62828; font-size: 2.5em; margin-bottom: 20px;">⭐ BAŞARI SERTİFİKASI ⭐</h2>
-                            <p style="font-size: 1.3em; color: #333; margin: 20px 0;">Bu sertifika</p>
-                            <input type="text" placeholder="Adın Soyadın" style="font-size: 2em; padding: 15px; border: 3px solid #c62828; border-radius: 10px; text-align: center; width: 80%; margin: 20px 0; font-weight: bold;">
-                            <p style="font-size: 1.3em; color: #333; margin: 20px 0;">adlı öğrenciye,</p>
-                            <p style="font-size: 1.2em; color: #333; margin: 20px 0; line-height: 2;">
-                                Aralık 2024 ayında <strong style="color: #2e7d32;">adil</strong>, <strong style="color: #1976d2;">dürüst</strong> ve <strong style="color: #7b1fa2;">mütevazı</strong> olduğu için,<br>
-                                değerlerimize sahip çıktığı ve örnek davranışlar sergilediği için,<br>
-                                gurur ve takdirle verilmiştir.
-                            </p>
-                            <div style="margin-top: 40px; display: flex; justify-content: space-around; align-items: center;">
-                                <div>
-                                    <p style="border-top: 2px solid #333; padding-top: 10px; margin-top: 50px; font-size: 1.1em;">Öğretmen İmzası</p>
-                                </div>
-                                <div style="font-size: 3em;">🎄</div>
-                                <div>
-                                    <p style="border-top: 2px solid #333; padding-top: 10px; margin-top: 50px; font-size: 1.1em;">Tarih: Aralık 2024</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div style="text-align: center; margin-top: 30px;">
-                        <button class="btn-primary" onclick="window.print()">🖨️ Sertifikayı Yazdır</button>
-                    </div>
-                </div>
-
-                <!-- ÖDÜL ROZETLERİ -->
-                <div class="interactive-area" style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); margin-top: 40px;">
-                    <h3 class="interactive-title" style="color: #2e7d32;">🏅 Ödül Rozetlerim</h3>
-                    <p style="text-align: center; font-size: 1.2em; margin-bottom: 30px; color: #333;">
-                        Hedeflerine ulaştıkça bu rozetleri kazanacaksın!
-                    </p>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; margin-top: 30px;">
-                        <div style="background: white; padding: 30px; border-radius: 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s;">
-                            <div style="font-size: 5em;">⚖️</div>
-                            <h4 style="color: #2e7d32; font-size: 1.3em; margin-top: 15px;">Adalet<br>Kahramanı</h4>
-                        </div>
-                        
-                        <div style="background: white; padding: 30px; border-radius: 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s;">
-                            <div style="font-size: 5em;">🤝</div>
-                            <h4 style="color: #1976d2; font-size: 1.3em; margin-top: 15px;">Dürüstlük<br>Şampiyonu</h4>
-                        </div>
-                        
-                        <div style="background: white; padding: 30px; border-radius: 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s;">
-                            <div style="font-size: 5em;">🌟</div>
-                            <h4 style="color: #7b1fa2; font-size: 1.3em; margin-top: 15px;">Mütevazılık<br>Yıldızı</h4>
-                        </div>
-                        
-                        <div style="background: white; padding: 30px; border-radius: 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s;">
-                            <div style="font-size: 5em;">🏆</div>
-                            <h4 style="color: #c62828; font-size: 1.3em; margin-top: 15px;">Değerler<br>Uzmanı</h4>
-                        </div>
-                        
-                        <div style="background: white; padding: 30px; border-radius: 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s;">
-                            <div style="font-size: 5em;">💎</div>
-                            <h4 style="color: #e65100; font-size: 1.3em; margin-top: 15px;">Örnek<br>Öğrenci</h4>
-                        </div>
-                        
-                        <div style="background: white; padding: 30px; border-radius: 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s;">
-                            <div style="font-size: 5em;">🎄</div>
-                            <h4 style="color: #c2185b; font-size: 1.3em; margin-top: 15px;">Aralık<br>Süperi</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+      <div class="heart">♥ ♥ ♥</div>
+      <h1>Anneler Günü</h1>
+      <p>
+        Sevgi, şefkat, merhamet ve emekle büyüyen güzel kalplere...
+      </p>
+      <p><strong>“Anne sevgisi, dünyadaki en sıcak kucaktır.”</strong></p>
     </div>
+  </header>
 
-    <script>
-        // Sekme Değiştirme Fonksiyonu
-        function changeTab(index) {
-            var buttons = document.querySelectorAll('.nav-btn');
-            var sections = document.querySelectorAll('.activity-section');
-            
-            for(var i = 0; i < buttons.length; i++) {
-                buttons[i].classList.remove('active');
-            }
-            
-            for(var i = 0; i < sections.length; i++) {
-                sections[i].classList.remove('active');
-            }
-            
-            buttons[index].classList.add('active');
-            sections[index].classList.add('active');
-            
-            window.scrollTo(0, 0);
-            console.log('Sekme değişti: ' + index);
-        }
+  <nav class="no-print">
+    <a href="#plan">Etkinlik Planı</a>
+    <a href="#tarihce">Tarihçe</a>
+    <a href="#sozler">Sözler ve Şiir</a>
+    <a href="#pano">Pano</a>
+    <a href="#calisma">Çalışma Kâğıtları</a>
+  </nav>
 
-        // Adalet Quiz Fonksiyonları
-        var justiceScore = 0;
-        var justiceAnswered = [false, false, false, false, false];
+  <main class="container">
 
-        function answerJustice(element, isCorrect, questionNumber) {
-            if (justiceAnswered[questionNumber - 1]) {
-                return;
-            }
+    <section id="plan">
+      <h2>Etkinlik Planı</h2>
 
-            justiceAnswered[questionNumber - 1] = true;
+      <div class="center">
+        <span class="badge">Yaş Grubu: 5-8 yaş</span>
+        <span class="badge">Süre: 60-90 dakika</span>
+        <span class="badge">Tema: Sevgi ve Şefkat</span>
+      </div>
 
-            var allOptions = element.parentElement.querySelectorAll('.quiz-option');
-            for(var i = 0; i < allOptions.length; i++) {
-                allOptions[i].style.pointerEvents = 'none';
-            }
+      <div class="grid">
+        <div class="card">
+          <h3>1. Sohbet Çemberi</h3>
+          <p>
+            Çocuklara “Annem bize sevgisini nasıl gösterir?”, 
+            “Annemi mutlu etmek için ne yapabilirim?” soruları yöneltilir.
+          </p>
+        </div>
 
-            if (isCorrect) {
-                element.classList.add('correct');
-                justiceScore++;
-            } else {
-                element.classList.add('wrong');
-            }
+        <div class="card">
+          <h3>2. Sevgi Kalbim</h3>
+          <p>
+            Çocuklar kalp şeklini boyar ve içine anneleriyle ilgili güzel
+            bir söz veya teşekkür cümlesi yazar.
+          </p>
+        </div>
 
-            updateJusticeScore();
-        }
+        <div class="card">
+          <h3>3. Anneme Çiçek</h3>
+          <p>
+            Renkli kâğıtlardan çiçek hazırlanır. Her çiçeğin yaprağına
+            anneyle ilgili bir güzel özellik yazılır.
+          </p>
+        </div>
 
-        function updateJusticeScore() {
-            document.getElementById('justiceScore').textContent = 'Doğru Cevap: ' + justiceScore + ' / 5';
-            
-            if (justiceScore === 5) {
-                document.getElementById('justiceBadge').innerHTML = '<span class="badge badge-gold">🏆 Adalet Uzmanı! Mükemmelsin!</span>';
-            } else if (justiceScore >= 3) {
-                document.getElementById('justiceBadge').innerHTML = '<span class="badge badge-silver">🥈 Çok İyi! Biraz daha pratik yap!</span>';
-            } else if (justiceScore > 0) {
-                document.getElementById('justiceBadge').innerHTML = '<span class="badge badge-bronze">🥉 İyi Başlangıç! Daha fazla öğren!</span>';
-            }
-        }
+        <div class="card">
+          <h3>4. İyilik Sözü</h3>
+          <p>
+            Çocuklar annelerine yardım etmek için yapabilecekleri bir
+            davranışı seçer ve “Anneme yardım edeceğim.” sözünü verir.
+          </p>
+        </div>
+      </div>
 
-        function resetJusticeQuiz() {
-            justiceScore = 0;
-            justiceAnswered = [false, false, false, false, false];
-            
-            var allOptions = document.querySelectorAll('#justiceQuiz .quiz-option');
-            for(var i = 0; i < allOptions.length; i++) {
-                allOptions[i].classList.remove('correct', 'wrong');
-                allOptions[i].style.pointerEvents = 'auto';
-            }
-            
-            document.getElementById('justiceScore').textContent = 'Doğru Cevap: 0 / 5';
-            document.getElementById('justiceBadge').innerHTML = '';
-        }
+      <h3>Gerekli Malzemeler</h3>
+      <p>
+        Renkli kartonlar, pastel boya, makas, yapıştırıcı, kurdele,
+        pamuk, keçeli kalem, tahta çubuk, sim ve çalışma kâğıtları.
+      </p>
 
-        // Dürüstlük Quiz Fonksiyonları
-        var honestyScore = 0;
-        var honestyAnswered = [false, false, false, false, false];
+      <h3>Değerlendirme Soruları</h3>
+      <ul>
+        <li>Annene sevgini hangi davranışlarla gösterebilirsin?</li>
+        <li>Bir annenin çocuğu için yaptığı fedakârlıklardan biri nedir?</li>
+        <li>Sevgi ve merhamet gösterdiğimizde insanlar nasıl hisseder?</li>
+      </ul>
+    </section>
 
-        function answerHonesty(element, isCorrect, questionNumber) {
-            if (honestyAnswered[questionNumber - 1]) {
-                return;
-            }
+    <section id="tarihce">
+      <h2>Anneler Günü'nün Tarihçesi</h2>
 
-            honestyAnswered[questionNumber - 1] = true;
+      <div class="timeline">
+        <div>
+          <strong>Antik Çağlar:</strong>
+          İlkbahar ve annelik temalı kutlamalar, farklı toplumlarda
+          çeşitli bayramlarla anılmıştır.
+        </div>
 
-            var allOptions = element.parentElement.querySelectorAll('.quiz-option');
-            for(var i = 0; i < allOptions.length; i++) {
-                allOptions[i].style.pointerEvents = 'none';
-            }
+        <div>
+          <strong>Anna Jarvis:</strong>
+          Amerikalı Anna Jarvis, annesini anmak ve annelerin emeklerini
+          onurlandırmak amacıyla özel bir gün oluşturulması için çalışmıştır.
+        </div>
 
-            if (isCorrect) {
-                element.classList.add('correct');
-                honestyScore++;
-            } else {
-                element.classList.add('wrong');
-            }
+        <div>
+          <strong>1908:</strong>
+          Anna Jarvis, annesinin anısına Amerika Birleşik Devletleri’nde
+          ilk önemli Anneler Günü etkinliklerinden birini düzenlemiştir.
+        </div>
 
-            updateHonestyScore();
-        }
+        <div>
+          <strong>1914:</strong>
+          Amerika Birleşik Devletleri’nde mayıs ayının ikinci pazarı
+          Anneler Günü olarak resmî şekilde kabul edilmiştir.
+        </div>
 
-        function updateHonestyScore() {
-            document.getElementById('honestyScore').textContent = 'Doğru Cevap: ' + honestyScore + ' / 5';
-            
-            if (honestyScore === 5) {
-                document.getElementById('honestyBadge').innerHTML = '<span class="badge badge-gold">🏆 Dürüstlük Şampiyonu! Harikasın!</span>';
-            } else if (honestyScore >= 3) {
-                document.getElementById('honestyBadge').innerHTML = '<span class="badge badge-silver">🥈 Çok İyi! Devam et!</span>';
-            } else if (honestyScore > 0) {
-                document.getElementById('honestyBadge').innerHTML = '<span class="badge badge-bronze">🥉 İyi Başlangıç! Daha fazla öğren!</span>';
-            }
-        }
+        <div>
+          <strong>Türkiye’de:</strong>
+          Anneler Günü, birçok ülkede olduğu gibi mayıs ayının ikinci
+          pazar günü kutlanmaktadır.
+        </div>
+      </div>
 
-        function resetHonestyQuiz() {
-            honestyScore = 0;
-            honestyAnswered = [false, false, false, false, false];
-            
-            var allOptions = document.querySelectorAll('#honestyQuiz .quiz-option');
-            for(var i = 0; i < allOptions.length; i++) {
-                allOptions[i].classList.remove('correct', 'wrong');
-                allOptions[i].style.pointerEvents = 'auto';
-            }
-            
-            document.getElementById('honestyScore').textContent = 'Doğru Cevap: 0 / 5';
-            document.getElementById('honestyBadge').innerHTML = '';
-        }
+      <blockquote>
+        “Bir annenin kalbi, çocuğunun en güvenli evidir.”
+      </blockquote>
+    </section>
 
-        // Mütevazılık Quiz Fonksiyonları
-        var humilityScore = 0;
-        var humilityAnswered = [false, false, false, false, false];
+    <section id="sozler">
+      <h2>Anneler Günü Sözleri</h2>
 
-        function answerHumility(element, isCorrect, questionNumber) {
-            if (humilityAnswered[questionNumber - 1]) {
-                return;
-            }
+      <div class="grid">
+        <div class="card">
+          <strong>♥</strong> Anne, sevginle dünyamı güzelleştiren en güzel kalpsin.
+        </div>
 
-            humilityAnswered[questionNumber - 1] = true;
+        <div class="card">
+          <strong>♥</strong> Senin şefkatin, en zor günlerimde bana güç verir.
+        </div>
 
-            var allOptions = element.parentElement.querySelectorAll('.quiz-option');
-            for(var i = 0; i < allOptions.length; i++) {
-                allOptions[i].style.pointerEvents = 'none';
-            }
+        <div class="card">
+          <strong>♥</strong> Annem, ilk öğretmenim ve en güzel rehberimsin.
+        </div>
 
-            if (isCorrect) {
-                element.classList.add('correct');
-                humilityScore++;
-            } else {
-                element.classList.add('wrong');
-            }
+        <div class="card">
+          <strong>♥</strong> Bir annenin sevgisi, hiç solmayan bir çiçek gibidir.
+        </div>
 
-            updateHumilityScore();
-        }
+        <div class="card">
+          <strong>♥</strong> Anne sevgisi; merhamet, sabır ve umutla örülmüş sıcacık bir yuvadır.
+        </div>
 
-        function updateHumilityScore() {
-            document.getElementById('humilityScore').textContent = 'Doğru Cevap: ' + humilityScore + ' / 5';
-            
-            if (humilityScore === 5) {
-                document.getElementById('humilityBadge').innerHTML = '<span class="badge badge-gold">🏆 Mütevazılık Ustası! Mükemmelsin!</span>';
-            } else if (humilityScore >= 3) {
-                document.getElementById('humilityBadge').innerHTML = '<span class="badge badge-silver">🥈 Çok İyi! Devam et!</span>';
-            } else if (humilityScore > 0) {
-                document.getElementById('humilityBadge').innerHTML = '<span class="badge badge-bronze">🥉 İyi Başlangıç! Daha fazla öğren!</span>';
-            }
-        }
+        <div class="card">
+          <strong>♥</strong> Dünyadaki bütün güzel kelimeler, annemin sevgisini anlatmaya yetmez.
+        </div>
+      </div>
 
-        function resetHumilityQuiz() {
-            humilityScore = 0;
-            humilityAnswered = [false, false, false, false, false];
-            
-            var allOptions = document.querySelectorAll('#humilityQuiz .quiz-option');
-            for(var i = 0; i < allOptions.length; i++) {
-                allOptions[i].classList.remove('correct', 'wrong');
-                allOptions[i].style.pointerEvents = 'auto';
-            }
-            
-            document.getElementById('humilityScore').textContent = 'Doğru Cevap: 0 / 5';
-            document.getElementById('humilityBadge').innerHTML = '';
-        }
+      <h2>Çocuklar İçin Şiir</h2>
 
-        // Sayfa yüklendiğinde konsola mesaj
-        console.log('🎄 Aralık Ayı Etkinlikleri Sistemi Başarıyla Yüklendi!');
-        console.log('⚖️ Adalet, 🤝 Dürüstlük, 🌟 Mütevazılık değerlerini öğrenmeye hazır ol!');
-    </script>
+      <div class="poem">
+        <strong>Canım Annem</strong>
+
+        Gülüşün güneş gibi,
+        Isıtır benim içimi.
+        Şefkat dolu ellerinle,
+        Sararsın küçücük kalbimi.
+
+        Sen yanımda olunca,
+        Korkularım uzaklaşır.
+        Anneciğim, güzel annem,
+        Sevgin içimde çiçek açar.
+
+        İyi ki varsın canım annem,
+        Seni çok seviyorum.
+        Bugün değil, her gün seni
+        Kalbimde taşıyorum.
+      </div>
+
+      <h2>Kısa Teşekkür Metni</h2>
+
+      <p>
+        Canım annem; bana sevgiyle sarıldığın, beni sabırla dinlediğin ve
+        her zaman yanımda olduğun için teşekkür ederim. Senin şefkatin
+        bana güç, gülüşün bana mutluluk veriyor. Seni çok seviyorum.
+        Anneler Günü'n kutlu olsun!
+      </p>
+    </section>
+
+    <section id="pano">
+      <h2>Anneler Günü Pano Çalışması</h2>
+
+      <div class="pano">
+        <h2>ANNEM, KALBİMİN EN GÜZEL ÇİÇEĞİ</h2>
+
+        <div class="pano-message">
+          Annelerimiz sevginin, şefkatin, sabrın ve merhametin en güzel
+          örneğidir. Onlara sevgimizi yalnızca bugün değil, her gün
+          davranışlarımızla gösterelim.
+        </div>
+
+        <div class="flower-row">
+          <div class="flower">SEVGİ</div>
+          <div class="flower">ŞEFKAT</div>
+          <div class="flower">SABIR</div>
+          <div class="flower">MERHAMET</div>
+          <div class="flower">GÜVEN</div>
+          <div class="flower">EMEK</div>
+        </div>
+
+        <div>
+          <span class="leaf-note">Anneme sarılırım.</span>
+          <span class="leaf-note">Ona yardım ederim.</span>
+          <span class="leaf-note">Güzel söz söylerim.</span>
+          <span class="leaf-note">Teşekkür ederim.</span>
+        </div>
+
+        <p class="pano-message">
+          <strong>“Annelerimizin kalbine sevgi ekiyoruz.”</strong>
+        </p>
+      </div>
+
+      <h3>Pano Hazırlama Önerisi</h3>
+      <ol>
+        <li>Panonun zeminini pembe, mor veya açık krem kartonla kaplayın.</li>
+        <li>Başlığı büyük harflerle hazırlayıp panonun üst kısmına yerleştirin.</li>
+        <li>Çocukların boyadığı kalp ve çiçekleri panoya asın.</li>
+        <li>Her çiçeğin içine çocukların anneleri için yazdığı güzel sözleri ekleyin.</li>
+        <li>Panonun kenarlarını kurdele, kelebek ve kalp süsleriyle tamamlayın.</li>
+      </ol>
+    </section>
+
+    <section id="calisma">
+      <h2>Çocuklar İçin Çalışma Kâğıtları</h2>
+
+      <div class="center no-print">
+        <button onclick="window.print()">🖨 Tüm Sayfaları Yazdır</button>
+        <button onclick="downloadWorksheet('worksheet1')">⬇ Çalışma Kâğıdı 1'i İndir</button>
+        <button onclick="downloadWorksheet('worksheet2')">⬇ Çalışma Kâğıdı 2'yi İndir</button>
+      </div>
+
+      <div class="worksheet" id="worksheet1">
+        <h2 class="worksheet-title">Çalışma Kâğıdı 1: Anneme Mektup</h2>
+
+        <p><strong>Adım Soyadım:</strong></p>
+        <div class="line"></div>
+
+        <p>
+          Annene söylemek istediğin güzel sözleri aşağıdaki satırlara yaz
+          veya resmini çiz.
+        </p>
+
+        <p><strong>Canım annem,</strong></p>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+
+        <div class="big-heart">
+          <div class="heart-text">SENİ<br>ÇOK<br>SEVİYORUM</div>
+        </div>
+
+        <p class="center">
+          <strong>Sevgiyle: __________________________</strong>
+        </p>
+      </div>
+
+      <div class="worksheet" id="worksheet2">
+        <h2 class="worksheet-title">Çalışma Kâğıdı 2: Anneme Yardım Ediyorum</h2>
+
+        <p><strong>Adım Soyadım:</strong></p>
+        <div class="line"></div>
+
+        <p>
+          Annene yardım etmek için yapabileceğin davranışların yanına
+          gülücük çiz veya kutuyu işaretle.
+        </p>
+
+        <div class="checklist">
+          <label>☐ Oyuncaklarımı toplarım.</label>
+          <label>☐ Odamı düzenlerim.</label>
+          <label>☐ Sofrayı hazırlamaya yardım ederim.</label>
+          <label>☐ Anneme sarılırım.</label>
+          <label>☐ Ona güzel sözler söylerim.</label>
+          <label>☐ İhtiyacı olduğunda onu dinlerim.</label>
+        </div>
+
+        <p><strong>Benim anneme yardım sözüm:</strong></p>
+        <div class="line"></div>
+        <div class="line"></div>
+
+        <h3 class="center">Anneme bir resim çiziyorum.</h3>
+        <div class="drawing-box"></div>
+      </div>
+
+      <div class="worksheet" id="worksheet3">
+        <h2 class="worksheet-title">Çalışma Kâğıdı 3: Sevgi Çiçeğim</h2>
+
+        <p>
+          Aşağıdaki çiçeğin yapraklarına annenle ilgili güzel kelimeler yaz.
+          Daha sonra çiçeği dilediğin gibi boya.
+        </p>
+
+        <div class="center" style="font-size: 7rem; color: #e98cab;">
+          ❀
+        </div>
+
+        <div class="grid">
+          <div class="card">Annemin güzel özelliği: __________________</div>
+          <div class="card">Annemle yapmayı sevdiğim şey: ____________</div>
+          <div class="card">Anneme teşekkürüm: _______________________</div>
+          <div class="card">Anneme sevgim: ____________________________</div>
+        </div>
+
+        <p class="center">
+          <strong>Bu çiçek, güzel anneme armağanımdır. ♥</strong>
+        </p>
+      </div>
+    </section>
+
+    <section class="center">
+      <h2>Etkinliği Tamamlama Rozeti</h2>
+      <p>
+        Bu etkinlikte sevgi, şefkat ve merhamet hakkında düşündüm.
+      </p>
+      <span class="badge">♥ Sevgi Elçisi ♥</span>
+      <p>Çocuğun adı: __________________________</p>
+      <p>Tarih: ____ / ____ / ______</p>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>♥ Annelerimizin sevgisiyle büyüyen güzel kalplere ♥</p>
+    <p>Anneler Günü Etkinlik Sayfası</p>
+  </footer>
+
+  <script>
+    function downloadWorksheet(id) {
+      const content = document.getElementById(id).outerHTML;
+
+      const style = `
+        <meta charset="UTF-8">
+        <title>Anneler Günü Çalışma Kâğıdı</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            padding: 25px;
+            color: #493b47;
+          }
+          .worksheet {
+            border: 3px solid #765b88;
+            padding: 25px;
+            min-height: 650px;
+          }
+          h2 {
+            text-align: center;
+            color: #765b88;
+          }
+          .line {
+            border-bottom: 2px solid #777;
+            height: 35px;
+            margin: 8px 0;
+          }
+          .center {
+            text-align: center;
+          }
+          .drawing-box {
+            height: 180px;
+            border: 3px dashed #aaa;
+            border-radius: 10px;
+          }
+          .big-heart {
+            width: 150px;
+            height: 135px;
+            margin: 20px auto;
+            background: #ffd6e2;
+            border: 4px solid #d9799a;
+            text-align: center;
+            padding-top: 45px;
+          }
+          .heart-text {
+            font-weight: bold;
+            color: #a5466c;
+          }
+          .checklist label {
+            display: block;
+            margin: 15px 0;
+            font-size: 18px;
+          }
+        </style>
+      `;
+
+      const file = `<!DOCTYPE html><html lang="tr"><head>${style}</head><body>${content}</body></html>`;
+      const blob = new Blob([file], { type: "text/html;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.download = id + "-anneler-gunu.html";
+      link.click();
+
+      URL.revokeObjectURL(url);
+    }
+  </script>
+
 </body>
 </html>
