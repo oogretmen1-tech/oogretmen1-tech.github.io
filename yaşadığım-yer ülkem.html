@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yaşadığım Yer ve Ülkem</title>
+
+  <style>
+    :root {
+      --kirmizi: #b5122b;
+      --koyu: #17324d;
+      --mavi: #247ba0;
+      --acik-mavi: #eaf6fb;
+      --sari: #f5c542;
+      --yesil: #4d9361;
+      --krem: #fffaf0;
+      --gri: #f3f5f7;
+      --metin: #263238;
+      --golge: 0 8px 25px rgba(0, 0, 0, .12);
+    }
+
+    * {
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--metin);
+      background: linear-gradient(135deg, #fffaf0, #eaf6fb);
+      line-height: 1.6;
+    }
+
+    header {
+      color: white;
+      text-align: center;
+      padding: 65px 20px 50px;
+      background:
+        linear-gradient(rgba(23, 50, 77, .82), rgba(181, 18, 43, .82)),
+        url("https://ai-seek-user-image.s3.us-east-1.amazonaws.com/202608/22/1e693582390f40c195b18f9fc17d42bbgcy0.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4MTWODAZEP5GANEB%2F20260822%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260822T225746Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=7f7e66e95b97f0675b4c5cc32baa91e462451f3c9f03235f4595234ae17cc43e");
+      background-size: cover;
+      background-position: center;
+    }
+
+    header h1 {
+      margin: 0 0 10px;
+      font-size: clamp(2rem, 5vw, 4rem);
+      text-shadow: 2px 2px 5px #000;
+    }
+
+    header p {
+      font-size: 1.15rem;
+      margin: 5px auto;
+      max-width: 800px;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px;
+      background: var(--koyu);
+      box-shadow: var(--golge);
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 9px 13px;
+      border-radius: 20px;
+      font-size: .92rem;
+      transition: .25s;
+    }
+
+    nav a:hover {
+      background: var(--kirmizi);
+      transform: translateY(-2px);
+    }
+
+    main {
+      max-width: 1200px;
+      margin: auto;
+      padding: 25px 16px 60px;
+    }
+
+    section {
+      background: white;
+      margin: 28px 0;
+      padding: clamp(20px, 4vw, 40px);
+      border-radius: 22px;
+      box-shadow: var(--golge);
+    }
+
+    section h2 {
+      color: var(--kirmizi);
+      border-bottom: 3px solid var(--sari);
+      padding-bottom: 10px;
+      margin-top: 0;
+    }
+
+    section h3 {
+      color: var(--koyu);
+    }
+
+    .hero-box {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .hero-box img,
+    .card img,
+    .wide-image {
+      display: block;
+      width: 100%;
+      border-radius: 16px;
+      object-fit: cover;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, .15);
+    }
+
+    .hero-box img {
+      max-height: 350px;
+    }
+
+    .wide-image {
+      max-height: 430px;
+      margin: 22px auto;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--gri);
+      border-radius: 17px;
+      padding: 15px;
+      border-top: 5px solid var(--mavi);
+    }
+
+    .card img {
+      height: 190px;
+    }
+
+    .card h3 {
+      margin-bottom: 5px;
+    }
+
+    .info-box {
+      padding: 18px;
+      margin: 16px 0;
+      border-left: 6px solid var(--mavi);
+      background: var(--acik-mavi);
+      border-radius: 10px;
+    }
+
+    .red-box {
+      border-left-color: var(--kirmizi);
+      background: #fff0f2;
+    }
+
+    .yellow-box {
+      border-left-color: var(--sari);
+      background: #fff9dc;
+    }
+
+    ul, ol {
+      padding-left: 25px;
+    }
+
+    li {
+      margin: 7px 0;
+    }
+
+    .timeline {
+      border-left: 5px solid var(--kirmizi);
+      padding-left: 22px;
+      margin: 25px 0 25px 10px;
+    }
+
+    .timeline-item {
+      margin: 20px 0;
+      position: relative;
+    }
+
+    .timeline-item::before {
+      content: "";
+      width: 15px;
+      height: 15px;
+      background: var(--sari);
+      border: 3px solid var(--kirmizi);
+      border-radius: 50%;
+      position: absolute;
+      left: -34px;
+      top: 5px;
+    }
+
+    .activity {
+      background: #f8fbff;
+      border: 2px dashed var(--mavi);
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 15px;
+    }
+
+    .activity strong {
+      color: var(--kirmizi);
+    }
+
+    button {
+      background: var(--kirmizi);
+      color: white;
+      border: none;
+      padding: 11px 18px;
+      border-radius: 9px;
+      cursor: pointer;
+      font-weight: bold;
+      margin: 5px;
+    }
+
+    button:hover {
+      background: var(--koyu);
+    }
+
+    .choice {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: white;
+      color: var(--metin);
+      border: 2px solid #d7e1e8;
+      margin: 8px 0;
+    }
+
+    .choice:hover {
+      background: #eef8fc;
+      color: var(--metin);
+    }
+
+    .correct {
+      background: #d9f5df !important;
+      border-color: var(--yesil) !important;
+    }
+
+    .wrong {
+      background: #ffe0e3 !important;
+      border-color: var(--kirmizi) !important;
+    }
+
+    .score {
+      display: inline-block;
+      background: var(--sari);
+      color: #362d00;
+      padding: 10px 16px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    #sonuc {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-top: 15px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 11px;
+      margin: 7px 0 15px;
+      border: 1px solid #bdcbd5;
+      border-radius: 8px;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .certificate {
+      display: none;
+      border: 5px double var(--sari);
+      background: var(--krem);
+      padding: 30px;
+      text-align: center;
+      margin-top: 20px;
+      border-radius: 15px;
+    }
+
+    footer {
+      text-align: center;
+      color: white;
+      background: var(--koyu);
+      padding: 25px;
+    }
+
+    @media (max-width: 750px) {
+      .hero-box {
+        grid-template-columns: 1fr;
+      }
+
+      nav a {
+        font-size: .8rem;
+        padding: 7px 9px;
+      }
+
+      section {
+        padding: 22px 17px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Yaşadığım Yer ve Ülkem</h1>
+    <p>Çevremi tanıyorum, Türkiye’yi öğreniyorum, kültürel mirasımı koruyorum.</p>
+    <p>İlkokul düzeyine uygun konu anlatımı, oyunlar ve etkinlikler</p>
+  </header>
+
+  <nav>
+    <a href="#baslangic">Başlangıç</a>
+    <a href="#cevrem">Yaşadığım Çevre</a>
+    <a href="#turkiye">Ülkem Türkiye</a>
+    <a href="#ataturk">Atatürk</a>
+    <a href="#mucadele">Millî Mücadele</a>
+    <a href="#miras">Kültürel Miras</a>
+    <a href="#oyunlar">Oyunlar</a>
+    <a href="#test">Mini Test</a>
+  </nav>
+
+  <main>
+    <section id="baslangic">
+      <div class="hero-box">
+        <div>
+          <h2>Derse Başlayalım</h2>
+          <p>Her insan bir evde, mahallede, köyde, kasabada veya şehirde yaşar. Yaşadığımız çevrede insanlar, evler, okullar, yollar, parklar, tarihî yapılar ve doğal güzellikler bulunur.</p>
+          <p>Bizim ülkemiz Türkiye’dir. Türkiye; doğal güzellikleri, tarihî eserleri, farklı gelenekleri, yemekleri, bayramları ve kahramanlık tarihiyle çok zengin bir ülkedir.</p>
+
+          <div class="info-box">
+            <strong>Bu derste neler öğreneceğiz?</strong>
+            <ul>
+              <li>Yaşadığımız çevreyi ve yerleşim yerlerini tanımayı</li>
+              <li>Türkiye’nin haritadaki yerini</li>
+              <li>Atatürk’ün hayatını ve ailesini</li>
+              <li>Millî Mücadele’nin önemini</li>
+              <li>Kültürel mirasımızı korumayı</li>
+            </ul>
+          </div>
+        </div>
+
+        <img src="https://ai-seek-user-image.s3.us-east-1.amazonaws.com/202608/22/1e693582390f40c195b18f9fc17d42bbgcy0.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4MTWODAZEP5GANEB%2F20260822%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260822T225746Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=7f7e66e95b97f0675b4c5cc32baa91e462451f3c9f03235f4595234ae17cc43e" alt="Anıtkabir ve Türk bayrağı">
+      </div>
+    </section>
+
+    <section id="hedefler">
+      <h2>Dersin Hedefleri</h2>
+      <div class="cards">
+        <div class="card"><h3>🏠 Çevremi tanırım</h3><p>Yaşadığım yerin özelliklerini fark ederim ve çevreme karşı sorumluluk geliştiririm.</p></div>
+        <div class="card"><h3>🇹🇷 Ülkemi tanırım</h3><p>Türkiye’nin haritadaki yerini, başkentini ve önemli özelliklerini öğrenirim.</p></div>
+        <div class="card"><h3>⭐ Tarihimi öğrenirim</h3><p>Atatürk’ü, Millî Mücadele’yi ve bağımsızlığımızın önemini kavrarım.</p></div>
+        <div class="card"><h3>🏛️ Mirasımı korurum</h3><p>Tarihî eserlerin ve geleneklerin gelecek nesillere aktarılması gerektiğini anlarım.</p></div>
+      </div>
+    </section>
+
+    <section id="cevrem">
+      <h2>1. Yaşadığım Çevre ve Yerleşim Yerleri</h2>
+      <p>İnsanların yaşadığı yerlere <strong>yerleşim yeri</strong> denir. Yerleşim yerleri nüfusuna, büyüklüğüne ve özelliklerine göre köy, kasaba, ilçe ve şehir olabilir.</p>
+
+      <div class="cards">
+        <div class="card"><h3>Köy</h3><p>Nüfusu daha az olan, tarım ve hayvancılığın yaygın olduğu yerleşim yeridir.</p></div>
+        <div class="card"><h3>Kasaba</h3><p>Köyden büyük, şehirden küçük yerleşim yeridir.</p></div>
+        <div class="card"><h3>İlçe</h3><p>Bir ile bağlı olan yönetim birimidir.</p></div>
+        <div class="card"><h3>Şehir</h3><p>Nüfusu fazla olan; eğitim, sağlık, ulaşım ve ticaret imkânlarının geliştiği yerleşim yeridir.</p></div>
+      </div>
+
+      <div class="activity">
+        <strong>Etkinlik 1: Yaşadığım yeri tanıtıyorum</strong>
+        <p>Aşağıdaki soruları cevapla:</p>
+        <label>Yaşadığım ilin adı:</label>
+        <input type="text" placeholder="Cevabını yaz">
+        <label>Yaşadığım yerin adı:</label>
+        <input type="text" placeholder="Mahalle, köy, ilçe veya şehir">
+        <label>Çevremde bulunan üç önemli yer:</label>
+        <textarea placeholder="Örneğin: okul, park, hastane..."></textarea>
+        <label>Yaşadığım yerde en çok neyi seviyorum?</label>
+        <textarea placeholder="Düşüncelerini yaz"></textarea>
+      </div>
+
+      <div class="info-box yellow-box">
+        <strong>Çevremize karşı sorumluluklarımız</strong>
+        <ul>
+          <li>Çöpleri yere atmamak</li>
+          <li>Ağaçları ve bitkileri korumak</li>
+          <li>Ortak kullanım alanlarını temiz bırakmak</li>
+          <li>Tarihî yapılara zarar vermemek</li>
+          <li>İnsanlara, hayvanlara ve doğaya saygılı davranmak</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="turkiye">
+      <h2>2. Ülkem Türkiye</h2>
+      <div class="hero-box">
+        <div>
+          <p>Türkiye’nin resmî adı <strong>Türkiye Cumhuriyeti</strong>’dir. Başkentimiz <strong>Ankara</strong>’dır. Türkiye’nin üç tarafı denizlerle çevrilidir.</p>
+          <ul>
+            <li>Kuzeyinde Karadeniz bulunur.</li>
+            <li>Batısında Ege Denizi bulunur.</li>
+            <li>Güneyinde Akdeniz bulunur.</li>
+            <li>Türkiye’nin iki kıtada toprakları vardır: Asya ve Avrupa.</li>
+            <li>Ülkemizin bayrağı ay yıldızlı Türk bayrağıdır.</li>
+          </ul>
+          <div class="info-box red-box">Türkiye’nin başkenti İstanbul değil, <strong>Ankara</strong>’dır.</div>
+        </div>
+
+        <img src="https://ai-seek-user-image.s3.us-east-1.amazonaws.com/202608/22/1e693582390f40c195b18f9fc17d42bbspw0.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4MTWODAZEP5GANEB%2F20260822%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260822T225746Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=af97f10b3b06a089270ff24e997603a6711fca44b8353c66e86862d38db167d1" alt="Türkiye fiziki ve siyasi haritası">
+      </div>
+
+      <div class="activity">
+        <strong>Etkinlik 2: Haritayı incele</strong>
+        <p>Haritada Türkiye’nin komşu ülkelerini, denizlerini ve büyük şehirlerini incele.</p>
+        <label>Türkiye’nin başkenti neresidir?</label>
+        <input type="text" placeholder="Cevabını yaz">
+      </div>
+    </section>
+
+    <section id="ataturk">
+      <h2>3. Atatürk’ün Hayatı ve Ailesi</h2>
+      <div class="cards">
+        <div class="card">
+          <img src="https://ai-seek-user-image.s3.us-east-1.amazonaws.com/202608/22/1e693582390f40c195b18f9fc17d42bbdgl0.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4MTWODAZEP5GANEB%2F20260822%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260822T225746Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=b6b1418135fbad6a6e4533701d6b178bb69c52f0b7e7a090738253165012ec7d" alt="Atatürk'ün çocukluk ve öğrenim hayatı">
+          <h3>Çocukluk ve Öğrenim Hayatı</h3>
+          <p>Mustafa Kemal Atatürk, Selanik’te doğmuştur. Eğitim hayatında farklı okullarda öğrenim görmüş ve askerî eğitim almıştır.</p>
+        </div>
+
+        <div class="card">
+          <img src="https://ai-seek-user-image.s3.us-east-1.amazonaws.com/202608/22/1e693582390f40c195b18f9fc17d42bbeya0.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4MTWODAZEP5GANEB%2F20260822%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260822T225746Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=3a7679dee7a2d5b98f4d8a4e67edebbb46f6eb1f7f1ce531a0dfcd7f904bdfac" alt="Atatürk'ün ailesi">
+          <h3>Atatürk’ün Ailesi</h3>
+          <p>Atatürk’ün annesi Zübeyde Hanım, babası Ali Rıza Efendi’dir. Ailesi onun yetişmesinde önemli bir yere sahiptir.</p>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item"><h3>1881 – Doğumu</h3><p>Mustafa Kemal, Selanik’te dünyaya geldi.</p></div>
+        <div class="timeline-item"><h3>1919 – Millî Mücadele’nin Başlaması</h3><p>Mustafa Kemal, Samsun’a çıkarak bağımsızlık mücadelesini başlattı.</p></div>
+        <div class="timeline-item"><h3>1923 – Cumhuriyet’in İlanı</h3><p>Türkiye Cumhuriyeti kuruldu ve Mustafa Kemal Atatürk ilk cumhurbaşkanı oldu.</p></div>
+        <div class="timeline-item"><h3>1938 – Atatürk’ün Vefatı</h3><p>Atatürk, milletine bıraktığı eserlerle yaşamaya devam etmektedir.</p></div>
+      </div>
+
+      <div class="activity">
+        <strong>Etkinlik 3: Atatürk’ü anlatıyorum</strong>
+        <p>Atatürk’ün hangi özelliklerini örnek almak istediğini yaz:</p>
+        <textarea placeholder="Örneğin: çalışkan, kararlı, ileri görüşlü..."></textarea>
+      </div>
+    </section>
+
+    <section id="mucadele">
+      <h2>4. Millî Mücadele ve Halkımızın Fedakârlıkları</h2>
+      <p>Millî Mücadele, Türk milletinin bağımsızlığını ve vatanını korumak için verdiği büyük mücadeledir. Bu mücadelede kadın, erkek, genç ve yaşlı birçok insan elinden gelen yardımı yapmıştır.</p>
+
+      <div class="cards">
+        <div class="card">
+          <img src="https://ai-seek-user-image.s3.us-east-1.amazonaws.com/202608/22/1e693582390f40c195b18f9fc17d42bbvsn0.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4MTWODAZEP5GANEB%2F20260822%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260822T225746Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=9e469871d5fa7bc05e0087e061a94609d698910c4cd690b99399759f98b932c6" alt="Atatürk ve Millî Mücadele">
+          <h3>Atatürk ve Millî Mücadele</h3>
+          <p>Atatürk, milletin bağımsızlığı için çalışmış ve mücadeleyi milletle birlikte yürütmüştür.</p>
+        </div>
+
+        <div class="card">
+          <img src="https://ai-seek-user-image.s3.us-east-1.amazonaws.com/202608/22/1e693582390f40c195b18f9fc17d42bbfnw0.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4MTWODAZEP5GANEB%2F20260822%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260822T225746Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=08af03aa6121504cc957138c715c52ef72e220a1b4cd42c33c631af6868ff882" alt="Türkiye'nin tarihî ve kültürel yerleri">
+          <h3>Türkiye’nin Zengin Mirası</h3>
+          <p>Türkiye’de tarihî yapılar, doğal güzellikler ve farklı kültürel değerler bir arada bulunur.</p>
+        </div>
+      </div>
+
+      <div class="info-box red-box"><strong>Unutmayalım:</strong> Bağımsızlık, vatan sevgisi, dayanışma ve birlik Millî Mücadele’nin en önemli değerlerindendir.</div>
+
+      <div class="activity">
+        <strong>Etkinlik 4: Fedakârlık nedir?</strong>
+        <p>Millî Mücadele döneminde insanların hangi fedakârlıkları yaptığını kendi cümlelerinle anlat.</p>
+        <textarea placeholder="Cevabını buraya yaz"></textarea>
+      </div>
+    </section>
+
+    <section id="miras">
+      <h2>5. Türkiye’nin Kültürel Mirası ve Tarihî Yerleri</h2>
+      <p>Kültürel miras; geçmişten günümüze ulaşan tarihî yapılar, gelenekler, el sanatları, yemekler, müzikler, oyunlar ve bayramlardır. Kültürel mirasımız bize geçmişimizi tanıtır.</p>
+
+      <img class="wide-image" src="https://ai-seek-user-image.s3.us-east-1.amazonaws.com/202608/22/1e693582390f40c195b18f9fc17d42bbfnw0.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4MTWODAZEP5GANEB%2F20260822%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260822T225746Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=08af03aa6121504cc957138c715c52ef72e220a1b4cd42c33c631af6868ff882" alt="Türkiye'nin kültürel ve tarihî yerleri">
+
+      <div class="hero-box">
+        <div>
+          <h3>Anıtkabir</h3>
+          <p>Anıtkabir, Ankara’da bulunan ve Mustafa Kemal Atatürk’ün naaşının bulunduğu anıt mezardır.</p>
+          <h3>Tarihî Yerlerimizi Koruyalım</h3>
+          <ul>
+            <li>Tarihî yapıların duvarlarına yazı yazmamalıyız.</li>
+            <li>Eserlere dokunarak zarar vermemeliyiz.</li>
+            <li>Çöplerimizi çevreye atmamalıyız.</li>
+            <li>Bu yerleri gelecek nesillere aktarmalıyız.</li>
+          </ul>
+        </div>
+
+        <img src="https://ai-seek-user-image.s3.us-east-1.amazonaws.com/202608/22/1e693582390f40c195b18f9fc17d42bbgcy0.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4MTWODAZEP5GANEB%2F20260822%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260822T225746Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=7f7e66e95b97f0675b4c5cc32baa91e462451f3c9f03235f4595234ae17cc43e" alt="Anıtkabir">
+      </div>
+
+      <div class="cards">
+        <div class="card"><h3>Somut kültürel miras</h3><p>Camiler, köprüler, kaleler, müzeler, saraylar ve tarihî evler.</p></div>
+        <div class="card"><h3>Somut olmayan kültürel miras</h3><p>Türküler, masallar, gelenekler, halk oyunları, yemekler ve el sanatları.</p></div>
+        <div class="card"><h3>Millî bayramlar</h3><p>23 Nisan, 19 Mayıs, 30 Ağustos ve 29 Ekim gibi önemli günler.</p></div>
+      </div>
+
+      <div class="activity">
+        <strong>Etkinlik 5: Kültürel miras araştırması</strong>
+        <p>Ailenden bir büyüğüne yaşadığınız yöreye ait bir yemek, oyun, türkü veya gelenek sor.</p>
+        <textarea placeholder="Araştırma sonucunu yaz"></textarea>
+      </div>
+    </section>
+
+    <section id="oyunlar">
+      <h2>6. Eğlenceli Oyunlar ve Etkinlikler</h2>
+
+      <div class="activity">
+        <strong>Oyun 1: Doğru mu, yanlış mı?</strong>
+        <p>Türkiye’nin başkenti Ankara’dır.</p>
+        <button onclick="dogruYanlis(this, true)">Doğru</button>
+        <button onclick="dogruYanlis(this, false)">Yanlış</button>
+        <span class="cevap"></span>
+
+        <p>Atatürk Selanik’te doğmuştur.</p>
+        <button onclick="dogruYanlis(this, true)">Doğru</button>
+        <button onclick="dogruYanlis(this, false)">Yanlış</button>
+        <span class="cevap"></span>
+
+        <p>Tarihî eserlere zarar vermek kültürel mirası korumaktır.</p>
+        <button onclick="dogruYanlis(this, false)">Doğru</button>
+        <button onclick="dogruYanlis(this, true)">Yanlış</button>
+        <span class="cevap"></span>
+      </div>
+
+      <div class="activity">
+        <strong>Oyun 2: Kelime avı</strong>
+        <p>Öğrendiğimiz konularla ilgili kelimeleri seç:</p>
+        <button class="kelime" onclick="kelimeSec(this)">Ankara</button>
+        <button class="kelime" onclick="kelimeSec(this)">Atatürk</button>
+        <button class="kelime" onclick="kelimeSec(this)">Harita</button>
+        <button class="kelime" onclick="kelimeSec(this)">Kültürel miras</button>
+        <button class="kelime" onclick="kelimeSec(this)">Millî Mücadele</button>
+        <button class="kelime" onclick="kelimeSec(this)">Vatan</button>
+        <p id="kelimeSonuc"></p>
+      </div>
+
+      <div class="activity">
+        <strong>Etkinlik 6: Benim ülkem</strong>
+        <p>“Türkiye deyince aklıma...” cümlesini tamamla.</p>
+        <textarea placeholder="Türkiye deyince aklıma..."></textarea>
+      </div>
+    </section>
+
+    <section id="test">
+      <h2>7. Mini Değerlendirme Testi</h2>
+      <p class="score">Puan: <span id="puan">0</span> / 5</p>
+
+      <div class="quiz-question">
+        <h3>1. Türkiye’nin başkenti hangisidir?</h3>
+        <button class="choice" onclick="cevapla(this, true)">Ankara</button>
+        <button class="choice" onclick="cevapla(this, false)">İzmir</button>
+        <button class="choice" onclick="cevapla(this, false)">Bursa</button>
+      </div>
+
+      <div class="quiz-question">
+        <h3>2. Atatürk nerede doğmuştur?</h3>
+        <button class="choice" onclick="cevapla(this, true)">Selanik</button>
+        <button class="choice" onclick="cevapla(this, false)">Ankara</button>
+        <button class="choice" onclick="cevapla(this, false)">İstanbul</button>
+      </div>
+
+      <div class="quiz-question">
+        <h3>3. Türkiye’nin fiziki ve siyasi özelliklerini gösteren araç nedir?</h3>
+        <button class="choice" onclick="cevapla(this, false)">Takvim</button>
+        <button class="choice" onclick="cevapla(this, true)">Harita</button>
+        <button class="choice" onclick="cevapla(this, false)">Saat</button>
+      </div>
+
+      <div class="quiz-question">
+        <h3>4. Anıtkabir hangi şehirde bulunur?</h3>
+        <button class="choice" onclick="cevapla(this, true)">Ankara</button>
+        <button class="choice" onclick="cevapla(this, false)">Samsun</button>
+        <button class="choice" onclick="cevapla(this, false)">Selanik</button>
+      </div>
+
+      <div class="quiz-question">
+        <h3>5. Hangisi kültürel mirasa örnektir?</h3>
+        <button class="choice" onclick="cevapla(this, false)">Çöp kutusu</button>
+        <button class="choice" onclick="cevapla(this, true)">Halk oyunu</button>
+        <button class="choice" onclick="cevapla(this, false)">Trafik ışığı</button>
+      </div>
+
+      <p id="sonuc"></p>
+      <button onclick="testiBitir()">Testi Bitir</button>
+      <button onclick="testiSifirla()">Tekrar Dene</button>
+
+      <div id="belge" class="certificate">
+        <h2>🎉 Tebrikler! 🎉</h2>
+        <p>“Yaşadığım Yer ve Ülkem” dersini başarıyla tamamladın.</p>
+        <p><strong>Bilgili, meraklı ve sorumluluk sahibi bir öğrencisin.</strong></p>
+      </div>
+    </section>
+
+    <section id="degerlendirme">
+      <h2>8. Ders Sonu Öz Değerlendirme</h2>
+      <p>Öğrendiklerini kendin değerlendir:</p>
+      <label><input type="checkbox" style="width:auto"> Yaşadığım çevreyi tanıyorum.</label><br>
+      <label><input type="checkbox" style="width:auto"> Türkiye’nin başkentini biliyorum.</label><br>
+      <label><input type="checkbox" style="width:auto"> Atatürk’ün hayatı hakkında bilgi edindim.</label><br>
+      <label><input type="checkbox" style="width:auto"> Millî Mücadele’nin önemini anladım.</label><br>
+      <label><input type="checkbox" style="width:auto"> Kültürel mirası korumam gerektiğini biliyorum.</label>
+
+      <div class="info-box yellow-box">
+        <strong>Bugünün mesajı:</strong> Yaşadığımız yeri tanımalı, ülkemizi sevmeli, tarihimize ve kültürel mirasımıza sahip çıkmalıyız.
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>🇹🇷 Yaşadığım Yer ve Ülkem | Eğitim Çalışması 🇹🇷</p>
+    <p>Vatanımızı, tarihî değerlerimizi ve kültürel mirasımızı koruyalım.</p>
+  </footer>
+
+  <script>
+    let puan = 0;
+    let cevaplanan = 0;
+
+    function dogruYanlis(button, dogru) {
+      const alan = button.parentElement.querySelectorAll('.cevap');
+      const cevap = alan[alan.length - 1];
+      cevap.textContent = dogru ? ' ✅ Doğru cevap!' : ' ❌ Bu cevap yanlış.';
+      cevap.style.color = dogru ? 'green' : 'crimson';
+    }
+
+    function kelimeSec(button) {
+      button.classList.toggle('correct');
+      const secilenler = document.querySelectorAll('.kelime.correct').length;
+      document.getElementById('kelimeSonuc').textContent = secilenler + ' kelime seçtin. Harika!';
+    }
+
+    function cevapla(button, dogru) {
+      const soru = button.parentElement;
+      if (soru.dataset.cevaplandi === 'true') return;
+
+      soru.dataset.cevaplandi = 'true';
+      cevaplanan++;
+      const secenekler = soru.querySelectorAll('.choice');
+
+      if (dogru) {
+        button.classList.add('correct');
+        puan++;
+      } else {
+        button.classList.add('wrong');
+        secenekler.forEach(function(secenek) {
+          if (secenek.getAttribute('onclick').includes('true')) {
+            secenek.classList.add('correct');
+          }
+        });
+      }
+
+      document.getElementById('puan').textContent = puan;
+    }
+
+    function testiBitir() {
+      const sonuc = document.getElementById('sonuc');
+
+      if (cevaplanan < 5) {
+        sonuc.textContent = 'Lütfen bütün soruları cevapla.';
+        sonuc.style.color = 'crimson';
+        return;
+      }
+
+      sonuc.textContent = 'Test sonucu: ' + puan + ' / 5';
+
+      if (puan >= 4) {
+        sonuc.textContent += ' — Tebrikler, konuyu çok iyi öğrenmişsin!';
+        sonuc.style.color = 'green';
+        document.getElementById('belge').style.display = 'block';
+      } else if (puan >= 2) {
+        sonuc.textContent += ' — Güzel! Konuyu biraz daha tekrar edebilirsin.';
+        sonuc.style.color = '#b27600';
+      } else {
+        sonuc.textContent += ' — Konuyu yeniden okuyup tekrar denemelisin.';
+        sonuc.style.color = 'crimson';
+      }
+    }
+
+    function testiSifirla() {
+      puan = 0;
+      cevaplanan = 0;
+      document.getElementById('puan').textContent = '0';
+      document.getElementById('sonuc').textContent = '';
+      document.getElementById('belge').style.display = 'none';
+
+      document.querySelectorAll('.quiz-question').forEach(function(soru) {
+        soru.dataset.cevaplandi = 'false';
+        soru.querySelectorAll('.choice').forEach(function(secenek) {
+          secenek.classList.remove('correct', 'wrong');
+        });
+      });
+    }
+  </script>
+</body>
+</html>
+
