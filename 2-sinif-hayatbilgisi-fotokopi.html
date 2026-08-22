@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2. Sınıf Hayat Bilgisi - Yazdırılabilir Çalışma Sayfaları</title>
+    <style>
+        @media print {
+            body { margin: 0; background: white; }
+            .sayfa { page-break-after: always; }
+            .no-print { display: none; }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            padding: 20px;
+        }
+        
+        .sayfa {
+            background: white;
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto 30px;
+            padding: 20mm;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        .baslik {
+            text-align: center;
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .baslik h1 {
+            font-size: 36px;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .baslik p {
+            font-size: 20px;
+        }
+
+        .ad-soyad {
+            border-bottom: 2px solid #333;
+            width: 300px;
+            margin: 10px auto;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        .tarih {
+            position: absolute;
+            top: 20mm;
+            right: 20mm;
+            font-size: 16px;
+            color: #666;
+        }
+
+        .baslik-kucuk {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 26px;
+            font-weight: bold;
+            margin: 25px 0 20px 0;
+            text-align: center;
+        }
+
+        .bilgi-kutusu {
+            background: #e3f2fd;
+            border: 4px solid #2196f3;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            font-size: 20px;
+            line-height: 1.8;
+        }
+
+        .etkinlik-kutusu {
+            background: #fff9c4;
+            border: 4px solid #fbc02d;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            font-size: 22px;
+        }
+
+        .soru-kutusu {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border: 4px solid #ff6348;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: #2d3436;
+        }
+
+        .resim-alan {
+            border: 3px dashed #9c27b0;
+            border-radius: 15px;
+            min-height: 200px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #9c27b0;
+            background: #f3e5f5;
+        }
+
+        .cizgi-satir {
+            border-bottom: 2px solid #333;
+            min-height: 40px;
+            margin: 15px 0;
+            padding: 5px 0;
+        }
+
+        .evet-hayir {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid #333;
+            border-radius: 5px;
+            margin: 0 10px;
+            vertical-align: middle;
+        }
+
+        .yildiz {
+            display: inline-block;
+            font-size: 40px;
+            margin: 0 5px;
+            color: #fbc02d;
+        }
+
+        .duygu-kutu {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            border: 4px solid #e91e63;
+            border-radius: 50%;
+            margin: 15px;
+            font-size: 50px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #fce4ec;
+        }
+
+        .takvim-kutu {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .takvim-kutu td, .takvim-kutu th {
+            border: 2px solid #333;
+            padding: 10px;
+            text-align: center;
+            font-size: 20px;
+        }
+
+        .takvim-kutu th {
+            background: #4caf50;
+            color: white;
+            font-size: 22px;
+        }
+
+        .mevsim-kutu {
+            display: inline-block;
+            width: 180px;
+            padding: 20px;
+            margin: 10px;
+            border: 4px solid #ff9800;
+            border-radius: 15px;
+            text-align: center;
+            vertical-align: top;
+        }
+
+        .saglik-kutu {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border: 4px solid #4caf50;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            font-size: 22px;
+        }
+
+        .tehlike-kutu {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border: 4px solid #f44336;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            font-size: 22px;
+        }
+
+        .trafik-isaret {
+            display: inline-block;
+            width: 120px;
+            height: 120px;
+            margin: 15px;
+            text-align: center;
+            vertical-align: top;
+        }
+
+        .meslek-kutu {
+            display: inline-block;
+            width: 150px;
+            padding: 15px;
+            margin: 10px;
+            border: 3px solid #9c27b0;
+            border-radius: 10px;
+            text-align: center;
+            background: #f3e5f5;
+            vertical-align: top;
+        }
+
+        .no-print {
+            text-align: center;
+            margin: 20px;
+        }
+
+        .no-print button {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .no-print button:hover {
+            background: #c2185b;
+        }
+
+        .eklenen-liste {
+            background: white;
+            border: 3px solid #2196f3;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 20px;
+        }
+
+        .harita-kutu {
+            border: 3px solid #ff5722;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            background: #fff3e0;
+            min-height: 150px;
+        }
+
+        .organlar-kutu {
+            display: inline-block;
+            width: 140px;
+            padding: 15px;
+            margin: 10px;
+            border: 3px solid #e91e63;
+            border-radius: 10px;
+            text-align: center;
+            background: #fce4ec;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="no-print">
+        <button onclick="window.print()">🖨️ YAZDIR</button>
+    </div>
+
+    <!-- SAYFA 1: BEN KİMİM? -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2026</div>
+        <div class="baslik">
+            <h1>👦 2. SINIF HAYAT BİLGİSİ</h1>
+            <p>Ben Kimim?</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Öğretmen Notu:</strong> Her insanın kendine özgü özellikleri vardır. Adımız, soyadımız, yaşımız bizi tanıtan bilgilerdir.
+        </div>
+
+        <div class="baslik-kucuk">📝 Kendimi Tanıyorum</div>
+
+        <div class="soru-kutusu">
+            <p><strong>Adım:</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>Soyadım:</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>Yaşım:</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>Doğum Tarihim:</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>Yaşadığım Şehir:</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="baslik-kucuk">🎨 Kendimi Çiziyorum</div>
+
+        <div class="resim-alan">
+            🖼️ Buraya kendini çiz
+        </div>
+
+        <div class="etkinlik-kutusu">
+            <p style="text-align: center; font-size: 24px; line-height: 2;">
+                <strong>Benim Özelliklerim:</strong><br>
+                Göz Rengim: _______________<br>
+                Saç Rengim: _______________<br>
+                Boyum: _______________ cm
+            </p>
+        </div>
+    </div>
+
+    <!-- SAYFA 2: AİLEM -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2026</div>
+        <div class="baslik">
+            <h1>👨‍👩‍👧‍👦 AİLEM</h1>
+            <p>Ailem ve Aile Bireyleri</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Öğretmen Notu:</strong> Aile, birlikte yaşayan ve birbirini seven kişilerdir. Anne, baba, kardeşler ailemizi oluşturur.
+        </div>
+
+        <div class="baslik-kucuk">👪 Ailem Kimlerden Oluşur?</div>
+
+        <div class="soru-kutusu">
+            <p><strong>Annemin Adı:</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>Babamın Adı:</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>Kardeşlerimin Adları:</strong></p>
+            <div class="cizgi-satir"></div>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>Evimizde kaç kişi yaşıyoruz?</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="baslik-kucuk">🏠 Evde Görevlerim</div>
+
+        <div class="etkinlik-kutusu">
+            <p style="font-size: 22px; line-height: 2.5;">
+                <input type="checkbox" style="width: 25px; height: 25px; vertical-align: middle;"> Odamı toplarım<br>
+                <input type="checkbox" style="width: 25px; height: 25px; vertical-align: middle;"> Sofrayı kurarım<br>
+                <input type="checkbox" style="width: 25px; height: 25px; vertical-align: middle;"> Çöpleri atarım<br>
+                <input type="checkbox" style="width: 25px; height: 25px; vertical-align: middle;"> Ayakkabılarımı düzenlerim<br>
+                <input type="checkbox" style="width: 25px; height: 25px; vertical-align: middle;"> Yatağımı toplarım
+            </p>
+        </div>
+
+        <div class="baslik-kucuk">🎨 Ailemi Çiziyorum</div>
+
+        <div class="resim-alan">
+            🖼️ Aileni buraya çiz
+        </div>
+    </div>
+
+    <!-- SAYFA 3: DUYGULARIM -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2026</div>
+        <div class="baslik">
+            <h1>😊 DUYGULARIM</h1>
+            <p>Duygularımı Tanıyorum</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Öğretmen Notu:</strong> İnsanların farklı duyguları vardır. Mutluluk, üzüntü, korku, öfke temel duygulardandır.
+        </div>
+
+        <div class="baslik-kucuk">😀 Duygularımı Tanıyorum</div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <div class="duygu-kutu">😊</div>
+            <div class="duygu-kutu">😢</div>
+            <div class="duygu-kutu">😠</div>
+            <div class="duygu-kutu">😨</div>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0; font-size: 22px; font-weight: bold;">
+            <div style="display: inline-block; width: 100px; text-align: center; margin: 15px;">Mutlu</div>
+            <div style="display: inline-block; width: 100px; text-align: center; margin: 15px;">Üzgün</div>
+            <div style="display: inline-block; width: 100px; text-align: center; margin: 15px;">Kızgın</div>
+            <div style="display: inline-block; width: 100px; text-align: center; margin: 15px;">Korkmuş</div>
+        </div>
+
+        <div class="baslik-kucuk">📝 Ne Zaman Bu Duyguları Hissederim?</div>
+
+        <div class="soru-kutusu">
+            <p><strong>😊 Mutlu olduğum zamanlar:</strong></p>
+            <div class="cizgi-satir"></div>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>😢 Üzüldüğüm zamanlar:</strong></p>
+            <div class="cizgi-satir"></div>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>😠 Kızdığım zamanlar:</strong></p>
+            <div class="cizgi-satir"></div>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="etkinlik-kutusu">
+            <p style="text-align: center; font-size: 24px; line-height: 2;">
+                <strong>💡 Önemli Not:</strong><br>
+                Duygularımızı uygun şekilde ifade etmeliyiz.<br>
+                Kızgın olduğumuzda bağırmamalı, sakinleşmeliyiz.<br>
+                Üzgün olduğumuzda büyüklerimizle konuşabiliriz.
+            </p>
+        </div>
+    </div>
+
+    <!-- SAYFA 4: OKULUMUZ -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2026</div>
+        <div class="baslik">
+            <h1>🏫 OKULUMUZ</h1>
+            <p>Okulum ve Okul Kuralları</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Öğretmen Notu:</strong> Okul, bilgi öğrendiğimiz ve arkadaşlık kurduğumuz yerdir. Okulda kurallara uymalıyız.
+        </div>
+
+        <div class="baslik-kucuk">🏫 Okulumu Tanıyorum</div>
+
+        <div class="soru-kutusu">
+            <p><strong>Okulumun Adı:</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>Öğretmenimin Adı:</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>Sınıfım:</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="baslik-kucuk">📜 Okul Kurallarımız</div>
+
+        <div class="etkinlik-kutusu">
+            <p style="font-size: 22px; line-height: 2.5;">
+                ✅ Okula zamanında gelirim<br>
+                ✅ Derse dikkat ederim<br>
+                ✅ Arkadaşlarıma saygılıyım<br>
+                ✅ Sıramı temiz tutarım<br>
+                ✅ Öğretmenlerimi dinlerim<br>
+                ✅ Sınıfta koşmam<br>
+                ✅ Ödevlerimi yaparım<br>
+                ✅ Okul eşyalarıma dikkat ederim
+            </p>
+        </div>
+
+        <div class="baslik-kucuk">🤝 En İyi Arkadaşım</div>
+
+        <div class="soru-kutusu">
+            <p><strong>En iyi arkadaşımın adı:</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>Onunla neler yapmayı severim?</strong></p>
+            <div class="cizgi-satir"></div>
+            <div class="cizgi-satir"></div>
+        </div>
+    </div>
+
+    <!-- SAYFA 5: SAĞLIKLI YAŞAM -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2026</div>
+        <div class="baslik">
+            <h1>🏥 SAĞLIKLI YAŞAM</h1>
+            <p>Sağlıklı Olmak İçin Neler Yapmalıyız?</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Öğretmen Notu:</strong> Sağlıklı yaşamak için düzenli beslenme, temizlik ve spor önemlidir.
+        </div>
+
+        <div class="baslik-kucuk">🧼 Temizlik Kuralları</div>
+
+        <div class="saglik-kutu">
+            <p style="font-size: 24px; line-height: 2.5;">
+                🚿 Her gün banyo yaparım<br>
+                🦷 Günde 2 kez dişlerimi fırçalarım<br>
+                🧴 Ellerimi sabunla yıkarım<br>
+                💅 Tırnaklarımı keserim<br>
+                👕 Temiz kıyafetler giyerim<br>
+                👟 Ayakkabılarımı temiz tutarım
+            </p>
+        </div>
+
+        <div class="baslik-kucuk">🍎 Sağlıklı Beslenme</div>
+
+        <div class="saglik-kutu">
+            <p style="font-size: 24px; line-height: 2.5;">
+                🥛 Süt ve süt ürünleri yerim<br>
+                🍎 Meyve ve sebze yerim<br>
+                🍞 Kahvaltı yaparım<br>
+                💧 Bol su içerim<br>
+                🚫 Çok fazla şeker yemem<br>
+                ⏰ Yemekleri zamanında yerim
+            </p>
+        </div>
+
+        <div class="baslik-kucuk">⚽ Spor ve Hareket</div>
+
+        <div class="saglik-kutu">
+            <p style="font-size: 24px; line-height: 2.5;">
+                🏃 Her gün hareket ederim<br>
+                ⚽ Spor yaparım<br>
+                🚴 Açık havada oynarım<br>
+                😴 Düzenli uyurum (9-10 saat)
+            </p>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>En sevdiğim spor:</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+    </div>
+
+    <!-- SAYFA 6: VÜCUDUMUZU TANIYALIM -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2026</div>
+        <div class="baslik">
+            <h1>👤 VÜCUDUMUZU TANIYALIM</h1>
+            <p>Vücut Organları ve Görevleri</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Öğretmen Notu:</strong> Vücudumuzda birçok organ vardır. Her organın özel bir görevi vardır.
+        </div>
+
+        <div class="baslik-kucuk">👁️ Duyu Organlarımız</div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <div class="organlar-kutu">
+                <p style="font-size: 50px; margin: 10px 0;">👁️</p>
+                <p style="font-size: 20px; font-weight: bold;">GÖZ</p>
+                <p style="font-size: 18px; margin-top: 10px;">Görmek</p>
+            </div>
+
+            <div class="organlar-kutu">
+                <p style="font-size: 50px; margin: 10px 0;">👂</p>
+                <p style="font-size: 20px; font-weight: bold;">KULAK</p>
+                <p style="font-size: 18px; margin-top: 10px;">Duymak</p>
+            </div>
+
+            <div class="organlar-kutu">
+                <p style="font-size: 50px; margin: 10px 0;">👃</p>
+                <p style="font-size: 20px; font-weight: bold;">BURUN</p>
+                <p style="font-size: 18px; margin-top: 10px;">Koklamak</p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <div class="organlar-kutu">
+                <p style="font-size: 50px; margin: 10px 0;">👅</p>
+                <p style="font-size: 20px; font-weight: bold;">DİL</p>
+                <p style="font-size: 18px; margin-top: 10px;">Tatmak</p>
+            </div>
+
+            <div class="organlar-kutu">
+                <p style="font-size: 50px; margin: 10px 0;">✋</p>
+                <p style="font-size: 20px; font-weight: bold;">DERİ</p>
+                <p style="font-size: 18px; margin-top: 10px;">Dokunmak</p>
+            </div>
+        </div>
+
+        <div class="baslik-kucuk">📝 Eşleştir</div>
+
+        <div class="soru-kutusu">
+            <p><strong>1. Göz</strong> → _____________________ (ne işe yarar?)</p>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>2. Kulak</strong> → _____________________ (ne işe yarar?)</p>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>3. Burun</strong> → _____________________ (ne işe yarar?)</p>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>4. Dil</strong> → _____________________ (ne işe yarar?)</p>
+        </div>
+
+        <div class="baslik-kucuk">🎯 Organlarımızı Koruyalım</div>
+
+        <div class="saglik-kutu">
+            <p style="font-size: 20px; line-height: 2;">
+                👁️ <strong>Göz:</strong> Gözlerime yabancı cisim sokmam, fazla TV izlemem<br>
+                👂 <strong>Kulak:</strong> Kulaklarımı temiz tutarım, yüksek sesle dinlemem<br>
+                👃 <strong>Burun:</strong> Burnuma parmak sokmam, mendil kullanırım<br>
+                🦷 <strong>Diş:</strong> Günde 2 kez fırçalarım, diş hekimine giderim
+            </p>
+        </div>
+    </div>
+
+    <!-- SAYFA 7: ZAMANIN GEÇİŞİ -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2026</div>
+        <div class="baslik">
+            <h1>⏰ ZAMANIN GEÇİŞİ</h1>
+            <p>Gün, Hafta, Ay, Yıl</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Öğretmen Notu:</strong> Zaman sürekli akar. Gün, hafta, ay ve yıl zaman ölçüleridir.
+        </div>
+
+        <div class="baslik-kucuk">📅 Haftanın Günleri</div>
+
+        <div class="etkinlik-kutusu">
+            <table class="takvim-kutu">
+                <tr>
+                    <th>Pazartesi</th>
+                    <th>Salı</th>
+                    <th>Çarşamba</th>
+                    <th>Perşembe</th>
+                    <th>Cuma</th>
+                    <th>Cumartesi</th>
+                    <th>Pazar</th>
+                </tr>
+                <tr>
+                    <td>1. Gün</td>
+                    <td>2. Gün</td>
+                    <td>3. Gün</td>
+                    <td>4. Gün</td>
+                    <td>5. Gün</td>
+                    <td>6. Gün</td>
+                    <td>7. Gün</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="bilgi-kutusu">
+            <p style="text-align: center; font-size: 24px; line-height: 2.5;">
+                <strong>1 hafta = 7 gün</strong><br>
+                <strong>1 ay ≈ 30 gün</strong><br>
+                <strong>1 yıl = 12 ay = 365 gün</strong>
+            </p>
+        </div>
+
+        <div class="baslik-kucuk">📆 Yılın Ayları</div>
+
+        <div class="etkinlik-kutusu">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; font-size: 20px; text-align: center;">
+                <div class="eklenen-liste">1. Ocak</div>
+                <div class="eklenen-liste">2. Şubat</div>
+                <div class="eklenen-liste">3. Mart</div>
+                <div class="eklenen-liste">4. Nisan</div>
+                <div class="eklenen-liste">5. Mayıs</div>
+                <div class="eklenen-liste">6. Haziran</div>
+                <div class="eklenen-liste">7. Temmuz</div>
+                <div class="eklenen-liste">8. Ağustos</div>
+                <div class="eklenen-liste">9. Eylül</div>
+                <div class="eklenen-liste">10. Ekim</div>
+                <div class="eklenen-liste">11. Kasım</div>
+                <div class="eklenen-liste">12. Aralık</div>
+            </div>
+        </div>
+
+        <div class="baslik-kucuk">✏️ Sorular</div>
+
+        <div class="soru-kutusu">
+            <p><strong>1. Bugün haftanın hangi günü?</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>2. Hangi aydayız?</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>3. Hangi mevsimde doğdun?</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+    </div>
+
+    <!-- SAYFA 8: MEVSİMLER -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2026</div>
+        <div class="baslik">
+            <h1>🌸 MEVSİMLER</h1>
+            <p>İlkbahar, Yaz, Sonbahar, Kış</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Öğretmen Notu:</strong> Yılın dört mevsimi vardır. Her mevsimin kendine özgü özellikleri vardır.
+        </div>
+
+        <div class="baslik-kucuk">🌷 Mevsimleri Tanıyalım</div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <div class="mevsim-kutu" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+                <p style="font-size: 60px; margin: 15px 0;">🌸</p>
+                <p style="font-size: 26px; font-weight: bold; margin: 10px 0;">İLKBAHAR</p>
+                <p style="font-size: 18px; line-height: 1.8;">
+                    Mart-Nisan-Mayıs<br>
+                    Çiçekler açar<br>
+                    Hava ılık<br>
+                    Yağmur yağar
+                </p>
+            </div>
+
+            <div class="mevsim-kutu" style="background: linear-gradient(135deg, #fff9c4 0%, #ffeb3b 100%);">
+                <p style="font-size: 60px; margin: 15px 0;">☀️</p>
+                <p style="font-size: 26px; font-weight: bold; margin: 10px 0;">YAZ</p>
+                <p style="font-size: 18px; line-height: 1.8;">
+                    Haziran-Temmuz-Ağustos<br>
+                    Hava sıcak<br>
+                    Tatil zamanı<br>
+                    Deniz, güneş
+                </p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <div class="mevsim-kutu" style="background: linear-gradient(135deg, #ffe0b2 0%, #ffb74d 100%);">
+                <p style="font-size: 60px; margin: 15px 0;">🍂</p>
+                <p style="font-size: 26px; font-weight: bold; margin: 10px 0;">SONBAHAR</p>
+                <p style="font-size: 18px; line-height: 1.8;">
+                    Eylül-Ekim-Kasım<br>
+                    Yapraklar dökülür<br>
+                    Hava serinler<br>
+                    Okul açılır
+                </p>
+            </div>
+
+            <div class="mevsim-kutu" style="background: linear-gradient(135deg, #e3f2fd 0%, #90caf9 100%);">
+                <p style="font-size: 60px; margin: 15px 0;">❄️</p>
+                <p style="font-size: 26px; font-weight: bold; margin: 10px 0;">KIŞ</p>
+                <p style="font-size: 18px; line-height: 1.8;">
+                    Aralık-Ocak-Şubat<br>
+                    Hava soğuk<br>
+                    Kar yağar<br>
+                    Kalın giysiler
+                </p>
+            </div>
+        </div>
+
+        <div class="baslik-kucuk">✏️ Sorular</div>
+
+        <div class="soru-kutusu">
+            <p><strong>1. En sevdiğim mevsim:</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>2. Şu an hangi mevsimdeyiz?</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>3. Hangi mevsimde kar yağar?</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+    </div>
+
+    <!-- SAYFA 9: TRAFİK GÜVENLİĞİ -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2026</div>
+        <div class="baslik">
+            <h1>🚦 TRAFİK GÜVENLİĞİ</h1>
+            <p>Trafik Kuralları ve Güvenlik</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Öğretmen Notu:</strong> Trafik kuralları can güvenliğimiz için çok önemlidir. Kurallara uymalıyız.
+        </div>
+
+        <div class="baslik-kucuk">🚦 Trafik Işıkları</div>
+
+        <div style="text-align: center; margin: 40px 0;">
+            <div style="display: inline-block; width: 150px; height: 350px; background: #333; border-radius: 20px; padding: 20px; margin: 0 30px;">
+                <div style="width: 110px; height: 110px; background: #f44336; border-radius: 50%; margin: 10px 0;"></div>
+                <div style="width: 110px; height: 110px; background: #ff9800; border-radius: 50%; margin: 10px 0;"></div>
+                <div style="width: 110px; height: 110px; background: #4caf50; border-radius: 50%; margin: 10px 0;"></div>
+            </div>
+
+            <div style="display: inline-block; vertical-align: top; text-align: left; margin-left: 30px; font-size: 24px; line-height: 2.5;">
+                <p><strong style="color: #f44336;">🔴 KIRMIZI:</strong> DUR!</p>
+                <p><strong style="color: #ff9800;">🟠 SARI:</strong> HAZIRLAN!</p>
+                <p><strong style="color: #4caf50;">🟢 YEŞİL:</strong> GEÇ!</p>
+            </div>
+        </div>
+
+        <div class="baslik-kucuk">🚸 Yaya Geçidi Kuralları</div>
+
+        <div class="saglik-kutu">
+            <p style="font-size: 22px; line-height: 2.5;">
+                ✅ Sadece yaya geçidinden karşıya geçerim<br>
+                ✅ Işık kırmızıyken beklerim<br>
+                ✅ Yeşil yandığında sağa-sola bakarım<br>
+                ✅ Koşmadan yürüyerek geçerim<br>
+                ✅ Oyun oynamadan geçerim<br>
+                ✅ Telefonla uğraşmadan geçerim
+            </p>
+        </div>
+
+        <div class="baslik-kucuk">🚫 Tehlikeli Davranışlar</div>
+
+        <div class="tehlike-kutu">
+            <p style="font-size: 22px; line-height: 2.5;">
+                ❌ Yolda koşmak<br>
+                ❌ Kırmızı ışıkta geçmek<br>
+                ❌ Araçların arasından geçmek<br>
+                ❌ Yolda oyun oynamak<br>
+                ❌ Emniyet kemeri takmamak
+            </p>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>Okula nasıl gidiyorsun? (Yürüyerek, servis, araba vb.)</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+    </div>
+
+    <!-- SAYFA 10: MESLEKLER -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2026</div>
+        <div class="baslik">
+            <h1>👨‍⚕️ MESLEKLER</h1>
+            <p>İnsanlar Ne İş Yapar?</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Öğretmen Notu:</strong> Meslek, insanların para kazanmak ve topluma faydalı olmak için yaptıkları işlerdir.
+        </div>
+
+        <div class="baslik-kucuk">👷 Meslekleri Tanıyalım</div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <div class="meslek-kutu">
+                <p style="font-size: 50px; margin: 10px 0;">👨‍⚕️</p>
+                <p style="font-size: 22px; font-weight: bold;">DOKTOR</p>
+                <p style="font-size: 16px; margin-top: 10px;">Hastaları iyileştirir</p>
+            </div>
+
+            <div class="meslek-kutu">
+                <p style="font-size: 50px; margin: 10px 0;">👨‍🏫</p>
+                <p style="font-size: 22px; font-weight: bold;">ÖĞRETMEN</p>
+                <p style="font-size: 16px; margin-top: 10px;">Öğrencilere ders verir</p>
+            </div>
+
+            <div class="meslek-kutu">
+                <p style="font-size: 50px; margin: 10px 0;">👨‍🚒</p>
+                <p style="font-size: 22px; font-weight: bold;">İTFAİYECİ</p>
+                <p style="font-size: 16px; margin-top: 10px;">Yangınları söndürür</p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <div class="meslek-kutu">
+                <p style="font-size: 50px; margin: 10px 0;">👮</p>
+                <p style="font-size: 22px; font-weight: bold;">POLİS</p>
+                <p style="font-size: 16px; margin-top: 10px;">Güvenliği sağlar</p>
+            </div>
+
+            <div class="meslek-kutu">
+                <p style="font-size: 50px; margin: 10px 0;">👨‍🌾</p>
+                <p style="font-size: 22px; font-weight: bold;">ÇİFTÇİ</p>
+                <p style="font-size: 16px; margin-top: 10px;">Ürün yetiştirir</p>
+            </div>
+
+            <div class="meslek-kutu">
+                <p style="font-size: 50px; margin: 10px 0;">👨‍🍳</p>
+                <p style="font-size: 22px; font-weight: bold;">AŞÇI</p>
+                <p style="font-size: 16px; margin-top: 10px;">Yemek pişirir</p>
+            </div>
+        </div>
+
+        <div class="baslik-kucuk">✏️ Meslekleri Eşleştir</div>
+
+        <div class="soru-kutusu">
+            <p><strong>1. Doktor</strong> → _____________________ (ne yapar?)</p>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>2. Öğretmen</strong> → _____________________ (ne yapar?)</p>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>3. Polis</strong> → _____________________ (ne yapar?)</p>
+        </div>
+
+        <div class="baslik-kucuk">🎯 Hayalim</div>
+
+        <div class="soru-kutusu">
+            <p><strong>Büyüyünce ne olmak istiyorsun?</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>Neden?</strong></p>
+            <div class="cizgi-satir"></div>
+            <div class="cizgi-satir"></div>
+        </div>
+    </div>
+
+    <!-- SAYFA 11: ÇEVREMDE YAŞAM -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2026</div>
+        <div class="baslik">
+            <h1>🏘️ ÇEVREMDE YAŞAM</h1>
+            <p>Mahalle ve Komşuluk</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Öğretmen Notu:</strong> Yaşadığımız yere mahalle denir. Mahallede birlikte yaşayan insanlar komşudur.
+        </div>
+
+        <div class="baslik-kucuk">🏠 Mahallemi Tanıyorum</div>
+
+        <div class="soru-kutusu">
+            <p><strong>Mahallemi Adı:</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>Yaşadığım İlçe:</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>Yaşadığım Şehir:</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="baslik-kucuk">🏢 Mahallede Neler Var?</div>
+
+        <div class="etkinlik-kutusu">
+            <p style="font-size: 22px; line-height: 2.5;">
+                🏫 Okul<br>
+                🏥 Sağlık Ocağı<br>
+                🏪 Market / Bakkal<br>
+                🕌 Cami<br>
+                🏞️ Park<br>
+                📮 Postane<br>
+                🚓 Karakol<br>
+                💊 Eczane
+            </p>
+        </div>
+
+        <div class="baslik-kucuk">🤝 Komşuluk İlişkileri</div>
+
+        <div class="saglik-kutu">
+            <p style="font-size: 22px; line-height: 2.5;">
+                ✅ Komşularıma selam veririm<br>
+                ✅ İhtiyacı olana yardım ederim<br>
+                ✅ Gürültü yapmam<br>
+                ✅ Hasta komşumu ziyaret ederim<br>
+                ✅ Saygılı davranırım
+            </p>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>Mahallende en çok gittiğin yer neresi?</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="baslik-kucuk">🎨 Mahallemi Çiziyorum</div>
+
+        <div class="resim-alan">
+            🖼️ Mahalleni buraya çiz
+        </div>
+    </div>
+
+    <!-- SAYFA 12: DOĞA VE ÇEVRE -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2026</div>
+        <div class="baslik">
+            <h1>🌳 DOĞA VE ÇEVRE</h1>
+            <p>Çevremizi Koruyalım</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Öğretmen Notu:</strong> Doğa bizim evimizdir. Temiz bir çevrede yaşamak için doğayı korumalıyız.
+        </div>
+
+        <div class="baslik-kucuk">🌍 Canlılar ve Cansızlar</div>
+
+        <div class="etkinlik-kutusu">
+            <table style="width: 100%; border-collapse: collapse; font-size: 22px;">
+                <tr>
+                    <th style="background: #4caf50; color: white; padding: 15px; border: 2px solid #333;">CANLILAR</th>
+                    <th style="background: #757575; color: white; padding: 15px; border: 2px solid #333;">CANSIZLAR</th>
+                </tr>
+                <tr>
+                    <td style="padding: 15px; border: 2px solid #333;">
+                        🧒 İnsan<br>
+                        🐕 Hayvanlar<br>
+                        🌲 Bitkiler
+                    </td>
+                    <td style="padding: 15px; border: 2px solid #333;">
+                        🪨 Taş<br>
+                        💧 Su<br>
+                        ☀️ Güneş<br>
+                        🌬️ Hava
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="bilgi-kutusu">
+            <p style="text-align: center; font-size: 24px; line-height: 2;">
+                <strong>Canlıların Özellikleri:</strong><br>
+                ✅ Doğarlar<br>
+                ✅ Beslenirler<br>
+                ✅ Büyürler<br>
+                ✅ Çoğalırlar<br>
+                ✅ Ölürler
+            </p>
+        </div>
+
+        <div class="baslik-kucuk">♻️ Çevreyi Koruma</div>
+
+        <div class="saglik-kutu">
+            <p style="font-size: 22px; line-height: 2.5;">
+                ✅ Çöpleri çöp kutusuna atarım<br>
+                ✅ Suyu israf etmem<br>
+                ✅ Elektriği boş yere harcamam<br>
+                ✅ Ağaçları kırmam<br>
+                ✅ Hayvanları incitmem<br>
+                ✅ Çiçekleri koparmam<br>
+                ✅ Geri dönüşüm yaparım
+            </p>
+        </div>
+
+        <div class="tehlike-kutu">
+            <p style="font-size: 22px; line-height: 2.5;">
+                ❌ Çöpleri yere atmak<br>
+                ❌ Suyu boşa harcamak<br>
+                ❌ Ağaçları kesmek<br>
+                ❌ Hayvanları üzmek<br>
+                ❌ Doğayı kirletmek
+            </p>
+        </div>
+    </div>
+
+    <!-- SAYFA 13: HAYVANLAR -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2026</div>
+        <div class="baslik">
+            <h1>🐾 HAYVANLAR</h1>
+            <p>Evcil ve Vahşi Hayvanlar</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Öğretmen Notu:</strong> Hayvanlar canlılardır. Evcil hayvanlar evde beslenebilir, vahşi hayvanlar doğada yaşar.
+        </div>
+
+        <div class="baslik-kucuk">🏠 Evcil Hayvanlar</div>
+
+        <div class="etkinlik-kutusu">
+            <p style="font-size: 50px; text-align: center; line-height: 1.5;">
+                🐕 🐈 🐦 🐠 🐰 🐹 🐴
+            </p>
+            <p style="text-align: center; font-size: 22px; margin-top: 20px; line-height: 2;">
+                Köpek - Kedi - Kuş - Balık - Tavşan - Hamster - At
+            </p>
+        </div>
+
+        <div class="bilgi-kutusu">
+            <p style="font-size: 20px; line-height: 2;">
+                <strong>Evcil Hayvanların Özellikleri:</strong><br>
+                ✅ Evde veya bahçede beslenebilir<br>
+                ✅ İnsanlara zarar vermez<br>
+                ✅ İnsanlarla yaşayabilir<br>
+                ✅ Bakımlarını insanlar yapar
+            </p>
+        </div>
+
+        <div class="baslik-kucuk">🦁 Vahşi Hayvanlar</div>
+
+        <div class="etkinlik-kutusu">
+            <p style="font-size: 50px; text-align: center; line-height: 1.5;">
+                🦁 🐯 🐻 🐺 🦅 🐍 🦒
+            </p>
+            <p style="text-align: center; font-size: 22px; margin-top: 20px; line-height: 2;">
+                Aslan - Kaplan - Ayı - Kurt - Kartal - Yılan - Zürafa
+            </p>
+        </div>
+
+        <div class="bilgi-kutusu">
+            <p style="font-size: 20px; line-height: 2;">
+                <strong>Vahşi Hayvanların Özellikleri:</strong><br>
+                ⚠️ Ormanda, doğada yaşar<br>
+                ⚠️ Tehlikeli olabilir<br>
+                ⚠️ Evde beslenmez<br>
+                ⚠️ Kendi yiyeceğini bulur
+            </p>
+        </div>
+
+        <div class="baslik-kucuk">✏️ Hayvanları Sınıflandır</div>
+
+        <div class="soru-kutusu">
+            <p><strong>Evcil Hayvanlar:</strong></p>
+            <div class="cizgi-satir"></div>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>Vahşi Hayvanlar:</strong></p>
+            <div class="cizgi-satir"></div>
+            <div class="cizgi-satir"></div>
+        </div>
+    </div>
+
+    <!-- SAYFA 14: BİTKİLER -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2026</div>
+        <div class="baslik">
+            <h1>🌱 BİTKİLER</h1>
+            <p>Bitkilerin Yaşamı</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Öğretmen Notu:</strong> Bitkiler canlılardır. Yaşamaları için toprak, su, güneş ve hava gerekir.
+        </div>
+
+        <div class="baslik-kucuk">🌳 Bitkilerin Bölümleri</div>
+
+        <div class="etkinlik-kutusu">
+            <div style="text-align: center; font-size: 50px; margin: 30px 0;">
+                🌳
+            </div>
+            <div style="font-size: 24px; line-height: 2.5; text-align: center;">
+                <p><strong style="color: #4caf50;">🍃 YAPRAK:</strong> Fotosentez yapar</p>
+                <p><strong style="color: #8d6e63;">🪵 GÖVDE:</strong> Bitkiyi ayakta tutar</p>
+                <p><strong style="color: #e91e63;">🌸 ÇİÇEK:</strong> Tohum oluşturur</p>
+                <p><strong style="color: #ff9800;">🍎 MEYVE:</strong> Tohumları taşır</p>
+                <p><strong style="color: #795548;">🌿 KÖK:</strong> Su ve besin alır</p>
+            </div>
+        </div>
+
+        <div class="baslik-kucuk">💧 Bitkilerin İhtiyaçları</div>
+
+        <div class="saglik-kutu">
+            <p style="font-size: 24px; line-height: 2.5; text-align: center;">
+                💧 <strong>SU</strong><br>
+                ☀️ <strong>GÜNEŞ IŞIĞI</strong><br>
+                🌍 <strong>TOPRAK</strong><br>
+                🌬️ <strong>HAVA</strong>
+            </p>
+        </div>
+
+        <div class="baslik-kucuk">🌱 Bitki Yetiştirme</div>
+
+        <div class="etkinlik-kutusu">
+            <p style="font-size: 22px; line-height: 2.5;">
+                <strong>1.</strong> Saksıya toprak koy<br>
+                <strong>2.</strong> Toprağa tohum ek<br>
+                <strong>3.</strong> Üzerine toprak koy<br>
+          <strong>4.</strong> Su ver<br>
+                <strong>5.</strong> Güneşli bir yere koy<br>
+                <strong>6.</strong> Sabırla bekle<br>
+                <strong>7.</strong> Düzenli sula
+            </p>
+        </div>
+
+        <div class="baslik-kucuk">🌿 Bitkilerin Faydaları</div>
+
+        <div class="bilgi-kutusu">
+            <p style="font-size: 22px; line-height: 2.5;">
+                ✅ Oksijen verir<br>
+                ✅ Meyve ve sebze sağlar<br>
+                ✅ Gölge yapar<br>
+                ✅ Havayı temizler<br>
+                ✅ Kuşlara yuva olur<br>
+                ✅ Doğayı güzelleştirir
+            </p>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>En sevdiğin meyve veya sebze nedir?</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+    </div>
+
+    <!-- SAYFA 15: SU VE HAYAT -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2026</div>
+        <div class="baslik">
+            <h1>💧 SU VE HAYAT</h1>
+            <p>Suyun Önemi ve Tasarrufu</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Öğretmen Notu:</strong> Su yaşam kaynağımızdır. Canlılar susuz yaşayamaz. Suyu tasarruflu kullanmalıyız.
+        </div>
+
+        <div class="baslik-kucuk">💦 Suyun Önemi</div>
+
+        <div class="etkinlik-kutusu">
+            <p style="font-size: 24px; line-height: 2.5; text-align: center;">
+                <strong>Su Nerede Kullanılır?</strong><br><br>
+                🚿 Banyo yapmak<br>
+                🥛 İçmek<br>
+                🍳 Yemek pişirmek<br>
+                🧼 Temizlik yapmak<br>
+                🌱 Bitkileri sulamak<br>
+                🏊 Yüzmek<br>
+                🧺 Çamaşır yıkamak
+            </p>
+        </div>
+
+        <div class="bilgi-kutusu">
+            <p style="text-align: center; font-size: 26px; line-height: 2.5;">
+                <strong>⚠️ ÖNEMLİ BİLGİ:</strong><br>
+                Dünyadaki suyun sadece <strong>%3'ü</strong> tatlı sudur.<br>
+                Su tasarrufu çok önemlidir!
+            </p>
+        </div>
+
+        <div class="baslik-kucuk">💧 Su Tasarrufu</div>
+
+        <div class="saglik-kutu">
+            <p style="font-size: 22px; line-height: 2.5;">
+                ✅ Dişlerimi fırçalarken musluğu kapatırım<br>
+                ✅ Kısa süreli duş yaparım<br>
+                ✅ Muslukları iyice kapatırım<br>
+                ✅ Suyla oyun oynamam<br>
+                ✅ Tam dolmadan çamaşır makinesi çalıştırmam<br>
+                ✅ Bahçeyi hortumla değil kovayla sularım
+            </p>
+        </div>
+
+        <div class="tehlike-kutu">
+            <p style="font-size: 22px; line-height: 2.5;">
+                ❌ Musluğu açık bırakmak<br>
+                ❌ Suyla oynamak<br>
+                ❌ Gereksiz su harcamak<br>
+                ❌ Suyu kirletmek<br>
+                ❌ Çöpleri suya atmak
+            </p>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>Günde kaç bardak su içmelisin?</strong></p>
+            <div class="cizgi-satir"></div>
+            <p style="margin-top: 15px; font-size: 20px;">Cevap: 6-8 bardak</p>
+        </div>
+    </div>
+
+    <!-- SAYFA 16: DOĞAL AFETLER -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2026</div>
+        <div class="baslik">
+            <h1>⚠️ DOĞAL AFETLER</h1>
+            <p>Deprem ve Güvenlik</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Öğretmen Notu:</strong> Doğal afetler aniden olabilir. Ne yapacağımızı önceden bilmeliyiz.
+        </div>
+
+        <div class="baslik-kucuk">🌍 Doğal Afetler Nelerdir?</div>
+
+        <div class="etkinlik-kutusu">
+            <p style="font-size: 24px; line-height: 2.5; text-align: center;">
+                🌊 <strong>SEL</strong> - Aşırı yağış<br>
+                🔥 <strong>YANGIN</strong> - Yangın tehlikesi<br>
+                💨 <strong>FIRTINA</strong> - Şiddetli rüzgar<br>
+                🌪️ <strong>HORTUM</strong> - Dönen hava kütlesi<br>
+                🗻 <strong>DEPREM</strong> - Yerin sarsılması<br>
+                ❄️ <strong>ÇIĞ</strong> - Karın kayması
+            </p>
+        </div>
+
+        <div class="baslik-kucuk">📋 DEPREM ESNASINDA</div>
+
+        <div class="tehlike-kutu">
+            <p style="font-size: 28px; font-weight: bold; text-align: center; margin: 30px 0;">
+                ÇÖK - KAPAN - TUTUN
+            </p>
+            <div style="text-align: center; font-size: 60px; margin: 20px 0;">
+                🧎 → 🛡️ → 🤝
+            </div>
+            <p style="font-size: 22px; line-height: 2.5;">
+                <strong>🧎 ÇÖK:</strong> Yere çök<br>
+                <strong>🛡️ KAPAN:</strong> Masanın altına gir, başını koru<br>
+                <strong>🤝 TUTUN:</strong> Masa ayağından tut
+            </p>
+        </div>
+
+        <div class="baslik-kucuk">🎒 Deprem Çantası</div>
+
+        <div class="saglik-kutu">
+            <p style="font-size: 22px; line-height: 2.5;">
+                ✅ Su ve konserve yiyecek<br>
+                ✅ El feneri ve pil<br>
+                ✅ İlk yardım malzemeleri<br>
+                ✅ Islık<br>
+                ✅ Radyo<br>
+                ✅ Önemli telefon numaraları<br>
+                ✅ Battaniye
+            </p>
+        </div>
+
+        <div class="bilgi-kutusu">
+            <p style="text-align: center; font-size: 26px; line-height: 2;">
+                <strong>🚨 ACİL DURUM NUMARALARI:</strong><br><br>
+                <strong>112</strong> - Acil Sağlık<br>
+                <strong>110</strong> - İtfaiye<br>
+                <strong>155</strong> - Polis<br>
+                <strong>156</strong> - Jandarma
+            </p>
+        </div>
+    </div>
+
+    <!-- SAYFA 17: ÜLKEM TÜRKİYE -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2026</div>
+        <div class="baslik">
+            <h1>🇹🇷 ÜLKEM TÜRKİYE</h1>
+            <p>Türkiye Cumhuriyeti</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Öğretmen Notu:</strong> Türkiye Cumhuriyeti bizim vatanımızdır. Başkenti Ankara'dır.
+        </div>
+
+        <div class="baslik-kucuk">🇹🇷 Türk Bayrağı</div>
+
+        <div style="text-align: center; margin: 40px 0;">
+            <div style="width: 400px; height: 266px; background: #e30a17; margin: 0 auto; border: 5px solid #333; border-radius: 10px; position: relative;">
+                <div style="position: absolute; left: 80px; top: 50%; transform: translateY(-50%); font-size: 120px; color: white;">
+                    ☪️
+                </div>
+                <div style="position: absolute; left: 180px; top: 50%; transform: translateY(-50%); font-size: 100px; color: white;">
+                    ⭐
+                </div>
+            </div>
+        </div>
+
+        <div class="bilgi-kutusu">
+            <p style="text-align: center; font-size: 24px; line-height: 2.5;">
+                <strong>🇹🇷 BAYRAĞIMIZIN ÖZELLİKLERİ:</strong><br>
+                🔴 Kırmızı zemin<br>
+                ☪️ Beyaz ay yıldız<br>
+                ⭐ Beş köşeli yıldız
+            </p>
+        </div>
+
+        <div class="baslik-kucuk">📍 Türkiye Hakkında Bilgiler</div>
+
+        <div class="etkinlik-kutusu">
+            <p style="font-size: 24px; line-height: 2.5;">
+                <strong>Başkent:</strong> Ankara<br>
+                <strong>En Büyük Şehir:</strong> İstanbul<br>
+                <strong>Resmi Dil:</strong> Türkçe<br>
+                <strong>Para Birimi:</strong> Türk Lirası (TL)<br>
+                <strong>Kuruluş Tarihi:</strong> 29 Ekim 1923<br>
+                <strong>Kurucusu:</strong> Mustafa Kemal ATATÜRK
+            </p>
+        </div>
+
+        <div class="baslik-kucuk">🗺️ Türkiye'nin Komşuları</div>
+
+        <div class="harita-kutu">
+            <p style="font-size: 22px; line-height: 2.5; text-align: center;">
+                Türkiye'nin <strong>8 komşusu</strong> vardır:<br><br>
+                🇬🇷 Yunanistan • 🇧🇬 Bulgaristan • 🇬🇪 Gürcistan • 🇦🇲 Ermenistan<br>
+                🇮🇷 İran • 🇮🇶 Irak • 🇸🇾 Suriye • 🇦🇿 Azerbaycan (Nahçıvan)
+            </p>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>Türkiye'nin başkenti neresidir?</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>Atatürk'ün tam adı nedir?</strong></p>
+            <div class="cizgi-satir"></div>
+        </div>
+    </div>
+
+    <!-- SAYFA 18: MİLLİ BAYRAMLARIMIZ -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2026</div>
+        <div class="baslik">
+            <h1>🎉 MİLLİ BAYRAMLARIMIZ</h1>
+            <p>Önemli Günler ve Bayramlar</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Öğretmen Notu:</strong> Milli bayramlar, ülkemiz için önemli günlerdir. Coşku ve heyecanla kutlarız.
+        </div>
+
+        <div class="baslik-kucuk">🇹🇷 Milli Bayramlarımız</div>
+
+        <div class="etkinlik-kutusu">
+            <div style="border-bottom: 3px solid #2196f3; padding: 20px; margin: 15px 0;">
+                <p style="font-size: 28px; font-weight: bold; color: #e30a17;">🎊 23 NİSAN</p>
+                <p style="font-size: 22px; margin-top: 10px;">Ulusal Egemenlik ve Çocuk Bayramı</p>
+                <p style="font-size: 18px; margin-top: 10px; color: #555;">TBMM'nin açılışı (1920)</p>
+            </div>
+
+            <div style="border-bottom: 3px solid #2196f3; padding: 20px; margin: 15px 0;">
+                <p style="font-size: 28px; font-weight: bold; color: #e30a17;">🏆 19 MAYIS</p>
+                <p style="font-size: 22px; margin-top: 10px;">Atatürk'ü Anma, Gençlik ve Spor Bayramı</p>
+                <p style="font-size: 18px; margin-top: 10px; color: #555;">Kurtuluş Savaşı'nın başlangıcı (1919)</p>
+            </div>
+
+            <div style="border-bottom: 3px solid #2196f3; padding: 20px; margin: 15px 0;">
+                <p style="font-size: 28px; font-weight: bold; color: #e30a17;">✌️ 30 AĞUSTOS</p>
+                <p style="font-size: 22px; margin-top: 10px;">Zafer Bayramı</p>
+                <p style="font-size: 18px; margin-top: 10px; color: #555;">Büyük Taarruz'un zaferi (1922)</p>
+            </div>
+
+            <div style="padding: 20px; margin: 15px 0;">
+                <p style="font-size: 28px; font-weight: bold; color: #e30a17;">🇹🇷 29 EKİM</p>
+                <p style="font-size: 22px; margin-top: 10px;">Cumhuriyet Bayramı</p>
+                <p style="font-size: 18px; margin-top: 10px; color: #555;">Cumhuriyetin ilanı (1923)</p>
+            </div>
+        </div>
+
+        <div class="baslik-kucuk">🎈 Diğer Önemli Günler</div>
+
+        <div class="saglik-kutu">
+            <p style="font-size: 20px; line-height: 2.5;">
+                📚 <strong>15 Temmuz:</strong> Demokrasi ve Milli Birlik Günü<br>
+                👨‍🏫 <strong>24 Kasım:</strong> Öğretmenler Günü<br>
+                🎓 <strong>14 Mart:</strong> Tıp Bayramı<br>
+                🌲 <strong>21 Mart:</strong> Ormanlar Haftası<br>
+                📖 <strong>Nisan:</strong> Kütüphane Haftası
+            </p>
+        </div>
+
+        <div class="baslik-kucuk">🎨 En Sevdiğim Bayram</div>
+
+        <div class="resim-alan">
+            🖼️ En sevdiğin bayramı çiz
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>En sevdiğim bayram ve nedeni:</strong></p>
+            <div class="cizgi-satir"></div>
+            <div class="cizgi-satir"></div>
+        </div>
+    </div>
+
+    <!-- SAYFA 19: GÜZEL DAVRANIŞLAR -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2026</div>
+        <div class="baslik">
+            <h1>😇 GÜZEL DAVRANIŞLAR</h1>
+            <p>Değerlerimiz ve Görgü Kuralları</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Öğretmen Notu:</strong> Güzel davranışlar toplumda huzurlu yaşamamızı sağlar. Saygılı ve nazik olmalıyız.
+        </div>
+
+        <div class="baslik-kucuk">🤝 Güzel Davranışlar</div>
+
+        <div class="saglik-kutu">
+            <p style="font-size: 22px; line-height: 2.5;">
+                ✅ <strong>Doğruluk:</strong> Her zaman doğru konuşurum<br>
+                ✅ <strong>Saygı:</strong> Büyüklerimi sayarım<br>
+                ✅ <strong>Sevgi:</strong> Herkese sevgiyle yaklaşırım<br>
+                ✅ <strong>Yardımseverlik:</strong> İhtiyacı olana yardım ederim<br>
+                ✅ <strong>Dürüstlük:</strong> Yalan söylemem<br>
+                ✅ <strong>Paylaşma:</strong> Eşyalarımı paylaşırım<br>
+                ✅ <strong>Sorumluluk:</strong> Görevlerimi yaparım<br>
+                ✅ <strong>Nezaket:</strong> Teşekkür eder, özür dilerim
+            </p>
+        </div>
+
+        <div class="baslik-kucuk">🗣️ Sihirli Kelimeler</div>
+
+        <div class="etkinlik-kutusu">
+            <p style="font-size: 28px; text-align: center; line-height: 2.5;">
+                <strong>LÜTFEN</strong> 🙏<br>
+                <strong>TEŞEKKÜR EDERİM</strong> 🙏<br>
+                <strong>ÖZÜR DİLERİM</strong> 🙇<br>
+                <strong>KUSURA BAKMAYIN</strong> 🤷<br>
+                <strong>AFEDERSINIZ</strong> 🙋<br>
+                <strong>HAYIRLI GÜNLER</strong> 👋<br>
+                <strong>AFİYET OLSUN</strong> 🍽️
+            </p>
+        </div>
+
+        <div class="baslik-kucuk">❌ Kötü Davranışlar</div>
+
+        <div class="tehlike-kutu">
+            <p style="font-size: 22px; line-height: 2.5;">
+                ❌ Yalan söylemek<br>
+                ❌ Kaba konuşmak<br>
+                ❌ Vurmak, itmek<br>
+                ❌ Hırsızlık yapmak<br>
+                ❌ Küfür etmek<br>
+                ❌ Başkalarını üzmek<br>
+                ❌ Bağırmak<br>
+                ❌ Saygısız davranmak
+            </p>
+        </div>
+
+        <div class="baslik-kucuk">📋 Görgü Kuralları</div>
+
+        <div class="saglik-kutu">
+            <p style="font-size: 20px; line-height: 2.5;">
+                ✅ Yemek yerken ağzımı kapalı çiğnerim<br>
+                ✅ Yaşlılara ve hamile kadınlara yer veririm<br>
+                ✅ Konuşurken sözümü kesenlere kızmam<br>
+                ✅ Sofrada ayağa kalkmam<br>
+                ✅ Hapşırırken ağzımı kapatırım<br>
+                ✅ İzinsiz başkasının eşyasını almam
+            </p>
+        </div>
+    </div>
+
+    <!-- SAYFA 20: GENEL TEKRAR -->
+    <div class="sayfa">
+        <div class="tarih">Tarih: ___/___/2026</div>
+        <div class="baslik">
+            <h1>🏆 GENEL TEKRAR</h1>
+            <p>Hayat Bilgisi Karışık Sorular</p>
+        </div>
+        
+        <div class="ad-soyad">Adı Soyadı: _________________________________</div>
+
+        <div class="bilgi-kutusu">
+            <strong>💡 Öğretmen Notu:</strong> Bu sayfada öğrendiklerimizi tekrar edelim.
+        </div>
+
+        <div class="baslik-kucuk">📝 Çoktan Seçmeli Sorular</div>
+
+        <div class="soru-kutusu">
+            <p><strong>1. Bir haftada kaç gün vardır?</strong></p>
+            <p style="margin-top: 10px; font-size: 20px;">
+                a) 5 gün □ &nbsp;&nbsp;&nbsp; b) 7 gün □ &nbsp;&nbsp;&nbsp; c) 10 gün □
+            </p>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>2. Türkiye'nin başkenti neresidir?</strong></p>
+            <p style="margin-top: 10px; font-size: 20px;">
+                a) İstanbul □ &nbsp;&nbsp;&nbsp; b) Ankara □ &nbsp;&nbsp;&nbsp; c) İzmir □
+            </p>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>3. Kırmızı ışık ne anlama gelir?</strong></p>
+            <p style="margin-top: 10px; font-size: 20px;">
+                a) Geç □ &nbsp;&nbsp;&nbsp; b) Dur □ &nbsp;&nbsp;&nbsp; c) Hazırlan □
+            </p>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>4. Aşağıdakilerden hangisi canlıdır?</strong></p>
+            <p style="margin-top: 10px; font-size: 20px;">
+                a) Taş □ &nbsp;&nbsp;&nbsp; b) Ağaç □ &nbsp;&nbsp;&nbsp; c) Su □
+            </p>
+        </div>
+
+        <div class="baslik-kucuk">✏️ Boşluk Doldurma</div>
+
+        <div class="soru-kutusu">
+            <p><strong>1. Bir yılda _______ ay vardır.</strong></p>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>2. Cumhuriyet Bayramı _______ tarihinde kutlanır.</strong></p>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>3. Görmemizi sağlayan duyu organımız _______ dir.</strong></p>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>4. Kar yağan mevsim _______ dir.</strong></p>
+        </div>
+
+        <div class="baslik-kucuk">✅ Doğru mu Yanlış mı?</div>
+
+        <div class="soru-kutusu">
+            <p><strong>1. Çevreyi kirletmek doğru bir davranıştır.</strong></p>
+            <p style="margin-top: 10px; font-size: 22px;">Doğru □ &nbsp;&nbsp;&nbsp; Yanlış □</p>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>2. Suyu tasarruflu kullanmalıyız.</strong></p>
+            <p style="margin-top: 10px; font-size: 22px;">Doğru □ &nbsp;&nbsp;&nbsp; Yanlış □</p>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>3. Kedi vahşi bir hayvandır.</strong></p>
+            <p style="margin-top: 10px; font-size: 22px;">Doğru □ &nbsp;&nbsp;&nbsp; Yanlış □</p>
+        </div>
+
+        <div class="soru-kutusu">
+            <p><strong>4. Büyüklerimize saygılı olmalıyız.</strong></p>
+            <p style="margin-top: 10px; font-size: 22px;">Doğru □ &nbsp;&nbsp;&nbsp; Yanlış □</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; padding: 20px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); border-radius: 15px;">
+            <p style="font-size: 30px; font-weight: bold; color: white;">
+                🎉 TEBRİKLER! 🎉<br>
+                <span style="font-size: 24px;">20 Sayfa Tamamlandı!</span>
+            </p>
+        </div>
+    </div>
+
+    <div class="no-print">
+        <button onclick="window.print()">🖨️ YAZDIR</button>
+        <p style="margin-top: 20px; color: white; font-size: 18px; text-align: center;">
+            ✅ <strong>20 Sayfa Tamamlandı!</strong><br>
+            👦 Ben Kimim, Ailem, Duygularım<br>
+            🏫 Okulumuz, Sağlıklı Yaşam, Vücut Organları<br>
+            ⏰ Zaman, Mevsimler, Trafik Güvenliği<br>
+            👨‍⚕️ Meslekler, Mahalle, Doğa ve Çevre<br>
+            🐾 Hayvanlar, Bitkiler, Su ve Hayat<br>
+            ⚠️ Doğal Afetler, Ülkem Türkiye<br>
+            🎉 Milli Bayramlar, Güzel Davranışlar<br>
+            🏆 Genel Tekrar
+        </p>
+    </div>
+
+</body>
+</html>
