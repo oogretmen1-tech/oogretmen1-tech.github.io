@@ -2,444 +2,583 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Deprem Çantası – Çalışma Sayfası</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deprem Çantası Oyunu</title>
+
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap');
+* {
+  box-sizing: border-box;
+}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #263238;
+  background:
+    radial-gradient(circle at top left, #ffe9a8 0, transparent 28%),
+    linear-gradient(135deg, #dff5ff, #fff8e1);
+}
 
-  body {
-    font-family: 'Nunito', sans-serif;
-    background: #fff;
+header {
+  text-align: center;
+  color: white;
+  padding: 30px 15px 45px;
+  background: linear-gradient(135deg, #123d63, #227ba8);
+  border-bottom-left-radius: 45px;
+  border-bottom-right-radius: 45px;
+}
+
+header h1 {
+  margin: 0 0 8px;
+  font-size: clamp(2rem, 6vw, 3.8rem);
+}
+
+header p {
+  margin: 5px;
+  font-size: 1.1rem;
+}
+
+.container {
+  width: min(1100px, 94%);
+  margin: -25px auto 40px;
+}
+
+.game-panel {
+  background: white;
+  border-radius: 25px;
+  padding: 20px;
+  box-shadow: 0 12px 30px #17324d30;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.score {
+  background: #ffd447;
+  color: #513e00;
+  padding: 11px 18px;
+  border-radius: 25px;
+  font-weight: bold;
+  font-size: 1.05rem;
+}
+
+.info {
+  background: #eaf7ff;
+  border-left: 6px solid #2694c8;
+  padding: 13px 16px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.game-area {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 25px;
+  align-items: start;
+}
+
+h2 {
+  color: #173b61;
+  margin-top: 0;
+}
+
+.items-area {
+  background: #f5fbff;
+  border: 2px dashed #83c7e8;
+  border-radius: 20px;
+  padding: 18px;
+}
+
+.items {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.item {
+  user-select: none;
+  cursor: grab;
+  min-height: 115px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 10px;
+  text-align: center;
+  background: white;
+  border: 3px solid #d8e9f2;
+  border-radius: 17px;
+  font-weight: bold;
+  transition: .2s;
+  touch-action: none;
+}
+
+.item:hover {
+  transform: translateY(-5px) rotate(-2deg);
+  border-color: #2694c8;
+  box-shadow: 0 8px 15px #2694c833;
+}
+
+.item:active {
+  cursor: grabbing;
+  transform: scale(.96);
+}
+
+.item .emoji {
+  font-size: 2.7rem;
+}
+
+.item.used {
+  opacity: .35;
+  cursor: default;
+  transform: none;
+  filter: grayscale(1);
+}
+
+.bag-area {
+  text-align: center;
+  min-height: 400px;
+  padding: 10px;
+}
+
+.bag {
+  position: relative;
+  width: min(360px, 90%);
+  min-height: 300px;
+  margin: 25px auto 15px;
+  padding: 70px 22px 20px;
+  border-radius: 35px 35px 55px 55px;
+  background: linear-gradient(145deg, #e84a4a, #a9162e);
+  border: 8px solid #7d1726;
+  box-shadow:
+    inset -15px -15px 0 #8d1728,
+    0 14px 20px #17324d44;
+  transition: .35s;
+}
+
+.bag::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -54px;
+  transform: translateX(-50%);
+  width: 135px;
+  height: 70px;
+  border: 15px solid #7d1726;
+  border-bottom: 0;
+  border-radius: 80px 80px 0 0;
+}
+
+.bag::after {
+  content: "DEPREM ÇANTASI";
+  position: absolute;
+  left: 50%;
+  top: 135px;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 1.05rem;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.bag.open {
+  transform: rotate(-2deg) scale(1.03);
+  background: linear-gradient(145deg, #f26055, #bb2139);
+  box-shadow:
+    inset -15px -15px 0 #9e1c30,
+    0 18px 28px #17324d55;
+}
+
+.bag.open::after {
+  content: "EŞYALARI BURAYA BIRAK!";
+  top: 135px;
+  font-size: .95rem;
+}
+
+.bag-content {
+  position: absolute;
+  inset: 180px 22px 18px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: center;
+  gap: 5px;
+  overflow-y: auto;
+  border-radius: 15px;
+}
+
+.inside-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 45px;
+  font-size: 1.8rem;
+  background: #fff8dd;
+  border-radius: 12px;
+  animation: pop .3s ease;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0) rotate(-20deg);
+  }
+  to {
+    transform: scale(1) rotate(0);
+  }
+}
+
+.drop-message {
+  color: white;
+  opacity: .9;
+  font-size: .85rem;
+  margin-top: 105px;
+}
+
+button {
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 18px;
+  color: white;
+  background: #173b61;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  margin: 5px;
+}
+
+button:hover {
+  background: #d83b4b;
+  transform: translateY(-2px);
+}
+
+#result {
+  min-height: 35px;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.tip {
+  color: #65747d;
+  font-size: .9rem;
+  text-align: center;
+}
+
+@media (max-width: 750px) {
+  .game-area {
+    grid-template-columns: 1fr;
   }
 
-  .page {
-    width: 210mm;
-    min-height: 297mm;
-    margin: 0 auto;
-    padding: 10mm 12mm;
-    background: #fff;
-    position: relative;
+  .bag-area {
+    order: -1;
   }
 
-  /* HEADER */
-  .header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: linear-gradient(135deg, #e8533a 0%, #c0392b 100%);
-    border-radius: 16px;
-    padding: 10px 16px;
-    margin-bottom: 10px;
-    color: white;
-  }
-  .header-icon { font-size: 38px; }
-  .header-text h1 {
-    font-family: 'Baloo 2', cursive;
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: 0.5px;
-  }
-  .header-text p {
-    font-size: 11px;
-    opacity: 0.9;
-    font-weight: 600;
+  .items {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  /* STUDENT BAR */
-  .student-bar {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 10px;
+  .bag {
+    min-height: 330px;
   }
-  .student-field {
-    flex: 1;
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
-    padding: 5px 10px;
-    font-size: 10px;
-    color: #888;
-    font-weight: 700;
-  }
-  .student-field span { display: block; border-bottom: 1.5px dashed #ccc; height: 16px; margin-top: 3px; }
+}
 
-  /* INTRO BOX */
-  .intro-box {
-    background: #fff8e1;
-    border-left: 5px solid #f9a825;
-    border-radius: 0 10px 10px 0;
-    padding: 7px 12px;
-    margin-bottom: 10px;
-    font-size: 11px;
-    font-weight: 700;
-    color: #5d4037;
-    line-height: 1.5;
-  }
-  .intro-box b { color: #e53935; }
-
-  /* SECTION TITLE */
-  .section-title {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    font-family: 'Baloo 2', cursive;
-    font-size: 13.5px;
-    font-weight: 800;
-    color: #c0392b;
-    margin-bottom: 7px;
-    padding-bottom: 4px;
-    border-bottom: 2.5px dashed #f4a09a;
-  }
-
-  /* MATERIALS GRID */
-  .materials-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-    margin-bottom: 10px;
-  }
-  .material-card {
-    border: 2.5px solid #e0e0e0;
-    border-radius: 12px;
-    padding: 6px 8px;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    background: #fafafa;
-    transition: all 0.2s;
-  }
-  .material-card .emoji { font-size: 22px; flex-shrink: 0; }
-  .material-card .info { flex: 1; }
-  .material-card .info .name {
-    font-weight: 800;
-    font-size: 10.5px;
-    color: #2c3e50;
-    line-height: 1.2;
-  }
-  .material-card .info .desc {
-    font-size: 9px;
-    color: #7f8c8d;
-    line-height: 1.3;
-    margin-top: 1px;
-  }
-  .material-card .check {
-    width: 18px;
-    height: 18px;
-    border: 2px solid #bdc3c7;
-    border-radius: 5px;
-    flex-shrink: 0;
-  }
-
-  /* COLOR-CODED CATEGORIES */
-  .cat-su { border-color: #2980b9; background: #ebf5fb; }
-  .cat-su .name { color: #1a5276; }
-  .cat-su .check { border-color: #2980b9; }
-
-  .cat-ilk { border-color: #e74c3c; background: #fdedec; }
-  .cat-ilk .name { color: #922b21; }
-  .cat-ilk .check { border-color: #e74c3c; }
-
-  .cat-belge { border-color: #8e44ad; background: #f5eef8; }
-  .cat-belge .name { color: #6c3483; }
-  .cat-belge .check { border-color: #8e44ad; }
-
-  .cat-gida { border-color: #27ae60; background: #eafaf1; }
-  .cat-gida .name { color: #1d8348; }
-  .cat-gida .check { border-color: #27ae60; }
-
-  .cat-isik { border-color: #f39c12; background: #fef9e7; }
-  .cat-isik .name { color: #9a6b00; }
-  .cat-isik .check { border-color: #f39c12; }
-
-  .cat-giysi { border-color: #16a085; background: #e8f8f5; }
-  .cat-giysi .name { color: #0e6655; }
-  .cat-giysi .check { border-color: #16a085; }
-
-  /* LEGEND */
-  .legend {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 10px;
-  }
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 9px;
-    font-weight: 700;
-  }
-  .legend-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 3px;
-  }
-
-  /* ACTIVITIES */
-  .activities-row {
-    display: grid;
+@media (max-width: 400px) {
+  .items {
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 10px;
+    gap: 7px;
   }
 
-  .activity-box {
-    border: 2.5px solid #e0e0e0;
-    border-radius: 12px;
-    padding: 8px 10px;
-    background: #f9f9f9;
-  }
-  .activity-box h3 {
-    font-family: 'Baloo 2', cursive;
-    font-size: 11px;
-    font-weight: 800;
-    color: #c0392b;
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
+  .item {
+    min-height: 100px;
+    font-size: .85rem;
   }
 
-  /* Q1 - sorting */
-  .sort-list { list-style: none; }
-  .sort-list li {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 9.5px;
-    font-weight: 700;
-    margin-bottom: 4px;
-    color: #2c3e50;
+  .item .emoji {
+    font-size: 2.2rem;
   }
-  .sort-list li span.tag {
-    display: inline-block;
-    width: 58px;
-    text-align: center;
-    padding: 2px 4px;
-    border-radius: 20px;
-    font-size: 8.5px;
-    font-weight: 800;
-    background: #ecf0f1;
-    border: 1.5px dashed #bdc3c7;
-  }
-
-  /* Q2 - true/false */
-  .tf-list { list-style: none; }
-  .tf-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 5px;
-    font-size: 9.5px;
-    font-weight: 600;
-    margin-bottom: 5px;
-    color: #2c3e50;
-    line-height: 1.4;
-  }
-  .tf-boxes {
-    display: flex;
-    gap: 3px;
-    flex-shrink: 0;
-  }
-  .tf-box {
-    width: 16px;
-    height: 16px;
-    border: 2px solid #bdc3c7;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 7px;
-    font-weight: 800;
-    color: #7f8c8d;
-  }
-  .tf-box.d { color: #27ae60; border-color: #27ae60; }
-  .tf-box.y { color: #e74c3c; border-color: #e74c3c; }
-
-  /* Q3 - write */
-  .write-area {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .write-line {
-    border-bottom: 1.5px dashed #bdc3c7;
-    height: 16px;
-    font-size: 9px;
-    color: #aaa;
-    padding-left: 2px;
-    font-weight: 600;
-  }
-
-  /* Q4 - draw */
-  .draw-box {
-    border: 2px dashed #bdc3c7;
-    border-radius: 8px;
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #ccc;
-    font-size: 9px;
-    font-weight: 700;
-    background: #fff;
-  }
-
-  /* FOOTER */
-  .footer {
-    border-top: 2px dashed #f4a09a;
-    padding-top: 6px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 9px;
-    color: #aaa;
-    font-weight: 700;
-  }
-  .footer .school { color: #c0392b; font-size: 10px; }
-
-  /* STARS */
-  .eval-stars {
-    display: flex;
-    gap: 3px;
-    align-items: center;
-  }
-  .star {
-    font-size: 16px;
-    color: #f0f0f0;
-  }
-
-  @media print {
-    body { margin: 0; }
-    .page { margin: 0; padding: 10mm 12mm; }
-    @page { size: A4; margin: 0; }
-  }
+}
 </style>
 </head>
+
 <body>
-<div class="page">
 
-  <!-- HEADER -->
-  <div class="header">
-    <div class="header-icon">🎒</div>
-    <div class="header-text">
-      <h1>DEPREM ÇANTASI – ÇALIŞMA SAYFASI</h1>
-      <p>Deprem öncesi hazırlık • 2. Sınıf Hayat Bilgisi</p>
-    </div>
-  </div>
+<header>
+  <h1>🎒 Deprem Çantası Oyunu</h1>
+  <p>Çantayı doğru eşyalarla doldurabilir misin?</p>
+  <p>Hazırlıklı olmak bizi daha güvende tutar!</p>
+</header>
 
-  <!-- STUDENT BAR -->
-  <div class="student-bar">
-    <div class="student-field">AD SOYAD <span></span></div>
-    <div class="student-field">TARİH <span></span></div>
-    <div class="student-field">SINIF <span></span></div>
-  </div>
+<div class="container">
+  <div class="game-panel">
 
-  <!-- INTRO -->
-  <div class="intro-box">
-    🏠 Depremler aniden olabilir. Bu yüzden her ailede hazır bir <b>deprem çantası</b> bulunmalıdır.
-    Deprem çantası, deprem sonrasında 72 saat (3 gün) ihtiyacımızı karşılayacak malzemeleri içermelidir.
-  </div>
+    <div class="topbar">
+      <div class="score">
+        ⭐ Puan: <span id="score">0</span>
+      </div>
 
-  <!-- MATERIALS LIST -->
-  <div class="section-title">
-    📋 Deprem Çantasında Bulunması Gereken Malzemeler
-    <span style="margin-left:auto;font-size:10px;color:#888;font-weight:600;">✅ Öğrendiklerini işaretle!</span>
-  </div>
-
-  <!-- LEGEND -->
-  <div class="legend">
-    <div class="legend-item"><div class="legend-dot" style="background:#2980b9"></div> Su & Gıda</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#e74c3c"></div> İlk Yardım</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#8e44ad"></div> Belgeler</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#27ae60"></div> Hazır Gıda</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#f39c12"></div> Işık & Haberleşme</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#16a085"></div> Giysi & Diğer</div>
-  </div>
-
-  <div class="materials-grid">
-    <!-- SU & GIDA -->
-    <div class="material-card cat-su"><div class="emoji">💧</div><div class="info"><div class="name">Su</div><div class="desc">Kişi başı günlük 2 litre, 3 günlük stok</div></div><div class="check"></div></div>
-    <div class="material-card cat-gida"><div class="emoji">🥫</div><div class="info"><div class="name">Konserve & Kuru Gıda</div><div class="desc">Bisküvi, kuru meyve, çikolata, konserve</div></div><div class="check"></div></div>
-    <div class="material-card cat-gida"><div class="emoji">🥄</div><div class="info"><div class="name">Kapkacak & Çatal-Kaşık</div><div class="desc">Plastik tabak, bardak, çatal-kaşık</div></div><div class="check"></div></div>
-
-    <!-- İLK YARDIM -->
-    <div class="material-card cat-ilk"><div class="emoji">🩹</div><div class="info"><div class="name">İlk Yardım Çantası</div><div class="desc">Sargı, yara bandı, antiseptik, ağrı kesici</div></div><div class="check"></div></div>
-    <div class="material-card cat-ilk"><div class="emoji">💊</div><div class="info"><div class="name">İlaçlar</div><div class="desc">Kullandığınız ilaçların en az 1 haftalık stoğu</div></div><div class="check"></div></div>
-    <div class="material-card cat-ilk"><div class="emoji">😷</div><div class="info"><div class="name">Maske & Eldiven</div><div class="desc">Toz maskesi ve tek kullanımlık eldiven</div></div><div class="check"></div></div>
-
-    <!-- BELGELER -->
-    <div class="material-card cat-belge"><div class="emoji">🪪</div><div class="info"><div class="name">Kimlik & Belgeler</div><div class="desc">Kimlik, pasaport, sigorta belgeleri (kopya)</div></div><div class="check"></div></div>
-    <div class="material-card cat-belge"><div class="emoji">📒</div><div class="info"><div class="name">Acil İletişim Listesi</div><div class="desc">Önemli telefon numaraları yazılı kağıt</div></div><div class="check"></div></div>
-    <div class="material-card cat-belge"><div class="emoji">💰</div><div class="info"><div class="name">Nakit Para</div><div class="desc">Küçük banknot ve bozuk para</div></div><div class="check"></div></div>
-
-    <!-- IŞIK & HABERLEŞME -->
-    <div class="material-card cat-isik"><div class="emoji">🔦</div><div class="info"><div class="name">El Feneri & Pil</div><div class="desc">Yedek pillerle birlikte el feneri</div></div><div class="check"></div></div>
-    <div class="material-card cat-isik"><div class="emoji">📻</div><div class="info"><div class="name">Pilli Radyo</div><div class="desc">Acil yayınları takip etmek için</div></div><div class="check"></div></div>
-    <div class="material-card cat-isik"><div class="emoji">🔋</div><div class="info"><div class="name">Taşınabilir Şarj Aleti</div><div class="desc">Telefon için powerbank veya yedek pil</div></div><div class="check"></div></div>
-
-    <!-- GİYSİ & DİĞER -->
-    <div class="material-card cat-giysi"><div class="emoji">🧥</div><div class="info"><div class="name">Yedek Giysiler</div><div class="desc">Mevsime uygun kıyafet ve iç çamaşır</div></div><div class="check"></div></div>
-    <div class="material-card cat-giysi"><div class="emoji">🧲</div><div class="info"><div class="name">Düdük & Ayna</div><div class="desc">Altında kalmada kurtarıcıyı uyarmak için</div></div><div class="check"></div></div>
-    <div class="material-card cat-giysi"><div class="emoji">🧻</div><div class="info"><div class="name">Kişisel Bakım & Hijyen</div><div class="desc">Tuvalet kağıdı, ıslak mendil, sabun</div></div><div class="check"></div></div>
-  </div>
-
-  <!-- ACTIVITIES -->
-  <div class="activities-row">
-
-    <!-- Q1 -->
-    <div class="activity-box">
-      <h3>🔎 1. Hangisi deprem çantasına GİRMEZ? Yanlış olanı bul ve üzerini çiz.</h3>
-      <ul class="sort-list">
-        <li>🔦 El feneri <span class="tag">Girer / Girmez</span></li>
-        <li>📺 Televizyon <span class="tag">Girer / Girmez</span></li>
-        <li>💧 Su <span class="tag">Girer / Girmez</span></li>
-        <li>🛋️ Koltuk <span class="tag">Girer / Girmez</span></li>
-        <li>🩹 Yara bandı <span class="tag">Girer / Girmez</span></li>
-        <li>🎮 Oyun konsolu <span class="tag">Girer / Girmez</span></li>
-      </ul>
-    </div>
-
-    <!-- Q2 -->
-    <div class="activity-box">
-      <h3>✅ 2. Doğru mu, Yanlış mı? Kutucukları işaretle.</h3>
-      <ul class="tf-list">
-        <li><div class="tf-boxes"><div class="tf-box d">D</div><div class="tf-box y">Y</div></div> Deprem çantası kapının yanına konulmalıdır.</li>
-        <li><div class="tf-boxes"><div class="tf-box d">D</div><div class="tf-box y">Y</div></div> Çantada en az 3 günlük su bulundurulmalıdır.</li>
-        <li><div class="tf-boxes"><div class="tf-box d">D</div><div class="tf-box y">Y</div></div> Çantaya süt ağırlıklı taze gıdalar koyulmalıdır.</li>
-        <li><div class="tf-boxes"><div class="tf-box d">D</div><div class="tf-box y">Y</div></div> Önemli belgeler çantaya konulabilir.</li>
-        <li><div class="tf-boxes"><div class="tf-box d">D</div><div class="tf-box y">Y</div></div> Çantanın her yıl kontrol edilmesi gerekir.</li>
-      </ul>
-    </div>
-
-    <!-- Q3 -->
-    <div class="activity-box">
-      <h3>✏️ 3. Ailende deprem çantası var mı? Anlat!</h3>
-      <div class="write-area">
-        <div class="write-line"></div>
-        <div class="write-line"></div>
-        <div class="write-line"></div>
-        <div class="write-line"></div>
-        <div class="write-line"></div>
+      <div>
+        <button onclick="openBag()">🎒 Çantayı Aç</button>
+        <button onclick="resetGame()">🔄 Yeniden Başla</button>
       </div>
     </div>
 
-    <!-- Q4 -->
-    <div class="activity-box">
-      <h3>🎨 4. Deprem çantasına koymak istediğin 3 şeyi çiz!</h3>
-      <div class="draw-box">✏️ Buraya çiz</div>
+    <div class="info">
+      <strong>Nasıl oynanır?</strong>
+      Önce çantaya tıkla. Daha sonra doğru eşyaları fareyle sürükleyip
+      çantanın içine bırak. Telefonda oynuyorsan eşyanın üzerine dokunman yeterlidir.
     </div>
 
-  </div>
+    <div class="game-area">
 
-  <!-- FOOTER -->
-  <div class="footer">
-    <div class="school">🏫 Tatlıca İlkokulu • Şanlıurfa</div>
-    <div class="eval-stars">
-      Değerlendirme: <span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span>
+      <div class="items-area">
+        <h2>🧰 Eşyaları Seç</h2>
+        <p>Deprem çantasına koyulması gereken eşyaları bul.</p>
+
+        <div class="items">
+
+          <div class="item" draggable="true"
+               data-name="Su" data-correct="true">
+            <div class="emoji">💧</div>
+            <span>Su</span>
+          </div>
+
+          <div class="item" draggable="true"
+               data-name="El feneri" data-correct="true">
+            <div class="emoji">🔦</div>
+            <span>El feneri</span>
+          </div>
+
+          <div class="item" draggable="true"
+               data-name="Düdük" data-correct="true">
+            <div class="emoji">📣</div>
+            <span>Düdük</span>
+          </div>
+
+          <div class="item" draggable="true"
+               data-name="İlk yardım çantası" data-correct="true">
+            <div class="emoji">🩹</div>
+            <span>İlk yardım</span>
+          </div>
+
+          <div class="item" draggable="true"
+               data-name="Paketli yiyecek" data-correct="true">
+            <div class="emoji">🥫</div>
+            <span>Paketli yiyecek</span>
+          </div>
+
+          <div class="item" draggable="true"
+               data-name="Battaniye" data-correct="true">
+            <div class="emoji">🧣</div>
+            <span>Battaniye</span>
+          </div>
+
+          <div class="item" draggable="true"
+               data-name="Oyuncak araba" data-correct="false">
+            <div class="emoji">🚗</div>
+            <span>Oyuncak araba</span>
+          </div>
+
+          <div class="item" draggable="true"
+               data-name="Cam vazo" data-correct="false">
+            <div class="emoji">🏺</div>
+            <span>Cam vazo</span>
+          </div>
+
+          <div class="item" draggable="true"
+               data-name="Televizyon" data-correct="false">
+            <div class="emoji">📺</div>
+            <span>Televizyon</span>
+          </div>
+
+          <div class="item" draggable="true"
+               data-name="Bisiklet" data-correct="false">
+            <div class="emoji">🚲</div>
+            <span>Bisiklet</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="bag-area">
+        <h2>🎒 Deprem Çantası</h2>
+
+        <div id="bag" class="bag">
+          <div id="bagContent" class="bag-content"></div>
+          <div id="dropMessage" class="drop-message">
+            Çantayı açmak için tıkla
+          </div>
+        </div>
+
+        <p class="tip">
+          Doğru eşyalar +10 puan, gereksiz eşyalar -5 puan
+        </p>
+
+        <p id="result"></p>
+
+        <button onclick="finishGame()">✅ Oyunu Bitir</button>
+      </div>
+
     </div>
-    <div>Öğretmen: Hasan Tutuş</div>
   </div>
-
 </div>
+
+<script>
+let score = 0;
+let bagOpen = false;
+let addedItems = [];
+
+const bag = document.getElementById("bag");
+const bagContent = document.getElementById("bagContent");
+const dropMessage = document.getElementById("dropMessage");
+const scoreText = document.getElementById("score");
+const result = document.getElementById("result");
+
+function openBag() {
+  bagOpen = true;
+  bag.classList.add("open");
+  dropMessage.textContent = "Eşyaları buraya bırak!";
+  result.textContent = "Çanta açıldı. Doğru eşyaları seç!";
+  result.style.color = "#173b61";
+}
+
+bag.addEventListener("click", function() {
+  openBag();
+});
+
+document.querySelectorAll(".item").forEach(function(item) {
+
+  item.addEventListener("dragstart", function(event) {
+    if (!bagOpen || item.classList.contains("used")) {
+      event.preventDefault();
+      return;
+    }
+
+    event.dataTransfer.setData("text/plain", item.dataset.name);
+    event.dataTransfer.setData("correct", item.dataset.correct);
+    event.dataTransfer.setData("emoji", item.querySelector(".emoji").textContent);
+  });
+
+  item.addEventListener("click", function(event) {
+    if (!bagOpen) {
+      openBag();
+      result.textContent = "Çanta açıldı! Şimdi eşyaya tekrar dokun.";
+      return;
+    }
+
+    if (!item.classList.contains("used")) {
+      addItem(
+        item.dataset.name,
+        item.dataset.correct === "true",
+        item.querySelector(".emoji").textContent,
+        item
+      );
+    }
+  });
+});
+
+bag.addEventListener("dragover", function(event) {
+  if (bagOpen) {
+    event.preventDefault();
+    bag.style.transform = "scale(1.05) rotate(2deg)";
+  }
+});
+
+bag.addEventListener("dragleave", function() {
+  bag.style.transform = "";
+});
+
+bag.addEventListener("drop", function(event) {
+  event.preventDefault();
+  bag.style.transform = "";
+
+  if (!bagOpen) {
+    openBag();
+    return;
+  }
+
+  const name = event.dataTransfer.getData("text/plain");
+  const correct = event.dataTransfer.getData("correct") === "true";
+  const emoji = event.dataTransfer.getData("emoji");
+
+  const item = [...document.querySelectorAll(".item")]
+    .find(x => x.dataset.name === name);
+
+  if (item) {
+    addItem(name, correct, emoji, item);
+  }
+});
+
+function addItem(name, correct, emoji, itemElement) {
+  if (addedItems.includes(name)) return;
+
+  addedItems.push(name);
+  itemElement.classList.add("used");
+
+  const insideItem = document.createElement("div");
+  insideItem.className = "inside-item";
+  insideItem.textContent = emoji;
+  insideItem.title = name;
+  bagContent.appendChild(insideItem);
+
+  if (correct) {
+    score += 10;
+    result.textContent = "✅ Harika! " + name + " çantaya eklendi.";
+    result.style.color = "#26934c";
+  } else {
+    score -= 5;
+    result.textContent = "⚠️ " + name + " deprem çantası için gerekli değil.";
+    result.style.color = "#d83b4b";
+  }
+
+  scoreText.textContent = score;
+}
+
+function finishGame() {
+  const correctItems = document.querySelectorAll(
+    '.item[data-correct="true"].used'
+  ).length;
+
+  if (correctItems === 6) {
+    result.textContent =
+      "🎉 Mükemmel! Deprem çantanı doğru eşyalarla hazırladın!";
+    result.style.color = "#26934c";
+  } else if (correctItems >= 4) {
+    result.textContent =
+      "👏 Çok güzel! Birkaç doğru eşyayı daha bulabilirsin.";
+    result.style.color = "#b27600";
+  } else {
+    result.textContent =
+      "📘 Çantayı biraz daha dikkatli hazırlamayı dene.";
+    result.style.color = "#d83b4b";
+  }
+}
+
+function resetGame() {
+  score = 0;
+  bagOpen = false;
+  addedItems = [];
+
+  scoreText.textContent = "0";
+  result.textContent = "";
+  bag.classList.remove("open");
+  bag.style.transform = "";
+  dropMessage.textContent = "Çantayı açmak için tıkla";
+  bagContent.innerHTML = "";
+
+  document.querySelectorAll(".item").forEach(function(item) {
+    item.classList.remove("used");
+  });
+}
+</script>
+
 </body>
 </html>
+
