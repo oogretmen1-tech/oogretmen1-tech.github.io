@@ -704,3 +704,689 @@ function panoYazdir(id){
 </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>29 Ekim Cumhuriyet Bayramı Pano Çalışması</title>
+
+  <style>
+    :root {
+      --kirmizi: #e30a17;
+      --koyu-kirmizi: #ae0711;
+      --lacivert: #17233d;
+      --krem: #fff9ed;
+      --altin: #f1bd3d;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: #e8ebf0;
+      color: #1f2937;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 12px;
+      text-align: center;
+      background: var(--lacivert);
+    }
+
+    button {
+      margin: 3px;
+      padding: 10px 18px;
+      border: 0;
+      border-radius: 24px;
+      cursor: pointer;
+      color: white;
+      background: var(--kirmizi);
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    button.secondary {
+      color: var(--lacivert);
+      background: white;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 15px auto;
+      padding: 13mm;
+      position: relative;
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 3px 18px rgba(0,0,0,.18);
+      page-break-after: always;
+    }
+
+    .top-line {
+      height: 12px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: var(--kirmizi);
+    }
+
+    h1 {
+      margin: 10px 0 8px;
+      color: var(--kirmizi);
+      text-align: center;
+      font-size: 34px;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      color: var(--kirmizi);
+      border-bottom: 3px solid var(--kirmizi);
+      padding-bottom: 6px;
+      font-size: 23px;
+    }
+
+    h3 {
+      margin: 0 0 7px;
+      color: var(--lacivert);
+      font-size: 18px;
+    }
+
+    p, li {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .center { text-align: center; }
+
+    .footer {
+      position: absolute;
+      bottom: 7mm;
+      left: 13mm;
+      right: 13mm;
+      display: flex;
+      justify-content: space-between;
+      padding-top: 3mm;
+      border-top: 1px solid #ddd;
+      color: #6b7280;
+      font-size: 10px;
+    }
+
+    /* Kapak */
+    .cover {
+      min-height: 267mm;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at 15% 15%, #fff0b8 0 4px, transparent 5px),
+        radial-gradient(circle at 85% 18%, #fff0b8 0 4px, transparent 5px),
+        linear-gradient(145deg, #ffffff, #fff1f1);
+    }
+
+    .cover h1 {
+      font-size: 39px;
+      margin: 5px;
+    }
+
+    .date-badge {
+      background: var(--kirmizi);
+      color: white;
+      font-size: 26px;
+      font-weight: bold;
+      padding: 8px 28px;
+      border-radius: 12px;
+      transform: rotate(-2deg);
+      margin-bottom: 10px;
+    }
+
+    .cover-subtitle {
+      color: var(--lacivert);
+      font-size: 19px;
+      font-weight: bold;
+      text-align: center;
+      margin: 5px 0 15px;
+    }
+
+    .atatürk-photo {
+      width: 72mm;
+      max-height: 123mm;
+      object-fit: cover;
+      object-position: center top;
+      border: 8px solid white;
+      outline: 4px solid var(--kirmizi);
+      box-shadow: 0 8px 18px rgba(0,0,0,.28);
+    }
+
+    .cover-quote {
+      width: 150mm;
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 12px;
+      background: white;
+      color: var(--lacivert);
+      font-size: 17px;
+      font-weight: bold;
+      text-align: center;
+      border: 2px solid var(--altin);
+    }
+
+    /* Bilgi kartları */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9mm;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6mm;
+    }
+
+    .card {
+      padding: 12px;
+      border: 2px solid #e3e6ea;
+      border-radius: 14px;
+      background: white;
+    }
+
+    .card.red {
+      background: var(--kirmizi);
+      border-color: var(--kirmizi);
+      color: white;
+    }
+
+    .card.red h3 { color: white; }
+
+    .card.yellow {
+      background: #fff5cf;
+      border-color: var(--altin);
+    }
+
+    .card.blue {
+      background: #edf5ff;
+      border-color: #9dc3e8;
+    }
+
+    blockquote {
+      margin: 9mm 0;
+      padding: 13px 17px;
+      color: #5b4306;
+      background: #fff7d8;
+      border-left: 7px solid var(--altin);
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    cite {
+      display: block;
+      margin-top: 7px;
+      text-align: right;
+      color: #705d25;
+      font-size: 12px;
+      font-style: normal;
+    }
+
+    /* Zaman çizelgesi */
+    .timeline {
+      margin: 7mm 0 0 8mm;
+      padding-left: 9mm;
+      border-left: 5px solid var(--kirmizi);
+    }
+
+    .event {
+      position: relative;
+      margin-bottom: 9mm;
+    }
+
+    .event::before {
+      content: "";
+      width: 13px;
+      height: 13px;
+      position: absolute;
+      top: 3px;
+      left: -16.5mm;
+      border: 3px solid var(--kirmizi);
+      border-radius: 50%;
+      background: var(--altin);
+    }
+
+    .date {
+      color: var(--kirmizi);
+      font-size: 17px;
+      font-weight: bold;
+    }
+
+    /* Görsel / boyama sayfası */
+    .coloring-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .coloring-page h1 {
+      margin-top: 12mm;
+      font-size: 30px;
+    }
+
+    .coloring-image {
+      display: block;
+      max-width: 174mm;
+      max-height: 222mm;
+      object-fit: contain;
+      margin: 5mm auto;
+      border: 2px solid #202020;
+      box-shadow: 0 2px 7px rgba(0,0,0,.15);
+    }
+
+    .coloring-note {
+      max-width: 172mm;
+      padding: 10px 15px;
+      color: var(--lacivert);
+      text-align: center;
+      font-size: 15px;
+      font-weight: bold;
+      background: #fff5cf;
+      border: 2px dashed var(--kirmizi);
+      border-radius: 12px;
+    }
+
+    .name-line {
+      width: 160mm;
+      margin-top: 7mm;
+      padding: 6px;
+      border-bottom: 2px dashed #777;
+      font-size: 14px;
+    }
+
+    @media screen and (max-width: 850px) {
+      .page {
+        width: 100%;
+        min-height: auto;
+        margin: 0 0 12px;
+        padding: 24px;
+      }
+
+      .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .cover h1 { font-size: 29px; }
+      .atatürk-photo { width: 80%; }
+      .coloring-image { width: 100%; }
+    }
+
+    @media print {
+      body { background: white; }
+      .toolbar { display: none; }
+
+      .page {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0;
+        box-shadow: none;
+      }
+
+      @page {
+        size: A4;
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="toolbar">
+    <button onclick="window.print()">🖨 Yazdır / PDF Kaydet</button>
+    <button class="secondary" onclick="downloadHTML()">⬇ HTML Dosyasını İndir</button>
+  </div>
+
+  <!-- 1. SAYFA: KAPAK -->
+  <section class="page">
+    <div class="top-line"></div>
+
+    <div class="cover">
+      <div class="date-badge">29 EKİM</div>
+      <h1>Cumhuriyet Bayramı</h1>
+      <div class="cover-subtitle">
+        Yaşasın Cumhuriyet!<br>
+        Yaşasın Türkiye!
+      </div>
+
+      <!-- Yüklediğiniz Atatürk ve Türk Bayrağı fotoğrafı -->
+      <img
+        class="atatürk-photo"
+        src="https://ai-seek-user-image.s3.us-east-1.amazonaws.com/202608/21/7a98f99bd6c843ee9e82a36c05756914xbg0.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4MTWODAZEP5GANEB%2F20260822%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260822T101007Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=e6062d6c7ba3aa8ca316a5e1a514db304d62c95de5ad0a6e8aeda143d79521dd"
+        alt="Mustafa Kemal Atatürk ve Türk Bayrağı">
+
+      <div class="cover-quote">
+        “Cumhuriyeti biz kurduk; onu yükseltecek ve yaşatacak sizlersiniz.”
+        <br><small>Mustafa Kemal Atatürk</small>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>29 Ekim Cumhuriyet Bayramı Pano Çalışması</span>
+      <span>1</span>
+    </div>
+  </section>
+
+  <!-- 2. SAYFA: CUMHURİYET NEDİR? -->
+  <section class="page">
+    <div class="top-line"></div>
+    <h1>Cumhuriyet Nedir?</h1>
+
+    <p class="center">
+      <strong>Cumhuriyet, milletin kendi geleceği hakkında söz sahibi olmasıdır.</strong>
+    </p>
+
+    <div class="grid-2" style="margin-top: 8mm;">
+      <div class="card red">
+        <h3>🇹🇷 Cumhuriyet</h3>
+        <p>
+          Cumhuriyet; yönetimde sözün millete ait olduğu yönetim biçimidir.
+          İnsanlar, kendilerini yönetecek kişileri seçimle belirler.
+        </p>
+        <p>
+          Türkiye Cumhuriyeti, 29 Ekim 1923 tarihinde Mustafa Kemal Atatürk
+          tarafından ilan edilmiştir.
+        </p>
+      </div>
+
+      <div class="card yellow">
+        <h3>🌟 Çocukların Diliyle</h3>
+        <p>Cumhuriyet demek:</p>
+        <ul>
+          <li>Özgürce düşünmek,</li>
+          <li>Okula gidebilmek,</li>
+          <li>Hayal kurabilmek,</li>
+          <li>Çalışıp başarılı olmak,</li>
+          <li>Ülkemizi çok sevmek demektir.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>Cumhuriyetin Kazanımları</h2>
+
+    <div class="grid-3">
+      <div class="card blue">
+        <h3>Milli Egemenlik</h3>
+        <p>Ülkeyi ilgilendiren konularda milletin sözü önemlidir.</p>
+      </div>
+
+      <div class="card blue">
+        <h3>Eğitim Hakkı</h3>
+        <p>Kız ve erkek tüm çocukların eğitim alması çok değerlidir.</p>
+      </div>
+
+      <div class="card blue">
+        <h3>Eşitlik</h3>
+        <p>Herkesin kanun önünde eşit olması hedeflenir.</p>
+      </div>
+
+      <div class="card blue">
+        <h3>Bilim ve Akıl</h3>
+        <p>Ülkemizin gelişmesinde bilim, sanat ve akıl yol gösterir.</p>
+      </div>
+
+      <div class="card blue">
+        <h3>Hak ve Özgürlükler</h3>
+        <p>İnsanların haklarına saygı duyulur, sorumluluk bilinci gelişir.</p>
+      </div>
+
+      <div class="card blue">
+        <h3>Çağdaş Türkiye</h3>
+        <p>Türkiye’nin her alanda ilerlemesi amaçlanır.</p>
+      </div>
+    </div>
+
+    <blockquote>
+      “Egemenlik kayıtsız şartsız milletindir.”
+      <cite>Mustafa Kemal Atatürk</cite>
+    </blockquote>
+
+    <div class="footer">
+      <span>29 Ekim Cumhuriyet Bayramı Pano Çalışması</span>
+      <span>2</span>
+    </div>
+  </section>
+
+  <!-- 3. SAYFA: NASIL KAZANILDI? -->
+  <section class="page">
+    <div class="top-line"></div>
+    <h1>Cumhuriyet Nasıl Kazanıldı?</h1>
+
+    <p class="center">
+      Cumhuriyetimiz, milletimizin bağımsızlık için verdiği büyük mücadelenin
+      ardından ilan edilmiştir.
+    </p>
+
+    <div class="timeline">
+      <div class="event">
+        <div class="date">19 Mayıs 1919</div>
+        <p>Mustafa Kemal Atatürk Samsun’a çıktı ve Millî Mücadele başladı.</p>
+      </div>
+
+      <div class="event">
+        <div class="date">23 Nisan 1920</div>
+        <p>Türkiye Büyük Millet Meclisi açıldı. Millet, temsilcileriyle yönetimde söz sahibi oldu.</p>
+      </div>
+
+      <div class="event">
+        <div class="date">1920 – 1922</div>
+        <p>Milletimiz, Kurtuluş Savaşı’nda büyük fedakârlıklarla bağımsızlığı için mücadele etti.</p>
+      </div>
+
+      <div class="event">
+        <div class="date">29 Ekim 1923</div>
+        <p><strong>Cumhuriyet ilan edildi.</strong> Mustafa Kemal Atatürk, ilk Cumhurbaşkanımız oldu.</p>
+      </div>
+    </div>
+
+    <h2>Cumhuriyet Dönemindeki Yenilikler</h2>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>📚 Eğitim</h3>
+        <p>Yeni okullar açıldı, eğitimde birlik sağlandı ve öğrenmeye önem verildi.</p>
+      </div>
+
+      <div class="card">
+        <h3>🔤 Yeni Türk Harfleri</h3>
+        <p>Okuma yazmayı kolaylaştırmak için yeni Türk alfabesi kabul edildi.</p>
+      </div>
+
+      <div class="card">
+        <h3>👩 Kadın Hakları</h3>
+        <p>Kadınların eğitim, çalışma ve yönetime katılma hakları güçlendirildi.</p>
+      </div>
+
+      <div class="card">
+        <h3>🎨 Sanat ve Spor</h3>
+        <p>Sanata, kültüre ve spora önem verilerek ülkenin gelişmesi desteklendi.</p>
+      </div>
+    </div>
+
+    <blockquote>
+      “Bütün ümidim gençliktedir.”
+      <cite>Mustafa Kemal Atatürk</cite>
+    </blockquote>
+
+    <div class="footer">
+      <span>29 Ekim Cumhuriyet Bayramı Pano Çalışması</span>
+      <span>3</span>
+    </div>
+  </section>
+
+  <!-- 4. SAYFA: ŞİİR VE SÖZLER -->
+  <section class="page">
+    <div class="top-line"></div>
+    <h1>Yaşasın Cumhuriyet!</h1>
+
+    <div class="grid-2" style="margin-top: 8mm;">
+      <div class="card red">
+        <h3>🎈 Cumhuriyet Şiiri</h3>
+        <p style="font-size:16px; line-height:1.7;">
+          Bayrağım gökte dalgalanır,<br>
+          Kalbimiz sevgiyle çarpar.<br>
+          Atatürk’ün armağanı,<br>
+          Cumhuriyet hep yaşar!<br><br>
+
+          Okuruz, çalışırız,<br>
+          Aydınlığa koşarız.<br>
+          Yirmi Dokuz Ekim’de,<br>
+          Sevinçle coşarız!
+        </p>
+      </div>
+
+      <div class="card yellow">
+        <h3>💬 Cumhuriyet Sözleri</h3>
+        <p>• Cumhuriyet, özgür düşünen çocukların ışığıdır.</p>
+        <p>• Bayrağımız, bağımsızlığımızın gururudur.</p>
+        <p>• Bugünün çocukları, yarının güçlü Türkiye’sidir.</p>
+        <p>• Vatan sevgisi çalışmakla ve üretmekle büyür.</p>
+        <p>• Cumhuriyetimize sahip çıkmak hepimizin görevidir.</p>
+      </div>
+    </div>
+
+    <h2 style="margin-top: 10mm;">29 Ekim Şenlik Fikirleri</h2>
+
+    <div class="grid-3">
+      <div class="card blue">
+        <h3>🎤 Şiir Okuma</h3>
+        <p>Öğrenciler Cumhuriyet şiirlerini sırayla okuyabilir.</p>
+      </div>
+
+      <div class="card blue">
+        <h3>🎨 Resim Sergisi</h3>
+        <p>Boyama sayfaları ve Cumhuriyet resimleri panoda sergilenebilir.</p>
+      </div>
+
+      <div class="card blue">
+        <h3>🎵 Şarkılar</h3>
+        <p>Marşlar ve Cumhuriyet şarkıları hep birlikte söylenebilir.</p>
+      </div>
+    </div>
+
+    <blockquote>
+      “Türk milletinin karakterine ve adetlerine en uygun olan idare, cumhuriyet idaresidir.”
+      <cite>Mustafa Kemal Atatürk</cite>
+    </blockquote>
+
+    <div class="footer">
+      <span>29 Ekim Cumhuriyet Bayramı Pano Çalışması</span>
+      <span>4</span>
+    </div>
+  </section>
+
+  <!-- 5. SAYFA: BAYRAK BOYAMA -->
+  <section class="page coloring-page">
+    <div class="top-line"></div>
+    <h1>Türk Bayrağı Boyama Etkinliği</h1>
+
+    <img
+      class="coloring-image"
+      src="https://ai-seek-user-image.s3.us-east-1.amazonaws.com/202608/22/a8c5e74c22904bfa86825d6a90006d9dkql0.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4MTWODAZEP5GANEB%2F20260822%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260822T101007Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=710cce6448b19d061f5bd9cd975686b35b363bcc7f2a47857d5dec5c551dc185"
+      alt="Türk Bayrağı Boyama Etkinliği">
+
+    <div class="coloring-note">
+      Bayrağın zeminini kırmızıya, ay ve yıldızı beyaza boya.
+    </div>
+
+    <div class="footer">
+      <span>29 Ekim Boyama Etkinliği</span>
+      <span>5</span>
+    </div>
+  </section>
+
+  <!-- 6. SAYFA: ÇOCUKLARLA BOYAMA -->
+  <section class="page coloring-page">
+    <div class="top-line"></div>
+    <h1>Cumhuriyet Bayramı Kutlu Olsun</h1>
+
+    <img
+      class="coloring-image"
+      src="https://ai-seek-user-image.s3.us-east-1.amazonaws.com/202608/22/a8c5e74c22904bfa86825d6a90006d9dkon0.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4MTWODAZEP5GANEB%2F20260822%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260822T101007Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=9b639d9322154fabc0498a1d2de9a74a9e514d7023c4ff78134c7cad1b933060"
+      alt="Cumhuriyet Bayramı çocuklar boyama çalışması">
+
+    <div class="coloring-note">
+      Çocukların kıyafetlerini, bayrakları ve süsleri istediğin renklerle boya.
+    </div>
+
+    <div class="footer">
+      <span>29 Ekim Boyama Etkinliği</span>
+      <span>6</span>
+    </div>
+  </section>
+
+  <!-- 7. SAYFA: ATATÜRK MANDALA BOYAMA -->
+  <section class="page coloring-page">
+    <div class="top-line"></div>
+    <h1>Yaşasın Cumhuriyet</h1>
+
+    <img
+      class="coloring-image"
+      src="https://ai-seek-user-image.s3.us-east-1.amazonaws.com/202608/22/a8c5e74c22904bfa86825d6a90006d9dmlb0.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4MTWODAZEP5GANEB%2F20260822%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260822T101007Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=ad1a0dcef0d9174e7884eb3be63a3ced9fb2c859fe1f0a864d6bc81c41277942"
+      alt="Atatürk ve Yaşasın Cumhuriyet boyama mandalası">
+
+    <div class="coloring-note">
+      Atatürk portresinin çevresindeki desenleri özenle boya ve panoya as.
+    </div>
+
+    <div class="footer">
+      <span>29 Ekim Boyama Etkinliği</span>
+      <span>7</span>
+    </div>
+  </section>
+
+  <!-- 8. SAYFA: TÜRKİYE CUMHURİYETİ BOYAMA -->
+  <section class="page coloring-page">
+    <div class="top-line"></div>
+    <h1>Türkiye Cumhuriyeti – 29 Ekim</h1>
+
+    <img
+      class="coloring-image"
+      src="https://ai-seek-user-image.s3.us-east-1.amazonaws.com/202608/22/a8c5e74c22904bfa86825d6a90006d9dagb0.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4MTWODAZEP5GANEB%2F20260822%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260822T101007Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=c28c62996305de3af42567f58d37e1b983f1db209cead3717bec3bdb73613dd3"
+      alt="Türkiye Cumhuriyeti 29 Ekim boyama çalışması">
+
+    <div class="coloring-note">
+      Küçük Türk bayraklarını kırmızı ve beyaz renklerle tamamla.
+    </div>
+
+    <div class="name-line">Adı Soyadı: ...............................................................................</div>
+
+    <div class="footer">
+      <span>29 Ekim Boyama Etkinliği</span>
+      <span>8</span>
+    </div>
+  </section>
+
+  <script>
+    function downloadHTML() {
+      const html = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+      const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "29-ekim-cumhuriyet-bayrami-pano-calismasi.html";
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(url);
+    }
+  </script>
+
+</body>
+</html>
+
