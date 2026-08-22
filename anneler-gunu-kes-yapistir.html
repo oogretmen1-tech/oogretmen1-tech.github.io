@@ -1,306 +1,813 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Anneler Günü – Kes Yapıştır Etkinliği</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<style>
-  :root { --rose: #c0415a; --blush: #f7d6de; --cream: #fffaf7; --warm: #7a3a4a; }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: #e8e8e8; font-family: 'Nunito', sans-serif; color: #3a2a2a; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anneler Günü Etkinlik ve Pano Çalışması</title>
 
-  .print-bar {
-    background: var(--rose); padding: 14px 24px; position: sticky; top: 0; z-index: 99;
-    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
-  }
-  .print-bar span { color: #fff; font-weight: 700; font-size: 15px; }
-  .btn-dl {
-    background: #fff; color: var(--rose); border: none; border-radius: 30px;
-    padding: 10px 28px; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 700;
-    cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,.15); transition: transform .15s;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .btn-dl:hover { transform: translateY(-2px); }
-  .btn-dl:disabled { opacity: .6; cursor: wait; }
+  <style>
+    :root {
+      --pembe: #e96b91;
+      --acik-pembe: #fff0f5;
+      --mor: #8d6bb3;
+      --sari: #ffd166;
+      --yesil: #8fc49a;
+      --metin: #493b47;
+      --beyaz: #fffdfb;
+    }
 
-  .a4 {
-    width: 210mm;
-    min-height: 297mm;
-    margin: 20px auto;
-    background: #fff;
-    padding: 14mm 12mm;
-    box-shadow: 0 4px 24px rgba(0,0,0,.18);
-    display: flex;
-    flex-direction: column;
-  }
+    * {
+      box-sizing: border-box;
+    }
 
-  /* ── SAYFA 1: ÇİÇEK ── */
-  .page-header {
-    text-align: center;
-    padding: 18px 16px;
-    background: linear-gradient(135deg, var(--rose), #e06680);
-    border-radius: 16px;
-    color: #fff;
-    margin-bottom: 14px;
-    position: relative;
-    overflow: hidden;
-  }
-  .page-header::before { content: '✂'; position: absolute; font-size: 60px; opacity: .1; top: -5px; right: 8px; transform: rotate(20deg); }
-  .page-header h1 { font-family: 'Fredoka One', cursive; font-size: 26px; letter-spacing: 2px; margin-bottom: 3px; }
-  .page-header .sub { font-size: 13px; opacity: .9; font-weight: 600; }
+    body {
+      margin: 0;
+      background: #f8e9ef;
+      color: var(--metin);
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      line-height: 1.6;
+    }
 
-  .info-band {
-    background: var(--blush); border-radius: 10px; padding: 10px 16px;
-    display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; align-items: center;
-  }
-  .info-field { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--warm); }
-  .info-field .line { border-bottom: 1.5px solid var(--rose); width: 110px; height: 18px; }
+    .container {
+      width: min(1100px, 94%);
+      margin: auto;
+    }
 
-  .instruction-box {
-    background: #fff3e0; border-left: 4px solid #d4965a; border-radius: 10px;
-    padding: 10px 14px; font-size: 13px; font-weight: 700; color: #5a3a1a;
-    margin-bottom: 14px; display: flex; align-items: flex-start; gap: 9px;
-  }
-  .instruction-box .ei { font-size: 18px; flex-shrink: 0; }
+    header {
+      min-height: 390px;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: white;
+      background:
+        linear-gradient(rgba(117, 65, 105, .64), rgba(117, 65, 105, .64)),
+        linear-gradient(135deg, #f095b5, #8e70b2);
+      padding: 55px 20px;
+      position: relative;
+      overflow: hidden;
+    }
 
-  .cut-section {
-    border: 2.5px dashed var(--rose);
-    border-radius: 14px;
-    padding: 16px;
-    background: #f7f0ff;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-  .cut-label {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;
-    color: var(--rose); margin-bottom: 14px;
-  }
+    header::before,
+    header::after {
+      content: "♥";
+      position: absolute;
+      color: rgba(255,255,255,.24);
+      font-size: 130px;
+    }
 
-  .petal-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    flex: 1;
-    align-items: center;
-  }
+    header::before {
+      left: 4%;
+      top: 25px;
+      transform: rotate(-18deg);
+    }
 
-  .petal {
-    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-    display: flex; flex-direction: column; align-items: center;
-    justify-content: center; text-align: center; padding: 10px 6px;
-    font-size: 12px; font-weight: 700; color: var(--warm);
-    min-height: 90px;
-  }
-  .petal.p1 { background: linear-gradient(160deg, #fce4ec, #f8bbd9); border: 2px solid #f48fb1; }
-  .petal.p2 { background: linear-gradient(160deg, #fff3e0, #ffe0b2); border: 2px solid #ffcc80; }
-  .petal.p3 { background: linear-gradient(160deg, #e8f5e9, #c8e6c9); border: 2px solid #a5d6a7; }
-  .petal.p4 { background: linear-gradient(160deg, #f3e5f5, #e1bee7); border: 2px solid #ce93d8; }
-  .petal.p5 { background: linear-gradient(160deg, #e3f2fd, #bbdefb); border: 2px solid #90caf9; }
-  .petal.p6 { background: linear-gradient(160deg, #fffde7, #fff9c4); border: 2px solid #ffe082; }
-  .petal.p7 { background: linear-gradient(160deg, #fce4ec, #f8bbd9); border: 2px solid #f48fb1; }
-  .petal.center {
-    background: linear-gradient(135deg, var(--rose), #e06680);
-    color: #fff; border-radius: 50%; font-size: 11px; font-weight: 800; border: none;
-    min-height: 90px;
-  }
-  .petal .pe { font-size: 22px; margin-bottom: 4px; }
-  .petal-line { border-bottom: 1.5px solid rgba(0,0,0,.18); width: 55px; height: 14px; margin-top: 4px; }
+    header::after {
+      right: 5%;
+      bottom: 10px;
+      transform: rotate(18deg);
+    }
 
-  /* ── SAYFA 2: ANNEM HAKKINDA ── */
-  .page2-header {
-    text-align: center; margin-bottom: 16px;
-  }
-  .page2-header h2 { font-family: 'Fredoka One', cursive; font-size: 26px; color: var(--rose); margin-bottom: 3px; }
-  .page2-header .sub2 { font-size: 12px; color: #888; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
-  .divider { width: 60px; height: 3px; background: linear-gradient(90deg, var(--blush), var(--rose), var(--blush)); border-radius: 2px; margin: 10px auto; }
+    header h1 {
+      font-family: Georgia, serif;
+      font-size: clamp(2.3rem, 6vw, 4.7rem);
+      margin: 10px 0;
+      letter-spacing: 1px;
+    }
 
-  .complete-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    flex: 1;
-    align-content: start;
-  }
-  .complete-item {
-    background: #fff; border: 2px solid var(--blush); border-radius: 12px;
-    padding: 14px 14px; display: flex; align-items: flex-start; gap: 10px;
-  }
-  .ci-emoji { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
-  .ci-content { flex: 1; }
-  .ci-prompt { font-size: 12px; font-weight: 700; color: #888; margin-bottom: 5px; }
-  .ci-line { border-bottom: 1.5px solid #e0cdd0; height: 24px; width: 100%; }
-  .ci-line + .ci-line { margin-top: 6px; }
+    header p {
+      font-size: 1.25rem;
+      margin: 12px auto;
+      max-width: 720px;
+    }
 
-  @media print {
-    body { background: #fff; }
-    .print-bar { display: none !important; }
-    .a4 { width: 100%; margin: 0; padding: 12mm 10mm; min-height: 0; box-shadow: none; page-break-after: always; }
-    .a4:last-child { page-break-after: auto; }
-    @page { margin: 0; size: A4 portrait; }
-  }
-</style>
+    .heart {
+      color: #ffd1e0;
+      font-size: 3rem;
+    }
+
+    nav {
+      background: white;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 2px 12px #0001;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    nav a {
+      color: var(--mor);
+      text-decoration: none;
+      font-weight: bold;
+      margin: 0 12px;
+    }
+
+    section {
+      background: var(--beyaz);
+      margin: 28px auto;
+      padding: 30px;
+      border-radius: 24px;
+      box-shadow: 0 5px 20px #75416918;
+    }
+
+    h2 {
+      color: var(--mor);
+      font-family: Georgia, serif;
+      font-size: 2rem;
+      text-align: center;
+      margin-top: 0;
+    }
+
+    h3 {
+      color: var(--pembe);
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--acik-pembe);
+      border: 2px solid #f4b4c8;
+      border-radius: 30px;
+      padding: 7px 15px;
+      color: #a6456b;
+      font-weight: bold;
+      margin: 5px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: #fff6f8;
+      border-left: 6px solid var(--pembe);
+      border-radius: 15px;
+      padding: 18px;
+    }
+
+    .card strong {
+      color: var(--mor);
+    }
+
+    .timeline {
+      border-left: 4px solid var(--pembe);
+      margin: 20px auto;
+      max-width: 800px;
+      padding-left: 25px;
+    }
+
+    .timeline div {
+      position: relative;
+      margin: 20px 0;
+      background: #fff1f5;
+      padding: 14px 18px;
+      border-radius: 12px;
+    }
+
+    .timeline div::before {
+      content: "";
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--pembe);
+      position: absolute;
+      left: -34px;
+      top: 22px;
+      border: 4px solid white;
+    }
+
+    blockquote {
+      background: #fff4c9;
+      border-left: 8px solid var(--sari);
+      padding: 20px;
+      margin: 18px 0;
+      border-radius: 12px;
+      font-family: Georgia, serif;
+      font-size: 1.15rem;
+      font-style: italic;
+    }
+
+    .poem {
+      white-space: pre-line;
+      text-align: center;
+      background: linear-gradient(135deg, #fff0f5, #f5effd);
+      border-radius: 20px;
+      padding: 25px;
+      font-family: Georgia, serif;
+      font-size: 1.2rem;
+    }
+
+    .pano {
+      background:
+        radial-gradient(circle at 10% 15%, #ffd9e5 0 32px, transparent 33px),
+        radial-gradient(circle at 90% 22%, #e8d9fa 0 38px, transparent 39px),
+        linear-gradient(135deg, #ffeaf2, #f4efff);
+      border: 12px solid #d58baa;
+      padding: 28px;
+      min-height: 600px;
+      position: relative;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .pano h2 {
+      display: inline-block;
+      background: white;
+      border: 4px dashed var(--pembe);
+      padding: 13px 25px;
+      border-radius: 18px;
+      color: #b54d77;
+    }
+
+    .pano-message {
+      max-width: 700px;
+      margin: 20px auto;
+      font-family: Georgia, serif;
+      font-size: 1.45rem;
+      background: #ffffffdd;
+      padding: 20px;
+      border-radius: 20px;
+    }
+
+    .flower-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 18px;
+      margin: 25px 0;
+    }
+
+    .flower {
+      width: 120px;
+      height: 120px;
+      background: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px;
+      border: 5px solid #f2a9c1;
+      box-shadow: 0 5px 10px #0001;
+      font-size: .9rem;
+      font-weight: bold;
+    }
+
+    .flower:nth-child(2n) {
+      border-color: #c7abe7;
+      transform: rotate(5deg);
+    }
+
+    .flower:nth-child(3n) {
+      border-color: #f4cc73;
+      transform: rotate(-5deg);
+    }
+
+    .leaf-note {
+      display: inline-block;
+      background: #dff1df;
+      padding: 13px 20px;
+      margin: 7px;
+      border-radius: 50% 10px 50% 10px;
+      color: #3f7650;
+      font-weight: bold;
+    }
+
+    .worksheet {
+      border: 3px solid #765b88;
+      border-radius: 8px;
+      padding: 25px;
+      margin: 25px 0;
+      background: white;
+      min-height: 450px;
+    }
+
+    .worksheet-title {
+      text-align: center;
+      color: #765b88;
+      font-family: Georgia, serif;
+      border-bottom: 2px dashed #d890ad;
+      padding-bottom: 10px;
+    }
+
+    .line {
+      border-bottom: 2px solid #777;
+      height: 35px;
+      margin: 8px 0;
+    }
+
+    .big-heart {
+      width: 150px;
+      height: 135px;
+      margin: 20px auto;
+      position: relative;
+      transform: rotate(-45deg);
+      background: #ffd6e2;
+      border-radius: 12px 0 12px 0;
+      border: 4px solid #d9799a;
+    }
+
+    .big-heart::before,
+    .big-heart::after {
+      content: "";
+      position: absolute;
+      width: 150px;
+      height: 135px;
+      background: #ffd6e2;
+      border: 4px solid #d9799a;
+      border-radius: 50%;
+    }
+
+    .big-heart::before {
+      top: -76px;
+      left: -4px;
+      border-bottom: 0;
+    }
+
+    .big-heart::after {
+      left: 72px;
+      top: 4px;
+      border-left: 0;
+    }
+
+    .heart-text {
+      position: relative;
+      z-index: 2;
+      transform: rotate(45deg);
+      padding-top: 52px;
+      font-weight: bold;
+      color: #a5466c;
+      width: 130px;
+      margin-left: 5px;
+    }
+
+    .drawing-box {
+      height: 180px;
+      border: 3px dashed #aaa;
+      border-radius: 10px;
+      margin-top: 15px;
+    }
+
+    .checklist label {
+      display: block;
+      margin: 12px 0;
+      font-size: 1.05rem;
+    }
+
+    button {
+      border: 0;
+      background: var(--pembe);
+      color: white;
+      padding: 12px 18px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin: 6px;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #c94f78;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    footer {
+      text-align: center;
+      background: #754169;
+      color: white;
+      padding: 30px;
+      margin-top: 35px;
+    }
+
+    @media print {
+      nav, button, .no-print {
+        display: none !important;
+      }
+
+      body {
+        background: white;
+      }
+
+      section {
+        box-shadow: none;
+        page-break-inside: avoid;
+        margin: 0 0 20px;
+      }
+
+      header {
+        min-height: 250px;
+      }
+
+      .worksheet {
+        page-break-before: always;
+      }
+
+      footer {
+        display: none;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="print-bar">
-  <span>✂️ Anneler Günü – Kes Yapıştır Etkinliği</span>
-  <button class="btn-dl" id="dlBtn" onclick="indir()">⬇️ PDF İndir</button>
-</div>
-
-<!-- ══════════════ SAYFA 1: ÇİÇEK KES-YAPISTIR ══════════════ -->
-<div class="a4" id="sayfa1">
-
-  <div class="page-header">
-    <h1>✂️ KES – YAPISTIR ETKİNLİĞİ</h1>
-    <div class="sub">Anneler Günü · 2. Sınıf</div>
-  </div>
-
-  <div class="info-band">
-    <div class="info-field">Adı Soyadı: <div class="line"></div></div>
-    <div class="info-field">Sınıfı: <div class="line" style="width:50px"></div></div>
-    <div class="info-field">Tarih: <div class="line" style="width:70px"></div></div>
-  </div>
-
-  <div class="instruction-box">
-    <span class="ei">✂️</span>
-    <div>Aşağıdaki yaprak kartlarını kes. Her yaprağa annen için bir güzel özellik yaz. Ortadaki kalbi de kes. Hepsini bir kağıda yapıştırarak annen için çiçek oluştur!</div>
-  </div>
-
-  <div class="cut-section">
-    <div class="cut-label"><span>✂️</span> Buradan Kes!</div>
-    <div class="petal-grid">
-      <div class="petal p1"><div class="pe">🌸</div><div>Annem...</div><div class="petal-line"></div></div>
-      <div class="petal p2"><div class="pe">💛</div><div>Annem...</div><div class="petal-line"></div></div>
-      <div class="petal p3"><div class="pe">🍀</div><div>Annem...</div><div class="petal-line"></div></div>
-      <div class="petal center"><div style="font-size:28px">❤️</div><div>ANNEM</div></div>
-      <div class="petal p4"><div class="pe">🦋</div><div>Annem...</div><div class="petal-line"></div></div>
-      <div class="petal p5"><div class="pe">⭐</div><div>Annem...</div><div class="petal-line"></div></div>
-      <div class="petal p6"><div class="pe">🌈</div><div>Annem...</div><div class="petal-line"></div></div>
-      <div class="petal p7"><div class="pe">🎀</div><div>Annem...</div><div class="petal-line"></div></div>
+  <header>
+    <div class="container">
+      <div class="heart">♥ ♥ ♥</div>
+      <h1>Anneler Günü</h1>
+      <p>
+        Sevgi, şefkat, merhamet ve emekle büyüyen güzel kalplere...
+      </p>
+      <p><strong>“Anne sevgisi, dünyadaki en sıcak kucaktır.”</strong></p>
     </div>
-  </div>
+  </header>
 
-</div>
+  <nav class="no-print">
+    <a href="#plan">Etkinlik Planı</a>
+    <a href="#tarihce">Tarihçe</a>
+    <a href="#sozler">Sözler ve Şiir</a>
+    <a href="#pano">Pano</a>
+    <a href="#calisma">Çalışma Kâğıtları</a>
+  </nav>
 
-<!-- ══════════════ SAYFA 2: ANNEM HAKKINDA ══════════════ -->
-<div class="a4" id="sayfa2">
+  <main class="container">
 
-  <div class="info-band">
-    <div class="info-field">Adı Soyadı: <div class="line"></div></div>
-    <div class="info-field">Sınıfı: <div class="line" style="width:50px"></div></div>
-    <div class="info-field">Tarih: <div class="line" style="width:70px"></div></div>
-  </div>
+    <section id="plan">
+      <h2>Etkinlik Planı</h2>
 
-  <div class="page2-header">
-    <div style="font-size:26px; margin-bottom:4px;">🌺 🌸 🌺</div>
-    <h2>Annem Hakkında</h2>
-    <p class="sub2">Boşlukları kendi annen hakkında düşünerek doldur</p>
-    <div class="divider"></div>
-  </div>
-
-  <div class="complete-grid">
-    <div class="complete-item">
-      <span class="ci-emoji">🌺</span>
-      <div class="ci-content">
-        <div class="ci-prompt">Annemin adı:</div>
-        <div class="ci-line"></div>
+      <div class="center">
+        <span class="badge">Yaş Grubu: 5-8 yaş</span>
+        <span class="badge">Süre: 60-90 dakika</span>
+        <span class="badge">Tema: Sevgi ve Şefkat</span>
       </div>
-    </div>
-    <div class="complete-item">
-      <span class="ci-emoji">😊</span>
-      <div class="ci-content">
-        <div class="ci-prompt">Annem güldüğünde:</div>
-        <div class="ci-line"></div>
-      </div>
-    </div>
-    <div class="complete-item">
-      <span class="ci-emoji">🍽️</span>
-      <div class="ci-content">
-        <div class="ci-prompt">Annemin en güzel yemeği:</div>
-        <div class="ci-line"></div>
-      </div>
-    </div>
-    <div class="complete-item">
-      <span class="ci-emoji">💪</span>
-      <div class="ci-content">
-        <div class="ci-prompt">Annem çok iyi bilir:</div>
-        <div class="ci-line"></div>
-      </div>
-    </div>
-    <div class="complete-item">
-      <span class="ci-emoji">❤️</span>
-      <div class="ci-content">
-        <div class="ci-prompt">Annemi en çok sevdiren şey:</div>
-        <div class="ci-line"></div>
-        <div class="ci-line"></div>
-      </div>
-    </div>
-    <div class="complete-item">
-      <span class="ci-emoji">🌟</span>
-      <div class="ci-content">
-        <div class="ci-prompt">Annem beni mutlu eder çünkü:</div>
-        <div class="ci-line"></div>
-        <div class="ci-line"></div>
-      </div>
-    </div>
-    <div class="complete-item">
-      <span class="ci-emoji">🎁</span>
-      <div class="ci-content">
-        <div class="ci-prompt">Anneme vermek istediğim hediye:</div>
-        <div class="ci-line"></div>
-        <div class="ci-line"></div>
-      </div>
-    </div>
-    <div class="complete-item">
-      <span class="ci-emoji">💌</span>
-      <div class="ci-content">
-        <div class="ci-prompt">Anneme söylemek istediğim:</div>
-        <div class="ci-line"></div>
-        <div class="ci-line"></div>
-      </div>
-    </div>
-  </div>
 
-</div>
+      <div class="grid">
+        <div class="card">
+          <h3>1. Sohbet Çemberi</h3>
+          <p>
+            Çocuklara “Annem bize sevgisini nasıl gösterir?”, 
+            “Annemi mutlu etmek için ne yapabilirim?” soruları yöneltilir.
+          </p>
+        </div>
 
-<script>
-function indir() {
-  var btn = document.getElementById('dlBtn');
-  btn.disabled = true;
-  btn.textContent = 'Hazırlanıyor...';
+        <div class="card">
+          <h3>2. Sevgi Kalbim</h3>
+          <p>
+            Çocuklar kalp şeklini boyar ve içine anneleriyle ilgili güzel
+            bir söz veya teşekkür cümlesi yazar.
+          </p>
+        </div>
 
-  var sayfalar = document.querySelectorAll('.a4');
-  var opt = {
-    margin: 0,
-    filename: 'anneler-gunu-kes-yapistir.pdf',
-    image: { type: 'jpeg', quality: 0.97 },
-    html2canvas: { scale: 2, useCORS: true, windowWidth: 794 },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  };
+        <div class="card">
+          <h3>3. Anneme Çiçek</h3>
+          <p>
+            Renkli kâğıtlardan çiçek hazırlanır. Her çiçeğin yaprağına
+            anneyle ilgili bir güzel özellik yazılır.
+          </p>
+        </div>
 
-  var worker = html2pdf().set(opt).from(sayfalar[0]).toPdf();
+        <div class="card">
+          <h3>4. İyilik Sözü</h3>
+          <p>
+            Çocuklar annelerine yardım etmek için yapabilecekleri bir
+            davranışı seçer ve “Anneme yardım edeceğim.” sözünü verir.
+          </p>
+        </div>
+      </div>
 
-  worker = worker.get('pdf').then(function(pdf) {
-    pdf.addPage();
-    return html2pdf().set(opt).from(sayfalar[1]).toCanvas().then(function(canvas) {
-      var img = canvas.toDataURL('image/jpeg', 0.97);
-      pdf.addImage(img, 'JPEG', 0, 0, 210, 297);
-    });
-  });
+      <h3>Gerekli Malzemeler</h3>
+      <p>
+        Renkli kartonlar, pastel boya, makas, yapıştırıcı, kurdele,
+        pamuk, keçeli kalem, tahta çubuk, sim ve çalışma kâğıtları.
+      </p>
 
-  worker.save().then(function() {
-    btn.disabled = false;
-    btn.innerHTML = '⬇️ PDF İndir';
-  }).catch(function(e) {
-    console.error(e);
-    btn.disabled = false;
-    btn.innerHTML = '⬇️ PDF İndir';
-  });
-}
-</script>
+      <h3>Değerlendirme Soruları</h3>
+      <ul>
+        <li>Annene sevgini hangi davranışlarla gösterebilirsin?</li>
+        <li>Bir annenin çocuğu için yaptığı fedakârlıklardan biri nedir?</li>
+        <li>Sevgi ve merhamet gösterdiğimizde insanlar nasıl hisseder?</li>
+      </ul>
+    </section>
+
+    <section id="tarihce">
+      <h2>Anneler Günü'nün Tarihçesi</h2>
+
+      <div class="timeline">
+        <div>
+          <strong>Antik Çağlar:</strong>
+          İlkbahar ve annelik temalı kutlamalar, farklı toplumlarda
+          çeşitli bayramlarla anılmıştır.
+        </div>
+
+        <div>
+          <strong>Anna Jarvis:</strong>
+          Amerikalı Anna Jarvis, annesini anmak ve annelerin emeklerini
+          onurlandırmak amacıyla özel bir gün oluşturulması için çalışmıştır.
+        </div>
+
+        <div>
+          <strong>1908:</strong>
+          Anna Jarvis, annesinin anısına Amerika Birleşik Devletleri’nde
+          ilk önemli Anneler Günü etkinliklerinden birini düzenlemiştir.
+        </div>
+
+        <div>
+          <strong>1914:</strong>
+          Amerika Birleşik Devletleri’nde mayıs ayının ikinci pazarı
+          Anneler Günü olarak resmî şekilde kabul edilmiştir.
+        </div>
+
+        <div>
+          <strong>Türkiye’de:</strong>
+          Anneler Günü, birçok ülkede olduğu gibi mayıs ayının ikinci
+          pazar günü kutlanmaktadır.
+        </div>
+      </div>
+
+      <blockquote>
+        “Bir annenin kalbi, çocuğunun en güvenli evidir.”
+      </blockquote>
+    </section>
+
+    <section id="sozler">
+      <h2>Anneler Günü Sözleri</h2>
+
+      <div class="grid">
+        <div class="card">
+          <strong>♥</strong> Anne, sevginle dünyamı güzelleştiren en güzel kalpsin.
+        </div>
+
+        <div class="card">
+          <strong>♥</strong> Senin şefkatin, en zor günlerimde bana güç verir.
+        </div>
+
+        <div class="card">
+          <strong>♥</strong> Annem, ilk öğretmenim ve en güzel rehberimsin.
+        </div>
+
+        <div class="card">
+          <strong>♥</strong> Bir annenin sevgisi, hiç solmayan bir çiçek gibidir.
+        </div>
+
+        <div class="card">
+          <strong>♥</strong> Anne sevgisi; merhamet, sabır ve umutla örülmüş sıcacık bir yuvadır.
+        </div>
+
+        <div class="card">
+          <strong>♥</strong> Dünyadaki bütün güzel kelimeler, annemin sevgisini anlatmaya yetmez.
+        </div>
+      </div>
+
+      <h2>Çocuklar İçin Şiir</h2>
+
+      <div class="poem">
+        <strong>Canım Annem</strong>
+
+        Gülüşün güneş gibi,
+        Isıtır benim içimi.
+        Şefkat dolu ellerinle,
+        Sararsın küçücük kalbimi.
+
+        Sen yanımda olunca,
+        Korkularım uzaklaşır.
+        Anneciğim, güzel annem,
+        Sevgin içimde çiçek açar.
+
+        İyi ki varsın canım annem,
+        Seni çok seviyorum.
+        Bugün değil, her gün seni
+        Kalbimde taşıyorum.
+      </div>
+
+      <h2>Kısa Teşekkür Metni</h2>
+
+      <p>
+        Canım annem; bana sevgiyle sarıldığın, beni sabırla dinlediğin ve
+        her zaman yanımda olduğun için teşekkür ederim. Senin şefkatin
+        bana güç, gülüşün bana mutluluk veriyor. Seni çok seviyorum.
+        Anneler Günü'n kutlu olsun!
+      </p>
+    </section>
+
+    <section id="pano">
+      <h2>Anneler Günü Pano Çalışması</h2>
+
+      <div class="pano">
+        <h2>ANNEM, KALBİMİN EN GÜZEL ÇİÇEĞİ</h2>
+
+        <div class="pano-message">
+          Annelerimiz sevginin, şefkatin, sabrın ve merhametin en güzel
+          örneğidir. Onlara sevgimizi yalnızca bugün değil, her gün
+          davranışlarımızla gösterelim.
+        </div>
+
+        <div class="flower-row">
+          <div class="flower">SEVGİ</div>
+          <div class="flower">ŞEFKAT</div>
+          <div class="flower">SABIR</div>
+          <div class="flower">MERHAMET</div>
+          <div class="flower">GÜVEN</div>
+          <div class="flower">EMEK</div>
+        </div>
+
+        <div>
+          <span class="leaf-note">Anneme sarılırım.</span>
+          <span class="leaf-note">Ona yardım ederim.</span>
+          <span class="leaf-note">Güzel söz söylerim.</span>
+          <span class="leaf-note">Teşekkür ederim.</span>
+        </div>
+
+        <p class="pano-message">
+          <strong>“Annelerimizin kalbine sevgi ekiyoruz.”</strong>
+        </p>
+      </div>
+
+      <h3>Pano Hazırlama Önerisi</h3>
+      <ol>
+        <li>Panonun zeminini pembe, mor veya açık krem kartonla kaplayın.</li>
+        <li>Başlığı büyük harflerle hazırlayıp panonun üst kısmına yerleştirin.</li>
+        <li>Çocukların boyadığı kalp ve çiçekleri panoya asın.</li>
+        <li>Her çiçeğin içine çocukların anneleri için yazdığı güzel sözleri ekleyin.</li>
+        <li>Panonun kenarlarını kurdele, kelebek ve kalp süsleriyle tamamlayın.</li>
+      </ol>
+    </section>
+
+    <section id="calisma">
+      <h2>Çocuklar İçin Çalışma Kâğıtları</h2>
+
+      <div class="center no-print">
+        <button onclick="window.print()">🖨 Tüm Sayfaları Yazdır</button>
+        <button onclick="downloadWorksheet('worksheet1')">⬇ Çalışma Kâğıdı 1'i İndir</button>
+        <button onclick="downloadWorksheet('worksheet2')">⬇ Çalışma Kâğıdı 2'yi İndir</button>
+      </div>
+
+      <div class="worksheet" id="worksheet1">
+        <h2 class="worksheet-title">Çalışma Kâğıdı 1: Anneme Mektup</h2>
+
+        <p><strong>Adım Soyadım:</strong></p>
+        <div class="line"></div>
+
+        <p>
+          Annene söylemek istediğin güzel sözleri aşağıdaki satırlara yaz
+          veya resmini çiz.
+        </p>
+
+        <p><strong>Canım annem,</strong></p>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+
+        <div class="big-heart">
+          <div class="heart-text">SENİ<br>ÇOK<br>SEVİYORUM</div>
+        </div>
+
+        <p class="center">
+          <strong>Sevgiyle: __________________________</strong>
+        </p>
+      </div>
+
+      <div class="worksheet" id="worksheet2">
+        <h2 class="worksheet-title">Çalışma Kâğıdı 2: Anneme Yardım Ediyorum</h2>
+
+        <p><strong>Adım Soyadım:</strong></p>
+        <div class="line"></div>
+
+        <p>
+          Annene yardım etmek için yapabileceğin davranışların yanına
+          gülücük çiz veya kutuyu işaretle.
+        </p>
+
+        <div class="checklist">
+          <label>☐ Oyuncaklarımı toplarım.</label>
+          <label>☐ Odamı düzenlerim.</label>
+          <label>☐ Sofrayı hazırlamaya yardım ederim.</label>
+          <label>☐ Anneme sarılırım.</label>
+          <label>☐ Ona güzel sözler söylerim.</label>
+          <label>☐ İhtiyacı olduğunda onu dinlerim.</label>
+        </div>
+
+        <p><strong>Benim anneme yardım sözüm:</strong></p>
+        <div class="line"></div>
+        <div class="line"></div>
+
+        <h3 class="center">Anneme bir resim çiziyorum.</h3>
+        <div class="drawing-box"></div>
+      </div>
+
+      <div class="worksheet" id="worksheet3">
+        <h2 class="worksheet-title">Çalışma Kâğıdı 3: Sevgi Çiçeğim</h2>
+
+        <p>
+          Aşağıdaki çiçeğin yapraklarına annenle ilgili güzel kelimeler yaz.
+          Daha sonra çiçeği dilediğin gibi boya.
+        </p>
+
+        <div class="center" style="font-size: 7rem; color: #e98cab;">
+          ❀
+        </div>
+
+        <div class="grid">
+          <div class="card">Annemin güzel özelliği: __________________</div>
+          <div class="card">Annemle yapmayı sevdiğim şey: ____________</div>
+          <div class="card">Anneme teşekkürüm: _______________________</div>
+          <div class="card">Anneme sevgim: ____________________________</div>
+        </div>
+
+        <p class="center">
+          <strong>Bu çiçek, güzel anneme armağanımdır. ♥</strong>
+        </p>
+      </div>
+    </section>
+
+    <section class="center">
+      <h2>Etkinliği Tamamlama Rozeti</h2>
+      <p>
+        Bu etkinlikte sevgi, şefkat ve merhamet hakkında düşündüm.
+      </p>
+      <span class="badge">♥ Sevgi Elçisi ♥</span>
+      <p>Çocuğun adı: __________________________</p>
+      <p>Tarih: ____ / ____ / ______</p>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>♥ Annelerimizin sevgisiyle büyüyen güzel kalplere ♥</p>
+    <p>Anneler Günü Etkinlik Sayfası</p>
+  </footer>
+
+  <script>
+    function downloadWorksheet(id) {
+      const content = document.getElementById(id).outerHTML;
+
+      const style = `
+        <meta charset="UTF-8">
+        <title>Anneler Günü Çalışma Kâğıdı</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            padding: 25px;
+            color: #493b47;
+          }
+          .worksheet {
+            border: 3px solid #765b88;
+            padding: 25px;
+            min-height: 650px;
+          }
+          h2 {
+            text-align: center;
+            color: #765b88;
+          }
+          .line {
+            border-bottom: 2px solid #777;
+            height: 35px;
+            margin: 8px 0;
+          }
+          .center {
+            text-align: center;
+          }
+          .drawing-box {
+            height: 180px;
+            border: 3px dashed #aaa;
+            border-radius: 10px;
+          }
+          .big-heart {
+            width: 150px;
+            height: 135px;
+            margin: 20px auto;
+            background: #ffd6e2;
+            border: 4px solid #d9799a;
+            text-align: center;
+            padding-top: 45px;
+          }
+          .heart-text {
+            font-weight: bold;
+            color: #a5466c;
+          }
+          .checklist label {
+            display: block;
+            margin: 15px 0;
+            font-size: 18px;
+          }
+        </style>
+      `;
+
+      const file = `<!DOCTYPE html><html lang="tr"><head>${style}</head><body>${content}</body></html>`;
+      const blob = new Blob([file], { type: "text/html;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.download = id + "-anneler-gunu.html";
+      link.click();
+
+      URL.revokeObjectURL(url);
+    }
+  </script>
+
 </body>
 </html>
