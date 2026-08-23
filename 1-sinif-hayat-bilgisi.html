@@ -3,1694 +3,922 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>1. Sınıf Hayat Bilgisi | Hasan Tutus</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+<title>1. Sınıf Hayat Bilgisi - Oyunlu Öğrenme</title>
+
 <style>
 :root{
-  --cream:#FFFBF2; --dark:#2D1F0E;
-  --u1:#1976D2; --u1l:#E3F2FD;
-  --u2:#D32F2F; --u2l:#FFEBEE;
-  --u3:#F57C00; --u3l:#FFF3E0;
-  --u4:#388E3C; --u4l:#E8F5E9;
-  --u5:#7B1FA2; --u5l:#F3E5F5;
-  --u6:#0097A7; --u6l:#E0F7FA;
-  --u7:#283593; --u7l:#E8EAF6;
+  --turuncu:#ff7b54;
+  --mavi:#4a90e2;
+  --yesil:#55b76b;
+  --mor:#9b59b6;
+  --sari:#ffc928;
+  --koyu:#4f362c;
+  --zemin:#fff8ef;
 }
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--dark);overflow-x:hidden;}
 
-/* HERO */
-.hero{background:linear-gradient(135deg,#1976D2 0%,#388E3C 35%,#F57C00 70%,#D32F2F 100%);
-  padding:46px 20px 80px;text-align:center;position:relative;overflow:hidden;}
-.hero::after{content:'';position:absolute;bottom:-1px;left:0;width:100%;height:60px;
-  background:var(--cream);clip-path:ellipse(58% 100% at 50% 100%);}
-.badge{display:inline-block;background:white;color:#1976D2;font-weight:800;
-  font-size:.72rem;letter-spacing:2px;text-transform:uppercase;padding:5px 16px;
-  border-radius:20px;margin-bottom:14px;box-shadow:0 3px 12px rgba(0,0,0,.18);}
-.hero h1{font-family:'Fredoka One',cursive;font-size:clamp(2rem,7vw,4rem);
-  color:white;text-shadow:3px 4px 0 rgba(0,0,0,.18);line-height:1.05;}
-.hero p{color:rgba(255,255,255,.94);font-size:1rem;margin-top:8px;font-weight:700;}
-.hero-icons{font-size:2.2rem;margin-top:14px;letter-spacing:6px;}
+*{ box-sizing:border-box; }
 
-/* NAV */
-.nav{position:sticky;top:0;z-index:300;background:var(--cream);
-  border-bottom:4px solid #FFE082;display:flex;overflow-x:auto;
-  -webkit-overflow-scrolling:touch;padding:0 4px;}
-.nav::-webkit-scrollbar{height:3px;}
-.nav::-webkit-scrollbar-thumb{background:#FFD54F;border-radius:3px;}
-.tab{flex:0 0 auto;padding:12px 16px;border:none;background:transparent;
-  font-family:'Fredoka One',cursive;font-size:.85rem;cursor:pointer;
-  border-bottom:4px solid transparent;margin-bottom:-4px;
-  color:#999;transition:all .2s;white-space:nowrap;line-height:1.15;text-align:center;}
-.tab.on{color:var(--tc);border-bottom-color:var(--tc);background:rgba(255,255,255,.7);}
-.tab small{display:block;font-family:'Nunito',sans-serif;font-size:.6rem;
-  font-weight:700;margin-top:2px;opacity:.85;}
+body{
+  margin:0;
+  font-family:Arial, "Trebuchet MS", sans-serif;
+  background:linear-gradient(135deg,#fff4df,#e9f7ff);
+  color:var(--koyu);
+}
 
-/* UNIT PANEL */
-.unit{display:none;max-width:960px;margin:0 auto;padding:30px 16px 60px;}
-.unit.on{display:block;}
+header{
+  text-align:center;
+  padding:22px 15px;
+  color:white;
+  background:linear-gradient(120deg,#ff7043,#ffbd28);
+  box-shadow:0 4px 12px #0003;
+}
 
-/* UNIT HEADER */
-.uHead{border-radius:22px;padding:22px 24px;margin-bottom:24px;
-  display:flex;align-items:center;gap:18px;flex-wrap:wrap;
-  position:relative;overflow:hidden;color:white;}
-.uHead::before{content:'';position:absolute;right:-20px;top:-20px;
-  width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.13);}
-.uIcon{font-size:3.5rem;flex-shrink:0;line-height:1;}
-.uInfo h2{font-family:'Fredoka One',cursive;font-size:1.45rem;line-height:1.15;}
-.uInfo p{font-size:.88rem;margin-top:4px;font-weight:700;opacity:.92;}
+header h1{
+  margin:5px;
+  font-size:clamp(27px,5vw,44px);
+}
 
-/* SUB-NAV (chapters inside unit) */
-.subnav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:22px;}
-.subBtn{padding:7px 14px;border:2px solid var(--uc);background:white;
-  border-radius:50px;font-family:'Fredoka One',cursive;font-size:.82rem;
-  color:var(--uc);cursor:pointer;transition:all .2s;}
-.subBtn.on,.subBtn:hover{background:var(--uc);color:white;transform:translateY(-1px);}
+header p{
+  font-size:18px;
+  margin:8px;
+}
 
-/* CHAPTER PANEL */
-.chapter{display:none;}
-.chapter.on{display:block;}
+.top-bar{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:12px;
+  padding:12px;
+  background:white;
+  position:sticky;
+  top:0;
+  z-index:100;
+  box-shadow:0 3px 10px #0002;
+}
 
-/* BLOCK */
-.block{background:white;border-radius:18px;padding:20px 22px;margin-bottom:18px;
-  box-shadow:0 3px 16px rgba(0,0,0,.07);}
-.bTitle{font-family:'Fredoka One',cursive;font-size:1.05rem;margin-bottom:12px;
-  color:var(--uc);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.bTag{font-size:.62rem;background:var(--ucl);color:var(--uc);padding:3px 9px;
-  border-radius:20px;font-family:'Nunito',sans-serif;font-weight:800;}
+.score-box{
+  border:3px solid #ffd54f;
+  background:#fff7cd;
+  padding:10px 16px;
+  border-radius:20px;
+  font-size:18px;
+  font-weight:bold;
+}
 
-/* OKUMA METNİ */
-.story{background:linear-gradient(135deg,var(--ucl),#fff);
-  border:2px dashed var(--uc);border-radius:16px;padding:20px 22px;
-  font-family:'Patrick Hand',cursive;font-size:1.18rem;line-height:1.85;
-  color:#333;position:relative;}
-.story::before{content:'📖';position:absolute;top:-14px;left:18px;
-  background:white;padding:2px 8px;border-radius:50%;font-size:1.2rem;}
-.story-title{font-family:'Fredoka One',cursive;font-size:1.2rem;
-  color:var(--uc);text-align:center;margin-bottom:10px;}
+button{
+  border:0;
+  border-radius:18px;
+  padding:12px 17px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:.2s;
+  touch-action:manipulation;
+}
 
-/* SORULAR */
-.qList{display:flex;flex-direction:column;gap:10px;margin-top:10px;}
-.qItem{background:#FAFAFA;border-left:5px solid var(--uc);border-radius:0 12px 12px 0;
-  padding:10px 14px;cursor:pointer;transition:all .2s;}
-.qItem:hover{background:var(--ucl);transform:translateX(3px);}
-.qTitle{font-weight:800;display:flex;gap:10px;align-items:flex-start;font-size:.95rem;}
-.qNum{color:var(--uc);font-family:'Fredoka One',cursive;flex-shrink:0;}
-.qAns{margin-top:8px;font-family:'Patrick Hand',cursive;font-size:1.05rem;
-  color:#444;background:white;padding:10px 12px;border-radius:8px;
-  border-left:3px solid var(--uc);display:none;line-height:1.6;}
-.qItem.open .qAns{display:block;animation:slideDown .3s;}
-@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-.qHint{font-size:.7rem;color:#999;margin-top:6px;}
+button:hover{ transform:scale(1.04); }
+button:active{ transform:scale(.96); }
 
-/* D/Y TEST */
-.dyList{display:flex;flex-direction:column;gap:8px;}
-.dyItem{display:flex;align-items:center;gap:10px;background:#FAFAFA;
-  border-radius:10px;padding:10px 14px;}
-.dyText{flex:1;font-size:.95rem;font-weight:600;}
-.dyBtns{display:flex;gap:6px;}
-.dyBtn{width:36px;height:36px;border-radius:8px;border:2px solid #ddd;
-  background:white;font-family:'Fredoka One',cursive;font-size:1rem;
-  cursor:pointer;transition:all .15s;}
-.dyBtn:hover{transform:scale(1.1);}
-.dyBtn.right{background:#E8F5E9;border-color:#388E3C;color:#388E3C;}
-.dyBtn.wrong{background:#FFEBEE;border-color:#D32F2F;color:#D32F2F;}
-.dyBtn.picked-d{background:var(--uc);color:white;border-color:var(--uc);}
-.dyBtn.picked-y{background:var(--uc);color:white;border-color:var(--uc);}
+.blue{ background:var(--mavi); color:white; }
+.green{ background:var(--yesil); color:white; }
+.orange{ background:var(--turuncu); color:white; }
+.purple{ background:var(--mor); color:white; }
+.yellow{ background:var(--sari); color:#5a3a00; }
 
-/* INFO CARD */
-.infoCard{display:flex;align-items:center;gap:14px;background:var(--ucl);
-  border-radius:14px;padding:14px 16px;margin:8px 0;border-left:5px solid var(--uc);}
-.infoEmoji{font-size:2.2rem;flex-shrink:0;}
-.infoText{font-family:'Patrick Hand',cursive;font-size:1.05rem;line-height:1.5;}
-.infoText b{color:var(--uc);}
+.tabs{
+  display:flex;
+  gap:10px;
+  padding:15px;
+  overflow-x:auto;
+  background:white;
+}
 
-/* DEPREM ÇANTASI */
-.bagGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));
-  gap:10px;margin-top:10px;}
-.bagItem{background:white;border:2px solid #eee;border-radius:14px;
-  padding:12px 8px;text-align:center;cursor:pointer;transition:all .2s;}
-.bagItem:hover{border-color:var(--uc);transform:translateY(-2px);
-  box-shadow:0 5px 14px rgba(0,0,0,.1);}
-.bagItem.in{background:var(--ucl);border-color:var(--uc);}
-.bagItem.in::after{content:'✓';position:absolute;}
-.bEmoji{font-size:2rem;display:block;margin-bottom:3px;}
-.bName{font-size:.78rem;font-weight:700;color:#444;}
-.bagItem.ok{background:#E8F5E9;border-color:#388E3C;}
-.bagItem.nope{background:#FFEBEE;border-color:#D32F2F;animation:shake .4s;}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.tab{
+  min-width:150px;
+  color:white;
+  padding:12px;
+  border-radius:18px;
+  box-shadow:0 3px 8px #0003;
+}
 
-/* MATCH GAME */
-.matchGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
-.matchCol{display:flex;flex-direction:column;gap:8px;}
-.matchItem{background:white;border:2px solid #eee;border-radius:12px;
-  padding:10px 14px;cursor:pointer;transition:all .2s;font-weight:700;
-  display:flex;align-items:center;gap:8px;font-size:.9rem;}
-.matchItem:hover{border-color:var(--uc);}
-.matchItem.sel{background:var(--uc);color:white;border-color:var(--uc);}
-.matchItem.done{background:#E8F5E9;border-color:#388E3C;color:#388E3C;
-  cursor:default;opacity:.7;}
-.matchEmo{font-size:1.4rem;}
+.tab.active{
+  outline:4px solid white;
+  box-shadow:0 0 0 5px #ff7043, 0 4px 10px #0003;
+}
 
-/* AFETLER */
-.afetGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;}
-.afetCard{background:white;border:2px solid #eee;border-radius:14px;
-  padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s;}
-.afetCard:hover{border-color:var(--uc);transform:translateY(-3px);
-  box-shadow:0 6px 14px rgba(0,0,0,.12);}
-.afetEmoji{font-size:2.8rem;margin-bottom:6px;}
-.afetName{font-family:'Fredoka One',cursive;font-size:.95rem;color:var(--uc);}
-.afetDesc{font-size:.72rem;color:#666;margin-top:3px;line-height:1.3;}
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:20px;
+}
 
-/* GERİ DÖNÜŞÜM */
-.recycleBins{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:14px;}
-.recBin{border-radius:14px;padding:16px 10px;text-align:center;color:white;font-weight:800;
-  cursor:pointer;transition:transform .2s;font-family:'Fredoka One',cursive;font-size:.9rem;}
-.recBin:hover{transform:translateY(-3px);}
-.recBin.plastik{background:#FFC107;color:#5D4037;}
-.recBin.kagit{background:#1976D2;}
-.recBin.cam{background:#388E3C;}
-.recBin.metal{background:#E64A19;}
-.recBin .icon{font-size:1.8rem;display:block;margin-bottom:4px;}
-.recItems{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;}
-.recItem{background:white;border:2px solid #eee;border-radius:10px;
-  padding:8px;text-align:center;cursor:pointer;transition:all .2s;
-  font-size:1.8rem;position:relative;}
-.recItem:hover{border-color:var(--uc);transform:scale(1.05);}
-.recItem.sel{border-color:var(--uc);background:var(--ucl);}
-.recItem.done{opacity:.3;cursor:default;}
-.recItem .lbl{display:block;font-size:.65rem;color:#666;margin-top:2px;font-weight:700;}
+.unit-header{
+  text-align:center;
+  padding:22px;
+  background:white;
+  border-radius:26px;
+  box-shadow:0 4px 12px #0002;
+}
 
-/* PLANETS */
-.planetGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;}
-.planet{background:white;border-radius:18px;padding:18px;text-align:center;
-  border:3px solid;box-shadow:0 4px 14px rgba(0,0,0,.08);}
-.planetEmoji{font-size:3.5rem;margin-bottom:8px;}
-.planetName{font-family:'Fredoka One',cursive;font-size:1.3rem;margin-bottom:8px;}
-.planetFact{font-family:'Patrick Hand',cursive;font-size:1rem;line-height:1.5;
-  background:#FAFAFA;border-radius:10px;padding:8px;margin-top:5px;}
+.unit-header h2{
+  margin:5px;
+  font-size:clamp(25px,4vw,34px);
+}
 
-/* ATATÜRK TIMELINE */
-.timeline{display:flex;flex-direction:column;gap:10px;}
-.tlItem{display:flex;gap:12px;background:white;border-radius:14px;padding:12px 14px;
-  border-left:5px solid var(--uc);box-shadow:0 2px 10px rgba(0,0,0,.06);}
-.tlIcon{font-size:1.8rem;flex-shrink:0;width:50px;text-align:center;}
-.tlText{flex:1;}
-.tlTitle{font-family:'Fredoka One',cursive;font-size:.95rem;color:var(--uc);}
-.tlDesc{font-size:.85rem;color:#555;margin-top:2px;}
+.unit-emoji{
+  font-size:68px;
+}
 
-/* SCORE */
-.score{display:inline-flex;align-items:center;gap:10px;background:#FFF8E1;
-  border-radius:50px;padding:6px 16px;margin-top:10px;}
-.scoreLabel{font-weight:800;font-size:.85rem;}
-.scoreVal{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--uc);}
-.stars{letter-spacing:2px;}
+.topic-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:15px;
+  margin:22px 0;
+}
 
-/* FEEDBACK */
-.fb{display:block;padding:8px 16px;border-radius:50px;font-weight:800;
-  margin-top:10px;min-height:34px;transition:all .3s;font-size:.92rem;text-align:center;}
-.fb.ok{background:#E8F5E9;color:#2E7D32;}
-.fb.no{background:#FFEBEE;color:#C62828;}
-.fb.mt{background:transparent;}
+.topic-card{
+  min-height:215px;
+  text-align:center;
+  padding:18px;
+  border-radius:22px;
+  background:white;
+  box-shadow:0 4px 10px #0002;
+}
 
-/* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;
-  border-radius:50px;border:none;font-family:'Nunito',sans-serif;
-  font-size:.9rem;font-weight:800;cursor:pointer;transition:all .2s;
-  box-shadow:0 3px 10px rgba(0,0,0,.15);}
-.btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.18);}
-.btnC{background:var(--uc);color:white;}
-.btnG{background:#F5F5F5;color:#555;}
+.topic-card:hover{
+  transform:translateY(-5px);
+}
 
-/* PRINT SECTION */
-.printSec{border:3px dashed var(--uc);border-radius:18px;padding:20px;
-  text-align:center;background:var(--ucl);margin-top:14px;}
-.printSec h3{font-family:'Fredoka One',cursive;font-size:1.05rem;color:var(--uc);margin-bottom:6px;}
-.printSec p{font-size:.82rem;color:#666;margin-bottom:12px;}
-.pGrid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
-.pBtn{background:white;border:2px solid var(--uc);border-radius:12px;
-  padding:8px 14px;cursor:pointer;transition:all .2s;
-  font-family:'Nunito',sans-serif;font-weight:800;font-size:.82rem;color:var(--uc);}
-.pBtn:hover{background:var(--uc);color:white;}
+.topic-icon{ font-size:52px; }
 
-/* CUSTOM INPUT FOR ANSWERS */
-.fillInput{width:100%;padding:8px 12px;border:2px solid #ddd;border-radius:8px;
-  font-family:'Patrick Hand',cursive;font-size:1rem;outline:none;
-  transition:border .2s;margin-top:6px;}
-.fillInput:focus{border-color:var(--uc);}
+.topic-card h3{
+  margin:8px 0;
+  font-size:20px;
+}
 
-/* RULES */
-.ruleList{display:flex;flex-direction:column;gap:8px;}
-.rule{display:flex;align-items:center;gap:10px;background:#FAFAFA;
-  border-radius:12px;padding:10px 14px;border-left:4px solid var(--uc);}
-.ruleIcon{font-size:1.6rem;flex-shrink:0;}
-.ruleText{font-size:.92rem;font-weight:600;}
+.topic-card p{
+  line-height:1.45;
+  min-height:65px;
+}
 
-/* MODAL */
-.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:999;
-  align-items:center;justify-content:center;}
-.mbg.open{display:flex;}
-.mbox{background:white;border-radius:22px;padding:30px;max-width:480px;width:90%;
-  text-align:center;animation:su .3s;box-shadow:0 20px 60px rgba(0,0,0,.25);}
-@keyframes su{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
-.mbox h2{font-family:'Fredoka One',cursive;font-size:1.3rem;margin-bottom:6px;}
-.mbox p{color:#666;font-size:.88rem;margin-bottom:18px;}
-.mbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.listen-panel,
+.game-panel{
+  background:white;
+  border-radius:26px;
+  padding:22px;
+  margin-top:22px;
+  box-shadow:0 4px 12px #0002;
+}
 
-/* FOOTER */
-footer{background:#2D1F0E;color:rgba(255,255,255,.75);text-align:center;
-  padding:28px 16px;font-size:.88rem;}
-footer strong{color:white;}
+.listen-panel h2,
+.game-panel h2{
+  text-align:center;
+  margin-top:0;
+}
 
-@media(max-width:580px){
-  .matchGrid{grid-template-columns:1fr;}
-  .uIcon{font-size:2.5rem;}
-  .uInfo h2{font-size:1.2rem;}
+.listen-text{
+  background:#fff9e9;
+  border-left:8px solid #ffbd28;
+  border-radius:12px;
+  padding:15px;
+  line-height:1.65;
+  font-size:17px;
+  margin:15px 0;
+}
+
+.voice-row,
+.game-menu{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-items:center;
+}
+
+select{
+  padding:11px;
+  border-radius:12px;
+  border:2px solid #90caf9;
+  max-width:310px;
+  font-size:15px;
+}
+
+.game-area{
+  min-height:340px;
+  margin-top:18px;
+  padding:18px;
+  text-align:center;
+  border:3px dashed #90caf9;
+  background:#f7fcff;
+  border-radius:22px;
+}
+
+.message{
+  min-height:38px;
+  font-size:21px;
+  font-weight:bold;
+  color:#684133;
+}
+
+/* BALON */
+.balloon-board{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-items:flex-end;
+  gap:28px 18px;
+  padding:25px 5px;
+}
+
+.balloon{
+  width:155px;
+  min-height:150px;
+  padding:18px 12px;
+  border-radius:50% 50% 46% 46%;
+  color:white;
+  box-shadow:inset -12px -12px #0002, 0 6px 10px #0003;
+  border:4px solid #fff8;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  line-height:1.25;
+}
+
+.balloon:nth-child(4n+1){ background:#ef5350; }
+.balloon:nth-child(4n+2){ background:#42a5f5; }
+.balloon:nth-child(4n+3){ background:#ab47bc; }
+.balloon:nth-child(4n+4){ background:#ff9800; }
+
+.balloon::after{
+  content:"";
+  width:3px;
+  height:32px;
+  background:#795548;
+  position:absolute;
+  margin-top:180px;
+}
+
+.balloon.popped{
+  opacity:0;
+  transform:scale(1.6) rotate(20deg);
+  pointer-events:none;
+}
+
+/* VAGON */
+.train-board{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:12px;
+  margin:25px auto;
+}
+
+.wagon{
+  width:170px;
+  min-height:120px;
+  background:#ffd180;
+  border:4px solid #e87817;
+  border-radius:18px;
+  padding:12px;
+  font-size:17px;
+  box-shadow:0 5px 8px #0003;
+}
+
+.wagon .number{
+  font-size:30px;
+  display:block;
+}
+
+.wagon.selected{
+  background:#fff176;
+  outline:6px solid #42a5f5;
+  transform:scale(1.06);
+}
+
+/* SEPET */
+.sort-card{
+  max-width:520px;
+  margin:20px auto;
+  padding:20px;
+  background:#fff;
+  border-radius:22px;
+  font-size:23px;
+  font-weight:bold;
+  box-shadow:0 4px 10px #0002;
+}
+
+.baskets{
+  display:flex;
+  gap:18px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.basket{
+  width:220px;
+  min-height:145px;
+  border-radius:20px;
+  color:white;
+  padding:18px 12px;
+  font-size:20px;
+}
+
+.good-basket{ background:#54b868; }
+.bad-basket{ background:#f05f57; }
+
+/* YAPBOZ */
+.puzzle-wrap{
+  display:flex;
+  justify-content:center;
+  margin-top:20px;
+}
+
+.puzzle{
+  display:grid;
+  grid-template-columns:repeat(3,105px);
+  gap:4px;
+  background:#795548;
+  padding:4px;
+  border-radius:10px;
+}
+
+.piece{
+  width:105px;
+  height:105px;
+  border:2px solid white;
+  cursor:pointer;
+  background-repeat:no-repeat;
+  background-size:315px 315px;
+}
+
+.piece.empty{
+  background:#d7efff !important;
+  border:2px dashed #90a4ae;
+}
+
+@media(max-width:550px){
+  .container{ padding:10px; }
+  .puzzle{ grid-template-columns:repeat(3,82px); }
+  .piece{
+    width:82px;
+    height:82px;
+    background-size:246px 246px;
+  }
+  .balloon{ width:135px; min-height:135px; font-size:14px; }
 }
 </style>
 </head>
+
 <body>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="badge">📚 Hasan Tutus · Taylıca İlkokulu · Şanlıurfa</div>
-  <h1>1. Sınıf<br>Hayat Bilgisi</h1>
-  <p>İnteraktif Konu Anlatımları · Maarif Modeli · Tüm Üniteler</p>
-  <div class="hero-icons">👫 🏫 🌍 💚 🔬</div>
+<header>
+  <div style="font-size:54px">🏫 🌈 📚 🌳</div>
+  <h1>Hayat Bilgisi Macerası</h1>
+  <p>1. sınıf için oyunla, dinleyerek ve keşfederek öğreniyoruz.</p>
+</header>
+
+<div class="top-bar">
+  <div class="score-box">⭐ Puan: <span id="score">0</span></div>
+  <div class="score-box">🏆 Yıldız: <span id="stars">0</span></div>
+  <button class="yellow" onclick="resetScore()">Puanları Sıfırla</button>
 </div>
 
-<!-- NAV -->
-<nav class="nav" id="mainNav">
-  <button class="tab on" data-u="1" style="--tc:var(--u1)" onclick="switchU(1)">
-    📘 Ben ve Okulum<small>Tanışma · Kurallar</small>
-  </button>
-  <button class="tab" data-u="2" style="--tc:var(--u2)" onclick="switchU(2)">
-    ❤️ Sağlığım<small>Sağlık · Güvenlik</small>
-  </button>
-  <button class="tab" data-u="3" style="--tc:var(--u3)" onclick="switchU(3)">
-    👨‍👩‍👧 Ailem<small>Aile · Toplum</small>
-  </button>
-  <button class="tab" data-u="4" style="--tc:var(--u4)" onclick="switchU(4)">
-    🇹🇷 Ülkem<small>Türkiye · Atatürk</small>
-  </button>
-  <button class="tab" data-u="5" style="--tc:var(--u5)" onclick="switchU(5)">
-    🌳 Doğa<small>Çevre · Afetler</small>
-  </button>
-  <button class="tab" data-u="6" style="--tc:var(--u6)" onclick="switchU(6)">
-    🔬 Bilim<small>Teknoloji · Sanat</small>
-  </button>
-  <button class="tab" data-u="7" style="--tc:var(--u7)" onclick="switchU(7)">
-    🌍 Dünya-Ay<small>Güneş · Uzay</small>
-  </button>
-</nav>
+<div class="tabs" id="tabs"></div>
 
-<!-- ═══════ ÜNİTE 1: BEN ve OKULUM ═══════ -->
-<div id="u1" class="unit on" style="--uc:var(--u1);--ucl:var(--u1l)">
-  <div class="uHead" style="background:linear-gradient(135deg,#1976D2,#42A5F5)">
-    <div class="uIcon">📘</div>
-    <div class="uInfo">
-      <h2>Ben ve Okulum</h2>
-      <p>Tanışma · Okul Bölümleri · Kurallar · Duygular · Kendini Tanıma</p>
-    </div>
-  </div>
+<div class="container">
+  <section class="unit-header">
+    <div id="unitEmoji" class="unit-emoji"></div>
+    <h2 id="unitName"></h2>
+    <p id="unitDescription"></p>
+  </section>
 
-  <div class="subnav">
-    <button class="subBtn on" onclick="switchC(1,'tanis')">👋 Tanışma</button>
-    <button class="subBtn" onclick="switchC(1,'okul')">🏫 Okul Bölümleri</button>
-    <button class="subBtn" onclick="switchC(1,'kural')">📋 Kurallar</button>
-    <button class="subBtn" onclick="switchC(1,'duygu')">😊 Duygular</button>
-    <button class="subBtn" onclick="switchC(1,'kendim')">🪞 Kendimi Tanıyorum</button>
-  </div>
+  <section id="topics" class="topic-grid"></section>
 
-  <!-- TANIŞMA -->
-  <div id="c1-tanis" class="chapter on">
-    <div class="block">
-      <div class="bTitle">📖 Okuma Metni <span class="bTag">SORULARI YANITLA</span></div>
-      <div class="story">
-        <div class="story-title">OKULDA İLK GÜNÜM</div>
-        Elif, okulun ilk gününde heyecanla sınıfa girdi. Öğretmen, her çocuğa bir resim defteri ve renkli kalemler dağıttı. "En sevdiğiniz hayvanı çizin." dedi. Elif, defterine özenle renkli bir kelebek çizdi. Yanındaki Kerem, "Ben de kelebek çizebilir miyim?" diye sordu. Elif, kalemlerinden birini Kerem'e uzattı. Kerem, mavi ve sarı renklerle kendi kelebeğini yaptı. Ders sonunda Elif ile Kerem resimlerini birbirine gösterip gülümsediler. İkisi el sıkışarak arkadaş oldular ve teneffüste birlikte bahçede oyunlar oynadılar.
-      </div>
-      <div class="qList">
-        <div class="qItem" onclick="this.classList.toggle('open')">
-          <div class="qTitle"><span class="qNum">1.</span> Öğretmen çocuklara ne dağıttı?</div>
-          <div class="qAns">Öğretmen her çocuğa bir resim defteri ve renkli kalemler dağıttı.</div>
-          <div class="qHint">💡 Cevabı görmek için tıkla</div>
-        </div>
-        <div class="qItem" onclick="this.classList.toggle('open')">
-          <div class="qTitle"><span class="qNum">2.</span> Elif resim defterine ne çizdi?</div>
-          <div class="qAns">Elif defterine özenle renkli bir kelebek çizdi.</div>
-        </div>
-        <div class="qItem" onclick="this.classList.toggle('open')">
-          <div class="qTitle"><span class="qNum">3.</span> Kerem hangi renkleri kullandı?</div>
-          <div class="qAns">Kerem mavi ve sarı renkleri kullandı.</div>
-        </div>
-        <div class="qItem" onclick="this.classList.toggle('open')">
-          <div class="qTitle"><span class="qNum">4.</span> Elif ve Kerem nasıl arkadaş oldu?</div>
-          <div class="qAns">Resimlerini birbirine gösterip gülümseyerek el sıkıştılar ve birlikte bahçede oynayarak arkadaş oldular.</div>
-        </div>
-      </div>
+  <section class="listen-panel">
+    <h2>🎧 Dinle ve Öğren</h2>
+    <div id="listenText" class="listen-text"></div>
+
+    <div class="voice-row">
+      <label for="voiceSelect"><b>Ses seç:</b></label>
+      <select id="voiceSelect">
+        <option>Sesler yükleniyor...</option>
+      </select>
+      <button class="blue" onclick="readLesson()">▶ Konuyu Dinle</button>
+      <button class="orange" onclick="stopSpeech()">■ Durdur</button>
     </div>
 
-    <div class="block">
-      <div class="bTitle">✅ Doğru mu Yanlış mı? <span class="bTag">D / Y</span></div>
-      <div class="dyList" id="dy-tanis">
-        <div class="dyItem"><div class="dyText">Arkadaşlarımızla tanışırken onun sözünü kesebiliriz.</div>
-          <div class="dyBtns"><button class="dyBtn" data-a="Y" onclick="checkDY(this,'Y')">D</button><button class="dyBtn" data-a="Y" onclick="checkDY(this,'D')">Y</button></div></div>
-        <div class="dyItem"><div class="dyText">Kendimizi tanıtırken nezaket kurallarına uymalıyız.</div>
-          <div class="dyBtns"><button class="dyBtn" data-a="D" onclick="checkDY(this,'D')">D</button><button class="dyBtn" data-a="D" onclick="checkDY(this,'Y')">Y</button></div></div>
-        <div class="dyItem"><div class="dyText">Öğretmen ile tanışırken göz teması kurmalıyız.</div>
-          <div class="dyBtns"><button class="dyBtn" data-a="D" onclick="checkDY(this,'D')">D</button><button class="dyBtn" data-a="D" onclick="checkDY(this,'Y')">Y</button></div></div>
-        <div class="dyItem"><div class="dyText">Arkadaşlarımızla tanışırken bağırarak adımızı söylemeliyiz.</div>
-          <div class="dyBtns"><button class="dyBtn" data-a="Y" onclick="checkDY(this,'Y')">D</button><button class="dyBtn" data-a="Y" onclick="checkDY(this,'D')">Y</button></div></div>
-        <div class="dyItem"><div class="dyText">Yeni tanıştığımız biriyle dalga geçebiliriz.</div>
-          <div class="dyBtns"><button class="dyBtn" data-a="Y" onclick="checkDY(this,'Y')">D</button><button class="dyBtn" data-a="Y" onclick="checkDY(this,'D')">Y</button></div></div>
-      </div>
+    <p style="text-align:center;font-size:14px">
+      Not: Erkek ses tercihi yapılır; ancak kullanılabilen sesler bilgisayar, tablet veya akıllı tahtadaki Türkçe seslere bağlıdır.
+    </p>
+  </section>
+
+  <section class="game-panel">
+    <h2>🎮 Etkinlik ve Oyun Alanı</h2>
+
+    <div class="game-menu">
+      <button class="orange" onclick="startBalloons()">🎈 Doğru Balonu Patlat</button>
+      <button class="green" onclick="startTrain()">🚂 Vagonları Sırala</button>
+      <button class="purple" onclick="startSorting()">🧺 Doğru Sepete At</button>
+      <button class="blue" onclick="startPuzzle()">🧩 Resim Yapbozu</button>
     </div>
 
-    <div class="block">
-      <div class="bTitle">🐝 Kendini Tanıt</div>
-      <div class="infoCard">
-        <div class="infoEmoji">🐝</div>
-        <div class="infoText">"Merhaba, ben <b>Semih</b>. 7 yaşındayım. En sevdiğim spor <b>futbol</b>. Boş zamanlarımda <b>resim yapmayı</b> severim. İleride <b>polis</b> olmak istiyorum."</div>
-      </div>
-      <p style="font-size:.88rem;margin:10px 0 6px;color:#555">Şimdi sen de kendini tanıt:</p>
-      <input class="fillInput" placeholder="Merhaba, ben ... yaşındayım. En sevdiğim...">
+    <div class="game-area">
+      <div id="message" class="message">Bir oyun seç ve başlayalım! 🌟</div>
+      <div id="game"></div>
     </div>
-  </div>
-
-  <!-- OKUL BÖLÜMLERİ -->
-  <div id="c1-okul" class="chapter">
-    <div class="block">
-      <div class="bTitle">🏫 Okulumuzun Bölümleri</div>
-      <div class="bagGrid" style="--uc:var(--u1)">
-        <div class="bagItem"><span class="bEmoji">👨‍💼</span><div class="bName">Müdür Odası</div></div>
-        <div class="bagItem"><span class="bEmoji">📚</span><div class="bName">Kütüphane</div></div>
-        <div class="bagItem"><span class="bEmoji">🪑</span><div class="bName">Sınıf</div></div>
-        <div class="bagItem"><span class="bEmoji">🚻</span><div class="bName">Tuvalet</div></div>
-        <div class="bagItem"><span class="bEmoji">👨‍🏫</span><div class="bName">Öğretmenler Odası</div></div>
-        <div class="bagItem"><span class="bEmoji">🥪</span><div class="bName">Kantin</div></div>
-        <div class="bagItem"><span class="bEmoji">🌳</span><div class="bName">Bahçe</div></div>
-        <div class="bagItem"><span class="bEmoji">🏥</span><div class="bName">Revir</div></div>
-      </div>
-    </div>
-    <div class="block">
-      <div class="bTitle">🇹🇷 Sınıf Şeref Köşesi</div>
-      <div class="infoCard">
-        <div class="infoEmoji">🇹🇷</div>
-        <div class="infoText"><b>İstiklal Marşı</b> – Milli marşımızın sözleri burada yer alır.</div>
-      </div>
-      <div class="infoCard">
-        <div class="infoEmoji">🎖️</div>
-        <div class="infoText"><b>Atatürk Portresi</b> – Cumhuriyetimizin kurucusu.</div>
-      </div>
-      <div class="infoCard">
-        <div class="infoEmoji">📜</div>
-        <div class="infoText"><b>Gençliğe Hitabe</b> – Atatürk'ün Türk gençliğine seslenişi.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- KURALLAR -->
-  <div id="c1-kural" class="chapter">
-    <div class="block">
-      <div class="bTitle">📋 Okul Kuralları</div>
-      <div class="ruleList">
-        <div class="rule"><div class="ruleIcon">🚮</div><div class="ruleText">Çöpleri çöp kutusuna atarız.</div></div>
-        <div class="rule"><div class="ruleIcon">🚶</div><div class="ruleText">Merdivenlerde koşmaz, yürüyerek ineriz.</div></div>
-        <div class="rule"><div class="ruleIcon">✋</div><div class="ruleText">Derste söz hakkı isteyerek konuşuruz.</div></div>
-        <div class="rule"><div class="ruleIcon">⏰</div><div class="ruleText">Okula zamanında geliriz.</div></div>
-        <div class="rule"><div class="ruleIcon">🧍</div><div class="ruleText">Kantinde sıraya gireriz.</div></div>
-        <div class="rule"><div class="ruleIcon">🤝</div><div class="ruleText">Arkadaşımızdan izin isteyerek eşyalarını kullanırız.</div></div>
-      </div>
-    </div>
-    <div class="block">
-      <div class="bTitle">📖 Kurallara Uyalım</div>
-      <div class="story">
-        <div class="story-title">KURALLARA UYALIM</div>
-        Deniz, okulun ilk gününde sınıfa girerken öğretmenin kurallarını düşünüyordu. Öğretmen "Sınıfta sessizce konuş, el kaldırmadan söz alma, koridorda yürüyerek gez" demişti. Deniz suskun kaldı, elini kaldırdı ve öğretmenden söz istedi. Çıkış zilinde koridorda koşmak yerine yürüdü. Sınıf düzenli, sessiz ve huzurluydu. Deniz de kendini güvende hissetti.
-      </div>
-    </div>
-  </div>
-
-  <!-- DUYGULAR -->
-  <div id="c1-duygu" class="chapter">
-    <div class="block">
-      <div class="bTitle">😊 Duygularımı Tanıyorum</div>
-      <div class="bagGrid">
-        <div class="bagItem"><span class="bEmoji">😄</span><div class="bName">Mutlu</div></div>
-        <div class="bagItem"><span class="bEmoji">😢</span><div class="bName">Üzgün</div></div>
-        <div class="bagItem"><span class="bEmoji">😡</span><div class="bName">Kızgın</div></div>
-        <div class="bagItem"><span class="bEmoji">😨</span><div class="bName">Korkmuş</div></div>
-        <div class="bagItem"><span class="bEmoji">😲</span><div class="bName">Şaşkın</div></div>
-        <div class="bagItem"><span class="bEmoji">🤔</span><div class="bName">Düşünceli</div></div>
-        <div class="bagItem"><span class="bEmoji">😴</span><div class="bName">Uykulu</div></div>
-        <div class="bagItem"><span class="bEmoji">🥰</span><div class="bName">Sevgi dolu</div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- KENDİMİ TANIYORUM -->
-  <div id="c1-kendim" class="chapter">
-    <div class="block">
-      <div class="bTitle">🪞 Kendimi Tanıyorum</div>
-      <div class="story">
-        <div class="story-title">KENDİMİ TANIYORUM</div>
-        Miray, sabah okula gelmeden önce aynanın karşısına geçti. Saçlarını taradı, gözlüklerini düzeltti ve gülümseyerek "Merhaba" dedi. Aynada koyu kahverengi gözlerini, uzun kirpiklerini ve çillerini fark etti. "Çiller beni farklı kılıyor ama onları seviyorum." diye düşündü. Okulda öğretmeni "Herkes aynada kendini tanıtsın" dedi. Miray, "Ben Miray, kahverengi gözlü, çilli bir arkadaşım." dedi. Herkes kendini sevmeyi öğrendi.
-      </div>
-      <div class="qList">
-        <div class="qItem" onclick="this.classList.toggle('open')">
-          <div class="qTitle"><span class="qNum">1.</span> Miray aynaya baktığında ne fark etti?</div>
-          <div class="qAns">Koyu kahverengi gözlerini, uzun kirpiklerini ve çillerini fark etti.</div>
-        </div>
-        <div class="qItem" onclick="this.classList.toggle('open')">
-          <div class="qTitle"><span class="qNum">2.</span> Günün sonunda öğrenciler ne öğrendi?</div>
-          <div class="qAns">Herkesin kendini sevmeyi öğrendi. Her birey farklıdır ve bu farklılıklar güzeldir.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="printSec">
-    <h3>📄 Çalışma Sayfaları — Ben ve Okulum</h3>
-    <p>Yazdır veya PDF olarak kaydet</p>
-    <div class="pGrid">
-      <div class="pBtn" onclick="openPrint(1,'tanis')">👋 Tanışma</div>
-      <div class="pBtn" onclick="openPrint(1,'okul')">🏫 Okul Bölümleri</div>
-      <div class="pBtn" onclick="openPrint(1,'kural')">📋 Sınıf Kuralları</div>
-      <div class="pBtn" onclick="openPrint(1,'duygu')">😊 Duygular</div>
-    </div>
-  </div>
+  </section>
 </div>
-
-<!-- ═══════ ÜNİTE 2: SAĞLIĞIM ve GÜVENLİĞİM ═══════ -->
-<div id="u2" class="unit" style="--uc:var(--u2);--ucl:var(--u2l)">
-  <div class="uHead" style="background:linear-gradient(135deg,#D32F2F,#EF5350)">
-    <div class="uIcon">❤️</div>
-    <div class="uInfo">
-      <h2>Sağlığım ve Güvenliğim</h2>
-      <p>Sağlıklı Yaşam · Diş Sağlığı · Trafik · Deprem Çantası · Acil Numaralar</p>
-    </div>
-  </div>
-
-  <div class="subnav">
-    <button class="subBtn on" onclick="switchC(2,'saglik')">🍎 Sağlıklı Yaşam</button>
-    <button class="subBtn" onclick="switchC(2,'dis')">🦷 Diş Sağlığı</button>
-    <button class="subBtn" onclick="switchC(2,'kisisel')">👤 Kişisel Alan</button>
-    <button class="subBtn" onclick="switchC(2,'trafik')">🚦 Trafik</button>
-    <button class="subBtn" onclick="switchC(2,'deprem')">🎒 Deprem Çantası</button>
-    <button class="subBtn" onclick="switchC(2,'acil')">🚨 Acil Numaralar</button>
-  </div>
-
-  <!-- SAĞLIKLI YAŞAM -->
-  <div id="c2-saglik" class="chapter on">
-    <div class="block">
-      <div class="bTitle">📖 Sağlıklı Elif</div>
-      <div class="story">
-        <div class="story-title">SAĞLIKLI ELİF</div>
-        Elif sabah uyandığında önce penceresini açıp derin bir nefes aldı. Sonra banyoya gidip dişlerini fırçaladı ve yüzünü yıkadı. Kahvaltıda süt, tam buğday ekmeği, peynir ve taze meyve yedi. Okulda teneffüste arkadaşlarıyla bahçede koştu ve ip oynadı. Eve döndüğünde ellerini sabunla iyice yıkadı, bol su içti. Akşam yemek öncesi bir porsiyon meyve atıştırdı ve yatağına erken gitti.
-      </div>
-      <div class="qList">
-        <div class="qItem" onclick="this.classList.toggle('open')">
-          <div class="qTitle"><span class="qNum">1.</span> Elif sabah ne yaptı?</div>
-          <div class="qAns">Penceresini açıp derin bir nefes aldı, banyoya gidip dişlerini fırçaladı ve yüzünü yıkadı.</div>
-        </div>
-        <div class="qItem" onclick="this.classList.toggle('open')">
-          <div class="qTitle"><span class="qNum">2.</span> Elif kişisel bakım ve temizlik olarak neler yaptı?</div>
-          <div class="qAns">Dişlerini fırçaladı, yüzünü yıkadı, eve dönünce ellerini sabunla iyice yıkadı.</div>
-        </div>
-        <div class="qItem" onclick="this.classList.toggle('open')">
-          <div class="qTitle"><span class="qNum">3.</span> Sağlıklı olmak için ne yapmalıyız?</div>
-          <div class="qAns">Düzenli beslenmeli, ellerimizi yıkamalı, spor yapmalı, bol su içmeli ve erken yatmalıyız.</div>
-        </div>
-      </div>
-    </div>
-    <div class="block">
-      <div class="bTitle">✅ Doğru mu Yanlış mı?</div>
-      <div class="dyList">
-        <div class="dyItem"><div class="dyText">Merve sık sık şekerli abur cubur yer.</div>
-          <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'Y')">D</button><button class="dyBtn" onclick="checkDY(this,'D')">Y</button></div></div>
-        <div class="dyItem"><div class="dyText">Duru her sabah dişlerini fırçalar.</div>
-          <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'D')">D</button><button class="dyBtn" onclick="checkDY(this,'Y')">Y</button></div></div>
-        <div class="dyItem"><div class="dyText">Hasan düzenli olarak spor yapmaktadır.</div>
-          <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'D')">D</button><button class="dyBtn" onclick="checkDY(this,'Y')">Y</button></div></div>
-        <div class="dyItem"><div class="dyText">Kerim gün içinde sadece sabah kahvaltısı yapar.</div>
-          <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'Y')">D</button><button class="dyBtn" onclick="checkDY(this,'D')">Y</button></div></div>
-        <div class="dyItem"><div class="dyText">Samet dışarıdan eve gelir gelmez ellerini yıkar.</div>
-          <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'D')">D</button><button class="dyBtn" onclick="checkDY(this,'Y')">Y</button></div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- DİŞ SAĞLIĞI -->
-  <div id="c2-dis" class="chapter">
-    <div class="block">
-      <div class="bTitle">🦷 Diş Sağlığı</div>
-      <div class="story">
-        <div class="story-title">DİŞ SAĞLIĞI</div>
-        Ayşe her sabah diş macununu fırçaya sürüp iki dakika boyunca özenle fırçalardı. Dişleri bembeyaz ve sağlıklı görünürdü. Emre ise bazen diş fırçalamayı unutuyor, bazen de sadece suyla duruluyordu. Bir gün Emre'nin dişi çürüdü ve çok acıdı. Diş hekimine gittiler, dolgu yapıldı. O günden sonra Emre, sabah ve akşam düzenli fırçalamayı hiç unutmuyor.
-      </div>
-      <div class="infoCard">
-        <div class="infoEmoji">🪥</div>
-        <div class="infoText"><b>Dişlerini sabah ve akşam</b> mutlaka 2 dakika fırçala!</div>
-      </div>
-      <div class="infoCard">
-        <div class="infoEmoji">🍬</div>
-        <div class="infoText"><b>Çok şekerli yiyecekler</b> diş çürümesine yol açar.</div>
-      </div>
-      <div class="infoCard">
-        <div class="infoEmoji">👨‍⚕️</div>
-        <div class="infoText">Yılda <b>en az 2 kez</b> diş hekimine git!</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- KİŞİSEL ALAN -->
-  <div id="c2-kisisel" class="chapter">
-    <div class="block">
-      <div class="bTitle">👤 Kişisel Alanımız</div>
-      <div class="story">
-        <div class="story-title">KİŞİSEL ALANIMIZ</div>
-        Öğretmen, "Kişisel alanımız bizim görünmez balonumuz gibidir. Herkesin kendi balonuna saygı göstermeliyiz." dedi. Merve oyun oynarken Efe ona biraz fazla yaklaştı. Merve rahatsız hissetti: "Efe, lütfen biraz uzak durabilir misin? Kişisel alanıma çok girdin." dedi. Efe "Özür dilerim" diyerek geri çekildi.
-      </div>
-      <div class="infoCard">
-        <div class="infoEmoji">🎈</div>
-        <div class="infoText">Kişisel alanın <b>görünmez bir balon</b> gibidir. Herkesin balonuna saygı göster.</div>
-      </div>
-      <div class="infoCard">
-        <div class="infoEmoji">🙋</div>
-        <div class="infoText">Birisi sana çok yaklaşırsa <b>kibarca uyar</b>: "Lütfen biraz uzak durur musun?"</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- TRAFİK -->
-  <div id="c2-trafik" class="chapter">
-    <div class="block">
-      <div class="bTitle">🚦 Kırmızı Işık — Trafik Kuralları</div>
-      <div class="story">
-        <div class="story-title">KIRMIZI IŞIK</div>
-        Ada okuldan eve dönerken trafik lambasına geldiler. Kırmızı ışık yanıyordu. Ada durdu ve annesinin elini tuttu. Yanındaki başka bir çocuk ise yol boş diye koşarak karşıya geçti. Annesi "Evet Ada, kırmızı ışıkta beklemek bizi güvende tutar." dedi. Yeşil ışık yandığında karşıya güvenle geçtiler.
-      </div>
-      <div class="ruleList">
-        <div class="rule" style="border-left-color:#D32F2F"><div class="ruleIcon">🔴</div><div class="ruleText"><b>Kırmızı ışık:</b> DUR! Yaya geçmez, araç gitmez.</div></div>
-        <div class="rule" style="border-left-color:#F9A825"><div class="ruleIcon">🟡</div><div class="ruleText"><b>Sarı ışık:</b> Dikkat! Hazırlan.</div></div>
-        <div class="rule" style="border-left-color:#388E3C"><div class="ruleIcon">🟢</div><div class="ruleText"><b>Yeşil ışık:</b> Geçebilirsin (yine de sağa-sola bak).</div></div>
-        <div class="rule"><div class="ruleIcon">🚸</div><div class="ruleText">Karşıdan karşıya geçerken yaya geçidini kullan.</div></div>
-        <div class="rule"><div class="ruleIcon">👀</div><div class="ruleText">Önce sola, sonra sağa, tekrar sola bak.</div></div>
-        <div class="rule"><div class="ruleIcon">🚗</div><div class="ruleText">Arabada arka koltukta otur ve emniyet kemerini tak.</div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- DEPREM ÇANTASI -->
-  <div id="c2-deprem" class="chapter">
-    <div class="block">
-      <div class="bTitle">🎒 Deprem Çantası Hazırlama Oyunu <span class="bTag">DOĞRUYU SEÇ</span></div>
-      <p style="font-size:.9rem;margin-bottom:10px;color:#555">Deprem çantasına konulması gerekenleri tıkla! Yanlış seçimde hata uyarısı gelir.</p>
-      <div class="bagGrid" id="bag-game">
-        <div class="bagItem" data-ok="1" onclick="pickBag(this,1)"><span class="bEmoji">💧</span><div class="bName">Su</div></div>
-        <div class="bagItem" data-ok="1" onclick="pickBag(this,1)"><span class="bEmoji">🔦</span><div class="bName">El Feneri</div></div>
-        <div class="bagItem" data-ok="1" onclick="pickBag(this,1)"><span class="bEmoji">🔋</span><div class="bName">Yedek Pil</div></div>
-        <div class="bagItem" data-ok="1" onclick="pickBag(this,1)"><span class="bEmoji">🥫</span><div class="bName">Konserve</div></div>
-        <div class="bagItem" data-ok="1" onclick="pickBag(this,1)"><span class="bEmoji">📻</span><div class="bName">Radyo</div></div>
-        <div class="bagItem" data-ok="1" onclick="pickBag(this,1)"><span class="bEmoji">🎽</span><div class="bName">Yedek Kıyafet</div></div>
-        <div class="bagItem" data-ok="1" onclick="pickBag(this,1)"><span class="bEmoji">💊</span><div class="bName">İlk Yardım</div></div>
-        <div class="bagItem" data-ok="1" onclick="pickBag(this,1)"><span class="bEmoji">📯</span><div class="bName">Düdük</div></div>
-        <div class="bagItem" data-ok="0" onclick="pickBag(this,0)"><span class="bEmoji">💄</span><div class="bName">Makyaj</div></div>
-        <div class="bagItem" data-ok="0" onclick="pickBag(this,0)"><span class="bEmoji">🎮</span><div class="bName">Oyun</div></div>
-        <div class="bagItem" data-ok="0" onclick="pickBag(this,0)"><span class="bEmoji">🍰</span><div class="bName">Pasta</div></div>
-        <div class="bagItem" data-ok="0" onclick="pickBag(this,0)"><span class="bEmoji">📺</span><div class="bName">Televizyon</div></div>
-      </div>
-      <div class="score">
-        <span class="scoreLabel">Doğru:</span><span class="scoreVal" id="bag-score">0</span>
-        <span class="scoreLabel">/ 8</span>
-      </div>
-      <div class="fb mt" id="bag-fb"></div>
-    </div>
-    <div class="block">
-      <div class="bTitle">🏠 Deprem Anında ÇÖK-KAPAN-TUTUN</div>
-      <div class="infoCard"><div class="infoEmoji">⬇️</div><div class="infoText"><b>ÇÖK</b> – Dizlerinin üzerine çök.</div></div>
-      <div class="infoCard"><div class="infoEmoji">🙆</div><div class="infoText"><b>KAPAN</b> – Başını kollarınla koru.</div></div>
-      <div class="infoCard"><div class="infoEmoji">🤲</div><div class="infoText"><b>TUTUN</b> – Sağlam bir yere (sıra, masa) tutun.</div></div>
-    </div>
-  </div>
-
-  <!-- ACİL NUMARALAR -->
-  <div id="c2-acil" class="chapter">
-    <div class="block">
-      <div class="bTitle">🚨 Acil Durum Numaraları</div>
-      <div class="afetGrid">
-        <div class="afetCard" style="--uc:var(--u2)">
-          <div class="afetEmoji">🚑</div>
-          <div class="afetName">112</div>
-          <div class="afetDesc">ACİL ÇAĞRI<br>(Tüm acil durumlar)</div>
-        </div>
-        <div class="afetCard" style="--uc:var(--u2)">
-          <div class="afetEmoji">🚒</div>
-          <div class="afetName">112</div>
-          <div class="afetDesc">İtfaiye<br>(Yangın)</div>
-        </div>
-        <div class="afetCard" style="--uc:var(--u2)">
-          <div class="afetEmoji">👮</div>
-          <div class="afetName">155</div>
-          <div class="afetDesc">Polis İmdat</div>
-        </div>
-        <div class="afetCard" style="--uc:var(--u2)">
-          <div class="afetEmoji">🚓</div>
-          <div class="afetName">156</div>
-          <div class="afetDesc">Jandarma</div>
-        </div>
-      </div>
-      <div class="infoCard" style="margin-top:14px">
-        <div class="infoEmoji">⚠️</div>
-        <div class="infoText"><b>Türkiye'de tüm acil durumlar için 112</b> aranır (yeni sistem).</div>
-      </div>
-    </div>
-    <div class="block">
-      <div class="bTitle">❓ Sen Ne Yapardın?</div>
-      <div class="qList">
-        <div class="qItem" onclick="this.classList.toggle('open')">
-          <div class="qTitle"><span class="qNum">1.</span> Okulda arkadaşın yaralandığında ne yaparsın?</div>
-          <div class="qAns">Hemen öğretmene haber veririm. Arkadaşımı yalnız bırakmam.</div>
-        </div>
-        <div class="qItem" onclick="this.classList.toggle('open')">
-          <div class="qTitle"><span class="qNum">2.</span> Mutfaktan doğalgaz kokusu gelirse?</div>
-          <div class="qAns">Hemen ışıkları açmadan büyüklere haber veririm, kapı ve pencereleri açarız.</div>
-        </div>
-        <div class="qItem" onclick="this.classList.toggle('open')">
-          <div class="qTitle"><span class="qNum">3.</span> Arabaya bindiğinde ne yapmalısın?</div>
-          <div class="qAns">Arka koltuğa otururum ve emniyet kemerimi takarım.</div>
-        </div>
-        <div class="qItem" onclick="this.classList.toggle('open')">
-          <div class="qTitle"><span class="qNum">4.</span> Alışveriş merkezinde kaybolursan?</div>
-          <div class="qAns">Olduğum yerde dururum veya güvenlik görevlisine giderim. Yabancılarla gitmem.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="printSec">
-    <h3>📄 Çalışma Sayfaları — Sağlık ve Güvenlik</h3>
-    <div class="pGrid">
-      <div class="pBtn" onclick="openPrint(2,'saglik')">🍎 Sağlıklı Yaşam</div>
-      <div class="pBtn" onclick="openPrint(2,'dis')">🦷 Diş Sağlığı</div>
-      <div class="pBtn" onclick="openPrint(2,'trafik')">🚦 Trafik Kuralları</div>
-      <div class="pBtn" onclick="openPrint(2,'deprem')">🎒 Deprem Çantası</div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════ ÜNİTE 3: AİLEM ve TOPLUM ═══════ -->
-<div id="u3" class="unit" style="--uc:var(--u3);--ucl:var(--u3l)">
-  <div class="uHead" style="background:linear-gradient(135deg,#F57C00,#FFA726)">
-    <div class="uIcon">👨‍👩‍👧</div>
-    <div class="uInfo">
-      <h2>Ailem ve Toplum</h2>
-      <p>Nezaket Kuralları · Dayanışma · Aile Görevleri</p>
-    </div>
-  </div>
-
-  <div class="subnav">
-    <button class="subBtn on" onclick="switchC(3,'nezaket')">🙏 Nezaket</button>
-    <button class="subBtn" onclick="switchC(3,'dayanisma')">🤝 Dayanışma</button>
-    <button class="subBtn" onclick="switchC(3,'gorev')">📋 Aile Görevleri</button>
-  </div>
-
-  <div id="c3-nezaket" class="chapter on">
-    <div class="block">
-      <div class="bTitle">🙏 Nezaket Kuralları</div>
-      <div class="story">
-        <div class="story-title">NEZAKET KURALLARI</div>
-        Emir okuldan geldiğinde ayakkabılarını kapının yanına düzgünce koydu. "Merhaba anneciğim, nasılsın?" diye sordu. Akşam yemeğinde "Yemeği alabilir miyim lütfen?" dedi. Sessizce yedi, ağzını kapatarak çiğnedi. Yemekten sonra "Ellerine sağlık anneciğim." dedi. Ertesi gün okulda arkadaşına "Lütfen kalemini ödünç alabilir miyim?" diye sordu.
-      </div>
-      <div class="ruleList">
-        <div class="rule"><div class="ruleIcon">👋</div><div class="ruleText"><b>Merhaba</b> – Karşılaşınca selam ver.</div></div>
-        <div class="rule"><div class="ruleIcon">🙏</div><div class="ruleText"><b>Lütfen</b> – Bir şey isterken kullan.</div></div>
-        <div class="rule"><div class="ruleIcon">💝</div><div class="ruleText"><b>Teşekkür ederim</b> – Yardım veya hediye alınca söyle.</div></div>
-        <div class="rule"><div class="ruleIcon">😔</div><div class="ruleText"><b>Özür dilerim</b> – Hata yapınca söyle.</div></div>
-        <div class="rule"><div class="ruleIcon">🍽️</div><div class="ruleText"><b>Afiyet olsun / Ellerine sağlık</b> – Yemekten sonra söyle.</div></div>
-      </div>
-    </div>
-    <div class="block">
-      <div class="bTitle">✅ Doğru mu Yanlış mı?</div>
-      <div class="dyList">
-        <div class="dyItem"><div class="dyText">Yaşar arkadaşının masasından izinsiz kalem aldı.</div>
-          <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'Y')">D</button><button class="dyBtn" onclick="checkDY(this,'D')">Y</button></div></div>
-        <div class="dyItem"><div class="dyText">Sultan yeni çanta alan babasına teşekkür etti.</div>
-          <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'D')">D</button><button class="dyBtn" onclick="checkDY(this,'Y')">Y</button></div></div>
-        <div class="dyItem"><div class="dyText">Celal yemeği ağzını açarak çiğniyor.</div>
-          <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'Y')">D</button><button class="dyBtn" onclick="checkDY(this,'D')">Y</button></div></div>
-        <div class="dyItem"><div class="dyText">Büşra annesi yemek hazırlarken ona yardım etti.</div>
-          <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'D')">D</button><button class="dyBtn" onclick="checkDY(this,'Y')">Y</button></div></div>
-      </div>
-    </div>
-  </div>
-
-  <div id="c3-dayanisma" class="chapter">
-    <div class="block">
-      <div class="bTitle">🤝 Dayanışma</div>
-      <div class="story">
-        <div class="story-title">DAYANIŞMA</div>
-        Defne pazar sabahı uyandı. Önce yatağını topladı, odasını havalandırdı. "Bugün masayı kurmak benim görevim" dedi. Küçük kardeşi Deniz "Ben de ekmekleri dilimlerim" diye gönüllü oldu. Kahvaltıdan sonra babası bulaşıkları yerleştirdi, annesi çamaşırları aldı. Pikniğe hazırlanırken Defne meyveleri yıkadı, Deniz mataraları doldurdu, babası arabayı kontrol etti, annesi sandviç yaptı. Babası: "Ekip çalışması sayesinde her şey kolaylaştı" dedi.
-      </div>
-      <div class="qList">
-        <div class="qItem" onclick="this.classList.toggle('open')">
-          <div class="qTitle"><span class="qNum">1.</span> Defne kahvaltı hazırlığında hangi görevi üstlendi?</div>
-          <div class="qAns">Masayı kurma görevini üstlendi. Renkli tabakları, çatal-kaşıkları ve peçeteleri özenle dizdi.</div>
-        </div>
-        <div class="qItem" onclick="this.classList.toggle('open')">
-          <div class="qTitle"><span class="qNum">2.</span> Aile üyeleri görevleri paylaştığında hangi faydayı gördüler?</div>
-          <div class="qAns">İşler hızlı bitti, daha çok zamanları kaldı ve hep birlikte mutlu oldular.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="c3-gorev" class="chapter">
-    <div class="block">
-      <div class="bTitle">📋 Ailede Görevler</div>
-      <div class="planetGrid">
-        <div class="planet" style="border-color:#F57C00">
-          <div class="planetEmoji">👩</div>
-          <div class="planetName" style="color:#F57C00">ANNE</div>
-          <div class="planetFact">Yemek, temizlik, çocuklara bakım</div>
-        </div>
-        <div class="planet" style="border-color:#F57C00">
-          <div class="planetEmoji">👨</div>
-          <div class="planetName" style="color:#F57C00">BABA</div>
-          <div class="planetFact">Alışveriş, ev tamiri, iş hayatı</div>
-        </div>
-        <div class="planet" style="border-color:#F57C00">
-          <div class="planetEmoji">🧒</div>
-          <div class="planetName" style="color:#F57C00">KARDEŞ</div>
-          <div class="planetFact">Oyuncaklarını toplama, kitap okuma</div>
-        </div>
-        <div class="planet" style="border-color:#F57C00">
-          <div class="planetEmoji">🙋</div>
-          <div class="planetName" style="color:#F57C00">SEN</div>
-          <div class="planetFact">Odanı toplama, derslerine çalışma, yardım etme</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="printSec">
-    <h3>📄 Çalışma Sayfaları — Ailem ve Toplum</h3>
-    <div class="pGrid">
-      <div class="pBtn" onclick="openPrint(3,'nezaket')">🙏 Nezaket Kuralları</div>
-      <div class="pBtn" onclick="openPrint(3,'gorev')">📋 Aile Görevleri</div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════ ÜNİTE 4: YAŞADIĞIM YER ve ÜLKEM ═══════ -->
-<div id="u4" class="unit" style="--uc:var(--u4);--ucl:var(--u4l)">
-  <div class="uHead" style="background:linear-gradient(135deg,#388E3C,#66BB6A)">
-    <div class="uIcon">🇹🇷</div>
-    <div class="uInfo">
-      <h2>Yaşadığım Yer ve Ülkem</h2>
-      <p>Türkiye · Bayrak · İstiklal Marşı · Atatürk · İllerimiz</p>
-    </div>
-  </div>
-
-  <div class="subnav">
-    <button class="subBtn on" onclick="switchC(4,'ulkem')">🇹🇷 Ülkem Türkiye</button>
-    <button class="subBtn" onclick="switchC(4,'vatan')">❤️ Vatan Sevgisi</button>
-    <button class="subBtn" onclick="switchC(4,'ataturk')">🎖️ Atatürk</button>
-    <button class="subBtn" onclick="switchC(4,'iller')">🗺️ İllerimiz</button>
-  </div>
-
-  <div id="c4-ulkem" class="chapter on">
-    <div class="block">
-      <div class="bTitle">🇹🇷 Ülkemiz Türkiye</div>
-      <div class="planetGrid">
-        <div class="planet" style="border-color:#D32F2F">
-          <div class="planetEmoji">🇹🇷</div>
-          <div class="planetName" style="color:#D32F2F">BAYRAĞIMIZ</div>
-          <div class="planetFact">Kırmızı zemin üzerinde <b>ay ve yıldız</b> bulunur.</div>
-        </div>
-        <div class="planet" style="border-color:#388E3C">
-          <div class="planetEmoji">🏛️</div>
-          <div class="planetName" style="color:#388E3C">BAŞKENT</div>
-          <div class="planetFact"><b>Ankara</b> başkentimizdir.</div>
-        </div>
-        <div class="planet" style="border-color:#1976D2">
-          <div class="planetEmoji">💰</div>
-          <div class="planetName" style="color:#1976D2">PARA BİRİMİ</div>
-          <div class="planetFact"><b>Türk Lirası (TL)</b> – ₺ sembolü</div>
-        </div>
-        <div class="planet" style="border-color:#7B1FA2">
-          <div class="planetEmoji">🎵</div>
-          <div class="planetName" style="color:#7B1FA2">MİLLİ MARŞ</div>
-          <div class="planetFact"><b>İstiklal Marşı</b><br><small>Şair: Mehmet Akif Ersoy</small></div>
-        </div>
-      </div>
-    </div>
-    <div class="block">
-      <div class="bTitle">✅ Doğru mu Yanlış mı?</div>
-      <div class="dyList">
-        <div class="dyItem"><div class="dyText">Ülkemizin başkenti Sivas'tır.</div>
-          <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'Y')">D</button><button class="dyBtn" onclick="checkDY(this,'D')">Y</button></div></div>
-        <div class="dyItem"><div class="dyText">Ülkemizin adı Türkiye'dir.</div>
-          <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'D')">D</button><button class="dyBtn" onclick="checkDY(this,'Y')">Y</button></div></div>
-        <div class="dyItem"><div class="dyText">Ülkemizin her tarafı denizlerle çevrili bir ada ülkesidir.</div>
-          <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'Y')">D</button><button class="dyBtn" onclick="checkDY(this,'D')">Y</button></div></div>
-        <div class="dyItem"><div class="dyText">Van Gölü ülkemizin en büyük gölüdür.</div>
-          <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'D')">D</button><button class="dyBtn" onclick="checkDY(this,'Y')">Y</button></div></div>
-        <div class="dyItem"><div class="dyText">Marmara denizi ülkemizin bir parçasıdır.</div>
-          <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'D')">D</button><button class="dyBtn" onclick="checkDY(this,'Y')">Y</button></div></div>
-      </div>
-    </div>
-  </div>
-
-  <div id="c4-vatan" class="chapter">
-    <div class="block">
-      <div class="bTitle">❤️ Vatan Sevgisi</div>
-      <div class="story">
-        <div class="story-title">VATAN SEVGİSİ</div>
-        Ali sınıfta bayrak şiiri çalışırken öğretmeni Çanakkale Zaferi'nden söz etti. "Çanakkale, ülkemizi korumak için cesur askerlerimizin omuz omuza durduğu bir yerdir." dedi. Ali defterinin kenarına küçük bir ay-yıldız çizdi ve altına yazdı: "Ülkem için en iyisini yapacağım." Evine dönerken rüzgârda dalgalanan bayrağa baktı, başını dik tuttu ve sessizce söz verdi: "Çanakkale'deki cesur askerler gibi, ben de vatanımı hep koruyacağım."
-      </div>
-      <div class="qList">
-        <div class="qItem" onclick="this.classList.toggle('open')">
-          <div class="qTitle"><span class="qNum">1.</span> Öğretmen hangi zaferden bahsetti?</div>
-          <div class="qAns">Çanakkale Zaferi'nden bahsetti. Cesur askerlerimizin fedakarlıklarını anlattı.</div>
-        </div>
-        <div class="qItem" onclick="this.classList.toggle('open')">
-          <div class="qTitle"><span class="qNum">2.</span> Sen ülkeni sevdiğini nasıl gösterebilirsin?</div>
-          <div class="qAns">Çalışkan olarak, doğayı koruyarak, kurallara uyarak, bayrağımıza saygı göstererek.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="c4-ataturk" class="chapter">
-    <div class="block">
-      <div class="bTitle">🎖️ Atatürk'ün Hayatı</div>
-      <div class="timeline">
-        <div class="tlItem"><div class="tlIcon">🏠</div><div class="tlText">
-          <div class="tlTitle">Doğum Yeri</div>
-          <div class="tlDesc">Selanik'te doğdu (1881).</div>
-        </div></div>
-        <div class="tlItem"><div class="tlIcon">👩</div><div class="tlText">
-          <div class="tlTitle">Annesi: Zübeyde Hanım</div>
-          <div class="tlDesc">Babası: Ali Rıza Bey · Kız Kardeşi: Makbule Hanım</div>
-        </div></div>
-        <div class="tlItem"><div class="tlIcon">🎓</div><div class="tlText">
-          <div class="tlTitle">Askeri Okulda Eğitim</div>
-          <div class="tlDesc">Askeri okula gitti, başarılı bir asker oldu.</div>
-        </div></div>
-        <div class="tlItem"><div class="tlIcon">⚔️</div><div class="tlText">
-          <div class="tlTitle">Çanakkale Zaferi</div>
-          <div class="tlDesc">Büyük katkısı oldu, vatan kurtarıldı.</div>
-        </div></div>
-        <div class="tlItem"><div class="tlIcon">🇹🇷</div><div class="tlText">
-          <div class="tlTitle">Türk Kurtuluş Savaşı</div>
-          <div class="tlDesc">Liderlik yaptı, Cumhuriyet'i kurdu.</div>
-        </div></div>
-        <div class="tlItem"><div class="tlIcon">👑</div><div class="tlText">
-          <div class="tlTitle">Cumhurbaşkanlığı</div>
-          <div class="tlDesc">Ömrünün geri kalanında ülkemizin liderliğini yaptı.</div>
-        </div></div>
-        <div class="tlItem"><div class="tlIcon">🕯️</div><div class="tlText">
-          <div class="tlTitle">Vefat: 10 Kasım 1938</div>
-          <div class="tlDesc">Dolmabahçe Sarayı'nda hayata gözlerini yumdu.</div>
-        </div></div>
-        <div class="tlItem"><div class="tlIcon">🏛️</div><div class="tlText">
-          <div class="tlTitle">Anıtkabir</div>
-          <div class="tlDesc">Atatürk için Ankara'da anıt mezar yapılmıştır.</div>
-        </div></div>
-      </div>
-    </div>
-  </div>
-
-  <div id="c4-iller" class="chapter">
-    <div class="block">
-      <div class="bTitle">🗺️ Yiyeceklerin Ünlü Olduğu İller</div>
-      <div class="afetGrid">
-        <div class="afetCard" style="--uc:var(--u4)">
-          <div class="afetEmoji">🥩</div><div class="afetName">ADIYAMAN</div>
-          <div class="afetDesc">Çiğ köfte</div>
-        </div>
-        <div class="afetCard" style="--uc:var(--u4)">
-          <div class="afetEmoji">🍑</div><div class="afetName">MALATYA</div>
-          <div class="afetDesc">Kayısı</div>
-        </div>
-        <div class="afetCard" style="--uc:var(--u4)">
-          <div class="afetEmoji">🥘</div><div class="afetName">KAHRAMANMARAŞ</div>
-          <div class="afetDesc">Maraş dondurması</div>
-        </div>
-        <div class="afetCard" style="--uc:var(--u4)">
-          <div class="afetEmoji">🥮</div><div class="afetName">GAZİANTEP</div>
-          <div class="afetDesc">Baklava</div>
-        </div>
-        <div class="afetCard" style="--uc:var(--u4)">
-          <div class="afetEmoji">🌰</div><div class="afetName">GİRESUN</div>
-          <div class="afetDesc">Fındık</div>
-        </div>
-        <div class="afetCard" style="--uc:var(--u4)">
-          <div class="afetEmoji">🍝</div><div class="afetName">KAYSERİ</div>
-          <div class="afetDesc">Mantı</div>
-        </div>
-        <div class="afetCard" style="--uc:var(--u4)">
-          <div class="afetEmoji">🌶️</div><div class="afetName">ŞANLIURFA</div>
-          <div class="afetDesc">İsot, çiğ köfte</div>
-        </div>
-        <div class="afetCard" style="--uc:var(--u4)">
-          <div class="afetEmoji">🫖</div><div class="afetName">RİZE</div>
-          <div class="afetDesc">Çay</div>
-        </div>
-      </div>
-    </div>
-    <div class="block">
-      <div class="bTitle">🏛️ Türkiye'nin Tarihi Yerleri</div>
-      <div class="afetGrid">
-        <div class="afetCard" style="--uc:var(--u4)"><div class="afetEmoji">🕌</div><div class="afetName">Ayasofya</div><div class="afetDesc">İstanbul</div></div>
-        <div class="afetCard" style="--uc:var(--u4)"><div class="afetEmoji">⛪</div><div class="afetName">Sümela Manastırı</div><div class="afetDesc">Trabzon</div></div>
-        <div class="afetCard" style="--uc:var(--u4)"><div class="afetEmoji">🏞️</div><div class="afetName">Pamukkale</div><div class="afetDesc">Denizli</div></div>
-        <div class="afetCard" style="--uc:var(--u4)"><div class="afetEmoji">🏛️</div><div class="afetName">Anıtkabir</div><div class="afetDesc">Ankara</div></div>
-        <div class="afetCard" style="--uc:var(--u4)"><div class="afetEmoji">⚔️</div><div class="afetName">Şehitler Abidesi</div><div class="afetDesc">Çanakkale</div></div>
-        <div class="afetCard" style="--uc:var(--u4)"><div class="afetEmoji">🏔️</div><div class="afetName">Peri Bacaları</div><div class="afetDesc">Kapadokya</div></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="printSec">
-    <h3>📄 Çalışma Sayfaları — Yaşadığım Yer ve Ülkem</h3>
-    <div class="pGrid">
-      <div class="pBtn" onclick="openPrint(4,'ulkem')">🇹🇷 Ülkem Türkiye</div>
-      <div class="pBtn" onclick="openPrint(4,'ataturk')">🎖️ Atatürk'ün Hayatı</div>
-      <div class="pBtn" onclick="openPrint(4,'iller')">🗺️ İllerimiz</div>
-      <div class="pBtn" onclick="openPrint(4,'mektup')">✉️ Atatürk'e Mektup</div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════ ÜNİTE 5: DOĞA ve ÇEVRE ═══════ -->
-<div id="u5" class="unit" style="--uc:var(--u5);--ucl:var(--u5l)">
-  <div class="uHead" style="background:linear-gradient(135deg,#7B1FA2,#AB47BC)">
-    <div class="uIcon">🌳</div>
-    <div class="uInfo">
-      <h2>Doğa ve Çevre</h2>
-      <p>Doğa Gezisi · Doğal Afetler · Geri Dönüşüm</p>
-    </div>
-  </div>
-
-  <div class="subnav">
-    <button class="subBtn on" onclick="switchC(5,'doga')">🌲 Doğa Gezisi</button>
-    <button class="subBtn" onclick="switchC(5,'afet')">🌪️ Doğal Afetler</button>
-    <button class="subBtn" onclick="switchC(5,'geri')">♻️ Geri Dönüşüm</button>
-  </div>
-
-  <div id="c5-doga" class="chapter on">
-    <div class="block">
-      <div class="bTitle">🌲 Doğa Gezisi</div>
-      <div class="story">
-        <div class="story-title">DOĞA GEZİSİ</div>
-        Efe, sınıfıyla birlikte ormana geziye gitti. Öğretmeni "Canlı ve cansız varlıkları gözlemleyelim" demişti. Efe önce serçelerin dallarda cıvıldadığını gördü. Parlak bir çakıl taşı buldu ama hemen yerine koydu: "Bu taş burada kalmalı" dedi. Yerde yürüyen bir karıncayı görünce ezmemek için adımlarını yavaşlattılar. "Doğaya saygı gösterirsek o da bize güzelliklerini gösterir."
-      </div>
-      <div class="ruleList">
-        <div class="rule"><div class="ruleIcon">🌿</div><div class="ruleText"><b>Canlılar:</b> İnsan, hayvan, bitki – nefes alır, beslenir, büyür.</div></div>
-        <div class="rule"><div class="ruleIcon">🪨</div><div class="ruleText"><b>Cansızlar:</b> Taş, su, toprak – nefes almaz, beslenmez.</div></div>
-        <div class="rule"><div class="ruleIcon">🐜</div><div class="ruleText">Doğada gördüğümüz canlılara <b>zarar vermeyiz</b>.</div></div>
-        <div class="rule"><div class="ruleIcon">🚮</div><div class="ruleText">Çöplerimizi doğaya <b>atmayız</b>, çöp kutusuna atarız.</div></div>
-      </div>
-    </div>
-  </div>
-
-  <div id="c5-afet" class="chapter">
-    <div class="block">
-      <div class="bTitle">🌪️ Doğal Afetler</div>
-      <div class="afetGrid">
-        <div class="afetCard" style="--uc:var(--u5)">
-          <div class="afetEmoji">🏚️</div>
-          <div class="afetName">DEPREM</div>
-          <div class="afetDesc">Yerin altında oluşan ani sarsıntılar</div>
-        </div>
-        <div class="afetCard" style="--uc:var(--u5)">
-          <div class="afetEmoji">🌊</div>
-          <div class="afetName">SEL</div>
-          <div class="afetDesc">Şiddetli yağmur sonu oluşan su baskınları</div>
-        </div>
-        <div class="afetCard" style="--uc:var(--u5)">
-          <div class="afetEmoji">🔥</div>
-          <div class="afetName">YANGIN</div>
-          <div class="afetDesc">Kontrolsüz oluşan yanma olayları</div>
-        </div>
-        <div class="afetCard" style="--uc:var(--u5)">
-          <div class="afetEmoji">🏔️</div>
-          <div class="afetName">ÇIĞ</div>
-          <div class="afetDesc">Karlı dağlarda karın kütle halinde aşağı kayması</div>
-        </div>
-        <div class="afetCard" style="--uc:var(--u5)">
-          <div class="afetEmoji">⛰️</div>
-          <div class="afetName">HEYELAN</div>
-          <div class="afetDesc">Kaya, toprak, çamurun eğimli arazilerden kayması</div>
-        </div>
-        <div class="afetCard" style="--uc:var(--u5)">
-          <div class="afetEmoji">🌪️</div>
-          <div class="afetName">FIRTINA</div>
-          <div class="afetDesc">Şiddetli rüzgâr ve yağışlar</div>
-        </div>
-      </div>
-    </div>
-    <div class="block">
-      <div class="bTitle">✅ Doğru mu Yanlış mı?</div>
-      <div class="dyList">
-        <div class="dyItem"><div class="dyText">Deprem yüksek yerlerdeki karın aşağı kaymasıdır.</div>
-          <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'Y')">D</button><button class="dyBtn" onclick="checkDY(this,'D')">Y</button></div></div>
-        <div class="dyItem"><div class="dyText">Yoğun yağmur sonrası sel oluşabilir.</div>
-          <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'D')">D</button><button class="dyBtn" onclick="checkDY(this,'Y')">Y</button></div></div>
-        <div class="dyItem"><div class="dyText">Deprem çantasında su bulunmalıdır.</div>
-          <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'D')">D</button><button class="dyBtn" onclick="checkDY(this,'Y')">Y</button></div></div>
-        <div class="dyItem"><div class="dyText">Yanma olayının kontrolden çıkmasına yangın denir.</div>
-          <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'D')">D</button><button class="dyBtn" onclick="checkDY(this,'Y')">Y</button></div></div>
-        <div class="dyItem"><div class="dyText">Deprem çantasına makyaj malzemesi koyulmalıdır.</div>
-          <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'Y')">D</button><button class="dyBtn" onclick="checkDY(this,'D')">Y</button></div></div>
-        <div class="dyItem"><div class="dyText">Eğimli araziden karların aşağı kaymasına çığ denir.</div>
-          <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'D')">D</button><button class="dyBtn" onclick="checkDY(this,'Y')">Y</button></div></div>
-      </div>
-    </div>
-  </div>
-
-  <div id="c5-geri" class="chapter">
-    <div class="block">
-      <div class="bTitle">♻️ Geri Dönüşüm Oyunu <span class="bTag">DOĞRU KUTUYA</span></div>
-      <p style="font-size:.88rem;color:#555;margin-bottom:12px">Önce atığı seç, sonra doğru renkli kutuya tıkla!</p>
-      <div class="recycleBins">
-        <div class="recBin plastik" onclick="dropRec('plastik')"><span class="icon">🟡</span>PLASTİK<br><small>Sarı</small></div>
-        <div class="recBin kagit" onclick="dropRec('kagit')"><span class="icon">🔵</span>KÂĞIT<br><small>Mavi</small></div>
-        <div class="recBin cam" onclick="dropRec('cam')"><span class="icon">🟢</span>CAM<br><small>Yeşil</small></div>
-        <div class="recBin metal" onclick="dropRec('metal')"><span class="icon">🔴</span>METAL<br><small>Kırmızı</small></div>
-      </div>
-      <div class="recItems" id="recyItems">
-        <div class="recItem" data-type="plastik" onclick="selRec(this)">🥤<span class="lbl">Pet şişe</span></div>
-        <div class="recItem" data-type="kagit" onclick="selRec(this)">📰<span class="lbl">Gazete</span></div>
-        <div class="recItem" data-type="cam" onclick="selRec(this)">🍾<span class="lbl">Şişe</span></div>
-        <div class="recItem" data-type="metal" onclick="selRec(this)">🥫<span class="lbl">Konserve</span></div>
-        <div class="recItem" data-type="plastik" onclick="selRec(this)">🛍️<span class="lbl">Poşet</span></div>
-        <div class="recItem" data-type="kagit" onclick="selRec(this)">📦<span class="lbl">Kutu</span></div>
-        <div class="recItem" data-type="cam" onclick="selRec(this)">🫙<span class="lbl">Kavanoz</span></div>
-        <div class="recItem" data-type="metal" onclick="selRec(this)">🥤<span class="lbl">Kola kutusu</span></div>
-      </div>
-      <div class="score">
-        <span class="scoreLabel">Doğru:</span><span class="scoreVal" id="rec-score">0</span>
-        <span class="scoreLabel">/ 8</span>
-      </div>
-      <div class="fb mt" id="rec-fb"></div>
-    </div>
-    <div class="block">
-      <div class="bTitle">📖 Geri Dönüşüm</div>
-      <div class="story">
-        <div class="story-title">GERİ DÖNÜŞÜM</div>
-        Okulun bahçesinde mavi, sarı, yeşil ve kırmızı dört geri dönüşüm kutusu vardı. Öğretmen Sevim Hanım: "Her atığın gideceği doğru bir yer var" dedi. Elif gazete kâğıdını mavi kutuya attı. Kerem plastik şişeyi sarı kutuya bıraktı. Ali cam kavanozu yeşil kutuya yerleştirdi. Zeynep metal kola kutusunu kırmızı kutuya bıraktı. "Atıklar doğru kutuya giderse yeniden kullanılır ve doğa korunur."
-      </div>
-    </div>
-  </div>
-
-  <div class="printSec">
-    <h3>📄 Çalışma Sayfaları — Doğa ve Çevre</h3>
-    <div class="pGrid">
-      <div class="pBtn" onclick="openPrint(5,'afet')">🌪️ Doğal Afetler</div>
-      <div class="pBtn" onclick="openPrint(5,'geri')">♻️ Geri Dönüşüm</div>
-      <div class="pBtn" onclick="openPrint(5,'doga')">🌲 Doğa Gezisi</div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════ ÜNİTE 6: BİLİM, TEKNOLOJİ ve SANAT ═══════ -->
-<div id="u6" class="unit" style="--uc:var(--u6);--ucl:var(--u6l)">
-  <div class="uHead" style="background:linear-gradient(135deg,#0097A7,#26C6DA)">
-    <div class="uIcon">🔬</div>
-    <div class="uInfo">
-      <h2>Bilim, Teknoloji ve Sanat</h2>
-      <p>Bilimsel Süreç · Teknolojik Aletler · Sanat Etkinlikleri</p>
-    </div>
-  </div>
-
-  <div class="subnav">
-    <button class="subBtn on" onclick="switchC(6,'bilim')">🔬 Bilim</button>
-    <button class="subBtn" onclick="switchC(6,'teknoloji')">💻 Teknoloji</button>
-    <button class="subBtn" onclick="switchC(6,'sanat')">🎨 Sanat</button>
-  </div>
-
-  <div id="c6-bilim" class="chapter on">
-    <div class="block">
-      <div class="bTitle">🔬 Meraklı Derin — Bilimsel Süreç</div>
-      <div class="story">
-        <div class="story-title">MERAKLI DERİN</div>
-        Bir gün Derin, okul bahçesinde yürürken bir çiçeğin yapraklarında su damlacıkları gördü. Hava güneşliydi ama yağmur yağmamıştı. Merakla düşündü: "Bu damlalar nereden geldi?" Öğretmenine sordu. Birlikte deney yaptılar: Saksıdaki çiçeklere aynı miktarda su verdiler, birini güneşli pencere kenarına, diğerini gölgeli yere koydular. Ertesi gün pencere kenarındaki bitkinin yapraklarında su damlacıkları oluştu. "Bitki fazla suyu yapraklarından bırakıyor!" Öğretmen: "İşte bu bilimsel süreçtir: Soru sor, tahmin et, gözlem yap ve sonuca ulaş."
-      </div>
-    </div>
-    <div class="block">
-      <div class="bTitle">🧪 Bilimsel Süreç Adımları</div>
-      <div class="timeline">
-        <div class="tlItem"><div class="tlIcon">🤔</div><div class="tlText">
-          <div class="tlTitle">1. Bilim Merakla Başlar</div>
-          <div class="tlDesc">Etrafımızı gözlemleriz, sorular sorarız.</div>
-        </div></div>
-        <div class="tlItem"><div class="tlIcon">📌</div><div class="tlText">
-          <div class="tlTitle">2. Bir Konu Belirleriz</div>
-          <div class="tlDesc">Araştıracağımız konuyu seçeriz.</div>
-        </div></div>
-        <div class="tlItem"><div class="tlIcon">❓</div><div class="tlText">
-          <div class="tlTitle">3. Sorular Hazırlarız</div>
-          <div class="tlDesc">"Neden?", "Nasıl?" sorularını sorarız.</div>
-        </div></div>
-        <div class="tlItem"><div class="tlIcon">🧪</div><div class="tlText">
-          <div class="tlTitle">4. Araştırma veya Deney Yaparız</div>
-          <div class="tlDesc">Gözlem yapar, sonuca ulaşırız.</div>
-        </div></div>
-      </div>
-    </div>
-  </div>
-
-  <div id="c6-teknoloji" class="chapter">
-    <div class="block">
-      <div class="bTitle">💻 Teknolojinin Peşinde</div>
-      <div class="story">
-        <div class="story-title">TEKNOLOJİNİN PEŞİNDE</div>
-        Yiğit kolundaki akıllı saati tanıttı: "Beni titreşimle uyandırıyor, adımlarımı sayıyor, 112'yi arıyor, su içmemi hatırlatıyor." Öğretmen projeksiyonu açtı, uzaktaki halk kütüphanesine bağlandı. Robot süpürge tozları temizledi. Yiğit: "Teknoloji hem sağlığımızı koruyor hem de zamandan tasarruf ettiriyor." Öğretmen: "Önemli olan bu araçları güvenli ve yararlı kullanmak."
-      </div>
-    </div>
-    <div class="block">
-      <div class="bTitle">⚙️ Teknolojinin Kullanım Alanları</div>
-      <div class="planetGrid">
-        <div class="planet" style="border-color:#D32F2F">
-          <div class="planetEmoji">🏥</div>
-          <div class="planetName" style="color:#D32F2F">SAĞLIK</div>
-          <div class="planetFact">Röntgen, tomografi, ameliyat aletleri</div>
-        </div>
-        <div class="planet" style="border-color:#1976D2">
-          <div class="planetEmoji">📱</div>
-          <div class="planetName" style="color:#1976D2">İLETİŞİM</div>
-          <div class="planetFact">Telefon, bilgisayar, internet</div>
-        </div>
-        <div class="planet" style="border-color:#F57C00">
-          <div class="planetEmoji">✈️</div>
-          <div class="planetName" style="color:#F57C00">ULAŞIM</div>
-          <div class="planetFact">Uçak, tren, araba, gemi</div>
-        </div>
-        <div class="planet" style="border-color:#388E3C">
-          <div class="planetEmoji">💻</div>
-          <div class="planetName" style="color:#388E3C">EĞİTİM</div>
-          <div class="planetFact">Bilgisayar, akıllı tahta, tablet</div>
-        </div>
-      </div>
-    </div>
-    <div class="block">
-      <div class="bTitle">🔁 Bilim ↔️ Teknoloji</div>
-      <div class="infoCard">
-        <div class="infoEmoji">🔬</div>
-        <div class="infoText"><b>Bilim ve teknoloji</b> her zaman birbirini destekler. Bilim geliştikçe teknoloji de gelişir, teknoloji geliştikçe de bilim gelişir.</div>
-      </div>
-    </div>
-  </div>
-
-  <div id="c6-sanat" class="chapter">
-    <div class="block">
-      <div class="bTitle">🎨 Sahilde Sanat</div>
-      <div class="story">
-        <div class="story-title">SAHİLDE SANAT</div>
-        Hafta sonu sabahı, Ada ve kuzeni Mete deniz kenarındaki "Sahil Boyası Şenliği" afişini gördüler. Şenlik alanında resim ve kil şekillendirme atölyesi vardı. Ada tuvalin başına geçti, ince çizgiler ve canlı renkler kullanarak martıların uçuşunu boyadı: "Renkler duygularımı anlatıyor." Mete kil masasında bir balık heykelciği yaptı. Şenlik görevlisi: "Sanatsal etkinlikler bizi mutlu eder, el becerimizi ve hayallerimizi geliştirir, duygularımızı ifade ederiz."
-      </div>
-    </div>
-    <div class="block">
-      <div class="bTitle">🎭 Sanat Dalları</div>
-      <div class="bagGrid">
-        <div class="bagItem"><span class="bEmoji">🎨</span><div class="bName">Resim</div></div>
-        <div class="bagItem"><span class="bEmoji">🗿</span><div class="bName">Heykel</div></div>
-        <div class="bagItem"><span class="bEmoji">🎵</span><div class="bName">Müzik</div></div>
-        <div class="bagItem"><span class="bEmoji">💃</span><div class="bName">Dans</div></div>
-        <div class="bagItem"><span class="bEmoji">🎭</span><div class="bName">Tiyatro</div></div>
-        <div class="bagItem"><span class="bEmoji">📷</span><div class="bName">Fotoğraf</div></div>
-        <div class="bagItem"><span class="bEmoji">🏺</span><div class="bName">Seramik</div></div>
-        <div class="bagItem"><span class="bEmoji">✍️</span><div class="bName">Şiir</div></div>
-      </div>
-    </div>
-    <div class="block">
-      <div class="bTitle">💖 Sanatın Faydaları</div>
-      <div class="infoCard"><div class="infoEmoji">😊</div><div class="infoText">Bizi <b>mutlu</b> eder.</div></div>
-      <div class="infoCard"><div class="infoEmoji">✋</div><div class="infoText"><b>El becerimizi</b> geliştirir.</div></div>
-      <div class="infoCard"><div class="infoEmoji">🌈</div><div class="infoText"><b>Hayal gücümüzü</b> artırır.</div></div>
-      <div class="infoCard"><div class="infoEmoji">💭</div><div class="infoText"><b>Duygu ve düşüncelerimizi</b> ifade ederiz.</div></div>
-    </div>
-  </div>
-
-  <div class="printSec">
-    <h3>📄 Çalışma Sayfaları — Bilim, Teknoloji ve Sanat</h3>
-    <div class="pGrid">
-      <div class="pBtn" onclick="openPrint(6,'bilim')">🔬 Bilimsel Süreç</div>
-      <div class="pBtn" onclick="openPrint(6,'teknoloji')">💻 Teknoloji</div>
-      <div class="pBtn" onclick="openPrint(6,'sanat')">🎨 Sanat Etkinlikleri</div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════ ÜNİTE 7: DÜNYA, GÜNEŞ ve AY ═══════ -->
-<div id="u7" class="unit" style="--uc:var(--u7);--ucl:var(--u7l)">
-  <div class="uHead" style="background:linear-gradient(135deg,#283593,#5C6BC0)">
-    <div class="uIcon">🌍</div>
-    <div class="uInfo">
-      <h2>Dünya, Güneş ve Ay</h2>
-      <p>Gök Cisimleri · Bilgi Kartları · Uzay</p>
-    </div>
-  </div>
-
-  <div class="block">
-    <div class="bTitle">🌌 Dünya, Güneş ve Ay Bilgi Kartları</div>
-    <div class="planetGrid">
-      <div class="planet" style="border-color:#1976D2">
-        <div class="planetEmoji">🌍</div>
-        <div class="planetName" style="color:#1976D2">DÜNYA</div>
-        <div class="planetFact">Üzerinde yaşadığımız gök cismidir.</div>
-        <div class="planetFact" style="margin-top:6px">Dünya Güneş'ten küçüktür.</div>
-        <div class="planetFact" style="margin-top:6px">Dünya Ay'dan daha büyüktür.</div>
-      </div>
-      <div class="planet" style="border-color:#F57C00">
-        <div class="planetEmoji">☀️</div>
-        <div class="planetName" style="color:#F57C00">GÜNEŞ</div>
-        <div class="planetFact">Isı ve ışık kaynağıdır.</div>
-        <div class="planetFact" style="margin-top:6px">Güneş'i gündüzleri görebiliriz.</div>
-        <div class="planetFact" style="margin-top:6px">Ay ve Dünya'dan daha büyüktür.</div>
-      </div>
-      <div class="planet" style="border-color:#7B1FA2">
-        <div class="planetEmoji">🌙</div>
-        <div class="planetName" style="color:#7B1FA2">AY</div>
-        <div class="planetFact">Bazı geceler gözle görülür.</div>
-        <div class="planetFact" style="margin-top:6px">Ay, Dünya'nın uydusudur.</div>
-        <div class="planetFact" style="margin-top:6px">Ay, Güneş ve Dünya'dan küçüktür.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="block">
-    <div class="bTitle">📏 Büyüklük Sırası</div>
-    <div class="infoCard">
-      <div class="infoEmoji">☀️</div>
-      <div class="infoText"><b>1. GÜNEŞ</b> (en büyük) – Çok büyük bir ısı ve ışık kaynağıdır.</div>
-    </div>
-    <div class="infoCard">
-      <div class="infoEmoji">🌍</div>
-      <div class="infoText"><b>2. DÜNYA</b> (ortanca) – Üzerinde yaşadığımız gezegen.</div>
-    </div>
-    <div class="infoCard">
-      <div class="infoEmoji">🌙</div>
-      <div class="infoText"><b>3. AY</b> (en küçük) – Dünya'nın uydusu.</div>
-    </div>
-  </div>
-
-  <div class="block">
-    <div class="bTitle">✅ Doğru mu Yanlış mı?</div>
-    <div class="dyList">
-      <div class="dyItem"><div class="dyText">Güneş, Ay ve Dünya'nın şekilleri topa benzer.</div>
-        <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'D')">D</button><button class="dyBtn" onclick="checkDY(this,'Y')">Y</button></div></div>
-      <div class="dyItem"><div class="dyText">Ay, Güneş'ten daha küçüktür.</div>
-        <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'D')">D</button><button class="dyBtn" onclick="checkDY(this,'Y')">Y</button></div></div>
-      <div class="dyItem"><div class="dyText">Dünya, Güneş'ten daha büyüktür.</div>
-        <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'Y')">D</button><button class="dyBtn" onclick="checkDY(this,'D')">Y</button></div></div>
-      <div class="dyItem"><div class="dyText">Ay'ı çoğunlukla gece, Güneş'i gündüz görebiliriz.</div>
-        <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'D')">D</button><button class="dyBtn" onclick="checkDY(this,'Y')">Y</button></div></div>
-      <div class="dyItem"><div class="dyText">Dünya, üzerinde yaşadığımız gök cismidir.</div>
-        <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'D')">D</button><button class="dyBtn" onclick="checkDY(this,'Y')">Y</button></div></div>
-      <div class="dyItem"><div class="dyText">Ay, Dünya'dan daha küçüktür.</div>
-        <div class="dyBtns"><button class="dyBtn" onclick="checkDY(this,'D')">D</button><button class="dyBtn" onclick="checkDY(this,'Y')">Y</button></div></div>
-    </div>
-  </div>
-
-  <div class="printSec">
-    <h3>📄 Çalışma Sayfaları — Dünya, Güneş ve Ay</h3>
-    <div class="pGrid">
-      <div class="pBtn" onclick="openPrint(7,'kartlar')">🌌 Bilgi Kartları</div>
-      <div class="pBtn" onclick="openPrint(7,'dytest')">✅ D/Y Testi</div>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL -->
-<div class="mbg" id="modalBg">
-  <div class="mbox">
-    <div style="font-size:2.5rem" id="mIcon">📄</div>
-    <h2 id="mTitle">Çalışma Sayfası</h2>
-    <p id="mDesc">Bu sayfayı yazdırabilirsiniz.</p>
-    <div class="mbtns">
-      <button class="btn" style="background:#1976D2;color:white" onclick="execPrint()">🖨 Yazdır / PDF</button>
-      <button class="btn btnG" onclick="closeM()">✖ Kapat</button>
-    </div>
-  </div>
-</div>
-
-<footer>
-  <div style="font-size:1.8rem;margin-bottom:6px">📚 🇹🇷 🌳 🔬</div>
-  <strong>Hasan Tutus — Taylıca İlkokulu · Şanlıurfa</strong>
-  <div style="margin-top:4px">1. Sınıf Hayat Bilgisi · Maarif Modeli · İnteraktif Eğitim</div>
-</footer>
 
 <script>
-// MAIN TAB
-function switchU(n) {
-  document.querySelectorAll('.unit').forEach(el => el.classList.remove('on'));
-  document.querySelectorAll('.tab').forEach(el => el.classList.remove('on'));
-  document.getElementById('u'+n).classList.add('on');
-  document.querySelector(`.tab[data-u="${n}"]`).classList.add('on');
-  window.scrollTo({top: document.querySelector('.nav').offsetTop - 10, behavior:'smooth'});
+const units = [
+  {
+    name:"1. Ünite: Okulumuzda Hayat",
+    emoji:"🏫",
+    color:"#ff7043",
+    desc:"Okulumuza uyum sağlıyor, arkadaşlarımızla tanışıyor ve okul kurallarını öğreniyoruz.",
+    listen:`Merhaba çocuklar! Bu ünitede okulumuzu tanıyacağız. Okul; öğrenmek, arkadaş edinmek ve güzel davranışlar kazanmak için geldiğimiz yerdir. Sınıfa girerken öğretmenimizi selamlarız. Arkadaşlarımızla konuşurken nazik kelimeler kullanırız. Söz almak istediğimizde parmak kaldırırız. Okuldaki bayrağımıza, Atatürk resmine ve İstiklâl Marşı'na saygı gösteririz. Çantamızı ders programımıza göre hazırlamak da önemli bir sorumluluktur.`,
+    topics:[
+      ["🤝","Tanışıyoruz","Adımızı söyleyerek kendimizi tanıtır, arkadaşlarımızla nazikçe konuşuruz."],
+      ["🧒","Benim Özelliklerim","Saç rengimiz, boyumuz ve sevdiğimiz şeyler birbirinden farklı olabilir."],
+      ["🏫","Okulumuzun Bölümleri","Sınıf, kantin, lavabo, öğretmenler odası ve müdür odasının ne işe yaradığını öğreniriz."],
+      ["🇹🇷","Bayrağımız, Atatürk ve İstiklâl Marşı","Bayrağımızı, Atatürk'ü ve İstiklâl Marşı'nı tanır; bunlara saygı gösteririz."],
+      ["📏","Okul Kuralları","Sıraya girer, sınıfta söz alır ve arkadaşlarımızın eşyalarına izin alarak dokunuruz."],
+      ["🎒","Çantamı Hazırlıyorum","Ders programına bakarak gerekli kitap, defter ve kalemleri çantamıza koyarız."]
+    ],
+    good:["Söz almak için parmak kaldırmak","Arkadaşıma yardım etmek","Sırada beklemek","Çantamı düzenli hazırlamak"],
+    bad:["Arkadaşımı itmek","Sınıfta bağırmak","Yere çöp atmak","İzinsiz eşya almak"],
+    train:["Okula gel","Sınıfa selam ver","Dersini dikkatle dinle","Çantanı düzenle"]
+  },
+  {
+    name:"2. Ünite: Evimizde Hayat",
+    emoji:"🏠",
+    color:"#55b76b",
+    desc:"Ailemizi tanıyor, evde sorumluluk alıyor ve kaynakları dikkatli kullanıyoruz.",
+    listen:`Evimiz, ailemizle birlikte yaşadığımız güvenli yerdir. Her aile üyesinin evde yapabileceği görevler vardır. Oyuncaklarımızı toplamak, sofraya yardım etmek ve odamızı düzenlemek bizim görevlerimiz olabilir. Su, elektrik ve yiyecekler sınırsız değildir. Bu nedenle diş fırçalarken musluğu kapatır, kullanmadığımız odanın ışığını söndürürüz. İhtiyaçlarımız yaşamamız için gerekli olan şeylerdir. Yemek, su ve barınma ihtiyaçtır. Her istediğimiz şey ise ihtiyaç olmayabilir.`,
+    topics:[
+      ["👨‍👩‍👧","Ailemizi Tanıyoruz","Anne, baba, kardeş, dede, nine ve diğer akrabalarımızı tanırız."],
+      ["📍","Evimizin Yeri","Evimizin adresini ve yakın çevremizdeki önemli yerleri öğreniriz."],
+      ["🧹","Evdeki Görevlerim","Oyuncak toplamak, sofraya yardım etmek ve odamızı düzenlemek görevlerimizdendir."],
+      ["💧","Tasarruf Yapıyorum","Suyu, elektriği ve yiyecekleri gereksiz yere harcamayız."],
+      ["🍎","İstek ve İhtiyaç","Su, yemek ve ev ihtiyaçtır; her oyuncak ise istek olabilir."]
+    ],
+    good:["Musluğu kapatmak","Oyuncakları toplamak","Sofraya yardım etmek","Işığı söndürmek"],
+    bad:["Suyu boşa akıtmak","Odamı dağıtmak","Yemeği çöpe atmak","Açık ışık bırakmak"],
+    train:["Oyuncaklarını topla","Ellerini yıka","Sofraya yardım et","Ailene teşekkür et"]
+  },
+  {
+    name:"3. Ünite: Sağlıklı Hayat",
+    emoji:"🍎",
+    color:"#ef5350",
+    desc:"Temizlik, sağlıklı beslenme ve kişisel bakım alışkanlıkları kazanıyoruz.",
+    listen:`Sağlıklı olmak için vücudumuza iyi bakmamız gerekir. Yemekten önce ve tuvaletten sonra ellerimizi sabunla yıkamalıyız. Dişlerimizi sabah ve akşam fırçalamalıyız. Sebze, meyve, süt, yoğurt ve yumurta gibi besinler vücudumuzu güçlendirir. Çok fazla şekerli yiyecek tüketmek dişlerimize zarar verebilir. Hastalandığımızda doktor, hemşire, eczacı ve diş hekimi bize yardım eder. Hava soğuksa mont giymek, yağmurluysa şemsiye kullanmak sağlığımızı korur.`,
+    topics:[
+      ["🧼","Kişisel Bakım","Ellerimizi yıkar, banyo yapar ve dişlerimizi fırçalarız."],
+      ["🥦","Sağlıklı Beslenme","Meyve, sebze, süt ve protein içeren besinleri dengeli tüketiriz."],
+      ["🍽️","Yemek Görgüsü","Yemekte ağzımız kapalı çiğner, nazik konuşuruz."],
+      ["🩺","Sağlık Çalışanları","Doktor, hemşire, eczacı ve diş hekimi sağlığımız için çalışır."],
+      ["🧥","Uygun Giyinme","Hava durumuna göre mont, tişört, yağmurluk veya şapka seçeriz."]
+    ],
+    good:["Ellerini sabunla yıkamak","Meyve yemek","Dişlerini fırçalamak","Hava durumuna uygun giyinmek"],
+    bad:["Kirli ellerle yemek yemek","Sadece şeker yemek","Diş fırçalamamak","Kışın ince giyinmek"],
+    train:["Ellerini yıka","Sağlıklı yemek ye","Dişlerini fırçala","Dinlen ve uyu"]
+  },
+  {
+    name:"4. Ünite: Güvenli Hayat",
+    emoji:"🚦",
+    color:"#4a90e2",
+    desc:"Evde, okulda, sokakta ve teknolojiyi kullanırken güvenli davranıyoruz.",
+    listen:`Güvenli davranmak bizi kazalardan korur. Karşıdan karşıya geçerken yaya geçidini kullanırız. Trafik ışığında kırmızı ışıkta durur, yeşil ışıkta dikkatlice geçeriz. Evde prizlerle, kesici aletlerle ve sıcak eşyalarla oynamayız. Tanımadığımız kişilerle hiçbir yere gitmeyiz. Tablet, telefon ve bilgisayarı ailemizin belirlediği süre kadar kullanırız. Acil bir durumda ambulans, polis ve itfaiye için 112 numarasını arayabiliriz.`,
+    topics:[
+      ["🚦","Trafik Kuralları","Trafik ışıklarına uyar, yaya geçidini kullanırız."],
+      ["🚶","Okul Yolunda Güvenlik","Yolda dikkatli yürür, tanımadığımız kişilerden uzak dururuz."],
+      ["🔌","Evde Güvenlik","Prizlerle, kesici ve sıcak eşyalarla oynamayız."],
+      ["🛝","Güvenli Oyun Alanları","Oyun oynamak için park ve okul bahçesi gibi güvenli yerleri seçeriz."],
+      ["📱","Teknolojiyi Güvenli Kullanma","Ekran süresine uyar, kişisel bilgilerimizi paylaşmayız."],
+      ["☎️","Acil Durum: 112","Polis, ambulans ve itfaiye için 112 aranır."]
+    ],
+    good:["Yaya geçidini kullanmak","Prizlerden uzak durmak","112 numarasını bilmek","Kask takmak"],
+    bad:["Kırmızı ışıkta geçmek","Prizle oynamak","Yolda koşmak","Tanımadık kişiyle gitmek"],
+    train:["Dur","Sağına ve soluna bak","Dinle","Güvenle geç"]
+  },
+  {
+    name:"5. Ünite: Ülkemizde Hayat",
+    emoji:"🇹🇷",
+    color:"#9b59b6",
+    desc:"Türkiye'yi, Atatürk'ü, bayramlarımızı ve farklı kültürleri tanıyoruz.",
+    listen:`Türkiye bizim ülkemizdir. Başkentimiz Ankara'dır. Bayrağımız kırmızı renkte, üzerinde beyaz ay ve yıldız bulunan Türk bayrağıdır. Mustafa Kemal Atatürk, Türkiye Cumhuriyeti'nin kurucusudur. Atatürk'ün anıt mezarı Ankara'daki Anıtkabir'dedir. 23 Nisan Ulusal Egemenlik ve Çocuk Bayramı, çocuklara armağan edilen özel bir gündür. 29 Ekim Cumhuriyet Bayramı'dır. İnsanların farklı yemekleri, kıyafetleri veya gelenekleri olabilir. Herkesin farklılıklarına saygı duymalıyız.`,
+    topics:[
+      ["🏘️","Yaşadığımız Yer","Köy, mahalle, ilçe ve il gibi yerleşim yerlerini öğreniriz."],
+      ["🗺️","Türkiye ve Ankara","Ülkemiz Türkiye'dir; başkentimiz Ankara'dır."],
+      ["👤","Mustafa Kemal Atatürk","Atatürk, Cumhuriyetimizin kurucusudur. Anıtkabir Ankara'dadır."],
+      ["🎉","Millî Bayramlarımız","23 Nisan, 19 Mayıs, 30 Ağustos ve 29 Ekim millî bayramlarımızdandır."],
+      ["🕌","Dinî Bayramlarımız","Ramazan ve Kurban Bayramı'nda büyüklerimizi ziyaret ederiz."],
+      ["🌍","Farklı Kültürlere Saygı","Farklı gelenekleri olan insanlara sevgi ve saygı ile yaklaşırız."]
+    ],
+    good:["Bayrağımıza saygı göstermek","Farklılıklara saygı duymak","Bayramda büyükleri ziyaret etmek","Atatürk'ü tanımak"],
+    bad:["İnsanlarla alay etmek","Bayrağı yere atmak","Farklı kültürleri küçümsemek","Saygısız konuşmak"],
+    train:["Türkiye'yi tanı","Bayrağını tanı","Atatürk'ü öğren","Bayramları kutla"]
+  },
+  {
+    name:"6. Ünite: Doğada Hayat",
+    emoji:"🌳",
+    color:"#26a69a",
+    desc:"Canlıları, mevsimleri, geri dönüşümü ve doğayı korumayı öğreniyoruz.",
+    listen:`Doğada insanlar, hayvanlar ve bitkiler birlikte yaşar. Ağaçlar bize temiz hava sağlar. Hayvanların da suya, yiyeceğe ve güvenli bir yaşam alanına ihtiyacı vardır. Çöplerimizi yere atmamalıyız. Kâğıt, plastik, cam ve metal gibi bazı atıkları geri dönüşüm kutularına atabiliriz. Sonbaharda yapraklar sararır ve dökülür. Kışın hava soğur. İlkbaharda çiçekler açar. Yazın hava ısınır. Doğayı korumak hepimizin görevidir.`,
+    topics:[
+      ["🐶","Hayvanlar ve Bitkiler","Çevremizdeki hayvanları ve bitkileri gözlemleriz."],
+      ["🌳","Doğayı Koruyalım","Ağaçlara, çiçeklere ve hayvanlara zarar vermeyiz."],
+      ["♻️","Geri Dönüşüm","Kâğıt, plastik, cam ve metali uygun geri dönüşüm kutularına atarız."],
+      ["🍂","Mevsimler","Sonbahar, kış, ilkbahar ve yazın özelliklerini tanırız."]
+    ],
+    good:["Çöpü geri dönüşüm kutusuna atmak","Ağaçları korumak","Hayvanlara su vermek","Parkı temiz tutmak"],
+    bad:["Çöpü yere atmak","Çiçekleri koparmak","Hayvanlara zarar vermek","Ağaç dallarını kırmak"],
+    train:["Çevrene dikkatle bak","Çöpünü ayır","Doğayı temiz tut","Canlıları koru"]
+  }
+];
+
+let currentUnit = 0;
+let score = Number(localStorage.getItem("hayatPuan") || 0);
+let stars = Number(localStorage.getItem("hayatYildiz") || 0);
+let voices = [];
+
+const scoreEl = document.getElementById("score");
+const starsEl = document.getElementById("stars");
+const tabsEl = document.getElementById("tabs");
+const topicsEl = document.getElementById("topics");
+const gameEl = document.getElementById("game");
+const messageEl = document.getElementById("message");
+const voiceSelect = document.getElementById("voiceSelect");
+
+function updateScore(){
+  scoreEl.textContent = score;
+  starsEl.textContent = stars;
+  localStorage.setItem("hayatPuan", score);
+  localStorage.setItem("hayatYildiz", stars);
 }
 
-document.querySelectorAll('.tab').forEach(btn => {
-  const n = btn.dataset.u;
-  btn.style.setProperty('--tc', `var(--u${n})`);
-});
-
-// CHAPTER SWITCH
-function switchC(u, c) {
-  const unit = document.getElementById('u'+u);
-  unit.querySelectorAll('.chapter').forEach(el => el.classList.remove('on'));
-  unit.querySelectorAll('.subBtn').forEach(el => el.classList.remove('on'));
-  const ch = document.getElementById(`c${u}-${c}`);
-  if(ch) ch.classList.add('on');
-  event.currentTarget.classList.add('on');
+function earn(points){
+  score += points;
+  stars += 1;
+  updateScore();
 }
 
-// D/Y CHECK
-function checkDY(btn, correctAns) {
-  const item = btn.closest('.dyItem');
-  const btns = item.querySelectorAll('.dyBtn');
-  const picked = btn.textContent;
-  btns.forEach(b => b.disabled = true);
-  if(picked === correctAns) {
-    btn.classList.add('right');
-  } else {
-    btn.classList.add('wrong');
-    // show correct
-    btns.forEach(b => { if(b.textContent === correctAns) b.classList.add('right'); });
+function resetScore(){
+  if(confirm("Puanlar ve yıldızlar sıfırlansın mı?")){
+    score = 0;
+    stars = 0;
+    updateScore();
   }
 }
 
-// DEPREM ÇANTASI OYUNU
-let bagScore = 0;
-function pickBag(el, isOk) {
-  if(el.classList.contains('ok') || el.classList.contains('nope')) return;
-  if(isOk === 1) {
-    el.classList.add('ok');
-    bagScore++;
-    document.getElementById('bag-score').textContent = bagScore;
-    setFB('bag-fb', true, '🎉 Doğru! Bu deprem çantasına konabilir.');
-    if(bagScore === 8) setFB('bag-fb', true, '🏆 TEBRİKLER! Çantayı doğru hazırladın!');
-  } else {
-    el.classList.add('nope');
-    setTimeout(() => el.classList.remove('nope'), 800);
-    setFB('bag-fb', false, '❌ Hayır, bu deprem çantasına konmaz!');
-  }
+function renderTabs(){
+  tabsEl.innerHTML = "";
+
+  units.forEach((unit,index) => {
+    const button = document.createElement("button");
+    button.className = "tab " + (index === currentUnit ? "active" : "");
+    button.style.background = unit.color;
+    button.innerHTML = `${unit.emoji}<br><b>${index + 1}. Ünite</b>`;
+    button.onclick = () => {
+      currentUnit = index;
+      renderUnit();
+    };
+    tabsEl.appendChild(button);
+  });
 }
 
-function setFB(id, ok, msg) {
-  const el = document.getElementById(id);
-  el.textContent = msg;
-  el.className = 'fb ' + (ok ? 'ok' : 'no');
-  setTimeout(() => { if(el.textContent === msg) { el.className = 'fb mt'; el.textContent = ''; } }, 2500);
+function renderUnit(){
+  const unit = units[currentUnit];
+
+  document.getElementById("unitEmoji").textContent = unit.emoji;
+  document.getElementById("unitName").textContent = unit.name;
+  document.getElementById("unitDescription").textContent = unit.desc;
+  document.getElementById("listenText").textContent = unit.listen;
+
+  topicsEl.innerHTML = "";
+
+  unit.topics.forEach(topic => {
+    const card = document.createElement("article");
+    card.className = "topic-card";
+    card.innerHTML = `
+      <div class="topic-icon">${topic[0]}</div>
+      <h3>${topic[1]}</h3>
+      <p>${topic[2]}</p>
+      <button class="blue" onclick="readText('${topic[1]}. ${topic[2]}')">🔊 Dinle</button>
+    `;
+    topicsEl.appendChild(card);
+  });
+
+  renderTabs();
+  gameEl.innerHTML = "";
+  messageEl.textContent = "Bir oyun seç ve başlayalım! 🌟";
 }
 
-// GERİ DÖNÜŞÜM
-let selectedRec = null;
-let recScore = 0;
-function selRec(el) {
-  if(el.classList.contains('done')) return;
-  document.querySelectorAll('.recItem').forEach(r => r.classList.remove('sel'));
-  el.classList.add('sel');
-  selectedRec = el;
-}
-function dropRec(type) {
-  if(!selectedRec) {
-    setFB('rec-fb', false, '⚠️ Önce bir atık seç!');
+/* SES BÖLÜMÜ */
+function loadVoices(){
+  voices = speechSynthesis.getVoices().filter(v => v.lang.toLowerCase().startsWith("tr"));
+
+  voiceSelect.innerHTML = "";
+
+  if(voices.length === 0){
+    voiceSelect.innerHTML = "<option>Türkçe ses bulunamadı</option>";
     return;
   }
-  const correctType = selectedRec.dataset.type;
-  if(correctType === type) {
-    recScore++;
-    document.getElementById('rec-score').textContent = recScore;
-    selectedRec.classList.add('done');
-    selectedRec.classList.remove('sel');
-    setFB('rec-fb', true, `🎉 Doğru! ${type.toUpperCase()} kutusu doğru.`);
-    if(recScore === 8) setFB('rec-fb', true, '🏆 TEBRİKLER! Tüm atıkları doğru ayrıştırdın!');
-    selectedRec = null;
-  } else {
-    setFB('rec-fb', false, `❌ Bu ${correctType.toUpperCase()} kutusuna gider, ${type.toUpperCase()} kutusuna değil!`);
+
+  voices.forEach((voice,index) => {
+    const option = document.createElement("option");
+    option.value = index;
+    option.textContent = voice.name + " (" + voice.lang + ")";
+
+    /* Erkek ses adına benzeyen seçenekleri öne alma denemesi */
+    const name = voice.name.toLowerCase();
+    if(name.includes("male") || name.includes("erkek") || name.includes("ahmet") ||
+       name.includes("emre") || name.includes("kemal") || name.includes("murat")){
+      option.selected = true;
+    }
+
+    voiceSelect.appendChild(option);
+  });
+}
+
+function readText(text){
+  speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "tr-TR";
+  utterance.rate = 0.83;
+  utterance.pitch = 0.92;
+
+  const selected = voices[voiceSelect.value];
+  if(selected) utterance.voice = selected;
+
+  speechSynthesis.speak(utterance);
+}
+
+function readLesson(){
+  readText(units[currentUnit].listen);
+}
+
+function stopSpeech(){
+  speechSynthesis.cancel();
+}
+
+speechSynthesis.onvoiceschanged = loadVoices;
+loadVoices();
+
+/* BALON PATLATMA */
+function startBalloons(){
+  const unit = units[currentUnit];
+  const items = [...unit.good, ...unit.bad].sort(() => Math.random() - 0.5);
+
+  messageEl.textContent = "Üzerinde doğru davranış yazan balonlara bas! 🎈";
+  gameEl.innerHTML = `<div class="balloon-board" id="balloonBoard"></div>`;
+
+  const board = document.getElementById("balloonBoard");
+  let completed = 0;
+
+  items.forEach(text => {
+    const balloon = document.createElement("button");
+    balloon.className = "balloon";
+    balloon.textContent = text;
+
+    balloon.onclick = () => {
+      const isGood = unit.good.includes(text);
+
+      if(isGood){
+        balloon.classList.add("popped");
+        messageEl.textContent = "Harika! Bu doğru bir davranış! ⭐";
+        earn(10);
+        completed++;
+
+        if(completed === unit.good.length){
+          messageEl.textContent = "Tüm doğru davranış balonlarını patlattın! Tebrikler! 🎉";
+        }
+      }else{
+        messageEl.textContent = "Bu davranış doğru değil. Başka bir balon seçmelisin. 🤔";
+        balloon.style.opacity = ".55";
+      }
+    };
+
+    board.appendChild(balloon);
+  });
+}
+
+/* VAGONLARI DOKUNARAK YER DEĞİŞTİRME */
+function startTrain(){
+  const unit = units[currentUnit];
+  const wagons = [...unit.train].sort(() => Math.random() - 0.5);
+
+  messageEl.textContent = "Önce bir vagon seç, sonra yer değiştirmesi için başka bir vagona bas! 🚂";
+
+  gameEl.innerHTML = `
+    <p><b>Görev:</b> Olayları doğru sıraya koy.</p>
+    <div class="train-board" id="trainBoard"></div>
+    <button class="green" onclick="checkTrain()">Treni Kontrol Et 🚂</button>
+  `;
+
+  const board = document.getElementById("trainBoard");
+  let selected = null;
+
+  wagons.forEach((text) => {
+    const wagon = document.createElement("button");
+    wagon.className = "wagon";
+    wagon.dataset.text = text;
+    wagon.innerHTML = `<span class="number">🚃</span>${text}`;
+
+    wagon.onclick = () => {
+      if(!selected){
+        selected = wagon;
+        wagon.classList.add("selected");
+        messageEl.textContent = "Şimdi yer değiştirmek istediğin ikinci vagona bas.";
+        return;
+      }
+
+      if(selected === wagon){
+        wagon.classList.remove("selected");
+        selected = null;
+        messageEl.textContent = "Vagon seçimi kaldırıldı.";
+        return;
+      }
+
+      const allWagons = [...board.children];
+      const firstIndex = allWagons.indexOf(selected);
+      const secondIndex = allWagons.indexOf(wagon);
+
+      if(firstIndex < secondIndex){
+        board.insertBefore(wagon, selected);
+      }else{
+        board.insertBefore(selected, wagon);
+      }
+
+      selected.classList.remove("selected");
+      selected = null;
+      messageEl.textContent = "Vagonların yerleri değişti. Devam edebilirsin! 🚂";
+    };
+
+    board.appendChild(wagon);
+  });
+}
+
+function checkTrain(){
+  const answer = [...document.querySelectorAll(".wagon")].map(w => w.dataset.text);
+  const correct = units[currentUnit].train;
+
+  if(answer.join("|") === correct.join("|")){
+    messageEl.textContent = "Mükemmel! Vagonlar doğru sırada, tren hareket ediyor! 🚂🎉";
+    earn(25);
+  }else{
+    messageEl.textContent = "Bazı vagonların sırası karışmış. Yeniden düzenlemeyi dene.";
   }
 }
 
-// PRINT
-let printState = {};
-const unitInfo = {
-  1: { name:'Ben ve Okulum', color:'#1976D2' },
-  2: { name:'Sağlığım ve Güvenliğim', color:'#D32F2F' },
-  3: { name:'Ailem ve Toplum', color:'#F57C00' },
-  4: { name:'Yaşadığım Yer ve Ülkem', color:'#388E3C' },
-  5: { name:'Doğa ve Çevre', color:'#7B1FA2' },
-  6: { name:'Bilim, Teknoloji ve Sanat', color:'#0097A7' },
-  7: { name:'Dünya, Güneş ve Ay', color:'#283593' },
-};
+/* DOĞRU SEPETE AT */
+function startSorting(){
+  const unit = units[currentUnit];
+  const all = [
+    ...unit.good.map(text => ({text,good:true})),
+    ...unit.bad.map(text => ({text,good:false}))
+  ].sort(() => Math.random() - 0.5);
 
-function openPrint(u, type) {
-  printState = { u, type };
-  document.getElementById('mTitle').textContent = unitInfo[u].name;
-  document.getElementById('mDesc').textContent = 'Çalışma sayfası: ' + type;
-  document.getElementById('modalBg').classList.add('open');
-}
-function closeM() { document.getElementById('modalBg').classList.remove('open'); }
-document.getElementById('modalBg').addEventListener('click', e => { if(e.target === e.currentTarget) closeM(); });
-function execPrint() { closeM(); buildPrint(printState.u, printState.type); }
+  let index = 0;
+  let correctCount = 0;
 
-function buildPrint(u, type) {
-  const ui = unitInfo[u];
-  const w = window.open('','_blank');
-  let content = '';
+  function showCard(){
+    if(index >= all.length){
+      messageEl.textContent = `Etkinlik tamamlandı! ${correctCount} doğru seçim yaptın! 🎉`;
+      earn(20);
+      gameEl.innerHTML = `<h2>🌟 Çok güzel çalıştın!</h2>`;
+      return;
+    }
 
-  // CONTENT BY TYPE
-  if(type === 'tanis') {
-    content = `<div class="tt">Kendini Tanıt</div>
-    <div class="copy-ref">Merhaba, ben ____________. ____ yaşındayım. En sevdiğim spor ____________. Boş zamanlarımda ____________ severim. İlerde ____________ olmak istiyorum.</div>
-    <div class="tt" style="margin-top:18px">Sınıfımdaki Arkadaşlarımı Tanıyorum</div>
-    ${Array(5).fill('<div class="cline"></div>').join('')}`;
-  } else if(type === 'okul') {
-    content = `<div class="tt">Okulumuzun Bölümlerini Yazalım</div>
-    <div class="kg">
-      <div class="kp"><div class="ke2">👨‍💼</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">📚</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">🪑</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">🚻</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">👨‍🏫</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">🥪</div><div class="kl"></div></div>
-    </div>`;
-  } else if(type === 'kural') {
-    content = `<div class="tt">Sana göre olması gereken sınıf kuralları nelerdir?</div>
-    ${Array(6).fill('<div class="rb"></div>').join('')}`;
-  } else if(type === 'duygu') {
-    content = `<div class="tt">Görsellerin altına duyguyu yaz</div>
-    <div class="kg">
-      <div class="kp"><div class="ke2">😄</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">😢</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">😡</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">😨</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">😲</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">🥰</div><div class="kl"></div></div>
-    </div>`;
-  } else if(type === 'saglik') {
-    content = `<div class="tt">Doğru olana D, Yanlış olana Y yaz</div>
-    <div class="dy-print">
-      <div class="dyr"><span class="dyb"></span><span>Merve sık sık şekerli abur cubur yer.</span></div>
-      <div class="dyr"><span class="dyb"></span><span>Duru her sabah dişlerini fırçalar.</span></div>
-      <div class="dyr"><span class="dyb"></span><span>Hasan düzenli olarak spor yapmaktadır.</span></div>
-      <div class="dyr"><span class="dyb"></span><span>Kerim gün içinde sadece sabah kahvaltısı yapar.</span></div>
-      <div class="dyr"><span class="dyb"></span><span>Samet eve gelir gelmez ellerini yıkar.</span></div>
-      <div class="dyr"><span class="dyb"></span><span>Salim öğle vaktine kadar uyur.</span></div>
-    </div>
-    <div class="tt" style="margin-top:16px">Sağlıklı büyümek için neler yapmalıyız?</div>
-    ${Array(6).fill('<div class="rb"></div>').join('')}`;
-  } else if(type === 'dis') {
-    content = `<div class="tt">Diş Sağlığı için Yapılması Gerekenler</div>
-    <div class="info-print">🪥 Dişlerimizi sabah ve akşam mutlaka fırçalamalıyız.</div>
-    <div class="info-print">⏱️ En az 2 dakika fırçalamalıyız.</div>
-    <div class="info-print">🍬 Çok şekerli yiyeceklerden uzak durmalıyız.</div>
-    <div class="info-print">👨‍⚕️ Yılda en az 2 kez diş hekimine gitmeliyiz.</div>
-    <div class="tt" style="margin-top:16px">Diş bakımı için sen neler yapıyorsun? Yaz:</div>
-    ${Array(4).fill('<div class="cline"></div>').join('')}`;
-  } else if(type === 'trafik') {
-    content = `<div class="tt">Uymamız gereken trafik kurallarını yaz</div>
-    ${Array(5).fill('<div class="rb"></div>').join('')}
-    <div class="tt" style="margin-top:16px">Trafik Işıkları</div>
-    <div class="info-print">🔴 KIRMIZI: ____________</div>
-    <div class="info-print">🟡 SARI: ____________</div>
-    <div class="info-print">🟢 YEŞİL: ____________</div>`;
-  } else if(type === 'deprem') {
-    content = `<div class="tt">Deprem Çantasında Bulunması Gerekenleri Boyayalım</div>
-    <div class="kg">
-      <div class="kp"><div class="ke2">💧</div><div style="font-size:.8rem">Su</div></div>
-      <div class="kp"><div class="ke2">🔦</div><div style="font-size:.8rem">El Feneri</div></div>
-      <div class="kp"><div class="ke2">🔋</div><div style="font-size:.8rem">Yedek Pil</div></div>
-      <div class="kp"><div class="ke2">🥫</div><div style="font-size:.8rem">Konserve</div></div>
-      <div class="kp"><div class="ke2">📻</div><div style="font-size:.8rem">Radyo</div></div>
-      <div class="kp"><div class="ke2">🎽</div><div style="font-size:.8rem">Yedek Kıyafet</div></div>
-      <div class="kp"><div class="ke2">💊</div><div style="font-size:.8rem">İlk Yardım</div></div>
-      <div class="kp"><div class="ke2">📯</div><div style="font-size:.8rem">Düdük</div></div>
-    </div>
-    <div class="tt" style="margin-top:16px">Deprem çantasında başka ne olmalı?</div>
-    ${Array(3).fill('<div class="cline"></div>').join('')}`;
-  } else if(type === 'nezaket') {
-    content = `<div class="tt">Aşağıdaki durumlarda ne dersin?</div>
-    <div class="info-print"><b>1.</b> Arkadaşından kalem isterken: __________________________</div>
-    <div class="info-print"><b>2.</b> Annene yemek için: __________________________</div>
-    <div class="info-print"><b>3.</b> Arkadaşın sana yardım ettiğinde: __________________________</div>
-    <div class="info-print"><b>4.</b> Bir hata yaptığında: __________________________</div>
-    <div class="info-print"><b>5.</b> Hediye aldığında: __________________________</div>`;
-  } else if(type === 'gorev') {
-    content = `<div class="tt">Evinizdeki aile bireylerinin görevlerini yazınız</div>
-    <div class="role-box"><b>ANNE 👩</b><div class="cline"></div><div class="cline"></div></div>
-    <div class="role-box"><b>BABA 👨</b><div class="cline"></div><div class="cline"></div></div>
-    <div class="role-box"><b>KARDEŞ 🧒</b><div class="cline"></div><div class="cline"></div></div>
-    <div class="role-box"><b>SEN 🙋</b><div class="cline"></div><div class="cline"></div></div>`;
-  } else if(type === 'ulkem') {
-    content = `<div class="tt">Ülkemiz Hakkında Bilgiler</div>
-    <div class="info-print"><b>Ülkemizin Adı:</b> __________________</div>
-    <div class="info-print"><b>Başkentimiz:</b> __________________</div>
-    <div class="info-print"><b>Bayrağımızdaki Semboller:</b> __________________</div>
-    <div class="info-print"><b>Para Birimimiz:</b> __________________</div>
-    <div class="info-print"><b>Milli Marşımız:</b> __________________</div>
-    <div class="info-print"><b>Milli Marşımızın Şairi:</b> __________________</div>`;
-  } else if(type === 'ataturk') {
-    content = `<div class="tt">Atatürk'ün Hayatı — Boşlukları Doldur</div>
-    <div class="info-print">1. Atatürk ______________'te doğdu.</div>
-    <div class="info-print">2. Annesinin adı ______________.</div>
-    <div class="info-print">3. Babasının adı ______________.</div>
-    <div class="info-print">4. ______________ Zaferinde büyük rolü olmuştur.</div>
-    <div class="info-print">5. ______________ Savaşı'nda liderlik yapmıştır.</div>
-    <div class="info-print">6. ______________ Sarayı'nda vefat etmiştir.</div>
-    <div class="info-print">7. Atatürk için ______________ adlı anıt yapıldı.</div>`;
-  } else if(type === 'iller') {
-    content = `<div class="tt">Yiyeceklerin Ünlü Olduğu İlleri Yaz</div>
-    <div class="kg">
-      <div class="kp"><div class="ke2">🥩</div><div style="font-size:.7rem">Çiğ köfte</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">🍑</div><div style="font-size:.7rem">Kayısı</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">🍦</div><div style="font-size:.7rem">Dondurma</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">🥮</div><div style="font-size:.7rem">Baklava</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">🌰</div><div style="font-size:.7rem">Fındık</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">🍝</div><div style="font-size:.7rem">Mantı</div><div class="kl"></div></div>
-    </div>`;
-  } else if(type === 'mektup') {
-    content = `<div class="tt">Atatürk'e Mektup</div>
-    <div class="info-print" style="background:#FFF8E1">Atatürk yaşasaydı ona söylemek istediklerinizi mektup olarak yazınız.</div>
-    <div class="copy-ref" style="background:white;font-weight:normal">Sevgili Atatürk,</div>
-    ${Array(8).fill('<div class="cline"></div>').join('')}
-    <div style="text-align:right;margin-top:14px">Saygılarımla,<br>____________</div>`;
-  } else if(type === 'afet') {
-    content = `<div class="tt">Doğal Afet İsimlerini Yaz</div>
-    <div class="info-print">1. Yerin altında oluşan ani sarsıntılara ______________ denir.</div>
-    <div class="info-print">2. Şiddetli yağmur sonu oluşan su baskınlarına ______________ denir.</div>
-    <div class="info-print">3. Kontrolsüz yanma olaylarına ______________ denir.</div>
-    <div class="info-print">4. Karlı dağlarda karın kütle halinde kaymasına ______________ denir.</div>
-    <div class="info-print">5. Kaya ve toprağın eğimli arazilerden kaymasına ______________ denir.</div>`;
-  } else if(type === 'geri') {
-    content = `<div class="tt">Atıkları Doğru Kutuya Eşleştir</div>
-    <div class="kg">
-      <div class="kp"><div class="ke2">🥤</div><div style="font-size:.8rem">Pet şişe</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">📰</div><div style="font-size:.8rem">Gazete</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">🍾</div><div style="font-size:.8rem">Cam şişe</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">🥫</div><div style="font-size:.8rem">Konserve</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">📦</div><div style="font-size:.8rem">Kutu</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">🫙</div><div style="font-size:.8rem">Kavanoz</div><div class="kl"></div></div>
-    </div>
-    <div class="tt" style="margin-top:14px">Renkler:</div>
-    <div class="info-print">🟡 SARI = ____________</div>
-    <div class="info-print">🔵 MAVİ = ____________</div>
-    <div class="info-print">🟢 YEŞİL = ____________</div>
-    <div class="info-print">🔴 KIRMIZI = ____________</div>`;
-  } else if(type === 'doga') {
-    content = `<div class="tt">Doğa Gezisi</div>
-    <div class="info-print">Canlı varlıklara 3 örnek yaz:</div>
-    ${Array(3).fill('<div class="rb"></div>').join('')}
-    <div class="info-print" style="margin-top:10px">Cansız varlıklara 3 örnek yaz:</div>
-    ${Array(3).fill('<div class="rb"></div>').join('')}
-    <div class="info-print" style="margin-top:10px">Doğayı korumak için neler yapmalıyız?</div>
-    ${Array(4).fill('<div class="cline"></div>').join('')}`;
-  } else if(type === 'bilim') {
-    content = `<div class="tt">Bilimsel Süreç</div>
-    <div class="info-print"><b>1. Bilim merakla başlar:</b> __________________</div>
-    <div class="info-print"><b>2. Bir konu belirleriz:</b> __________________</div>
-    <div class="info-print"><b>3. Sorular hazırlarız:</b> __________________</div>
-    <div class="info-print"><b>4. Araştırma yaparız:</b> __________________</div>
-    <div class="tt" style="margin-top:14px">Sen neyi merak ediyorsun? Yaz:</div>
-    ${Array(4).fill('<div class="cline"></div>').join('')}`;
-  } else if(type === 'teknoloji') {
-    content = `<div class="tt">Teknolojinin Kullanım Alanları — Örnek Yaz</div>
-    <div class="info-print">🏥 <b>SAĞLIK:</b> ____________</div>
-    <div class="info-print">📱 <b>İLETİŞİM:</b> ____________</div>
-    <div class="info-print">✈️ <b>ULAŞIM:</b> ____________</div>
-    <div class="info-print">💻 <b>EĞİTİM:</b> ____________</div>
-    <div class="tt" style="margin-top:14px">Evinde hangi teknolojik aletler var?</div>
-    ${Array(5).fill('<div class="rb"></div>').join('')}`;
-  } else if(type === 'sanat') {
-    content = `<div class="tt">Sanat Dallarını Yaz</div>
-    <div class="kg">
-      <div class="kp"><div class="ke2">🎨</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">🗿</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">🎵</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">💃</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">🎭</div><div class="kl"></div></div>
-      <div class="kp"><div class="ke2">📷</div><div class="kl"></div></div>
-    </div>
-    <div class="tt" style="margin-top:14px">Sen hangi sanat dalını seviyorsun? Niçin?</div>
-    ${Array(4).fill('<div class="cline"></div>').join('')}`;
-  } else if(type === 'kartlar') {
-    content = `<div class="tt">Dünya, Güneş ve Ay hakkında bildiklerini yaz</div>
-    <div class="role-box"><b>🌍 DÜNYA</b><div class="cline"></div><div class="cline"></div><div class="cline"></div></div>
-    <div class="role-box"><b>☀️ GÜNEŞ</b><div class="cline"></div><div class="cline"></div><div class="cline"></div></div>
-    <div class="role-box"><b>🌙 AY</b><div class="cline"></div><div class="cline"></div><div class="cline"></div></div>`;
-  } else if(type === 'dytest') {
-    content = `<div class="tt">Doğru olana D, Yanlış olana Y yaz</div>
-    <div class="dy-print">
-      <div class="dyr"><span class="dyb"></span><span>Güneş, Ay ve Dünya'nın şekilleri topa benzer.</span></div>
-      <div class="dyr"><span class="dyb"></span><span>Ay, Güneş'ten daha küçüktür.</span></div>
-      <div class="dyr"><span class="dyb"></span><span>Dünya, Güneş'ten daha büyüktür.</span></div>
-      <div class="dyr"><span class="dyb"></span><span>Ay'ı çoğunlukla gece, Güneş'i gündüz görebiliriz.</span></div>
-      <div class="dyr"><span class="dyb"></span><span>Dünya, üzerinde yaşadığımız gök cismidir.</span></div>
-      <div class="dyr"><span class="dyb"></span><span>Ay, Dünya'dan daha küçüktür.</span></div>
-    </div>`;
+    const item = all[index];
+
+    gameEl.innerHTML = `
+      <div class="sort-card">"${item.text}"</div>
+      <p>Bu davranış hangi sepete gitmeli?</p>
+      <div class="baskets">
+        <button class="basket good-basket" onclick="sortAnswer(true)">
+          ✅ Doğru Davranış<br><span style="font-size:46px">😊</span>
+        </button>
+        <button class="basket bad-basket" onclick="sortAnswer(false)">
+          ⚠️ Dikkat Etmeliyim<br><span style="font-size:46px">🤔</span>
+        </button>
+      </div>
+    `;
   }
 
-  w.document.write(`<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8">
-    <title>${ui.name}</title>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
-      body{font-family:'Patrick Hand',cursive;max-width:700px;margin:24px auto;padding:18px;color:#222;}
-      .hdr{background:#F5F5F5;border-left:6px solid ${ui.color};padding:12px 16px;border-radius:0 10px 10px 0;margin-bottom:14px;}
-      .ht{font-size:1.3rem;font-weight:900;color:${ui.color};}
-      .hs{font-size:.75rem;color:#888;margin-top:2px;}
-      .nr{display:flex;gap:20px;font-size:.9rem;margin-bottom:18px;flex-wrap:wrap;}
-      .ul{display:inline-block;min-width:140px;border-bottom:2px solid #333;}
-      .tt{font-size:1.05rem;font-weight:900;color:${ui.color};border-bottom:2px dashed ${ui.color};padding-bottom:3px;margin:14px 0 10px;}
-      .info-print{background:#FAFAFA;border-left:3px solid ${ui.color};padding:8px 12px;margin:6px 0;border-radius:0 8px 8px 0;font-size:1rem;}
-      .cline{border-bottom:2px solid #ccc;height:28px;margin:8px 0;}
-      .rb{border:2px dashed #ccc;border-radius:8px;padding:12px;margin:6px 0;min-height:30px;}
-      .copy-ref{background:#F5F5F5;border-radius:8px;padding:10px 14px;font-size:1.05rem;font-weight:900;color:${ui.color};margin:8px 0;}
-      .kg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px;}
-      .kp{border:2px solid #eee;border-radius:10px;padding:10px;text-align:center;}
-      .ke2{font-size:2rem;margin-bottom:4px;}
-      .kl{border-bottom:2px solid #ccc;margin-top:8px;height:22px;}
-      .role-box{border:2px dashed ${ui.color};border-radius:12px;padding:12px;margin:10px 0;}
-      .role-box b{color:${ui.color};font-size:1.05rem;}
-      .dy-print{display:flex;flex-direction:column;gap:6px;}
-      .dyr{display:flex;align-items:center;gap:10px;background:#FAFAFA;border-radius:8px;padding:8px 12px;}
-      .dyb{width:30px;height:30px;border:2px solid ${ui.color};border-radius:6px;flex-shrink:0;}
-      @media print{body{margin:4px;padding:4px}}
-    </style></head><body>
-    <div class="hdr"><div class="ht">${ui.name}</div><div class="hs">1. Sınıf Hayat Bilgisi · Hasan Tutus · Taylıca İlkokulu</div></div>
-    <div class="nr"><span>Adı Soyadı: <u class="ul"></u></span><span>Tarih: <u class="ul" style="min-width:80px"></u></span></div>
-    ${content}
-    <div style="text-align:center;margin-top:30px" class="noprint">
-      <button onclick="window.print()" style="background:${ui.color};color:white;border:none;padding:11px 26px;border-radius:50px;font-size:1rem;cursor:pointer;font-weight:900">🖨 Yazdır / PDF</button>
-    </div>
-    <script>window.onload=()=>setTimeout(()=>window.print(),500)<\/script>
-    </body></html>`);
-  w.document.close();
+  window.sortAnswer = function(answer){
+    const item = all[index];
+
+    if(answer === item.good){
+      correctCount++;
+      messageEl.textContent = "Doğru sepete attın! 🌟";
+    }else{
+      messageEl.textContent = "Bu davranışı diğer sepete koymalıydın. Öğrenmeye devam! 💪";
+    }
+
+    index++;
+    setTimeout(showCard, 700);
+  };
+
+  messageEl.textContent = "Cümleyi oku ve doğru sepete gönder. 🧺";
+  showCard();
 }
+
+/* RESİMLİ YAPBOZ */
+function startPuzzle(){
+  const unit = units[currentUnit];
+
+  messageEl.textContent = "Boşluğun yanındaki parçaya basarak resmi tamamla! 🧩";
+
+  const canvas = document.createElement("canvas");
+  canvas.width = 315;
+  canvas.height = 315;
+  const ctx = canvas.getContext("2d");
+
+  /* Basit, renkli ünite resmi */
+  ctx.fillStyle = "#87ceeb";
+  ctx.fillRect(0,0,315,315);
+
+  ctx.fillStyle = "#7acb62";
+  ctx.fillRect(0,220,315,95);
+
+  ctx.font = "105px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText(unit.emoji,157,155);
+
+  ctx.font = "48px Arial";
+  ctx.fillText("🌈",65,78);
+  ctx.fillText("⭐",254,75);
+  ctx.fillText("😊",70,280);
+  ctx.fillText("📚",250,280);
+
+  const imageURL = canvas.toDataURL();
+  const solved = [0,1,2,3,4,5,6,7,8];
+  let order = [0,1,2,3,4,5,6,7,8];
+  let emptyIndex = 8;
+
+  for(let i=0; i<45; i++){
+    const choices = movableIndexes(emptyIndex);
+    const next = choices[Math.floor(Math.random() * choices.length)];
+    [order[emptyIndex], order[next]] = [order[next], order[emptyIndex]];
+    emptyIndex = next;
+  }
+
+  function movableIndexes(index){
+    const result = [];
+    const row = Math.floor(index / 3);
+    const col = index % 3;
+
+    if(row > 0) result.push(index - 3);
+    if(row < 2) result.push(index + 3);
+    if(col > 0) result.push(index - 1);
+    if(col < 2) result.push(index + 1);
+
+    return result;
+  }
+
+  function drawPuzzle(){
+    gameEl.innerHTML = `<div class="puzzle-wrap"><div class="puzzle" id="puzzle"></div></div>`;
+    const puzzle = document.getElementById("puzzle");
+
+    order.forEach((pieceNumber,index) => {
+      const piece = document.createElement("div");
+      piece.className = "piece";
+
+      if(index === emptyIndex){
+        piece.classList.add("empty");
+      }else{
+        const sourceRow = Math.floor(pieceNumber / 3);
+        const sourceCol = pieceNumber % 3;
+        piece.style.backgroundImage = `url(${imageURL})`;
+        piece.style.backgroundPosition = `-${sourceCol * 105}px -${sourceRow * 105}px`;
+      }
+
+      piece.onclick = () => {
+        if(movableIndexes(emptyIndex).includes(index)){
+          [order[emptyIndex],order[index]] = [order[index],order[emptyIndex]];
+          emptyIndex = index;
+          drawPuzzle();
+
+          if(order.join(",") === solved.join(",")){
+            messageEl.textContent = "Yapboz tamamlandı! Resim çok güzel oldu! 🎉";
+            earn(20);
+          }
+        }
+      };
+
+      puzzle.appendChild(piece);
+    });
+  }
+
+  drawPuzzle();
+}
+
+updateScore();
+renderUnit();
 </script>
+
 </body>
 </html>
