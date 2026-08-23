@@ -1,6 +1,756 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tekerleme Hız Atölyesi</title>
+
+  <style>
+    :root {
+      --primary: #6c5ce7;
+      --secondary: #00b894;
+      --dark: #252a34;
+      --muted: #6b7280;
+      --light: #f5f7fb;
+      --card: #ffffff;
+      --danger: #e17055;
+      --yellow: #fdcb6e;
+      --shadow: 0 12px 35px rgba(40, 44, 80, .12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, #e9e4ff, transparent 30%),
+        linear-gradient(135deg, #f7f8fc, #edf1ff);
+      color: var(--dark);
+      min-height: 100vh;
+    }
+
+    .container {
+      width: min(1150px, 94%);
+      margin: auto;
+      padding: 28px 0 50px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #6c5ce7, #4f46b8);
+      color: white;
+      padding: 30px;
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 22px;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: clamp(27px, 5vw, 45px);
+    }
+
+    header p {
+      margin: 0;
+      opacity: .9;
+      line-height: 1.6;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 22px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    .sidebar h2,
+    .practice h2 {
+      margin-top: 0;
+    }
+
+    label {
+      display: block;
+      margin: 17px 0 7px;
+      font-weight: bold;
+      color: #414656;
+    }
+
+    select,
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid #dfe3ed;
+      border-radius: 11px;
+      padding: 11px 12px;
+      font-size: 15px;
+      background: white;
+      outline: none;
+    }
+
+    select:focus,
+    input:focus,
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(108, 92, 231, .12);
+    }
+
+    .level-info {
+      background: #f0efff;
+      border-left: 4px solid var(--primary);
+      padding: 12px;
+      margin-top: 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      transition: .2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      filter: brightness(.98);
+    }
+
+    .primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .success {
+      background: var(--secondary);
+      color: white;
+    }
+
+    .warning {
+      background: var(--yellow);
+      color: #5b4300;
+    }
+
+    .light-btn {
+      background: #eef0f7;
+      color: var(--dark);
+    }
+
+    button:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: bold;
+      background: #eeeaff;
+      color: var(--primary);
+    }
+
+    .timer {
+      font-size: 31px;
+      font-weight: bold;
+      color: var(--danger);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .reading-box {
+      background: #fffdf3;
+      border: 2px dashed #f1c40f;
+      border-radius: 17px;
+      padding: 28px;
+      min-height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .reading-text {
+      font-size: clamp(22px, 3vw, 34px);
+      line-height: 1.7;
+      font-weight: bold;
+      letter-spacing: .3px;
+    }
+
+    .hint {
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .stat {
+      background: var(--light);
+      border-radius: 14px;
+      text-align: center;
+      padding: 14px 8px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 25px;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .result {
+      display: none;
+      margin-top: 17px;
+      background: #e9fff7;
+      border: 1px solid #a8eed6;
+      border-radius: 15px;
+      padding: 18px;
+      line-height: 1.6;
+    }
+
+    .result.show {
+      display: block;
+    }
+
+    .challenge {
+      margin-top: 22px;
+      background: #fff4ed;
+      border-radius: 16px;
+      padding: 17px;
+    }
+
+    .challenge h3 {
+      margin-top: 0;
+      color: #c75126;
+    }
+
+    .progress {
+      height: 10px;
+      background: #e7e8ef;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--secondary), var(--primary));
+      transition: width .4s ease;
+    }
+
+    .custom-area {
+      margin-top: 20px;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    .history {
+      margin-top: 22px;
+    }
+
+    .history-list {
+      padding-left: 0;
+      list-style: none;
+      margin-bottom: 0;
+    }
+
+    .history-list li {
+      border-bottom: 1px solid #eee;
+      padding: 9px 0;
+      font-size: 14px;
+    }
+
+    .empty {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 800px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <header>
+      <h1>🗣️ Tekerleme Hız Atölyesi</h1>
+      <p>
+        Önce gözlerinle tara, sonra yüksek sesle oku. Amaç yalnızca hızlı okumak değil;
+        doğru, akıcı ve anlaşılır okumaktır.
+      </p>
+    </header>
+
+    <section class="layout">
+      <aside class="card sidebar">
+        <h2>Etkinlik Ayarları</h2>
+
+        <label for="level">Zorluk seviyesi</label>
+        <select id="level">
+          <option value="kolay">🟢 Kolay</option>
+          <option value="orta">🟡 Orta</option>
+          <option value="zor">🔴 Zor</option>
+          <option value="uzman">🟣 Uzman</option>
+        </select>
+
+        <div class="level-info" id="levelInfo">
+          Kısa ve ritmik cümlelerle ısınma yap.
+        </div>
+
+        <label for="target">Hedef okuma hızı</label>
+        <select id="target">
+          <option value="60">60 kelime/dakika</option>
+          <option value="90" selected>90 kelime/dakika</option>
+          <option value="120">120 kelime/dakika</option>
+          <option value="150">150 kelime/dakika</option>
+        </select>
+
+        <label for="roundCount">Basamaklı çalışma turu</label>
+        <select id="roundCount">
+          <option value="1">1 tur</option>
+          <option value="3" selected>3 tur</option>
+          <option value="5">5 tur</option>
+        </select>
+
+        <div class="buttons">
+          <button class="primary" id="randomBtn">🎲 Rastgele Seç</button>
+          <button class="light-btn" id="resetBtn">↺ Sıfırla</button>
+        </div>
+
+        <div class="history">
+          <h3>Son Çalışmalar</h3>
+          <ul class="history-list" id="historyList"></ul>
+        </div>
+      </aside>
+
+      <section class="card practice">
+        <div class="toolbar">
+          <div>
+            <span class="badge" id="difficultyBadge">KOLAY</span>
+            <span class="badge" id="wordCountBadge">0 kelime</span>
+          </div>
+          <div class="timer" id="timer">00:00.0</div>
+        </div>
+
+        <h2 id="title">Tekerleme hazır!</h2>
+
+        <div class="reading-box">
+          <div class="reading-text" id="readingText">
+            Başlamak için “Yeni Tekerleme” düğmesine bas.
+          </div>
+        </div>
+
+        <p class="hint">
+          Tekerlemeyi önce sessizce incele. Hazır olduğunda kronometreyi başlat,
+          yüksek sesle ve anlaşılır biçimde oku. Bitirince “Okumayı Bitirdim” düğmesine bas.
+        </p>
+
+        <div class="buttons">
+          <button class="warning" id="newBtn">✨ Yeni Tekerleme</button>
+          <button class="success" id="startBtn" disabled>▶ Okumaya Başla</button>
+          <button class="primary" id="finishBtn" disabled>⏹ Okumayı Bitirdim</button>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <strong id="wordStat">0</strong>
+            <span>Kelime</span>
+          </div>
+          <div class="stat">
+            <strong id="secondStat">0</strong>
+            <span>Süre (sn)</span>
+          </div>
+          <div class="stat">
+            <strong id="wpmStat">0</strong>
+            <span>Kelime/dk</span>
+          </div>
+          <div class="stat">
+            <strong id="scoreStat">-</strong>
+            <span>Başarı</span>
+          </div>
+        </div>
+
+        <div class="result" id="result"></div>
+
+        <div class="challenge">
+          <h3>🚀 Hız Merdiveni</h3>
+          <p>
+            Aynı tekerlemeyi birkaç tur oku. Her turda hedefin biraz üzerine çıkmaya
+            çalış; fakat anlaşılabilirliği koru.
+          </p>
+          <div><b id="roundText">Tur: 0 / 3</b></div>
+          <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+        </div>
+
+        <div class="custom-area">
+          <h3>✍️ Kendi Tekerlemeni Ekle</h3>
+          <textarea id="customText" placeholder="Buraya kendi tekerlemeni yazabilirsin..."></textarea>
+          <button class="light-btn" id="useCustomBtn" style="margin-top:10px;">
+            Kendi Tekerlememi Kullan
+          </button>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const tongueTwisters = {
+      kolay: [
+        {
+          title: "Şaşkın Şakir",
+          text: "Şaşkın Şakir şişeleri şıpır şıpır sıraladı."
+        },
+        {
+          title: "Minik Mırmır",
+          text: "Minik kedi Mırmır mavi minderde mışıl mışıl uyudu."
+        },
+        {
+          title: "Renkli Renkler",
+          text: "Renkli kalemlerle kırmızı, sarı, yeşil resimler çizdim."
+        },
+        {
+          title: "Sarı Sincap",
+          text: "Sarı sincap sarı samanları sepetine sakladı."
+        }
+      ],
+      orta: [
+        {
+          title: "Berberin Biri",
+          text: "Berberin biri berbere, bre berber, beri gel diye bağırmış."
+        },
+        {
+          title: "Kırk Küp",
+          text: "Kırk küp, kırkının da kulpu kırık küp."
+        },
+        {
+          title: "Pireli Peynir",
+          text: "Pireli peyniri perhizli pireler pek beğendi."
+        },
+        {
+          title: "Çömlekçi",
+          text: "Çömlekçi çömlek çevirirken çömlek çatladı."
+        }
+      ],
+      zor: [
+        {
+          title: "Şemsi Paşa",
+          text: "Şemsi Paşa Pasajı'nda sesi büzüşesiceler."
+        },
+        {
+          title: "Bu Yoğurdu",
+          text: "Bu yoğurdu mayalamalı mı, mayalamamalı mı?"
+        },
+        {
+          title: "Taş ve Kuş",
+          text: "Kırk kırık küp, kırkının da kulpu kırık küp."
+        },
+        {
+          title: "Çekirge",
+          text: "Çekirge çit çit çitlerken çitçinin çivisi çıktı."
+        }
+      ],
+      uzman: [
+        {
+          title: "Zor Zamanlar",
+          text: "Zümrüt zeytinlikte zıplayan zeki zürafa, zencefilli zerdeçal zerrelerini zorla zapt etti."
+        },
+        {
+          title: "Çetrefilli Çalışma",
+          text: "Çalışkan çırak, çekiçle çiviyi çakarken çetin çam çıtalarını çatırdattı."
+        },
+        {
+          title: "Rüzgârlı Rıhtım",
+          text: "Rıhtımda rüzgârla yarışan Rıza, renk renk raketleri hızla rafa kaldırdı."
+        },
+        {
+          title: "Sibilant Sınavı",
+          text: "Şaşırtıcı şekilde suskunlaşan sevimli sincap, sessiz sokakta sarı sümbülleri saydı."
+        }
+      ]
+    };
+
+    const levelDescriptions = {
+      kolay: "Kısa ve ritmik cümlelerle ısınma yap.",
+      orta: "Benzer sesleri art arda söyleyerek akıcılığını geliştir.",
+      zor: "Hızlı ses geçişlerine ve uzun kelimelere dikkat et.",
+      uzman: "Anlaşılır konuşmayı bozmadan yüksek hıza ulaşmaya çalış."
+    };
+
+    let selectedItem = null;
+    let startTime = null;
+    let timerInterval = null;
+    let currentSeconds = 0;
+    let currentRound = 0;
+    let totalRounds = 3;
+
+    const $ = id => document.getElementById(id);
+
+    function countWords(text) {
+      return text.trim().split(/\s+/).filter(Boolean).length;
+    }
+
+    function chooseRandom() {
+      const level = $("level").value;
+      const list = tongueTwisters[level];
+      selectedItem = list[Math.floor(Math.random() * list.length)];
+
+      $("title").textContent = selectedItem.title;
+      $("readingText").textContent = selectedItem.text;
+      $("difficultyBadge").textContent = level.toUpperCase();
+      $("wordCountBadge").textContent = countWords(selectedItem.text) + " kelime";
+      $("wordStat").textContent = countWords(selectedItem.text);
+
+      $("startBtn").disabled = false;
+      $("finishBtn").disabled = true;
+      $("result").classList.remove("show");
+      $("timer").textContent = "00:00.0";
+      $("secondStat").textContent = "0";
+      $("wpmStat").textContent = "0";
+      $("scoreStat").textContent = "-";
+      currentSeconds = 0;
+    }
+
+    function startTimer() {
+      if (!selectedItem) return;
+
+      startTime = Date.now();
+      $("startBtn").disabled = true;
+      $("finishBtn").disabled = false;
+      $("newBtn").disabled = true;
+
+      timerInterval = setInterval(() => {
+        currentSeconds = (Date.now() - startTime) / 1000;
+        updateTimer();
+      }, 100);
+    }
+
+    function updateTimer() {
+      const minutes = Math.floor(currentSeconds / 60);
+      const seconds = Math.floor(currentSeconds % 60);
+      const tenths = Math.floor((currentSeconds % 1) * 10);
+
+      $("timer").textContent =
+        String(minutes).padStart(2, "0") + ":" +
+        String(seconds).padStart(2, "0") + "." + tenths;
+
+      $("secondStat").textContent = currentSeconds.toFixed(1);
+    }
+
+    function finishReading() {
+      clearInterval(timerInterval);
+      $("finishBtn").disabled = true;
+      $("newBtn").disabled = false;
+
+      const words = countWords(selectedItem.text);
+      const minutes = currentSeconds / 60;
+      const wpm = minutes > 0 ? Math.round(words / minutes) : 0;
+      const target = Number($("target").value);
+      const difference = Math.abs(wpm - target);
+
+      let score;
+      let message;
+
+      if (difference <= 10) {
+        score = "🌟 Harika";
+        message = "Hedef hızına çok yakınsın. Üstelik anlaşılır okumaya devam et!";
+      } else if (difference <= 25) {
+        score = "👍 İyi";
+        message = "Gayet iyi! Birkaç tekrar ile hedef hızına yaklaşabilirsin.";
+      } else if (wpm < target) {
+        score = "💪 Gelişiyor";
+        message = "Biraz daha akıcı okumayı dene. Kelimeleri tek tek değil, küçük anlam gruplarıyla gör.";
+      } else {
+        score = "🎯 Hızlı";
+        message = "Hızın yüksek! Şimdi aynı hızda telaffuzunu daha net yapmaya çalış.";
+      }
+
+      $("wpmStat").textContent = wpm;
+      $("scoreStat").textContent = score.split(" ")[1] || score;
+
+      $("result").innerHTML = `
+        <b>${score}</b><br>
+        ${message}<br>
+        Hızın: <b>${wpm} kelime/dakika</b> |
+        Hedefin: <b>${target} kelime/dakika</b>
+      `;
+      $("result").classList.add("show");
+
+      currentRound++;
+      totalRounds = Number($("roundCount").value);
+      updateProgress();
+
+      saveHistory(wpm, selectedItem.title);
+    }
+
+    function updateProgress() {
+      $("roundText").textContent = `Tur: ${currentRound} / ${totalRounds}`;
+      const percent = Math.min((currentRound / totalRounds) * 100, 100);
+      $("progressBar").style.width = percent + "%";
+
+      if (currentRound >= totalRounds) {
+        $("roundText").textContent = `🎉 Tamamlandı: ${currentRound} / ${totalRounds}`;
+      }
+    }
+
+    function saveHistory(wpm, title) {
+      const history = JSON.parse(localStorage.getItem("tekerlemeHistory") || "[]");
+
+      history.unshift({
+        title,
+        wpm,
+        date: new Date().toLocaleString("tr-TR", {
+          day: "2-digit",
+          month: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit"
+        })
+      });
+
+      localStorage.setItem(
+        "tekerlemeHistory",
+        JSON.stringify(history.slice(0, 6))
+      );
+
+      showHistory();
+    }
+
+    function showHistory() {
+      const history = JSON.parse(localStorage.getItem("tekerlemeHistory") || "[]");
+      const list = $("historyList");
+
+      if (!history.length) {
+        list.innerHTML = `<li class="empty">Henüz çalışma yapılmadı.</li>`;
+        return;
+      }
+
+      list.innerHTML = history.map(item => `
+        <li>
+          <b>${item.wpm} kelime/dk</b><br>
+          ${item.title}<br>
+          <small>${item.date}</small>
+        </li>
+      `).join("");
+    }
+
+    $("level").addEventListener("change", () => {
+      $("levelInfo").textContent = levelDescriptions[$("level").value];
+      chooseRandom();
+    });
+
+    $("roundCount").addEventListener("change", () => {
+      totalRounds = Number($("roundCount").value);
+      currentRound = 0;
+      updateProgress();
+    });
+
+    $("newBtn").addEventListener("click", chooseRandom);
+    $("randomBtn").addEventListener("click", chooseRandom);
+    $("startBtn").addEventListener("click", startTimer);
+    $("finishBtn").addEventListener("click", finishReading);
+
+    $("resetBtn").addEventListener("click", () => {
+      clearInterval(timerInterval);
+      selectedItem = null;
+      currentRound = 0;
+      $("title").textContent = "Tekerleme hazır!";
+      $("readingText").textContent = "Başlamak için “Yeni Tekerleme” düğmesine bas.";
+      $("startBtn").disabled = true;
+      $("finishBtn").disabled = true;
+      $("newBtn").disabled = false;
+      $("timer").textContent = "00:00.0";
+      $("wordCountBadge").textContent = "0 kelime";
+      $("wordStat").textContent = "0";
+      $("secondStat").textContent = "0";
+      $("wpmStat").textContent = "0";
+      $("scoreStat").textContent = "-";
+      $("result").classList.remove("show");
+      updateProgress();
+    });
+
+    $("useCustomBtn").addEventListener("click", () => {
+      const text = $("customText").value.trim();
+
+      if (!text) {
+        alert("Lütfen önce bir tekerleme yaz.");
+        return;
+      }
+
+      selectedItem = {
+        title: "Kendi Tekerlemem",
+        text
+      };
+
+      $("title").textContent = selectedItem.title;
+      $("readingText").textContent = text;
+      $("difficultyBadge").textContent = "ÖZEL";
+      $("wordCountBadge").textContent = countWords(text) + " kelime";
+      $("wordStat").textContent = countWords(text);
+      $("startBtn").disabled = false;
+      $("finishBtn").disabled = true;
+      $("result").classList.remove("show");
+    });
+
+    showHistory();
+    chooseRandom();
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tekerleme Köşesi</title>
