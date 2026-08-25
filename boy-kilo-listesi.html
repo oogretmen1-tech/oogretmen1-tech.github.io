@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Öğrenci Boy Kilo Listesi</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f8eaf0;
+  color: #493d4d;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  width: 95%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+header {
+  background: linear-gradient(135deg, #e789aa, #8066a3);
+  color: white;
+  text-align: center;
+  padding: 35px 15px;
+  border-radius: 0 0 30px 30px;
+}
+
+header h1 {
+  margin: 10px 0;
+  font-family: Georgia, serif;
+  font-size: 38px;
+}
+
+header p {
+  font-size: 18px;
+}
+
+.panel {
+  background: white;
+  padding: 25px;
+  margin: 25px 0;
+  border-radius: 20px;
+  box-shadow: 0 5px 18px #60426622;
+}
+
+h2 {
+  color: #8066a3;
+  text-align: center;
+  font-family: Georgia, serif;
+}
+
+.buttons {
+  text-align: center;
+  margin: 20px 0;
+}
+
+button {
+  border: none;
+  border-radius: 25px;
+  padding: 13px 20px;
+  margin: 6px;
+  color: white;
+  background: #e2769b;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #be547b;
+}
+
+button.mavi {
+  background: #67abc5;
+}
+
+button.yesil {
+  background: #79b589;
+}
+
+button.mor {
+  background: #8066a3;
+}
+
+.form-bilgi {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.alan {
+  border-bottom: 2px dotted #8066a3;
+  min-height: 36px;
+  padding: 8px 3px;
+  font-weight: bold;
+}
+
+.talimat {
+  background: #fff2c9;
+  border-left: 6px solid #f3cb67;
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 20px;
+}
+
+.liste-baslik {
+  background: #8066a3;
+  color: white;
+  padding: 15px;
+  border-radius: 12px 12px 0 0;
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.tablo-kapsayici {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  min-width: 800px;
+  border-collapse: collapse;
+  margin-bottom: 25px;
+}
+
+th {
+  background: #f4c1d1;
+  color: #493d4d;
+  border: 1px solid white;
+  padding: 12px 6px;
+}
+
+td {
+  height: 40px;
+  border: 1px solid #cdbbd2;
+  padding: 6px;
+}
+
+tr:nth-child(even) {
+  background: #fff6f9;
+}
+
+td:first-child {
+  width: 50px;
+  text-align: center;
+  font-weight: bold;
+  color: #8066a3;
+}
+
+.bilgi-notu {
+  text-align: center;
+  color: #8066a3;
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+.gizli {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  header h1 {
+    font-size: 28px;
+  }
+
+  .form-bilgi {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    padding: 15px;
+  }
+}
+
+@media print {
+  body {
+    background: white;
+  }
+
+  header {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .buttons {
+    display: none;
+  }
+
+  .panel {
+    box-shadow: none;
+    margin: 0;
+  }
+
+  #liste22 {
+    display: block !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="container">
+    <div style="font-size:42px;">📏 ⚖️ 🌈</div>
+    <h1>Öğrenci Boy-Kilo Takip Listesi</h1>
+    <p>Sevgiyle takip edilen sağlıklı gelişim</p>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="panel">
+    <h2>Liste Seçimi</h2>
+
+    <div class="buttons">
+      <button onclick="liste20Goster()">
+        20 Öğrencilik Listeyi Göster
+      </button>
+
+      <button class="mavi" onclick="liste22Goster()">
+        22 Öğrencilik Listeyi Göster
+      </button>
+
+      <button class="yesil" onclick="tumunuGoster()">
+        İki Listeyi de Göster
+      </button>
+
+      <button class="mor" onclick="window.print()">
+        🖨 Yazdır
+      </button>
+    </div>
+  </section>
+
+  <!-- 20 KİŞİLİK LİSTE -->
+  <section class="panel" id="liste20">
+    <div class="liste-baslik">
+      20 Öğrencilik Boy-Kilo Takip Listesi
+    </div>
+
+    <div class="form-bilgi">
+      <div class="alan">Okul: ................................</div>
+      <div class="alan">Sınıf / Şube: ................................</div>
+      <div class="alan">Öğretmen: ................................</div>
+      <div class="alan">Tarih: ................................</div>
+      <div class="alan">Dönem: ................................</div>
+      <div class="alan">Eğitim Yılı: ................................</div>
+    </div>
+
+    <div class="talimat">
+      <strong>Bilgilendirme:</strong>
+      Boy bilgisi santimetre, kilo bilgisi kilogram olarak yazılmalıdır.
+      Bu form sınıf içi kayıt amacıyla hazırlanmıştır.
+    </div>
+
+    <div class="tablo-kapsayici">
+      <table>
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Öğrenci Adı Soyadı</th>
+            <th>Boy<br>(cm)</th>
+            <th>Kilo<br>(kg)</th>
+            <th>Ölçüm Tarihi</th>
+            <th>Gözlem / Not</th>
+          </tr>
+        </thead>
+        <tbody id="tablo20"></tbody>
+      </table>
+    </div>
+
+    <p class="bilgi-notu">
+      ♥ Her çocuk kendi gelişim yolunda özeldir. ♥
+    </p>
+  </section>
+
+  <!-- 22 KİŞİLİK LİSTE -->
+  <section class="panel gizli" id="liste22">
+    <div class="liste-baslik">
+      22 Öğrencilik Boy-Kilo Takip Listesi
+    </div>
+
+    <div class="form-bilgi">
+      <div class="alan">Okul: ................................</div>
+      <div class="alan">Sınıf / Şube: ................................</div>
+      <div class="alan">Öğretmen: ................................</div>
+      <div class="alan">Tarih: ................................</div>
+      <div class="alan">Dönem: ................................</div>
+      <div class="alan">Eğitim Yılı: ................................</div>
+    </div>
+
+    <div class="talimat">
+      <strong>Bilgilendirme:</strong>
+      Boy bilgisi santimetre, kilo bilgisi kilogram olarak yazılmalıdır.
+      Bu form sınıf içi kayıt amacıyla hazırlanmıştır.
+    </div>
+
+    <div class="tablo-kapsayici">
+      <table>
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Öğrenci Adı Soyadı</th>
+            <th>Boy<br>(cm)</th>
+            <th>Kilo<br>(kg)</th>
+            <th>Ölçüm Tarihi</th>
+            <th>Gözlem / Not</th>
+          </tr>
+        </thead>
+        <tbody id="tablo22"></tbody>
+      </table>
+    </div>
+
+    <p class="bilgi-notu">
+      ♥ Her çocuk kendi gelişim yolunda özeldir. ♥
+    </p>
+  </section>
+
+  <section class="panel">
+    <h2>İndirme Seçenekleri</h2>
+
+    <div class="buttons">
+      <button onclick="dosyaIndir(20)">
+        ⬇ 20 Kişilik HTML Dosyasını İndir
+      </button>
+
+      <button class="mavi" onclick="dosyaIndir(22)">
+        ⬇ 22 Kişilik HTML Dosyasını İndir
+      </button>
+    </div>
+  </section>
+
+</main>
+
+<script>
+function satirOlustur(adet) {
+  let satirlar = "";
+
+  for (let i = 1; i <= adet; i++) {
+    satirlar += `
+      <tr>
+        <td>${i}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    `;
+  }
+
+  return satirlar;
+}
+
+document.getElementById("tablo20").innerHTML = satirOlustur(20);
+document.getElementById("tablo22").innerHTML = satirOlustur(22);
+
+function liste20Goster() {
+  document.getElementById("liste20").classList.remove("gizli");
+  document.getElementById("liste22").classList.add("gizli");
+
+  document.getElementById("liste20").scrollIntoView({
+    behavior: "smooth"
+  });
+}
+
+function liste22Goster() {
+  document.getElementById("liste20").classList.add("gizli");
+  document.getElementById("liste22").classList.remove("gizli");
+
+  document.getElementById("liste22").scrollIntoView({
+    behavior: "smooth"
+  });
+}
+
+function tumunuGoster() {
+  document.getElementById("liste20").classList.remove("gizli");
+  document.getElementById("liste22").classList.remove("gizli");
+}
+
+function dosyaIndir(adet) {
+  const satirlar = satirOlustur(adet);
+
+  const yeniHTML = `
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>${adet} Öğrencilik Boy-Kilo Listesi</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 25px;
+  color: #493d4d;
+}
+
+.baslik {
+  text-align: center;
+  background: #8066a3;
+  color: white;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.bilgiler {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin: 25px 0;
+}
+
+.alan {
+  border-bottom: 2px dotted #8066a3;
+  padding: 10px 3px;
+}
+
+.aciklama {
+  background: #fff2c9;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background: #f4c1d1;
+  padding: 12px;
+}
+
+td {
+  border: 1px solid #aaa;
+  height: 40px;
+}
+
+td:first-child {
+  width: 45px;
+  text-align: center;
+}
+
+tr:nth-child(even) {
+  background: #fff6f9;
+}
+
+.alt {
+  text-align: center;
+  color: #8066a3;
+  margin-top: 25px;
+}
+
+@media print {
+  .baslik,
+  th {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="baslik">
+  <h1>📏 Öğrenci Boy-Kilo Takip Listesi ⚖️</h1>
+  <p>${adet} öğrencilik sınıf çizelgesi</p>
+</div>
+
+<div class="bilgiler">
+  <div class="alan">Okul: ................................</div>
+  <div class="alan">Sınıf / Şube: ................................</div>
+  <div class="alan">Öğretmen: ................................</div>
+  <div class="alan">Tarih: ................................</div>
+  <div class="alan">Dönem: ................................</div>
+  <div class="alan">Eğitim Yılı: ................................</div>
+</div>
+
+<div class="aciklama">
+  <strong>Bilgilendirme:</strong>
+  Boy bilgisi santimetre, kilo bilgisi kilogram olarak yazılmalıdır.
+  Bu form sınıf içi kayıt amacıyla hazırlanmıştır.
+</div>
+
+<table>
+<thead>
+<tr>
+  <th>No</th>
+  <th>Öğrenci Adı Soyadı</th>
+  <th>Boy (cm)</th>
+  <th>Kilo (kg)</th>
+  <th>Ölçüm Tarihi</th>
+  <th>Gözlem / Not</th>
+</tr>
+</thead>
+<tbody>
+${satirlar}
+</tbody>
+</table>
+
+<p class="alt">
+  ♥ Her çocuk kendi gelişim yolunda özeldir. ♥
+</p>
+
+</body>
+</html>
+`;
+
+  const dosya = new Blob([yeniHTML], {
+    type: "text/html;charset=utf-8"
+  });
+
+  const url = URL.createObjectURL(dosya);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = adet + "-ogrencilik-boy-kilo-listesi.html";
+  link.click();
+
+  setTimeout(function() {
+    URL.revokeObjectURL(url);
+  }, 1000);
+}
+</script>
+
+</body>
+</html>
