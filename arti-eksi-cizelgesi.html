@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Artı Eksi Ders Çizelgesi</title>
+
+<style>
+:root {
+  --mor: #7562a4;
+  --koyu-mor: #514272;
+  --pembe: #e589a8;
+  --acik-pembe: #fff2f6;
+  --mavi: #72b9d0;
+  --yesil: #8dbd92;
+  --sari: #f4cc70;
+  --metin: #493e4d;
+  --kenar: #cbbbd4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f7eaf0;
+  color: var(--metin);
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  width: 96%;
+  max-width: 1250px;
+  margin: auto;
+}
+
+header {
+  background: linear-gradient(135deg, var(--pembe), var(--mor));
+  color: white;
+  text-align: center;
+  padding: 35px 15px;
+  border-radius: 0 0 30px 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+header h1 {
+  margin: 10px 0;
+  font-family: Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3.7rem);
+}
+
+header p {
+  font-size: 1.1rem;
+}
+
+header::before {
+  content: "★  ✿  ★  ✿  ★";
+  position: absolute;
+  top: 10px;
+  left: 3%;
+  color: #ffffff55;
+  font-size: 38px;
+}
+
+header::after {
+  content: "✿  ★  ✿  ★";
+  position: absolute;
+  right: 3%;
+  bottom: 8px;
+  color: #ffffff55;
+  font-size: 38px;
+}
+
+.panel {
+  background: white;
+  padding: 25px;
+  margin: 25px 0;
+  border-radius: 22px;
+  box-shadow: 0 5px 18px #60426622;
+}
+
+.bilgi-alanlari {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.noktali-alan {
+  min-height: 38px;
+  padding: 8px 3px;
+  border-bottom: 2px dotted var(--mor);
+  font-weight: bold;
+}
+
+.aciklama {
+  background: #fff4cb;
+  border-left: 6px solid var(--sari);
+  padding: 14px 18px;
+  border-radius: 10px;
+  margin: 20px 0;
+}
+
+.sekmeler {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 22px 0;
+}
+
+.sekme {
+  border: none;
+  border-radius: 24px;
+  padding: 12px 17px;
+  color: white;
+  background: var(--mor);
+  cursor: pointer;
+  font-weight: bold;
+  font-size: .95rem;
+}
+
+.sekme:hover,
+.sekme.aktif {
+  background: var(--pembe);
+  transform: translateY(-2px);
+}
+
+.sekme:nth-child(2) {
+  background: var(--mavi);
+}
+
+.sekme:nth-child(3) {
+  background: #9473b3;
+}
+
+.sekme:nth-child(4) {
+  background: var(--yesil);
+}
+
+.sekme:nth-child(5) {
+  background: #d99662;
+}
+
+.sekme:nth-child(6) {
+  background: #649dc3;
+}
+
+.sekme:nth-child(7) {
+  background: #a379a9;
+}
+
+.tablo-basligi {
+  background: linear-gradient(135deg, var(--pembe), var(--mor));
+  color: white;
+  text-align: center;
+  padding: 17px;
+  border-radius: 15px 15px 0 0;
+  font-size: 1.35rem;
+  font-weight: bold;
+}
+
+.tablo-kapsayici {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+}
+
+th {
+  background: #f4c5d5;
+  padding: 12px 7px;
+  border: 1px solid white;
+  color: var(--metin);
+}
+
+td {
+  height: 44px;
+  border: 1px solid var(--kenar);
+  padding: 5px;
+  text-align: center;
+}
+
+tr:nth-child(even) {
+  background: #fff7fa;
+}
+
+td:first-child {
+  width: 48px;
+  color: var(--mor);
+  font-weight: bold;
+}
+
+.ad-alani {
+  min-width: 230px;
+  height: 28px;
+  border-bottom: 2px dotted #9d87ae;
+  text-align: left;
+  margin: 0 6px;
+}
+
+.kucuk-not {
+  min-width: 160px;
+  height: 28px;
+  border-bottom: 2px dotted #9d87ae;
+}
+
+.isaret {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #baa9c5;
+  border-radius: 8px;
+  color: #b8a6c1;
+  font-size: 1.35rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 0 4px;
+  background: white;
+  user-select: none;
+}
+
+.isaret.artiya {
+  background: #dff3e1;
+  color: #3e9652;
+  border-color: #6eb47b;
+}
+
+.isaret.eksiye {
+  background: #ffe1e8;
+  color: #c44f70;
+  border-color: #dc8199;
+}
+
+.icerik {
+  display: none;
+}
+
+.icerik.aktif {
+  display: block;
+}
+
+.alt-aciklama {
+  text-align: center;
+  color: var(--mor);
+  font-size: .9rem;
+  margin: 20px 0 5px;
+}
+
+.butonlar {
+  text-align: center;
+  margin: 25px 0 5px;
+}
+
+button {
+  border: none;
+  border-radius: 24px;
+  padding: 12px 20px;
+  margin: 5px;
+  color: white;
+  background: var(--pembe);
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+button:hover {
+  background: var(--koyu-mor);
+}
+
+footer {
+  background: var(--koyu-mor);
+  color: white;
+  padding: 28px;
+  text-align: center;
+  margin-top: 30px;
+}
+
+@media (max-width: 700px) {
+  .bilgi-alanlari {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    padding: 14px;
+  }
+}
+
+@media print {
+  body {
+    background: white;
+  }
+
+  header {
+    border-radius: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .sekmeler,
+  .butonlar,
+  .aciklama {
+    display: none;
+  }
+
+  .panel {
+    box-shadow: none;
+    margin: 0;
+  }
+
+  .icerik {
+    display: none !important;
+  }
+
+  .icerik.aktif {
+    display: block !important;
+  }
+
+  .tablo-basligi,
+  th {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="container">
+    <div style="font-size: 46px;">📚 ✏️ ⭐ ➕ ➖</div>
+    <h1>Artı - Eksi Ders Çizelgesi</h1>
+    <p>30 öğrencilik sınıf takip formu</p>
+  </div>
+</header>
+
+<main class="container">
+
+<section class="panel">
+
+  <h2>Sınıf Bilgileri</h2>
+
+  <div class="bilgi-alanlari">
+    <div class="noktali-alan">Okul: ................................................</div>
+    <div class="noktali-alan">Sınıf / Şube: ................................................</div>
+    <div class="noktali-alan">Öğretmen: ................................................</div>
+    <div class="noktali-alan">Tarih: ................................................</div>
+    <div class="noktali-alan">Dönem: ................................................</div>
+    <div class="noktali-alan">Konu: ................................................</div>
+  </div>
+
+  <div class="aciklama">
+    <strong>Kullanım:</strong>
+    Öğrencinin ders içindeki durumunu değerlendirmek için
+    <strong>+</strong> veya <strong>−</strong> kutusuna tıklayabilirsiniz.
+    İsim alanları noktalı bırakılmıştır; isterseniz isim yerine öğrenci
+    kodu da kullanabilirsiniz.
+  </div>
+
+  <div class="sekmeler">
+    <button class="sekme aktif" onclick="dersAc('turkce', this)">📝 Türkçe</button>
+    <button class="sekme" onclick="dersAc('matematik', this)">➗ Matematik</button>
+    <button class="sekme" onclick="dersAc('hayat', this)">🌱 Hayat Bilgisi</button>
+    <button class="sekme" onclick="dersAc('fen', this)">🔬 Fen Bilimleri</button>
+    <button class="sekme" onclick="dersAc('sosyal', this)">🌍 Sosyal Bilgiler</button>
+    <button class="sekme" onclick="dersAc('okuma', this)">📖 Okuma</button>
+    <button class="sekme" onclick="dersAc('davranis', this)">⭐ Davranış</button>
+  </div>
+
+  <div id="cizelgeler"></div>
+
+  <div class="butonlar">
+    <button onclick="aktifDersiYazdir()">🖨 Aktif Çizelgeyi Yazdır</button>
+    <button onclick="window.print()">🖨 Yazdır</button>
+    <button onclick="dosyayiIndir()">⬇ HTML Dosyasını İndir</button>
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+  ⭐ Her öğrencinin gelişimi değerlidir. ⭐
+</footer>
+
+<script>
+const dersler = {
+  turkce: "Türkçe Dersi Artı - Eksi Çizelgesi",
+  matematik: "Matematik Dersi Artı - Eksi Çizelgesi",
+  hayat: "Hayat Bilgisi Artı - Eksi Çizelgesi",
+  fen: "Fen Bilimleri Artı - Eksi Çizelgesi",
+  sosyal: "Sosyal Bilgiler Artı - Eksi Çizelgesi",
+  okuma: "Okuma Dersi Artı - Eksi Çizelgesi",
+  davranis: "Davranış Artı - Eksi Çizelgesi"
+};
+
+function satirOlustur() {
+  let satirlar = "";
+
+  for (let i = 1; i <= 30; i++) {
+    satirlar += `
+      <tr>
+        <td>${i}</td>
+
+        <td>
+          <div class="ad-alani">................................</div>
+        </td>
+
+        <td>
+          <span class="isaret" onclick="artiSec(this)">+</span>
+        </td>
+
+        <td>
+          <span class="isaret" onclick="eksiSec(this)">−</span>
+        </td>
+
+        <td>
+          <div class="kucuk-not"></div>
+        </td>
+      </tr>
+    `;
+  }
+
+  return satirlar;
+}
+
+function cizelgeOlustur(anahtar, baslik, aktifMi) {
+  return `
+    <div id="${anahtar}" class="icerik ${aktifMi ? "aktif" : ""}">
+      <div class="tablo-basligi">${baslik}</div>
+
+      <div class="tablo-kapsayici">
+        <table>
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Öğrenci Adı / Kod</th>
+              <th>Artı (+)</th>
+              <th>Eksi (−)</th>
+              <th>Kısa Not</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            ${satirOlustur()}
+          </tbody>
+        </table>
+      </div>
+
+      <p class="alt-aciklama">
+        Öğrenci derse katıldığında, görevini yaptığında veya olumlu davranış
+        gösterdiğinde “+”; geliştirilmesi gereken durumlarda “−” işareti
+        kullanılabilir.
+      </p>
+    </div>
+  `;
+}
+
+let ilk = true;
+
+for (const [anahtar, baslik] of Object.entries(dersler)) {
+  document.getElementById("cizelgeler").innerHTML +=
+    cizelgeOlustur(anahtar, baslik, ilk);
+
+  ilk = false;
+}
+
+function dersAc(anahtar, buton) {
+  document.querySelectorAll(".icerik").forEach(function(icerik) {
+    icerik.classList.remove("aktif");
+  });
+
+  document.querySelectorAll(".sekme").forEach(function(sekme) {
+    sekme.classList.remove("aktif");
+  });
+
+  document.getElementById(anahtar).classList.add("aktif");
+  buton.classList.add("aktif");
+}
+
+function artiSec(element) {
+  const satir = element.closest("tr");
+  const eksi = satir.querySelectorAll(".isaret")[1];
+
+  element.classList.toggle("artiya");
+  eksi.classList.remove("eksiye");
+}
+
+function eksiSec(element) {
+  const satir = element.closest("tr");
+  const arti = satir.querySelectorAll(".isaret")[0];
+
+  element.classList.toggle("eksiye");
+  arti.classList.remove("artiya");
+}
+
+function aktifDersiYazdir() {
+  window.print();
+}
+
+function dosyayiIndir() {
+  const html = "<!DOCTYPE html>" + document.documentElement.outerHTML;
+
+  const blob = new Blob([html], {
+    type: "text/html;charset=utf-8"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = "30-ogrencilik-arti-eksi-cizelgesi.html";
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  setTimeout(function() {
+    URL.revokeObjectURL(url);
+  }, 1000);
+}
+</script>
+
+</body>
+</html>

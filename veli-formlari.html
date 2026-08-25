@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veli Formları</title>
+
+<style>
+:root {
+  --mor: #7561a3;
+  --koyu-mor: #514273;
+  --pembe: #e589a8;
+  --acik-pembe: #fff3f7;
+  --sari: #f5d274;
+  --yesil: #e5f3e7;
+  --mavi: #e3f4f8;
+  --metin: #463b4c;
+  --kenar: #cdbbd5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f7eaf0;
+  color: var(--metin);
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+}
+
+.container {
+  width: 95%;
+  max-width: 1100px;
+  margin: auto;
+}
+
+header {
+  background: linear-gradient(135deg, var(--pembe), var(--mor));
+  color: white;
+  text-align: center;
+  padding: 35px 15px;
+  border-radius: 0 0 30px 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+header::before {
+  content: "✿  ★  ✿  ★  ✿";
+  position: absolute;
+  top: 8px;
+  left: 3%;
+  color: #ffffff55;
+  font-size: 36px;
+}
+
+header::after {
+  content: "★  ✿  ★  ✿";
+  position: absolute;
+  right: 3%;
+  bottom: 8px;
+  color: #ffffff55;
+  font-size: 36px;
+}
+
+header h1,
+header p,
+header div {
+  position: relative;
+  z-index: 1;
+}
+
+header h1 {
+  margin: 10px 0;
+  font-family: Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+}
+
+header p {
+  font-size: 1.1rem;
+}
+
+.panel {
+  background: white;
+  margin: 25px 0;
+  padding: 25px;
+  border-radius: 22px;
+  box-shadow: 0 5px 18px #60426622;
+}
+
+.bilgi-alanlari {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.noktali {
+  min-height: 38px;
+  padding: 8px 3px;
+  border-bottom: 2px dotted var(--mor);
+}
+
+.aciklama {
+  background: #fff5ce;
+  border-left: 6px solid var(--sari);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 20px 0;
+}
+
+.sekmeler {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 22px 0;
+}
+
+.sekme,
+.buton {
+  border: none;
+  border-radius: 24px;
+  padding: 12px 18px;
+  color: white;
+  background: var(--mor);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.sekme:hover,
+.sekme.aktif,
+.buton:hover {
+  background: var(--pembe);
+}
+
+.form {
+  display: none;
+}
+
+.form.aktif {
+  display: block;
+}
+
+.form-baslik {
+  background: linear-gradient(135deg, var(--pembe), var(--mor));
+  color: white;
+  text-align: center;
+  padding: 18px;
+  border-radius: 15px 15px 0 0;
+  font-family: Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.form-icerik {
+  border: 2px solid var(--kenar);
+  border-top: none;
+  padding: 25px;
+  border-radius: 0 0 15px 15px;
+}
+
+h2,
+h3 {
+  color: var(--koyu-mor);
+  font-family: Georgia, serif;
+}
+
+h2 {
+  text-align: center;
+}
+
+h3 {
+  margin-top: 22px;
+}
+
+.yazi-alani {
+  min-height: 80px;
+  border: 2px dotted var(--mor);
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: 8px;
+}
+
+.yazi-alani.buyuk {
+  min-height: 135px;
+}
+
+.duz-satir {
+  min-height: 38px;
+  border-bottom: 2px dotted var(--mor);
+  padding: 8px 3px;
+  margin: 10px 0;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px 25px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 15px;
+}
+
+.checkboxlar {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin: 12px 0 20px;
+}
+
+.checkboxlar label {
+  background: var(--acik-pembe);
+  padding: 9px;
+  border-radius: 8px;
+}
+
+.sorumluluk {
+  background: var(--yesil);
+  border-left: 6px solid #70ad78;
+  padding: 16px;
+  margin: 20px 0;
+  border-radius: 10px;
+}
+
+.bilgi-kutusu {
+  background: var(--mavi);
+  border-left: 6px solid #66acc0;
+  padding: 16px;
+  margin: 20px 0;
+  border-radius: 10px;
+}
+
+.imzalar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+  margin-top: 50px;
+}
+
+.imza {
+  text-align: center;
+  border-top: 2px dotted var(--mor);
+  padding-top: 8px;
+}
+
+.not {
+  color: #766c79;
+  font-size: .9rem;
+}
+
+.butons {
+  text-align: center;
+  margin: 25px 0 5px;
+}
+
+footer {
+  background: var(--koyu-mor);
+  color: white;
+  text-align: center;
+  padding: 26px;
+  margin-top: 30px;
+}
+
+[contenteditable="true"]:focus {
+  outline: 3px solid #f0bfd0;
+  background: #fffafd;
+}
+
+@media (max-width: 700px) {
+  .bilgi-alanlari,
+  .grid-2,
+  .grid-3,
+  .imzalar {
+    grid-template-columns: 1fr;
+  }
+
+  .checkboxlar {
+    grid-template-columns: 1fr;
+  }
+
+  .panel,
+  .form-icerik {
+    padding: 14px;
+  }
+}
+
+@media print {
+  body {
+    background: white;
+  }
+
+  header {
+    border-radius: 0;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .sekmeler,
+  .butons,
+  .aciklama {
+    display: none;
+  }
+
+  .panel {
+    box-shadow: none;
+    margin: 0;
+  }
+
+  .form {
+    display: none !important;
+  }
+
+  .form.aktif {
+    display: block !important;
+  }
+
+  .form-baslik,
+  .checkboxlar label,
+  .sorumluluk,
+  .bilgi-kutusu {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="container">
+    <div style="font-size: 44px;">🏫 📝 👨‍👩‍👧‍👦</div>
+    <h1>Veli Formları</h1>
+    <p>Veli izin, gözlem ve ziyaret belgeleri</p>
+  </div>
+</header>
+
+<main class="container">
+
+<section class="panel">
+
+  <div class="bilgi-alanlari">
+    <div class="noktali" contenteditable="true">
+      Okul: ................................................
+    </div>
+
+    <div class="noktali" contenteditable="true">
+      Sınıf / Şube: ................................................
+    </div>
+
+    <div class="noktali" contenteditable="true">
+      Öğretmen: ................................................
+    </div>
+  </div>
+
+  <div class="aciklama">
+    <strong>Bilgilendirme:</strong>
+    Aşağıdaki sekmelerden kullanmak istediğiniz formu seçebilirsiniz.
+    Noktalı alanlara tıklayarak bilgisayarda doldurabilir, daha sonra
+    yalnızca açık olan formu yazdırabilirsiniz.
+  </div>
+
+  <div class="sekmeler">
+    <button class="sekme aktif" onclick="formAc('izin', this)">
+      ✍️ Veli İzin ve Onay Formu
+    </button>
+
+    <button class="sekme" onclick="formAc('gozlem', this)">
+      👀 Veli Gözlem Formu
+    </button>
+
+    <button class="sekme" onclick="formAc('ziyaret', this)">
+      🏠 Veli Ziyareti Formu
+    </button>
+  </div>
+
+  <!-- DOĞRU VELİ İZİN FORMU -->
+  <section id="izin" class="form aktif">
+
+    <div class="form-baslik">
+      VELİ İZİN VE ONAY FORMU
+    </div>
+
+    <div class="form-icerik">
+
+      <div class="bilgi-kutusu">
+        <strong>Bu formun amacı:</strong>
+        Öğretmen veya okul tarafından düzenlenen bir etkinlik,
+        gezi, çalışma ya da faaliyet hakkında veliyi bilgilendirmek
+        ve öğrencinin katılımı için veli onayı almaktır.
+      </div>
+
+      <div class="grid-2">
+        <div class="duz-satir" contenteditable="true">
+          Tarih: ................................................
+        </div>
+
+        <div class="duz-satir" contenteditable="true">
+          Belge No: ................................................
+        </div>
+      </div>
+
+      <p>
+        Sayın Veli,
+      </p>
+
+      <p>
+        Öğrencinizin aşağıda bilgileri verilen etkinlik / faaliyet /
+        çalışma programına katılması planlanmaktadır. Etkinlikle ilgili
+        bilgileri inceleyerek öğrencinizin katılımı konusunda uygun seçeneği
+        işaretlemeniz ve formu imzalayarak okula teslim etmeniz rica olunur.
+      </p>
+
+      <section class="bolum">
+        <div class="bolum-baslik">
+          1. Öğrenci Bilgileri
+        </div>
+
+        <div class="form-icerik">
+          <div class="bilgi-alanlari">
+            <div class="noktali" contenteditable="true">
+              Öğrencinin Adı Soyadı: ................................
+            </div>
+
+            <div class="noktali" contenteditable="true">
+              Sınıf / Şube: ................................
+            </div>
+
+            <div class="noktali" contenteditable="true">
+              Öğrenci No: ................................
+            </div>
+
+            <div class="noktali" contenteditable="true">
+              Veli Adı Soyadı: ................................
+            </div>
+
+            <div class="noktali" contenteditable="true">
+              Veli Telefonu: ................................
+            </div>
+
+            <div class="noktali" contenteditable="true">
+              Acil Durum Telefonu: ................................
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="bolum">
+        <div class="bolum-baslik">
+          2. Etkinlik Bilgileri
+        </div>
+
+        <div class="form-icerik">
+          <div class="duz-satir" contenteditable="true">
+            Etkinliğin / Faaliyetin Adı:
+            ............................................................
+          </div>
+
+          <div class="duz-satir" contenteditable="true">
+            Etkinliğin Amacı:
+            ............................................................
+          </div>
+
+          <div class="grid-3">
+            <div class="duz-satir" contenteditable="true">
+              Tarih: ................................
+            </div>
+
+            <div class="duz-satir" contenteditable="true">
+              Saat: ................................
+            </div>
+
+            <div class="duz-satir" contenteditable="true">
+              Süre: ................................
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="duz-satir" contenteditable="true">
+              Etkinlik Yeri:
+              ................................................
+            </div>
+
+            <div class="duz-satir" contenteditable="true">
+              Ulaşım Şekli:
+              ................................................
+            </div>
+
+            <div class="duz-satir" contenteditable="true">
+              Sorumlu Öğretmen:
+              ................................................
+            </div>
+
+            <div class="duz-satir" contenteditable="true">
+              Dönüş Bilgisi:
+              ................................................
+            </div>
+          </div>
+
+          <p><strong>Etkinlik türü:</strong></p>
+
+          <div class="checkboxlar">
+            <label>☐ Gezi</label>
+            <label>☐ Sosyal etkinlik</label>
+            <label>☐ Sportif faaliyet</label>
+            <label>☐ Yarışma</label>
+            <label>☐ Okul dışı çalışma</label>
+            <label>☐ Kültürel faaliyet</label>
+            <label>☐ Fotoğraf / video çalışması</label>
+            <label>☐ Diğer</label>
+          </div>
+        </div>
+      </section>
+
+      <section class="bolum">
+        <div class="bolum-baslik">
+          3. Veli İzin ve Onay Beyanı
+        </div>
+
+        <div class="form-icerik">
+
+          <p>
+            Aşağıda uygun seçeneği işaretleyiniz:
+          </p>
+
+          <div class="checkboxlar">
+            <label>☐ Öğrencimin etkinliğe katılmasına izin veriyorum.</label>
+            <label>☐ Öğrencimin etkinliğe katılmasına izin vermiyorum.</label>
+          </div>
+
+          <div class="sorumluluk">
+            <strong>Veli Beyanı:</strong>
+
+            Yukarıda bilgileri belirtilen etkinlik hakkında
+            bilgilendirildim. Öğrencim ........................................
+            adlı çocuğumun bu etkinliğe katılmasına izin veriyorum.
+
+            Etkinlik sırasında öğrencimin okul ve öğretmen tarafından
+            bildirilen kurallara uymasını sağlayacağımı; öğrencimin sağlık,
+            alerji, özel durum ve acil iletişim bilgilerini doğru şekilde
+            bildirdiğimi kabul ve beyan ederim.
+
+            Etkinliğin amacı, tarihi, yeri, süresi ve ulaşım bilgileri
+            hakkında tarafıma bilgi verilmiştir.
+          </div>
+
+          <p><strong>Sağlık / Alerji / Özel Durum Bilgisi:</strong></p>
+
+          <div class="yazi-alani" contenteditable="true"></div>
+
+          <p><strong>Velinin eklemek istediği açıklama:</strong></p>
+
+          <div class="yazi-alani" contenteditable="true"></div>
+
+          <div class="grid-2">
+            <div class="duz-satir" contenteditable="true">
+              Veli Adı Soyadı:
+              ................................................
+            </div>
+
+            <div class="duz-satir" contenteditable="true">
+              Tarih:
+              ................................................
+            </div>
+
+            <div class="duz-satir" contenteditable="true">
+              Telefon:
+              ................................................
+            </div>
+
+            <div class="duz-satir" contenteditable="true">
+              Öğrenciyle Yakınlık Derecesi:
+              ................................................
+            </div>
+          </div>
+
+          <div class="imzalar">
+            <div class="imza">
+              Veli İmzası
+            </div>
+
+            <div class="imza">
+              Sorumlu Öğretmen İmzası
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <p class="not">
+        Not: Bu belge genel amaçlı bir veli bilgilendirme ve onay taslağıdır.
+        Etkinliğin türüne göre okul yönetiminin istediği ek belgeler veya
+        özel izin metinleri bulunabilir.
+      </p>
+
+    </div>
+  </section>
+
+  <!-- VELİ GÖZLEM FORMU -->
+  <section id="gozlem" class="form">
+
+    <div class="form-baslik">
+      VELİ GÖZLEM FORMU
+    </div>
+
+    <div class="form-icerik">
+
+      <h2>Öğrenciyi Daha İyi Tanımak İçin</h2>
+
+      <div class="bilgi-alanlari">
+        <div class="noktali" contenteditable="true">
+          Öğrencinin Adı Soyadı: ................................
+        </div>
+
+        <div class="noktali" contenteditable="true">
+          Tarih: ................................
+        </div>
+
+        <div class="noktali" contenteditable="true">
+          Veli Adı Soyadı: ................................
+        </div>
+      </div>
+
+      <h3>Çocuğunuzun İlgi Alanları</h3>
+
+      <div class="checkboxlar">
+        <label>☐ Kitap okuma</label>
+        <label>☐ Resim / Boyama</label>
+        <label>☐ Müzik</label>
+        <label>☐ Spor</label>
+        <label>☐ Bilgisayar / Teknoloji</label>
+        <label>☐ Drama / Tiyatro</label>
+        <label>☐ Yapboz / Oyun</label>
+        <label>☐ Bilim / Deney</label>
+      </div>
+
+      <h3>Çocuğunuzun Güçlü Yönleri</h3>
+      <div class="yazi-alani" contenteditable="true"></div>
+
+      <h3>Desteklenmesi Gereken Alanlar</h3>
+      <div class="yazi-alani" contenteditable="true"></div>
+
+      <h3>Veli Gözlemi ve Öğretmenle Paylaşılacak Bilgiler</h3>
+      <div class="yazi-alani buyuk" contenteditable="true"></div>
+
+      <h3>Çocuğunuzu Desteklemek İçin Önerileriniz</h3>
+      <div class="yazi-alani" contenteditable="true"></div>
+
+      <div class="imzalar">
+        <div class="imza">Veli İmzası</div>
+        <div class="imza">Öğretmen Notu / İmzası</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- VELİ ZİYARETİ FORMU -->
+  <section id="ziyaret" class="form">
+
+    <div class="form-baslik">
+      VELİ ZİYARETİ FORMU
+    </div>
+
+    <div class="form-icerik">
+
+      <div class="bilgi-alanlari">
+        <div class="noktali" contenteditable="true">
+          Ziyaret Tarihi: ................................
+        </div>
+
+        <div class="noktali" contenteditable="true">
+          Saat: ................................
+        </div>
+
+        <div class="noktali" contenteditable="true">
+          Ziyareti Yapan: ................................
+        </div>
+
+        <div class="noktali" contenteditable="true">
+          Öğrencinin Adı Soyadı: ................................
+        </div>
+
+        <div class="noktali" contenteditable="true">
+          Sınıf / Şube: ................................
+        </div>
+
+        <div class="noktali" contenteditable="true">
+          Veli Adı Soyadı: ................................
+        </div>
+      </div>
+
+      <h3>Ziyaretin Amacı</h3>
+
+      <div class="checkboxlar">
+        <label>☐ Öğrencinin ders başarısını görüşmek</label>
+        <label>☐ Devam durumu hakkında görüşmek</label>
+        <label>☐ Davranış durumu hakkında görüşmek</label>
+        <label>☐ Aile ile iş birliği yapmak</label>
+        <label>☐ Öğrencinin gelişimini değerlendirmek</label>
+        <label>☐ Diğer</label>
+      </div>
+
+      <h3>Görüşme Notları</h3>
+      <div class="yazi-alani buyuk" contenteditable="true"></div>
+
+      <h3>Kararlaştırılan Çalışmalar ve Destekler</h3>
+      <div class="yazi-alani" contenteditable="true"></div>
+
+      <h3>Bir Sonraki Görüşme Bilgisi</h3>
+
+      <div class="grid-2">
+        <div class="duz-satir" contenteditable="true">
+          Tarih: ................................................
+        </div>
+
+        <div class="duz-satir" contenteditable="true">
+          Açıklama: ................................................
+        </div>
+      </div>
+
+      <div class="imzalar">
+        <div class="imza">Veli İmzası</div>
+        <div class="imza">Öğretmen İmzası</div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="butons">
+    <button class="buton" onclick="window.print()">
+      🖨 Açık Formu Yazdır
+    </button>
+
+    <button class="buton" onclick="dosyayiIndir()">
+      ⬇ HTML Dosyasını İndir
+    </button>
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+  🏫 Okul ve aile iş birliği öğrencinin gelişimini destekler. 🏫
+</footer>
+
+<script>
+function formAc(formId, buton) {
+  document.querySelectorAll(".form").forEach(function(form) {
+    form.classList.remove("aktif");
+  });
+
+  document.querySelectorAll(".sekme").forEach(function(sekme) {
+    sekme.classList.remove("aktif");
+  });
+
+  document.getElementById(formId).classList.add("aktif");
+  buton.classList.add("aktif");
+}
+
+function dosyayiIndir() {
+  const html = "<!DOCTYPE html>" + document.documentElement.outerHTML;
+
+  const dosya = new Blob([html], {
+    type: "text/html;charset=utf-8"
+  });
+
+  const url = URL.createObjectURL(dosya);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = "veli-formlari-duzeltilmis.html";
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  setTimeout(function() {
+    URL.revokeObjectURL(url);
+  }, 1000);
+}
+</script>
+
+</body>
+</html>

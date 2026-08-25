@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026-2027 Öğretmen Dosyası</title>
+
+<style>
+@page {
+    size: A4 portrait;
+    margin: 0;
+}
+
+:root {
+    --ana: #17365d;
+    --sekme: #2f75b5;
+    --cerceve: #a8bfd6;
+    --yazi: #17212b;
+    --arka: #edf2f7;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--arka);
+    color: var(--yazi);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: 14px;
+    background: var(--ana);
+    color: white;
+    text-align: center;
+    box-shadow: 0 2px 8px #0004;
+}
+
+.toolbar h1 {
+    margin: 0 0 10px;
+    font-size: 23px;
+}
+
+button {
+    margin: 4px;
+    padding: 9px 13px;
+    border: 0;
+    border-radius: 7px;
+    background: white;
+    color: var(--ana);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #dbeafe;
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    max-width: 1200px;
+    margin: 10px auto 0;
+}
+
+.controls label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 8px;
+    border-radius: 5px;
+    background: white;
+    color: #17365d;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.controls input[type="text"] {
+    width: 140px;
+    padding: 5px;
+    border: 1px solid #999;
+    border-radius: 4px;
+}
+
+.controls input[type="color"] {
+    width: 34px;
+    height: 25px;
+    padding: 0;
+}
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px;
+    background: #dbe7f3;
+}
+
+.tab {
+    padding: 8px 11px;
+    border: 1px solid #91aac4;
+    border-radius: 17px;
+    background: white;
+    color: #17365d;
+    font-size: 12px;
+}
+
+.tab.active {
+    background: var(--ana);
+    color: white;
+}
+
+#pages {
+    padding: 25px 0;
+}
+
+.page {
+    --p-ana: var(--ana);
+    --p-sekme: var(--sekme);
+    --p-cerceve: var(--cerceve);
+    --p-yazi: var(--yazi);
+
+    position: relative;
+    display: none;
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto 25px;
+    padding: 22mm 19mm;
+    overflow: hidden;
+    background: white;
+    color: var(--p-yazi);
+    page-break-after: always;
+}
+
+.page.active {
+    display: block;
+}
+
+.outer-border {
+    position: absolute;
+    inset: 13mm;
+    border: 3px solid var(--p-ana);
+    border-radius: 18px;
+    pointer-events: none;
+}
+
+.inner-border {
+    position: absolute;
+    inset: 17mm;
+    border: 1px solid var(--p-cerceve);
+    border-radius: 12px;
+    pointer-events: none;
+}
+
+.side-tab {
+    position: absolute;
+    top: 42mm;
+    right: 8mm;
+    width: 35mm;
+    min-height: 18mm;
+    padding: 7px 4px;
+    border-radius: 12px 0 0 12px;
+    background: var(--p-sekme);
+    color: white;
+    text-align: center;
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 1.2;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+}
+
+.content {
+    position: relative;
+    z-index: 2;
+}
+
+.header {
+    margin-top: 7mm;
+    text-align: center;
+    font-size: 17px;
+    line-height: 1.55;
+    font-weight: bold;
+}
+
+.year {
+    margin-top: 12mm;
+    color: var(--p-ana);
+    text-align: center;
+    font-size: 21px;
+    line-height: 1.4;
+    font-weight: bold;
+}
+
+.title {
+    width: 82%;
+    margin: 25mm auto 15mm;
+    padding: 13px;
+    border-top: 4px solid var(--p-ana);
+    border-bottom: 4px solid var(--p-ana);
+    color: var(--p-ana);
+    text-align: center;
+    font-size: 28px;
+    line-height: 1.25;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.subtitle {
+    margin: 9mm 0;
+    color: var(--p-ana);
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.text {
+    margin-top: 12mm;
+    white-space: pre-line;
+    text-align: justify;
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+.editable {
+    outline: none;
+}
+
+.editable:focus {
+    background: #fafcff;
+    box-shadow: 0 0 0 2px var(--p-cerceve);
+}
+
+.info {
+    margin-top: 30mm;
+    font-size: 15px;
+    line-height: 2.3;
+}
+
+.info div {
+    margin: 4px 0;
+    border-bottom: 1px solid #777;
+}
+
+.table {
+    width: 100%;
+    margin: 12px 0;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.table th,
+.table td {
+    min-height: 30px;
+    padding: 7px;
+    border: 1px solid #687786;
+    vertical-align: top;
+}
+
+.table th {
+    background: var(--p-cerceve);
+    text-align: center;
+}
+
+.table td {
+    height: 34px;
+}
+
+.notice {
+    padding: 10px;
+    border-left: 4px solid var(--p-ana);
+    background: #f3f6f9;
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+.legislation {
+    margin: 12px 0;
+    padding: 12px;
+    border: 1px solid var(--p-cerceve);
+    border-radius: 8px;
+}
+
+.legislation h3 {
+    margin: 0 0 6px;
+    color: var(--p-ana);
+    font-size: 17px;
+}
+
+.legislation p {
+    margin: 6px 0;
+    line-height: 1.5;
+    font-size: 13px;
+}
+
+.legislation a {
+    color: #075985;
+    word-break: break-all;
+}
+
+.form {
+    margin-top: 15mm;
+}
+
+.form label {
+    display: block;
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.form input,
+.form textarea {
+    width: 100%;
+    margin-top: 4px;
+    padding: 7px;
+    border: 1px solid #8996a3;
+    border-radius: 4px;
+}
+
+.form textarea {
+    min-height: 80px;
+}
+
+.ataturk-image {
+    display: block;
+    max-width: 125mm;
+    max-height: 160mm;
+    margin: 12mm auto;
+    object-fit: contain;
+}
+
+.image-help {
+    text-align: center;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.signatures {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 30mm;
+    text-align: center;
+    font-size: 13px;
+}
+
+.signatures div {
+    min-height: 45px;
+    border-top: 1px solid #555;
+    padding-top: 8px;
+}
+
+.footer {
+    position: absolute;
+    right: 0;
+    bottom: 20mm;
+    left: 0;
+    color: #64748b;
+    text-align: center;
+    font-size: 11px;
+}
+
+@media print {
+    body {
+        background: white;
+    }
+
+    .toolbar,
+    .tabs,
+    .image-help {
+        display: none !important;
+    }
+
+    #pages {
+        padding: 0;
+    }
+
+    .page {
+        display: none !important;
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0;
+    }
+
+    body.print-selected .page.active {
+        display: block !important;
+    }
+
+    body.print-all .page {
+        display: block !important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="toolbar">
+    <h1>2026-2027 Öğretmen Dosyası ve Evrak Arşivi</h1>
+
+    <button onclick="printSelected()">Seçili Sayfayı Yazdır</button>
+    <button onclick="printAll()">Tümünü Yazdır / PDF</button>
+    <button onclick="downloadHTML()">HTML İndir</button>
+    <button onclick="downloadWord()">Word Olarak İndir</button>
+
+    <div class="controls">
+        <label>Okul:
+            <input id="school" type="text" placeholder="Okul adı">
+        </label>
+
+        <label>Öğretmen:
+            <input id="teacher" type="text" placeholder="Ad Soyad">
+        </label>
+
+        <label>Branş:
+            <input id="branch" type="text" placeholder="Branş">
+        </label>
+
+        <label>Ana renk:
+            <input id="mainColor" type="color" value="#17365d">
+        </label>
+
+        <label>Sekme:
+            <input id="tabColor" type="color" value="#2f75b5">
+        </label>
+
+        <label>Çerçeve:
+            <input id="borderColor" type="color" value="#a8bfd6">
+        </label>
+
+        <label>Yazı:
+            <input id="textColor" type="color" value="#17212b">
+        </label>
+
+        <button onclick="applyInfo()">Bilgileri Uygula</button>
+        <button onclick="applyColors()">Renkleri Uygula</button>
+
+        <label>
+            Atatürk Görseli:
+            <input type="file" accept="image/*" onchange="loadAtaturk(this)">
+        </label>
+    </div>
+</div>
+
+<div class="tabs" id="tabs"></div>
+<div id="pages"></div>
+
+<script>
+const ataturkDefault =
+"https://ai-seek-user-image.s3.us-east-1.amazonaws.com/202608/21/7a98f99bd6c843ee9e82a36c05756914xbg0.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4MTWODAZEP5GANEB%2F20260821%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260821T152032Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=a618d2b2df388d5b3318d35dfae1df3b7b65b70b14a6f82def531bd4374b3abc";
+
+const items = [
+    ["ATATÜRK", "Atatürk Görseli", "ataturk"],
+    ["İSTİKLÂL MARŞI", "İstiklâl Marşı", "istiklal"],
+    ["GENÇLİĞE HİTABE", "Gençliğe Hitabe", "hitabe"],
+    ["İÇİNDEKİLER", "İçindekiler", "contents"],
+    ["MEVZUAT", "Mevzuat ve Resmî Kaynaklar", "law"],
+    ["ÖĞRETMEN DOSYASI", "Öğretmen Dosyası", "cover"],
+    ["YILLIK PLANLAR", "Yıllık Planlar", "plan"],
+    ["DERS PLANLARI", "Ders Planları", "plan"],
+    ["İŞ TAKVİMİ", "İş Takvimi", "calendar"],
+    ["ZÜMRE TUTANAĞI", "Zümre Toplantı Tutanağı", "meeting"],
+    ["ŞÖK TUTANAĞI", "Şube Öğretmenler Kurulu", "meeting"],
+    ["ÖĞRETMENLER KURULU", "Öğretmenler Kurulu", "meeting"],
+    ["VELİ TOPLANTISI", "Veli Toplantı Tutanağı", "parent"],
+    ["REHBERLİK", "Rehberlik Çalışmaları", "guidance"],
+    ["KULÜP", "Öğrenci Kulübü", "club"],
+    ["ÖLÇME", "Ölçme ve Değerlendirme", "assessment"],
+    ["ÖĞRENCİ TAKİP", "Öğrenci Takip Çizelgesi", "student"],
+    ["FAALİYET RAPORU", "Faaliyet Raporu", "report"]
+];
+
+const tabs = document.getElementById("tabs");
+const pages = document.getElementById("pages");
+
+function header() {
+    return `
+        <div class="header">
+            T.C.<br>
+            MİLLÎ EĞİTİM BAKANLIĞI
+        </div>
+        <div class="year">
+            2026-2027<br>
+            EĞİTİM ÖĞRETİM YILI
+        </div>
+    `;
+}
+
+function info() {
+    return `
+        <div class="info">
+            <div><b>Okul Adı:</b> <span class="schoolText">................................................</span></div>
+            <div><b>Öğretmenin Adı Soyadı:</b> <span class="teacherText">................................................</span></div>
+            <div><b>Branşı:</b> <span class="branchText">................................................</span></div>
+            <div><b>Sınıf / Şube:</b> ................................................</div>
+        </div>
+    `;
+}
+
+function table(headers, rows = 7) {
+    let h = headers.map(x => `<th>${x}</th>`).join("");
+    let body = "";
+
+    for (let i = 0; i < rows; i++) {
+        body += `<tr>${headers.map(() =>
+            `<td contenteditable="true"></td>`).join("")}</tr>`;
+    }
+
+    return `<table class="table">
+        <thead><tr>${h}</tr></thead>
+        <tbody>${body}</tbody>
+    </table>`;
+}
+
+function textBlock(title, text) {
+    return `
+        <div class="subtitle">${title}</div>
+        <div class="text editable" contenteditable="true">${text}</div>
+    `;
+}
+
+function content(type, title) {
+    if (type === "ataturk") {
+        return `
+            ${header()}
+            <div class="title">${title}</div>
+            <img class="ataturk-image" id="ataturkImage" src="${ataturkDefault}" alt="Atatürk">
+            <p class="image-help">
+                Görseli kalıcı olarak dosyaya eklemek için üst bölümden kendi bilgisayarınızdan seçebilirsiniz.
+            </p>
+        `;
+    }
+
+    if (type === "istiklal") {
+        return `
+            ${header()}
+            <div class="title">${title}</div>
+            <div class="text editable" contenteditable="true">
+Korkma, sönmez bu şafaklarda yüzen al sancak;
+Sönmeden yurdumun üstünde tüten en son ocak.
+O benim milletimin yıldızıdır, parlayacak;
+O benimdir, o benim milletimindir ancak.
+
+Çatma, kurban olayım, çehreni ey nazlı hilâl!
+Kahraman ırkıma bir gül! Ne bu şiddet, bu celâl?
+Sana olmaz dökülen kanlarımız sonra helâl,
+Hakkıdır, Hakk’a tapan milletimin istiklâl!
+
+Ben ezelden beridir hür yaşadım, hür yaşarım.
+Hangi çılgın bana zincir vuracakmış? Şaşarım!
+Kükremiş sel gibiyim, bendimi çiğner, aşarım.
+Yırtarım dağları, enginlere sığmam, taşarım.
+
+Garb’ın âfâkını sarmışsa çelik zırhlı duvar,
+Benim iman dolu göğsüm gibi serhaddim var.
+Ulusun, korkma! Nasıl böyle bir îmanı boğar,
+“Medeniyet!” dediğin tek dişi kalmış canavar?
+
+Arkadaş! Yurduma alçakları uğratma, sakın;
+Siper et gövdeni, dursun bu hayâsızca akın.
+Doğacaktır sana va’dettiği günler Hakk’ın;
+Kim bilir, belki yarın, belki yarından da yakın.
+
+Bastığın yerleri “toprak!” diyerek geçme, tanı:
+Düşün altında binlerce kefensiz yatanı.
+Sen şehîd oğlusun, incitme, yazıktır, atanı:
+Verme, dünyaları alsan da, bu cennet vatanı.
+
+Kim bu cennet vatanın uğruna olmaz ki fedâ?
+Şühedâ fışkıracak toprağı sıksan, şühedâ!
+Cânı, cânânı, bütün varımı alsın da Hudâ,
+Etmesin tek vatanımdan beni dünyada cüdâ.
+
+Ruhumun senden, İlâhî, şudur ancak emeli:
+Değmesin ma’bedimin göğsüne nâ-mahrem eli.
+Bu ezanlar-ki şehâdetleri dînin temeli,
+Ebedî yurdumun üstünde benim inlemeli.
+
+O zaman vecd ile bin secde eder -varsa- taşım;
+Her cerîhamdan, İlâhî, boşanıp kanlı yaşım;
+Fışkırır ruh-ı mücerred gibi yerden na’şım;
+O zaman yükselerek Arş’a değer, belki başım.
+
+Dalgalan sen de şafaklar gibi ey şanlı hilâl!
+Olsun artık dökülen kanlarımın hepsi helâl.
+Ebediyyen sana yok, ırkıma yok izmihlâl:
+Hakkıdır, hür yaşamış bayrağımın hürriyet;
+Hakkıdır, Hakk’a tapan milletimin istiklâl!
+            </div>
+        `;
+    }
+
+    if (type === "hitabe") {
+        return `
+            ${header()}
+            <div class="title">${title}</div>
+            <div class="text editable" contenteditable="true">
+Ey Türk gençliği! Birinci vazifen, Türk istiklâlini, Türk Cumhuriyetini, ilelebet, muhafaza ve müdafaa etmektir.
+
+Mevcudiyetinin ve istikbalinin yegâne temeli budur. Bu temel, senin en kıymetli hazinendir. İstikbalde dahi, seni bu hazineden mahrum etmek isteyecek, dahilî ve haricî bedhahların olacaktır.
+
+Bir gün, istiklâl ve Cumhuriyeti müdafaa mecburiyetine düşersen, vazifeye atılmak için, içinde bulunacağın vaziyetin imkân ve şeraitini düşünmeyeceksin! Bu imkân ve şerait, çok nâmüsait bir mahiyette tezahür edebilir.
+
+İstiklâl ve Cumhuriyetine kastedecek düşmanlar, bütün dünyada emsali görülmemiş bir galibiyetin mümessili olabilirler. Cebren ve hile ile aziz vatanın, bütün kaleleri zapt edilmiş, bütün tersanelerine girilmiş, bütün orduları dağıtılmış ve memleketin her köşesi bilfiil işgal edilmiş olabilir.
+
+Bütün bu şeraitten daha elîm ve daha vahim olmak üzere, memleketin dahilinde, iktidara sahip olanlar gaflet ve dalâlet ve hatta hıyanet içinde bulunabilirler. Hatta bu iktidar sahipleri şahsî menfaatlerini, müstevlilerin siyasî emelleriyle tevhit edebilirler.
+
+Millet, fakr u zaruret içinde harap ve bîtap düşmüş olabilir.
+
+Ey Türk istikbalinin evladı! İşte, bu ahval ve şerait içinde dahi vazifen, Türk istiklâl ve Cumhuriyetini kurtarmaktır!
+
+Muhtaç olduğun kudret, damarlarındaki asil kanda mevcuttur!
+            </div>
+        `;
+    }
+
+    if (type === "contents") {
+        return `
+            ${header()}
+            <div class="title">${title}</div>
+            ${table(["Sıra", "Bölüm / Belge", "Sayfa", "Açıklama"], 16)}
+        `;
+    }
+
+    if (type === "law") {
+        return `
+            ${header()}
+            <div class="title">${title}</div>
+
+            <div class="notice">
+                Aşağıdaki açıklamalar dosya düzenleme amacıyla hazırlanmıştır.
+                Güncel ve bağlayıcı metin için ilgili resmî kaynağı kontrol ediniz.
+                Okul yönetiminin gönderdiği güncel yazılar bu bölüme eklenebilir.
+            </div>
+
+            <div class="legislation">
+                <h3>1739 Sayılı Millî Eğitim Temel Kanunu</h3>
+                <p>Türk millî eğitiminin genel amaçlarını, temel ilkelerini ve eğitim sisteminin genel çerçevesini düzenler.</p>
+                <p><b>Dosyada kullanılabilecek bölüm:</b> Millî eğitimin amaçları, temel ilkeler ve öğretmenin eğitim sürecindeki sorumlulukları.</p>
+                <a href="https://www.mevzuat.gov.tr/mevzuatmetin/1.5.1739.pdf" target="_blank">Resmî metni aç</a>
+            </div>
+
+            <div class="legislation">
+                <h3>657 Sayılı Devlet Memurları Kanunu</h3>
+                <p>Devlet memurlarının ödevleri, sorumlulukları, hakları, yasakları ve çalışma düzeniyle ilgili temel hükümleri içerir.</p>
+                <p><b>Dosyada kullanılabilecek bölüm:</b> Tarafsızlık, sadakat, davranış ve görev sorumluluklarıyla ilgili maddeler.</p>
+                <a href="https://www.mevzuat.gov.tr/mevzuatmetin/1.5.657.pdf" target="_blank">Resmî metni aç</a>
+            </div>
+
+            <div class="legislation">
+                <h3>Öğretmenlik Mesleği Kanunu</h3>
+                <p>Öğretmenlik mesleğinin niteliği, öğretmenlerin hak ve sorumlulukları ve mesleki gelişimle ilgili güncel hükümler için kullanılır.</p>
+                <p><b>Not:</b> Güncel kanun ve değişiklikler resmî mevzuat kaynağından kontrol edilmelidir.</p>
+                <a href="https://www.mevzuat.gov.tr/" target="_blank">Mevzuat Bilgi Sistemi</a>
+            </div>
+
+            <div class="legislation">
+                <h3>Rehberlik ve Psikolojik Danışma Hizmetleri</h3>
+                <p>Öğrencilerin akademik, sosyal ve duygusal gelişimini destekleyen rehberlik çalışmalarının genel çerçevesini oluşturur.</p>
+                <p><b>Dosyada kullanılabilecek belgeler:</b> Rehberlik yıllık planı, öğrenci görüşme formu, gözlem formu ve faaliyet raporu.</p>
+                <a href="https://www.mevzuat.gov.tr/" target="_blank">Güncel resmî mevzuatı aç</a>
+            </div>
+
+            <div class="legislation">
+                <h3>Sosyal Etkinlikler ve Öğrenci Kulüpleri</h3>
+                <p>Öğrenci kulüpleri, sosyal etkinlikler, gezi ve çalışmaların planlanması, yürütülmesi ve raporlanmasıyla ilgilidir.</p>
+                <p><b>Dosyada kullanılabilecek belgeler:</b> Kulüp listesi, görev dağılımı, yıllık plan, toplantı tutanağı, veli izin belgesi ve faaliyet raporu.</p>
+                <a href="https://www.mevzuat.gov.tr/" target="_blank">Güncel resmî mevzuatı aç</a>
+            </div>
+
+            <div class="legislation">
+                <h3>Ölçme ve Değerlendirme</h3>
+                <p>Sınav, performans, proje, geri bildirim ve öğrenci gelişiminin izlenmesiyle ilgili düzenlemeler bu bölümde takip edilebilir.</p>
+                <p><b>Dosyada kullanılabilecek belgeler:</b> Sınav takvimi, sonuç çizelgesi, analiz tablosu ve kazanım takip formu.</p>
+                <a href="https://www.meb.gov.tr/" target="_blank">MEB resmî sitesini aç</a>
+            </div>
+
+            <div class="legislation">
+                <h3>Özel Eğitim ve Bütünleştirme</h3>
+                <p>Özel eğitim ihtiyacı bulunan öğrencilerin eğitim süreçlerinin planlanması ve desteklenmesiyle ilgili belgeler bu bölümde saklanabilir.</p>
+                <p><b>Dosyada kullanılabilecek belgeler:</b> BEP evrakları, toplantı tutanakları, izleme formları ve veli görüşme belgeleri.</p>
+                <a href="https://www.mevzuat.gov.tr/" target="_blank">Güncel resmî mevzuatı aç</a>
+            </div>
+
+            <div class="legislation">
+                <h3>Öğrenci Bilgilerinin Gizliliği</h3>
+                <p>Öğrenciye ait kişisel, akademik ve rehberlik bilgilerinin yetkisiz kişilerle paylaşılmaması gerekir.</p>
+                <p><b>Uyarı:</b> Öğrenci bilgileri içeren belgeler güvenli ve erişimi sınırlı bir yerde saklanmalıdır.</p>
+                <a href="https://www.kvkk.gov.tr/" target="_blank">KVKK resmî sitesini aç</a>
+            </div>
+
+            <h3 class="subtitle">Okul Yönetiminden Gelen Güncel Yazılar</h3>
+            ${table(["Tarih", "Yazının Konusu", "Evrak No", "Açıklama"], 6)}
+        `;
+    }
+
+    if (type === "cover") {
+        return `
+            ${header()}
+            <div class="title">${title}</div>
+            <div class="subtitle">DOSYA KAPAĞI</div>
+            ${info()}
+        `;
+    }
+
+    if (type === "plan") {
+        return `
+            ${header()}
+            <div class="title">${title}</div>
+            ${info()}
+            ${table(["Hafta / Tarih", "Konu", "Kazanım", "Etkinlik", "Ölçme-Değerlendirme"], 9)}
+        `;
+    }
+
+    if (type === "calendar") {
+        return `
+            ${header()}
+            <div class="title">${title}</div>
+            ${table(["Tarih", "Yapılacak İş / Etkinlik", "Sorumlu", "Açıklama"], 13)}
+        `;
+    }
+
+    if (type === "meeting") {
+        return `
+            ${header()}
+            <div class="title">${title}</div>
+            <div class="form">
+                <label>Toplantı Tarihi:<input type="text"></label>
+                <label>Toplantı Yeri:<input type="text"></label>
+                <label>Toplantı Saati:<input type="text"></label>
+                <label>Katılımcılar:<textarea></textarea></label>
+                <label>Gündem Maddeleri:<textarea></textarea></label>
+                <label>Görüşülen Konular:<textarea></textarea></label>
+                <label>Alınan Kararlar:<textarea></textarea></label>
+            </div>
+            <div class="signatures">
+                <div>Başkan<br>İmza</div>
+                <div>Üye<br>İmza</div>
+                <div>Üye<br>İmza</div>
+            </div>
+        `;
+    }
+
+    if (type === "parent") {
+        return `
+            ${header()}
+            <div class="title">${title}</div>
+            <div class="form">
+                <label>Toplantı Tarihi:<input type="text"></label>
+                <label>Sınıf / Şube:<input type="text"></label>
+                <label>Gündem:<textarea></textarea></label>
+                <label>Alınan Kararlar:<textarea></textarea></label>
+            </div>
+            ${table(["Sıra", "Veli Adı Soyadı", "Öğrenci Adı Soyadı", "İmza"], 10)}
+        `;
+    }
+
+    if (type === "guidance") {
+        return `
+            ${header()}
+            <div class="title">${title}</div>
+            <div class="notice">Öğrenci bilgileri gizlilik kurallarına uygun şekilde saklanmalıdır.</div>
+            ${table(["Tarih", "Çalışma / Etkinlik", "Hedef Kitle", "Değerlendirme"], 8)}
+            <h3 class="subtitle">Rehberlik Çalışması Notları</h3>
+            <div class="text editable" contenteditable="true">Yapılan çalışmalar ve değerlendirmeler buraya yazılabilir.</div>
+        `;
+    }
+
+    if (type === "club") {
+        return `
+            ${header()}
+            <div class="title">${title}</div>
+            ${info()}
+            <h3 class="subtitle">Kulüp Öğrenci Listesi</h3>
+            ${table(["Sıra", "Öğrenci Adı Soyadı", "Görevi", "İmza"], 10)}
+            <h3 class="subtitle">Kulüp Faaliyet Planı</h3>
+            ${table(["Tarih", "Faaliyet", "Sorumlu", "Sonuç"], 6)}
+        `;
+    }
+
+    if (type === "assessment") {
+        return `
+            ${header()}
+            <div class="title">${title}</div>
+            ${info()}
+            ${table(["Sıra", "Öğrenci", "Sınav 1", "Sınav 2", "Performans", "Proje", "Açıklama"], 12)}
+        `;
+    }
+
+    if (type === "student") {
+        return `
+            ${header()}
+            <div class="title">${title}</div>
+            ${table(["Sıra", "Öğrenci Adı Soyadı", "Devam", "Başarı", "Gözlem", "Not"], 12)}
+        `;
+    }
+
+    if (type === "report") {
+        return `
+            ${header()}
+            <div class="title">${title}</div>
+            <div class="form">
+                <label>Rapor Tarihi:<input type="text"></label>
+                <label>Faaliyetin Adı:<input type="text"></label>
+                <label>Yapılan Çalışmalar:<textarea></textarea></label>
+                <label>Sonuç ve Değerlendirme:<textarea></textarea></label>
+                <label>Ek Açıklamalar:<textarea></textarea></label>
+            </div>
+            <div class="signatures">
+                <div>Hazırlayan<br>İmza</div>
+                <div>Danışman Öğretmen<br>İmza</div>
+                <div>Okul Yönetimi<br>İmza</div>
+            </div>
+        `;
+    }
+}
+
+items.forEach((item, index) => {
+    const tab = document.createElement("button");
+    tab.className = "tab" + (index === 0 ? " active" : "");
+    tab.textContent = item[0];
+    tab.onclick = () => selectPage(index);
+    tabs.appendChild(tab);
+
+    const page = document.createElement("section");
+    page.className = "page" + (index === 0 ? " active" : "");
+
+    page.innerHTML = `
+        <div class="outer-border"></div>
+        <div class="inner-border"></div>
+        <div class="side-tab">${item[0]}</div>
+        <div class="content">${content(item[2], item[1])}</div>
+        <div class="footer">2026-2027 Eğitim Öğretim Yılı</div>
+    `;
+
+    pages.appendChild(page);
+});
+
+function selectPage(index) {
+    document.querySelectorAll(".tab").forEach((x, i) => {
+        x.classList.toggle("active", i === index);
+    });
+
+    document.querySelectorAll(".page").forEach((x, i) => {
+        x.classList.toggle("active", i === index);
+    });
+}
+
+function getColors() {
+    return {
+        ana: document.getElementById("mainColor").value,
+        sekme: document.getElementById("tabColor").value,
+        cerceve: document.getElementById("borderColor").value,
+        yazi: document.getElementById("textColor").value
+    };
+}
+
+function applyColors() {
+    const c = getColors();
+
+    document.querySelectorAll(".page").forEach(page => {
+        page.style.setProperty("--p-ana", c.ana);
+        page.style.setProperty("--p-sekme", c.sekme);
+        page.style.setProperty("--p-cerceve", c.cerceve);
+        page.style.setProperty("--p-yazi", c.yazi);
+    });
+}
+
+function applyInfo() {
+    const school = document.getElementById("school").value ||
+        "................................................";
+
+    const teacher = document.getElementById("teacher").value ||
+        "................................................";
+
+    const branch = document.getElementById("branch").value ||
+        "................................................";
+
+    document.querySelectorAll(".schoolText").forEach(x => x.textContent = school);
+    document.querySelectorAll(".teacherText").forEach(x => x.textContent = teacher);
+    document.querySelectorAll(".branchText").forEach(x => x.textContent = branch);
+}
+
+function loadAtaturk(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+        document.getElementById("ataturkImage").src = e.target.result;
+    };
+
+    reader.readAsDataURL(file);
+}
+
+function printSelected() {
+    document.body.classList.remove("print-all");
+    document.body.classList.add("print-selected");
+    window.print();
+
+    setTimeout(() => {
+        document.body.classList.remove("print-selected");
+    }, 1000);
+}
+
+function printAll() {
+    document.body.classList.remove("print-selected");
+    document.body.classList.add("print-all");
+    window.print();
+
+    setTimeout(() => {
+        document.body.classList.remove("print-all");
+    }, 1000);
+}
+
+function downloadHTML() {
+    const html = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+    const blob = new Blob([html], {
+        type: "text/html;charset=utf-8"
+    });
+
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "2026-2027-ogretmen-dosyasi.html";
+    link.click();
+
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+}
+
+function downloadWord() {
+    const html = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+    const blob = new Blob(["\ufeff", html], {
+        type: "application/msword"
+    });
+
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "2026-2027-ogretmen-dosyasi.doc";
+    link.click();
+
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+}
+</script>
+
+</body>
+</html>

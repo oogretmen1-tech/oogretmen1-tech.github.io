@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026-2027 Eğitim Öğretim Yılı Dosya Kapakları</title>
+
+<style>
+@page {
+    size: A4 portrait;
+    margin: 0;
+}
+
+:root {
+    --ana-renk: #17365d;
+    --sekme-rengi: #2f75b5;
+    --cerceve-rengi: #9bb7d3;
+    --yazi-rengi: #17212b;
+    --arka-plan: #eef2f7;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--arka-plan);
+    color: var(--yazi-rengi);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ÜST KONTROL ALANI */
+.toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding: 15px;
+    background: var(--ana-renk);
+    color: white;
+    text-align: center;
+    box-shadow: 0 2px 8px #0004;
+}
+
+.toolbar h1 {
+    margin: 0 0 12px;
+    font-size: 24px;
+}
+
+.toolbar button {
+    border: 0;
+    border-radius: 7px;
+    margin: 4px;
+    padding: 10px 14px;
+    background: white;
+    color: var(--ana-renk);
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.toolbar button:hover {
+    background: #dbeafe;
+}
+
+/* RENK ALANI */
+.color-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 1150px;
+    margin: 12px auto 0;
+    padding: 10px;
+    border-radius: 10px;
+    background: #ffffff22;
+}
+
+.color-panel label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 9px;
+    border-radius: 6px;
+    background: white;
+    color: #17365d;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.color-panel input[type="color"] {
+    width: 38px;
+    height: 28px;
+    padding: 0;
+    border: 1px solid #999;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.color-panel select {
+    height: 30px;
+    border: 1px solid #999;
+    border-radius: 4px;
+    color: #17365d;
+    font-weight: bold;
+}
+
+/* SEKME MENÜSÜ */
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 7px;
+    padding: 13px;
+    background: #dbe7f3;
+}
+
+.tab {
+    padding: 8px 12px;
+    border: 1px solid #91aac4;
+    border-radius: 18px;
+    background: white;
+    color: #17365d;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.tab:hover {
+    background: #e8f1fb;
+}
+
+.tab.active {
+    background: var(--ana-renk);
+    color: white;
+}
+
+/* KAPAKLAR */
+#covers {
+    padding: 25px 0;
+}
+
+.cover {
+    --kapak-ana: var(--ana-renk);
+    --kapak-sekme: var(--sekme-rengi);
+    --kapak-cerceve: var(--cerceve-rengi);
+    --kapak-yazi: var(--yazi-rengi);
+
+    position: relative;
+    display: none;
+    width: 210mm;
+    height: 297mm;
+    margin: 0 auto 25px;
+    padding: 22mm 18mm;
+    overflow: hidden;
+    background: white;
+    color: var(--kapak-yazi);
+    page-break-after: always;
+}
+
+.cover.active {
+    display: block;
+}
+
+.outer-border {
+    position: absolute;
+    inset: 13mm;
+    border: 3px solid var(--kapak-ana);
+    border-radius: 18px;
+    pointer-events: none;
+}
+
+.inner-border {
+    position: absolute;
+    inset: 17mm;
+    border: 1px solid var(--kapak-cerceve);
+    border-radius: 12px;
+    pointer-events: none;
+}
+
+.tab-label {
+    position: absolute;
+    top: 42mm;
+    right: 8mm;
+    z-index: 3;
+    width: 35mm;
+    min-height: 18mm;
+    padding: 7px 4px;
+    border-radius: 12px 0 0 12px;
+    background: var(--kapak-sekme);
+    color: white;
+    text-align: center;
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 1.25;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+}
+
+.content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+}
+
+.ministry {
+    margin-top: 10mm;
+    color: var(--kapak-yazi);
+    font-size: 17px;
+    line-height: 1.6;
+    font-weight: bold;
+    letter-spacing: .5px;
+}
+
+.year {
+    margin-top: 13mm;
+    color: var(--kapak-ana);
+    font-size: 22px;
+    line-height: 1.4;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.title {
+    width: 80%;
+    margin-top: 32mm;
+    padding: 14px 18px;
+    border-top: 4px solid var(--kapak-ana);
+    border-bottom: 4px solid var(--kapak-ana);
+    color: var(--kapak-ana);
+    font-size: 31px;
+    line-height: 1.25;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.subtitle {
+    margin-top: 10mm;
+    color: var(--kapak-yazi);
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.info {
+    width: 78%;
+    margin-top: auto;
+    margin-bottom: 14mm;
+    color: var(--kapak-yazi);
+    text-align: left;
+    font-size: 16px;
+    line-height: 2.35;
+}
+
+.info div {
+    margin-bottom: 5px;
+    border-bottom: 1px solid #6b7280;
+}
+
+.footer {
+    position: absolute;
+    right: 0;
+    bottom: 22mm;
+    left: 0;
+    color: #64748b;
+    text-align: center;
+    font-size: 12px;
+}
+
+/* YAZDIRMA */
+@media print {
+    body {
+        background: white;
+    }
+
+    .toolbar,
+    .tabs {
+        display: none !important;
+    }
+
+    #covers {
+        padding: 0;
+    }
+
+    .cover {
+        display: none !important;
+        width: 210mm;
+        height: 297mm;
+        margin: 0;
+        box-shadow: none;
+    }
+
+    body.print-selected .cover.active {
+        display: block !important;
+    }
+
+    body.print-all .cover {
+        display: block !important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="toolbar">
+    <h1>2026-2027 Eğitim Öğretim Yılı Dosya Kapakları</h1>
+
+    <div>
+        <button onclick="printSelected()">Seçili Kapağı Yazdır</button>
+        <button onclick="printAll()">Tümünü Yazdır / PDF</button>
+        <button onclick="downloadHTML()">HTML Olarak İndir</button>
+        <button onclick="downloadWord()">Word Olarak İndir</button>
+    </div>
+
+    <div class="color-panel">
+        <label>
+            Ana Renk:
+            <input type="color" id="anaRenk" value="#17365d">
+        </label>
+
+        <label>
+            Sekme Rengi:
+            <input type="color" id="sekmeRengi" value="#2f75b5">
+        </label>
+
+        <label>
+            Çerçeve Rengi:
+            <input type="color" id="cerceveRengi" value="#9bb7d3">
+        </label>
+
+        <label>
+            Yazı Rengi:
+            <input type="color" id="yaziRengi" value="#17212b">
+        </label>
+
+        <label>
+            Hazır Tema:
+            <select id="temaSec" onchange="temaUygula(this.value)">
+                <option value="">Tema Seçiniz</option>
+                <option value="lacivert">Lacivert</option>
+                <option value="bordo">Bordo</option>
+                <option value="yesil">Yeşil</option>
+                <option value="mor">Mor</option>
+                <option value="turuncu">Turuncu</option>
+                <option value="siyah">Siyah-Beyaz</option>
+            </select>
+        </label>
+
+        <button onclick="seciliyeRenkUygula()">Seçili Kapağa Uygula</button>
+        <button onclick="tumuneRenkUygula()">Tüm Kapaklara Uygula</button>
+        <button onclick="varsayilanRenkler()">Varsayılana Dön</button>
+    </div>
+</div>
+
+<div class="tabs" id="tabs"></div>
+<div id="covers"></div>
+
+<script>
+const kapaklar = [
+    ["ÖĞRETMEN DOSYASI", "Öğretmen Dosyası"],
+    ["YILLIK PLANLAR", "Yıllık Planlar"],
+    ["DERS PLANLARI", "Ders Planları"],
+    ["DERS PROGRAMI", "Haftalık Ders Programı"],
+    ["NÖBET ÇİZELGESİ", "Nöbet Çizelgesi"],
+    ["SINIF LİSTELERİ", "Sınıf Listeleri"],
+    ["DEVAM-DEVAMSIZLIK", "Öğrenci Devam-Devamsızlık"],
+    ["ÖLÇME-DEĞERLENDİRME", "Ölçme ve Değerlendirme"],
+    ["SINAV EVRAKLARI", "Sınav Evrakları"],
+    ["SINAV ANALİZLERİ", "Sınav Analizleri"],
+    ["VELİ GÖRÜŞMELERİ", "Veli Görüşme Belgeleri"],
+    ["ÖĞRENCİ GÖZLEM", "Öğrenci Gözlem Belgeleri"],
+    ["BEP BELGELERİ", "BEP ve Bütünleştirme Belgeleri"],
+
+    ["REHBERLİK DOSYASI", "Rehberlik Dosyası"],
+    ["REHBERLİK YILLIK PLANI", "Rehberlik Yıllık Planı"],
+    ["SINIF REHBERLİK", "Sınıf Rehberlik Çalışmaları"],
+    ["REHBERLİK ETKİNLİKLERİ", "Rehberlik Etkinlikleri"],
+    ["ÖĞRENCİ TANIMA", "Öğrenci Tanıma Çalışmaları"],
+    ["ÖĞRENCİ GÖRÜŞMELERİ", "Öğrenci Görüşme Belgeleri"],
+    ["VELİ REHBERLİK GÖRÜŞMELERİ", "Veli Görüşme Belgeleri"],
+    ["ÖĞRENCİ YÖNLENDİRME", "Öğrenci Yönlendirme Belgeleri"],
+    ["KARİYER REHBERLİĞİ", "Kariyer Rehberliği Çalışmaları"],
+    ["REHBERLİK RAPORLARI", "Rehberlik Faaliyet Raporları"],
+
+    ["KULÜP DOSYASI", "Öğrenci Kulübü Dosyası"],
+    ["KULÜP ÖĞRENCİ LİSTESİ", "Kulüp Öğrenci Listesi"],
+    ["KULÜP GÖREV DAĞILIMI", "Kulüp Görev Dağılımı"],
+    ["KULÜP YILLIK PLANI", "Kulüp Yıllık Çalışma Planı"],
+    ["KULÜP TOPLANTILARI", "Kulüp Toplantı Tutanakları"],
+    ["KULÜP FAALİYETLERİ", "Kulüp Faaliyet Planları"],
+    ["KULÜP ETKİNLİK RAPORLARI", "Kulüp Etkinlik Raporları"],
+    ["GEZİ VE ETKİNLİK İZİNLERİ", "Gezi ve Etkinlik İzin Belgeleri"],
+    ["VELİ İZİN BELGELERİ", "Veli İzin Belgeleri"],
+    ["KULÜP YIL SONU RAPORU", "Kulüp Yıl Sonu Faaliyet Raporu"],
+
+    ["ÖĞRETMENLER KURULU", "Öğretmenler Kurulu Toplantı Tutanakları"],
+    ["ZÜMRE TOPLANTILARI", "Zümre Öğretmenler Kurulu Toplantı Tutanakları"],
+    ["ŞÖK TOPLANTILARI", "Şube Öğretmenler Kurulu Toplantı Tutanakları"],
+    ["VELİ TOPLANTILARI", "Veli Toplantı Tutanakları"],
+    ["REHBERLİK KOMİSYONU", "Rehberlik Yürütme Komisyonu Toplantıları"],
+    ["SOSYAL ETKİNLİKLER KURULU", "Sosyal Etkinlikler Kurulu Toplantıları"],
+    ["DİĞER KURUL VE KOMİSYONLAR", "Diğer Kurul ve Komisyon Tutanakları"],
+
+    ["İŞ TAKVİMİ", "Eğitim Öğretim Yılı Çalışma Takvimi"],
+    ["FAALİYET TAKVİMİ", "Faaliyet Takvimi"],
+    ["SINAV TAKVİMİ", "Sınav Takvimi"],
+    ["GÖREV DAĞILIMI", "Görev Dağılımı"],
+    ["ETKİNLİK BELGELERİ", "Etkinlik ve Gezi Belgeleri"]
+];
+
+const tabs = document.getElementById("tabs");
+const covers = document.getElementById("covers");
+
+/* Kapakları oluştur */
+kapaklar.forEach((item, index) => {
+    const tab = document.createElement("div");
+    tab.className = "tab" + (index === 0 ? " active" : "");
+    tab.textContent = item[0];
+    tab.onclick = () => kapakSec(index);
+    tabs.appendChild(tab);
+
+    const cover = document.createElement("section");
+    cover.className = "cover" + (index === 0 ? " active" : "");
+
+    cover.innerHTML = `
+        <div class="outer-border"></div>
+        <div class="inner-border"></div>
+        <div class="tab-label">${item[0]}</div>
+
+        <div class="content">
+            <div class="ministry">
+                T.C.<br>
+                MİLLÎ EĞİTİM BAKANLIĞI
+            </div>
+
+            <div class="year">
+                2026-2027<br>
+                EĞİTİM ÖĞRETİM YILI
+            </div>
+
+            <div class="title">${item[1]}</div>
+
+            <div class="subtitle">DOSYA KAPAĞI</div>
+
+            <div class="info">
+                <div><b>Okul Adı:</b> ....................................................</div>
+                <div><b>Öğretmenin Adı Soyadı:</b> ....................................</div>
+                <div><b>Branşı:</b> ........................................................</div>
+                <div><b>Sınıf / Şube:</b> ..................................................</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            2026-2027 Eğitim Öğretim Yılı
+        </div>
+    `;
+
+    covers.appendChild(cover);
+});
+
+/* Kapak seçme */
+function kapakSec(index) {
+    document.querySelectorAll(".tab").forEach((tab, i) => {
+        tab.classList.toggle("active", i === index);
+    });
+
+    document.querySelectorAll(".cover").forEach((cover, i) => {
+        cover.classList.toggle("active", i === index);
+    });
+}
+
+/* Seçilen renkleri alma */
+function renkleriAl() {
+    return {
+        ana: document.getElementById("anaRenk").value,
+        sekme: document.getElementById("sekmeRengi").value,
+        cerceve: document.getElementById("cerceveRengi").value,
+        yazi: document.getElementById("yaziRengi").value
+    };
+}
+
+/* Renkleri tek kapağa uygulama */
+function kapağaRenkUygula(kapak, renkler) {
+    kapak.style.setProperty("--kapak-ana", renkler.ana);
+    kapak.style.setProperty("--kapak-sekme", renkler.sekme);
+    kapak.style.setProperty("--kapak-cerceve", renkler.cerceve);
+    kapak.style.setProperty("--kapak-yazi", renkler.yazi);
+}
+
+/* Seçili kapağa renk uygulama */
+function seciliyeRenkUygula() {
+    const secili = document.querySelector(".cover.active");
+
+    if (secili) {
+        kapağaRenkUygula(secili, renkleriAl());
+    }
+}
+
+/* Tüm kapaklara renk uygulama */
+function tumuneRenkUygula() {
+    const renkler = renkleriAl();
+
+    document.querySelectorAll(".cover").forEach(kapak => {
+        kapağaRenkUygula(kapak, renkler);
+    });
+}
+
+/* Hazır temalar */
+function temaUygula(tema) {
+    const temalar = {
+        lacivert: {
+            ana: "#17365d",
+            sekme: "#2f75b5",
+            cerceve: "#9bb7d3",
+            yazi: "#17212b"
+        },
+        bordo: {
+            ana: "#7f1d1d",
+            sekme: "#b91c1c",
+            cerceve: "#d99a9a",
+            yazi: "#301010"
+        },
+        yesil: {
+            ana: "#166534",
+            sekme: "#16a34a",
+            cerceve: "#9bc9a9",
+            yazi: "#102d1b"
+        },
+        mor: {
+            ana: "#581c87",
+            sekme: "#9333ea",
+            cerceve: "#c7a5e2",
+            yazi: "#27113d"
+        },
+        turuncu: {
+            ana: "#9a3412",
+            sekme: "#ea580c",
+            cerceve: "#e9b08f",
+            yazi: "#35170b"
+        },
+        siyah: {
+            ana: "#111827",
+            sekme: "#374151",
+            cerceve: "#9ca3af",
+            yazi: "#111111"
+        }
+    };
+
+    if (!temalar[tema]) return;
+
+    const renk = temalar[tema];
+
+    document.getElementById("anaRenk").value = renk.ana;
+    document.getElementById("sekmeRengi").value = renk.sekme;
+    document.getElementById("cerceveRengi").value = renk.cerceve;
+    document.getElementById("yaziRengi").value = renk.yazi;
+
+    tumuneRenkUygula();
+}
+
+/* Varsayılan renkler */
+function varsayilanRenkler() {
+    document.getElementById("anaRenk").value = "#17365d";
+    document.getElementById("sekmeRengi").value = "#2f75b5";
+    document.getElementById("cerceveRengi").value = "#9bb7d3";
+    document.getElementById("yaziRengi").value = "#17212b";
+
+    tumuneRenkUygula();
+}
+
+/* Seçili kapağı yazdırma */
+function printSelected() {
+    document.body.classList.remove("print-all");
+    document.body.classList.add("print-selected");
+
+    window.print();
+
+    setTimeout(() => {
+        document.body.classList.remove("print-selected");
+    }, 1000);
+}
+
+/* Tüm kapakları PDF/yazıcıya gönderme */
+function printAll() {
+    document.body.classList.remove("print-selected");
+    document.body.classList.add("print-all");
+
+    window.print();
+
+    setTimeout(() => {
+        document.body.classList.remove("print-all");
+    }, 1000);
+}
+
+/* HTML olarak indirme */
+function downloadHTML() {
+    const html = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+    const blob = new Blob([html], {
+        type: "text/html;charset=utf-8"
+    });
+
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "2026-2027-kapaklar.html";
+    link.click();
+
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+}
+
+/* Word olarak indirme */
+function downloadWord() {
+    const renk = renkleriAl();
+
+    const wordIcerik = `
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<style>
+@page {
+    size: A4;
+    margin: 1.5cm;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.sayfa {
+    height: 25cm;
+    padding: 2cm;
+    page-break-after: always;
+    text-align: center;
+    border: 3px solid ${renk.ana};
+    border-radius: 18px;
+}
+
+.bakanlik {
+    margin-top: 1cm;
+    font-size: 17pt;
+    line-height: 1.6;
+    font-weight: bold;
+}
+
+.yil {
+    margin-top: 1.5cm;
+    color: ${renk.ana};
+    font-size: 21pt;
+    font-weight: bold;
+}
+
+.baslik {
+    margin: 4cm auto 0;
+    padding: 15px;
+    border-top: 4px solid ${renk.ana};
+    border-bottom: 4px solid ${renk.ana};
+    color: ${renk.ana};
+    font-size: 28pt;
+    font-weight: bold;
+}
+
+.bilgi {
+    margin-top: 5cm;
+    text-align: left;
+    font-size: 15pt;
+    line-height: 2.3;
+}
+</style>
+</head>
+<body>
+${kapaklar.map(item => `
+<div class="sayfa">
+    <div class="bakanlik">
+        T.C.<br>
+        MİLLÎ EĞİTİM BAKANLIĞI
+    </div>
+
+    <div class="yil">
+        2026-2027<br>
+        EĞİTİM ÖĞRETİM YILI
+    </div>
+
+    <div class="baslik">${item[1]}</div>
+
+    <div class="bilgi">
+        <b>Okul Adı:</b> ....................................................<br>
+        <b>Öğretmenin Adı Soyadı:</b> ....................................<br>
+        <b>Branşı:</b> ........................................................<br>
+        <b>Sınıf / Şube:</b> ..................................................
+    </div>
+</div>
+`).join("")}
+</body>
+</html>
+`;
+
+    const blob = new Blob(["\ufeff", wordIcerik], {
+        type: "application/msword"
+    });
+
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "2026-2027-kapaklar.doc";
+    link.click();
+
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+}
+</script>
+
+</body>
+</html>
