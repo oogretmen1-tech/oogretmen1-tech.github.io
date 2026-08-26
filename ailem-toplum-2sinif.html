@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ailem ve Toplum - İnteraktif Ders Kitabı</title>
+
+<style>
+:root{
+  --mor:#7657a8;
+  --mor-koyu:#49336f;
+  --pembe:#f28b9c;
+  --sari:#ffd86b;
+  --turkuaz:#55c5bd;
+  --yesil:#68b77b;
+  --mavi:#5ca8df;
+  --krem:#fffaf0;
+  --arka:#f2f6fb;
+  --metin:#293747;
+  --beyaz:#fff;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:"Trebuchet MS",Arial,sans-serif;
+  background:var(--arka);
+  color:var(--metin);
+  line-height:1.6;
+}
+
+header{
+  position:relative;
+  overflow:hidden;
+  text-align:center;
+  color:#fff;
+  padding:42px 18px 85px;
+  background:linear-gradient(135deg,var(--mor-koyu),var(--mor),#9a72c9);
+}
+
+header h1{
+  margin:0;
+  font-size:clamp(32px,6vw,58px);
+}
+
+header p{
+  font-size:19px;
+  margin:8px 0;
+}
+
+.bubble{
+  position:absolute;
+  border-radius:50%;
+  opacity:.2;
+  background:white;
+}
+
+.b1{width:170px;height:170px;left:-50px;top:20px}
+.b2{width:120px;height:120px;right:8%;top:35px}
+.b3{width:220px;height:220px;right:-80px;bottom:-100px}
+
+.app{
+  max-width:1120px;
+  margin:-42px auto 50px;
+  padding:0 16px;
+}
+
+.book{
+  background:white;
+  border-radius:28px;
+  box-shadow:0 12px 35px #42516b22;
+  overflow:hidden;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:15px 22px;
+  background:#fff;
+  border-bottom:1px solid #e8e3ef;
+  flex-wrap:wrap;
+}
+
+.progress{
+  flex:1;
+  min-width:190px;
+  height:13px;
+  background:#eeeaf5;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.progress span{
+  display:block;
+  width:14%;
+  height:100%;
+  background:linear-gradient(90deg,var(--turkuaz),var(--yesil));
+  transition:.4s;
+}
+
+.points{
+  background:var(--sari);
+  color:#674d00;
+  padding:7px 14px;
+  border-radius:20px;
+  font-weight:bold;
+}
+
+.tabs{
+  display:flex;
+  gap:7px;
+  padding:13px;
+  overflow-x:auto;
+  background:#faf8fd;
+  border-bottom:1px solid #e9e3f2;
+}
+
+.tab{
+  flex:0 0 auto;
+  border:0;
+  padding:12px 17px;
+  border-radius:15px;
+  color:var(--mor-koyu);
+  background:#eee8f7;
+  font-weight:bold;
+  cursor:pointer;
+  font-size:15px;
+}
+
+.tab.active{
+  color:#fff;
+  background:var(--mor);
+  box-shadow:0 4px 10px #7657a855;
+}
+
+.page{
+  display:none;
+  padding:30px;
+  animation:fade .25s ease;
+}
+
+.page.active{display:block}
+
+@keyframes fade{
+  from{opacity:0;transform:translateY(6px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+h2{
+  color:var(--mor-koyu);
+  font-size:32px;
+  margin:0 0 12px;
+}
+
+h3{
+  color:var(--mor);
+  font-size:23px;
+  margin-top:25px;
+}
+
+.hero{
+  display:grid;
+  grid-template-columns:1.3fr .7fr;
+  align-items:center;
+  gap:25px;
+  padding:24px;
+  background:linear-gradient(135deg,#fff8e2,#f4edff);
+  border-radius:23px;
+  margin-bottom:22px;
+}
+
+.hero h2{font-size:40px}
+
+.family-art{
+  font-size:78px;
+  text-align:center;
+  letter-spacing:-10px;
+  filter:drop-shadow(0 7px 4px #7657a833);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;
+}
+
+.card{
+  padding:20px;
+  border-radius:19px;
+  background:#f8fbff;
+  border:2px solid #e6edf5;
+  transition:.2s;
+}
+
+.card:hover{
+  transform:translateY(-4px);
+  border-color:var(--mavi);
+}
+
+.icon{
+  font-size:45px;
+  display:block;
+}
+
+.info{
+  padding:16px 19px;
+  border-radius:14px;
+  margin:18px 0;
+}
+
+.yellow{background:#fff5c9;border-left:7px solid var(--sari)}
+.green{background:#e9f8ed;border-left:7px solid var(--yesil)}
+.pink{background:#fff0f3;border-left:7px solid var(--pembe)}
+.blue{background:#eaf6ff;border-left:7px solid var(--mavi)}
+
+.steps{
+  counter-reset:num;
+  padding:0;
+  list-style:none;
+}
+
+.steps li{
+  counter-increment:num;
+  margin:10px 0;
+  padding:13px 15px 13px 57px;
+  background:#f8f9fc;
+  border-radius:12px;
+  position:relative;
+}
+
+.steps li:before{
+  content:counter(num);
+  position:absolute;
+  left:15px;
+  top:10px;
+  width:30px;
+  height:30px;
+  line-height:30px;
+  text-align:center;
+  color:white;
+  background:var(--mor);
+  border-radius:50%;
+  font-weight:bold;
+}
+
+.game{
+  margin:25px 0;
+  padding:24px;
+  border-radius:22px;
+  background:linear-gradient(135deg,#effbfa,#f5f0ff);
+  border:2px dashed #9ecfc9;
+}
+
+.game-title{
+  font-size:24px;
+  color:var(--mor-koyu);
+  font-weight:bold;
+}
+
+button{
+  border:0;
+  cursor:pointer;
+  font:inherit;
+  font-weight:bold;
+  border-radius:11px;
+  padding:11px 16px;
+  margin:5px 3px;
+  background:var(--mor);
+  color:white;
+  transition:.2s;
+}
+
+button:hover{
+  transform:translateY(-2px);
+  filter:brightness(1.08);
+}
+
+.choice{
+  background:#fff;
+  color:var(--mor-koyu);
+  border:2px solid #dcd4ea;
+}
+
+.correct{
+  background:var(--yesil)!important;
+  color:white!important;
+  border-color:var(--yesil)!important;
+}
+
+.wrong{
+  background:#dd6862!important;
+  color:white!important;
+  border-color:#dd6862!important;
+}
+
+.feedback{
+  display:none;
+  padding:13px;
+  border-radius:11px;
+  margin-top:12px;
+  font-weight:bold;
+}
+
+.good{display:block;background:#e6f7eb;color:#277342}
+.bad{display:block;background:#ffeded;color:#a43d38}
+
+.people{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  gap:12px;
+  margin:20px 0;
+}
+
+.person{
+  text-align:center;
+  padding:15px 8px;
+  background:#fffaf0;
+  border:2px solid #f2dfb5;
+  border-radius:17px;
+  cursor:pointer;
+}
+
+.person:hover{border-color:var(--pembe)}
+.person strong{display:block;color:var(--mor-koyu)}
+.person span{display:block;font-size:45px}
+
+#personInfo{
+  min-height:55px;
+  background:white;
+  border-radius:13px;
+  padding:13px;
+  border:2px solid #e6dff0;
+}
+
+.sort-area{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:10px;
+}
+
+.sort-card{
+  text-align:center;
+  padding:16px;
+  background:#fff;
+  border:2px solid #dfe7ed;
+  border-radius:14px;
+  cursor:pointer;
+}
+
+.sort-card.selected{
+  background:#fff1c5;
+  border-color:#edbd35;
+}
+
+.basket{
+  min-height:75px;
+  background:white;
+  border:3px dashed #d5c6e8;
+  border-radius:17px;
+  padding:15px;
+  font-size:25px;
+  margin:15px 0;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:18px 0;
+}
+
+th,td{
+  border:1px solid #d9e3eb;
+  padding:12px;
+  text-align:left;
+}
+
+th{background:var(--mor-koyu);color:#fff}
+tr:nth-child(even){background:#f7f9fc}
+
+.score{
+  display:inline-block;
+  background:var(--mor-koyu);
+  color:white;
+  padding:9px 16px;
+  border-radius:13px;
+  font-weight:bold;
+}
+
+footer{
+  text-align:center;
+  color:#697989;
+  padding:25px;
+}
+
+@media(max-width:700px){
+  .hero{grid-template-columns:1fr}
+  .family-art{font-size:58px}
+  .page{padding:22px 17px}
+  .topbar{align-items:stretch}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="bubble b1"></div>
+  <div class="bubble b2"></div>
+  <div class="bubble b3"></div>
+  <h1>Ailem ve Toplum</h1>
+  <p>3. Ünite • Keşfet, oyna, öğren!</p>
+</header>
+
+<div class="app">
+  <div class="book">
+
+    <div class="topbar">
+      <strong>🌟 Öğrenme Yolculuğum</strong>
+      <div class="progress"><span id="progressBar"></span></div>
+      <div class="points">⭐ Puan: <span id="points">0</span></div>
+    </div>
+
+    <nav class="tabs">
+      <button class="tab active" onclick="openTab('baslangic',this)">🏠 Başlangıç</button>
+      <button class="tab" onclick="openTab('aile',this)">👨‍👩‍👧 Ailem</button>
+      <button class="tab" onclick="openTab('gorev',this)">🧹 Görevlerim</button>
+      <button class="tab" onclick="openTab('karar',this)">💬 Karar Veriyorum</button>
+      <button class="tab" onclick="openTab('akraba',this)">🌳 Akrabalarım</button>
+      <button class="tab" onclick="openTab('tasarruf',this)">💰 Tasarruf</button>
+      <button class="tab" onclick="openTab('test',this)">🏆 Test</button>
+    </nav>
+
+    <!-- BAŞLANGIÇ -->
+    <section class="page active" id="baslangic">
+      <div class="hero">
+        <div>
+          <h2>Merhaba! 👋</h2>
+          <p>
+            Bu ünitede ailemizi tanıyacak, evdeki görevlerimizi öğrenecek,
+            akrabalarımızı keşfedecek ve kaynakları dikkatli kullanmayı
+            oyunlarla çalışacağız.
+          </p>
+          <button onclick="openTab('aile',document.querySelectorAll('.tab')[1])">
+            Öğrenmeye Başla 🚀
+          </button>
+        </div>
+        <div class="family-art">👩‍👧‍👦<br>🏠</div>
+      </div>
+
+      <h3>Bu ünitede neler öğreneceğim?</h3>
+
+      <div class="grid">
+        <div class="card"><span class="icon">❤️</span><h3>Aile sevgisi</h3><p>Aile bireylerimize saygılı ve yardımsever davranmayı öğreneceğim.</p></div>
+        <div class="card"><span class="icon">🧩</span><h3>Sorumluluk</h3><p>Evde yapabileceğim görevleri fark edeceğim.</p></div>
+        <div class="card"><span class="icon">🗣️</span><h3>Karar alma</h3><p>Fikirlerimi uygun bir şekilde söylemeyi öğreneceğim.</p></div>
+        <div class="card"><span class="icon">🌱</span><h3>Tasarruf</h3><p>Su, elektrik ve parayı dikkatli kullanmayı öğreneceğim.</p></div>
+      </div>
+
+      <div class="info yellow">
+        <strong>Oyun kuralı:</strong> Etkinlikleri tamamladıkça puan kazanacaksın.
+        Yanlış cevap verdiğinde üzülme; ipucunu oku ve tekrar dene!
+      </div>
+    </section>
+
+    <!-- AİLEM -->
+    <section class="page" id="aile">
+      <h2>👨‍👩‍👧 Ailemi Tanıyorum</h2>
+
+      <p>
+        Aile, birbirine sevgi, saygı ve bağlılıkla bağlı olan insanların
+        oluşturduğu topluluktur. Her ailenin yapısı aynı olmayabilir.
+        Bazı ailelerde kardeşler bulunabilir, bazı çocuklar büyükanne veya
+        büyükbabalarıyla birlikte yaşayabilir.
+      </p>
+
+      <div class="info blue">
+        <strong>Unutma:</strong> Aileleri birbirinden farklı yapan özellikler
+        olabilir. Her aile değerlidir. Aile içinde önemli olan sevgi,
+        güven, saygı ve dayanışmadır.
+      </div>
+
+      <h3>Aile Bireylerimize Nasıl Davranırız?</h3>
+
+      <div class="grid">
+        <div class="card"><span class="icon">👂</span><h3>Dinlerim</h3><p>Konuşan kişinin sözünü kesmeden onu dinlerim.</p></div>
+        <div class="card"><span class="icon">🤝</span><h3>Yardım ederim</h3><p>Gücümün yettiği işlerde aileme destek olurum.</p></div>
+        <div class="card"><span class="icon">😊</span><h3>Saygılı konuşurum</h3><p>Bağırmadan ve kırıcı sözler kullanmadan konuşurum.</p></div>
+        <div class="card"><span class="icon">🔒</span><h3>İzin isterim</h3><p>Başkasının eşyasını kullanmadan önce izin alırım.</p></div>
+      </div>
+
+      <h3>İnteraktif Etkinlik: Aile Albümü</h3>
+      <p>Aşağıdaki aile bireylerine tıkla ve görevlerini öğren.</p>
+
+      <div class="people">
+        <div class="person" onclick="showPerson('Anne','Ailemizle ilgilenir, bizi dinler ve ihtiyaçlarımızda bize destek olur.')"><span>👩</span><strong>Anne</strong></div>
+        <div class="person" onclick="showPerson('Baba','Ailemizin bir bireyidir. Evdeki sorumluluklar paylaşılır ve birlikte yerine getirilir.')"><span>👨</span><strong>Baba</strong></div>
+        <div class="person" onclick="showPerson('Kardeş','Birlikte oyun oynayabilir, eşyalarımızı paylaşabilir ve birbirimize yardım edebiliriz.')"><span>🧒</span><strong>Kardeş</strong></div>
+        <div class="person" onclick="showPerson('Büyükanne','Aile büyüklerimiz bize deneyimleriyle yardımcı olabilir. Onlara saygılı davranırız.')"><span>👵</span><strong>Büyükanne</strong></div>
+        <div class="person" onclick="showPerson('Büyükbaba','Aile büyüklerimizle sohbet eder, onları dinler ve gerektiğinde yardımcı oluruz.')"><span>👴</span><strong>Büyükbaba</strong></div>
+      </div>
+
+      <div id="personInfo">Bir aile bireyinin üzerine tıkla. Bilgi kartı burada açılacak.</div>
+    </section>
+
+    <!-- GÖREVLER -->
+    <section class="page" id="gorev">
+      <h2>🧹 Görevlerim ve Sorumluluklarım</h2>
+
+      <p>
+        Görev, yapılması gereken iştir. Sorumluluk ise üzerimize düşen görevi
+        zamanında ve dikkatli biçimde yapmaktır. Çocuklar da yaşlarına ve
+        güçlerine uygun bazı ev işlerine yardımcı olabilirler.
+      </p>
+
+      <ol class="steps">
+        <li>Odamdaki eşyaları yerlerine koyarım.</li>
+        <li>Oyuncaklarımı oynadıktan sonra toplarım.</li>
+        <li>Çantamı ders programına göre hazırlarım.</li>
+        <li>Sofranın hazırlanmasına veya toplanmasına yardım ederim.</li>
+        <li>Kirli kıyafetlerimi ilgili yere koyarım.</li>
+        <li>Evcil hayvanım varsa onun bakımına yetişkin yardımıyla katılırım.</li>
+      </ol>
+
+      <div class="info pink">
+        <strong>Güvenlik notu:</strong> Ocak, ütü, kesici aletler ve elektrikli
+        araçlar gibi tehlikeli eşyaları yetişkin izni ve yardımı olmadan kullanmam.
+      </div>
+
+      <div class="game">
+        <div class="game-title">🎯 Görev Eşleştirme Oyunu</div>
+        <p>Çocukların yapabileceği uygun görevleri seç.</p>
+
+        <button class="choice task" onclick="task(this,true)">Oyuncaklarımı toplamak</button>
+        <button class="choice task" onclick="task(this,true)">Çantamı hazırlamak</button>
+        <button class="choice task" onclick="task(this,true)">Kitaplarımı düzenlemek</button>
+        <button class="choice task" onclick="task(this,false)">Tek başıma ocağı açmak</button>
+        <button class="choice task" onclick="task(this,false)">İzinsiz ilaç almak</button>
+        <button class="choice task" onclick="task(this,true)">Sofraya peçete koymak</button>
+
+        <div id="taskFeedback" class="feedback"></div>
+      </div>
+    </section>
+
+    <!-- KARAR -->
+    <section class="page" id="karar">
+      <h2>💬 Aile İçinde Karar Veriyorum</h2>
+
+      <p>
+        Aile içinde herkesin farklı fikirleri olabilir. Bir konuda karar
+        verirken yalnızca kendi istediğimizin olmasını beklememeliyiz.
+        Önce düşüncemizi söyler, sonra diğerlerini dinler ve ortak bir çözüm
+        ararız.
+      </p>
+
+      <h3>Karar Alma Basamakları</h3>
+
+      <ol class="steps">
+        <li>Konuyu anlayalım.</li>
+        <li>Fikrimizi nazikçe söyleyelim.</li>
+        <li>Başkalarının fikirlerini dinleyelim.</li>
+        <li>Uygun seçenekleri birlikte değerlendirelim.</li>
+        <li>Ortak bir karara uyalım.</li>
+      </ol>
+
+      <div class="game">
+        <div class="game-title">🎭 Sen Olsaydın Ne Yapardın?</div>
+        <p>
+          Ailen hafta sonu etkinliği için karar verecek. Sen parka gitmek,
+          kardeşin müzeye gitmek, annen ise evde dinlenmek istiyor.
+        </p>
+
+        <button class="choice" onclick="decision(this,false)">Ben ne istiyorsam o olsun.</button>
+        <button class="choice" onclick="decision(this,true)">Herkesi dinleyip ortak çözüm ararım.</button>
+        <button class="choice" onclick="decision(this,false)">Kimseye sormadan karar veririm.</button>
+
+        <div id="decisionFeedback" class="feedback"></div>
+      </div>
+
+      <div class="info green">
+        Fikrimizin kabul edilmemesi, fikrimizin değersiz olduğu anlamına gelmez.
+        Aile içinde herkesin düşüncesi dinlenmeye değerdir.
+      </div>
+    </section>
+
+    <!-- AKRABALAR -->
+    <section class="page" id="akraba">
+      <h2>🌳 Akrabalarımı Öğreniyorum</h2>
+
+      <p>
+        Akrabalarımız, ailemizle kan bağı veya evlilik yoluyla bağlı olan
+        kişilerdir. Yakın akrabalarımızı tanımak ve güvenilir akrabalarımızın
+        iletişim bilgilerini bilmek güvenliğimiz için önemlidir.
+      </p>
+
+      <div class="grid">
+        <div class="card"><span class="icon">👨</span><h3>Amca</h3><p>Babanın erkek kardeşidir.</p></div>
+        <div class="card"><span class="icon">👩</span><h3>Hala</h3><p>Babanın kız kardeşidir.</p></div>
+        <div class="card"><span class="icon">👨‍🦱</span><h3>Dayı</h3><p>Annenin erkek kardeşidir.</p></div>
+        <div class="card"><span class="icon">👩‍🦰</span><h3>Teyze</h3><p>Annenin kız kardeşidir.</p></div>
+        <div class="card"><span class="icon">🧒</span><h3>Kuzen</h3><p>Amca, hala, dayı veya teyzenin çocuğudur.</p></div>
+      </div>
+
+      <div class="info yellow">
+        <strong>Güvenlik bilgisi:</strong> Ev adresimizi ve aile telefon
+        numaralarını güvenilir yetişkinlerden öğrenebiliriz. Bu bilgileri
+        yabancılarla paylaşmayız.
+      </div>
+
+      <div class="game">
+        <div class="game-title">🧠 Akrabalık Bilgi Yarışması</div>
+        <p id="relativeQuestion"></p>
+        <div id="relativeOptions"></div>
+        <div id="relativeFeedback" class="feedback"></div>
+        <button onclick="nextRelative()">Sonraki Soru ➜</button>
+      </div>
+    </section>
+
+    <!-- TASARRUF -->
+    <section class="page" id="tasarruf">
+      <h2>💰 İstek mi, İhtiyaç mı?</h2>
+
+      <p>
+        İhtiyaçlarımız olmadan yaşayamayacağımız temel şeylerdir. İsteklerimiz
+        ise sahip olmak istediğimiz, ancak hemen almak zorunda olmadığımız
+        şeylerdir.
+      </p>
+
+      <table>
+        <tr><th>İhtiyaç</th><th>İstek</th></tr>
+        <tr><td>Su ve sağlıklı yiyecek</td><td>Yeni oyuncak</td></tr>
+        <tr><td>Mevsime uygun kıyafet</td><td>Moda bir çanta</td></tr>
+        <tr><td>Barınma</td><td>Her gün dışarıdan yemek</td></tr>
+      </table>
+
+      <div class="game">
+        <div class="game-title">🛒 Alışveriş Sepeti Oyunu</div>
+        <p>Önce ihtiyaçları, sonra istekleri düşün. Sepete eklemek istediğin ürüne tıkla.</p>
+
+        <div class="basket" id="basket">Sepetin boş.</div>
+
+        <button class="choice" onclick="addBasket('🥖 Ekmek',true)">Ekmek</button>
+        <button class="choice" onclick="addBasket('🧥 Kışlık mont',true)">Kışlık mont</button>
+        <button class="choice" onclick="addBasket('🧸 Oyuncak',false)">Oyuncak</button>
+        <button class="choice" onclick="addBasket('💧 Su',true)">Su</button>
+        <button class="choice" onclick="addBasket('🎮 Oyun konsolu',false)">Oyun konsolu</button>
+        <button class="choice" onclick="addBasket('🍎 Meyve',true)">Meyve</button>
+
+        <div id="basketFeedback" class="feedback"></div>
+      </div>
+
+      <h3>Tasarruflu Davranışlar</h3>
+
+      <div class="grid">
+        <div class="card"><span class="icon">💧</span><h3>Su</h3><p>Dişlerimizi fırçalarken musluğu kapatırız.</p></div>
+        <div class="card"><span class="icon">💡</span><h3>Elektrik</h3><p>Odadan çıkarken ışığı kapatırız.</p></div>
+        <div class="card"><span class="icon">🍽️</span><h3>Yiyecek</h3><p>Tabağımıza yiyebileceğimiz kadar yemek alırız.</p></div>
+        <div class="card"><span class="icon">📚</span><h3>Eşyalar</h3><p>Kitap ve defterlerimizi özenli kullanırız.</p></div>
+      </div>
+    </section>
+
+    <!-- TEST -->
+    <section class="page" id="test">
+      <h2>🏆 Ünite Sonu Testi</h2>
+      <p>Her soruyu dikkatlice oku. Başarılar!</p>
+
+      <div class="question">
+        <strong>1. Aile içinde karar alırken ne yapmalıyız?</strong><br>
+        <button class="choice quiz" onclick="quiz(this,true)">Herkesin fikrini dinlemeliyiz.</button>
+        <button class="choice quiz" onclick="quiz(this,false)">Sadece kendi istediğimizi yapmalıyız.</button>
+      </div>
+
+      <div class="question">
+        <strong>2. Babamızın kız kardeşine ne denir?</strong><br>
+        <button class="choice quiz" onclick="quiz(this,true)">Hala</button>
+        <button class="choice quiz" onclick="quiz(this,false)">Teyze</button>
+      </div>
+
+      <div class="question">
+        <strong>3. Hangisi bir sorumluluktur?</strong><br>
+        <button class="choice quiz" onclick="quiz(this,true)">Oyuncakları toplamak</button>
+        <button class="choice quiz" onclick="quiz(this,false)">Eşyaları kırmak</button>
+      </div>
+
+      <div class="question">
+        <strong>4. Hangisi ihtiyaçtır?</strong><br>
+        <button class="choice quiz" onclick="quiz(this,false)">Yeni oyun almak</button>
+        <button class="choice quiz" onclick="quiz(this,true)">İçme suyu</button>
+      </div>
+
+      <div class="question">
+        <strong>5. Hangisi tasarruflu davranıştır?</strong><br>
+        <button class="choice quiz" onclick="quiz(this,true)">Gereksiz yanan ışığı kapatmak</button>
+        <button class="choice quiz" onclick="quiz(this,false)">Musluğu açık bırakmak</button>
+      </div>
+
+      <p class="score">Test puanın: <span id="testScore">0</span> / 5</p>
+      <div id="testMessage" class="feedback"></div>
+    </section>
+
+  </div>
+</div>
+
+<footer>
+  Ailem ve Toplum • Sevgiyle paylaşır, sorumlulukla davranırım. 🌟
+</footer>
+
+<script>
+let puan=0;
+let tamamlanan=0;
+
+function openTab(id,button){
+  document.querySelectorAll(".page").forEach(page=>{
+    page.classList.remove("active");
+  });
+
+  document.querySelectorAll(".tab").forEach(tab=>{
+    tab.classList.remove("active");
+  });
+
+  document.getElementById(id).classList.add("active");
+  button.classList.add("active");
+
+  const toplam=document.querySelectorAll(".tab").length;
+  const sira=[...document.querySelectorAll(".tab")].indexOf(button)+1;
+  document.getElementById("progressBar").style.width=(sira/toplam*100)+"%";
+}
+
+function addPoint(amount=1){
+  puan+=amount;
+  document.getElementById("points").innerText=puan;
+}
+
+function showPerson(name,text){
+  document.getElementById("personInfo").innerHTML=
+    "<strong>"+name+":</strong> "+text;
+  addPoint(1);
+}
+
+function task(button,correct){
+  if(button.dataset.clicked)return;
+  button.dataset.clicked="1";
+
+  const feedback=document.getElementById("taskFeedback");
+
+  if(correct){
+    button.classList.add("correct");
+    feedback.className="feedback good";
+    feedback.innerHTML="Doğru! Bu görevleri yaşına uygun şekilde yapabilirsin. ⭐";
+    addPoint(2);
+  }else{
+    button.classList.add("wrong");
+    feedback.className="feedback bad";
+    feedback.innerHTML="Dikkat! Ocak ve ilaç gibi şeyler için mutlaka yetişkin yardımı gerekir.";
+  }
+}
+
+function decision(button,correct){
+  const feedback=document.getElementById("decisionFeedback");
+
+  if(correct){
+    button.classList.add("correct");
+    feedback.className="feedback good";
+    feedback.innerHTML="Harika! Herkesin fikrini dinlemek demokratik ve saygılı bir davranıştır. ⭐";
+    addPoint(3);
+  }else{
+    button.classList.add("wrong");
+    feedback.className="feedback bad";
+    feedback.innerHTML="Ortak karar için aile bireylerini dinlemek ve birlikte çözüm aramak gerekir.";
+  }
+}
+
+const relatives=[
+  {
+    q:"Annemizin erkek kardeşine ne denir?",
+    a:["Amca","Dayı","Hala"],
+    c:1
+  },
+  {
+    q:"Babamızın kız kardeşine ne denir?",
+    a:["Teyze","Hala","Dayı"],
+    c:1
+  },
+  {
+    q:"Teyzemizin çocuğu bizim neyimiz olur?",
+    a:["Kuzenimiz","Komşumuz","Öğretmenimiz"],
+    c:0
+  }
+];
+
+let relativeIndex=0;
+
+function showRelative(){
+  const item=relatives[relativeIndex];
+  document.getElementById("relativeQuestion").innerHTML=
+    "<strong>"+item.q+"</strong>";
+
+  const area=document.getElementById("relativeOptions");
+  area.innerHTML="";
+
+  item.a.forEach((answer,index)=>{
+    const btn=document.createElement("button");
+    btn.className="choice";
+    btn.innerText=answer;
+    btn.onclick=function(){
+      const feedback=document.getElementById("relativeFeedback");
+
+      if(index===item.c){
+        btn.classList.add("correct");
+        feedback.className="feedback good";
+        feedback.innerHTML="Doğru cevap! Çok güzel gidiyorsun. ⭐";
+        addPoint(2);
+      }else{
+        btn.classList.add("wrong");
+        feedback.className="feedback bad";
+        feedback.innerHTML="Tekrar düşün. İpucu: Akrabalık ilişkilerini aile ağacından hatırla.";
+      }
+    };
+    area.appendChild(btn);
+  });
+
+  document.getElementById("relativeFeedback").className="feedback";
+}
+
+function nextRelative(){
+  relativeIndex=(relativeIndex+1)%relatives.length;
+  showRelative();
+}
+
+showRelative();
+
+let sepet=[];
+
+function addBasket(urun,ihtiyac){
+  sepet.push(urun);
+  document.getElementById("basket").innerHTML=sepet.join(" • ");
+
+  const feedback=document.getElementById("basketFeedback");
+
+  if(ihtiyac){
+    feedback.className="feedback good";
+    feedback.innerHTML="Bu bir ihtiyaçtır. Öncelikle ihtiyaçlarımızı karşılamalıyız. ⭐";
+    addPoint(1);
+  }else{
+    feedback.className="feedback bad";
+    feedback.innerHTML="Bu bir istektir. İhtiyaçlarını aldıktan sonra bütçeye uygun olup olmadığını düşünmelisin.";
+  }
+}
+
+function quiz(button,correct){
+  const box=button.parentElement;
+
+  if(box.dataset.done)return;
+  box.dataset.done="1";
+
+  if(correct){
+    button.classList.add("correct");
+    puan++;
+    document.getElementById("testScore").innerText=
+      Number(document.getElementById("testScore").innerText)+1;
+    addPoint(1);
+  }else{
+    button.classList.add("wrong");
+    [...box.querySelectorAll(".quiz")].forEach(btn=>{
+      if(btn.getAttribute("onclick").includes("true")){
+        btn.classList.add("correct");
+      }
+    });
+  }
+
+  const cevaplanan=document.querySelectorAll("#test .question[data-done]").length;
+
+  if(cevaplanan===5){
+    const sonuc=Number(document.getElementById("testScore").innerText);
+    const mesaj=document.getElementById("testMessage");
+    mesaj.className="feedback "+(sonuc>=4?"good":"bad");
+
+    if(sonuc===5){
+      mesaj.innerHTML="Muhteşem! Ünitede çok başarılı oldun. 🏆";
+    }else if(sonuc>=3){
+      mesaj.innerHTML="Çok güzel! Birkaç konuyu tekrar ederek daha da başarılı olabilirsin. 🌟";
+    }else{
+      mesaj.innerHTML="Sorun değil. Konu sekmelerini tekrar inceleyip yeniden deneyebilirsin. 💪";
+    }
+  }
+}
+</script>
+
+</body>
+</html>

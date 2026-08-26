@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İlkokul Sınıf Oturma Planı</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #edf2f7;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #263238;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            text-align: center;
+            color: #1d3557;
+        }
+
+        .aciklama {
+            margin-bottom: 15px;
+            text-align: center;
+            color: #555;
+        }
+
+        .yazdir {
+            display: block;
+            margin: 0 auto 18px;
+            padding: 10px 22px;
+            border: none;
+            border-radius: 6px;
+            background: #1976d2;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .yazdir:hover {
+            background: #0d47a1;
+        }
+
+        /*
+         * SINIF PLANI
+         */
+        .sinif {
+            position: relative;
+            width: min(1200px, 100%);
+            height: 800px;
+            margin: auto;
+            overflow: hidden;
+            background: #fffdf2;
+            border: 7px solid #37474f;
+            border-radius: 12px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.15);
+        }
+
+        /*
+         * KAPI
+         */
+        .kapi {
+            position: absolute;
+            top: 25px;
+            left: 18px;
+            width: 90px;
+            height: 105px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-weight: bold;
+            color: #1b5e20;
+            background: #a5d6a7;
+            border: 3px solid #2e7d32;
+            border-radius: 7px;
+        }
+
+        /*
+         * ÇÖP KOVASI
+         * Kapının önünde, küçük ve yuvarlak
+         */
+        .cop-kovasi {
+            position: absolute;
+            top: 155px;
+            left: 38px;
+            width: 55px;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 10px;
+            line-height: 12px;
+            font-weight: bold;
+            color: #263238;
+            background: #90a4ae;
+            border: 3px solid #455a64;
+            border-radius: 50%;
+        }
+
+        /*
+         * ASKILIKLAR
+         * Sol duvarda dikey şekilde
+         */
+        .askiliklar {
+            position: absolute;
+            top: 235px;
+            left: 18px;
+            width: 58px;
+            height: 270px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 13px;
+            font-weight: bold;
+            color: #4a148c;
+            background: #ce93d8;
+            border: 3px solid #6a1b9a;
+            border-radius: 8px;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+        /*
+         * ŞEREF KÖŞESİ
+         * Tahtanın üstünde, ancak tahtaya yapışık değil
+         */
+        .seref-kosesi {
+            position: absolute;
+            top: 20px;
+            left: 31%;
+            width: 34%;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-weight: bold;
+            color: #795548;
+            background: #fff59d;
+            border: 2px solid #f9a825;
+            border-radius: 7px;
+        }
+
+        /*
+         * TAHTA
+         * Ortada ve çevresinde boşluk olacak şekilde
+         */
+        .tahta {
+            position: absolute;
+            top: 85px;
+            left: 27%;
+            width: 42%;
+            height: 78px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            background: #263238;
+            border: 6px solid #795548;
+            border-radius: 7px;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        /*
+         * ÖĞRETMEN MASASI
+         * En sağ köşede
+         */
+        .ogretmen-masasi {
+            position: absolute;
+            top: 28px;
+            right: 3%;
+            width: 15%;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-weight: bold;
+            color: #0d47a1;
+            background: #90caf9;
+            border: 3px solid #1565c0;
+            border-radius: 7px;
+        }
+
+        /*
+         * SINIF DOLABI
+         * Öğretmen masasının hemen yanında
+         */
+        .sinif-dolabi {
+            position: absolute;
+            top: 108px;
+            right: 3%;
+            width: 15%;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-weight: bold;
+            color: #3e2723;
+            background: #bcaaa4;
+            border: 3px solid #5d4037;
+            border-radius: 7px;
+        }
+
+        /*
+         * ÖĞRENCİ SIRALARI
+         * 4 sütun ve 5 sıra
+         */
+        .oturma-alani {
+            position: absolute;
+            top: 220px;
+            left: 13%;
+            right: 3%;
+            bottom: 170px;
+
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            gap: 13px;
+        }
+
+        .sira {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 7px;
+            padding: 7px;
+            background: #ffe0b2;
+            border: 3px solid #ef6c00;
+            border-radius: 8px;
+        }
+
+        /*
+         * HER SIRADA İKİ ÖĞRENCİ
+         */
+        .ogrenci {
+            width: 50%;
+            min-height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            overflow-wrap: anywhere;
+            text-align: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: #4e342e;
+            background: #fff8e1;
+            border: 2px solid #fb8c00;
+            border-radius: 5px;
+        }
+
+        .ogrenci:focus {
+            outline: 3px solid #42a5f5;
+            background: white;
+        }
+
+        /*
+         * ÖĞRENCİLERİN ARKASINDAKİ PANOLAR
+         */
+        .panolar {
+            position: absolute;
+            left: 13%;
+            right: 3%;
+            bottom: 25px;
+            height: 95px;
+
+            display: flex;
+            gap: 14px;
+        }
+
+        .pano {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            text-align: center;
+            font-weight: bold;
+            color: #5d4037;
+            background: #ffcc80;
+            border: 3px solid #ef6c00;
+            border-radius: 8px;
+        }
+
+        /*
+         * YAZDIRMA AYARLARI
+         */
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 8mm;
+            }
+
+            body {
+                padding: 0;
+                background: white;
+            }
+
+            h1 {
+                margin: 0 0 5px;
+                font-size: 21px;
+            }
+
+            .aciklama,
+            .yazdir {
+                display: none;
+            }
+
+            .sinif {
+                width: 100%;
+                height: 175mm;
+                box-shadow: none;
+                border: 4px solid #000;
+            }
+
+            .ogrenci:focus {
+                outline: none;
+            }
+        }
+
+        /*
+         * Küçük ekranlarda yatay kaydırma
+         */
+        @media screen and (max-width: 850px) {
+            body {
+                overflow-x: auto;
+            }
+
+            .sinif {
+                min-width: 850px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>İlkokul Sınıf Oturma Planı</h1>
+
+    <div class="aciklama">
+        Öğrenci adlarını değiştirmek için kutuların üzerine tıklayabilirsiniz.
+    </div>
+
+    <button class="yazdir" onclick="window.print()">
+        Yazdır / PDF Olarak Kaydet
+    </button>
+
+    <main class="sinif">
+
+        <!-- Giriş bölümü -->
+        <div class="kapi">
+            KAPI<br>
+            GİRİŞ
+        </div>
+
+        <div class="cop-kovasi">
+            ÇÖP
+        </div>
+
+        <div class="askiliklar">
+            ASKILIKLAR
+        </div>
+
+        <!-- Ön duvar -->
+        <div class="seref-kosesi">
+            ŞEREF KÖŞESİ
+        </div>
+
+        <div class="tahta">
+            TAHTA
+        </div>
+
+        <!-- Öğretmen bölümü -->
+        <div class="ogretmen-masasi">
+            ÖĞRETMEN<br>MASASI
+        </div>
+
+        <div class="sinif-dolabi">
+            SINIF<br>DOLABI
+        </div>
+
+        <!-- 4 sütun x 5 sıra = 20 sıra -->
+        <section class="oturma-alani">
+
+            <!-- 1 -->
+            <div class="sira">
+                <div class="ogrenci" contenteditable="true">Öğrenci 1</div>
+                <div class="ogrenci" contenteditable="true">Öğrenci 2</div>
+            </div>
+
+            <!-- 2 -->
+            <div class="sira">
+                <div class="ogrenci" contenteditable="true">Öğrenci 1</div>
+                <div class="ogrenci" contenteditable="true">Öğrenci 2</div>
+            </div>
+
+            <!-- 3 -->
+            <div class="sira">
+                <div class="ogrenci" contenteditable="true">Öğrenci 1</div>
+                <div class="ogrenci" contenteditable="true">Öğrenci 2</div>
+            </div>
+
+            <!-- 4 -->
+            <div class="sira">
+                <div class="ogrenci" contenteditable="true">Öğrenci 1</div>
+                <div class="ogrenci" contenteditable="true">Öğrenci 2</div>
+            </div>
+
+            <!-- 5 -->
+            <div class="sira">
+                <div class="ogrenci" contenteditable="true">Öğrenci 1</div>
+                <div class="ogrenci" contenteditable="true">Öğrenci 2</div>
+            </div>
+
+            <!-- 6 -->
+            <div class="sira">
+                <div class="ogrenci" contenteditable="true">Öğrenci 1</div>
+                <div class="ogrenci" contenteditable="true">Öğrenci 2</div>
+            </div>
+
+            <!-- 7 -->
+            <div class="sira">
+                <div class="ogrenci" contenteditable="true">Öğrenci 1</div>
+                <div class="ogrenci" contenteditable="true">Öğrenci 2</div>
+            </div>
+
+            <!-- 8 -->
+            <div class="sira">
+                <div class="ogrenci" contenteditable="true">Öğrenci 1</div>
+                <div class="ogrenci" contenteditable="true">Öğrenci 2</div>
+            </div>
+
+            <!-- 9 -->
+            <div class="sira">
+                <div class="ogrenci" contenteditable="true">Öğrenci 1</div>
+                <div class="ogrenci" contenteditable="true">Öğrenci 2</div>
+            </div>
+
+            <!-- 10 -->
+            <div class="sira">
+                <div class="ogrenci" contenteditable="true">Öğrenci 1</div>
+                <div class="ogrenci" contenteditable="true">Öğrenci 2</div>
+            </div>
+
+            <!-- 11 -->
+            <div class="sira">
+                <div class="ogrenci" contenteditable="true">Öğrenci 1</div>
+                <div class="ogrenci" contenteditable="true">Öğrenci 2</div>
+            </div>
+
+            <!-- 12 -->
+            <div class="sira">
+                <div class="ogrenci" contenteditable="true">Öğrenci 1</div>
+                <div class="ogrenci" contenteditable="true">Öğrenci 2</div>
+            </div>
+
+            <!-- 13 -->
+            <div class="sira">
+                <div class="ogrenci" contenteditable="true">Öğrenci 1</div>
+                <div class="ogrenci" contenteditable="true">Öğrenci 2</div>
+            </div>
+
+            <!-- 14 -->
+            <div class="sira">
+                <div class="ogrenci" contenteditable="true">Öğrenci 1</div>
+                <div class="ogrenci" contenteditable="true">Öğrenci 2</div>
+            </div>
+
+            <!-- 15 -->
+            <div class="sira">
+                <div class="ogrenci" contenteditable="true">Öğrenci 1</div>
+                <div class="ogrenci" contenteditable="true">Öğrenci 2</div>
+            </div>
+
+            <!-- 16 -->
+            <div class="sira">
+                <div class="ogrenci" contenteditable="true">Öğrenci 1</div>
+                <div class="ogrenci" contenteditable="true">Öğrenci 2</div>
+            </div>
+
+            <!-- 17 -->
+            <div class="sira">
+                <div class="ogrenci" contenteditable="true">Öğrenci 1</div>
+                <div class="ogrenci" contenteditable="true">Öğrenci 2</div>
+            </div>
+
+            <!-- 18 -->
+            <div class="sira">
+                <div class="ogrenci" contenteditable="true">Öğrenci 1</div>
+                <div class="ogrenci" contenteditable="true">Öğrenci 2</div>
+            </div>
+
+            <!-- 19 -->
+            <div class="sira">
+                <div class="ogrenci" contenteditable="true">Öğrenci 1</div>
+                <div class="ogrenci" contenteditable="true">Öğrenci 2</div>
+            </div>
+
+            <!-- 20 -->
+            <div class="sira">
+                <div class="ogrenci" contenteditable="true">Öğrenci 1</div>
+                <div class="ogrenci" contenteditable="true">Öğrenci 2</div>
+            </div>
+
+        </section>
+
+        <!-- Öğrencilerin arkasındaki panolar -->
+        <section class="panolar">
+            <div class="pano">SINIF PANOSU</div>
+            <div class="pano">ÖDEV VE DUYURU PANOSU</div>
+            <div class="pano">ETKİNLİK PANOSU</div>
+        </section>
+
+    </main>
+
+</body>
+</html>

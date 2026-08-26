@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ben ve Okulum - İnteraktif Ders Kitabı</title>
+
+<style>
+:root{
+  --lacivert:#304b70;
+  --mavi:#579bd3;
+  --acik-mavi:#eaf6ff;
+  --mor:#8067b7;
+  --turkuaz:#51bdb4;
+  --yesil:#68b879;
+  --sari:#ffd766;
+  --turuncu:#f3a45c;
+  --pembe:#ef8fa4;
+  --kirmizi:#dd6d68;
+  --arka:#f3f7fb;
+  --metin:#29394a;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:var(--arka);
+  color:var(--metin);
+  font-family:"Trebuchet MS",Arial,sans-serif;
+  line-height:1.6;
+}
+
+header{
+  position:relative;
+  overflow:hidden;
+  padding:45px 18px 85px;
+  text-align:center;
+  color:white;
+  background:linear-gradient(135deg,#304b70,#579bd3,#8067b7);
+}
+
+header h1{
+  position:relative;
+  z-index:1;
+  margin:0;
+  font-size:clamp(34px,6vw,60px);
+}
+
+header p{
+  position:relative;
+  z-index:1;
+  margin:8px 0;
+  font-size:19px;
+}
+
+.bubble{
+  position:absolute;
+  border-radius:50%;
+  background:white;
+  opacity:.16;
+}
+
+.b1{width:190px;height:190px;left:-55px;top:-45px}
+.b2{width:125px;height:125px;right:10%;top:25px}
+.b3{width:230px;height:230px;right:-80px;bottom:-120px}
+
+.container{
+  max-width:1150px;
+  margin:-43px auto 50px;
+  padding:0 15px;
+}
+
+.book{
+  overflow:hidden;
+  border-radius:27px;
+  background:white;
+  box-shadow:0 13px 35px #304b7025;
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  flex-wrap:wrap;
+  padding:15px 22px;
+  border-bottom:1px solid #e0e9f0;
+}
+
+.progress{
+  flex:1;
+  min-width:180px;
+  height:13px;
+  overflow:hidden;
+  border-radius:20px;
+  background:#e8f0f5;
+}
+
+.progress span{
+  display:block;
+  width:12%;
+  height:100%;
+  border-radius:20px;
+  background:linear-gradient(90deg,var(--turkuaz),var(--yesil));
+  transition:.4s;
+}
+
+.score{
+  padding:7px 15px;
+  border-radius:20px;
+  background:var(--sari);
+  color:#665100;
+  font-weight:bold;
+}
+
+.tabs{
+  display:flex;
+  gap:7px;
+  padding:13px;
+  overflow-x:auto;
+  background:#f8fbfd;
+  border-bottom:1px solid #e0e9f0;
+}
+
+.tab{
+  flex:0 0 auto;
+  padding:11px 15px;
+  border:0;
+  border-radius:14px;
+  cursor:pointer;
+  color:var(--lacivert);
+  background:#e5eef6;
+  font:inherit;
+  font-weight:bold;
+}
+
+.tab.active{
+  color:white;
+  background:var(--mavi);
+  box-shadow:0 4px 12px #579bd355;
+}
+
+.page{
+  display:none;
+  padding:31px;
+  animation:appear .25s ease;
+}
+
+.page.active{display:block}
+
+@keyframes appear{
+  from{opacity:0;transform:translateY(6px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+h2{
+  margin:0 0 13px;
+  color:var(--lacivert);
+  font-size:32px;
+}
+
+h3{
+  margin-top:25px;
+  color:var(--mavi);
+  font-size:23px;
+}
+
+.hero{
+  display:grid;
+  grid-template-columns:1.3fr .7fr;
+  gap:22px;
+  align-items:center;
+  padding:26px;
+  border-radius:23px;
+  background:linear-gradient(135deg,#fff8d9,#eaf6ff);
+}
+
+.hero h2{font-size:40px}
+
+.hero-art{
+  text-align:center;
+  font-size:78px;
+  line-height:1.25;
+  filter:drop-shadow(0 7px 4px #304b7033);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:16px;
+}
+
+.card{
+  padding:20px;
+  border:2px solid #e0ebf2;
+  border-radius:19px;
+  background:#fbfdfe;
+  transition:.2s;
+}
+
+.card:hover{
+  transform:translateY(-4px);
+  border-color:var(--turkuaz);
+}
+
+.icon{
+  display:block;
+  font-size:44px;
+}
+
+.note,.safe,.warning{
+  margin:20px 0;
+  padding:15px 19px;
+  border-radius:13px;
+}
+
+.note{
+  border-left:7px solid var(--sari);
+  background:#fff7d4;
+}
+
+.safe{
+  border-left:7px solid var(--yesil);
+  background:#e9f8ed;
+}
+
+.warning{
+  border-left:7px solid var(--kirmizi);
+  background:#fff0ee;
+}
+
+.steps{
+  padding:0;
+  list-style:none;
+  counter-reset:step;
+}
+
+.steps li{
+  position:relative;
+  margin:10px 0;
+  padding:13px 15px 13px 57px;
+  border-radius:12px;
+  background:#f5f9fc;
+  counter-increment:step;
+}
+
+.steps li::before{
+  position:absolute;
+  top:10px;
+  left:14px;
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  background:var(--mavi);
+  color:white;
+  content:counter(step);
+  line-height:30px;
+  text-align:center;
+  font-weight:bold;
+}
+
+.game{
+  margin:25px 0;
+  padding:24px;
+  border:2px dashed #9acbd8;
+  border-radius:22px;
+  background:linear-gradient(135deg,#effbfa,#f3f0ff);
+}
+
+.game-title{
+  color:var(--lacivert);
+  font-size:24px;
+  font-weight:bold;
+}
+
+button{
+  margin:5px 3px;
+  padding:11px 16px;
+  border:0;
+  border-radius:11px;
+  cursor:pointer;
+  background:var(--mavi);
+  color:white;
+  font:inherit;
+  font-weight:bold;
+  transition:.2s;
+}
+
+button:hover{
+  transform:translateY(-2px);
+  filter:brightness(1.08);
+}
+
+.choice{
+  border:2px solid #d7e5ed;
+  background:white;
+  color:var(--lacivert);
+}
+
+.correct{
+  border-color:var(--yesil)!important;
+  background:var(--yesil)!important;
+  color:white!important;
+}
+
+.wrong{
+  border-color:var(--kirmizi)!important;
+  background:var(--kirmizi)!important;
+  color:white!important;
+}
+
+.feedback{
+  display:none;
+  margin-top:12px;
+  padding:13px;
+  border-radius:11px;
+  font-weight:bold;
+}
+
+.good{
+  display:block;
+  background:#e5f7ea;
+  color:#287044;
+}
+
+.bad{
+  display:block;
+  background:#ffeded;
+  color:#a43b36;
+}
+
+.identity{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+  gap:13px;
+  margin:20px 0;
+}
+
+.identity-card{
+  padding:17px 10px;
+  border:2px solid #dce8ef;
+  border-radius:17px;
+  background:#fff;
+  text-align:center;
+  cursor:pointer;
+}
+
+.identity-card:hover{
+  border-color:var(--pembe);
+  transform:translateY(-3px);
+}
+
+.identity-card span{
+  display:block;
+  font-size:48px;
+}
+
+.identity-card strong{
+  color:var(--lacivert);
+}
+
+#identityInfo{
+  min-height:58px;
+  padding:14px;
+  border:2px solid #dce8ef;
+  border-radius:13px;
+  background:#f9fcfe;
+}
+
+.school-areas{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:14px;
+}
+
+.area{
+  min-height:150px;
+  padding:18px;
+  border-radius:18px;
+  background:#fff;
+  border:2px solid #dfebf1;
+  text-align:center;
+  cursor:pointer;
+}
+
+.area:hover{
+  border-color:var(--turkuaz);
+  background:#f1fcfb;
+}
+
+.area span{
+  display:block;
+  font-size:48px;
+}
+
+.order-box{
+  min-height:60px;
+  margin:15px 0;
+  padding:13px;
+  border:3px dashed #b9d5df;
+  border-radius:15px;
+  background:white;
+}
+
+.order-item{
+  display:inline-block;
+  margin:4px;
+  padding:8px 11px;
+  border-radius:9px;
+  background:#e7f5fa;
+  color:var(--lacivert);
+}
+
+table{
+  width:100%;
+  margin:18px 0;
+  border-collapse:collapse;
+}
+
+th,td{
+  padding:12px;
+  border:1px solid #d8e3e9;
+  text-align:left;
+  vertical-align:top;
+}
+
+th{
+  color:white;
+  background:var(--lacivert);
+}
+
+tr:nth-child(even){background:#f6fafc}
+
+footer{
+  padding:25px;
+  color:#667986;
+  text-align:center;
+}
+
+@media(max-width:700px){
+  .hero{grid-template-columns:1fr}
+  .hero-art{font-size:60px}
+  .page{padding:22px 17px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="bubble b1"></div>
+  <div class="bubble b2"></div>
+  <div class="bubble b3"></div>
+  <h1>Ben ve Okulum</h1>
+  <p>1. Ünite • Kendimi tanıyorum, okulumu keşfediyorum!</p>
+</header>
+
+<div class="container">
+<div class="book">
+
+<div class="topbar">
+  <strong>🌟 Öğrenme Yolculuğum</strong>
+  <div class="progress"><span id="progressBar"></span></div>
+  <div class="score">⭐ Puan: <span id="score">0</span></div>
+</div>
+
+<nav class="tabs">
+  <button class="tab active" onclick="openTab('baslangic',this)">🏠 Başlangıç</button>
+  <button class="tab" onclick="openTab('ben',this)">😊 Ben Kimim?</button>
+  <button class="tab" onclick="openTab('okulum',this)">🏫 Okulum</button>
+  <button class="tab" onclick="openTab('kurallar',this)">📚 Kurallar</button>
+  <button class="tab" onclick="openTab('haklar',this)">🤝 Haklarım</button>
+  <button class="tab" onclick="openTab('iletisim',this)">💬 İletişim</button>
+  <button class="tab" onclick="openTab('test',this)">🏆 Test</button>
+</nav>
+
+<!-- BAŞLANGIÇ -->
+<section class="page active" id="baslangic">
+  <div class="hero">
+    <div>
+      <h2>Merhaba! 👋</h2>
+      <p>
+        Bu ünitede kendimizi tanıyacak, ilgi ve yeteneklerimizi keşfedecek,
+        okulumuzdaki bölümleri öğrenecek ve okul kurallarının neden önemli
+        olduğunu eğlenceli etkinliklerle çalışacağız.
+      </p>
+      <button onclick="openTab('ben',document.querySelectorAll('.tab')[1])">
+        Keşfe Başla 🚀
+      </button>
+    </div>
+
+    <div class="hero-art">🧒📚<br>🏫🌟</div>
+  </div>
+
+  <h3>Bu ünitede neler öğreneceğim?</h3>
+
+  <div class="grid">
+    <div class="card">
+      <span class="icon">😊</span>
+      <h3>Kendimi tanıyorum</h3>
+      <p>İlgi alanlarımı, yeteneklerimi ve kişisel özelliklerimi fark edeceğim.</p>
+    </div>
+
+    <div class="card">
+      <span class="icon">🏫</span>
+      <h3>Okulumu tanıyorum</h3>
+      <p>Okulumdaki bölümleri ve bu bölümlerin görevlerini öğreneceğim.</p>
+    </div>
+
+    <div class="card">
+      <span class="icon">📏</span>
+      <h3>Kurallara uyuyorum</h3>
+      <p>Okul kurallarının güvenli ve düzenli bir ortam oluşturduğunu anlayacağım.</p>
+    </div>
+
+    <div class="card">
+      <span class="icon">🤝</span>
+      <h3>Birlikte yaşıyorum</h3>
+      <p>Arkadaşlarımla saygılı iletişim kurmayı ve yardımlaşmayı öğreneceğim.</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>Oyun kuralı:</strong> Etkinlikleri tamamladıkça yıldız kazanırsın.
+    Yanlış cevap verirsen üzülme; ipucunu oku ve tekrar dene!
+  </div>
+</section>
+
+<!-- BEN -->
+<section class="page" id="ben">
+  <h2>😊 Ben Kimim?</h2>
+
+  <p>
+    Her insanın kendine özgü özellikleri vardır. Boyumuz, saç rengimiz,
+    sevdiğimiz oyunlar, ilgi alanlarımız ve yeteneklerimiz birbirinden farklı
+    olabilir. Farklılıklarımız bizi özel ve değerli yapar.
+  </p>
+
+  <div class="safe">
+    Kendimizi başkalarıyla yarıştırmak yerine kendi güçlü yönlerimizi
+    geliştirmeye çalışmalıyız. Arkadaşlarımızın farklı özelliklerine de
+    saygı göstermeliyiz.
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <span class="icon">🎨</span>
+      <h3>İlgi alanı</h3>
+      <p>Keyif aldığımız ve merak ettiğimiz alanlardır. Resim yapmak, müzik dinlemek veya kitap okumak birer ilgi alanı olabilir.</p>
+    </div>
+
+    <div class="card">
+      <span class="icon">⚽</span>
+      <h3>Yetenek</h3>
+      <p>Bir işi yapabilme becerimizdir. Spor yapmak, güzel şarkı söylemek veya problem çözmek yetenek olabilir.</p>
+    </div>
+
+    <div class="card">
+      <span class="icon">💪</span>
+      <h3>Güçlü yön</h3>
+      <p>Başarılı olduğumuz veya iyi yaptığımız özelliklerimizdir.</p>
+    </div>
+
+    <div class="card">
+      <span class="icon">🌱</span>
+      <h3>Geliştirebilirim</h3>
+      <p>Henüz çok iyi olmadığımız alanlarda çalışarak kendimizi geliştirebiliriz.</p>
+    </div>
+  </div>
+
+  <h3>İnteraktif Etkinlik: Özellik Kartlarım</h3>
+  <p>Aşağıdaki kartlara tıkla ve kendinle ilgili olumlu özellikleri keşfet.</p>
+
+  <div class="identity">
+    <div class="identity-card" onclick="showIdentity('Meraklı','Yeni şeyler öğrenmek ve soru sormak öğrenmene yardımcı olur.')">
+      <span>🔎</span><strong>Meraklı</strong>
+    </div>
+
+    <div class="identity-card" onclick="showIdentity('Yardımsever','Arkadaşlarına ve çevrendeki insanlara uygun şekilde yardım edebilirsin.')">
+      <span>🤝</span><strong>Yardımsever</strong>
+    </div>
+
+    <div class="identity-card" onclick="showIdentity('Dikkatli','Çevrendeki ayrıntıları fark eder ve görevlerini özenle yaparsın.')">
+      <span>👀</span><strong>Dikkatli</strong>
+    </div>
+
+    <div class="identity-card" onclick="showIdentity('Sabırlı','Bir işi hemen başaramadığında denemeye devam edebilirsin.')">
+      <span>🧘</span><strong>Sabırlı</strong>
+    </div>
+
+    <div class="identity-card" onclick="showIdentity('Yaratıcı','Yeni fikirler düşünebilir ve farklı çözümler bulabilirsin.')">
+      <span>💡</span><strong>Yaratıcı</strong>
+    </div>
+  </div>
+
+  <div id="identityInfo">
+    Bir özellik kartına tıkla. Bilgi kartı burada açılacak.
+  </div>
+
+  <div class="game">
+    <div class="game-title">🌟 Güçlü Yönümü Seçiyorum</div>
+    <p>Bir arkadaşın matematik sorusunu çözemiyor. Ne yaparsın?</p>
+
+    <button class="choice" onclick="simpleAnswer(this,true,'Harika! Yardımsever ve paylaşımcı bir davranış seçtin.')">
+      Ona sakin şekilde yardım ederim.
+    </button>
+
+    <button class="choice" onclick="simpleAnswer(this,false,'Arkadaşını küçümsemek yerine ona destek olmalısın.')">
+      Onunla dalga geçerim.
+    </button>
+
+    <div class="feedback"></div>
+  </div>
+</section>
+
+<!-- OKULUM -->
+<section class="page" id="okulum">
+  <h2>🏫 Okulumu Tanıyorum</h2>
+
+  <p>
+    Okul, bilgi ve becerilerimizi geliştirdiğimiz, arkadaşlarımızla birlikte
+    öğrendiğimiz önemli bir yerdir. Okulda farklı bölümler bulunur ve her
+    bölümün ayrı bir görevi vardır.
+  </p>
+
+  <div class="school-areas">
+    <div class="area" onclick="showArea('Sınıf','Derslerimizi öğretmenimizle birlikte işler, öğrenme etkinlikleri yaparız.')">
+      <span>🧑‍🏫</span><strong>Sınıf</strong>
+    </div>
+
+    <div class="area" onclick="showArea('Kütüphane','Kitap okur, araştırma yapar ve kitapları dikkatli kullanırız.')">
+      <span>📚</span><strong>Kütüphane</strong>
+    </div>
+
+    <div class="area" onclick="showArea('Bahçe','Teneffüslerde oyun oynar, dinlenir ve arkadaşlarımızla vakit geçiririz.')">
+      <span>🌳</span><strong>Bahçe</strong>
+    </div>
+
+    <div class="area" onclick="showArea('Spor Salonu','Beden eğitimi etkinlikleri ve çeşitli hareket çalışmaları yaparız.')">
+      <span>🏀</span><strong>Spor Salonu</strong>
+    </div>
+
+    <div class="area" onclick="showArea('Müdür Odası','Okulun yönetimiyle ilgili çalışmaların yürütüldüğü bölümdür.')">
+      <span>🗂️</span><strong>Müdür Odası</strong>
+    </div>
+
+    <div class="area" onclick="showArea('Rehberlik Servisi','Kendimizi daha iyi tanımak ve sorunlarımıza çözüm bulmak için destek alabiliriz.')">
+      <span>💬</span><strong>Rehberlik</strong>
+    </div>
+  </div>
+
+  <div id="areaInfo" class="safe">
+    Bir okul bölümüne tıkla. Görevini burada öğreneceksin.
+  </div>
+
+  <div class="game">
+    <div class="game-title">🧩 Okul Bölümü Eşleştirme</div>
+    <p>Kitap okumak için hangi bölüme gideriz?</p>
+
+    <button class="choice" onclick="simpleAnswer(this,true,'Doğru! Kitaplık ve kütüphane kitap okumak ve araştırma yapmak içindir.')">
+      📚 Kütüphane
+    </button>
+
+    <button class="choice" onclick="simpleAnswer(this,false,'Bahçede oyun oynarız; kitap okumak için kütüphaneyi kullanırız.')">
+      🌳 Bahçe
+    </button>
+
+    <div class="feedback"></div>
+  </div>
+</section>
+
+<!-- KURALLAR -->
+<section class="page" id="kurallar">
+  <h2>📚 Okul Kurallarım</h2>
+
+  <p>
+    Kurallar, birlikte yaşayan insanların güvenli, düzenli ve huzurlu bir
+    ortamda bulunmasına yardımcı olur. Okul kurallarına uyduğumuzda hem
+    kendimizi hem de arkadaşlarımızı koruruz.
+  </p>
+
+  <h3>Okulda Uymamız Gereken Kurallar</h3>
+
+  <ol class="steps">
+    <li>Ders sırasında öğretmenimizi ve arkadaşlarımızı dinleriz.</li>
+    <li>Koridorlarda koşmadan ve itmeden yürürüz.</li>
+    <li>Okul eşyalarını özenli kullanırız.</li>
+    <li>Söz almak için parmak kaldırırız.</li>
+    <li>Çöplerimizi çöp kutusuna atarız.</li>
+    <li>Arkadaşlarımıza saygılı ve nazik davranırız.</li>
+  </ol>
+
+  <div class="game">
+    <div class="game-title">✅ Doğru Davranışı Bul</div>
+    <p>Teneffüste koridorda nasıl davranmalıyız?</p>
+
+    <button class="choice" onclick="simpleAnswer(this,true,'Doğru! Koridorda yürümek herkesin güvenliği için önemlidir.')">
+      Sakin şekilde yürürüm.
+    </button>
+
+    <button class="choice" onclick="simpleAnswer(this,false,'Koridorda koşmak ve arkadaşlarını itmek kazalara neden olabilir.')">
+      Koşup arkadaşlarımı iterim.
+    </button>
+
+    <div class="feedback"></div>
+  </div>
+
+  <div class="game">
+    <div class="game-title">🗑️ Temiz Okul Oyunu</div>
+    <p>Yerde bir kâğıt gördün. Ne yaparsın?</p>
+
+    <button class="choice" onclick="simpleAnswer(this,true,'Harika! Temiz bir okul için çöpleri çöp kutusuna atarız.')">
+      Kâğıdı çöp kutusuna atarım.
+    </button>
+
+    <button class="choice" onclick="simpleAnswer(this,false,'Çöpleri yerde bırakmak okulun kirlenmesine neden olur.')">
+      Üzerinden geçip giderim.
+    </button>
+
+    <div class="feedback"></div>
+  </div>
+</section>
+
+<!-- HAKLAR -->
+<section class="page" id="haklar">
+  <h2>🤝 Haklarım ve Sorumluluklarım</h2>
+
+  <p>
+    Hak, sahip olduğumuz ve kullanabileceğimiz imkânlardır. Sorumluluk ise
+    yapmamız gereken görevlerdir. Haklarımızı kullanırken başkalarının
+    haklarına da saygı göstermeliyiz.
+  </p>
+
+  <table>
+    <tr>
+      <th>Haklarım</th>
+      <th>Sorumluluklarım</th>
+    </tr>
+    <tr>
+      <td>Eğitim alma hakkım vardır.</td>
+      <td>Derslerimi takip eder ve okul araçlarını dikkatli kullanırım.</td>
+    </tr>
+    <tr>
+      <td>Düşüncemi saygılı biçimde söyleyebilirim.</td>
+      <td>Başkalarının düşüncelerini de dinlerim.</td>
+    </tr>
+    <tr>
+      <td>Güvenli bir ortamda bulunma hakkım vardır.</td>
+      <td>Kurallara uyar, arkadaşlarımı tehlikeye atmam.</td>
+    </tr>
+    <tr>
+      <td>Dinlenme ve oyun oynama hakkım vardır.</td>
+      <td>Oyun sırasında arkadaşlarıma zarar vermem.</td>
+    </tr>
+  </table>
+
+  <div class="safe">
+    Her çocuk değerlidir. Kimse dış görünüşü, konuşma biçimi, ailesi veya
+    yetenekleri nedeniyle küçümsenmemelidir.
+  </div>
+
+  <div class="game">
+    <div class="game-title">⚖️ Hak mı, Sorumluluk mu?</div>
+    <p id="rightsQuestion"></p>
+    <div id="rightsOptions"></div>
+    <div id="rightsFeedback" class="feedback"></div>
+    <button onclick="nextRights()">Yeni Kart 🔄</button>
+  </div>
+</section>
+
+<!-- İLETİŞİM -->
+<section class="page" id="iletisim">
+  <h2>💬 İyi İletişim Kuruyorum</h2>
+
+  <p>
+    İletişim, duygu ve düşüncelerimizi başkalarıyla paylaşmamızdır. İyi
+    iletişim kurmak için karşımızdaki kişiyi dinlemeli, sözünü kesmemeli ve
+    kırıcı olmayan kelimeler kullanmalıyız.
+  </p>
+
+  <div class="grid">
+    <div class="card">
+      <span class="icon">👂</span>
+      <h3>Etkin dinlerim</h3>
+      <p>Konuşan kişiye bakar, sözünü kesmeden dinlerim.</p>
+    </div>
+
+    <div class="card">
+      <span class="icon">🗣️</span>
+      <h3>Ben dili kullanırım</h3>
+      <p>“Sen hep böylesin!” demek yerine “Bu davranış beni üzdü.” diyebilirim.</p>
+    </div>
+
+    <div class="card">
+      <span class="icon">🙂</span>
+      <h3>Nazik konuşurum</h3>
+      <p>Lütfen, teşekkür ederim ve özür dilerim gibi ifadeleri kullanırım.</p>
+    </div>
+
+    <div class="card">
+      <span class="icon">🕊️</span>
+      <h3>Sorunları konuşarak çözerim</h3>
+      <p>Bağırmak veya kavga etmek yerine yardım isteyerek çözüm ararım.</p>
+    </div>
+  </div>
+
+  <div class="game">
+    <div class="game-title">🎭 Sen Olsaydın Ne Yapardın?</div>
+    <p>
+      Bir arkadaşın senin kalemini izinsiz aldı. Ona nasıl söylersin?
+    </p>
+
+    <button class="choice" onclick="simpleAnswer(this,true,'Harika! Duygunu sakin ve saygılı şekilde ifade ettin.')">
+      “Kalemimi izinsiz aldığında üzülüyorum. Lütfen önce benden izin iste.”
+    </button>
+
+    <button class="choice" onclick="simpleAnswer(this,false,'Kırıcı sözler sorunu çözmez. Duygunu sakin ve saygılı anlatmalısın.')">
+      “Sen kötü birisin, kalemimi hemen ver!”
+    </button>
+
+    <div class="feedback"></div>
+  </div>
+
+  <div class="note">
+    Bir sorun yaşadığında güvendiğin bir yetişkinden yardım istemek doğru
+    ve güvenli bir davranıştır.
+  </div>
+</section>
+
+<!-- TEST -->
+<section class="page" id="test">
+  <h2>🏆 Ünite Sonu Testi</h2>
+  <p>Soruları cevapla ve “Ben ve Okulum” uzmanı olduğunu göster!</p>
+
+  <div class="game question">
+    <p><strong>1. Aşağıdakilerden hangisi olumlu bir özelliktir?</strong></p>
+    <button class="choice quiz" onclick="quiz(this,true)">Yardımsever olmak</button>
+    <button class="choice quiz" onclick="quiz(this,false)">Arkadaşları küçümsemek</button>
+  </div>
+
+  <div class="game question">
+    <p><strong>2. Kitap okumak ve araştırma yapmak için hangi bölümü kullanırız?</strong></p>
+    <button class="choice quiz" onclick="quiz(this,true)">Kütüphane</button>
+    <button class="choice quiz" onclick="quiz(this,false)">Spor salonu</button>
+  </div>
+
+  <div class="game question">
+    <p><strong>3. Koridorda nasıl yürümeliyiz?</strong></p>
+    <button class="choice quiz" onclick="quiz(this,true)">Sakin ve dikkatli</button>
+    <button class="choice quiz" onclick="quiz(this,false)">Koşarak ve iterek</button>
+  </div>
+
+  <div class="game question">
+    <p><strong>4. İyi iletişim kurmak için ne yapmalıyız?</strong></p>
+    <button class="choice quiz" onclick="quiz(this,true)">Karşımızdakini dinlemeliyiz.</button>
+    <button class="choice quiz" onclick="quiz(this,false)">Sözünü sürekli kesmeliyiz.</button>
+  </div>
+
+  <div class="game question">
+    <p><strong>5. Hangisi bir öğrencinin sorumluluğudur?</strong></p>
+    <button class="choice quiz" onclick="quiz(this,true)">Okul eşyalarını özenli kullanmak</button>
+    <button class="choice quiz" onclick="quiz(this,false)">Çöpleri yere atmak</button>
+  </div>
+
+  <p class="score">
+    Test puanı: <span id="testScore">0</span> / 5
+  </p>
+
+  <div id="testFeedback" class="feedback"></div>
+</section>
+
+</div>
+</div>
+
+<footer>
+  Ben ve Okulum • Kendimi tanır, okulumu sever ve sorumluluklarımı yerine getiririm. 🌟
+</footer>
+
+<script>
+let points=0;
+
+function openTab(id,button){
+  document.querySelectorAll(".page").forEach(page=>{
+    page.classList.remove("active");
+  });
+
+  document.querySelectorAll(".tab").forEach(tab=>{
+    tab.classList.remove("active");
+  });
+
+  document.getElementById(id).classList.add("active");
+  button.classList.add("active");
+
+  const tabs=[...document.querySelectorAll(".tab")];
+  const index=tabs.indexOf(button)+1;
+
+  document.getElementById("progressBar").style.width=
+    (index/tabs.length*100)+"%";
+}
+
+function addPoint(amount=1){
+  points+=amount;
+  document.getElementById("score").innerText=points;
+}
+
+function showIdentity(title,text){
+  document.getElementById("identityInfo").innerHTML=
+    "<strong>"+title+":</strong> "+text;
+  addPoint(1);
+}
+
+function showArea(title,text){
+  document.getElementById("areaInfo").innerHTML=
+    "<strong>"+title+":</strong> "+text;
+  addPoint(1);
+}
+
+function simpleAnswer(button,correct,text){
+  const game=button.closest(".game");
+  const feedback=game.querySelector(".feedback");
+
+  if(button.dataset.done)return;
+  button.dataset.done="1";
+
+  if(correct){
+    button.classList.add("correct");
+    feedback.className="feedback good";
+    feedback.innerHTML="🌟 "+text;
+    addPoint(2);
+  }else{
+    button.classList.add("wrong");
+    feedback.className="feedback bad";
+    feedback.innerHTML="💡 "+text;
+  }
+}
+
+/* Haklar etkinliği */
+const rightsCards=[
+  {
+    q:"Okula gidip eğitim almak",
+    options:["Hak","Sorumluluk"],
+    correct:0
+  },
+  {
+    q:"Dersleri takip etmek",
+    options:["Hak","Sorumluluk"],
+    correct:1
+  },
+  {
+    q:"Güvenli bir ortamda bulunmak",
+    options:["Hak","Sorumluluk"],
+    correct:0
+  },
+  {
+    q:"Okul eşyalarını dikkatli kullanmak",
+    options:["Hak","Sorumluluk"],
+    correct:1
+  }
+];
+
+let rightsIndex=0;
+
+function showRights(){
+  const item=rightsCards[rightsIndex];
+
+  document.getElementById("rightsQuestion").innerHTML=
+    "<strong>“"+item.q+"” bir hak mı, sorumluluk mu?</strong>";
+
+  const area=document.getElementById("rightsOptions");
+  area.innerHTML="";
+
+  item.options.forEach((option,index)=>{
+    const button=document.createElement("button");
+    button.className="choice";
+    button.innerText=option;
+
+    button.onclick=()=>{
+      const feedback=document.getElementById("rightsFeedback");
+
+      if(index===item.correct){
+        button.classList.add("correct");
+        feedback.className="feedback good";
+        feedback.innerHTML="Doğru! Çok güzel düşünüyorsun. ⭐";
+        addPoint(2);
+      }else{
+        button.classList.add("wrong");
+        feedback.className="feedback bad";
+        feedback.innerHTML="İpucu: Haklar sahip olduğumuz imkânlardır; sorumluluklar ise yapmamız gereken görevlerdir.";
+      }
+    };
+
+    area.appendChild(button);
+  });
+
+  document.getElementById("rightsFeedback").className="feedback";
+}
+
+function nextRights(){
+  rightsIndex=(rightsIndex+1)%rightsCards.length;
+  showRights();
+}
+
+showRights();
+
+/* Test */
+let testScore=0;
+
+function quiz(button,correct){
+  const game=button.closest(".question");
+
+  if(game.dataset.done)return;
+  game.dataset.done="1";
+
+  if(correct){
+    button.classList.add("correct");
+    testScore++;
+
+    document.getElementById("testScore").innerText=testScore;
+    addPoint(1);
+  }else{
+    button.classList.add("wrong");
+
+    [...game.querySelectorAll(".quiz")].forEach(button=>{
+      if(button.getAttribute("onclick").includes("true")){
+        button.classList.add("correct");
+      }
+    });
+  }
+
+  const answered=
+    document.querySelectorAll("#test .question[data-done]").length;
+
+  if(answered===5){
+    const feedback=document.getElementById("testFeedback");
+
+    feedback.className="feedback "+(testScore>=4?"good":"bad");
+
+    if(testScore===5){
+      feedback.innerHTML="🏆 Muhteşem! 1. üniteyi başarıyla tamamladın!";
+    }else if(testScore>=3){
+      feedback.innerHTML="🌟 Çok güzel! Birkaç konuyu tekrar edersen daha da başarılı olabilirsin.";
+    }else{
+      feedback.innerHTML="💪 Konu sekmelerini tekrar inceleyip yeniden deneyebilirsin.";
+    }
+  }
+}
+</script>
+
+</body>
+</html>

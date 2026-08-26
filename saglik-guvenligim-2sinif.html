@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sağlığım ve Güvenliğim</title>
+
+<style>
+:root{
+  --lacivert:#214663;
+  --mavi:#3994d0;
+  --acik-mavi:#eaf7ff;
+  --turkuaz:#45b9ae;
+  --yesil:#65b878;
+  --sari:#ffd45f;
+  --turuncu:#f4a261;
+  --kirmizi:#df6b64;
+  --mor:#8270bd;
+  --arka:#f2f7fa;
+  --metin:#293947;
+  --beyaz:#fff;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:var(--arka);
+  color:var(--metin);
+  font-family:"Trebuchet MS",Arial,sans-serif;
+  line-height:1.6;
+}
+
+header{
+  position:relative;
+  overflow:hidden;
+  color:white;
+  text-align:center;
+  padding:45px 18px 85px;
+  background:linear-gradient(135deg,#16415f,#3994d0,#45b9ae);
+}
+
+header h1{
+  position:relative;
+  z-index:1;
+  margin:0;
+  font-size:clamp(32px,6vw,58px);
+}
+
+header p{
+  position:relative;
+  z-index:1;
+  margin:8px 0;
+  font-size:19px;
+}
+
+.bubble{
+  position:absolute;
+  border-radius:50%;
+  background:white;
+  opacity:.16;
+}
+
+.b1{width:190px;height:190px;left:-55px;top:-35px}
+.b2{width:130px;height:130px;right:10%;top:20px}
+.b3{width:230px;height:230px;right:-80px;bottom:-120px}
+
+.container{
+  max-width:1150px;
+  margin:-43px auto 50px;
+  padding:0 15px;
+}
+
+.book{
+  background:white;
+  border-radius:27px;
+  overflow:hidden;
+  box-shadow:0 13px 35px rgba(33,70,99,.14);
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  flex-wrap:wrap;
+  padding:15px 22px;
+  border-bottom:1px solid #dfebf1;
+}
+
+.progress{
+  height:13px;
+  flex:1;
+  min-width:180px;
+  overflow:hidden;
+  border-radius:20px;
+  background:#e8f0f4;
+}
+
+.progress span{
+  display:block;
+  height:100%;
+  width:12%;
+  border-radius:20px;
+  background:linear-gradient(90deg,var(--turkuaz),var(--yesil));
+  transition:.4s;
+}
+
+.score{
+  padding:7px 15px;
+  border-radius:20px;
+  background:var(--sari);
+  color:#654f00;
+  font-weight:bold;
+}
+
+.tabs{
+  display:flex;
+  gap:7px;
+  padding:13px;
+  overflow-x:auto;
+  background:#f8fbfd;
+  border-bottom:1px solid #e0ebf1;
+}
+
+.tab{
+  flex:0 0 auto;
+  border:0;
+  border-radius:14px;
+  padding:11px 15px;
+  cursor:pointer;
+  color:var(--lacivert);
+  background:#e4f0f6;
+  font:inherit;
+  font-weight:bold;
+}
+
+.tab.active{
+  color:white;
+  background:var(--mavi);
+  box-shadow:0 4px 12px #3994d055;
+}
+
+.page{
+  display:none;
+  padding:31px;
+  animation:appear .25s ease;
+}
+
+.page.active{display:block}
+
+@keyframes appear{
+  from{opacity:0;transform:translateY(6px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+h2{
+  margin:0 0 13px;
+  color:var(--lacivert);
+  font-size:32px;
+}
+
+h3{
+  color:var(--mavi);
+  font-size:23px;
+  margin-top:25px;
+}
+
+.hero{
+  display:grid;
+  grid-template-columns:1.3fr .7fr;
+  gap:22px;
+  align-items:center;
+  padding:26px;
+  border-radius:23px;
+  background:linear-gradient(135deg,#fff9dc,#e9f8ff);
+}
+
+.hero h2{font-size:40px}
+
+.hero-art{
+  text-align:center;
+  font-size:78px;
+  line-height:1.2;
+  filter:drop-shadow(0 7px 4px #21466333);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:16px;
+}
+
+.card{
+  padding:20px;
+  border:2px solid #e1edf2;
+  border-radius:19px;
+  background:#fbfdfe;
+  transition:.2s;
+}
+
+.card:hover{
+  transform:translateY(-4px);
+  border-color:var(--turkuaz);
+}
+
+.icon{
+  display:block;
+  font-size:44px;
+}
+
+.note,.safe,.warning{
+  margin:20px 0;
+  padding:15px 19px;
+  border-radius:13px;
+}
+
+.note{
+  border-left:7px solid var(--sari);
+  background:#fff7d5;
+}
+
+.safe{
+  border-left:7px solid var(--yesil);
+  background:#e9f8ed;
+}
+
+.warning{
+  border-left:7px solid var(--kirmizi);
+  background:#fff0ee;
+}
+
+.steps{
+  padding:0;
+  list-style:none;
+  counter-reset:step;
+}
+
+.steps li{
+  position:relative;
+  margin:10px 0;
+  padding:13px 15px 13px 57px;
+  border-radius:12px;
+  background:#f6fafc;
+  counter-increment:step;
+}
+
+.steps li::before{
+  position:absolute;
+  left:14px;
+  top:10px;
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  background:var(--mavi);
+  color:white;
+  content:counter(step);
+  line-height:30px;
+  text-align:center;
+  font-weight:bold;
+}
+
+.game{
+  margin:25px 0;
+  padding:24px;
+  border:2px dashed #9bceda;
+  border-radius:22px;
+  background:linear-gradient(135deg,#effbfa,#f2f7ff);
+}
+
+.game-title{
+  color:var(--lacivert);
+  font-size:24px;
+  font-weight:bold;
+}
+
+button{
+  margin:5px 3px;
+  padding:11px 16px;
+  border:0;
+  border-radius:11px;
+  cursor:pointer;
+  background:var(--mavi);
+  color:white;
+  font:inherit;
+  font-weight:bold;
+  transition:.2s;
+}
+
+button:hover{
+  transform:translateY(-2px);
+  filter:brightness(1.08);
+}
+
+.choice{
+  border:2px solid #d8e6ed;
+  background:white;
+  color:var(--lacivert);
+}
+
+.correct{
+  border-color:var(--yesil)!important;
+  background:var(--yesil)!important;
+  color:white!important;
+}
+
+.wrong{
+  border-color:var(--kirmizi)!important;
+  background:var(--kirmizi)!important;
+  color:white!important;
+}
+
+.feedback{
+  display:none;
+  margin-top:12px;
+  padding:13px;
+  border-radius:11px;
+  font-weight:bold;
+}
+
+.good{
+  display:block;
+  background:#e5f7ea;
+  color:#287044;
+}
+
+.bad{
+  display:block;
+  background:#ffeded;
+  color:#a43b36;
+}
+
+.order-box{
+  min-height:58px;
+  margin:15px 0;
+  padding:13px;
+  border:3px dashed #b9d5df;
+  border-radius:15px;
+  background:white;
+}
+
+.order-item{
+  display:inline-block;
+  margin:4px;
+  padding:8px 11px;
+  border-radius:9px;
+  background:#e7f5fa;
+  color:var(--lacivert);
+}
+
+.weather-card{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  padding:17px;
+  border-radius:17px;
+  background:white;
+  border:2px solid #deebf1;
+}
+
+.weather-icon{font-size:56px}
+
+.basket{
+  min-height:70px;
+  padding:14px;
+  border:3px dashed #b9d5df;
+  border-radius:16px;
+  background:white;
+  font-size:25px;
+}
+
+.danger-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:12px;
+}
+
+.danger{
+  padding:18px;
+  border-radius:15px;
+  text-align:center;
+  cursor:pointer;
+  border:2px solid #e0e9ee;
+  background:#fff;
+  font-size:18px;
+  font-weight:bold;
+}
+
+.danger:hover{border-color:var(--kirmizi)}
+
+table{
+  width:100%;
+  margin:18px 0;
+  border-collapse:collapse;
+}
+
+th,td{
+  padding:12px;
+  border:1px solid #d8e3e9;
+  text-align:left;
+  vertical-align:top;
+}
+
+th{
+  color:white;
+  background:var(--lacivert);
+}
+
+tr:nth-child(even){background:#f6fafc}
+
+footer{
+  padding:25px;
+  text-align:center;
+  color:#667986;
+}
+
+@media(max-width:700px){
+  .hero{grid-template-columns:1fr}
+  .hero-art{font-size:60px}
+  .page{padding:22px 17px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="bubble b1"></div>
+  <div class="bubble b2"></div>
+  <div class="bubble b3"></div>
+  <h1>Sağlığım ve Güvenliğim</h1>
+  <p>2. Ünite • Öğren, oyna, sağlıklı ve güvenli yaşa!</p>
+</header>
+
+<div class="container">
+<div class="book">
+
+<div class="topbar">
+  <strong>🌟 Öğrenme Yolculuğum</strong>
+  <div class="progress"><span id="progressBar"></span></div>
+  <div class="score">⭐ Puan: <span id="score">0</span></div>
+</div>
+
+<nav class="tabs">
+  <button class="tab active" onclick="openTab('baslangic',this)">🏠 Başlangıç</button>
+  <button class="tab" onclick="openTab('bakim',this)">🧼 Kişisel Bakım</button>
+  <button class="tab" onclick="openTab('beslenme',this)">🥗 Beslenme</button>
+  <button class="tab" onclick="openTab('giyim',this)">🌦️ Giyim</button>
+  <button class="tab" onclick="openTab('yolculuk',this)">🚦 Yolculuk</button>
+  <button class="tab" onclick="openTab('guvenlik',this)">🏠 Güvenlik</button>
+  <button class="tab" onclick="openTab('test',this)">🏆 Test</button>
+</nav>
+
+<!-- BAŞLANGIÇ -->
+<section class="page active" id="baslangic">
+  <div class="hero">
+    <div>
+      <h2>Merhaba sağlık kahramanı! 🦸</h2>
+      <p>
+        Bu ünitede temizliğimizi nasıl koruyacağımızı, sağlıklı beslenmeyi,
+        hava durumuna uygun giyinmeyi ve güvenli davranmayı oyunlarla
+        öğreneceğiz.
+      </p>
+      <button onclick="openTab('bakim',document.querySelectorAll('.tab')[1])">
+        Keşfe Başla 🚀
+      </button>
+    </div>
+    <div class="hero-art">🧼🥗<br>🦷🛡️</div>
+  </div>
+
+  <h3>Bu ünitede neler öğreneceğim?</h3>
+
+  <div class="grid">
+    <div class="card"><span class="icon">🧼</span><h3>Temizlik</h3><p>Ellerimizi ve dişlerimizi doğru şekilde temizlemeyi öğreneceğim.</p></div>
+    <div class="card"><span class="icon">🥦</span><h3>Beslenme</h3><p>Sağlıklı yiyecekleri ve dengeli beslenmeyi keşfedeceğim.</p></div>
+    <div class="card"><span class="icon">🚦</span><h3>Yol güvenliği</h3><p>Yaya ve yolcu olarak uymam gereken kuralları öğreneceğim.</p></div>
+    <div class="card"><span class="icon">🛡️</span><h3>Acil durumlar</h3><p>Evde, okulda ve acil durumlarda güvenli davranacağım.</p></div>
+  </div>
+
+  <div class="note">
+    <strong>Oyun kuralı:</strong> Etkinlikleri tamamladıkça yıldız kazanırsın.
+    Yanlış cevap verirsen ipucunu okuyup tekrar deneyebilirsin.
+  </div>
+</section>
+
+<!-- BAKIM -->
+<section class="page" id="bakim">
+  <h2>🧼 Kişisel Bakım</h2>
+
+  <p>
+    Kişisel bakım, vücudumuzu temiz ve sağlıklı tutmak için yaptığımız
+    davranışlardır. Düzenli kişisel bakım, mikroplardan korunmamıza ve
+    kendimizi iyi hissetmemize yardımcı olur.
+  </p>
+
+  <div class="grid">
+    <div class="card"><span class="icon">👐</span><h3>El temizliği</h3><p>Yemekten önce ve sonra, tuvaletten sonra ve dışarıdan gelince ellerimizi yıkarız.</p></div>
+    <div class="card"><span class="icon">🦷</span><h3>Diş bakımı</h3><p>Dişlerimizi sabah ve gece fırçalar, fırçamızı başkalarıyla paylaşmayız.</p></div>
+    <div class="card"><span class="icon">🚿</span><h3>Vücut temizliği</h3><p>Düzenli banyo yapar, temiz kıyafetler giyeriz.</p></div>
+    <div class="card"><span class="icon">💅</span><h3>Tırnak bakımı</h3><p>Tırnaklarımızı temiz ve kısa tutarız.</p></div>
+  </div>
+
+  <h3>El Yıkama Basamakları</h3>
+  <ol class="steps">
+    <li>Ellerimi temiz suyla ıslatırım.</li>
+    <li>Sabun alırım.</li>
+    <li>Avuç içlerimi, el sırtlarımı ve parmak aralarımı ovalarım.</li>
+    <li>Ellerimi suyla durularım.</li>
+    <li>Temiz havluyla kurularım.</li>
+  </ol>
+
+  <div class="game">
+    <div class="game-title">🫧 El Yıkama Sırasını Oluştur</div>
+    <p>Basamaklara doğru sırayla tıkla.</p>
+    <div class="order-box" id="handOrder">Seçimlerin burada görünecek.</div>
+
+    <button class="choice hand" onclick="chooseHand(this,'Ellerimi ıslatırım.')">Ellerimi ıslatırım</button>
+    <button class="choice hand" onclick="chooseHand(this,'Sabun alırım.')">Sabun alırım</button>
+    <button class="choice hand" onclick="chooseHand(this,'Ellerimi ovalarım.')">Ellerimi ovalarım</button>
+    <button class="choice hand" onclick="chooseHand(this,'Ellerimi durularım.')">Ellerimi durularım</button>
+    <button class="choice hand" onclick="chooseHand(this,'Ellerimi kurularım.')">Ellerimi kurularım</button>
+    <br>
+    <button onclick="checkHand()">Sıramı Kontrol Et ✅</button>
+    <button onclick="resetHand()">Yeniden Başla</button>
+    <div id="handFeedback" class="feedback"></div>
+  </div>
+
+  <div class="game">
+    <div class="game-title">🦷 Diş Bakımı Doğru mu?</div>
+    <p>“Diş fırçamı kardeşimle paylaşabilirim.”</p>
+    <button class="choice" onclick="answer(this,false,'Diş fırçası kişiye özeldir; paylaşılmamalıdır.')">Doğru</button>
+    <button class="choice" onclick="answer(this,true,'Harika! Diş fırçası kişiye özeldir.')">Yanlış</button>
+    <div class="feedback"></div>
+  </div>
+</section>
+
+<!-- BESLENME -->
+<section class="page" id="beslenme">
+  <h2>🥗 Sağlıklı Beslenme</h2>
+
+  <p>
+    Vücudumuzun büyümek, hareket etmek, düşünmek ve hastalıklara karşı
+    korunmak için farklı besinlere ihtiyacı vardır. Dengeli beslenmek,
+    çeşitli besinlerden yeterli miktarda tüketmek demektir.
+  </p>
+
+  <table>
+    <tr><th>Besin grubu</th><th>Vücudumuza katkısı</th><th>Örnekler</th></tr>
+    <tr><td>Süt ürünleri</td><td>Kemik ve dişlerin gelişmesine yardımcı olur.</td><td>Süt, yoğurt, peynir</td></tr>
+    <tr><td>Et, yumurta ve baklagiller</td><td>Büyümemize ve güçlenmemize katkı sağlar.</td><td>Yumurta, balık, mercimek</td></tr>
+    <tr><td>Sebze ve meyveler</td><td>Vitamin ve mineral almamızı sağlar.</td><td>Elma, havuç, domates</td></tr>
+    <tr><td>Tahıllar</td><td>Enerji verir.</td><td>Ekmek, bulgur, pirinç</td></tr>
+  </table>
+
+  <div class="safe">
+    Her gün su içmeli, öğünlerimizi atlamamalı ve yiyecekleri
+    yiyebileceğimiz kadar tabağımıza almalıyız.
+  </div>
+
+  <div class="game">
+    <div class="game-title">🛒 Sağlıklı Sepeti Doldur</div>
+    <p>Sağlıklı besinleri seçerek sepete ekle.</p>
+    <div class="basket" id="foodBasket">Sepetin boş.</div>
+
+    <button class="choice" onclick="food(this,'🍎 Elma',true)">Elma</button>
+    <button class="choice" onclick="food(this,'🥛 Süt',true)">Süt</button>
+    <button class="choice" onclick="food(this,'🥦 Brokoli',true)">Brokoli</button>
+    <button class="choice" onclick="food(this,'💧 Su',true)">Su</button>
+    <button class="choice" onclick="food(this,'🍟 Cips',false)">Cips</button>
+    <button class="choice" onclick="food(this,'🥤 Gazlı içecek',false)">Gazlı içecek</button>
+
+    <div id="foodFeedback" class="feedback"></div>
+  </div>
+
+  <div class="game">
+    <div class="game-title">🍽️ Dengeli Tabak</div>
+    <p>Hangisi dengeli bir öğüne daha uygundur?</p>
+    <button class="choice" onclick="answer(this,true,'Doğru! Sebze, protein ve yoğurt dengeli bir öğün oluşturabilir.')">
+      Sebze yemeği + yoğurt + yumurta
+    </button>
+    <button class="choice" onclick="answer(this,false,'Tek bir yiyecek grubuyla beslenmek dengeli değildir.')">
+      Sadece şekerleme
+    </button>
+    <div class="feedback"></div>
+  </div>
+</section>
+
+<!-- GİYİM -->
+<section class="page" id="giyim">
+  <h2>🌦️ Mevsimine Uygun Giyinme</h2>
+
+  <p>
+    Kıyafet seçerken hava durumuna dikkat ederiz. Havanın sıcak mı, soğuk mu,
+    yağmurlu mu veya rüzgârlı mı olduğunu öğrenerek uygun kıyafetleri seçeriz.
+  </p>
+
+  <div class="grid">
+    <div class="weather-card"><div class="weather-icon">☀️</div><div><h3>Sıcak hava</h3><p>İnce kıyafet, şapka ve su kullanabiliriz.</p></div></div>
+    <div class="weather-card"><div class="weather-icon">🌧️</div><div><h3>Yağmurlu hava</h3><p>Yağmurluk ve su geçirmeyen ayakkabı giyebiliriz.</p></div></div>
+    <div class="weather-card"><div class="weather-icon">❄️</div><div><h3>Soğuk hava</h3><p>Mont, bere, atkı, eldiven ve bot kullanabiliriz.</p></div></div>
+    <div class="weather-card"><div class="weather-icon">🌬️</div><div><h3>Rüzgârlı hava</h3><p>Rüzgâr geçirmeyen bir ceket giyebiliriz.</p></div></div>
+  </div>
+
+  <div class="game">
+    <div class="game-title">👕 Hava Durumu Stilisti</div>
+    <p id="weatherQuestion"></p>
+    <div id="weatherOptions"></div>
+    <div id="weatherFeedback" class="feedback"></div>
+    <button onclick="newWeather()">Yeni hava durumu 🔄</button>
+  </div>
+</section>
+
+<!-- YOLCULUK -->
+<section class="page" id="yolculuk">
+  <h2>🚦 Güvenli Yolculuk</h2>
+
+  <p>
+    Yaya olarak kaldırımdan yürür, karşıya geçerken yaya geçidini kullanır
+    ve trafik ışıklarına uyarız. Araçta yolculuk yaparken emniyet kemerimizi
+    takarız.
+  </p>
+
+  <h3>Karşıya Geçerken</h3>
+  <ol class="steps">
+    <li>Kaldırımda dururum.</li>
+    <li>Soluma, sağıma ve tekrar soluma bakarım.</li>
+    <li>Araçların tamamen durduğundan emin olurum.</li>
+    <li>Yaya geçidinden ve dikkatli şekilde geçerim.</li>
+  </ol>
+
+  <div class="game">
+    <div class="game-title">🚥 Trafik Işığı Oyunu</div>
+    <p id="lightQuestion">Kırmızı ışık yandı. Ne yapmalısın?</p>
+    <button class="choice" onclick="answer(this,true,'Doğru! Kırmızı ışıkta dururuz.')">Dururum</button>
+    <button class="choice" onclick="answer(this,false,'Kırmızı ışıkta geçmek tehlikelidir.')">Koşarak geçerim</button>
+    <div class="feedback"></div>
+  </div>
+
+  <div class="game">
+    <div class="game-title">🚗 Araçta Güvenlik</div>
+    <p>“Kısa mesafede emniyet kemeri takmaya gerek yoktur.”</p>
+    <button class="choice" onclick="answer(this,false,'Kısa mesafelerde de emniyet kemeri takılır.')">Doğru</button>
+    <button class="choice" onclick="answer(this,true,'Harika! Her yolculukta emniyet kemeri takılır.')">Yanlış</button>
+    <div class="feedback"></div>
+  </div>
+</section>
+
+<!-- GÜVENLİK -->
+<section class="page" id="guvenlik">
+  <h2>🏠 Evde, Okulda ve Acil Durumlarda Güvenlik</h2>
+
+  <p>
+    Evde ve okulda bazı araçlar tehlikeli olabilir. Tehlikeli bir durum
+    gördüğümüzde sakin olur, hemen güvendiğimiz bir yetişkinden yardım isteriz.
+  </p>
+
+  <div class="danger-grid">
+    <div class="danger" onclick="danger(this,true)">🔌 Priz</div>
+    <div class="danger" onclick="danger(this,true)">🔥 Sıcak ocak</div>
+    <div class="danger" onclick="danger(this,true)">🔪 Kesici alet</div>
+    <div class="danger" onclick="danger(this,false)">📚 Kitap</div>
+    <div class="danger" onclick="danger(this,false)">🧸 Oyuncak</div>
+    <div class="danger" onclick="danger(this,true)">💊 İlaç</div>
+  </div>
+
+  <div id="dangerFeedback" class="feedback"></div>
+
+  <h3>Yangın Sırasında</h3>
+  <ul>
+    <li>Hemen bir yetişkine haber veririz.</li>
+    <li>Asansörü kullanmayız.</li>
+    <li>Duman varsa yere yakın ilerleriz.</li>
+    <li>Güvenli çıkış yolunu takip ederiz.</li>
+  </ul>
+
+  <h3>Deprem Sırasında</h3>
+  <ul>
+    <li>Pencere ve dolaplardan uzaklaşırız.</li>
+    <li>Çök-kapan-tutun hareketini yaparız.</li>
+    <li>Sarsıntı sırasında merdivenlere koşmayız.</li>
+    <li>Öğretmenimizin veya yetişkinlerin yönlendirmelerini dinleriz.</li>
+  </ul>
+
+  <div class="warning">
+    Acil durumlarda 112’den yardım istenebilir. Telefonu yalnızca gerçekten
+    acil durumlarda ve bir yetişkinin yönlendirmesiyle kullanmalıyız.
+  </div>
+
+  <div class="game">
+    <div class="game-title">🛡️ Güvenli mi, Tehlikeli mi?</div>
+    <p>“Deprem sırasında pencerenin önünde beklerim.”</p>
+    <button class="choice" onclick="answer(this,false,'Pencerelerden uzaklaşmalıyız.')">Güvenli</button>
+    <button class="choice" onclick="answer(this,true,'Doğru! Pencerelerden uzaklaşıp çök-kapan-tutun yaparız.')">Tehlikeli</button>
+    <div class="feedback"></div>
+  </div>
+</section>
+
+<!-- TEST -->
+<section class="page" id="test">
+  <h2>🏆 Ünite Sonu Testi</h2>
+  <p>Soruları cevapla ve sağlık kahramanı puanını tamamla.</p>
+
+  <div class="game">
+    <p><strong>1. Ellerimizi ne zaman yıkamalıyız?</strong></p>
+    <button class="choice quiz" onclick="quiz(this,true)">Yemekten önce ve sonra</button>
+    <button class="choice quiz" onclick="quiz(this,false)">Sadece haftada bir</button>
+  </div>
+
+  <div class="game">
+    <p><strong>2. Hangisi sağlıklı bir besindir?</strong></p>
+    <button class="choice quiz" onclick="quiz(this,true)">Yoğurt</button>
+    <button class="choice quiz" onclick="quiz(this,false)">Gazlı içecek</button>
+  </div>
+
+  <div class="game">
+    <p><strong>3. Yağmurlu havada ne kullanabiliriz?</strong></p>
+    <button class="choice quiz" onclick="quiz(this,true)">Yağmurluk</button>
+    <button class="choice quiz" onclick="quiz(this,false)">Deniz gözlüğü</button>
+  </div>
+
+  <div class="game">
+    <p><strong>4. Araçta ne takmalıyız?</strong></p>
+    <button class="choice quiz" onclick="quiz(this,true)">Emniyet kemeri</button>
+    <button class="choice quiz" onclick="quiz(this,false)">Oyuncak çanta</button>
+  </div>
+
+  <div class="game">
+    <p><strong>5. Deprem sırasında ne yapmalıyız?</strong></p>
+    <button class="choice quiz" onclick="quiz(this,true)">Çök-kapan-tutun</button>
+    <button class="choice quiz" onclick="quiz(this,false)">Pencereye koşmak</button>
+  </div>
+
+  <p class="score">Test puanı: <span id="testScore">0</span> / 5</p>
+  <div id="testFeedback" class="feedback"></div>
+</section>
+
+</div>
+</div>
+
+<footer>
+  Sağlığım ve Güvenliğim • Sağlıklı yaşar, güvenli davranırım! 🌟
+</footer>
+
+<script>
+let points=0;
+
+function openTab(id,button){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+
+  document.getElementById(id).classList.add("active");
+  button.classList.add("active");
+
+  const tabs=[...document.querySelectorAll(".tab")];
+  const index=tabs.indexOf(button)+1;
+  document.getElementById("progressBar").style.width=(index/tabs.length*100)+"%";
+}
+
+function addPoint(n=1){
+  points+=n;
+  document.getElementById("score").innerText=points;
+}
+
+function answer(button,correct,text){
+  const game=button.closest(".game");
+  const feedback=game.querySelector(".feedback");
+
+  if(button.dataset.done)return;
+  button.dataset.done="1";
+
+  if(correct){
+    button.classList.add("correct");
+    feedback.className="feedback good";
+    feedback.innerHTML="🌟 "+text;
+    addPoint(2);
+  }else{
+    button.classList.add("wrong");
+    feedback.className="feedback bad";
+    feedback.innerHTML="💡 "+text;
+  }
+}
+
+let hand=[];
+const correctHand=[
+  "Ellerimi ıslatırım.",
+  "Sabun alırım.",
+  "Ellerimi ovalarım.",
+  "Ellerimi durularım.",
+  "Ellerimi kurularım."
+];
+
+function chooseHand(button,text){
+  if(button.dataset.used)return;
+  button.dataset.used="1";
+  button.classList.add("correct");
+  hand.push(text);
+
+  document.getElementById("handOrder").innerHTML=
+    hand.map((x,i)=>'<span class="order-item">'+(i+1)+". "+x+"</span>").join("");
+}
+
+function checkHand(){
+  const feedback=document.getElementById("handFeedback");
+
+  if(JSON.stringify(hand)===JSON.stringify(correctHand)){
+    feedback.className="feedback good";
+    feedback.innerHTML="Mükemmel! El yıkama basamaklarını doğru sıraladın. 🫧";
+    addPoint(5);
+  }else{
+    feedback.className="feedback bad";
+    feedback.innerHTML="İpucu: Önce eller ıslatılır, en son kurulanır.";
+  }
+}
+
+function resetHand(){
+  hand=[];
+  document.getElementById("handOrder").innerHTML="Seçimlerin burada görünecek.";
+  document.getElementById("handFeedback").className="feedback";
+
+  document.querySelectorAll(".hand").forEach(b=>{
+    b.dataset.used="";
+    b.classList.remove("correct");
+  });
+}
+
+let foods=[];
+
+function food(button,name,healthy){
+  if(button.dataset.used)return;
+  button.dataset.used="1";
+
+  const feedback=document.getElementById("foodFeedback");
+
+  if(healthy){
+    foods.push(name);
+    document.getElementById("foodBasket").innerHTML=foods.join(" • ");
+    button.classList.add("correct");
+    feedback.className="feedback good";
+    feedback.innerHTML="Güzel seçim! Bu besin sağlıklı bir tabağa eklenebilir. ⭐";
+    addPoint(2);
+  }else{
+    button.classList.add("wrong");
+    feedback.className="feedback bad";
+    feedback.innerHTML="Bu yiyecek fazla tüketilirse sağlığımızı olumsuz etkileyebilir.";
+  }
+}
+
+const weather=[
+  {
+    q:"Hava çok soğuk ve kar yağıyor. Ne giyersin?",
+    options:["Mont, bere ve bot","Şort ve terlik","İnce tişört"],
+    correct:0
+  },
+  {
+    q:"Hava yağmurlu. Hangisi uygundur?",
+    options:["Yağmurluk","Deniz mayosu","Güneş gözlüğü"],
+    correct:0
+  },
+  {
+    q:"Hava sıcak ve güneşli. Hangisi uygundur?",
+    options:["Kalın mont","İnce kıyafet ve şapka","Atkı ve eldiven"],
+    correct:1
+  }
+];
+
+let weatherIndex=0;
+
+function showWeather(){
+  const item=weather[weatherIndex];
+  document.getElementById("weatherQuestion").innerHTML="<strong>"+item.q+"</strong>";
+
+  const area=document.getElementById("weatherOptions");
+  area.innerHTML="";
+
+  item.options.forEach((text,index)=>{
+    const b=document.createElement("button");
+    b.className="choice";
+    b.innerText=text;
+
+    b.onclick=()=>{
+      const feedback=document.getElementById("weatherFeedback");
+
+      if(index===item.correct){
+        b.classList.add("correct");
+        feedback.className="feedback good";
+        feedback.innerHTML="Doğru! Hava durumuna uygun giyindin. 🌦️";
+        addPoint(3);
+      }else{
+        b.classList.add("wrong");
+        feedback.className="feedback bad";
+        feedback.innerHTML="Hava durumunu tekrar düşün. İpucu: Soğukta kalın, yağmurda su geçirmeyen kıyafet seçilir.";
+      }
+    };
+
+    area.appendChild(b);
+  });
+
+  document.getElementById("weatherFeedback").className="feedback";
+}
+
+function newWeather(){
+  weatherIndex=(weatherIndex+1)%weather.length;
+  showWeather();
+}
+
+showWeather();
+
+function danger(button,safe){
+  const feedback=document.getElementById("dangerFeedback");
+
+  if(safe){
+    button.classList.add("wrong");
+    feedback.className="feedback bad";
+    feedback.innerHTML="⚠️ Dikkat! Bu eşya için yetişkin yardımı gerekir.";
+  }else{
+    button.classList.add("correct");
+    feedback.className="feedback good";
+    feedback.innerHTML="✅ Bu eşya genellikle güvenlidir; yine de dikkatli kullanmalıyız.";
+    addPoint(1);
+  }
+}
+
+let testScore=0;
+
+function quiz(button,correct){
+  const game=button.closest(".game");
+  if(game.dataset.done)return;
+  game.dataset.done="1";
+
+  const feedback=document.getElementById("testFeedback");
+
+  if(correct){
+    button.classList.add("correct");
+    testScore++;
+    document.getElementById("testScore").innerText=testScore;
+    addPoint(1);
+  }else{
+    button.classList.add("wrong");
+
+    [...game.querySelectorAll(".quiz")].forEach(b=>{
+      if(b.getAttribute("onclick").includes("true")){
+        b.classList.add("correct");
+      }
+    });
+  }
+
+  const answered=document.querySelectorAll("#test .game[data-done]").length;
+
+  if(answered===5){
+    feedback.className="feedback "+(testScore>=4?"good":"bad");
+
+    if(testScore===5){
+      feedback.innerHTML="🏆 Harika! Sağlık ve güvenlik kahramanı oldun!";
+    }else if(testScore>=3){
+      feedback.innerHTML="🌟 Çok güzel! Bazı konuları tekrar edersen daha da başarılı olabilirsin.";
+    }else{
+      feedback.innerHTML="💪 Konu sekmelerini tekrar incele ve yeniden dene.";
+    }
+  }
+}
+</script>
+
+</body>
+</html>

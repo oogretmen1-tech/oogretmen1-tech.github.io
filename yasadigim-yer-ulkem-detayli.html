@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yaşadığım Yer ve Ülkem</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    :root {
+      --kirmizi: #b5122b;
+      --koyu: #17324d;
+      --mavi: #287da5;
+      --acik: #eef8fc;
+      --sari: #f4c542;
+      --yesil: #438653;
+      --metin: #263238;
+      --golge: 0 6px 20px rgba(0,0,0,.13);
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: var(--metin);
+      background: linear-gradient(135deg, #fffaf0, #eaf6fb);
+      line-height: 1.6;
+    }
+
+    header {
+      position: relative;
+      overflow: hidden;
+      color: white;
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(135deg, var(--koyu) 0%, #204a70 45%, var(--kirmizi) 100%);
+    }
+
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: white;
+      opacity: .12;
+    }
+
+    .b1 { width: 190px; height: 190px; left: -55px; top: -45px; }
+    .b2 { width: 125px; height: 125px; right: 10%; top: 15px; }
+    .b3 { width: 230px; height: 230px; right: -80px; bottom: -120px; }
+
+    header h1 {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      font-size: clamp(2rem, 6vw, 4rem);
+      text-shadow: 2px 2px 5px rgba(0,0,0,.25);
+    }
+
+    header p {
+      position: relative;
+      z-index: 1;
+      font-size: 1.2rem;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 7px;
+      padding: 10px;
+      background: var(--koyu);
+      box-shadow: var(--golge);
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 18px;
+      font-size: .9rem;
+    }
+
+    nav a:hover {
+      background: var(--kirmizi);
+    }
+
+    main {
+      max-width: 1180px;
+      margin: auto;
+      padding: 20px 15px 50px;
+    }
+
+    section {
+      background: white;
+      margin: 25px 0;
+      padding: clamp(20px, 4vw, 38px);
+      border-radius: 20px;
+      box-shadow: var(--golge);
+    }
+
+    h2 {
+      color: var(--kirmizi);
+      border-bottom: 3px solid var(--sari);
+      padding-bottom: 8px;
+    }
+
+    h3 {
+      color: var(--koyu);
+    }
+
+    .iki-sutun {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .kartlar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .kart {
+      padding: 18px;
+      background: #f6f9fb;
+      border-top: 5px solid var(--mavi);
+      border-radius: 14px;
+    }
+
+    .kart-ikon {
+      display: block;
+      text-align: center;
+      font-size: 46px;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,.12));
+    }
+
+    .kart img.ozel-ikon {
+      display: block;
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 8px;
+      object-fit: contain;
+    }
+
+    .gorsel-blok {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 220px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #eef8fc, #fff3d6);
+      font-size: 96px;
+      box-shadow: 0 4px 14px rgba(0,0,0,.10);
+    }
+
+    .bilgi {
+      padding: 17px;
+      margin: 15px 0;
+      border-left: 6px solid var(--mavi);
+      background: var(--acik);
+      border-radius: 10px;
+    }
+
+    .uyari {
+      border-left-color: var(--kirmizi);
+      background: #fff0f2;
+    }
+
+    .etkinlik {
+      padding: 20px;
+      margin: 20px 0;
+      background: #fffdf1;
+      border: 2px dashed var(--sari);
+      border-radius: 14px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 11px;
+      margin: 7px 0 14px;
+      border: 1px solid #bccbd3;
+      border-radius: 8px;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 100px;
+    }
+
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 10px 16px;
+      margin: 5px 3px;
+      color: white;
+      background: var(--kirmizi);
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: var(--koyu);
+    }
+
+    .secenek {
+      display: block;
+      width: 100%;
+      text-align: left;
+      color: var(--metin);
+      background: white;
+      border: 2px solid #d8e0e5;
+    }
+
+    .dogru {
+      background: #d8f4df !important;
+      border-color: var(--yesil) !important;
+    }
+
+    .yanlis {
+      background: #ffe0e3 !important;
+      border-color: var(--kirmizi) !important;
+    }
+
+    .zaman {
+      border-left: 5px solid var(--kirmizi);
+      padding-left: 20px;
+    }
+
+    .zaman div {
+      margin: 18px 0;
+    }
+
+    .rozet {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 20px;
+      background: var(--sari);
+      font-weight: bold;
+    }
+
+    footer {
+      padding: 25px;
+      text-align: center;
+      color: white;
+      background: var(--koyu);
+    }
+
+    @media(max-width: 700px) {
+      .iki-sutun {
+        grid-template-columns: 1fr;
+      }
+
+      nav a {
+        font-size: .78rem;
+        padding: 7px 9px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="bubble b1"></div>
+  <div class="bubble b2"></div>
+  <div class="bubble b3"></div>
+  <h1>Yaşadığım Yer ve Ülkem</h1>
+  <p>Çevremi tanıyorum, ülkem Türkiye’yi öğreniyorum.</p>
+  <p>Konu anlatımı • Etkinlikler • Oyunlar • Değerlendirme</p>
+</header>
+
+<nav>
+  <a href="#hazirlik">Hazırlık</a>
+  <a href="#yerlesim">Yerleşim</a>
+  <a href="#yonetim">Yönetim</a>
+  <a href="#turkiye">Türkiye</a>
+  <a href="#ataturk">Atatürk</a>
+  <a href="#mehmetakif">Mehmet Âkif</a>
+  <a href="#bayrak">Bayrak</a>
+  <a href="#bayramlar">Bayramlar</a>
+  <a href="#mucadele">Millî Mücadele</a>
+  <a href="#miras">Kültürel Miras</a>
+  <a href="#tarih">Tarihî Yerler</a>
+  <a href="#oyun">Oyunlar</a>
+  <a href="#test">Test</a>
+</nav>
+
+<main>
+
+  <section id="hazirlik">
+    <h2>1. Hazırlık Çalışması</h2>
+
+    <div class="iki-sutun">
+      <div>
+        <p>
+          İnsanlar evlerde, mahallelerde, köylerde, ilçelerde ve şehirlerde
+          yaşarlar. Yaşadığımız çevrede okullar, hastaneler, parklar,
+          yollar, iş yerleri ve tarihî yapılar bulunabilir.
+        </p>
+
+        <div class="bilgi">
+          <strong>Düşünelim:</strong>
+          <p>
+            Yaşadığın yerde hangi önemli yerler var?
+            Ülkemizin adı nedir? Türkiye’nin başkenti neresidir?
+          </p>
+        </div>
+      </div>
+
+      <div class="gorsel-blok">🇹🇷</div>
+    </div>
+
+    <div class="etkinlik">
+      <strong>Etkinlik: Kendimi ve yaşadığım yeri tanıtıyorum</strong>
+
+      <label>Adım:</label>
+      <input type="text">
+
+      <label>Yaşadığım il:</label>
+      <input type="text">
+
+      <label>Yaşadığım yerde bulunan üç önemli yer:</label>
+      <textarea></textarea>
+    </div>
+  </section>
+
+  <section id="yerlesim">
+    <h2>2. İlk Yönetim Birimleri ve Yerleşim Yerleri</h2>
+
+    <p>
+      Ülkemizde insanların düzenli ve güvenli bir şekilde yaşaması için
+      yönetim birimleri oluşturulmuştur. Küçük yerleşim yerlerinden büyük
+      yerleşim yerlerine doğru köy, belde, ilçe ve il bulunur.
+    </p>
+
+    <div class="kartlar">
+      <div class="kart">
+        <span class="kart-ikon">🏡</span>
+        <h3>Köy</h3>
+        <p>Nüfusu az olan, tarım ve hayvancılığın yaygın olduğu yerleşim yeridir.</p>
+      </div>
+
+      <div class="kart">
+        <span class="kart-ikon">🏘️</span>
+        <h3>Belde</h3>
+        <p>Köyden büyük, ilçeden küçük yerleşim yeridir.</p>
+      </div>
+
+      <div class="kart">
+        <span class="kart-ikon">🏙️</span>
+        <h3>İlçe</h3>
+        <p>Bir ile bağlı olan yönetim birimidir.</p>
+      </div>
+
+      <div class="kart">
+        <span class="kart-ikon">🌆</span>
+        <h3>İl</h3>
+        <p>İlçelerden oluşan daha büyük yönetim birimidir.</p>
+      </div>
+    </div>
+
+    <div class="bilgi uyari">
+      <strong>Önemli:</strong>
+      Köy, belde, ilçe ve il birer yerleşim veya yönetim birimidir.
+      Bunlar birbirinden büyüklük ve görev bakımından farklıdır.
+    </div>
+  </section>
+
+  <section id="yonetim">
+    <h2>3. Yöneticilerimiz</h2>
+
+    <p>
+      Her yönetim biriminin düzeninden, güvenliğinden ve hizmetlerinden
+      sorumlu yöneticileri vardır.
+    </p>
+
+    <div class="kartlar">
+      <div class="kart">
+        <span class="kart-ikon">🎖️</span>
+        <h3>Muhtar</h3>
+        <p>Mahalle veya köyün yöneticisidir. Halk tarafından seçilir.</p>
+      </div>
+
+      <div class="kart">
+        <span class="kart-ikon">🏛️</span>
+        <h3>Belediye Başkanı</h3>
+        <p>Belediye hizmetlerini yürütür. Yol, park ve temizlik gibi hizmetlerle ilgilenir.</p>
+      </div>
+
+      <div class="kart">
+        <span class="kart-ikon">📋</span>
+        <h3>Kaymakam</h3>
+        <p>İlçeyi yönetir ve ilçedeki devlet kurumlarının çalışmalarını koordine eder.</p>
+      </div>
+
+      <div class="kart">
+        <span class="kart-ikon">🏢</span>
+        <h3>Vali</h3>
+        <p>İli yönetir. İldeki kamu hizmetlerinin düzenli yürütülmesini sağlar.</p>
+      </div>
+    </div>
+
+    <div class="etkinlik">
+      <strong>Etkinlik: Eşleştirme</strong>
+      <p>Doğru yöneticiyi seç.</p>
+
+      <p>İlin yöneticisi kimdir?</p>
+      <button onclick="kontrol(this, true)">Vali</button>
+      <button onclick="kontrol(this, false)">Muhtar</button>
+      <span class="sonuc"></span>
+
+      <p>Köyün veya mahallenin yöneticisi kimdir?</p>
+      <button onclick="kontrol(this, true)">Muhtar</button>
+      <button onclick="kontrol(this, false)">Kaymakam</button>
+      <span class="sonuc"></span>
+
+      <p>İlçeyi kim yönetir?</p>
+      <button onclick="kontrol(this, true)">Kaymakam</button>
+      <button onclick="kontrol(this, false)">Vali</button>
+      <span class="sonuc"></span>
+    </div>
+  </section>
+
+  <section id="turkiye">
+    <h2>4. Ülkem Türkiye ve Haritamız</h2>
+
+    <div class="iki-sutun">
+      <div>
+        <p>
+          Ülkemizin adı <strong>Türkiye Cumhuriyeti</strong>’dir.
+          Başkentimiz <strong>Ankara</strong>’dır.
+        </p>
+
+        <ul>
+          <li>Kuzeyimizde Karadeniz bulunur.</li>
+          <li>Batımızda Ege Denizi bulunur.</li>
+          <li>Güneyimizde Akdeniz bulunur.</li>
+          <li>Türkiye’nin hem Asya’da hem Avrupa’da toprakları vardır.</li>
+          <li>Ülkemizin bayrağı ay yıldızlı Türk bayrağıdır.</li>
+        </ul>
+      </div>
+
+      <div class="gorsel-blok">🗺️</div>
+    </div>
+
+    <div class="etkinlik">
+      <strong>Harita Etkinliği</strong>
+      <p>
+        Sınıf haritasında veya atlasta yaşadığın ili bul. Daha sonra aşağıdaki cümleyi tamamla:
+      </p>
+      <p>Benim yaşadığım il: <input type="text"></p>
+      <p>Türkiye’nin başkenti: <input type="text"></p>
+    </div>
+  </section>
+
+  <section id="ataturk">
+    <h2>5. Mustafa Kemal Atatürk</h2>
+
+    <div class="kartlar">
+      <div class="kart">
+        <img class="ozel-ikon" src="icon_gen_ataturk_anitkabir.png" alt="" onerror="this.style.display='none'">
+        <h3>Çocukluğu ve Öğrenim Hayatı</h3>
+        <p>
+          Mustafa Kemal Atatürk, 1881 yılında Selanik’te doğmuştur.
+          Öğrenim hayatında askerî okullarda eğitim almıştır.
+        </p>
+      </div>
+
+      <div class="kart">
+        <span class="kart-ikon">👪</span>
+        <h3>Atatürk’ün Ailesi</h3>
+        <p>
+          Babası Ali Rıza Efendi, annesi Zübeyde Hanım’dır.
+          Atatürk ailesine ve milletine büyük değer vermiştir.
+        </p>
+      </div>
+    </div>
+
+    <div class="zaman">
+      <div><strong>1881:</strong> Selanik’te doğdu.</div>
+      <div><strong>1919:</strong> Samsun’a çıkarak Millî Mücadele’yi başlattı.</div>
+      <div><strong>1923:</strong> Türkiye Cumhuriyeti ilan edildi.</div>
+      <div><strong>1938:</strong> Hayatını kaybetti.</div>
+    </div>
+
+    <div class="bilgi">
+      <strong>Atatürk’ün örnek özellikleri:</strong>
+      Çalışkan, kararlı, ileri görüşlü, vatansever, lider ve yenilikçiydi.
+    </div>
+  </section>
+
+  <section id="mehmetakif">
+    <h2>6. Mehmet Âkif Ersoy ve İstiklâl Marşı</h2>
+
+    <div class="iki-sutun">
+      <div>
+        <h3>Mehmet Âkif Ersoy kimdir?</h3>
+        <p>
+          Mehmet Âkif Ersoy, Türk şairi ve yazarıdır. Türk milletinin
+          bağımsızlık mücadelesini ve vatan sevgisini anlatan şiirler yazmıştır.
+        </p>
+
+        <p>
+          İstiklâl Marşı’nın sözlerini yazmış ve bu marşı Türk milletine
+          armağan etmiştir.
+        </p>
+
+        <div class="bilgi uyari">
+          İstiklâl Marşı, Türkiye Büyük Millet Meclisi tarafından
+          <strong>12 Mart 1921</strong> tarihinde kabul edilmiştir.
+        </div>
+      </div>
+
+      <div class="kart">
+        <span class="kart-ikon">📜</span>
+        <h3>İstiklâl Marşı’nın anlamı</h3>
+        <p>
+          İstiklâl Marşı; bağımsızlığımızı, bayrağımızı, vatan sevgimizi
+          ve milletimizin kararlılığını anlatır.
+        </p>
+        <p>
+          Marşımız okunurken saygılı ve dikkatli davranırız.
+        </p>
+      </div>
+    </div>
+
+    <div class="etkinlik">
+      <strong>Etkinlik: Cümleyi tamamla</strong>
+      <p>
+        Mehmet Âkif Ersoy, ______________________________ yazmıştır.
+      </p>
+      <input type="text" placeholder="Cevabını yaz">
+    </div>
+  </section>
+
+  <section id="bayrak">
+    <h2>7. Türk Bayrağımız</h2>
+
+    <div class="iki-sutun">
+      <div>
+        <p>
+          Türk bayrağımız kırmızı renktedir ve üzerinde beyaz ay ile yıldız bulunur.
+          Bayrağımız bağımsızlığımızın ve milletimizin ortak değerlerinin sembolüdür.
+        </p>
+      </div>
+      <div class="gorsel-blok">🇹🇷</div>
+    </div>
+
+    <div class="kartlar">
+      <div class="kart">
+        <span class="kart-ikon">❤️</span>
+        <h3>Kırmızı renk</h3>
+        <p>Vatanımız için yapılan fedakârlıkları ve şehitlerimizin hatırasını simgeler.</p>
+      </div>
+
+      <div class="kart">
+        <span class="kart-ikon">☪️</span>
+        <h3>Ay ve yıldız</h3>
+        <p>Bayrağımızın en önemli sembolleridir ve bağımsızlığımızı temsil eder.</p>
+      </div>
+    </div>
+
+    <div class="bilgi">
+      Bayrağımıza sevgi ve saygı gösteririz; yere düşürmez, yırtık veya kirli bayrak kullanmayız.
+    </div>
+  </section>
+
+  <section id="bayramlar">
+    <h2>8. Dinî ve Millî Bayramlarımız</h2>
+
+    <h3>Dinî Bayramlarımız</h3>
+
+    <div class="kartlar">
+      <div class="kart">
+        <span class="kart-ikon">🌙</span>
+        <h3>Ramazan Bayramı</h3>
+        <p>
+          Büyükler ziyaret edilir, bayramlaşılır, çocuklar sevindirilir ve
+          ihtiyaç sahiplerine yardım edilir.
+        </p>
+      </div>
+
+      <div class="kart">
+        <span class="kart-ikon">🐑</span>
+        <h3>Kurban Bayramı</h3>
+        <p>
+          Paylaşma ve yardımlaşma önemlidir. Kurban etleri ihtiyaç sahipleriyle paylaşılır.
+        </p>
+      </div>
+    </div>
+
+    <h3>Millî Bayramlarımız</h3>
+
+    <div class="kartlar">
+      <div class="kart">
+        <span class="kart-ikon">🎈</span>
+        <h3>23 Nisan</h3>
+        <p>Ulusal Egemenlik ve Çocuk Bayramı’dır.</p>
+      </div>
+
+      <div class="kart">
+        <span class="kart-ikon">🏃</span>
+        <h3>19 Mayıs</h3>
+        <p>Atatürk’ü Anma, Gençlik ve Spor Bayramı’dır.</p>
+      </div>
+
+      <div class="kart">
+        <span class="kart-ikon">🎉</span>
+        <h3>30 Ağustos</h3>
+        <p>Zafer Bayramı’dır.</p>
+      </div>
+
+      <div class="kart">
+        <span class="kart-ikon">🎆</span>
+        <h3>29 Ekim</h3>
+        <p>Cumhuriyet Bayramı’dır.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="mucadele">
+    <h2>9. Millî Mücadele ve Halkımızın Fedakârlıkları</h2>
+
+    <div class="kartlar">
+      <div class="kart">
+        <img class="ozel-ikon" src="icon_gen_ataturk_at.png" alt="" onerror="this.style.display='none'">
+        <h3>Atatürk ve Millî Mücadele</h3>
+        <p>
+          Atatürk, Türk milletinin bağımsız yaşaması için büyük bir mücadele
+          vermiştir.
+        </p>
+      </div>
+
+      <div class="kart">
+        <span class="kart-ikon">🤝</span>
+        <h3>Halkımızın Yardımlaşması</h3>
+        <p>
+          Kadınlarımız, erkeklerimiz, gençlerimiz ve yaşlılarımız cepheye
+          yiyecek, giyecek ve cephane taşıyarak mücadeleye destek olmuştur.
+        </p>
+      </div>
+    </div>
+
+    <div class="bilgi">
+      <strong>Millî Mücadele’nin değerleri:</strong>
+      Vatan sevgisi, bağımsızlık, birlik, beraberlik, dayanışma ve fedakârlık.
+    </div>
+
+    <div class="etkinlik">
+      <strong>Yazma Etkinliği</strong>
+      <p>
+        Millî Mücadele’de halkımızın yaptığı fedakârlıkları kendi cümlelerinle yaz.
+      </p>
+      <textarea></textarea>
+    </div>
+  </section>
+
+  <section id="miras">
+    <h2>10. Kültürel Mirasımız</h2>
+
+    <p>
+      Kültürel mirasımız, geçmişten günümüze ulaşan ve toplumumuzu tanıtan
+      değerlerdir. Bu değerleri korumak hepimizin görevidir.
+    </p>
+
+    <div class="kartlar">
+      <div class="kart">
+        <span class="kart-ikon">🎊</span>
+        <h3>Gelenek ve görenekler</h3>
+        <p>Bayramlaşma, misafir ağırlama, düğünler ve özel günler.</p>
+      </div>
+
+      <div class="kart">
+        <span class="kart-ikon">🍲</span>
+        <h3>Yemekler</h3>
+        <p>Yöresel yemekler, tatlılar, ekmekler ve geleneksel mutfak kültürü.</p>
+      </div>
+
+      <div class="kart">
+        <span class="kart-ikon">🧶</span>
+        <h3>El sanatları</h3>
+        <p>Halı ve kilim dokumacılığı, çinicilik, ebru ve bakırcılık.</p>
+      </div>
+
+      <div class="kart">
+        <span class="kart-ikon">💃</span>
+        <h3>Halk oyunları</h3>
+        <p>Yörelere göre değişen müzikler, oyunlar ve kıyafetler.</p>
+      </div>
+    </div>
+
+    <div class="bilgi uyari">
+      <strong>Kültürel mirası nasıl koruruz?</strong>
+      <ul>
+        <li>Tarihî yapılara zarar vermeyiz.</li>
+        <li>Müzelerdeki eserlere dokunmayız.</li>
+        <li>Geleneklerimizi öğrenir ve yaşatırız.</li>
+        <li>Yöresel yemekleri ve el sanatlarını tanıtırız.</li>
+      </ul>
+    </div>
+
+    <div class="etkinlik">
+      <strong>Etkinlik: Yöremi tanıtıyorum</strong>
+      <p>
+        Yaşadığın yöreye ait bir yemek, oyun, türkü veya el sanatı yaz.
+      </p>
+      <textarea placeholder="Örneğin: halk oyunu, yöresel yemek..."></textarea>
+    </div>
+  </section>
+
+  <section id="tarih">
+    <h2>11. Türkiye’deki Tarihî Yerler</h2>
+
+    <p>
+      Türkiye’de geçmişten kalan birçok tarihî yapı ve alan vardır.
+      Bu yerler geçmişte yaşayan insanların hayatı hakkında bilgi verir.
+    </p>
+
+    <div class="kartlar">
+      <div class="kart">
+        <span class="kart-ikon">🕊️</span>
+        <h3>Anıtkabir – Ankara</h3>
+        <p>Mustafa Kemal Atatürk’ün anıt mezarıdır.</p>
+      </div>
+
+      <div class="kart">
+        <span class="kart-ikon">🎗️</span>
+        <h3>Çanakkale Şehitlikleri</h3>
+        <p>Çanakkale Savaşı’nda şehit olan askerlerimizi hatırlatır.</p>
+      </div>
+
+      <div class="kart">
+        <span class="kart-ikon">🏺</span>
+        <h3>Efes Antik Kenti</h3>
+        <p>Antik dönemlerden kalan önemli bir tarihî yerleşim yeridir.</p>
+      </div>
+
+      <div class="kart">
+        <span class="kart-ikon">🗿</span>
+        <h3>Göbeklitepe</h3>
+        <p>İnsanlık tarihinin en eski yerleşim alanlarından biridir.</p>
+      </div>
+
+      <div class="kart">
+        <span class="kart-ikon">🎈</span>
+        <h3>Kapadokya</h3>
+        <p>Doğal oluşumları ve tarihî yerleşimleriyle tanınır.</p>
+      </div>
+
+      <div class="kart">
+        <span class="kart-ikon">🏘️</span>
+        <h3>Safranbolu Evleri</h3>
+        <p>Geleneksel Türk evlerinin önemli örneklerindendir.</p>
+      </div>
+    </div>
+
+    <div class="etkinlik">
+      <strong>Konuşma Etkinliği</strong>
+      <p>
+        Yaşadığın ilde veya daha önce gezdiğin bir yerde gördüğün tarihî ya da
+        millî bir yeri anlat. Orada neler gördün, ne öğrendin?
+      </p>
+
+      <textarea placeholder="Gördüklerini yaz"></textarea>
+    </div>
+  </section>
+
+  <section id="oyun">
+    <h2>12. Eğlenceli Öğrenme Oyunları</h2>
+
+    <div class="etkinlik">
+      <strong>Doğru mu, Yanlış mı?</strong>
+
+      <p>Türkiye’nin başkenti Ankara’dır.</p>
+      <button onclick="dogruYanlis(this, true)">Doğru</button>
+      <button onclick="dogruYanlis(this, false)">Yanlış</button>
+      <span class="cevap"></span>
+
+      <p>İlin yöneticisi muhtardır.</p>
+      <button onclick="dogruYanlis(this, false)">Doğru</button>
+      <button onclick="dogruYanlis(this, true)">Yanlış</button>
+      <span class="cevap"></span>
+
+      <p>İstiklâl Marşı’nı Mehmet Âkif Ersoy yazmıştır.</p>
+      <button onclick="dogruYanlis(this, true)">Doğru</button>
+      <button onclick="dogruYanlis(this, false)">Yanlış</button>
+      <span class="cevap"></span>
+
+      <p>Kültürel mirasımızı korumak görevimiz değildir.</p>
+      <button onclick="dogruYanlis(this, false)">Doğru</button>
+      <button onclick="dogruYanlis(this, true)">Yanlış</button>
+      <span class="cevap"></span>
+    </div>
+
+    <div class="etkinlik">
+      <strong>Kelime Kutusu</strong>
+      <p>Öğrendiğin kelimeleri seç:</p>
+
+      <button class="kelime" onclick="kelimeSec(this)">Vali</button>
+      <button class="kelime" onclick="kelimeSec(this)">Atatürk</button>
+      <button class="kelime" onclick="kelimeSec(this)">Ankara</button>
+      <button class="kelime" onclick="kelimeSec(this)">Mehmet Âkif</button>
+      <button class="kelime" onclick="kelimeSec(this)">Kültürel miras</button>
+      <button class="kelime" onclick="kelimeSec(this)">Harita</button>
+
+      <p id="kelimeSonuc"></p>
+    </div>
+  </section>
+
+  <section id="test">
+    <h2>13. Mini Test</h2>
+    <p class="rozet">Puan: <span id="puan">0</span> / 6</p>
+
+    <div class="soru">
+      <h3>1. Türkiye’nin başkenti neresidir?</h3>
+      <button class="secenek" onclick="cevapla(this, true)">Ankara</button>
+      <button class="secenek" onclick="cevapla(this, false)">İstanbul</button>
+      <button class="secenek" onclick="cevapla(this, false)">Bursa</button>
+    </div>
+
+    <div class="soru">
+      <h3>2. İlin yöneticisi kimdir?</h3>
+      <button class="secenek" onclick="cevapla(this, true)">Vali</button>
+      <button class="secenek" onclick="cevapla(this, false)">Muhtar</button>
+      <button class="secenek" onclick="cevapla(this, false)">Kaymakam</button>
+    </div>
+
+    <div class="soru">
+      <h3>3. İlçeyi kim yönetir?</h3>
+      <button class="secenek" onclick="cevapla(this, false)">Vali</button>
+      <button class="secenek" onclick="cevapla(this, true)">Kaymakam</button>
+      <button class="secenek" onclick="cevapla(this, false)">Muhtar</button>
+    </div>
+
+    <div class="soru">
+      <h3>4. İstiklâl Marşı’nın yazarı kimdir?</h3>
+      <button class="secenek" onclick="cevapla(this, true)">Mehmet Âkif Ersoy</button>
+      <button class="secenek" onclick="cevapla(this, false)">Mustafa Kemal Atatürk</button>
+      <button class="secenek" onclick="cevapla(this, false)">Yunus Emre</button>
+    </div>
+
+    <div class="soru">
+      <h3>5. Atatürk nerede doğmuştur?</h3>
+      <button class="secenek" onclick="cevapla(this, false)">Ankara</button>
+      <button class="secenek" onclick="cevapla(this, true)">Selanik</button>
+      <button class="secenek" onclick="cevapla(this, false)">Samsun</button>
+    </div>
+
+    <div class="soru">
+      <h3>6. Aşağıdakilerden hangisi kültürel mirasa örnektir?</h3>
+      <button class="secenek" onclick="cevapla(this, false)">Trafik ışığı</button>
+      <button class="secenek" onclick="cevapla(this, true)">Halk oyunu</button>
+      <button class="secenek" onclick="cevapla(this, false)">Bilgisayar</button>
+    </div>
+
+    <button onclick="testiBitir()">Testi Bitir</button>
+    <button onclick="sifirla()">Tekrar Dene</button>
+    <p id="testSonucu"></p>
+  </section>
+
+  <section id="degerlendirme">
+    <h2>14. Ders Sonu Değerlendirmesi</h2>
+
+    <p>Öğrendiklerini kontrol et:</p>
+
+    <label>
+      <input type="checkbox" style="width:auto">
+      Yönetim birimlerini biliyorum.
+    </label><br>
+
+    <label>
+      <input type="checkbox" style="width:auto">
+      Vali, kaymakam ve muhtarın görevlerini biliyorum.
+    </label><br>
+
+    <label>
+      <input type="checkbox" style="width:auto">
+      Atatürk’ün hayatı hakkında bilgi edindim.
+    </label><br>
+
+    <label>
+      <input type="checkbox" style="width:auto">
+      Mehmet Âkif Ersoy’u ve İstiklâl Marşı’nı öğrendim.
+    </label><br>
+
+    <label>
+      <input type="checkbox" style="width:auto">
+      Bayrağımızı ve millî/dinî bayramlarımızı öğrendim.
+    </label><br>
+
+    <label>
+      <input type="checkbox" style="width:auto">
+      Kültürel mirasımızı korumam gerektiğini biliyorum.
+    </label>
+
+    <div class="bilgi">
+      <strong>Dersin ana fikri:</strong>
+      Yaşadığımız yeri tanımalı, ülkemizi sevmeli, bayrağımıza ve
+      tarihî-kültürel değerlerimize sahip çıkmalıyız.
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  🇹🇷 Yaşadığım Yer ve Ülkem 🇹🇷
+  <br>
+  Tarihimizi öğrenelim, kültürel mirasımızı koruyalım.
+</footer>
+
+<script>
+  function kontrol(button, dogru) {
+    const alan = button.parentElement;
+    const sonuc = alan.querySelector(".sonuc");
+
+    if (dogru) {
+      button.classList.add("dogru");
+      sonuc.textContent = " ✅ Doğru!";
+      sonuc.style.color = "green";
+    } else {
+      button.classList.add("yanlis");
+      sonuc.textContent = " ❌ Tekrar düşün.";
+      sonuc.style.color = "crimson";
+    }
+  }
+
+  function dogruYanlis(button, dogru) {
+    const cevap = button.parentElement.querySelector(".cevap");
+
+    if (dogru) {
+      cevap.textContent = " ✅ Doğru cevap!";
+      cevap.style.color = "green";
+    } else {
+      cevap.textContent = " ❌ Yanlış cevap.";
+      cevap.style.color = "crimson";
+    }
+  }
+
+  function kelimeSec(button) {
+    button.classList.toggle("dogru");
+
+    const toplam = document.querySelectorAll(".kelime.dogru").length;
+    document.getElementById("kelimeSonuc").textContent =
+      toplam + " kelime seçtin.";
+  }
+
+  let puan = 0;
+  let cevaplanan = 0;
+
+  function cevapla(button, dogru) {
+    const soru = button.parentElement;
+
+    if (soru.dataset.cevaplandi === "true") {
+      return;
+    }
+
+    soru.dataset.cevaplandi = "true";
+    cevaplanan++;
+
+    if (dogru) {
+      button.classList.add("dogru");
+      puan++;
+    } else {
+      button.classList.add("yanlis");
+
+      soru.querySelectorAll(".secenek").forEach(function(secenek) {
+        if (secenek.getAttribute("onclick").includes("true")) {
+          secenek.classList.add("dogru");
+        }
+      });
+    }
+
+    document.getElementById("puan").textContent = puan;
+  }
+
+  function testiBitir() {
+    const sonuc = document.getElementById("testSonucu");
+
+    if (cevaplanan < 6) {
+      sonuc.textContent = "Lütfen önce bütün soruları cevapla.";
+      sonuc.style.color = "crimson";
+      return;
+    }
+
+    if (puan >= 5) {
+      sonuc.textContent = "Harika! Konuyu çok iyi öğrenmişsin. 🎉";
+      sonuc.style.color = "green";
+    } else if (puan >= 3) {
+      sonuc.textContent = "Güzel! Biraz daha tekrar yapabilirsin.";
+      sonuc.style.color = "#a16a00";
+    } else {
+      sonuc.textContent = "Konuyu tekrar okuyup yeniden denemelisin.";
+      sonuc.style.color = "crimson";
+    }
+  }
+
+  function sifirla() {
+    puan = 0;
+    cevaplanan = 0;
+
+    document.getElementById("puan").textContent = "0";
+    document.getElementById("testSonucu").textContent = "";
+
+    document.querySelectorAll(".soru").forEach(function(soru) {
+      soru.dataset.cevaplandi = "false";
+
+      soru.querySelectorAll(".secenek").forEach(function(secenek) {
+        secenek.classList.remove("dogru", "yanlis");
+      });
+    });
+  }
+</script>
+
+</body>
+</html>
