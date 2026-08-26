@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kim Kazanmak İster? - Kırtasiye Ödüllü</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #071a52, #123b8c, #05102f);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .game-container {
+      width: min(1100px, 100%);
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 22px;
+    }
+
+    .main-panel {
+      background: rgba(5, 14, 50, 0.92);
+      border: 3px solid #f4c542;
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: 0 0 30px rgba(244, 197, 66, 0.35);
+    }
+
+    h1 {
+      text-align: center;
+      color: #f4c542;
+      margin: 0 0 8px;
+      font-size: clamp(28px, 4vw, 42px);
+      text-shadow: 2px 2px 3px #000;
+    }
+
+    .subtitle {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #dce7ff;
+      font-size: 16px;
+    }
+
+    .question-info {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      color: #f4c542;
+      font-weight: bold;
+    }
+
+    .question-box {
+      background: linear-gradient(135deg, #172f73, #0d1f55);
+      border: 2px solid #8eb7ff;
+      border-radius: 18px;
+      padding: 25px;
+      min-height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: clamp(20px, 2.6vw, 29px);
+      font-weight: bold;
+      margin-bottom: 22px;
+      line-height: 1.4;
+    }
+
+    .answers {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .answer-btn {
+      border: 2px solid #8eb7ff;
+      border-radius: 13px;
+      background: #123b8c;
+      color: white;
+      padding: 17px;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: left;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .answer-btn:hover:not(:disabled) {
+      background: #2458bb;
+      transform: scale(1.02);
+      border-color: #f4c542;
+    }
+
+    .answer-btn:disabled {
+      cursor: default;
+    }
+
+    .correct {
+      background: #16823a !important;
+      border-color: #7dff9f !important;
+    }
+
+    .wrong {
+      background: #a51c2f !important;
+      border-color: #ff9ba6 !important;
+    }
+
+    .message {
+      min-height: 42px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      margin: 20px 0 5px;
+      color: #f4c542;
+    }
+
+    .next-btn,
+    .restart-btn {
+      display: block;
+      margin: 18px auto 0;
+      padding: 14px 32px;
+      border: none;
+      border-radius: 30px;
+      background: #f4c542;
+      color: #18204b;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .next-btn:hover,
+    .restart-btn:hover {
+      transform: scale(1.05);
+      background: #ffe27d;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .prize-panel {
+      background: rgba(5, 14, 50, 0.94);
+      border: 3px solid #f4c542;
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: 0 0 25px rgba(244, 197, 66, 0.2);
+    }
+
+    .prize-panel h2 {
+      text-align: center;
+      color: #f4c542;
+      margin-top: 0;
+      font-size: 22px;
+    }
+
+    .prize-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .prize-list li {
+      border-radius: 8px;
+      padding: 10px 8px;
+      margin: 5px 0;
+      font-size: 15px;
+      background: rgba(39, 75, 150, 0.45);
+      border: 1px solid transparent;
+    }
+
+    .prize-list li.active {
+      background: #f4c542;
+      color: #111b45;
+      font-weight: bold;
+      border-color: white;
+      transform: scale(1.03);
+    }
+
+    .prize-list li.baraj {
+      border-left: 5px solid #ff8c00;
+    }
+
+    .guarantee-text {
+      margin-top: 16px;
+      background: #163775;
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 800px) {
+      .game-container {
+        grid-template-columns: 1fr;
+      }
+
+      .prize-panel {
+        order: 2;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .main-panel {
+        padding: 18px;
+      }
+
+      .answers {
+        grid-template-columns: 1fr;
+      }
+
+      .answer-btn {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="game-container">
+    <main class="main-panel">
+      <h1>Kim Kazanmak İster?</h1>
+      <p class="subtitle">Kırtasiye Ödüllü Bilgi Yarışması</p>
+
+      <div class="question-info">
+        <span id="questionNumber">Soru: 1 / 15</span>
+        <span id="currentPrize">Ödül: Silgi</span>
+      </div>
+
+      <div class="question-box" id="questionText"></div>
+
+      <div class="answers" id="answers"></div>
+
+      <div class="message" id="message"></div>
+
+      <button class="next-btn hidden" id="nextButton">Sonraki Soru</button>
+      <button class="restart-btn hidden" id="restartButton">Yeniden Başla</button>
+    </main>
+
+    <aside class="prize-panel">
+      <h2>Ödül Basamakları</h2>
+      <ul class="prize-list" id="prizeList"></ul>
+
+      <div class="guarantee-text">
+        <strong>Baraj Soruları:</strong><br />
+        1. soru: Silgi<br />
+        5. soru: Kuru Boya<br />
+        10. soru: Tükenmez Kalem Seti
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "Bir haftada kaç gün vardır?",
+        answers: ["5", "6", "7", "8"],
+        correct: 2
+      },
+      {
+        question: "Aşağıdakilerden hangisi bir meyvedir?",
+        answers: ["Masa", "Elma", "Kalem", "Defter"],
+        correct: 1
+      },
+      {
+        question: "8 + 7 işleminin sonucu kaçtır?",
+        answers: ["14", "15", "16", "17"],
+        correct: 1
+      },
+      {
+        question: "Türkiye'nin başkenti hangisidir?",
+        answers: ["İstanbul", "İzmir", "Ankara", "Antalya"],
+        correct: 2
+      },
+      {
+        question: "Bir yılda kaç ay vardır?",
+        answers: ["10", "11", "12", "13"],
+        correct: 2
+      },
+      {
+        question: "Aşağıdaki hayvanlardan hangisi yumurtlayarak çoğalır?",
+        answers: ["Kedi", "Tavuk", "Köpek", "İnek"],
+        correct: 1
+      },
+      {
+        question: "45 sayısının 10 fazlası kaçtır?",
+        answers: ["35", "45", "50", "55"],
+        correct: 3
+      },
+      {
+        question: "\"Bugün okul çok eğlenceliydi.\" cümlesinin sonuna hangi işaret gelir?",
+        answers: ["Nokta (.)", "Soru işareti (?)", "Ünlem (!)", "Virgül (,)"],
+        correct: 0
+      },
+      {
+        question: "Bir saatte kaç dakika vardır?",
+        answers: ["30", "45", "60", "100"],
+        correct: 2
+      },
+      {
+        question: "Aşağıdakilerden hangisi suyun hâllerinden biri değildir?",
+        answers: ["Katı", "Sıvı", "Gaz", "Kare"],
+        correct: 3
+      },
+      {
+        question: "Bir dikdörtgenin kısa kenarı 4 cm, uzun kenarı 7 cm'dir. Çevresi kaç cm'dir?",
+        answers: ["11", "18", "22", "28"],
+        correct: 2
+      },
+      {
+        question: "Bir sınıfta 28 öğrenci vardır. Öğrenciler 4 eşit gruba ayrılırsa her grupta kaç öğrenci olur?",
+        answers: ["6", "7", "8", "9"],
+        correct: 1
+      },
+      {
+        question: "Saat 09.25'te başlayan ders 40 dakika sürerse ders saat kaçta biter?",
+        answers: ["09.55", "10.05", "10.15", "10.25"],
+        correct: 1
+      },
+      {
+        question: "Bir kitabın 96 sayfasının ilk gün 28 sayfası, ikinci gün 35 sayfası okunuyor. Geriye kaç sayfa kalır?",
+        answers: ["23", "33", "43", "53"],
+        correct: 1
+      },
+      {
+        question: "Bir manavda 6 kasa elma vardır. Her kasada 24 elma bulunuyor. Manav 35 elma satarsa kaç elması kalır?",
+        answers: ["99", "109", "119", "134"],
+        correct: 1
+      }
+    ];
+
+    const prizes = [
+      "Silgi",
+      "Kalemtıraş",
+      "Kurşun Kalem",
+      "Küçük Not Defteri",
+      "Kuru Boya Paketi",
+      "Resim Defteri",
+      "Kırmızı Kalem",
+      "4 Delikli Kalemtıraş",
+      "Fosforlu Kalem",
+      "Tükenmez Kalem Seti",
+      "Büyük Çizgili Defter",
+      "Keçeli Kalem Seti",
+      "Cetvel, Gönye ve İletki Seti",
+      "Büyük Kırtasiye Paketi",
+      "Süper Öğrenci Kırtasiye Çantası"
+    ];
+
+    const letters = ["A", "B", "C", "D"];
+
+    let currentQuestion = 0;
+    let answered = false;
+
+    const questionText = document.getElementById("questionText");
+    const answersDiv = document.getElementById("answers");
+    const questionNumber = document.getElementById("questionNumber");
+    const currentPrize = document.getElementById("currentPrize");
+    const message = document.getElementById("message");
+    const nextButton = document.getElementById("nextButton");
+    const restartButton = document.getElementById("restartButton");
+    const prizeList = document.getElementById("prizeList");
+
+    function createPrizeList() {
+      prizeList.innerHTML = "";
+
+      for (let i = prizes.length - 1; i >= 0; i--) {
+        const li = document.createElement("li");
+        li.id = "prize-" + i;
+        li.textContent = `${i + 1}. ${prizes[i]}`;
+
+        if (i === 0 || i === 4 || i === 9) {
+          li.classList.add("baraj");
+        }
+
+        prizeList.appendChild(li);
+      }
+    }
+
+    function updatePrizeList() {
+      document.querySelectorAll(".prize-list li").forEach(item => {
+        item.classList.remove("active");
+      });
+
+      const activePrize = document.getElementById("prize-" + currentQuestion);
+      if (activePrize) {
+        activePrize.classList.add("active");
+      }
+    }
+
+    function showQuestion() {
+      answered = false;
+      message.textContent = "";
+      nextButton.classList.add("hidden");
+      restartButton.classList.add("hidden");
+
+      const q = questions[currentQuestion];
+
+      questionNumber.textContent = `Soru: ${currentQuestion + 1} / ${questions.length}`;
+      currentPrize.textContent = `Ödül: ${prizes[currentQuestion]}`;
+      questionText.textContent = q.question;
+
+      answersDiv.innerHTML = "";
+
+      q.answers.forEach((answer, index) => {
+        const button = document.createElement("button");
+        button.className = "answer-btn";
+        button.innerHTML = `<strong>${letters[index]}:</strong> ${answer}`;
+        button.addEventListener("click", () => checkAnswer(index, button));
+        answersDiv.appendChild(button);
+      });
+
+      updatePrizeList();
+    }
+
+    function guaranteedPrize() {
+      if (currentQuestion >= 10) {
+        return "Tükenmez Kalem Seti";
+      } else if (currentQuestion >= 5) {
+        return "Kuru Boya Paketi";
+      } else if (currentQuestion >= 1) {
+        return "Silgi";
+      } else {
+        return "henüz bir ödül";
+      }
+    }
+
+    function checkAnswer(selectedIndex, selectedButton) {
+      if (answered) return;
+
+      answered = true;
+
+      const q = questions[currentQuestion];
+      const allButtons = document.querySelectorAll(".answer-btn");
+
+      allButtons.forEach(button => button.disabled = true);
+
+      if (selectedIndex === q.correct) {
+        selectedButton.classList.add("correct");
+
+        if (currentQuestion === questions.length - 1) {
+          message.textContent = "Tebrikler! Büyük ödülü kazandın: Süper Öğrenci Kırtasiye Çantası!";
+          restartButton.classList.remove("hidden");
+        } else {
+          message.textContent = "Doğru cevap! Bir sonraki soruya geçebilirsin.";
+          nextButton.classList.remove("hidden");
+        }
+      } else {
+        selectedButton.classList.add("wrong");
+        allButtons[q.correct].classList.add("correct");
+
+        const prize = guaranteedPrize();
+        message.textContent = `Yanlış cevap! Kazandığın garanti ödül: ${prize}.`;
+        restartButton.classList.remove("hidden");
+      }
+    }
+
+    nextButton.addEventListener("click", () => {
+      currentQuestion++;
+      showQuestion();
+    });
+
+    restartButton.addEventListener("click", () => {
+      currentQuestion = 0;
+      showQuestion();
+    });
+
+    createPrizeList();
+    showQuestion();
+  </script>
+</body>
+</html>
