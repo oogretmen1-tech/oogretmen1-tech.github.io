@@ -166,7 +166,7 @@ nav {
 .divider { width:60px; height:5px; border-radius:3px; margin:10px auto 32px; }
 
 /* ===== SINIFLAR (sınıflar tablo) ===== */
-.classes-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:24px; }
+.classes-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:24px; align-items:start; }
 .class-card { background:#fff; border-radius:24px; overflow:hidden; box-shadow:var(--card-shadow); transition:transform .25s, box-shadow .25s; }
 .class-card:hover { transform:translateY(-6px); box-shadow:0 16px 36px rgba(0,0,0,.13); }
 .class-card-header { display:flex; align-items:center; gap:14px; padding:22px 22px 16px; border-bottom:3px solid #f0f0f0; cursor:pointer; user-select:none; -webkit-tap-highlight-color:transparent; transition:background .18s; border-radius:24px 24px 0 0; }
@@ -236,17 +236,18 @@ nav {
 /* ===== OYUNLAR ===== */
 .games-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:20px; }
 .game-card {
-  border-radius:22px; padding:28px 20px; color:#fff; text-align:center;
-  box-shadow:0 6px 20px rgba(0,0,0,.18); transition:transform .22s; cursor:pointer; text-decoration:none; display:block;
+  background:#fff; border-radius:22px; padding:28px 20px; color:var(--dark); text-align:center;
+  box-shadow:var(--card-shadow); border:3px solid transparent;
+  transition:transform .22s, box-shadow .22s; cursor:pointer; text-decoration:none; display:block;
 }
-.game-card:hover { transform:scale(1.04); }
+.game-card:hover { transform:translateY(-6px); box-shadow:0 16px 36px rgba(0,0,0,.13); }
 .game-card .gicon { font-size: 2.8rem; margin-bottom: 10px; }
-.game-card h4 { font-family:'Andika', sans-serif; font-size:1.1rem; font-weight:800; }
-.game-card p { font-size:.82rem; opacity:.85; margin-top:6px; line-height:1.4; }
-.g1 { background:linear-gradient(135deg, #f7971e, #ffd200); color:#2d2d2d; }
-.g2 { background:linear-gradient(135deg, #43e97b, #38f9d7); color:#1a3a2a; }
-.g3 { background:linear-gradient(135deg, #fa709a, #fee140); color:#2d2d2d; }
-.g4 { background:linear-gradient(135deg, #4facfe, #00f2fe); color:#0a2a3a; }
+.game-card h4 { font-family:'Andika', sans-serif; font-size:1.1rem; font-weight:800; color:var(--dark); }
+.game-card p { font-size:.82rem; color:#777; margin-top:6px; line-height:1.4; }
+.g1 { border-color:var(--orange); }
+.g2 { border-color:var(--teal); }
+.g3 { border-color:var(--pink); }
+.g4 { border-color:var(--s4); }
 
 /* ===== HAKKIMDA ===== */
 .about-box { background:#fff; border-radius:28px; box-shadow:var(--card-shadow); display:flex; gap:36px; align-items:center; padding:40px; flex-wrap:wrap; }
@@ -323,9 +324,13 @@ nav {
 .tema-bh .card-icon { background:#F1F5F9; }
 .tema-ev .card-icon { background:#FDF4E7; }
 .oyun-turkce .card { border-left:4px solid var(--s4); }
-.oyun-matematik .card { border-left:4px solid var(--orange); }
-.oyun-genel .card { border-left:4px solid var(--s3); }
+.oyun-matematik .card { border-left:4px solid var(--s2); }
+.oyun-genel .card { border-left:4px solid var(--s1); }
 .oyun-quiz .card { border-left:4px solid var(--purple); }
+.oyun-turkce .card-icon { background:var(--s4); }
+.oyun-matematik .card-icon { background:var(--s2); }
+.oyun-genel .card-icon { background:var(--s1); }
+.oyun-quiz .card-icon { background:var(--purple); }
 
 /* ===== ÇEDES ===== */
 .cedes-grid { display:flex; flex-direction:column; gap:18px; }
@@ -761,7 +766,7 @@ footer span { color:var(--metal-1); font-weight:800; }
     <a class="back-btn" href="#" onclick="showHome();return false;">← Ana Sayfa</a>
     <div class = "cat-hero hayat"><img class = "cat-hero-cover" src = "hayatbilgisi-kapak.png" alt = "Hayat Bilgisi" onerror = "this.style.display='none'"><div><h2>Hayat Bilgisi</h2><p>3. Sınıf · Konu anlatımı + interaktif etkinlikler</p></div></div>
     <div class="cards tema-h">
-      <a href = "ben-ve-okulum.html" class = "card"><div class = "card-icon"><img src = "icon-ben-ve-okulum.png" alt = "" onerror = "this.parentElement.innerHTML='🏫'"></div><div class = "card-body"><h3> Hayatsi Üniteleri</h3><p>3 Alt Konu + Etkinlik</p></div></a>
+      <a href = "ben-ve-okulum.html" class = "card"><div class = "card-icon"><img src = "icon-ben-ve-okulum.png" alt = "" onerror = "this.parentElement.innerHTML='🏫'"></div><div class = "card-body"><h3>Hayat Bilgisi Üniteleri</h3><p>Üniteler + Etkinlik</p></div></a>
       <a href="3sinif_hayatbilgisi_genel_degerlendirme-1.html" class="card"><div class="card-icon"><img src="icon-hayatbilgisi-genel-degerlendirme.png" alt="" onerror="this.src='icon_gen_inceleme.png'"></div><div class="card-body"><h3>Genel Değerlendirme</h3><p>Karma Test</p></div></a>
     </div>
   </div>
@@ -774,11 +779,6 @@ footer span { color:var(--metal-1); font-weight:800; }
       <a href="okulda-hayat-2sinif.html" class="card"><div class="card-icon"><img src="icon-okulda-hayat.png" alt="" onerror="this.parentElement.innerHTML='🏫'"></div><div class="card-body"><h3>Ben ve Okulum</h3><p>1. Ünite · İnteraktif Ders Kitabı</p></div></a>
     </div>
 
-    <div class="alt-baslik" style="background:#DCFCE7;color:#166534;">🏠 Evimiz Yuvamız</div>
-    <div class="cards tema-h">
-      <a href="ailem-toplum-2sinif.html" class="card"><div class="card-icon"><img src="icon-evimiz-yuvamiz.png" alt="" onerror="this.parentElement.innerHTML='🏠'"></div><div class="card-body"><h3>Ailem ve Toplum</h3><p>3. Ünite · İnteraktif Ders Kitabı</p></div></a>
-    </div>
-
     <div class="alt-baslik" style="background:#DBEAFE;color:#1E40AF;">🛡️Sağlığım ve Güvenliğim</div>
     <div class="cards tema-h">
       <a href="saglik-guvenligim-2sinif.html" class="card"><div class="card-icon">🧼</div><div class="card-body"><h3>Sağlığım ve Güvenliğim</h3><p>2. Ünite · İnteraktif Ders Kitabı</p></div></a>
@@ -786,10 +786,14 @@ footer span { color:var(--metal-1); font-weight:800; }
       <a href="dogal_afetler_2sinif.html" class="card"><div class="card-icon">🌋</div><div class="card-body"><h3>Doğal Afetler</h3><p>Ders Materyali</p></div></a>
     </div>
 
+    <div class="alt-baslik" style="background:#DCFCE7;color:#166534;">🏠 Evimiz Yuvamız</div>
+    <div class="cards tema-h">
+      <a href="ailem-toplum-2sinif.html" class="card"><div class="card-icon"><img src="icon-evimiz-yuvamiz.png" alt="" onerror="this.parentElement.innerHTML='🏠'"></div><div class="card-body"><h3>Ailem ve Toplum</h3><p>3. Ünite · İnteraktif Ders Kitabı</p></div></a>
+    </div>
+
     <div class="alt-baslik" style="background:#FFE4E6;color:#9F1239;">📍 Yaşadığım Yer ve Ülkem</div>
     <div class="cards tema-h">
       <a href="yasadigim-yer-ulkem-detayli.html" class="card"><div class="card-icon"><img src="icon_gen_ataturk_anitkabir.png" alt=""></div><div class="card-body"><h3>Yaşadığım Yer ve Ülkem · Geniş Konu Anlatımı</h3><p>Yönetim, Atatürk, Bayrak, Bayramlar, Tarihî Yerler + Test</p></div></a>
-      <a href = "ataturk-cocukluk.html" class = "card"><div class = "card-icon"><img src = "icon_gen_ataturk_anitkabir.png" alt = ""></div><div class = "card-body"><h3>Yaşadığım Yer ve Ülkem</h3><p>Metin + Zaman Çizgisi</p></div></a>
       <a href="tarihi-yerler.html" class="card"><div class="card-icon">🏛️</div><div class="card-body"><h3>Tarihi ve Doğal Yerler</h3><p>Türkiye + Güneydoğu</p></div></a>
       <a href="yerel-yonetimler.html" class="card"><div class="card-icon">🏢</div><div class="card-body"><h3>Yerel Yönetimler</h3><p>Muhtar, Kaymakam, Vali</p></div></a>
     </div>
