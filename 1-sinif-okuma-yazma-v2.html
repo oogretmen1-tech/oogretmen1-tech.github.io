@@ -1,0 +1,1897 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1. Sınıf İlk Okuma Yazma | Hasan Tutus</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FDF8EF; --dark:#2D1F0E;
+  --g1:#D81B60; --g1l:#FCE4EC;
+  --g2:#0277BD; --g2l:#E1F5FE;
+  --g3:#E65100; --g3l:#FFF3E0;
+  --g4:#2E7D32; --g4l:#E8F5E9;
+  --g5:#6A1B9A; --g5l:#F3E5F5;
+  --gt:#F57F17; --gtl:#FFF8E1;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--dark);overflow-x:hidden;}
+
+/* HERO */
+.hero{background:linear-gradient(140deg,#E91E63 0%,#FF9800 45%,#2196F3 100%);
+  padding:44px 20px 78px;text-align:center;position:relative;overflow:hidden;}
+.hero::after{content:'';position:absolute;bottom:-1px;left:0;width:100%;height:60px;
+  background:var(--cream);clip-path:ellipse(55% 100% at 50% 100%);}
+.badge{display:inline-block;background:white;color:#D81B60;font-weight:800;
+  font-size:.72rem;letter-spacing:2px;text-transform:uppercase;padding:5px 16px;
+  border-radius:20px;margin-bottom:16px;box-shadow:0 3px 12px rgba(0,0,0,.18);}
+.hero h1{font-family:'Fredoka One',cursive;font-size:clamp(2rem,7vw,4.2rem);
+  color:white;text-shadow:3px 4px 0 rgba(0,0,0,.15);line-height:1.05;}
+.hero p{color:rgba(255,255,255,.92);font-size:1rem;margin-top:8px;font-weight:700;}
+.hero-seq{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:16px;}
+.seq-chip{background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.5);
+  color:white;font-family:'Fredoka One',cursive;font-size:.95rem;
+  padding:5px 14px;border-radius:20px;}
+.seq-chip.active-chip{background:white;color:#D81B60;}
+
+/* MAIN TABS */
+.main-nav{position:sticky;top:0;z-index:300;background:var(--cream);
+  border-bottom:4px solid #FFE082;display:flex;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;}
+.main-nav::-webkit-scrollbar{height:3px;}
+.main-nav::-webkit-scrollbar-thumb{background:#FFD54F;border-radius:3px;}
+.main-tab{flex:0 0 auto;padding:12px 18px;border:none;background:transparent;
+  font-family:'Fredoka One',cursive;font-size:.88rem;cursor:pointer;
+  border-bottom:4px solid transparent;margin-bottom:-4px;
+  color:#999;transition:all .2s;white-space:nowrap;line-height:1.2;text-align:center;}
+.main-tab.on{color:var(--tc);border-bottom-color:var(--tc);background:rgba(255,255,255,.7);}
+.main-tab small{display:block;font-family:'Nunito',sans-serif;font-size:.62rem;
+  font-weight:700;margin-top:2px;opacity:.8;}
+
+/* GROUP PANEL */
+.gPanel{display:none;max-width:960px;margin:0 auto;padding:32px 16px 60px;}
+.gPanel.on{display:block;}
+
+/* GROUP HEADER */
+.gHead{border-radius:22px;padding:24px 26px;margin-bottom:28px;
+  display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+  position:relative;overflow:hidden;}
+.gHead::before{content:'';position:absolute;right:-20px;top:-20px;
+  width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.12);}
+.gNum{font-family:'Fredoka One',cursive;font-size:3.5rem;color:white;opacity:.25;flex-shrink:0;}
+.gInfo h2{font-family:'Fredoka One',cursive;font-size:1.5rem;color:white;}
+.gInfo p{color:rgba(255,255,255,.82);font-size:.88rem;margin-top:3px;font-weight:700;}
+.gHarfs{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.gHarf{background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.45);
+  color:white;border-radius:8px;padding:3px 10px;
+  font-family:'Fredoka One',cursive;font-size:.9rem;}
+.gHarf.new{background:white;}
+
+/* LETTER TABS inside group */
+.letter-nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px;}
+.lBtn{padding:8px 16px;border:2px solid var(--bc);background:white;
+  border-radius:50px;font-family:'Fredoka One',cursive;font-size:.9rem;
+  color:var(--bc);cursor:pointer;transition:all .2s;}
+.lBtn.on,.lBtn:hover{background:var(--bc);color:white;transform:translateY(-2px);}
+.lBtn.tekrar-btn{background:var(--bc);color:white;font-weight:800;}
+
+/* LETTER PANEL */
+.lPanel{display:none;}
+.lPanel.on{display:block;}
+
+/* BIG LETTER DISPLAY */
+.bigLetter{display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+  background:white;border-radius:20px;padding:22px 24px;margin-bottom:20px;
+  box-shadow:0 4px 20px rgba(0,0,0,.07);}
+.letter-box{text-align:center;min-width:110px;}
+.lu{font-family:'Fredoka One',cursive;font-size:4.5rem;color:var(--gc);line-height:1;}
+.ll{font-family:'Fredoka One',cursive;font-size:3.5rem;color:var(--gc);opacity:.6;line-height:1;}
+.letter-info{flex:1;}
+.letter-info h3{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--gc);margin-bottom:10px;}
+.ses-example{display:flex;align-items:center;gap:10px;font-size:1.1rem;font-weight:700;
+  background:var(--gcl);border-radius:12px;padding:10px 14px;margin-bottom:8px;}
+.ses-emoji{font-size:2rem;}
+.ses-word{font-family:'Nunito',sans-serif;font-size:1.3rem;color:var(--gc);}
+.ses-word b{color:var(--gc);text-decoration:underline;}
+
+/* Click to pop animation */
+.bigLetter .letter-box{cursor:pointer;transition:transform .2s;}
+.bigLetter .letter-box:hover{transform:scale(1.05);}
+.bigLetter .letter-box.pop{animation:pop .3s;}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.18)}100%{transform:scale(1)}}
+
+/* CARD BLOCK */
+.block{background:white;border-radius:18px;padding:20px 22px;margin-bottom:18px;
+  box-shadow:0 3px 16px rgba(0,0,0,.07);}
+.bTitle{font-family:'Fredoka One',cursive;font-size:1.05rem;margin-bottom:14px;
+  color:var(--gc);display:flex;align-items:center;gap:8px;}
+.bTag{font-size:.62rem;background:var(--gcl);color:var(--gc);padding:3px 9px;
+  border-radius:20px;font-family:'Nunito',sans-serif;font-weight:800;}
+
+/* HECELER */
+.heceWrap{display:flex;flex-wrap:wrap;gap:8px;}
+.hece{background:var(--gcl);border:2px solid var(--gc);border-radius:10px;
+  padding:8px 14px;font-family:'Fredoka One',cursive;font-size:1.1rem;
+  color:var(--gc);cursor:pointer;transition:all .2s;user-select:none;}
+.hece:hover,.hece.hit{background:var(--gc);color:white;transform:scale(1.08);}
+
+/* KELIMELER */
+.kelGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:9px;}
+.kelCard{background:white;border:2px solid #eee;border-radius:13px;
+  padding:11px 7px;text-align:center;cursor:pointer;transition:all .2s;}
+.kelCard:hover{border-color:var(--gc);transform:translateY(-2px);
+  box-shadow:0 5px 14px rgba(0,0,0,.1);}
+.ke{font-size:1.9rem;display:block;margin-bottom:3px;}
+.kt{font-family:'Nunito',sans-serif;font-size:1.2rem;font-weight:700;color:var(--gc);}
+.kh{font-size:.68rem;color:#bbb;margin-top:2px;font-weight:700;}
+
+/* CÜMLELER */
+.cumleList{display:flex;flex-direction:column;gap:9px;}
+.cumleStrip{background:linear-gradient(90deg,var(--gcl),white);
+  border-left:5px solid var(--gc);border-radius:0 13px 13px 0;
+  padding:11px 16px;font-family:'Nunito',sans-serif;font-weight:700;font-size:1.25rem;
+  cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:10px;}
+.cumleStrip:hover{padding-left:22px;box-shadow:0 3px 10px rgba(0,0,0,.1);}
+.cn{font-family:'Fredoka One',cursive;font-size:.8rem;color:var(--gc);opacity:.5;flex-shrink:0;}
+
+/* TEKRAR SECTION */
+.tekrarBox{background:linear-gradient(135deg,var(--gc) 0%,color-mix(in srgb,var(--gc) 70%,black) 100%);
+  border-radius:20px;padding:24px;margin-bottom:20px;color:white;}
+.tekrarBox h3{font-family:'Fredoka One',cursive;font-size:1.3rem;margin-bottom:6px;}
+.tekrarBox p{font-size:.88rem;opacity:.85;margin-bottom:16px;}
+.tekrarHarfs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+.tekrarHarf{background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.4);
+  border-radius:10px;padding:8px 16px;font-family:'Fredoka One',cursive;font-size:1.5rem;}
+
+/* METIN */
+.metinBox{background:#FAFAFA;border:2px dashed #ddd;border-radius:14px;
+  padding:18px 20px;font-family:'Nunito',sans-serif;font-weight:700;font-size:1.15rem;
+  line-height:2.2;position:relative;}
+.metinBox::before{content:'📖';position:absolute;top:-12px;left:16px;font-size:1.3rem;}
+.mw{cursor:pointer;border-radius:4px;padding:0 1px;transition:background .15s;}
+.mw:hover{background:var(--gcl);}
+.mw.lit{background:var(--gc);color:white;border-radius:4px;}
+
+/* OYUN */
+.oyunBox{background:white;border-radius:18px;padding:22px;
+  box-shadow:0 6px 24px rgba(0,0,0,.1);margin-bottom:20px;}
+.oyunBox h3{font-family:'Fredoka One',cursive;font-size:1.1rem;
+  color:var(--gc);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.otag{background:var(--gcl);color:var(--gc);font-size:.62rem;
+  font-family:'Nunito',sans-serif;font-weight:800;padding:3px 9px;border-radius:20px;}
+.findTarget{font-family:'Fredoka One',cursive;font-size:4rem;
+  color:var(--gc);text-align:center;margin-bottom:10px;}
+.findSub{font-size:.88rem;font-weight:700;color:#888;text-align:center;margin-bottom:12px;}
+.findText{background:var(--gcl);border-radius:12px;padding:14px 18px;
+  font-family:'Nunito',sans-serif;font-weight:700;font-size:1.25rem;line-height:2;word-break:break-word;}
+.fl{cursor:pointer;padding:1px 2px;border-radius:4px;transition:all .15s;}
+.fl:hover{background:rgba(0,0,0,.06);}
+.fl.found{background:var(--gc);color:white;border-radius:4px;}
+.fl.bad{background:#FFEBEE;color:#C62828;}
+.scoreRow{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap;}
+.sLbl{font-weight:800;font-size:.88rem;}
+.sVal{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--gc);}
+.stars{font-size:1.2rem;letter-spacing:3px;}
+.fb{display:inline-block;padding:7px 16px;border-radius:50px;font-weight:800;
+  min-height:34px;transition:all .3s;font-size:.95rem;}
+.fb.ok{background:#E8F5E9;color:#2E7D32;}
+.fb.no{background:#FFEBEE;color:#C62828;}
+.fb.mt{background:transparent;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;
+  border-radius:50px;border:none;font-family:'Nunito',sans-serif;
+  font-size:.9rem;font-weight:800;cursor:pointer;transition:all .2s;
+  box-shadow:0 3px 10px rgba(0,0,0,.15);}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.18);}
+.btnC{background:var(--gc);color:white;}
+.btnG{background:#F5F5F5;color:#555;}
+
+/* PRINT */
+.printSec{border:3px dashed var(--gc);border-radius:18px;padding:20px;
+  text-align:center;background:var(--gcl);margin-top:8px;}
+.printSec h3{font-family:'Fredoka One',cursive;font-size:1.05rem;color:var(--gc);margin-bottom:6px;}
+.printSec p{font-size:.82rem;color:#888;margin-bottom:12px;}
+.pGrid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+.pBtn{background:white;border:2px solid var(--gc);border-radius:12px;
+  padding:8px 14px;cursor:pointer;transition:all .2s;
+  font-family:'Nunito',sans-serif;font-weight:800;font-size:.82rem;color:var(--gc);}
+.pBtn:hover{background:var(--gc);color:white;}
+
+/* MODAL */
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:999;
+  align-items:center;justify-content:center;}
+.mbg.open{display:flex;}
+.mbox{background:white;border-radius:22px;padding:34px;max-width:480px;width:90%;
+  text-align:center;animation:su .3s;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+@keyframes su{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+.mbox h2{font-family:'Fredoka One',cursive;font-size:1.4rem;margin-bottom:6px;}
+.mbox p{color:#777;font-size:.88rem;margin-bottom:20px;}
+.mbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+
+footer{background:#2D1F0E;color:rgba(255,255,255,.75);text-align:center;padding:28px 16px;font-size:.88rem;}
+footer strong{color:white;}
+
+@media(max-width:580px){
+  .lu{font-size:3.5rem;}.ll{font-size:2.8rem;}
+  .cumleStrip{font-size:1.15rem;}
+  .findText{font-size:1.2rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="badge">📚 Hasan Tutus · Taylıca İlkokulu · Şanlıurfa</div>
+  <h1>1. Sınıf<br>İlk Okuma Yazma</h1>
+  <p>Ses Temelli Cümle Yöntemi · Maarif Modeli</p>
+  <div class="hero-seq">
+    <span class="seq-chip active-chip">A·N·E·T·İ·L</span>
+    <span class="seq-chip">O·K·U·R·I·M</span>
+    <span class="seq-chip">Ü·S·Ö·Y·D·Z</span>
+    <span class="seq-chip">Ç·B·G·C·Ş</span>
+    <span class="seq-chip">P·H·V·Ğ·F·J</span>
+  </div>
+</div>
+
+<!-- MAIN NAV -->
+<nav class="main-nav" id="mainNav">
+  <button class="main-tab on" data-g="1" style="--tc:var(--g1)" onclick="switchG(1)">
+    📗 Grup 1<small>A·N·E·T·İ·L</small>
+  </button>
+  <button class="main-tab" data-g="2" style="--tc:var(--g2)" onclick="switchG(2)">
+    📘 Grup 2<small>O·K·U·R·I·M</small>
+  </button>
+  <button class="main-tab" data-g="3" style="--tc:var(--g3)" onclick="switchG(3)">
+    📙 Grup 3<small>Ü·S·Ö·Y·D·Z</small>
+  </button>
+  <button class="main-tab" data-g="4" style="--tc:var(--g4)" onclick="switchG(4)">
+    📗 Grup 4<small>Ç·B·G·C·Ş</small>
+  </button>
+  <button class="main-tab" data-g="5" style="--tc:var(--g5)" onclick="switchG(5)">
+    📒 Grup 5<small>P·H·V·Ğ·F·J</small>
+  </button>
+  <button class="main-tab" data-g="6" style="--tc:var(--gt)" onclick="switchG(6)">
+    🏆 Genel Tekrar<small>Tüm Harfler</small>
+  </button>
+  <a class="main-tab" href="hece_kitapcigi.html" style="--tc:#6C5CE7;text-decoration:none;color:#6C5CE7;">
+    🔤 Hece Kitapçığı<small>Sesli Heceler</small>
+  </a>
+</nav>
+
+<!-- ═══════ GRUP 1: A·N·E·T·İ·L ═══════ -->
+<div id="g1" class="gPanel on" style="--gc:var(--g1);--gcl:var(--g1l)">
+  <div class="gHead" style="background:linear-gradient(135deg,#D81B60,#F06292)">
+    <div class="gNum">1</div>
+    <div class="gInfo">
+      <h2>A · N · E · T · İ · L</h2>
+      <p>İlk 6 ses · Temel okuma-yazma başlangıcı</p>
+      <div class="gHarfs">
+        <span class="gHarf new">A a</span><span class="gHarf new">N n</span>
+        <span class="gHarf new">E e</span><span class="gHarf new">T t</span>
+        <span class="gHarf new">İ i</span><span class="gHarf new">L l</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Letter nav buttons -->
+  <div class="letter-nav" id="ln1">
+    <button class="lBtn on" style="--bc:var(--g1)" onclick="switchL(1,'a')">🔴 A Sesi</button>
+    <button class="lBtn" style="--bc:var(--g1)" onclick="switchL(1,'n')">🟠 N Sesi</button>
+    <button class="lBtn" style="--bc:var(--g1)" onclick="switchL(1,'e')">🟡 E Sesi</button>
+    <button class="lBtn" style="--bc:var(--g1)" onclick="switchL(1,'t')">🟢 T Sesi</button>
+    <button class="lBtn" style="--bc:var(--g1)" onclick="switchL(1,'i')">🔵 İ Sesi</button>
+    <button class="lBtn" style="--bc:var(--g1)" onclick="switchL(1,'l')">🟣 L Sesi</button>
+    <button class="lBtn tekrar-btn" style="--bc:var(--g1)" onclick="switchL(1,'tekrar')">⭐ ANETİL Tekrar</button>
+  </div>
+
+  <!-- A -->
+  <div id="g1-a" class="lPanel on">
+    <div class="bigLetter">
+      <div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)">
+        <div class="lu">A</div><div class="ll">a</div>
+      </div>
+      <div class="letter-info">
+        <h3>A Sesi Çalışmaları</h3>
+        <div class="ses-example"><span class="ses-emoji">🐝</span><span class="ses-word"><b>a</b>rı</span></div>
+        <div class="ses-example"><span class="ses-emoji">🌳</span><span class="ses-word"><b>a</b>ğaç</span></div>
+        <div class="ses-example"><span class="ses-emoji">🍎</span><span class="ses-word"><b>a</b>rmut</span></div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="bTitle">🔗 A ile Heceler <span class="bTag">TIKLAYARAK OKU</span></div>
+      <div class="heceWrap">
+        <div class="hece" onclick="toggleHece(this)">a</div>
+        <div class="hece" onclick="toggleHece(this)">al</div>
+        <div class="hece" onclick="toggleHece(this)">an</div>
+        <div class="hece" onclick="toggleHece(this)">at</div>
+        <div class="hece" onclick="toggleHece(this)">la</div>
+        <div class="hece" onclick="toggleHece(this)">na</div>
+        <div class="hece" onclick="toggleHece(this)">ta</div>
+        <div class="hece" onclick="toggleHece(this)">ana</div>
+        <div class="hece" onclick="toggleHece(this)">ata</div>
+        <div class="hece" onclick="toggleHece(this)">nal</div>
+        <div class="hece" onclick="toggleHece(this)">tan</div>
+        <div class="hece" onclick="toggleHece(this)">alan</div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="bTitle">📝 A Sesiyle Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🐴</span><div class="kt">at</div><div class="kh">at</div></div>
+        <div class="kelCard"><span class="ke">👩</span><div class="kt">anne</div><div class="kh">an·ne</div></div>
+        <div class="kelCard"><span class="ke">🌿</span><div class="kt">nane</div><div class="kh">na·ne</div></div>
+        <div class="kelCard"><span class="ke">🌰</span><div class="kt">tane</div><div class="kh">ta·ne</div></div>
+        <div class="kelCard"><span class="ke">📻</span><div class="kt">anten</div><div class="kh">an·ten</div></div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="bTitle">💬 A Sesiyle Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Anne, nane al.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Ali, at al.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Anne, tane tane anlat.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- N -->
+  <div id="g1-n" class="lPanel">
+    <div class="bigLetter">
+      <div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)">
+        <div class="lu">N</div><div class="ll">n</div>
+      </div>
+      <div class="letter-info">
+        <h3>N Sesi Çalışmaları</h3>
+        <div class="ses-example"><span class="ses-emoji">🍎</span><span class="ses-word"><b>n</b>ar</span></div>
+        <div class="ses-example"><span class="ses-emoji">🌿</span><span class="ses-word"><b>n</b>ane</span></div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="bTitle">🔗 N ile Heceler</div>
+      <div class="heceWrap">
+        <div class="hece" onclick="toggleHece(this)">na</div>
+        <div class="hece" onclick="toggleHece(this)">ne</div>
+        <div class="hece" onclick="toggleHece(this)">ni</div>
+        <div class="hece" onclick="toggleHece(this)">an</div>
+        <div class="hece" onclick="toggleHece(this)">en</div>
+        <div class="hece" onclick="toggleHece(this)">in</div>
+        <div class="hece" onclick="toggleHece(this)">nal</div>
+        <div class="hece" onclick="toggleHece(this)">nine</div>
+        <div class="hece" onclick="toggleHece(this)">anne</div>
+        <div class="hece" onclick="toggleHece(this)">nane</div>
+        <div class="hece" onclick="toggleHece(this)">ten</div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="bTitle">📝 N Sesiyle Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">👵</span><div class="kt">nine</div><div class="kh">ni·ne</div></div>
+        <div class="kelCard"><span class="ke">👩</span><div class="kt">anne</div><div class="kh">an·ne</div></div>
+        <div class="kelCard"><span class="ke">🌿</span><div class="kt">nane</div><div class="kh">na·ne</div></div>
+        <div class="kelCard"><span class="ke">🔩</span><div class="kt">nal</div><div class="kh">nal</div></div>
+        <div class="kelCard"><span class="ke">💪</span><div class="kt">inat</div><div class="kh">i·nat</div></div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="bTitle">💬 N Sesiyle Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Nine, anlat.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Anne, nane al.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Nine ile anne.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- E -->
+  <div id="g1-e" class="lPanel">
+    <div class="bigLetter">
+      <div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)">
+        <div class="lu">E</div><div class="ll">e</div>
+      </div>
+      <div class="letter-info">
+        <h3>E Sesi Çalışmaları</h3>
+        <div class="ses-example"><span class="ses-emoji">🍎</span><span class="ses-word"><b>e</b>lma</span></div>
+        <div class="ses-example"><span class="ses-emoji">✋</span><span class="ses-word"><b>e</b>l</span></div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="bTitle">🔗 E ile Heceler</div>
+      <div class="heceWrap">
+        <div class="hece" onclick="toggleHece(this)">el</div>
+        <div class="hece" onclick="toggleHece(this)">et</div>
+        <div class="hece" onclick="toggleHece(this)">en</div>
+        <div class="hece" onclick="toggleHece(this)">le</div>
+        <div class="hece" onclick="toggleHece(this)">ne</div>
+        <div class="hece" onclick="toggleHece(this)">te</div>
+        <div class="hece" onclick="toggleHece(this)">ten</div>
+        <div class="hece" onclick="toggleHece(this)">ele</div>
+        <div class="hece" onclick="toggleHece(this)">tane</div>
+        <div class="hece" onclick="toggleHece(this)">anne</div>
+        <div class="hece" onclick="toggleHece(this)">alet</div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="bTitle">📝 E Sesiyle Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">✋</span><div class="kt">el</div><div class="kh">el</div></div>
+        <div class="kelCard"><span class="ke">🥩</span><div class="kt">et</div><div class="kh">et</div></div>
+        <div class="kelCard"><span class="ke">📡</span><div class="kt">tel</div><div class="kh">tel</div></div>
+        <div class="kelCard"><span class="ke">👵</span><div class="kt">nine</div><div class="kh">ni·ne</div></div>
+        <div class="kelCard"><span class="ke">🌰</span><div class="kt">tane</div><div class="kh">ta·ne</div></div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="bTitle">💬 E Sesiyle Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Ela, et al.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Anne, tel al.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Ali ile Ela el ele.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- T -->
+  <div id="g1-t" class="lPanel">
+    <div class="bigLetter">
+      <div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)">
+        <div class="lu">T</div><div class="ll">t</div>
+      </div>
+      <div class="letter-info">
+        <h3>T Sesi Çalışmaları</h3>
+        <div class="ses-example"><span class="ses-emoji">⚽</span><span class="ses-word"><b>t</b>op</span></div>
+        <div class="ses-example"><span class="ses-emoji">🐰</span><span class="ses-word"><b>t</b>avşan</span></div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="bTitle">🔗 T ile Heceler</div>
+      <div class="heceWrap">
+        <div class="hece" onclick="toggleHece(this)">ta</div>
+        <div class="hece" onclick="toggleHece(this)">te</div>
+        <div class="hece" onclick="toggleHece(this)">ti</div>
+        <div class="hece" onclick="toggleHece(this)">at</div>
+        <div class="hece" onclick="toggleHece(this)">et</div>
+        <div class="hece" onclick="toggleHece(this)">it</div>
+        <div class="hece" onclick="toggleHece(this)">tel</div>
+        <div class="hece" onclick="toggleHece(this)">tan</div>
+        <div class="hece" onclick="toggleHece(this)">ten</div>
+        <div class="hece" onclick="toggleHece(this)">tane</div>
+        <div class="hece" onclick="toggleHece(this)">alet</div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="bTitle">📝 T Sesiyle Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🐴</span><div class="kt">at</div><div class="kh">at</div></div>
+        <div class="kelCard"><span class="ke">🥩</span><div class="kt">et</div><div class="kh">et</div></div>
+        <div class="kelCard"><span class="ke">📡</span><div class="kt">tel</div><div class="kh">tel</div></div>
+        <div class="kelCard"><span class="ke">🔧</span><div class="kt">alet</div><div class="kh">a·let</div></div>
+        <div class="kelCard"><span class="ke">📻</span><div class="kt">anten</div><div class="kh">an·ten</div></div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="bTitle">💬 T Sesiyle Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Ali, alet al.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Nine, et al.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Anne, tane tane anlat.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- İ -->
+  <div id="g1-i" class="lPanel">
+    <div class="bigLetter">
+      <div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)">
+        <div class="lu">İ</div><div class="ll">i</div>
+      </div>
+      <div class="letter-info">
+        <h3>İ Sesi Çalışmaları</h3>
+        <div class="ses-example"><span class="ses-emoji">🪢</span><span class="ses-word"><b>i</b>p</span></div>
+        <div class="ses-example"><span class="ses-emoji">🐄</span><span class="ses-word"><b>i</b>nek</span></div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="bTitle">🔗 İ ile Heceler</div>
+      <div class="heceWrap">
+        <div class="hece" onclick="toggleHece(this)">il</div>
+        <div class="hece" onclick="toggleHece(this)">in</div>
+        <div class="hece" onclick="toggleHece(this)">it</div>
+        <div class="hece" onclick="toggleHece(this)">li</div>
+        <div class="hece" onclick="toggleHece(this)">ni</div>
+        <div class="hece" onclick="toggleHece(this)">ti</div>
+        <div class="hece" onclick="toggleHece(this)">ile</div>
+        <div class="hece" onclick="toggleHece(this)">ilan</div>
+        <div class="hece" onclick="toggleHece(this)">inat</div>
+        <div class="hece" onclick="toggleHece(this)">nine</div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="bTitle">📝 İ Sesiyle Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">👵</span><div class="kt">nine</div><div class="kh">ni·ne</div></div>
+        <div class="kelCard"><span class="ke">🏙️</span><div class="kt">il</div><div class="kh">il</div></div>
+        <div class="kelCard"><span class="ke">📋</span><div class="kt">ilan</div><div class="kh">i·lan</div></div>
+        <div class="kelCard"><span class="ke">💪</span><div class="kt">inat</div><div class="kh">i·nat</div></div>
+        <div class="kelCard"><span class="ke">🤝</span><div class="kt">ile</div><div class="kh">i·le</div></div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="bTitle">💬 İ Sesiyle Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Nine, ilan al.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Nine ile Ela.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Ali, inat etme.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L -->
+  <div id="g1-l" class="lPanel">
+    <div class="bigLetter">
+      <div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)">
+        <div class="lu">L</div><div class="ll">l</div>
+      </div>
+      <div class="letter-info">
+        <h3>L Sesi Çalışmaları</h3>
+        <div class="ses-example"><span class="ses-emoji">🌷</span><span class="ses-word"><b>l</b>ale</span></div>
+        <div class="ses-example"><span class="ses-emoji">🍋</span><span class="ses-word"><b>l</b>imon</span></div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="bTitle">🔗 L ile Heceler</div>
+      <div class="heceWrap">
+        <div class="hece" onclick="toggleHece(this)">al</div>
+        <div class="hece" onclick="toggleHece(this)">el</div>
+        <div class="hece" onclick="toggleHece(this)">il</div>
+        <div class="hece" onclick="toggleHece(this)">la</div>
+        <div class="hece" onclick="toggleHece(this)">le</div>
+        <div class="hece" onclick="toggleHece(this)">li</div>
+        <div class="hece" onclick="toggleHece(this)">lale</div>
+        <div class="hece" onclick="toggleHece(this)">nal</div>
+        <div class="hece" onclick="toggleHece(this)">tel</div>
+        <div class="hece" onclick="toggleHece(this)">alet</div>
+        <div class="hece" onclick="toggleHece(this)">ilan</div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="bTitle">📝 L Sesiyle Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🌷</span><div class="kt">lale</div><div class="kh">la·le</div></div>
+        <div class="kelCard"><span class="ke">✋</span><div class="kt">el</div><div class="kh">el</div></div>
+        <div class="kelCard"><span class="ke">🔩</span><div class="kt">nal</div><div class="kh">nal</div></div>
+        <div class="kelCard"><span class="ke">📡</span><div class="kt">tel</div><div class="kh">tel</div></div>
+        <div class="kelCard"><span class="ke">🔧</span><div class="kt">alet</div><div class="kh">a·let</div></div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="bTitle">💬 L Sesiyle Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Nine, lale al.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Ela, tel al.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Anne ile nine el ele.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEKRAR -->
+  <div id="g1-tekrar" class="lPanel">
+    <div class="tekrarBox" style="--gc:var(--g1)">
+      <h3>⭐ A·N·E·T·İ·L Sesleri Genel Tekrar</h3>
+      <p>Öğrenilen 6 sesin genel tekrarı</p>
+      <div class="tekrarHarfs">
+        <span class="tekrarHarf">A a</span><span class="tekrarHarf">N n</span>
+        <span class="tekrarHarf">E e</span><span class="tekrarHarf">T t</span>
+        <span class="tekrarHarf">İ i</span><span class="tekrarHarf">L l</span>
+      </div>
+    </div>
+    <div class="block">
+      <div class="bTitle">📝 Tüm Kelimeler (A·N·E·T·İ·L ile)</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">👩</span><div class="kt">anne</div><div class="kh">an·ne</div></div>
+        <div class="kelCard"><span class="ke">👵</span><div class="kt">nine</div><div class="kh">ni·ne</div></div>
+        <div class="kelCard"><span class="ke">🌷</span><div class="kt">lale</div><div class="kh">la·le</div></div>
+        <div class="kelCard"><span class="ke">🌿</span><div class="kt">nane</div><div class="kh">na·ne</div></div>
+        <div class="kelCard"><span class="ke">✋</span><div class="kt">el</div><div class="kh">el</div></div>
+        <div class="kelCard"><span class="ke">🐴</span><div class="kt">at</div><div class="kh">at</div></div>
+        <div class="kelCard"><span class="ke">🥩</span><div class="kt">et</div><div class="kh">et</div></div>
+        <div class="kelCard"><span class="ke">📡</span><div class="kt">tel</div><div class="kh">tel</div></div>
+        <div class="kelCard"><span class="ke">🔩</span><div class="kt">nal</div><div class="kh">nal</div></div>
+        <div class="kelCard"><span class="ke">🌰</span><div class="kt">tane</div><div class="kh">ta·ne</div></div>
+        <div class="kelCard"><span class="ke">🔧</span><div class="kt">alet</div><div class="kh">a·let</div></div>
+        <div class="kelCard"><span class="ke">🤝</span><div class="kt">ile</div><div class="kh">i·le</div></div>
+        <div class="kelCard"><span class="ke">📋</span><div class="kt">ilan</div><div class="kh">i·lan</div></div>
+        <div class="kelCard"><span class="ke">💪</span><div class="kt">inat</div><div class="kh">i·nat</div></div>
+        <div class="kelCard"><span class="ke">📻</span><div class="kt">anten</div><div class="kh">an·ten</div></div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="bTitle">💬 Tekrar Cümleleri</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Anne, nane al.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Nine, lale al.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Ali, at al.</div>
+        <div class="cumleStrip"><span class="cn">4.</span>Ela, tel al.</div>
+        <div class="cumleStrip"><span class="cn">5.</span>Nine, tane tane anlat.</div>
+        <div class="cumleStrip"><span class="cn">6.</span>Ali ile Ela el ele.</div>
+        <div class="cumleStrip"><span class="cn">7.</span>Anne ile nine nane al.</div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="bTitle">📖 Kısa Okuma Metni</div>
+      <div class="metinBox" id="m1">
+        Anne, nane al. Nine, lale al.<br>
+        Ali ile Ela el ele.<br>
+        Nine anlat, anne anlat!
+      </div>
+    </div>
+    <div class="oyunBox" style="--gc:var(--g1);--gcl:var(--g1l)">
+      <h3>🎮 Harfi Bul! <span class="otag">ANETİL OYUNU</span></h3>
+      <div class="findTarget" id="ft1"></div>
+      <div class="findSub" id="fs1"></div>
+      <div class="findText" id="fd1"></div>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button class="btn btnC" onclick="checkF(1)">✅ Kontrol</button>
+        <button class="btn btnG" onclick="newF(1)">🔄 Yeni Harf</button>
+      </div>
+      <div class="fb mt" id="fb1" style="margin-top:8px"></div>
+      <div class="scoreRow">
+        <span class="sLbl">Puan:</span>
+        <span class="sVal" id="sc1">0</span>
+        <span class="stars" id="st1"></span>
+      </div>
+    </div>
+    <div class="printSec" style="--gc:var(--g1)">
+      <h3>📄 Çalışma Sayfaları — ANETİL</h3>
+      <p>Yazdır veya PDF olarak kaydet</p>
+      <div class="pGrid">
+        <div class="pBtn" onclick="doPrintWS(1,'harf')">🔤 Harf Takip</div>
+        <div class="pBtn" onclick="doPrintWS(1,'hece')">🔗 Hece Tablosu</div>
+        <div class="pBtn" onclick="doPrintWS(1,'kelime')">📝 Kelimeler</div>
+        <div class="pBtn" onclick="doPrintWS(1,'cumle')">💬 Cümle Yaz</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ GRUP 2: O·K·U·R·I·M ═══════ -->
+<div id="g2" class="gPanel" style="--gc:var(--g2);--gcl:var(--g2l)">
+  <div class="gHead" style="background:linear-gradient(135deg,#0277BD,#29B6F6)">
+    <div class="gNum">2</div>
+    <div class="gInfo">
+      <h2>O · K · U · R · I · M</h2>
+      <p>6 yeni ses · Toplam 12 harf</p>
+      <div class="gHarfs">
+        <span class="gHarf" style="opacity:.45">A N E T İ L</span>
+        <span class="gHarf new">O o</span><span class="gHarf new">K k</span>
+        <span class="gHarf new">U u</span><span class="gHarf new">R r</span>
+        <span class="gHarf new">I ı</span><span class="gHarf new">M m</span>
+      </div>
+    </div>
+  </div>
+  <div class="letter-nav">
+    <button class="lBtn on" style="--bc:var(--g2)" onclick="switchL(2,'o')">O Sesi</button>
+    <button class="lBtn" style="--bc:var(--g2)" onclick="switchL(2,'k')">K Sesi</button>
+    <button class="lBtn" style="--bc:var(--g2)" onclick="switchL(2,'u')">U Sesi</button>
+    <button class="lBtn" style="--bc:var(--g2)" onclick="switchL(2,'r')">R Sesi</button>
+    <button class="lBtn" style="--bc:var(--g2)" onclick="switchL(2,'ı')">I Sesi</button>
+    <button class="lBtn" style="--bc:var(--g2)" onclick="switchL(2,'m')">M Sesi</button>
+    <button class="lBtn tekrar-btn" style="--bc:var(--g2)" onclick="switchL(2,'tekrar')">⭐ OKURIM Tekrar</button>
+  </div>
+
+  <div id="g2-o" class="lPanel on">
+    <div class="bigLetter"><div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="lu">O</div><div class="ll">o</div></div>
+      <div class="letter-info"><h3>O Sesi Çalışmaları</h3>
+        <div class="ses-example"><span class="ses-emoji">🏫</span><span class="ses-word"><b>o</b>kul</span></div>
+        <div class="ses-example"><span class="ses-emoji">🌳</span><span class="ses-word"><b>o</b>rman</span></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">🔗 O ile Heceler</div>
+      <div class="heceWrap">
+        <div class="hece" onclick="toggleHece(this)">ol</div><div class="hece" onclick="toggleHece(this)">on</div>
+        <div class="hece" onclick="toggleHece(this)">ot</div><div class="hece" onclick="toggleHece(this)">lo</div>
+        <div class="hece" onclick="toggleHece(this)">no</div><div class="hece" onclick="toggleHece(this)">to</div>
+        <div class="hece" onclick="toggleHece(this)">oku</div><div class="hece" onclick="toggleHece(this)">okul</div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">📝 O Sesiyle Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🏫</span><div class="kt">okul</div><div class="kh">o·kul</div></div>
+        <div class="kelCard"><span class="ke">🌳</span><div class="kt">orman</div><div class="kh">or·man</div></div>
+        <div class="kelCard"><span class="ke">🏨</span><div class="kt">otel</div><div class="kh">o·tel</div></div>
+        <div class="kelCard"><span class="ke">🚗</span><div class="kt">motor</div><div class="kh">mo·tor</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 O Sesiyle Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Ali roman okur.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Ormanı koru.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Turna ormana konar.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="g2-k" class="lPanel">
+    <div class="bigLetter"><div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="lu">K</div><div class="ll">k</div></div>
+      <div class="letter-info"><h3>K Sesi Çalışmaları</h3>
+        <div class="ses-example"><span class="ses-emoji">🐱</span><span class="ses-word"><b>k</b>edi</span></div>
+        <div class="ses-example"><span class="ses-emoji">✏️</span><span class="ses-word"><b>k</b>alem</span></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">🔗 K ile Heceler</div>
+      <div class="heceWrap">
+        <div class="hece" onclick="toggleHece(this)">ok</div><div class="hece" onclick="toggleHece(this)">ak</div>
+        <div class="hece" onclick="toggleHece(this)">ek</div><div class="hece" onclick="toggleHece(this)">ik</div>
+        <div class="hece" onclick="toggleHece(this)">ka</div><div class="hece" onclick="toggleHece(this)">ke</div>
+        <div class="hece" onclick="toggleHece(this)">ki</div><div class="hece" onclick="toggleHece(this)">ko</div>
+        <div class="hece" onclick="toggleHece(this)">ku</div><div class="hece" onclick="toggleHece(this)">kal</div>
+        <div class="hece" onclick="toggleHece(this)">kur</div><div class="hece" onclick="toggleHece(this)">kule</div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">📝 K Sesiyle Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">✏️</span><div class="kt">kalem</div><div class="kh">ka·lem</div></div>
+        <div class="kelCard"><span class="ke">🏫</span><div class="kt">okul</div><div class="kh">o·kul</div></div>
+        <div class="kelCard"><span class="ke">📄</span><div class="kt">karne</div><div class="kh">kar·ne</div></div>
+        <div class="kelCard"><span class="ke">📦</span><div class="kt">kutu</div><div class="kh">ku·tu</div></div>
+        <div class="kelCard"><span class="ke">🗼</span><div class="kt">kule</div><div class="kh">ku·le</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 K Sesiyle Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Ela kalem alır.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Ali karne alır.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Kalem kutumu okula alırım.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="g2-u" class="lPanel">
+    <div class="bigLetter"><div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="lu">U</div><div class="ll">u</div></div>
+      <div class="letter-info"><h3>U Sesi Çalışmaları</h3>
+        <div class="ses-example"><span class="ses-emoji">✈️</span><span class="ses-word"><b>u</b>çak</span></div>
+        <div class="ses-example"><span class="ses-emoji">🌾</span><span class="ses-word"><b>u</b>n</span></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">📝 U Sesiyle Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">📦</span><div class="kt">kutu</div><div class="kh">ku·tu</div></div>
+        <div class="kelCard"><span class="ke">🗼</span><div class="kt">kule</div><div class="kh">ku·le</div></div>
+        <div class="kelCard"><span class="ke">🌾</span><div class="kt">un</div><div class="kh">un</div></div>
+        <div class="kelCard"><span class="ke">🐦</span><div class="kt">turna</div><div class="kh">tur·na</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 U Sesiyle Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Turna ormana konar.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Anne un alır.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Ali kule kurar.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="g2-r" class="lPanel">
+    <div class="bigLetter"><div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="lu">R</div><div class="ll">r</div></div>
+      <div class="letter-info"><h3>R Sesi Çalışmaları</h3>
+        <div class="ses-example"><span class="ses-emoji">🎨</span><span class="ses-word"><b>r</b>esim</span></div>
+        <div class="ses-example"><span class="ses-emoji">🤖</span><span class="ses-word"><b>r</b>obot</span></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">📝 R Sesiyle Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🍒</span><div class="kt">erik</div><div class="kh">e·rik</div></div>
+        <div class="kelCard"><span class="ke">📖</span><div class="kt">roman</div><div class="kh">ro·man</div></div>
+        <div class="kelCard"><span class="ke">🍐</span><div class="kt">armut</div><div class="kh">ar·mut</div></div>
+        <div class="kelCard"><span class="ke">🌾</span><div class="kt">tarla</div><div class="kh">tar·la</div></div>
+        <div class="kelCard"><span class="ke">🏪</span><div class="kt">market</div><div class="kh">mar·ket</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 R Sesiyle Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Anne erik ile armut alır.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Murat roman okur.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Ali motoru onarır.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="g2-ı" class="lPanel">
+    <div class="bigLetter"><div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="lu">I</div><div class="ll">ı</div></div>
+      <div class="letter-info"><h3>I Sesi Çalışmaları</h3>
+        <div class="ses-example"><span class="ses-emoji">🏞️</span><span class="ses-word"><b>ı</b>rmak</span></div>
+        <div class="ses-example"><span class="ses-emoji">🍵</span><span class="ses-word"><b>ı</b>lık</span></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">📝 I Sesiyle Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🏞️</span><div class="kt">ırmak</div><div class="kh">ır·mak</div></div>
+        <div class="kelCard"><span class="ke">🍵</span><div class="kt">ılık</div><div class="kh">ı·lık</div></div>
+        <div class="kelCard"><span class="ke">🐝</span><div class="kt">arı</div><div class="kh">a·rı</div></div>
+        <div class="kelCard"><span class="ke">6️⃣</span><div class="kt">altı</div><div class="kh">al·tı</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 I Sesiyle Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Irmak akar.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Arı otlara konar.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Ela altı kalem alır.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="g2-m" class="lPanel">
+    <div class="bigLetter"><div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="lu">M</div><div class="ll">m</div></div>
+      <div class="letter-info"><h3>M Sesi Çalışmaları</h3>
+        <div class="ses-example"><span class="ses-emoji">🪑</span><span class="ses-word"><b>m</b>asa</span></div>
+        <div class="ses-example"><span class="ses-emoji">🍎</span><span class="ses-word">el<b>m</b>a</span></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">📝 M Sesiyle Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🍎</span><div class="kt">elma</div><div class="kh">el·ma</div></div>
+        <div class="kelCard"><span class="ke">🍋</span><div class="kt">limon</div><div class="kh">li·mon</div></div>
+        <div class="kelCard"><span class="ke">🏪</span><div class="kt">market</div><div class="kh">mar·ket</div></div>
+        <div class="kelCard"><span class="ke">🍝</span><div class="kt">makarna</div><div class="kh">ma·kar·na</div></div>
+        <div class="kelCard"><span class="ke">⚙️</span><div class="kt">makine</div><div class="kh">ma·ki·ne</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 M Sesiyle Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Anne elma alır.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Murat limon alır.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Meltem makarna alır.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="g2-tekrar" class="lPanel">
+    <div class="tekrarBox" style="--gc:var(--g2)">
+      <h3>⭐ O·K·U·R·I·M Sesleri Genel Tekrar</h3>
+      <p>12 harfin birlikte tekrarı</p>
+      <div class="tekrarHarfs">
+        <span class="tekrarHarf">O o</span><span class="tekrarHarf">K k</span>
+        <span class="tekrarHarf">U u</span><span class="tekrarHarf">R r</span>
+        <span class="tekrarHarf">I ı</span><span class="tekrarHarf">M m</span>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">📝 Kelimeler (12 Harfle)</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">✏️</span><div class="kt">kalem</div><div class="kh">ka·lem</div></div>
+        <div class="kelCard"><span class="ke">🍋</span><div class="kt">limon</div><div class="kh">li·mon</div></div>
+        <div class="kelCard"><span class="ke">🏖️</span><div class="kt">liman</div><div class="kh">li·man</div></div>
+        <div class="kelCard"><span class="ke">📄</span><div class="kt">karne</div><div class="kh">kar·ne</div></div>
+        <div class="kelCard"><span class="ke">📖</span><div class="kt">roman</div><div class="kh">ro·man</div></div>
+        <div class="kelCard"><span class="ke">🚗</span><div class="kt">motor</div><div class="kh">mo·tor</div></div>
+        <div class="kelCard"><span class="ke">🐦</span><div class="kt">turna</div><div class="kh">tur·na</div></div>
+        <div class="kelCard"><span class="ke">🏫</span><div class="kt">okul</div><div class="kh">o·kul</div></div>
+        <div class="kelCard"><span class="ke">🍎</span><div class="kt">elma</div><div class="kh">el·ma</div></div>
+        <div class="kelCard"><span class="ke">🍒</span><div class="kt">erik</div><div class="kh">e·rik</div></div>
+        <div class="kelCard"><span class="ke">🍝</span><div class="kt">makarna</div><div class="kh">ma·kar·na</div></div>
+        <div class="kelCard"><span class="ke">🌳</span><div class="kt">orman</div><div class="kh">or·man</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 Tekrar Cümleleri</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Ali roman okur.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Ela kalem alır.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Anne elma ile limon alır.</div>
+        <div class="cumleStrip"><span class="cn">4.</span>Turna ormana konar.</div>
+        <div class="cumleStrip"><span class="cn">5.</span>Murat motoru onarır.</div>
+        <div class="cumleStrip"><span class="cn">6.</span>Meltem karne alır.</div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">📖 Okuma Metni</div>
+      <div class="metinBox">
+        Ali roman okur. Ela kalem alır.<br>
+        Anne markete uğramaz, elma ile limon alır.<br>
+        Turna ormana konar, ırmak akar.<br>
+        Ormanı koru!
+      </div>
+    </div>
+    <div class="oyunBox" style="--gc:var(--g2);--gcl:var(--g2l)">
+      <h3>🎮 Harfi Bul! <span class="otag">OKURIM OYUNU</span></h3>
+      <div class="findTarget" id="ft2"></div>
+      <div class="findSub" id="fs2"></div>
+      <div class="findText" id="fd2"></div>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button class="btn btnC" onclick="checkF(2)">✅ Kontrol</button>
+        <button class="btn btnG" onclick="newF(2)">🔄 Yeni Harf</button>
+      </div>
+      <div class="fb mt" id="fb2" style="margin-top:8px"></div>
+      <div class="scoreRow"><span class="sLbl">Puan:</span><span class="sVal" id="sc2">0</span><span class="stars" id="st2"></span></div>
+    </div>
+    <div class="printSec" style="--gc:var(--g2)">
+      <h3>📄 Çalışma Sayfaları — OKURIM</h3>
+      <p>12 harf ile çalışma sayfaları</p>
+      <div class="pGrid">
+        <div class="pBtn" onclick="doPrintWS(2,'harf')">🔤 Harf Takip</div>
+        <div class="pBtn" onclick="doPrintWS(2,'kelime')">📝 Kelimeler</div>
+        <div class="pBtn" onclick="doPrintWS(2,'cumle')">💬 Cümle Yaz</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ GRUP 3: Ü·S·Ö·Y·D·Z ═══════ -->
+<div id="g3" class="gPanel" style="--gc:var(--g3);--gcl:var(--g3l)">
+  <div class="gHead" style="background:linear-gradient(135deg,#E65100,#FFA726)">
+    <div class="gNum">3</div>
+    <div class="gInfo">
+      <h2>Ü · S · Ö · Y · D · Z</h2>
+      <p>6 yeni ses · Toplam 18 harf</p>
+      <div class="gHarfs">
+        <span class="gHarf" style="opacity:.4">A N E T İ L O K U R I M</span>
+        <span class="gHarf new">Ü ü</span><span class="gHarf new">S s</span>
+        <span class="gHarf new">Ö ö</span><span class="gHarf new">Y y</span>
+        <span class="gHarf new">D d</span><span class="gHarf new">Z z</span>
+      </div>
+    </div>
+  </div>
+  <div class="letter-nav">
+    <button class="lBtn on" style="--bc:var(--g3)" onclick="switchL(3,'ü')">Ü Sesi</button>
+    <button class="lBtn" style="--bc:var(--g3)" onclick="switchL(3,'s')">S Sesi</button>
+    <button class="lBtn" style="--bc:var(--g3)" onclick="switchL(3,'ö')">Ö Sesi</button>
+    <button class="lBtn" style="--bc:var(--g3)" onclick="switchL(3,'y')">Y Sesi</button>
+    <button class="lBtn" style="--bc:var(--g3)" onclick="switchL(3,'d')">D Sesi</button>
+    <button class="lBtn" style="--bc:var(--g3)" onclick="switchL(3,'z')">Z Sesi</button>
+    <button class="lBtn tekrar-btn" style="--bc:var(--g3)" onclick="switchL(3,'tekrar')">⭐ ÜSÖYDZ Tekrar</button>
+  </div>
+  <div id="g3-ü" class="lPanel on">
+    <div class="bigLetter"><div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="lu">Ü</div><div class="ll">ü</div></div>
+      <div class="letter-info"><h3>Ü Sesi</h3><div class="ses-example"><span class="ses-emoji">🍇</span><span class="ses-word"><b>ü</b>züm</span></div></div>
+    </div>
+    <div class="block"><div class="bTitle">📝 Ü ile Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🍇</span><div class="kt">üzüm</div><div class="kh">ü·züm</div></div>
+        <div class="kelCard"><span class="ke">🥛</span><div class="kt">süt</div><div class="kh">süt</div></div>
+        <div class="kelCard"><span class="ke">💍</span><div class="kt">yüzük</div><div class="kh">yü·zük</div></div>
+        <div class="kelCard"><span class="ke">🌍</span><div class="kt">ülke</div><div class="kh">ül·ke</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Dedem üzüm yer.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Kedimiz süt sever.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Ülkemi severim.</div>
+      </div>
+    </div>
+  </div>
+  <div id="g3-s" class="lPanel">
+    <div class="bigLetter"><div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="lu">S</div><div class="ll">s</div></div>
+      <div class="letter-info"><h3>S Sesi</h3><div class="ses-example"><span class="ses-emoji">💧</span><span class="ses-word"><b>s</b>u</span></div></div>
+    </div>
+    <div class="block"><div class="bTitle">📝 S ile Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">💧</span><div class="kt">su</div><div class="kh">su</div></div>
+        <div class="kelCard"><span class="ke">🪑</span><div class="kt">masa</div><div class="kh">ma·sa</div></div>
+        <div class="kelCard"><span class="ke">📖</span><div class="kt">masal</div><div class="kh">ma·sal</div></div>
+        <div class="kelCard"><span class="ke">🎨</span><div class="kt">resim</div><div class="kh">re·sim</div></div>
+        <div class="kelCard"><span class="ke">📕</span><div class="kt">sözlük</div><div class="kh">söz·lük</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Nine masal anlatır.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Masada su duruyor.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Sözlükte kelime ararım.</div>
+      </div>
+    </div>
+  </div>
+  <div id="g3-ö" class="lPanel">
+    <div class="bigLetter"><div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="lu">Ö</div><div class="ll">ö</div></div>
+      <div class="letter-info"><h3>Ö Sesi</h3><div class="ses-example"><span class="ses-emoji">🦆</span><span class="ses-word"><b>ö</b>rdek</span></div></div>
+    </div>
+    <div class="block"><div class="bTitle">📝 Ö ile Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🦆</span><div class="kt">ördek</div><div class="kh">ör·dek</div></div>
+        <div class="kelCard"><span class="ke">📖</span><div class="kt">öykü</div><div class="kh">öy·kü</div></div>
+        <div class="kelCard"><span class="ke">💬</span><div class="kt">söz</div><div class="kh">söz</div></div>
+        <div class="kelCard"><span class="ke">🏡</span><div class="kt">köy</div><div class="kh">köy</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Ördek suda yüzer.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Dedem öykü anlatır.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Sözünde dur.</div>
+      </div>
+    </div>
+  </div>
+  <div id="g3-y" class="lPanel">
+    <div class="bigLetter"><div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="lu">Y</div><div class="ll">y</div></div>
+      <div class="letter-info"><h3>Y Sesi</h3><div class="ses-example"><span class="ses-emoji">⭐</span><span class="ses-word"><b>y</b>ıldız</span></div></div>
+    </div>
+    <div class="block"><div class="bTitle">📝 Y ile Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">⭐</span><div class="kt">yıldız</div><div class="kh">yıl·dız</div></div>
+        <div class="kelCard"><span class="ke">🛣️</span><div class="kt">yol</div><div class="kh">yol</div></div>
+        <div class="kelCard"><span class="ke">🥚</span><div class="kt">yumurta</div><div class="kh">yu·mur·ta</div></div>
+        <div class="kelCard"><span class="ke">☀️</span><div class="kt">yaz</div><div class="kh">yaz</div></div>
+        <div class="kelCard"><span class="ke">🐍</span><div class="kt">yılan</div><div class="kh">yı·lan</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Yolda dikkatli yürürüz.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Annem yumurta kaynatır.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Yazın denizde yüzeriz.</div>
+      </div>
+    </div>
+  </div>
+  <div id="g3-d" class="lPanel">
+    <div class="bigLetter"><div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="lu">D</div><div class="ll">d</div></div>
+      <div class="letter-info"><h3>D Sesi</h3><div class="ses-example"><span class="ses-emoji">🌊</span><span class="ses-word"><b>d</b>eniz</span></div></div>
+    </div>
+    <div class="block"><div class="bTitle">📝 D ile Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🌊</span><div class="kt">deniz</div><div class="kh">de·niz</div></div>
+        <div class="kelCard"><span class="ke">👴</span><div class="kt">dede</div><div class="kh">de·de</div></div>
+        <div class="kelCard"><span class="ke">🍅</span><div class="kt">domates</div><div class="kh">do·ma·tes</div></div>
+        <div class="kelCard"><span class="ke">🤝</span><div class="kt">dost</div><div class="kh">dost</div></div>
+        <div class="kelCard"><span class="ke">💨</span><div class="kt">duman</div><div class="kh">du·man</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Dost dosta yardım eder.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Dedem denizi çok sever.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Annem domates alır.</div>
+      </div>
+    </div>
+  </div>
+  <div id="g3-z" class="lPanel">
+    <div class="bigLetter"><div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="lu">Z</div><div class="ll">z</div></div>
+      <div class="letter-info"><h3>Z Sesi</h3><div class="ses-example"><span class="ses-emoji">🔔</span><span class="ses-word"><b>z</b>il</span></div></div>
+    </div>
+    <div class="block"><div class="bTitle">📝 Z ile Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🔔</span><div class="kt">zil</div><div class="kh">zil</div></div>
+        <div class="kelCard"><span class="ke">🫒</span><div class="kt">zeytin</div><div class="kh">zey·tin</div></div>
+        <div class="kelCard"><span class="ke">🧂</span><div class="kt">tuz</div><div class="kh">tuz</div></div>
+        <div class="kelCard"><span class="ke">⭐</span><div class="kt">yıldız</div><div class="kh">yıl·dız</div></div>
+        <div class="kelCard"><span class="ke">⏰</span><div class="kt">zaman</div><div class="kh">za·man</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Annem zeytin sever.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Deniz suyu tuzludur.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Yıldızları izleriz.</div>
+      </div>
+    </div>
+  </div>
+  <div id="g3-tekrar" class="lPanel">
+    <div class="tekrarBox" style="--gc:var(--g3)"><h3>⭐ Ü·S·Ö·Y·D·Z Genel Tekrar</h3><p>18 harfin birlikte tekrarı</p>
+      <div class="tekrarHarfs"><span class="tekrarHarf">Ü ü</span><span class="tekrarHarf">S s</span><span class="tekrarHarf">Ö ö</span><span class="tekrarHarf">Y y</span><span class="tekrarHarf">D d</span><span class="tekrarHarf">Z z</span></div>
+    </div>
+    <div class="block"><div class="bTitle">📝 Kelimeler (18 Harfle)</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🍇</span><div class="kt">üzüm</div><div class="kh">ü·züm</div></div>
+        <div class="kelCard"><span class="ke">🥛</span><div class="kt">süt</div><div class="kh">süt</div></div>
+        <div class="kelCard"><span class="ke">📖</span><div class="kt">masal</div><div class="kh">ma·sal</div></div>
+        <div class="kelCard"><span class="ke">🎨</span><div class="kt">resim</div><div class="kh">re·sim</div></div>
+        <div class="kelCard"><span class="ke">🦆</span><div class="kt">ördek</div><div class="kh">ör·dek</div></div>
+        <div class="kelCard"><span class="ke">⭐</span><div class="kt">yıldız</div><div class="kh">yıl·dız</div></div>
+        <div class="kelCard"><span class="ke">🥚</span><div class="kt">yumurta</div><div class="kh">yu·mur·ta</div></div>
+        <div class="kelCard"><span class="ke">🌊</span><div class="kt">deniz</div><div class="kh">de·niz</div></div>
+        <div class="kelCard"><span class="ke">👴</span><div class="kt">dede</div><div class="kh">de·de</div></div>
+        <div class="kelCard"><span class="ke">🍅</span><div class="kt">domates</div><div class="kh">do·ma·tes</div></div>
+        <div class="kelCard"><span class="ke">🫒</span><div class="kt">zeytin</div><div class="kh">zey·tin</div></div>
+        <div class="kelCard"><span class="ke">🤝</span><div class="kt">dost</div><div class="kh">dost</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 Tekrar Cümleleri</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Kedimiz süt sever.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Nine masal anlatır.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Ördek suda yüzer.</div>
+        <div class="cumleStrip"><span class="cn">4.</span>Annem yumurta kaynatır.</div>
+        <div class="cumleStrip"><span class="cn">5.</span>Dost dosta yardım eder.</div>
+        <div class="cumleStrip"><span class="cn">6.</span>Yazın denizde yüzeriz.</div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">📖 Okuma Metni</div>
+      <div class="metinBox">
+        Nine masal anlatır, dede öykü okur.<br>
+        Kedimiz süt sever, ördek suda yüzer.<br>
+        Annem yumurta kaynatır, sofraya zeytin koyar.<br>
+        Dost dosta yardım eder.
+      </div>
+    </div>
+    <div class="oyunBox" style="--gc:var(--g3);--gcl:var(--g3l)">
+      <h3>🎮 Harfi Bul! <span class="otag">ÜSÖYDZ OYUNU</span></h3>
+      <div class="findTarget" id="ft3"></div><div class="findSub" id="fs3"></div>
+      <div class="findText" id="fd3"></div>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button class="btn btnC" onclick="checkF(3)">✅ Kontrol</button>
+        <button class="btn btnG" onclick="newF(3)">🔄 Yeni Harf</button>
+      </div>
+      <div class="fb mt" id="fb3" style="margin-top:8px"></div>
+      <div class="scoreRow"><span class="sLbl">Puan:</span><span class="sVal" id="sc3">0</span><span class="stars" id="st3"></span></div>
+    </div>
+    <div class="printSec" style="--gc:var(--g3)">
+      <h3>📄 Çalışma Sayfaları — ÜSÖYDZ</h3>
+      <div class="pGrid">
+        <div class="pBtn" onclick="doPrintWS(3,'harf')">🔤 Harf Takip</div>
+        <div class="pBtn" onclick="doPrintWS(3,'kelime')">📝 Kelimeler</div>
+        <div class="pBtn" onclick="doPrintWS(3,'cumle')">💬 Cümle Yaz</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ GRUP 4: Ç·B·G·C·Ş ═══════ -->
+<div id="g4" class="gPanel" style="--gc:var(--g4);--gcl:var(--g4l)">
+  <div class="gHead" style="background:linear-gradient(135deg,#2E7D32,#66BB6A)">
+    <div class="gNum">4</div>
+    <div class="gInfo">
+      <h2>Ç · B · G · C · Ş</h2>
+      <p>5 yeni ses · Toplam 23 harf</p>
+      <div class="gHarfs">
+        <span class="gHarf" style="opacity:.4">Önceki 18 Harf</span>
+        <span class="gHarf new">Ç ç</span><span class="gHarf new">B b</span>
+        <span class="gHarf new">G g</span><span class="gHarf new">C c</span><span class="gHarf new">Ş ş</span>
+      </div>
+    </div>
+  </div>
+  <div class="letter-nav">
+    <button class="lBtn on" style="--bc:var(--g4)" onclick="switchL(4,'ç')">Ç Sesi</button>
+    <button class="lBtn" style="--bc:var(--g4)" onclick="switchL(4,'b')">B Sesi</button>
+    <button class="lBtn" style="--bc:var(--g4)" onclick="switchL(4,'g')">G Sesi</button>
+    <button class="lBtn" style="--bc:var(--g4)" onclick="switchL(4,'c')">C Sesi</button>
+    <button class="lBtn" style="--bc:var(--g4)" onclick="switchL(4,'ş')">Ş Sesi</button>
+    <button class="lBtn tekrar-btn" style="--bc:var(--g4)" onclick="switchL(4,'tekrar')">⭐ ÇBGCŞ Tekrar</button>
+  </div>
+  <div id="g4-ç" class="lPanel on">
+    <div class="bigLetter"><div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="lu">Ç</div><div class="ll">ç</div></div>
+      <div class="letter-info"><h3>Ç Sesi</h3><div class="ses-example"><span class="ses-emoji">🌸</span><span class="ses-word"><b>ç</b>içek</span></div></div>
+    </div>
+    <div class="block"><div class="bTitle">📝 Ç ile Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🌸</span><div class="kt">çiçek</div><div class="kh">çi·çek</div></div>
+        <div class="kelCard"><span class="ke">🍓</span><div class="kt">çilek</div><div class="kh">çi·lek</div></div>
+        <div class="kelCard"><span class="ke">🍵</span><div class="kt">çay</div><div class="kh">çay</div></div>
+        <div class="kelCard"><span class="ke">🍲</span><div class="kt">çorba</div><div class="kh">çor·ba</div></div>
+        <div class="kelCard"><span class="ke">🎒</span><div class="kt">çanta</div><div class="kh">çan·ta</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Çilek çok tatlıdır.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Dedem çayını içer.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Çantamı okula götürürüm.</div>
+      </div>
+    </div>
+  </div>
+  <div id="g4-b" class="lPanel">
+    <div class="bigLetter"><div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="lu">B</div><div class="ll">b</div></div>
+      <div class="letter-info"><h3>B Sesi</h3><div class="ses-example"><span class="ses-emoji">🍯</span><span class="ses-word"><b>b</b>al</span></div></div>
+    </div>
+    <div class="block"><div class="bTitle">📝 B ile Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🍯</span><div class="kt">bal</div><div class="kh">bal</div></div>
+        <div class="kelCard"><span class="ke">🐟</span><div class="kt">balık</div><div class="kh">ba·lık</div></div>
+        <div class="kelCard"><span class="ke">🚩</span><div class="kt">bayrak</div><div class="kh">bay·rak</div></div>
+        <div class="kelCard"><span class="ke">🥛</span><div class="kt">bardak</div><div class="kh">bar·dak</div></div>
+        <div class="kelCard"><span class="ke">☁️</span><div class="kt">bulut</div><div class="kh">bu·lut</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Balıklar denizde yüzer.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Bayrak dalgalanır.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Bulutlar gökyüzünde gezer.</div>
+      </div>
+    </div>
+  </div>
+  <div id="g4-g" class="lPanel">
+    <div class="bigLetter"><div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="lu">G</div><div class="ll">g</div></div>
+      <div class="letter-info"><h3>G Sesi</h3><div class="ses-example"><span class="ses-emoji">🌹</span><span class="ses-word"><b>g</b>ül</span></div></div>
+    </div>
+    <div class="block"><div class="bTitle">📝 G ile Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🌹</span><div class="kt">gül</div><div class="kh">gül</div></div>
+        <div class="kelCard"><span class="ke">☀️</span><div class="kt">güneş</div><div class="kh">gü·neş</div></div>
+        <div class="kelCard"><span class="ke">👁️</span><div class="kt">göz</div><div class="kh">göz</div></div>
+        <div class="kelCard"><span class="ke">🚢</span><div class="kt">gemi</div><div class="kh">ge·mi</div></div>
+        <div class="kelCard"><span class="ke">📰</span><div class="kt">gazete</div><div class="kh">ga·ze·te</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Güneş bizi ısıtır.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Gemi denizde gider.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Gece yıldızlar görünür.</div>
+      </div>
+    </div>
+  </div>
+  <div id="g4-c" class="lPanel">
+    <div class="bigLetter"><div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="lu">C</div><div class="ll">c</div></div>
+      <div class="letter-info"><h3>C Sesi</h3><div class="ses-example"><span class="ses-emoji">🪟</span><span class="ses-word"><b>c</b>am</span></div></div>
+    </div>
+    <div class="block"><div class="bTitle">📝 C ile Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🪟</span><div class="kt">cam</div><div class="kh">cam</div></div>
+        <div class="kelCard"><span class="ke">🧥</span><div class="kt">ceket</div><div class="kh">ce·ket</div></div>
+        <div class="kelCard"><span class="ke">👛</span><div class="kt">cüzdan</div><div class="kh">cüz·dan</div></div>
+        <div class="kelCard"><span class="ke">🌙</span><div class="kt">gece</div><div class="kh">ge·ce</div></div>
+        <div class="kelCard"><span class="ke">📅</span><div class="kt">cumartesi</div><div class="kh">cu·mar·te·si</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Cumartesi tatil günüdür.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Soğukta ceketimi giyerim.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Cam bardak kırılır.</div>
+      </div>
+    </div>
+  </div>
+  <div id="g4-ş" class="lPanel">
+    <div class="bigLetter"><div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="lu">Ş</div><div class="ll">ş</div></div>
+      <div class="letter-info"><h3>Ş Sesi</h3><div class="ses-example"><span class="ses-emoji">🍬</span><span class="ses-word"><b>ş</b>eker</span></div></div>
+    </div>
+    <div class="block"><div class="bTitle">📝 Ş ile Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🍬</span><div class="kt">şeker</div><div class="kh">şe·ker</div></div>
+        <div class="kelCard"><span class="ke">🎵</span><div class="kt">şarkı</div><div class="kh">şar·kı</div></div>
+        <div class="kelCard"><span class="ke">☂️</span><div class="kt">şemsiye</div><div class="kh">şem·si·ye</div></div>
+        <div class="kelCard"><span class="ke">🍶</span><div class="kt">şişe</div><div class="kh">şi·şe</div></div>
+        <div class="kelCard"><span class="ke">☀️</span><div class="kt">güneş</div><div class="kh">gü·neş</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Sınıfça şarkı söyleriz.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Şeker dişleri çürütür.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Kardeşim çilek sever.</div>
+      </div>
+    </div>
+  </div>
+  <div id="g4-tekrar" class="lPanel">
+    <div class="tekrarBox" style="--gc:var(--g4)"><h3>⭐ Ç·B·G·C·Ş Genel Tekrar</h3><p>23 harfin birlikte tekrarı</p>
+      <div class="tekrarHarfs"><span class="tekrarHarf">Ç ç</span><span class="tekrarHarf">B b</span><span class="tekrarHarf">G g</span><span class="tekrarHarf">C c</span><span class="tekrarHarf">Ş ş</span></div>
+    </div>
+    <div class="block"><div class="bTitle">📝 Kelimeler (23 Harfle)</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🍯</span><div class="kt">bal</div></div>
+        <div class="kelCard"><span class="ke">🐟</span><div class="kt">balık</div></div>
+        <div class="kelCard"><span class="ke">🍬</span><div class="kt">şeker</div></div>
+        <div class="kelCard"><span class="ke">🌸</span><div class="kt">çiçek</div></div>
+        <div class="kelCard"><span class="ke">🌹</span><div class="kt">gül</div></div>
+        <div class="kelCard"><span class="ke">🚩</span><div class="kt">bayrak</div></div>
+        <div class="kelCard"><span class="ke">🍵</span><div class="kt">çay</div></div>
+        <div class="kelCard"><span class="ke">☀️</span><div class="kt">güneş</div></div>
+        <div class="kelCard"><span class="ke">🎒</span><div class="kt">çanta</div></div>
+        <div class="kelCard"><span class="ke">🚢</span><div class="kt">gemi</div></div>
+        <div class="kelCard"><span class="ke">🎵</span><div class="kt">şarkı</div></div>
+        <div class="kelCard"><span class="ke">🌙</span><div class="kt">gece</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 Tekrar Cümleleri</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Çilek çok tatlıdır.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Balıklar denizde yüzer.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Güneş bugün çok sıcak.</div>
+        <div class="cumleStrip"><span class="cn">4.</span>Gece gökyüzünde yıldızlar görünür.</div>
+        <div class="cumleStrip"><span class="cn">5.</span>Kardeşim şeker sever.</div>
+        <div class="cumleStrip"><span class="cn">6.</span>Bayrak dalgalanır.</div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">📖 Okuma Metni</div>
+      <div class="metinBox">
+        Güneş bugün çok sıcak, gökyüzü masmavi.<br>
+        Balıklar denizde yüzer, kuşlar gökte uçar.<br>
+        Kardeşim çilek ile bal yer, dedem çayını içer.<br>
+        Gece olunca yıldızlar görünür.
+      </div>
+    </div>
+    <div class="oyunBox" style="--gc:var(--g4);--gcl:var(--g4l)">
+      <h3>🎮 Harfi Bul! <span class="otag">ÇBGCŞ OYUNU</span></h3>
+      <div class="findTarget" id="ft4"></div><div class="findSub" id="fs4"></div>
+      <div class="findText" id="fd4"></div>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button class="btn btnC" onclick="checkF(4)">✅ Kontrol</button>
+        <button class="btn btnG" onclick="newF(4)">🔄 Yeni Harf</button>
+      </div>
+      <div class="fb mt" id="fb4" style="margin-top:8px"></div>
+      <div class="scoreRow"><span class="sLbl">Puan:</span><span class="sVal" id="sc4">0</span><span class="stars" id="st4"></span></div>
+    </div>
+    <div class="printSec" style="--gc:var(--g4)">
+      <h3>📄 Çalışma Sayfaları — ÇBGCŞ</h3>
+      <div class="pGrid">
+        <div class="pBtn" onclick="doPrintWS(4,'harf')">🔤 Harf Takip</div>
+        <div class="pBtn" onclick="doPrintWS(4,'kelime')">📝 Kelimeler</div>
+        <div class="pBtn" onclick="doPrintWS(4,'cumle')">💬 Cümle Yaz</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ GRUP 5: P·H·V·Ğ·F·J ═══════ -->
+<div id="g5" class="gPanel" style="--gc:var(--g5);--gcl:var(--g5l)">
+  <div class="gHead" style="background:linear-gradient(135deg,#6A1B9A,#AB47BC)">
+    <div class="gNum">5</div>
+    <div class="gInfo">
+      <h2>P · H · V · Ğ · F · J</h2>
+      <p>6 son ses · Türk Alfabesi tamamlandı! (29 harf)</p>
+      <div class="gHarfs">
+        <span class="gHarf" style="opacity:.4">Önceki 23 Harf</span>
+        <span class="gHarf new">P p</span><span class="gHarf new">H h</span>
+        <span class="gHarf new">V v</span><span class="gHarf new">Ğ ğ</span>
+        <span class="gHarf new">F f</span><span class="gHarf new">J j</span>
+      </div>
+    </div>
+  </div>
+  <div class="letter-nav">
+    <button class="lBtn on" style="--bc:var(--g5)" onclick="switchL(5,'p')">P Sesi</button>
+    <button class="lBtn" style="--bc:var(--g5)" onclick="switchL(5,'h')">H Sesi</button>
+    <button class="lBtn" style="--bc:var(--g5)" onclick="switchL(5,'v')">V Sesi</button>
+    <button class="lBtn" style="--bc:var(--g5)" onclick="switchL(5,'ğ')">Ğ Sesi</button>
+    <button class="lBtn" style="--bc:var(--g5)" onclick="switchL(5,'f')">F Sesi</button>
+    <button class="lBtn" style="--bc:var(--g5)" onclick="switchL(5,'j')">J Sesi</button>
+    <button class="lBtn tekrar-btn" style="--bc:var(--g5)" onclick="switchL(5,'tekrar')">⭐ PHVĞFJ Tekrar</button>
+  </div>
+  <div id="g5-p" class="lPanel on">
+    <div class="bigLetter"><div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="lu">P</div><div class="ll">p</div></div>
+      <div class="letter-info"><h3>P Sesi</h3><div class="ses-example"><span class="ses-emoji">🍊</span><span class="ses-word"><b>p</b>ortakal</span></div></div>
+    </div>
+    <div class="block"><div class="bTitle">📝 P ile Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🌳</span><div class="kt">park</div><div class="kh">park</div></div>
+        <div class="kelCard"><span class="ke">🐕</span><div class="kt">köpek</div><div class="kh">kö·pek</div></div>
+        <div class="kelCard"><span class="ke">🧺</span><div class="kt">sepet</div><div class="kh">se·pet</div></div>
+        <div class="kelCard"><span class="ke">🥔</span><div class="kt">patates</div><div class="kh">pa·ta·tes</div></div>
+        <div class="kelCard"><span class="ke">🛒</span><div class="kt">pazar</div><div class="kh">pa·zar</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Parkta salıncakta sallandık.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Köpek bahçede havlıyor.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Pazardan sepetle patates aldık.</div>
+      </div>
+    </div>
+  </div>
+  <div id="g5-h" class="lPanel">
+    <div class="bigLetter"><div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="lu">H</div><div class="ll">h</div></div>
+      <div class="letter-info"><h3>H Sesi</h3><div class="ses-example"><span class="ses-emoji">🐓</span><span class="ses-word"><b>h</b>oroz</span></div></div>
+    </div>
+    <div class="block"><div class="bTitle">📝 H ile Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🌬️</span><div class="kt">hava</div><div class="kh">ha·va</div></div>
+        <div class="kelCard"><span class="ke">🛁</span><div class="kt">havlu</div><div class="kh">hav·lu</div></div>
+        <div class="kelCard"><span class="ke">🎁</span><div class="kt">hediye</div><div class="kh">he·di·ye</div></div>
+        <div class="kelCard"><span class="ke">🥕</span><div class="kt">havuç</div><div class="kh">ha·vuç</div></div>
+        <div class="kelCard"><span class="ke">🌻</span><div class="kt">bahçe</div><div class="kh">bah·çe</div></div>
+        <div class="kelCard"><span class="ke">🦁</span><div class="kt">hayvan</div><div class="kh">hay·van</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Bugün hava çok güzel.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Hayvanları korumalıyız.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Doğum günümde hediye aldım.</div>
+      </div>
+    </div>
+  </div>
+  <div id="g5-v" class="lPanel">
+    <div class="bigLetter"><div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="lu">V</div><div class="ll">v</div></div>
+      <div class="letter-info"><h3>V Sesi</h3><div class="ses-example"><span class="ses-emoji">🏺</span><span class="ses-word"><b>v</b>azo</span></div></div>
+    </div>
+    <div class="block"><div class="bTitle">📝 V ile Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🏠</span><div class="kt">vatan</div><div class="kh">va·tan</div></div>
+        <div class="kelCard"><span class="ke">🏺</span><div class="kt">vazo</div><div class="kh">va·zo</div></div>
+        <div class="kelCard"><span class="ke">🚢</span><div class="kt">vapur</div><div class="kh">va·pur</div></div>
+        <div class="kelCard"><span class="ke">🏊</span><div class="kt">havuz</div><div class="kh">ha·vuz</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Vatanımızı çok severiz.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Yazın havuzda yüzeriz.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Vazodaki çiçekler açtı.</div>
+      </div>
+    </div>
+  </div>
+  <div id="g5-ğ" class="lPanel">
+    <div class="bigLetter"><div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="lu">Ğ</div><div class="ll">ğ</div></div>
+      <div class="letter-info"><h3>Ğ Sesi</h3><div class="ses-example"><span class="ses-emoji">🌧️</span><span class="ses-word">ya<b>ğ</b>mur</span></div></div>
+    </div>
+    <div class="block"><div class="bTitle">📝 Ğ ile Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🌧️</span><div class="kt">yağmur</div><div class="kh">yağ·mur</div></div>
+        <div class="kelCard"><span class="ke">⛰️</span><div class="kt">dağ</div><div class="kh">dağ</div></div>
+        <div class="kelCard"><span class="ke">🌳</span><div class="kt">ağaç</div><div class="kh">a·ğaç</div></div>
+        <div class="kelCard"><span class="ke">🥣</span><div class="kt">yoğurt</div><div class="kh">yo·ğurt</div></div>
+        <div class="kelCard"><span class="ke">📄</span><div class="kt">kağıt</div><div class="kh">ka·ğıt</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Yağmur yağınca toprak ıslanır.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Dağların tepesinde kar var.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Ağaçlar bize gölge verir.</div>
+      </div>
+    </div>
+  </div>
+  <div id="g5-f" class="lPanel">
+    <div class="bigLetter"><div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="lu">F</div><div class="ll">f</div></div>
+      <div class="letter-info"><h3>F Sesi</h3><div class="ses-example"><span class="ses-emoji">🐘</span><span class="ses-word"><b>f</b>il</span></div></div>
+    </div>
+    <div class="block"><div class="bTitle">📝 F ile Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🐘</span><div class="kt">fil</div><div class="kh">fil</div></div>
+        <div class="kelCard"><span class="ke">🪥</span><div class="kt">fırça</div><div class="kh">fır·ça</div></div>
+        <div class="kelCard"><span class="ke">🌱</span><div class="kt">fidan</div><div class="kh">fi·dan</div></div>
+        <div class="kelCard"><span class="ke">📓</span><div class="kt">defter</div><div class="kh">def·ter</div></div>
+        <div class="kelCard"><span class="ke">🍑</span><div class="kt">şeftali</div><div class="kh">şef·ta·li</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Dişlerimi fırçayla temizlerim.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Bahçeye bir fidan diktik.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Defterime güzel yazı yazarım.</div>
+      </div>
+    </div>
+  </div>
+  <div id="g5-j" class="lPanel">
+    <div class="bigLetter"><div class="letter-box" onclick="this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="lu">J</div><div class="ll">j</div></div>
+      <div class="letter-info"><h3>J Sesi</h3><div class="ses-example"><span class="ses-emoji">🍮</span><span class="ses-word"><b>j</b>öle</span></div></div>
+    </div>
+    <div class="block"><div class="bTitle">📝 J ile Kelimeler</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🍮</span><div class="kt">jöle</div><div class="kh">jö·le</div></div>
+        <div class="kelCard"><span class="ke">🤸</span><div class="kt">jimnastik</div><div class="kh">jim·nas·tik</div></div>
+        <div class="kelCard"><span class="ke">🪙</span><div class="kt">jeton</div><div class="kh">je·ton</div></div>
+        <div class="kelCard"><span class="ke">🎉</span><div class="kt">müjde</div><div class="kh">müj·de</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Beden dersinde jimnastik yaptık.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Annem bize jöle yaptı.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Müjdeli haberi duyunca sevindik.</div>
+      </div>
+    </div>
+  </div>
+  <div id="g5-tekrar" class="lPanel">
+    <div class="tekrarBox" style="--gc:var(--g5)"><h3>⭐ P·H·V·Ğ·F·J Genel Tekrar</h3><p>Alfabe tamamlandı — 29 harf!</p>
+      <div class="tekrarHarfs"><span class="tekrarHarf">P p</span><span class="tekrarHarf">H h</span><span class="tekrarHarf">V v</span><span class="tekrarHarf">Ğ ğ</span><span class="tekrarHarf">F f</span><span class="tekrarHarf">J j</span></div>
+    </div>
+    <div class="block"><div class="bTitle">📝 Kelimeler (Tüm Alfabe)</div>
+      <div class="kelGrid">
+        <div class="kelCard"><span class="ke">🌬️</span><div class="kt">hava</div></div>
+        <div class="kelCard"><span class="ke">🏠</span><div class="kt">vatan</div></div>
+        <div class="kelCard"><span class="ke">🌧️</span><div class="kt">yağmur</div></div>
+        <div class="kelCard"><span class="ke">🌳</span><div class="kt">ağaç</div></div>
+        <div class="kelCard"><span class="ke">🌳</span><div class="kt">park</div></div>
+        <div class="kelCard"><span class="ke">🌻</span><div class="kt">bahçe</div></div>
+        <div class="kelCard"><span class="ke">🌱</span><div class="kt">fidan</div></div>
+        <div class="kelCard"><span class="ke">🪥</span><div class="kt">fırça</div></div>
+        <div class="kelCard"><span class="ke">🍮</span><div class="kt">jöle</div></div>
+        <div class="kelCard"><span class="ke">🥣</span><div class="kt">yoğurt</div></div>
+        <div class="kelCard"><span class="ke">🎁</span><div class="kt">hediye</div></div>
+        <div class="kelCard"><span class="ke">🐕</span><div class="kt">köpek</div></div>
+      </div>
+    </div>
+    <div class="block"><div class="bTitle">💬 Uzun Cümleler</div>
+      <div class="cumleList">
+        <div class="cumleStrip"><span class="cn">1.</span>Bugün hava çok güzel, parka gidelim.</div>
+        <div class="cumleStrip"><span class="cn">2.</span>Yağmur yağınca ağaçlar yıkanır.</div>
+        <div class="cumleStrip"><span class="cn">3.</span>Dişlerimi her sabah fırçalarım.</div>
+        <div class="cumleStrip"><span class="cn">4.</span>Kahvaltıda yoğurt ile ekmek yerim.</div>
+        <div class="cumleStrip"><span class="cn">5.</span>Bahçemize diktiğimiz fidan büyüdü.</div>
+        <div class="cumleStrip"><span class="cn">6.</span>Vatanımızı ve bayrağımızı seviyoruz.</div>
+      </div>
+    </div>
+    <div class="oyunBox" style="--gc:var(--g5);--gcl:var(--g5l)">
+      <h3>🎮 Harfi Bul! <span class="otag">PHVĞFJ OYUNU</span></h3>
+      <div class="findTarget" id="ft5"></div><div class="findSub" id="fs5"></div>
+      <div class="findText" id="fd5"></div>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button class="btn btnC" onclick="checkF(5)">✅ Kontrol</button>
+        <button class="btn btnG" onclick="newF(5)">🔄 Yeni Harf</button>
+      </div>
+      <div class="fb mt" id="fb5" style="margin-top:8px"></div>
+      <div class="scoreRow"><span class="sLbl">Puan:</span><span class="sVal" id="sc5">0</span><span class="stars" id="st5"></span></div>
+    </div>
+    <div class="printSec" style="--gc:var(--g5)">
+      <h3>📄 Çalışma Sayfaları — PHVĞFJ</h3>
+      <div class="pGrid">
+        <div class="pBtn" onclick="doPrintWS(5,'harf')">🔤 Harf Takip</div>
+        <div class="pBtn" onclick="doPrintWS(5,'kelime')">📝 Kelimeler</div>
+        <div class="pBtn" onclick="doPrintWS(5,'cumle')">💬 Cümle Yaz</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ GENEL TEKRAR ═══════ -->
+<div id="g6" class="gPanel" style="--gc:var(--gt);--gcl:var(--gtl)">
+  <div class="gHead" style="background:linear-gradient(135deg,#F57F17,#FFCA28)">
+    <div class="gNum">🏆</div>
+    <div class="gInfo">
+      <h2>İlk Okuma Yazma Genel Tekrar</h2>
+      <p>Tüm 29 harf · Türk Alfabesi tam</p>
+      <div class="gHarfs">
+        <span class="gHarf">A B C Ç D E F G Ğ H I İ J K L M N O Ö P R S Ş T U Ü V Y Z</span>
+      </div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="bTitle" style="color:var(--gt)">📊 Öğrenme Haritam</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px">
+      <div style="background:var(--g1l);border-left:4px solid var(--g1);border-radius:12px;padding:12px">
+        <div style="font-family:'Fredoka One',cursive;color:var(--g1);font-size:.9rem">Grup 1</div>
+        <div style="font-family:'Nunito',sans-serif;font-size:1.1rem;margin-top:4px">A · N · E · T · İ · L</div>
+        <div style="font-size:.75rem;color:#aaa;margin-top:4px">anne, nine, lale, tel, tane</div>
+      </div>
+      <div style="background:var(--g2l);border-left:4px solid var(--g2);border-radius:12px;padding:12px">
+        <div style="font-family:'Fredoka One',cursive;color:var(--g2);font-size:.9rem">Grup 2</div>
+        <div style="font-family:'Nunito',sans-serif;font-size:1.1rem;margin-top:4px">O · K · U · R · I · M</div>
+        <div style="font-size:.75rem;color:#aaa;margin-top:4px">okul, kalem, limon, orman</div>
+      </div>
+      <div style="background:var(--g3l);border-left:4px solid var(--g3);border-radius:12px;padding:12px">
+        <div style="font-family:'Fredoka One',cursive;color:var(--g3);font-size:.9rem">Grup 3</div>
+        <div style="font-family:'Nunito',sans-serif;font-size:1.1rem;margin-top:4px">Ü · S · Ö · Y · D · Z</div>
+        <div style="font-size:.75rem;color:#aaa;margin-top:4px">üzüm, masal, deniz, yıldız</div>
+      </div>
+      <div style="background:var(--g4l);border-left:4px solid var(--g4);border-radius:12px;padding:12px">
+        <div style="font-family:'Fredoka One',cursive;color:var(--g4);font-size:.9rem">Grup 4</div>
+        <div style="font-family:'Nunito',sans-serif;font-size:1.1rem;margin-top:4px">Ç · B · G · C · Ş</div>
+        <div style="font-size:.75rem;color:#aaa;margin-top:4px">çiçek, gül, bayrak, şeker</div>
+      </div>
+      <div style="background:var(--g5l);border-left:4px solid var(--g5);border-radius:12px;padding:12px">
+        <div style="font-family:'Fredoka One',cursive;color:var(--g5);font-size:.9rem">Grup 5</div>
+        <div style="font-family:'Nunito',sans-serif;font-size:1.1rem;margin-top:4px">P · H · V · Ğ · F · J</div>
+        <div style="font-size:.75rem;color:#aaa;margin-top:4px">hava, yağmur, ağaç, fırça</div>
+      </div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="bTitle" style="color:var(--gt)">🔤 Türk Alfabesi — 29 Harf</div>
+    <div style="font-family:'Nunito',sans-serif;font-size:1.6rem;letter-spacing:5px;line-height:2.2;color:#333;background:#FFF8E1;border-radius:14px;padding:16px">
+      A B C Ç D E F G Ğ H I İ J K L M N O Ö P R S Ş T U Ü V Y Z
+    </div>
+  </div>
+  <div class="block">
+    <div class="bTitle" style="color:var(--gt)">📖 Genel Tekrar Okuma Metni</div>
+    <div class="metinBox" style="--gc:var(--gt);--gcl:var(--gtl)">
+      Ali sabah erken kalkar, kahvaltısını yapar ve okula gider.<br>
+      Sınıfta arkadaşlarıyla birlikte kitap okur, yeni harfler öğrenir.<br>
+      Teneffüste bahçede oyun oynarlar.<br>
+      Eve dönünce ödevlerini yapar, sonra ailesiyle sohbet eder.<br>
+      Yatmadan önce annesi ona masal anlatır.
+    </div>
+  </div>
+  <div class="printSec" style="--gc:var(--gt)">
+    <h3>📄 Genel Tekrar Çalışma Sayfaları</h3>
+    <p>Tüm harfleri kapsayan tekrar sayfaları</p>
+    <div class="pGrid">
+      <div class="pBtn" onclick="doPrintWS(6,'alfabe')">🔤 Alfabe Tablosu</div>
+      <div class="pBtn" onclick="doPrintWS(6,'kelime')">📝 Kelime Tekrar</div>
+      <div class="pBtn" onclick="doPrintWS(6,'cumle')">💬 Cümle Tekrar</div>
+      <div class="pBtn" onclick="doPrintWS(6,'harita')">🗺️ Öğrenme Haritası</div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="mbg" id="modalBg">
+  <div class="mbox">
+    <div style="font-size:2.5rem" id="mIcon">📄</div>
+    <h2 id="mTitle">Çalışma Sayfası</h2>
+    <p id="mDesc">Bu sayfayı yazdırabilirsiniz.</p>
+    <div class="mbtns">
+      <button class="btn" style="background:#D81B60;color:white" onclick="execPrint()">🖨 Yazdır / PDF</button>
+      <button class="btn btnG" onclick="closeM()">✖ Kapat</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div style="font-size:1.8rem;margin-bottom:6px">📚 A · N · E · T · İ · L · O · K · U · R · I · M</div>
+  <strong>Hasan Tutus — Taylıca İlkokulu · Şanlıurfa</strong>
+  <div style="margin-top:4px">1. Sınıf İlk Okuma Yazma · Ses Temelli Cümle Yöntemi · Maarif Modeli</div>
+</footer>
+
+<script>
+// ── MAIN TAB ──
+function switchG(n) {
+  document.querySelectorAll('.gPanel').forEach(el => el.classList.remove('on'));
+  document.querySelectorAll('.main-tab').forEach(el => el.classList.remove('on'));
+  document.getElementById('g'+n).classList.add('on');
+  const btn = document.querySelector(`.main-tab[data-g="${n}"]`);
+  btn.classList.add('on');
+  window.scrollTo({top: document.querySelector('.main-nav').offsetTop - 10, behavior:'smooth'});
+  if(n >= 1 && n <= 5) initGame(n);
+}
+
+// ── LETTER TAB ──
+function switchL(g, l) {
+  const panel = document.getElementById('g'+g);
+  panel.querySelectorAll('.lPanel').forEach(el => el.classList.remove('on'));
+  panel.querySelectorAll('.lBtn').forEach(el => el.classList.remove('on'));
+  const lp = document.getElementById(`g${g}-${l}`);
+  if(lp) lp.classList.add('on');
+  event.currentTarget.classList.add('on');
+  if(l === 'tekrar') initGame(g);
+}
+
+// ── HECE CLICK ──
+function toggleHece(el) {
+  el.classList.toggle('hit');
+  setTimeout(() => el.classList.remove('hit'), 700);
+}
+
+// ── GAME DATA ──
+const GDATA = {
+  1: {
+    letters: ['a','n','e','t','i','l'],
+    texts: [
+      'Anne, nane al. Nine, lale al.',
+      'Ali ile Ela el ele.',
+      'Nine anlat, anne anlat!',
+      'Alet al, tel al, tane al.',
+    ]
+  },
+  2: {
+    letters: ['o','k','u','r','ı','m','a','n','e','t','i','l'],
+    texts: [
+      'Ali roman okur, Ela kalem alır.',
+      'Anne elma ile limon alır.',
+      'Turna ormana konar, ırmak akar.',
+      'Meltem karne alır, Murat motoru onarır.',
+    ]
+  },
+  3: {
+    letters: ['ü','s','ö','y','d','z','o','k','u','r','m','a','n','e','t','i','l'],
+    texts: [
+      'Nine masal anlatır, dede öykü okur.',
+      'Kedimiz süt sever, ördek suda yüzer.',
+      'Annem yumurta kaynatır, sofraya zeytin koyar.',
+      'Dost dosta yardım eder.',
+    ]
+  },
+  4: {
+    letters: ['ç','b','g','c','ş','ü','s','ö','y','d','z','o','k','u','r','m','a','n','e','t','i','l'],
+    texts: [
+      'Çilek çok tatlı, bal çok güzel.',
+      'Balıklar denizde yüzer, kuşlar gökte uçar.',
+      'Güneş bugün sıcak, gece serin olur.',
+      'Kardeşim şarkı söyler, çocuklar güler.',
+    ]
+  },
+  5: {
+    letters: ['p','h','v','ğ','f','j','ç','b','g','ş','ü','s','ö','y','d','z','o','k','u','r','m','a','n','e','t','i','l'],
+    texts: [
+      'Bugün hava çok güzel, parka gidelim.',
+      'Yağmur yağınca ağaçlar yıkanır.',
+      'Dişlerimi fırçaladım, yatmaya hazırım.',
+      'Bahçedeki fidan büyüdü, çiçek açtı.',
+    ]
+  }
+};
+
+const scores = {1:0,2:0,3:0,4:0,5:0};
+const gameStates = {};
+
+function getStars(n) {
+  if(n>=10) return '⭐⭐⭐⭐⭐';
+  if(n>=7)  return '⭐⭐⭐⭐';
+  if(n>=4)  return '⭐⭐⭐';
+  if(n>=2)  return '⭐⭐';
+  if(n>=1)  return '⭐';
+  return '';
+}
+
+function setFB(n, ok, msg) {
+  const el = document.getElementById('fb'+n);
+  el.textContent = msg;
+  el.className = 'fb ' + (ok ? 'ok' : 'no');
+  setTimeout(() => { el.className = 'fb mt'; el.textContent = ''; }, 2500);
+}
+
+function initGame(n) {
+  if(!GDATA[n]) return;
+  newF(n);
+}
+
+function newF(n) {
+  const d = GDATA[n];
+  if(!d) return;
+  const targetLetter = d.letters[Math.floor(Math.random() * d.letters.length)];
+  const text = d.texts[Math.floor(Math.random() * d.texts.length)];
+  gameStates[n] = { targetLetter, text };
+
+  document.getElementById('ft'+n).textContent = targetLetter;
+  document.getElementById('fs'+n).innerHTML =
+    `Metindeki tüm "<b>${targetLetter}</b>" ve "<b>${targetLetter.toUpperCase()}</b>" harflerini bul ve tıkla!`;
+
+  let html = '';
+  for(const ch of text) {
+    if(ch === ' ') { html += ' '; continue; }
+    if('.,!?'.includes(ch)) { html += ch; continue; }
+    const isTarget = ch.toLowerCase() === targetLetter.toLowerCase();
+    html += `<span class="fl" data-t="${isTarget}" onclick="tapLetter(this,${n})">${ch}</span>`;
+  }
+  document.getElementById('fd'+n).innerHTML = html;
+  document.getElementById('fb'+n).className = 'fb mt';
+  document.getElementById('fb'+n).textContent = '';
+}
+
+function tapLetter(el, n) {
+  if(el.dataset.t === 'true') { el.classList.toggle('found'); }
+  else { el.classList.add('bad'); setTimeout(() => el.classList.remove('bad'), 500); }
+}
+
+function checkF(n) {
+  const cont = document.getElementById('fd'+n);
+  const all = cont.querySelectorAll('[data-t="true"]');
+  const found = cont.querySelectorAll('[data-t="true"].found');
+  if(all.length === 0) { newF(n); return; }
+  if(found.length === all.length) {
+    scores[n]++;
+    document.getElementById('sc'+n).textContent = scores[n];
+    document.getElementById('st'+n).textContent = getStars(scores[n]);
+    setFB(n, true, `🎉 Harika! ${found.length}/${all.length} harfi buldun!`);
+    setTimeout(() => newF(n), 1600);
+  } else {
+    setFB(n, false, `⚠️ ${all.length - found.length} harf daha var!`);
+  }
+}
+
+// init first group game
+initGame(1);
+
+// ── PRINT ──
+let pState = {};
+
+const gInfo2 = {
+  1: { title:'Grup 1 — ANETİL', color:'#D81B60', harfler:'A, N, E, T, İ, L' },
+  2: { title:'Grup 2 — OKURIM', color:'#0277BD', harfler:'O, K, U, R, I, M' },
+  3: { title:'Grup 3 — ÜSÖYDZ', color:'#E65100', harfler:'Ü, S, Ö, Y, D, Z' },
+  4: { title:'Grup 4 — ÇBGCŞ', color:'#2E7D32', harfler:'Ç, B, G, C, Ş' },
+  5: { title:'Grup 5 — PHVĞFJ', color:'#6A1B9A', harfler:'P, H, V, Ğ, F, J' },
+  6: { title:'İlk Okuma Yazma Genel Tekrar', color:'#F57F17', harfler:'Tüm 29 Harf' },
+};
+
+function doPrintWS(g, type) {
+  pState = { g, type };
+  const fi = gInfo2[g];
+  document.getElementById('mIcon').textContent = type === 'harf' ? '🔤' : type === 'kelime' ? '📝' : type === 'alfabe' ? '🔤' : '💬';
+  document.getElementById('mTitle').textContent = fi.title;
+  document.getElementById('mDesc').textContent = 'Harfler: ' + fi.harfler;
+  document.getElementById('modalBg').classList.add('open');
+}
+
+function closeM() { document.getElementById('modalBg').classList.remove('open'); }
+document.getElementById('modalBg').addEventListener('click', e => { if(e.target === e.currentTarget) closeM(); });
+
+function execPrint() { closeM(); buildPrintPage(pState.g, pState.type); }
+
+function buildPrintPage(g, type) {
+  const fi = gInfo2[g];
+  const w = window.open('','_blank');
+
+  const newHarfsMap = {
+    1:['A a','N n','E e','T t','İ i','L l'],
+    2:['O o','K k','U u','R r','I ı','M m'],
+    3:['Ü ü','S s','Ö ö','Y y','D d','Z z'],
+    4:['Ç ç','B b','G g','C c','Ş ş'],
+    5:['P p','H h','V v','Ğ ğ','F f','J j'],
+    6:[],
+  };
+
+  const kelimelMap = {
+    1:[{k:'anne',e:'👩'},{k:'nine',e:'👵'},{k:'lale',e:'🌷'},{k:'nane',e:'🌿'},{k:'el',e:'✋'},{k:'at',e:'🐴'},{k:'tel',e:'📡'},{k:'tane',e:'🌰'},{k:'alet',e:'🔧'}],
+    2:[{k:'okul',e:'🏫'},{k:'kalem',e:'✏️'},{k:'limon',e:'🍋'},{k:'karne',e:'📄'},{k:'roman',e:'📖'},{k:'motor',e:'🚗'},{k:'turna',e:'🐦'},{k:'elma',e:'🍎'},{k:'orman',e:'🌳'}],
+    3:[{k:'üzüm',e:'🍇'},{k:'süt',e:'🥛'},{k:'masal',e:'📖'},{k:'resim',e:'🎨'},{k:'ördek',e:'🦆'},{k:'yıldız',e:'⭐'},{k:'yumurta',e:'🥚'},{k:'deniz',e:'🌊'},{k:'zeytin',e:'🫒'}],
+    4:[{k:'çiçek',e:'🌸'},{k:'çilek',e:'🍓'},{k:'bal',e:'🍯'},{k:'balık',e:'🐟'},{k:'gül',e:'🌹'},{k:'güneş',e:'☀️'},{k:'bayrak',e:'🚩'},{k:'şeker',e:'🍬'},{k:'gemi',e:'🚢'}],
+    5:[{k:'hava',e:'🌬️'},{k:'vatan',e:'🏠'},{k:'yağmur',e:'🌧️'},{k:'ağaç',e:'🌳'},{k:'park',e:'🌳'},{k:'fırça',e:'🪥'},{k:'fidan',e:'🌱'},{k:'yoğurt',e:'🥣'},{k:'hediye',e:'🎁'}],
+    6:[{k:'okul',e:'🏫'},{k:'bayrak',e:'🚩'},{k:'güneş',e:'☀️'},{k:'yağmur',e:'🌧️'},{k:'çiçek',e:'🌸'},{k:'kitap',e:'📚'}],
+  };
+
+  const cumleMap = {
+    1:['Anne, nane al.','Nine, lale al.','Ali, at al.','Ela, tel al.','Nine, tane tane anlat.','Ali ile Ela el ele.'],
+    2:['Ali roman okur.','Ela kalem alır.','Anne elma ile limon alır.','Turna ormana konar.','Meltem karne alır.'],
+    3:['Kedimiz süt sever.','Nine masal anlatır.','Ördek suda yüzer.','Annem yumurta kaynatır.','Dost dosta yardım eder.'],
+    4:['Çilek çok tatlıdır.','Balıklar denizde yüzer.','Güneş bugün çok sıcak.','Kardeşim şeker sever.','Bayrak dalgalanır.'],
+    5:['Bugün hava çok güzel, parka gidelim.','Yağmur yağınca ağaçlar yıkanır.','Dişlerimi her sabah fırçalarım.','Kahvaltıda yoğurt ile ekmek yerim.','Bahçemize diktiğimiz fidan büyüdü.'],
+    6:['Sabah erken kalkar, okula giderim.','Sınıfta yeni harfler öğreniyorum.','Teneffüste bahçede oyun oynarız.','Akşam annem bana masal anlatır.'],
+  };
+
+  const hdr = `<div class="hdr"><div class="ht">${fi.title}</div>
+    <div class="hs">Ses Temelli Cümle Yöntemi · Hasan Tutus · Taylıca İlkokulu · Şanlıurfa</div></div>
+    <div class="nr">
+      <span>Adı Soyadı: <u class="ul"></u></span>
+      <span>Tarih: <u class="ul2"></u></span>
+      <span>Puan: <u class="ul3"></u>/10</span>
+    </div>`;
+
+  let content = '';
+  if(type === 'harf') {
+    const hs = newHarfsMap[g];
+    content = `<div class="tt">1. Harfleri büyük-küçük yaz:</div>
+    <div class="hg">${hs.map(h=>`<div class="hb">${h}</div>`).join('')}</div>
+    <div class="tt" style="margin-top:20px">2. Her harfi 5 kez yaz:</div>
+    ${hs.map(h=>`<div class="wr"><span class="rh">${h.split(' ')[0]}</span>${Array(5).fill('<div class="wb"></div>').join('')}</div>`).join('')}`;
+  } else if(type === 'kelime') {
+    const ks = kelimelMap[g];
+    content = `<div class="tt">1. Kelimeleri oku ve altına yaz:</div>
+    <div class="kg">${ks.map(k=>`<div class="kp"><div class="ke2">${k.e}</div><div class="kw">${k.k}</div><div class="kl"></div></div>`).join('')}</div>
+    <div class="tt" style="margin-top:16px">2. Boşluğa doğru kelimeyi yaz:</div>
+    ${ks.slice(0,5).map(k=>`<div class="fr">${k.e} &nbsp;→&nbsp; <u class="ul4"></u></div>`).join('')}`;
+  } else if(type === 'cumle') {
+    const cs = cumleMap[g];
+    content = `<div class="tt">1. Cümleleri sesli oku:</div>
+    <div class="cl">${cs.map((c,i)=>`<div class="cp"><span class="cn2">${i+1}.</span>${c}</div>`).join('')}</div>
+    <div class="tt" style="margin-top:16px">2. İlk cümleyi 3 kez yaz:</div>
+    <div class="ref">${cs[0]}</div>
+    ${Array(3).fill('<div class="cline"></div>').join('')}
+    <div class="tt" style="margin-top:14px">3. Kendi cümleni yaz:</div>
+    <div class="cline"></div>`;
+  } else if(type === 'alfabe' || type === 'harita') {
+    content = `<div class="tt">Türk Alfabesi — 29 Harf</div>
+    <div class="ag">${['A a','B b','C c','Ç ç','D d','E e','F f','G g','Ğ ğ','H h','I ı','İ i','J j','K k','L l','M m','N n','O o','Ö ö','P p','R r','S s','Ş ş','T t','U u','Ü ü','V v','Y y','Z z'].map(h=>`<div class="ab">${h}</div>`).join('')}</div>
+    <div class="tt" style="margin-top:16px">Gruplaşma</div>
+    <table class="rt"><tr><th>Grup</th><th>Harfler</th><th>Örnek Kelime</th></tr>
+    <tr><td>1</td><td>A N E T İ L</td><td>anne, nine, lale</td></tr>
+    <tr><td>2</td><td>O K U R I M</td><td>okul, kalem, limon</td></tr>
+    <tr><td>3</td><td>Ü S Ö Y D Z</td><td>üzüm, masal, deniz</td></tr>
+    <tr><td>4</td><td>Ç B G C Ş</td><td>çiçek, gül, şeker</td></tr>
+    <tr><td>5</td><td>P H V Ğ F J</td><td>hava, yağmur, fırça</td></tr></table>`;
+  }
+
+  w.document.write(`<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8">
+    <title>${fi.title}</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap');
+      body{font-family:'Nunito',sans-serif;font-weight:700;max-width:700px;margin:24px auto;padding:18px;color:#222;}
+      .hdr{background:#F5F5F5;border-left:6px solid ${fi.color};padding:12px 16px;border-radius:0 10px 10px 0;margin-bottom:14px;}
+      .ht{font-size:1.3rem;font-weight:900;color:${fi.color};}
+      .hs{font-size:.75rem;color:#888;margin-top:2px;}
+      .nr{display:flex;gap:20px;font-size:.9rem;margin-bottom:18px;flex-wrap:wrap;}
+      .ul{display:inline-block;min-width:140px;border-bottom:2px solid #333;}
+      .ul2{display:inline-block;min-width:80px;border-bottom:2px solid #333;}
+      .ul3{display:inline-block;min-width:40px;border-bottom:2px solid #333;}
+      .tt{font-size:1rem;font-weight:900;color:${fi.color};border-bottom:2px dashed ${fi.color};padding-bottom:3px;margin:14px 0 10px;}
+      .hg{display:flex;flex-wrap:wrap;gap:8px;}
+      .hb{border:2px dashed #ccc;border-radius:8px;padding:8px 14px;font-size:1.8rem;font-weight:900;}
+      .wr{display:flex;align-items:center;gap:8px;margin:6px 0;}
+      .rh{font-size:1.4rem;font-weight:900;width:36px;color:${fi.color};}
+      .wb{width:46px;height:46px;border:2px solid #ddd;border-radius:8px;}
+      .kg{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px;}
+      .kp{border:2px solid #eee;border-radius:10px;padding:10px;text-align:center;}
+      .ke2{font-size:2rem;}.kw{font-size:1.2rem;font-weight:900;color:${fi.color};margin:3px 0;}
+      .kl{border-bottom:2px solid #ccc;margin-top:8px;height:22px;}
+      .fr{margin:8px 0;font-size:1rem;}
+      .ul4{display:inline-block;min-width:100px;border-bottom:2px solid #333;}
+      .cl{display:flex;flex-direction:column;gap:8px;}
+      .cp{border-left:4px solid ${fi.color};background:#FAFAFA;padding:9px 14px;border-radius:0 8px 8px 0;font-size:1.2rem;}
+      .cn2{color:${fi.color};font-weight:900;margin-right:6px;}
+      .ref{background:#F5F5F5;border-radius:8px;padding:9px 14px;font-size:1.2rem;font-weight:900;color:${fi.color};margin:8px 0;}
+      .cline{border-bottom:2px solid #ccc;height:30px;margin:10px 0;}
+      .ag{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;}
+      .ab{border:2px solid ${fi.color};border-radius:7px;padding:6px;text-align:center;font-size:.9rem;font-weight:900;color:${fi.color};}
+      .rt{width:100%;border-collapse:collapse;margin-top:8px;}
+      .rt th{background:${fi.color};color:white;padding:7px;text-align:left;}
+      .rt td{border:1px solid #ddd;padding:7px;}
+      .rt tr:nth-child(even) td{background:#F9F9F9;}
+      @media print{body{margin:4px;padding:4px}}
+    </style></head><body>
+    ${hdr}${content}
+    <div style="text-align:center;margin-top:28px" class="noprint">
+      <button onclick="window.print()" style="background:${fi.color};color:white;border:none;padding:11px 26px;border-radius:50px;font-size:1rem;cursor:pointer;font-weight:900">🖨 Yazdır / PDF Kaydet</button>
+    </div>
+    <script>window.onload=()=>setTimeout(()=>window.print(),400)<\/script>
+    </body></html>`);
+  w.document.close();
+}
+</script>
+</body>
+</html>
