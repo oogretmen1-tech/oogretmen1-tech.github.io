@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İlkokul Akademik ve Davranışsal Etkinlikler</title>
+<link href="https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --lacivert:#17324d;
+  --mavi:#2d79b7;
+  --acik-mavi:#edf7fd;
+  --turuncu:#df8735;
+  --acik-turuncu:#fff5e9;
+  --yesil:#328567;
+  --acik-yesil:#edf9f3;
+  --mor:#7256a3;
+  --acik-mor:#f5f0fc;
+  --kirmizi:#c65353;
+  --metin:#263641;
+  --arka:#f4f7f9;
+  --kenar:#d9e3e9;
+}
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:var(--arka);
+  color:var(--metin);
+  font-family:'Andika', sans-serif;
+  font-size:18px;
+  line-height:1.6;
+}
+
+header{
+  background:linear-gradient(135deg,var(--lacivert),var(--mavi));
+  color:white;
+  padding:42px 20px;
+}
+
+.container{
+  max-width:1180px;
+  margin:auto;
+  padding:0 18px;
+}
+
+h1{
+  margin:0 0 8px;
+  font-size:clamp(28px,5vw,46px);
+}
+
+h2{
+  color:var(--lacivert);
+  margin-top:0;
+}
+
+h3{
+  color:var(--lacivert);
+  margin-top:0;
+}
+
+.subtitle{
+  max-width:850px;
+  font-size:20px;
+  margin-bottom:0;
+}
+
+.header-buttons{
+  margin-top:22px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+button{
+  font-family:inherit;
+}
+
+.action-button{
+  border:0;
+  padding:11px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+  background:white;
+  color:var(--lacivert);
+}
+
+.action-button:hover{
+  background:#e5f4ff;
+}
+
+.tabs{
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:white;
+  border-bottom:1px solid var(--kenar);
+  box-shadow:0 2px 8px #00000012;
+}
+
+.tab-list{
+  max-width:1180px;
+  margin:auto;
+  padding:9px 18px;
+  display:flex;
+  gap:5px;
+  overflow-x:auto;
+}
+
+.tab-button{
+  border:0;
+  background:white;
+  color:var(--lacivert);
+  padding:12px 16px;
+  cursor:pointer;
+  border-radius:8px;
+  white-space:nowrap;
+  font-weight:bold;
+}
+
+.tab-button:hover,
+.tab-button.active{
+  color:white;
+  background:var(--mavi);
+}
+
+main{
+  padding:32px 0 60px;
+}
+
+.panel{
+  display:none;
+  animation:appear .25s ease;
+}
+
+.panel.active{
+  display:block;
+}
+
+@keyframes appear{
+  from{opacity:0;transform:translateY(5px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.intro-box{
+  background:white;
+  border-left:6px solid var(--mavi);
+  border-radius:10px;
+  padding:17px 20px;
+  margin-bottom:25px;
+}
+
+.activity-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:22px;
+}
+
+.activity-card{
+  background:white;
+  border:1px solid var(--kenar);
+  border-radius:15px;
+  overflow:hidden;
+  box-shadow:0 4px 14px #17324d0c;
+}
+
+.activity-title{
+  color:white;
+  padding:19px 20px;
+  min-height:125px;
+}
+
+.activity-title h3{
+  color:white;
+  margin:6px 0 8px;
+  font-size:26px;
+}
+
+.activity-title p{
+  margin:0;
+  font-size:16px;
+}
+
+.blue{background:linear-gradient(135deg,#286da4,#4d9bd0)}
+.orange{background:linear-gradient(135deg,#c76b20,#ecaa64)}
+.green{background:linear-gradient(135deg,#267458,#55a681)}
+.purple{background:linear-gradient(135deg,#60438c,#9378c4)}
+.red{background:linear-gradient(135deg,#a84444,#d77a7a)}
+
+.activity-body{
+  padding:19px 20px;
+}
+
+.meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-bottom:14px;
+}
+
+.meta span{
+  font-size:14px;
+  padding:6px 11px;
+  border-radius:20px;
+  background:#eef3f6;
+  color:#43545f;
+}
+
+.meta span:first-child{
+  background:#e5f3fb;
+  color:#21618c;
+}
+
+details{
+  border-top:1px solid #e8edf0;
+  padding:11px 0;
+}
+
+summary{
+  cursor:pointer;
+  color:var(--mavi);
+  font-weight:bold;
+}
+
+summary:hover{
+  color:var(--lacivert);
+}
+
+.content-title{
+  font-weight:bold;
+  color:var(--lacivert);
+  margin:13px 0 4px;
+}
+
+ul,ol{
+  padding-left:21px;
+  margin-top:6px;
+}
+
+li{
+  margin:5px 0;
+}
+
+.material{
+  background:var(--acik-turuncu);
+  border-left:4px solid var(--turuncu);
+  padding:10px 13px;
+  border-radius:6px;
+  font-size:16px;
+}
+
+.assessment{
+  background:var(--acik-yesil);
+  border-left:4px solid var(--yesil);
+  padding:10px 13px;
+  border-radius:6px;
+  font-size:16px;
+}
+
+.visual{
+  text-align:center;
+  padding:12px 0 2px;
+  font-size:45px;
+}
+
+.small-note{
+  color:#61717b;
+  font-size:15px;
+}
+
+.print-area{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  flex-wrap:wrap;
+  margin-bottom:22px;
+}
+
+.print-button{
+  background:var(--turuncu);
+  color:white;
+  border:0;
+  border-radius:8px;
+  padding:10px 15px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+footer{
+  background:var(--lacivert);
+  color:white;
+  text-align:center;
+  padding:27px 15px;
+}
+
+@media print{
+  .tabs,
+  .header-buttons,
+  .print-button{
+    display:none!important;
+  }
+
+  body{
+    background:white;
+  }
+
+  .panel{
+    display:block!important;
+    page-break-before:always;
+  }
+
+  .activity-card{
+    box-shadow:none;
+    break-inside:avoid;
+  }
+
+  details{
+    display:block;
+  }
+
+  details summary{
+    display:none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="container">
+    <h1>Etkinlik Uygulama Kılavuzu</h1>
+    <p class="subtitle">
+      İlkokul öğrencilerinde görülebilen okuma, yazma, matematik, dikkat,
+      öz düzenleme ve sınıf içi davranış sorunlarına yönelik yapılandırılmış etkinlikler.
+    </p>
+
+    <div class="header-buttons">
+      <button class="action-button" onclick="window.print()">🖨 Etkinlikleri Yazdır</button>
+      <button class="action-button" onclick="openAll()">Tümünü Aç</button>
+      <button class="action-button" onclick="closeAll()">Tümünü Kapat</button>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="tab-list">
+    <button class="tab-button active" data-tab="okuma">Okuma</button>
+    <button class="tab-button" data-tab="yazma">Yazma</button>
+    <button class="tab-button" data-tab="matematik">Matematik</button>
+    <button class="tab-button" data-tab="dikkat">Dikkat ve çalışma</button>
+    <button class="tab-button" data-tab="davranis">Davranış</button>
+    <button class="tab-button" data-tab="duygu">Duygu ve sosyal beceri</button>
+  </div>
+</nav>
+
+<main class="container">
+
+<!-- OKUMA -->
+<section id="okuma" class="panel active">
+  <div class="print-area">
+    <div>
+      <h2>Okuma Etkinlikleri</h2>
+      <p>Okuma doğruluğu, akıcılığı, kelime bilgisi ve okuduğunu anlama becerilerini destekler.</p>
+    </div>
+    <button class="print-button" onclick="window.print()">Bu bölümü yazdır</button>
+  </div>
+
+  <div class="activity-grid">
+
+    <article class="activity-card">
+      <div class="activity-title blue">
+        <div class="visual">🔤</div>
+        <h3>Ses–Harf Eşleştirme İstasyonları</h3>
+        <p>Sesleri ayırt etme ve harflerle ilişkilendirme</p>
+      </div>
+      <div class="activity-body">
+        <div class="meta"><span>15–20 dakika</span><span>1. sınıf</span><span>Bireysel / küçük grup</span></div>
+        <details open>
+          <summary>Uygulama basamakları</summary>
+          <ol>
+            <li>Bir ses seçin ve sesi net biçimde söyleyin.</li>
+            <li>Öğrenciye 3–4 harf kartı gösterin.</li>
+            <li>Doğru harfi seçmesini ve sesi tekrar etmesini isteyin.</li>
+            <li>Sesle başlayan görselleri doğru harfin altına yerleştirin.</li>
+            <li>Son aşamada iki veya üç sesle basit heceler oluşturun.</li>
+          </ol>
+        </details>
+        <div class="material"><b>Materyal:</b> Harf kartları, resim kartları, küçük kutular, mıknatıslı pano.</div>
+        <div class="assessment"><b>Değerlendirme:</b> 10 denemede doğru harf–ses eşleştirme sayısını kaydedin.</div>
+      </div>
+    </article>
+
+    <article class="activity-card">
+      <div class="activity-title green">
+        <div class="visual">📖</div>
+        <h3>Tekrarlı Okuma ve Akıcılık Çizelgesi</h3>
+        <p>Okuma hızından önce doğruluk ve anlamı geliştirme</p>
+      </div>
+      <div class="activity-body">
+        <div class="meta"><span>10–15 dakika</span><span>1–4. sınıf</span><span>Eşli çalışma</span></div>
+        <details>
+          <summary>Uygulama basamakları</summary>
+          <ol>
+            <li>Öğrencinin düzeyine uygun, kısa bir metin seçin.</li>
+            <li>Öğretmen metni bir kez anlamlı biçimde modelleyerek okusun.</li>
+            <li>Öğrenci metni öğretmenle birlikte okusun.</li>
+            <li>Öğrenci aynı metni ikinci ve üçüncü kez okusun.</li>
+            <li>Her okumadan sonra bir anlama sorusu sorun.</li>
+          </ol>
+        </details>
+        <div class="material"><b>Materyal:</b> Kısa metin, okuma çizelgesi, kalem, üç anlama sorusu.</div>
+        <div class="assessment"><b>Değerlendirme:</b> Yanlış okunan kelimeleri, duraklamaları ve sorulara verilen cevapları kaydedin.</div>
+      </div>
+    </article>
+
+    <article class="activity-card">
+      <div class="activity-title orange">
+        <div class="visual">🧩</div>
+        <h3>Kelimeyi Bağlamdan Bul</h3>
+        <p>Kelime anlamı, cümle kurma ve metin anlama</p>
+      </div>
+      <div class="activity-body">
+        <div class="meta"><span>20 dakika</span><span>2–4. sınıf</span><span>Grup çalışması</span></div>
+        <details>
+          <summary>Uygulama basamakları</summary>
+          <ol>
+            <li>Metinden 5 hedef kelime seçin.</li>
+            <li>Kelimeleri metinde farklı renkle işaretleyin.</li>
+            <li>Öğrenciler kelimenin cümledeki anlamını tahmin etsin.</li>
+            <li>Kelimeyi eş anlamlısı, görseli veya kendi cümlesiyle açıklasın.</li>
+            <li>Son olarak kelimeleri kullanarak kısa bir paragraf oluştursun.</li>
+          </ol>
+        </details>
+        <div class="material"><b>Materyal:</b> Metin, kelime kartları, sözlük, görsel kartlar.</div>
+        <div class="assessment"><b>Değerlendirme:</b> Öğrencinin 5 kelimeden kaçını doğru bağlamlandırdığını belirleyin.</div>
+      </div>
+    </article>
+
+    <article class="activity-card">
+      <div class="activity-title purple">
+        <div class="visual">🕵️</div>
+        <h3>Metin Dedektifleri</h3>
+        <p>Ana fikir, yardımcı fikir ve çıkarım yapma</p>
+      </div>
+      <div class="activity-body">
+        <div class="meta"><span>25 dakika</span><span>3–4. sınıf</span><span>Grupla çalışma</span></div>
+        <details>
+          <summary>Uygulama basamakları</summary>
+          <ol>
+            <li>Öğrencilere kısa bir bilgilendirici veya öyküleyici metin verin.</li>
+            <li>“Kim, nerede, ne yaptı, neden yaptı?” sorularını yöneltin.</li>
+            <li>Öğrenciler metindeki kanıt cümlelerinin altını çizsin.</li>
+            <li>Ana fikri tek cümleyle yazsın.</li>
+            <li>Metne dayalı bir çıkarım yapıp dayanağını açıklasın.</li>
+          </ol>
+        </details>
+        <div class="material"><b>Materyal:</b> Metin, fosforlu kalem, soru kartları, ana fikir şablonu.</div>
+        <div class="assessment"><b>Değerlendirme:</b> Cevabın metinden kanıt içerip içermediğini kontrol edin.</div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- YAZMA -->
+<section id="yazma" class="panel">
+  <div class="print-area">
+    <div>
+      <h2>Yazma Etkinlikleri</h2>
+      <p>Yazılı anlatımı planlama, cümle kurma, yazım ve kendini ifade etme becerilerini geliştirir.</p>
+    </div>
+    <button class="print-button" onclick="window.print()">Bu bölümü yazdır</button>
+  </div>
+
+  <div class="activity-grid">
+
+    <article class="activity-card">
+      <div class="activity-title blue">
+        <div class="visual">🧱</div>
+        <h3>Cümle İnşa Atölyesi</h3>
+        <p>Özne, yüklem ve anlamlı cümle oluşturma</p>
+      </div>
+      <div class="activity-body">
+        <div class="meta"><span>20 dakika</span><span>1–3. sınıf</span><span>Küçük grup</span></div>
+        <details open>
+          <summary>Uygulama basamakları</summary>
+          <ol>
+            <li>Özne, eylem ve nesne için farklı renklerde kartlar hazırlayın.</li>
+            <li>Öğrenci üç kart seçerek anlamlı bir cümle oluştursun.</li>
+            <li>Cümleyi yüksek sesle okusun.</li>
+            <li>Cümleye yer, zaman veya niteleme bilgisi eklesin.</li>
+            <li>Son cümleyi defterine yazsın ve noktalama işaretini kontrol etsin.</li>
+          </ol>
+        </details>
+        <div class="material"><b>Materyal:</b> Renkli kelime kartları, cümle şeritleri, noktalama kartları.</div>
+        <div class="assessment"><b>Değerlendirme:</b> Anlamlı cümle, doğru kelime sırası ve noktalama bakımından kontrol edin.</div>
+      </div>
+    </article>
+
+    <article class="activity-card">
+      <div class="activity-title orange">
+        <div class="visual">🖼️</div>
+        <h3>Resimden Planlı Hikâye</h3>
+        <p>Yazmadan önce plan yapma ve olay sıralama</p>
+      </div>
+      <div class="activity-body">
+        <div class="meta"><span>30 dakika</span><span>2–4. sınıf</span><span>Bireysel</span></div>
+        <details>
+          <summary>Uygulama basamakları</summary>
+          <ol>
+            <li>Birbirini izleyen 4 resim gösterin.</li>
+            <li>Öğrenci her resim için bir cümle söylesin.</li>
+            <li>Başlangıç, gelişme ve sonuç bölümlerini belirlesin.</li>
+            <li>Bağlaç kartları kullanarak cümleleri birleştirsin.</li>
+            <li>Hikâyeyi yazsın ve kontrol listesiyle gözden geçirsin.</li>
+          </ol>
+        </details>
+        <div class="material"><b>Materyal:</b> Sıralı resim kartları, hikâye planı, bağlaç kartları.</div>
+        <div class="assessment"><b>Değerlendirme:</b> Olay sırası, cümle bütünlüğü, başlangıç–sonuç ve yazım kontrol edilir.</div>
+      </div>
+    </article>
+
+    <article class="activity-card">
+      <div class="activity-title green">
+        <div class="visual">🔍</div>
+        <h3>Üç Aşamalı Yazı Kontrolü</h3>
+        <p>Yazıyı bağımsız gözden geçirme</p>
+      </div>
+      <div class="activity-body">
+        <div class="meta"><span>15 dakika</span><span>2–4. sınıf</span><span>Bireysel</span></div>
+        <details>
+          <summary>Uygulama basamakları</summary>
+          <ol>
+            <li><b>Anlam:</b> “Ne anlatmak istedim?” sorusunu cevapla.</li>
+            <li><b>Cümle:</b> Her cümlede anlam ve kelime sırasını kontrol et.</li>
+            <li><b>Biçim:</b> Büyük harf, nokta, boşluk ve yazımı kontrol et.</li>
+            <li>Öğrenci her aşamayı farklı renkle işaretlesin.</li>
+          </ol>
+        </details>
+        <div class="material"><b>Materyal:</b> Üç renkli kalem, kontrol listesi, örnek metin.</div>
+        <div class="assessment"><b>Değerlendirme:</b> Öğrencinin öğretmen yardımı olmadan fark ettiği hataları kaydedin.</div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- MATEMATİK -->
+<section id="matematik" class="panel">
+  <div class="print-area">
+    <div>
+      <h2>Matematik Etkinlikleri</h2>
+      <p>Sayısal anlamayı, problem çözmeyi, işlem stratejilerini ve matematiksel açıklamayı destekler.</p>
+    </div>
+    <button class="print-button" onclick="window.print()">Bu bölümü yazdır</button>
+  </div>
+
+  <div class="activity-grid">
+
+    <article class="activity-card">
+      <div class="activity-title blue">
+        <div class="visual">🔢</div>
+        <h3>Sayı Doğrusu Üzerinde Düşün</h3>
+        <p>Sayı karşılaştırma, ileri–geri sayma ve işlem anlamı</p>
+      </div>
+      <div class="activity-body">
+        <div class="meta"><span>20 dakika</span><span>1–3. sınıf</span><span>Hareketli etkinlik</span></div>
+        <details open>
+          <summary>Uygulama basamakları</summary>
+          <ol>
+            <li>Sınıf zeminine 0–20 veya 0–100 arası sayı doğrusu yerleştirin.</li>
+            <li>Öğrenci verilen sayının üzerine geçsin.</li>
+            <li>“3 ileri git”, “2 geri dön” yönergeleri verin.</li>
+            <li>Öğrenci yaptığı hareketi işlem olarak yazsın.</li>
+            <li>İşlemi materyal ve sembolle açıklasın.</li>
+          </ol>
+        </details>
+        <div class="material"><b>Materyal:</b> Zemin sayı doğrusu, sayı kartları, yön okları.</div>
+        <div class="assessment"><b>Değerlendirme:</b> Öğrencinin hareketi doğru işlemle eşleştirip eşleştirmediğini gözlemleyin.</div>
+      </div>
+    </article>
+
+    <article class="activity-card">
+      <div class="activity-title orange">
+        <div class="visual">🛒</div>
+        <h3>Sınıf Marketi</h3>
+        <p>Para, toplama–çıkarma ve problem kurma</p>
+      </div>
+      <div class="activity-body">
+        <div class="meta"><span>30–40 dakika</span><span>2–4. sınıf</span><span>Rol oynama</span></div>
+        <details>
+          <summary>Uygulama basamakları</summary>
+          <ol>
+            <li>Sınıfta ürün görselleri ve fiyat etiketleri hazırlayın.</li>
+            <li>Öğrencilere sınırlı miktarda oyuncak para verin.</li>
+            <li>Alışveriş listesi oluşturun.</li>
+            <li>Öğrenci toplam ödemeyi ve para üstünü hesaplasın.</li>
+            <li>Yaşadığı durumu matematik problemi olarak yazsın.</li>
+          </ol>
+        </details>
+        <div class="material"><b>Materyal:</b> Oyuncak para, ürün kartları, fiyat etiketleri, alışveriş listesi.</div>
+        <div class="assessment"><b>Değerlendirme:</b> İşlemin kurulması, hesaplama ve sonucu açıklama ayrı ayrı değerlendirilir.</div>
+      </div>
+    </article>
+
+    <article class="activity-card">
+      <div class="activity-title purple">
+        <div class="visual">🧠</div>
+        <h3>Hata Analizi Masası</h3>
+        <p>Yanlış çözümü inceleme ve strateji geliştirme</p>
+      </div>
+      <div class="activity-body">
+        <div class="meta"><span>20 dakika</span><span>3–4. sınıf</span><span>Çiftli çalışma</span></div>
+        <details>
+          <summary>Uygulama basamakları</summary>
+          <ol>
+            <li>İçinde yaygın bir işlem veya problem hatası bulunan örnekler hazırlayın.</li>
+            <li>Öğrenciler hatanın bulunduğu adımı işaretlesin.</li>
+            <li>“Bu öğrenci ne düşünmüş olabilir?” sorusunu cevaplasın.</li>
+            <li>Çözümü somut materyal, çizim veya sayı doğrusu ile yeniden göstersin.</li>
+            <li>Doğru çözümü yazılı olarak açıklasın.</li>
+          </ol>
+        </details>
+        <div class="material"><b>Materyal:</b> Hatalı çözüm kartları, mini tahta, sayı doğrusu, bloklar.</div>
+        <div class="assessment"><b>Değerlendirme:</b> Hatanın yerini ve nedenini doğru açıklayıp açıklamadığına bakın.</div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- DİKKAT -->
+<section id="dikkat" class="panel">
+  <div class="print-area">
+    <div>
+      <h2>Dikkat ve Çalışma Becerisi Etkinlikleri</h2>
+      <p>Göreve başlama, yönerge takip etme, çalışma süresini artırma ve materyal düzenini destekler.</p>
+    </div>
+    <button class="print-button" onclick="window.print()">Bu bölümü yazdır</button>
+  </div>
+
+  <div class="activity-grid">
+
+    <article class="activity-card">
+      <div class="activity-title green">
+        <div class="visual">🧭</div>
+        <h3>Görev Yol Haritası</h3>
+        <p>Uzun görevleri küçük ve izlenebilir adımlara ayırma</p>
+      </div>
+      <div class="activity-body">
+        <div class="meta"><span>10 dakika hazırlık</span><span>Tüm sınıflar</span><span>Bireysel</span></div>
+        <details open>
+          <summary>Uygulama basamakları</summary>
+          <ol>
+            <li>Görevi 3–5 küçük adıma ayırın.</li>
+            <li>Her adımı resim veya kısa cümleyle yazın.</li>
+            <li>Öğrenci her tamamlanan adımın yanına işaret koysun.</li>
+            <li>Görev bitince öğrenci hangi adımın kolay veya zor olduğunu söylesin.</li>
+          </ol>
+        </details>
+        <div class="material"><b>Materyal:</b> Görev kartı, kontrol kutuları, kalem, görsel semboller.</div>
+        <div class="assessment"><b>Değerlendirme:</b> Öğrencinin göreve başlama süresi ve tamamladığı adım sayısı kaydedilir.</div>
+      </div>
+    </article>
+
+    <article class="activity-card">
+      <div class="activity-title orange">
+        <div class="visual">⏱️</div>
+        <h3>Kısa Çalışma–Kısa Mola</h3>
+        <p>Çalışma dayanıklılığı ve görevde kalma</p>
+      </div>
+      <div class="activity-body">
+        <div class="meta"><span>20–30 dakika</span><span>Tüm sınıflar</span><span>Bireysel</span></div>
+        <details>
+          <summary>Uygulama basamakları</summary>
+          <ol>
+            <li>Öğrencinin sürdürebileceği kısa bir süre belirleyin.</li>
+            <li>Zamanlayıcıyı görünür biçimde başlatın.</li>
+            <li>Süre boyunca tek bir göreve odaklanmasını sağlayın.</li>
+            <li>Süre bitince 2–3 dakikalık planlı mola verin.</li>
+            <li>Başarı durumuna göre çalışma süresini kademeli artırın.</li>
+          </ol>
+        </details>
+        <div class="material"><b>Materyal:</b> Görsel zamanlayıcı, görev kâğıdı, mola kartı.</div>
+        <div class="assessment"><b>Değerlendirme:</b> Öğrencinin görevde kaldığı süreyi ve tamamladığı işi kaydedin.</div>
+      </div>
+    </article>
+
+    <article class="activity-card">
+      <div class="activity-title blue">
+        <div class="visual">👂</div>
+        <h3>Yönergeyi Dinle–Tekrarla–Uygula</h3>
+        <p>Dinleme, çalışma belleği ve yönerge takibi</p>
+      </div>
+      <div class="activity-body">
+        <div class="meta"><span>10–15 dakika</span><span>1–4. sınıf</span><span>Çiftli çalışma</span></div>
+        <details>
+          <summary>Uygulama basamakları</summary>
+          <ol>
+            <li>Bir yönergeyi kısa ve açık biçimde verin.</li>
+            <li>Öğrenci yönergeyi kendi cümlesiyle tekrar etsin.</li>
+            <li>İlk adımı gerçekleştirsin.</li>
+            <li>Başarılı olunca yönergeyi iki adıma çıkarın.</li>
+            <li>Gerekirse görsel yönerge kullanın.</li>
+          </ol>
+        </details>
+        <div class="material"><b>Materyal:</b> Renkli bloklar, resim kartları, yönerge kartları.</div>
+        <div class="assessment"><b>Değerlendirme:</b> Tek ve iki aşamalı yönergelerde doğru uygulama sayısını karşılaştırın.</div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- DAVRANIŞ -->
+<section id="davranis" class="panel">
+  <div class="print-area">
+    <div>
+      <h2>Davranış ve Sınıf Yönetimi Etkinlikleri</h2>
+      <p>Beklenen davranışları doğrudan öğretmeye ve güvenli biçimde prova etmeye yöneliktir.</p>
+    </div>
+    <button class="print-button" onclick="window.print()">Bu bölümü yazdır</button>
+  </div>
+
+  <div class="activity-grid">
+
+    <article class="activity-card">
+      <div class="activity-title blue">
+        <div class="visual">📣</div>
+        <h3>Beklenen Davranış Provası</h3>
+        <p>Söz alma, sıraya girme ve materyal kullanma</p>
+      </div>
+      <div class="activity-body">
+        <div class="meta"><span>15 dakika</span><span>Tüm sınıflar</span><span>Sınıfça</span></div>
+        <details open>
+          <summary>Uygulama basamakları</summary>
+          <ol>
+            <li>Tek bir davranış seçin: örneğin söz alma.</li>
+            <li>Davranışın üç adımını açıklayın: işaret ver, bekle, konuş.</li>
+            <li>Öğretmen doğru davranışı modelleyerek göstersin.</li>
+            <li>Öğrenciler ikili gruplarda prova yapsın.</li>
+            <li>Gerçek ders sırasında davranışı fark edip somut geri bildirim verin.</li>
+          </ol>
+        </details>
+        <div class="material"><b>Materyal:</b> Söz alma kartı, davranış adımları posteri, rol kartları.</div>
+        <div class="assessment"><b>Değerlendirme:</b> Öğrencinin davranışın kaç adımını bağımsız yaptığı gözlenir.</div>
+      </div>
+    </article>
+
+    <article class="activity-card">
+      <div class="activity-title green">
+        <div class="visual">⭐</div>
+        <h3>Hedef Davranış Kartı</h3>
+        <p>Tek bir davranış üzerinde düzenli geri bildirim</p>
+      </div>
+      <div class="activity-body">
+        <div class="meta"><span>Günlük 2 dakika</span><span>1–4. sınıf</span><span>Bireysel</span></div>
+        <details>
+          <summary>Uygulama basamakları</summary>
+          <ol>
+            <li>Öğrenciyle birlikte tek bir hedef seçin.</li>
+            <li>Hedefi gözlenebilir yazın: “Ders başında materyalini 2 dakika içinde çıkarır.”</li>
+            <li>Günü 2–3 kısa değerlendirme bölümüne ayırın.</li>
+            <li>Her bölüm sonunda kanıta dayalı kısa geri bildirim verin.</li>
+            <li>Hedefe ulaşınca yeni bir hedef belirleyin.</li>
+          </ol>
+        </details>
+        <div class="material"><b>Materyal:</b> Davranış kartı, kalem, üç bölümlü günlük çizelge.</div>
+        <div class="assessment"><b>Değerlendirme:</b> Günlük işaretleri haftalık olarak karşılaştırılır; öğrenciyle birlikte yorumlanır.</div>
+      </div>
+    </article>
+
+    <article class="activity-card">
+      <div class="activity-title red">
+        <div class="visual">🛑</div>
+        <h3>Dur–Sakinleş–Seç</h3>
+        <p>Öfke anında alternatif davranış geliştirme</p>
+      </div>
+      <div class="activity-body">
+        <div class="meta"><span>20 dakika</span><span>2–4. sınıf</span><span>Küçük grup</span></div>
+        <details>
+          <summary>Uygulama basamakları</summary>
+          <ol>
+            <li><b>Dur:</b> Bedensel belirtileri ve olayın farkına var.</li>
+            <li><b>Sakinleş:</b> Derin nefes, su içme veya kısa mola seç.</li>
+            <li><b>Seç:</b> Yardım isteme, konuşma veya ortamdan güvenli uzaklaşma yollarından birini seç.</li>
+            <li>Rol oynama yoluyla iki farklı senaryoyu uygulayın.</li>
+            <li>Uygulama sonunda en işe yarayan seçeneği belirleyin.</li>
+          </ol>
+        </details>
+        <div class="material"><b>Materyal:</b> Dur–sakinleş–seç posteri, senaryo kartları, duygu kartları.</div>
+        <div class="assessment"><b>Değerlendirme:</b> Öğrencinin kriz oluşmadan önce alternatif davranışı söyleyebilmesi ve uygulayabilmesi değerlendirilir.</div>
+      </div>
+    </article>
+
+    <article class="activity-card">
+      <div class="activity-title purple">
+        <div class="visual">🤝</div>
+        <h3>Çatışma Çözme Çemberi</h3>
+        <p>Akran çatışmalarında dinleme ve çözüm üretme</p>
+      </div>
+      <div class="activity-body">
+        <div class="meta"><span>25 dakika</span><span>2–4. sınıf</span><span>Grupla çalışma</span></div>
+        <details>
+          <summary>Uygulama basamakları</summary>
+          <ol>
+            <li>Gerçek öğrenci isimleri kullanmadan örnek bir çatışma senaryosu okuyun.</li>
+            <li>Her öğrencinin olayı kendi açısından anlatmasını sağlayın.</li>
+            <li>“Ne oldu?”, “Kim nasıl hissetti?”, “Başka ne yapılabilirdi?” sorularını sorun.</li>
+            <li>En az üç çözüm seçeneği üretin.</li>
+            <li>Güvenli, adil ve uygulanabilir seçeneği değerlendirin.</li>
+          </ol>
+        </details>
+        <div class="material"><b>Materyal:</b> Senaryo kartları, duygu kartları, çözüm seçenekleri panosu.</div>
+        <div class="assessment"><b>Değerlendirme:</b> Öğrencinin karşı tarafı dinleme, duyguyu adlandırma ve çözüm önerme becerisine bakın.</div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- DUYGU -->
+<section id="duygu" class="panel">
+  <div class="print-area">
+    <div>
+      <h2>Duygu ve Sosyal Beceri Etkinlikleri</h2>
+      <p>Öz farkındalık, duygu ifade etme, empati, yardım isteme ve iş birliğini destekler.</p>
+    </div>
+    <button class="print-button" onclick="window.print()">Bu bölümü yazdır</button>
+  </div>
+
+  <div class="activity-grid">
+
+    <article class="activity-card">
+      <div class="activity-title orange">
+        <div class="visual">🌡️</div>
+        <h3>Duygu Termometresi</h3>
+        <p>Duygunun şiddetini fark etme ve uygun strateji seçme</p>
+      </div>
+      <div class="activity-body">
+        <div class="meta"><span>10 dakika</span><span>1–4. sınıf</span><span>Günlük rutin</span></div>
+        <details open>
+          <summary>Uygulama basamakları</summary>
+          <ol>
+            <li>0’dan 5’e kadar bir duygu termometresi hazırlayın.</li>
+            <li>Öğrenci o anki duygu düzeyini seçsin.</li>
+            <li>Her düzey için kullanılabilecek bir strateji belirleyin.</li>
+            <li>Örneğin 3 düzeyinde nefes alma, 4 düzeyinde yetişkinden yardım isteme.</li>
+            <li>Gün sonunda stratejinin işe yarayıp yaramadığını değerlendirin.</li>
+          </ol>
+        </details>
+        <div class="material"><b>Materyal:</b> Duygu termometresi, duygu kartları, strateji kartları.</div>
+        <div class="assessment"><b>Değerlendirme:</b> Öğrencinin duyguyu tanımlaması ve uygun strateji seçmesi gözlenir.</div>
+      </div>
+    </article>
+
+    <article class="activity-card">
+      <div class="activity-title green">
+        <div class="visual">👥</div>
+        <h3>İş Birliği Görevi</h3>
+        <p>Rol alma, sıra bekleme, yardım isteme ve görev paylaşımı</p>
+      </div>
+      <div class="activity-body">
+        <div class="meta"><span>30 dakika</span><span>1–4. sınıf</span><span>4 kişilik grup</span></div>
+        <details>
+          <summary>Uygulama basamakları</summary>
+          <ol>
+            <li>Gruba ortak bir ürün görevi verin: afiş, model veya sınıf planı.</li>
+            <li>Her öğrenciye belirli bir rol verin: yazıcı, malzeme sorumlusu, zaman takipçisi, sunucu.</li>
+            <li>Görev başlamadan önce iş birliği kurallarını belirleyin.</li>
+            <li>Görev sırasında öğretmen yalnızca sonuç değil, iş birliği davranışlarını da gözlemlesin.</li>
+            <li>Görev sonunda grup kendi çalışmasını değerlendirsin.</li>
+          </ol>
+        </details>
+        <div class="material"><b>Materyal:</b> Karton, renkli kalem, rol kartları, grup değerlendirme formu.</div>
+        <div class="assessment"><b>Değerlendirme:</b> Dinleme, rolünü yerine getirme, materyal paylaşma ve anlaşmazlığı çözme ölçütleri kullanılır.</div>
+      </div>
+    </article>
+
+    <article class="activity-card">
+      <div class="activity-title purple">
+        <div class="visual">💬</div>
+        <h3>Yardım İsteme Cümleleri</h3>
+        <p>Uygun iletişim ve akademik yardım isteme</p>
+      </div>
+      <div class="activity-body">
+        <div class="meta"><span>15 dakika</span><span>1–4. sınıf</span><span>Rol oynama</span></div>
+        <details>
+          <summary>Uygulama basamakları</summary>
+          <ol>
+            <li>Tahtaya yardım isteme cümleleri yazın: “İlk adımı anlayamadım.”, “Bir kez daha açıklar mısınız?”</li>
+            <li>Öğretmen uygun ve uygunsuz yardım isteme örneğini göstersin.</li>
+            <li>Öğrenciler farklı ders senaryolarını canlandırsın.</li>
+            <li>Arkadaşından, öğretmenden veya materyalden nasıl yardım isteyebileceğini seçsin.</li>
+          </ol>
+        </details>
+        <div class="material"><b>Materyal:</b> Cümle kartları, ders senaryoları, yardım işareti kartı.</div>
+        <div class="assessment"><b>Değerlendirme:</b> Öğrencinin bağırma veya görevi bırakma yerine uygun yardım isteme davranışı kullanıp kullanmadığı izlenir.</div>
+      </div>
+    </article>
+
+    <article class="activity-card">
+      <div class="activity-title blue">
+        <div class="visual">🎭</div>
+        <h3>Bakış Açısı Değiştir</h3>
+        <p>Empati ve sosyal durumları yorumlama</p>
+      </div>
+      <div class="activity-body">
+        <div class="meta"><span>25 dakika</span><span>3–4. sınıf</span><span>Grup çalışması</span></div>
+        <details>
+          <summary>Uygulama basamakları</summary>
+          <ol>
+            <li>Bir sosyal durum kartı seçin: oyuna alınmama, kalemin izinsiz alınması gibi.</li>
+            <li>Öğrenciler olaydaki kişilerin duygu ve düşüncelerini belirlesin.</li>
+            <li>Aynı olayı farklı karakterlerin bakış açısından anlatsın.</li>
+            <li>Adil ve güvenli bir çözüm önerisi geliştirsin.</li>
+            <li>Çözümü kısa bir canlandırmayla göstersin.</li>
+          </ol>
+        </details>
+        <div class="material"><b>Materyal:</b> Sosyal durum kartları, duygu kartları, rol kartları.</div>
+        <div class="assessment"><b>Değerlendirme:</b> Öğrencinin birden fazla bakış açısını fark edip etmediğini ve çözümünün güvenli olup olmadığını değerlendirin.</div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p><b>Etkinlik uygulama ilkesi:</b> Küçük hedef belirle, açıkça göster, birlikte uygula, geri bildirim ver ve yeniden dene.</p>
+  <p class="small-note">Etkinlikler öğrenciyi cezalandırmak veya tanı koymak amacıyla kullanılmamalıdır.</p>
+</footer>
+
+<script>
+const buttons = document.querySelectorAll(".tab-button");
+const panels = document.querySelectorAll(".panel");
+
+buttons.forEach(button => {
+  button.addEventListener("click", function(){
+    const target = this.dataset.tab;
+
+    buttons.forEach(btn => {
+      btn.classList.remove("active");
+      btn.setAttribute("aria-selected", "false");
+    });
+
+    panels.forEach(panel => {
+      panel.classList.remove("active");
+    });
+
+    this.classList.add("active");
+    this.setAttribute("aria-selected", "true");
+    document.getElementById(target).classList.add("active");
+
+    history.replaceState(null, "", "#" + target);
+    window.scrollTo({top:0, behavior:"smooth"});
+  });
+});
+
+function openAll(){
+  document.querySelectorAll("details").forEach(item => item.open = true);
+}
+
+function closeAll(){
+  document.querySelectorAll("details").forEach(item => item.open = false);
+}
+
+/* Sayfa bağlantısı #matematik gibi açılırsa ilgili sekmeye gider */
+const currentHash = location.hash.substring(1);
+if(currentHash && document.getElementById(currentHash)){
+  const targetButton = document.querySelector(`[data-tab="${currentHash}"]`);
+  if(targetButton) targetButton.click();
+}
+</script>
+
+</body>
+</html>

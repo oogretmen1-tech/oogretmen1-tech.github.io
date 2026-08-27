@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İlkokul Öğretmen Rehberi</title>
+<link href="https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --lacivert:#18324b;
+  --mavi:#2676b9;
+  --acik:#eef6fb;
+  --turuncu:#ed9345;
+  --yesil:#398c70;
+  --kirmizi:#c95757;
+  --metin:#24313b;
+  --gri:#f5f7f9;
+  --kenar:#d9e2e8;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:'Andika', sans-serif;
+  font-size:18px;
+  color:var(--metin);
+  background:#f4f7fa;
+  line-height:1.6;
+}
+header{
+  background:linear-gradient(135deg,#18324b,#2676b9);
+  color:white;
+  padding:42px 20px 34px;
+}
+.container{max-width:1180px;margin:auto;padding:0 18px}
+h1{font-size:clamp(28px,5vw,46px);margin:0 0 10px}
+h2{color:var(--lacivert);margin-top:0}
+h3{color:var(--lacivert);margin-bottom:7px;font-size:23px}
+.subtitle{font-size:20px;max-width:800px}
+.badge{
+  display:inline-block;background:#ffffff22;border:1px solid #ffffff55;
+  padding:5px 12px;border-radius:20px;font-size:14px;margin:4px 3px 0 0
+}
+.tabs{
+  position:sticky;top:0;z-index:20;background:white;
+  border-bottom:1px solid var(--kenar);box-shadow:0 2px 7px #00000012
+}
+.tab-list{display:flex;gap:5px;overflow-x:auto;padding:8px 18px;max-width:1180px;margin:auto}
+.tab-button{
+  flex:0 0 auto;border:0;background:white;color:var(--lacivert);
+  padding:12px 15px;border-radius:8px;cursor:pointer;font-weight:bold
+}
+.tab-button:hover,.tab-button.active{background:var(--mavi);color:white}
+main{padding:30px 0 60px}
+.panel{display:none;animation:fade .25s ease}
+.panel.active{display:block}
+@keyframes fade{from{opacity:.3;transform:translateY(4px)}to{opacity:1;transform:none}}
+.grid{display:grid;grid-template-columns:1fr;gap:20px}
+.card{
+  background:white;border:1px solid var(--kenar);border-radius:14px;
+  padding:20px;box-shadow:0 3px 12px #18324b0c
+}
+.card h3{margin-top:0}
+.info{border-left:5px solid var(--mavi);background:var(--acik);padding:14px 17px;border-radius:8px;margin:18px 0}
+.warning{border-left-color:var(--turuncu);background:#fff7ed}
+.success{border-left-color:var(--yesil);background:#effaf5}
+.danger{border-left-color:var(--kirmizi);background:#fff1f1}
+.flow{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:20px 0}
+.flow div{padding:13px 16px;border-radius:12px;text-align:center;font-weight:bold;background:#e8f3fb}
+.arrow{font-size:25px;color:var(--mavi)}
+.icon{font-size:34px}
+table{width:100%;border-collapse:collapse;background:white;border-radius:10px;overflow:hidden}
+th,td{padding:12px;border:1px solid var(--kenar);vertical-align:top;text-align:left}
+th{background:var(--lacivert);color:white}
+tr:nth-child(even){background:#f8fafb}
+ul{padding-left:21px}
+li{margin:6px 0}
+.checklist label{display:block;padding:8px;border-bottom:1px solid #edf0f2}
+.checklist input{margin-right:9px;accent-color:var(--mavi)}
+.activity{
+  border-top:5px solid var(--turuncu);
+}
+.activity small{color:#63717b;font-size:15px}
+button.print{
+  background:var(--turuncu);color:white;border:0;padding:10px 15px;
+  border-radius:7px;cursor:pointer;font-weight:bold
+}
+svg{max-width:100%;height:auto}
+footer{background:var(--lacivert);color:white;padding:28px 18px}
+footer a{color:#b9e0ff}
+.note{font-size:16px;color:#596771}
+@media print{
+  .tabs,.print{display:none!important}
+  .panel{display:block!important}
+  body{background:white}
+  .card{box-shadow:none}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="container">
+    <span class="badge">İlkokul 1–4. sınıf</span>
+    <span class="badge">Akademik ve davranışsal destek</span>
+    <h1>Öğretmen Rehberi</h1>
+    <p class="subtitle">
+      Öğrencinin güçlü yönlerini temel alan; açık öğretim, olumlu sınıf yönetimi,
+      erken fark etme ve aile–okul iş birliği için pratik bir kılavuz.
+    </p>
+    <button class="print" onclick="window.print()">🖨 Yazdır / PDF olarak kaydet</button>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Rehber bölümleri">
+  <div class="tab-list">
+    <button class="tab-button active" data-tab="baslangic">Başlangıç</button>
+    <button class="tab-button" data-tab="akademik">Akademik sorunlar</button>
+    <button class="tab-button" data-tab="davranis">Davranış sorunları</button>
+    <button class="tab-button" data-tab="etkinlikler">Etkinlik bankası</button>
+    <button class="tab-button" data-tab="takip">Takip ve iş birliği</button>
+    <button class="tab-button" data-tab="kaynaklar">Bilimsel kaynaklar</button>
+  </div>
+</nav>
+
+<main class="container">
+
+<!-- BAŞLANGIÇ -->
+<section id="baslangic" class="panel active">
+  <h2>1. Başlangıç: Sorunu değil, ihtiyacı belirleme</h2>
+
+  <div class="info">
+    <strong>Temel ilke:</strong> “Bu öğrenci neden böyle davranıyor?” yerine
+    “Bu davranış hangi becerinin veya desteğin eksikliğine işaret ediyor olabilir?”
+    sorusunu sorun.
+  </div>
+
+  <div class="flow">
+    <div>👀 Gözle<br><small>Ne zaman oluyor?</small></div>
+    <span class="arrow">→</span>
+    <div>📝 Kaydet<br><small>Ne kadar sık?</small></div>
+    <span class="arrow">→</span>
+    <div>🎯 Küçük hedef<br><small>Öğrenci ne yapacak?</small></div>
+    <span class="arrow">→</span>
+    <div>🔁 Uygula–değerlendir<br><small>İşe yaradı mı?</small></div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="icon">🧭</div>
+      <h3>İlk görüşmede</h3>
+      <ul>
+        <li>Öğrenciyi sınıf arkadaşlarının yanında etiketlemeyin.</li>
+        <li>“Sen dikkatsizsin.” yerine “Yönergenin ilk adımını birlikte bulalım.” deyin.</li>
+        <li>Önce güçlü yönünü ve ilgi alanını belirleyin.</li>
+        <li>Tek seferlik hata ile süreğen güçlüğü ayırın.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="icon">📊</div>
+      <h3>ABC gözlem kaydı</h3>
+      <p><b>A – Öncesi:</b> Davranıştan hemen önce ne oldu?</p>
+      <p><b>B – Davranış:</b> Gözlenebilir olarak ne yaptı?</p>
+      <p><b>C – Sonrası:</b> Davranıştan sonra ne elde etti veya neden kaçındı?</p>
+      <p class="note">“Dersi bozdu” yerine “3 dakika içinde iki kez arkadaşına seslendi” gibi ölçülebilir ifadeler kullanın.</p>
+    </div>
+
+    <div class="card">
+      <div class="icon">🌱</div>
+      <h3>Koruyucu sınıf iklimi</h3>
+      <ul>
+        <li>Az sayıda ve olumlu yazılmış sınıf kuralı belirleyin.</li>
+        <li>Kuralları yalnızca sorun çıkınca değil, düzenli olarak öğretin.</li>
+        <li>Beklenen davranışı modelleyin ve prova ettirin.</li>
+        <li>Çabayı ve stratejiyi, yalnızca sonucu değil, fark edin.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>İlk hafta için kısa kontrol listesi</h3>
+    <div class="checklist">
+      <label><input type="checkbox"> Öğrencilerin isimlerini ve ilgi alanlarını öğrendim.</label>
+      <label><input type="checkbox"> Sınıf kurallarını öğrencilerle birlikte görünür hâle getirdim.</label>
+      <label><input type="checkbox"> Geçişler, materyal kullanımı ve söz alma davranışlarını prova ettim.</label>
+      <label><input type="checkbox"> Akademik başlangıç düzeyini kısa görevlerle gözlemledim.</label>
+      <label><input type="checkbox"> Olumlu davranışları fark edip somut biçimde ifade ettim.</label>
+    </div>
+  </div>
+</section>
+
+<!-- AKADEMİK -->
+<section id="akademik" class="panel">
+  <h2>2. Akademik sorunlar için sınıf içi yöntemler</h2>
+
+  <div class="info success">
+    Etkili destek genellikle “daha çok ödev” değil; beceriyi küçük parçalara ayırma,
+    açıkça modelleme, rehberli uygulama ve sık geri bildirim verme döngüsüdür.
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>📖 Okuma güçlüğü</h3>
+      <p><b>Uygulanabilecekler:</b></p>
+      <ul>
+        <li>Ses–harf ilişkisini açık ve sistematik biçimde öğretin.</li>
+        <li>Kısa metinlerde öğretmen modellemesi yapın: “Ben nasıl çözdüm?”</li>
+        <li>Koro okuma, eşli okuma ve tekrarlı okumadan yararlanın.</li>
+        <li>Metin öncesi kelime ve kavram çalışması yapın.</li>
+        <li>Okuma akıcılığını hız yarışına çevirmeyin.</li>
+      </ul>
+      <p><b>Araçlar:</b> hece kartları, ses kutuları, kelime duvarı, kısa düzeyli metinler, akran okuma çizelgesi.</p>
+    </div>
+
+    <div class="card">
+      <h3>✍️ Yazma güçlüğü</h3>
+      <ul>
+        <li>Yazma görevini fikir üretme, cümle kurma ve düzeltme adımlarına ayırın.</li>
+        <li>Örnek metni birlikte inceleyin.</li>
+        <li>Önce sözlü anlatım, sonra yazılı anlatım kullandırın.</li>
+        <li>Çizgili kâğıt, kelime bankası ve başlangıç cümleleri sunun.</li>
+        <li>İçeriği değerlendirirken yazı biçimiyle içeriği birbirinden ayırın.</li>
+      </ul>
+      <p><b>Araçlar:</b> grafik düzenleyici, resimli öykü kartları, kontrol listesi, büyük puntolu çalışma kâğıdı.</p>
+    </div>
+
+    <div class="card">
+      <h3>🔢 Matematik güçlüğü</h3>
+      <ul>
+        <li>Somut materyal → görsel model → sembol sırasını izleyin.</li>
+        <li>Problemin önemli bilgilerini renklerle işaretleyin.</li>
+        <li>Çözüm yolunu sesli düşünerek modelleyin.</li>
+        <li>Aynı beceriyi farklı bağlamlarda kısa tekrarlarla çalışın.</li>
+        <li>Yanlış cevabı hemen silmek yerine hata analizini yaptırın.</li>
+      </ul>
+      <p><b>Araçlar:</b> onluk taban blokları, sayı doğrusu, fasulye/çubuk, zar, problem şeması.</p>
+    </div>
+
+    <div class="card">
+      <h3>🎯 Dikkat ve çalışma düzeni</h3>
+      <ul>
+        <li>Uzun görevi 5–10 dakikalık parçalara bölün.</li>
+        <li>Tek seferde tek ve kısa yönerge verin.</li>
+        <li>Öğrenciden yönergeyi kendi cümlesiyle tekrar etmesini isteyin.</li>
+        <li>Dikkat dağıtıcıları azaltın; uygun oturma yeri seçin.</li>
+        <li>Zamanlayıcı, görsel program ve “tamamlandı” kutusu kullanın.</li>
+      </ul>
+      <p><b>Araçlar:</b> görsel zamanlayıcı, görev kartı, kontrol listesi, renkli klasörler.</p>
+    </div>
+  </div>
+
+  <h3>“Açık öğretim” ders döngüsü</h3>
+  <div class="card">
+    <svg viewBox="0 0 900 180" role="img" aria-label="Açık öğretim döngüsü">
+      <rect x="20" y="55" width="150" height="70" rx="15" fill="#dceefa"/>
+      <text x="95" y="85" text-anchor="middle" font-size="18" fill="#18324b">Ben yapıyorum</text>
+      <text x="95" y="108" text-anchor="middle" font-size="13">Modelleme</text>
+      <path d="M180 90 H265" stroke="#2676b9" stroke-width="5" marker-end="url(#arrow)"/>
+      <rect x="280" y="55" width="150" height="70" rx="15" fill="#e2f4ec"/>
+      <text x="355" y="85" text-anchor="middle" font-size="18" fill="#18324b">Birlikte</text>
+      <text x="355" y="108" text-anchor="middle" font-size="13">Rehberli uygulama</text>
+      <path d="M440 90 H525" stroke="#2676b9" stroke-width="5" marker-end="url(#arrow)"/>
+      <rect x="540" y="55" width="150" height="70" rx="15" fill="#fff0df"/>
+      <text x="615" y="85" text-anchor="middle" font-size="18" fill="#18324b">Sen yapıyorsun</text>
+      <text x="615" y="108" text-anchor="middle" font-size="13">Bağımsız uygulama</text>
+      <path d="M700 90 H785" stroke="#2676b9" stroke-width="5" marker-end="url(#arrow)"/>
+      <rect x="800" y="55" width="80" height="70" rx="15" fill="#f9e1e1"/>
+      <text x="840" y="95" text-anchor="middle" font-size="15" fill="#18324b">Geri<br>bildirim</text>
+      <defs>
+        <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L9,3 z" fill="#2676b9"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+
+  <div class="info warning">
+    <b>Uyarlama örnekleri:</b> Daha kısa metin, ek süre, sözlü yanıt seçeneği,
+    büyük puntolu materyal, görsel yönerge ve akran desteği kullanılabilir.
+    Uyarlama, öğrencinin hedef beceriyi göstermesini kolaylaştırmalı; hedefi gereksiz
+    biçimde ortadan kaldırmamalıdır.
+  </div>
+</section>
+
+<!-- DAVRANIŞ -->
+<section id="davranis" class="panel">
+  <h2>3. Davranış sorunları için olumlu ve öğretici yaklaşım</h2>
+
+  <div class="info">
+    Davranışı yalnızca bastırmak yerine, beklenen davranışı açıkça öğretin,
+    uygun davranış ortaya çıktığında hızlı ve somut geri bildirim verin.
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>Gözlenen durum</th><th>Önleyici uygulama</th><th>O anda öğretmenin dili</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Söz kesme, arkadaşına seslenme</td>
+        <td>Söz alma işareti, kısa yönerge, bekleme provası</td>
+        <td>“Konuşmak istediğini görüyorum. Söz alma kartını kullan ve sıranı bekle.”</td>
+      </tr>
+      <tr>
+        <td>Görevi reddetme</td>
+        <td>Görevi küçültme, iki seçenek sunma, ilk adımı birlikte yapma</td>
+        <td>“Önce iki soruyu mu, yoksa ilk sorunun resmini mi yaparak başlayalım?”</td>
+      </tr>
+      <tr>
+        <td>Öfke patlaması</td>
+        <td>Sakinleşme alanı, duygu termometresi, geçiş uyarısı</td>
+        <td>“Şu an zorlanıyorsun. Güvenli kalalım; iki dakika sakinleşip konuşacağız.”</td>
+      </tr>
+      <tr>
+        <td>Akran çatışması</td>
+        <td>İş birliği kurallarını önceden öğretme, rol dağılımı</td>
+        <td>“Önce herkes olayı kendi açısından anlatacak; sonra çözüm seçenekleri bulacağız.”</td>
+      </tr>
+      <tr>
+        <td>Derse katılmama / içe kapanma</td>
+        <td>Güvenli seçimler, eşli katılım, küçük başarı fırsatları</td>
+        <td>“İstersen cevabı bana söyleyebilir veya kartlardan birini gösterebilirsin.”</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="grid" style="margin-top:18px">
+    <div class="card">
+      <h3>✅ Etkili pekiştirme</h3>
+      <p>Övgüyü genel değil, davranışa özgü yapın:</p>
+      <p><i>“Aferin.”</i> yerine<br>
+      <b>“Yönergeyi dinledin, gerekli malzemeyi aldın ve ilk adımı kendin yaptın.”</b></p>
+      <p class="note">Öğrencinin yaşına uygun, samimi ve davranıştan hemen sonra olmalıdır.</p>
+    </div>
+
+    <div class="card">
+      <h3>🧘 Sakinleşme köşesi</h3>
+      <ul>
+        <li>Ceza alanı gibi kullanılmamalıdır.</li>
+        <li>Duygu kartları, nefes görseli ve kısa kum saati bulundurulabilir.</li>
+        <li>Öğrenci sakinleştiğinde derse dönüş planı yapılmalıdır.</li>
+        <li>“Sakinleşmek” davranışın sorumluluğundan kaçmak anlamına gelmemelidir.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>🚫 Kaçınılması gerekenler</h3>
+      <ul>
+        <li>Herkesin önünde küçük düşürme ve alay etme</li>
+        <li>Etiketleme: “tembel”, “problemli”, “yaramaz”</li>
+        <li>Bütün sınıfın önünde uzun tartışmaya girme</li>
+        <li>Belirsiz, uygulanamayacak tehditler</li>
+        <li>Öğrencilerin önünde aile veya uzman hakkında yorum yapma</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ETKİNLİKLER -->
+<section id="etkinlikler" class="panel">
+  <h2>4. Uygulanabilir etkinlik bankası</h2>
+
+  <div class="grid">
+    <div class="card activity">
+      <h3>Etkinlik 1: Yönerge Dedektifi</h3>
+      <small>Hedef: Dinleme, çalışma belleği ve göreve başlama</small>
+      <ol>
+        <li>Yönergeyi en fazla 2–3 adıma bölün.</li>
+        <li>Her adımı küçük bir karta yazın veya resimleyin.</li>
+        <li>Öğrenci tamamladığı adımı işaretlesin.</li>
+        <li>Ders sonunda “Hangi strateji yardımcı oldu?” sorusunu sorun.</li>
+      </ol>
+      <b>Materyal:</b> görev kartı, kalem, görsel semboller.
+    </div>
+
+    <div class="card activity">
+      <h3>Etkinlik 2: Hata Araştırmacısı</h3>
+      <small>Hedef: Matematiksel düşünme ve hata toleransı</small>
+      <ol>
+        <li>İçinde yaygın bir hata bulunan örnek verin.</li>
+        <li>Öğrenciler hatayı bulsun.</li>
+        <li>“Nerede farklı düşünmüş olabilir?” sorusunu sorun.</li>
+        <li>Doğru çözümü somut materyalle yeniden kurun.</li>
+      </ol>
+      <b>Materyal:</b> sayı doğrusu, bloklar, mini beyaz tahta.
+    </div>
+
+    <div class="card activity">
+      <h3>Etkinlik 3: Duygu Termometresi</h3>
+      <small>Hedef: Duyguyu fark etme ve öz düzenleme</small>
+      <ol>
+        <li>0–5 arasında bir duygu ölçeği hazırlayın.</li>
+        <li>Öğrenci günün başında seviyesini seçsin.</li>
+        <li>4–5 seviyesinde kullanılacak iki sakinleşme stratejisi belirleyin.</li>
+        <li>Ders sonu kısa değerlendirme yapın.</li>
+      </ol>
+      <b>Materyal:</b> termometre görseli, duygu kartları.
+    </div>
+
+    <div class="card activity">
+      <h3>Etkinlik 4: İstasyonlu Tekrar</h3>
+      <small>Hedef: Farklı düzeylerde tekrar ve katılım</small>
+      <ol>
+        <li>3–4 istasyon oluşturun: öğretmenle çalışma, eşli okuma, oyun, bağımsız görev.</li>
+        <li>Her istasyona açık ve kısa görev yazın.</li>
+        <li>Grupları sabit etiketlemeyin; ihtiyaçlara göre değiştirin.</li>
+        <li>Her istasyon için başarı ölçütü belirleyin.</li>
+      </ol>
+      <b>Materyal:</b> istasyon tabelaları, zamanlayıcı, görev zarfları.
+    </div>
+
+    <div class="card activity">
+      <h3>Etkinlik 5: Davranış Provası</h3>
+      <small>Hedef: Geçiş, söz alma ve materyal toplama</small>
+      <ol>
+        <li>Beklenen davranışı açıklayın ve gösterin.</li>
+        <li>Öğrencilerle yanlış ve doğru örneği ayırt edin.</li>
+        <li>Gerçek durumda uygulamadan önce prova yaptırın.</li>
+        <li>Başarılı uygulamayı somut geri bildirimle pekiştirin.</li>
+      </ol>
+    </div>
+
+    <div class="card activity">
+      <h3>Etkinlik 6: Güçlü Yönler Panosu</h3>
+      <small>Hedef: Aidiyet, motivasyon ve öz yeterlik</small>
+      <p>Her öğrenci için yalnızca akademik olmayan bir güçlü yön de görünür kılın:
+      “iyi dinleyici”, “yardımsever”, “ısrarcı”, “yaratıcı”, “düzenli” gibi.</p>
+      <p class="note">Karşılaştırma yapmak veya öğrencileri sıralamak için kullanılmamalıdır.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TAKİP -->
+<section id="takip" class="panel">
+  <h2>5. Takip, aile ve uzman iş birliği</h2>
+
+  <div class="grid">
+    <div class="card">
+      <h3>📅 Basit veriyle takip</h3>
+      <table>
+        <tr><th>Tarih</th><th>Hedef davranış</th><th>Sonuç</th></tr>
+        <tr><td>……</td><td>Yönerge sonrası 2 dakika içinde başlar</td><td>☐ Evet ☐ Kısmen ☐ Hayır</td></tr>
+        <tr><td>……</td><td>Derste söz alma işaretini kullanır</td><td>☐ Evet ☐ Kısmen ☐ Hayır</td></tr>
+        <tr><td>……</td><td>10 dakika bağımsız çalışır</td><td>☐ Evet ☐ Kısmen ☐ Hayır</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>🤝 Aileyle görüşme dili</h3>
+      <ol>
+        <li>Önce öğrencinin güçlü yönünü paylaşın.</li>
+        <li>Yargı yerine gözlemi aktarın.</li>
+        <li>“Evde nasıl oluyor?” diye bilgi alın.</li>
+        <li>Birlikte tek ve ölçülebilir hedef seçin.</li>
+        <li>Ne zaman tekrar iletişim kurulacağını belirleyin.</li>
+      </ol>
+      <p><b>Örnek:</b> “Ali, görsel materyallerle çalışırken çok istekli. Son iki haftada uzun yönergelerde göreve başlaması gecikti. Evde benzer bir durum gözlüyor musunuz?”</p>
+    </div>
+  </div>
+
+  <div class="info danger">
+    <h3>Ne zaman yönlendirme gerekir?</h3>
+    <ul>
+      <li>Sorun birkaç hafta boyunca tutarlı sınıf içi desteklere rağmen sürüyorsa</li>
+      <li>Öğrencinin öğrenmesini, güvenliğini veya akran ilişkilerini belirgin biçimde etkiliyorsa</li>
+      <li>Belirgin gerileme, yoğun kaygı, sürekli okula gelmek istememe görülüyorsa</li>
+      <li>Kendine zarar verme, şiddet, istismar veya ciddi ihmal şüphesi varsa</li>
+      <li>Görme, işitme, dil-konuşma veya sağlık sorunu olabileceği düşünülüyorsa</li>
+    </ul>
+    <b>İzlenecek yol:</b> Okulun rehberlik servisi ve yönetimiyle kurum prosedürlerine uygun hareket edin.
+    Acil güvenlik risklerinde ilgili acil yardım ve çocuk koruma kanallarına başvurun.
+  </div>
+
+  <div class="card">
+    <h3>Hedef yazma şablonu</h3>
+    <p><b>Öğrenci,</b> ………………… koşulunda, ………………… davranışını,
+    ………………… kez / dakika / doğrulukla gerçekleştirecek.</p>
+    <p><b>Örnek:</b> “Öğrenci, görsel yönerge verildiğinde matematik görevine
+    2 dakika içinde başlayacak ve 10 dakikalık çalışma süresini tamamlayacaktır.”</p>
+  </div>
+</section>
+
+<!-- KAYNAKLAR -->
+<section id="kaynaklar" class="panel">
+  <h2>6. Dayanaklar ve bilimsel kaynaklar</h2>
+
+  <div class="info">
+    Aşağıdaki kaynaklar öğretim, sınıf yönetimi, okuma, matematik, davranış desteği
+    ve kapsayıcı eğitim alanlarında eğitimciler için hazırlanmış kurumsal veya
+    hakemli çalışmalardır.
+  </div>
+
+  <div class="card">
+    <ol>
+      <li>
+        <b>Education Endowment Foundation (EEF).</b>
+        <i>Special Educational Needs in Mainstream Classrooms</i> ve
+        <i>Improving Literacy / Mathematics in Key Stages</i> rehberleri.
+        <br><a href="https://educationendowmentfoundation.org.uk/education-evidence/guidance-reports"
+        target="_blank">EEF Guidance Reports</a>
+      </li>
+      <li>
+        <b>Institute of Education Sciences (IES).</b>
+        <i>Providing Reading Interventions for Students in Grades 4–9</i>;
+        <i>Assisting Students Struggling with Mathematics</i>.
+        <br><a href="https://ies.ed.gov/ncee/wwc/PracticeGuides"
+        target="_blank">What Works Clearinghouse Practice Guides</a>
+      </li>
+      <li>
+        <b>National Reading Panel.</b> (2000).
+        <i>Teaching Children to Read: An Evidence-Based Assessment</i>.
+        Ses bilgisel farkındalık, fonik, akıcılık, kelime ve anlama alanlarını ele alır.
+        <br><a href="https://www.nichd.nih.gov/publications/pubs/nrp"
+        target="_blank">National Reading Panel</a>
+      </li>
+      <li>
+        <b>What Works Clearinghouse.</b>
+        Kanıta dayalı eğitim uygulamalarına ilişkin standartlar ve müdahale raporları.
+        <br><a href="https://ies.ed.gov/ncee/wwc/"
+        target="_blank">ies.ed.gov/ncee/wwc</a>
+      </li>
+      <li>
+        <b>Center on PBIS.</b>
+        Olumlu davranış desteği, okul çapında davranış öğretimi ve veri temelli
+        müdahale yaklaşımı.
+        <br><a href="https://www.pbis.org/"
+        target="_blank">pbis.org</a>
+      </li>
+      <li>
+        <b>CAST.</b>
+        <i>Universal Design for Learning Guidelines</i>.
+        Farklı öğrencilerin katılım, sunum ve ifade yollarını çeşitlendirmeyi önerir.
+        <br><a href="https://udlguidelines.cast.org/"
+        target="_blank">UDL Guidelines</a>
+      </li>
+      <li>
+        <b>Black, P. & Wiliam, D. (1998).</b>
+        Assessment and Classroom Learning. <i>Assessment in Education</i>, 5(1), 7–74.
+        Biçimlendirici değerlendirmenin öğrenme sürecindeki rolünü ele alır.
+      </li>
+    </ol>
+  </div>
+
+  <div class="info warning">
+    <b>Kaynak kullanma notu:</b> Bir yöntemin “kanıta dayalı” olması her öğrenci için
+    otomatik olarak işe yarayacağı anlamına gelmez. Uygulama; öğrencinin yaşı,
+    beceri düzeyi, dil özellikleri, sağlık durumu ve sınıf bağlamına göre izlenmeli
+    ve gerektiğinde uyarlanmalıdır.
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <b>İlkokul Öğretmen Rehberi</b>
+    <p>Gözlemle → açıkça öğret → küçük hedef koy → geri bildirim ver → tekrar değerlendir.</p>
+  </div>
+</footer>
+
+<script>
+const buttons = document.querySelectorAll(".tab-button");
+const panels = document.querySelectorAll(".panel");
+
+buttons.forEach(button => {
+  button.addEventListener("click", () => {
+    const target = button.dataset.tab;
+
+    buttons.forEach(btn => {
+      btn.classList.toggle("active", btn === button);
+      btn.setAttribute("aria-selected", btn === button ? "true" : "false");
+    });
+
+    panels.forEach(panel => {
+      panel.classList.toggle("active", panel.id === target);
+    });
+
+    history.replaceState(null, "", "#" + target);
+    window.scrollTo({top: 0, behavior: "smooth"});
+  });
+});
+
+/* Sayfa #akademik gibi bir bağlantıyla açılırsa ilgili sekmeyi gösterir */
+const hash = location.hash.replace("#", "");
+if (hash && document.getElementById(hash)) {
+  const selected = document.querySelector(`[data-tab="${hash}"]`);
+  if (selected) selected.click();
+}
+</script>
+
+</body>
+</html>

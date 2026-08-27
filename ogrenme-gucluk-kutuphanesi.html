@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Öğrenme Güçlüğü Materyal Kütüphanesi</title>
+<link href="https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --lacivert:#18334d;
+  --mavi:#2778b8;
+  --acik-mavi:#edf7fd;
+  --turuncu:#e58a37;
+  --acik-turuncu:#fff5e9;
+  --yesil:#398a6d;
+  --acik-yesil:#edf9f3;
+  --mor:#7655a5;
+  --acik-mor:#f5f0fc;
+  --kirmizi:#c65757;
+  --metin:#263640;
+  --arka:#f3f6f8;
+  --kenar:#d7e1e7;
+  --golge:0 4px 15px rgba(24,51,77,.09);
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:var(--arka);
+  color:var(--metin);
+  font-family:'Andika', sans-serif;
+  font-size:18px;
+  line-height:1.6;
+}
+
+header{
+  color:white;
+  background:linear-gradient(135deg,var(--lacivert),var(--mavi));
+  padding:40px 20px 35px;
+}
+
+.container{
+  max-width:1180px;
+  margin:auto;
+  padding:0 18px;
+}
+
+h1{
+  margin:0 0 10px;
+  font-size:clamp(28px,5vw,46px);
+}
+
+h2{
+  color:var(--lacivert);
+  margin-top:0;
+}
+
+h3{
+  color:var(--lacivert);
+}
+
+.subtitle{
+  max-width:850px;
+  font-size:20px;
+}
+
+.header-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:20px;
+}
+
+button{
+  font:inherit;
+}
+
+.btn{
+  border:0;
+  padding:11px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.btn-light{
+  background:white;
+  color:var(--lacivert);
+}
+
+.btn-light:hover{
+  background:#e4f3fb;
+}
+
+.btn-primary{
+  color:white;
+  background:var(--mavi);
+}
+
+.btn-orange{
+  color:white;
+  background:var(--turuncu);
+}
+
+.tabs{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:#fff;
+  border-bottom:1px solid var(--kenar);
+  box-shadow:0 2px 8px #00000012;
+}
+
+.tab-list{
+  max-width:1180px;
+  margin:auto;
+  padding:9px 18px;
+  display:flex;
+  gap:5px;
+  overflow-x:auto;
+}
+
+.tab{
+  border:0;
+  background:white;
+  color:var(--lacivert);
+  padding:12px 15px;
+  border-radius:8px;
+  cursor:pointer;
+  white-space:nowrap;
+  font-weight:bold;
+}
+
+.tab:hover,
+.tab.active{
+  color:white;
+  background:var(--mavi);
+}
+
+main{
+  padding:32px 0 60px;
+}
+
+.panel{
+  display:none;
+  animation:fade .25s ease;
+}
+
+.panel.active{
+  display:block;
+}
+
+@keyframes fade{
+  from{opacity:0; transform:translateY(5px)}
+  to{opacity:1; transform:translateY(0)}
+}
+
+.info{
+  background:white;
+  border-left:6px solid var(--mavi);
+  border-radius:9px;
+  padding:16px 19px;
+  margin:18px 0 24px;
+}
+
+.warning{
+  border-left-color:var(--turuncu);
+  background:var(--acik-turuncu);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:22px;
+}
+
+.card{
+  background:white;
+  border:1px solid var(--kenar);
+  border-radius:14px;
+  padding:20px;
+  box-shadow:var(--golge);
+  margin-bottom:20px;
+}
+
+.card h3{
+  margin-top:0;
+}
+
+.material-card{
+  overflow:hidden;
+  padding:0;
+}
+
+.material-head{
+  color:white;
+  padding:21px;
+  min-height:135px;
+}
+
+.material-head h3{
+  color:white;
+  margin:6px 0;
+  font-size:26px;
+}
+
+.material-head p{
+  margin:0;
+  font-size:16px;
+}
+
+.blue{background:linear-gradient(135deg,#266ba0,#4a98ce)}
+.green{background:linear-gradient(135deg,#277359,#56a583)}
+.orange{background:linear-gradient(135deg,#bd641d,#e9a45e)}
+.purple{background:linear-gradient(135deg,#60418b,#9175bf)}
+.red{background:linear-gradient(135deg,#a94343,#d47777)}
+
+.emoji{
+  font-size:42px;
+}
+
+.material-body{
+  padding:20px;
+}
+
+.meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-bottom:15px;
+}
+
+.meta span{
+  background:#edf2f5;
+  border-radius:20px;
+  padding:6px 11px;
+  font-size:14px;
+}
+
+.teacher-note{
+  background:var(--acik-mavi);
+  border-left:4px solid var(--mavi);
+  padding:11px 14px;
+  border-radius:6px;
+  font-size:16px;
+  margin:15px 0;
+}
+
+.student-sheet{
+  background:#fff;
+  border:2px solid #1d3547;
+  padding:20px;
+  margin-top:18px;
+  border-radius:8px;
+}
+
+.student-sheet h4{
+  text-align:center;
+  color:var(--lacivert);
+  font-size:23px;
+  margin-top:0;
+  border-bottom:2px solid var(--lacivert);
+  padding-bottom:8px;
+}
+
+.name-line{
+  display:flex;
+  gap:10px;
+  margin:13px 0 20px;
+}
+
+.line{
+  border-bottom:1px solid #333;
+  flex:1;
+  min-width:100px;
+}
+
+.word-box{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+  margin:12px 0;
+}
+
+.word{
+  border:2px solid var(--mavi);
+  border-radius:8px;
+  padding:10px 14px;
+  font-size:24px;
+  background:var(--acik-mavi);
+}
+
+.sound-boxes{
+  display:grid;
+  grid-template-columns:repeat(5,48px);
+  gap:7px;
+  margin:13px 0;
+}
+
+.sound-boxes div{
+  height:48px;
+  border:2px solid #333;
+  border-radius:5px;
+}
+
+.big-lines{
+  min-height:100px;
+  background:repeating-linear-gradient(
+    to bottom,
+    white 0,
+    white 27px,
+    #9bb4c3 28px,
+    white 29px
+  );
+  border:1px solid #b8c9d2;
+}
+
+textarea{
+  width:100%;
+  min-height:90px;
+  resize:vertical;
+  border:1px solid #aec0ca;
+  border-radius:6px;
+  padding:10px;
+  font:inherit;
+}
+
+input[type="text"]{
+  border:0;
+  border-bottom:1px solid #333;
+  padding:5px;
+  outline:none;
+}
+
+.check-row{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  border-bottom:1px solid #e5eaed;
+  padding:8px 0;
+}
+
+.check-row input{
+  transform:scale(1.25);
+  accent-color:var(--mavi);
+}
+
+.number-line{
+  display:flex;
+  flex-wrap:wrap;
+  margin:15px 0;
+}
+
+.number-line div{
+  width:42px;
+  height:42px;
+  border:1px solid #607b8b;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-weight:bold;
+  background:#fafdff;
+}
+
+.problem-box{
+  border:2px dashed var(--turuncu);
+  background:var(--acik-turuncu);
+  padding:15px;
+  border-radius:8px;
+  margin:12px 0;
+}
+
+.answer-line{
+  border-bottom:1px solid #333;
+  min-height:30px;
+  margin:9px 0;
+}
+
+.steps{
+  counter-reset:step;
+  padding:0;
+  list-style:none;
+}
+
+.steps li{
+  counter-increment:step;
+  margin:10px 0;
+  padding-left:40px;
+  position:relative;
+}
+
+.steps li:before{
+  content:counter(step);
+  position:absolute;
+  left:0;
+  top:-2px;
+  width:27px;
+  height:27px;
+  border-radius:50%;
+  color:white;
+  background:var(--mavi);
+  text-align:center;
+  line-height:27px;
+  font-weight:bold;
+}
+
+.assessment{
+  background:var(--acik-yesil);
+  border-left:4px solid var(--yesil);
+  padding:11px 14px;
+  margin-top:15px;
+  font-size:16px;
+}
+
+.small{
+  color:#60717a;
+  font-size:15px;
+}
+
+footer{
+  background:var(--lacivert);
+  color:white;
+  padding:30px 18px;
+  text-align:center;
+}
+
+a{
+  color:var(--mavi);
+}
+
+@media print{
+  body{
+    background:white;
+  }
+
+  header,
+  .tabs,
+  .header-actions,
+  .print-current,
+  footer{
+    display:none!important;
+  }
+
+  main{
+    padding:0;
+  }
+
+  .panel{
+    display:none!important;
+  }
+
+  body[data-print="okuma"] #okuma,
+  body[data-print="yazma"] #yazma,
+  body[data-print="matematik"] #matematik,
+  body[data-print="calisma"] #calisma,
+  body[data-print="ogretmen"] #ogretmen{
+    display:block!important;
+  }
+
+  .card,
+  .material-card{
+    box-shadow:none;
+    break-inside:avoid;
+  }
+
+  .student-sheet{
+    break-inside:avoid;
+  }
+
+  textarea{
+    border:1px solid #333;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="container">
+    <h1>Öğrenme Güçlüğü Materyal Kütüphanesi</h1>
+    <p class="subtitle">
+      Öğrencinin okuma, yazma, matematik ve çalışma becerilerini desteklemek için
+      hazırlanmış, yazdırılabilir sınıf içi etkinlik materyalleri.
+    </p>
+
+    <div class="header-actions">
+      <button class="btn btn-light" onclick="printCurrent()">🖨 Açık sekmeyi yazdır</button>
+      <button class="btn btn-light" onclick="openAll()">Tüm yönergeleri aç</button>
+      <button class="btn btn-light" onclick="closeAll()">Yönergeleri kapat</button>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="tab-list">
+    <button class="tab active" data-tab="okuma">📖 Okuma</button>
+    <button class="tab" data-tab="yazma">✍️ Yazma</button>
+    <button class="tab" data-tab="matematik">🔢 Matematik</button>
+    <button class="tab" data-tab="calisma">🎯 Çalışma becerileri</button>
+    <button class="tab" data-tab="ogretmen">📊 Öğretmen takip</button>
+  </div>
+</nav>
+
+<main class="container">
+
+<!-- OKUMA -->
+<section id="okuma" class="panel active">
+  <h2>Okuma Materyalleri</h2>
+
+  <div class="info">
+    Bu bölüm; ses bilgisel farkındalık, ses–harf eşleştirme, kelime okuma,
+    akıcılık ve okuduğunu anlama çalışmalarından oluşur.
+  </div>
+
+  <div class="grid">
+
+    <article class="card material-card">
+      <div class="material-head blue">
+        <div class="emoji">🔤</div>
+        <h3>Sesleri Kutulara Ayır</h3>
+        <p>Ses bilgisel farkındalık ve kelime çözümleme</p>
+      </div>
+
+      <div class="material-body">
+        <div class="meta">
+          <span>10–15 dakika</span>
+          <span>1–2. sınıf</span>
+          <span>Bireysel / küçük grup</span>
+        </div>
+
+        <div class="teacher-note">
+          <b>Öğretmene:</b> Öğrenciden harfi değil, kelimedeki sesi fark etmesini isteyin.
+          Önce sözlü çalışın, sonra harfleri gösterin.
+        </div>
+
+        <details open>
+          <summary>Uygulama yönergesi</summary>
+          <ol class="steps">
+            <li>Kelimeyi yavaşça söyleyin: <b>masa</b>.</li>
+            <li>Öğrenci kelimedeki sesleri ayırsın.</li>
+            <li>Her ses için bir kutuya işaret koysun.</li>
+            <li>Daha sonra kelimeyi normal hızda okusun.</li>
+          </ol>
+        </details>
+
+        <div class="student-sheet">
+          <h4>Ses Avcısı</h4>
+          <div class="name-line">
+            Adım: <span class="line"></span>
+            Tarih: <span class="line"></span>
+          </div>
+
+          <p><b>Kelimeyi söyle. Duyduğun her ses için bir kutuyu işaretle.</b></p>
+
+          <p>1. <b>ev</b></p>
+          <div class="sound-boxes">
+            <div></div><div></div><div></div>
+          </div>
+
+          <p>2. <b>bal</b></p>
+          <div class="sound-boxes">
+            <div></div><div></div><div></div>
+          </div>
+
+          <p>3. <b>masa</b></p>
+          <div class="sound-boxes">
+            <div></div><div></div><div></div><div></div>
+          </div>
+
+          <p>4. <b>kitap</b></p>
+          <div class="sound-boxes">
+            <div></div><div></div><div></div><div></div><div></div>
+          </div>
+
+          <p><b>Bir kelime de sen yaz:</b></p>
+          <div class="answer-line"></div>
+        </div>
+
+        <div class="assessment">
+          <b>Kayıt:</b> Öğrencinin 10 kelimede doğru ses sayısını ve yardım ihtiyacını not edin.
+        </div>
+      </div>
+    </article>
+
+    <article class="card material-card">
+      <div class="material-head green">
+        <div class="emoji">🧩</div>
+        <h3>Hece Merdiveni</h3>
+        <p>Hece birleştirme ve kelime okuma</p>
+      </div>
+
+      <div class="material-body">
+        <div class="meta">
+          <span>15 dakika</span>
+          <span>1–2. sınıf</span>
+          <span>Sesli okuma</span>
+        </div>
+
+        <div class="teacher-note">
+          <b>Öğretmene:</b> Öğrenci zorlanırsa heceyi siz modelleyin,
+          birlikte okuyun ve son olarak öğrencinin bağımsız okumasını isteyin.
+        </div>
+
+        <details>
+          <summary>Uygulama yönergesi</summary>
+          <ol class="steps">
+            <li>Hece kartlarını sıraya koyun.</li>
+            <li>Her heceyi ayrı okuyun.</li>
+            <li>Heceyi birleştirerek kelimeyi okuyun.</li>
+            <li>Kelimeyi bir cümlede kullanın.</li>
+          </ol>
+        </details>
+
+        <div class="student-sheet">
+          <h4>Hece Merdiveni</h4>
+          <p>Hece kutularını oku, sonra kelimeyi oluştur.</p>
+
+          <div class="word-box">
+            <div class="word">ba</div>
+            <div class="word">lık</div>
+            <div class="word">=</div>
+            <div class="word">__________</div>
+          </div>
+
+          <div class="word-box">
+            <div class="word">ki</div>
+            <div class="word">tap</div>
+            <div class="word">=</div>
+            <div class="word">__________</div>
+          </div>
+
+          <div class="word-box">
+            <div class="word">o</div>
+            <div class="word">yun</div>
+            <div class="word">=</div>
+            <div class="word">__________</div>
+          </div>
+
+          <p><b>Oluşturduğun kelimelerden biriyle cümle kur:</b></p>
+          <div class="big-lines"></div>
+        </div>
+
+        <div class="assessment">
+          <b>Kayıt:</b> Öğrencinin heceleri birleştirme, kelimeyi doğru okuma ve cümlede kullanma düzeyini değerlendirin.
+        </div>
+      </div>
+    </article>
+
+    <article class="card material-card">
+      <div class="material-head orange">
+        <div class="emoji">⏱️</div>
+        <h3>Tekrarlı Okuma Kartı</h3>
+        <p>Okuma akıcılığı ve anlam</p>
+      </div>
+
+      <div class="material-body">
+        <div class="meta">
+          <span>10 dakika</span>
+          <span>2–4. sınıf</span>
+          <span>Haftada 3–4 kez</span>
+        </div>
+
+        <div class="teacher-note">
+          <b>Öğretmene:</b> Aynı kısa metni birkaç kez okutun. Amaç yalnızca hız değil;
+          doğru, anlamlı ve metni anlayarak okumadır.
+        </div>
+
+        <details>
+          <summary>Uygulama yönergesi</summary>
+          <ol class="steps">
+            <li>Metni önce siz anlamlı biçimde okuyun.</li>
+            <li>Öğrenciyle birlikte okuyun.</li>
+            <li>Öğrenci metni bağımsız okusun.</li>
+            <li>Her okumadan sonra bir anlama sorusu sorun.</li>
+          </ol>
+        </details>
+
+        <div class="student-sheet">
+          <h4>Benim Okuma Kartım</h4>
+          <div class="name-line">
+            Adım: <span class="line"></span>
+          </div>
+
+          <div class="problem-box">
+            <b>Minik Tohum</b><br><br>
+            Ece bir tohum buldu. Tohumu küçük bir saksıya dikti.
+            Her gün ona su verdi. Bir süre sonra saksıda yeşil bir filiz çıktı.
+            Ece çok sevindi.
+          </div>
+
+          <p>Metni üç kez oku ve her okumadan sonra kutuyu işaretle.</p>
+
+          <div class="check-row">
+            <input type="checkbox"> 1. okuma: Kelimeleri dikkatli okudum.
+          </div>
+          <div class="check-row">
+            <input type="checkbox"> 2. okuma: Duraklamalara dikkat ettim.
+          </div>
+          <div class="check-row">
+            <input type="checkbox"> 3. okuma: Metni anlamaya çalıştım.
+          </div>
+
+          <p><b>Tohumdan ne çıktı?</b></p>
+          <div class="answer-line"></div>
+
+          <p><b>Ece tohumu nasıl büyüttü?</b></p>
+          <div class="answer-line"></div>
+        </div>
+
+        <div class="assessment">
+          <b>Kayıt:</b> Doğru okunan kelimeler, atlanan kelimeler ve anlama sorularına verilen cevapları kaydedin.
+        </div>
+      </div>
+    </article>
+
+    <article class="card material-card">
+      <div class="material-head purple">
+        <div class="emoji">🔎</div>
+        <h3>Metin Dedektifi</h3>
+        <p>Ana fikir, ayrıntı ve metinden kanıt bulma</p>
+      </div>
+
+      <div class="material-body">
+        <div class="meta">
+          <span>20 dakika</span>
+          <span>3–4. sınıf</span>
+          <span>Bireysel / grup</span>
+        </div>
+
+        <details>
+          <summary>Uygulama yönergesi</summary>
+          <ol class="steps">
+            <li>Metni sessizce veya sesli okutun.</li>
+            <li>Öğrenciden anahtar kelimeleri çizmesini isteyin.</li>
+            <li>“Metinde bunu nereden anladın?” sorusunu yöneltin.</li>
+            <li>Cevap için metinden kanıt göstermesini sağlayın.</li>
+          </ol>
+        </details>
+
+        <div class="student-sheet">
+          <h4>Metin Dedektifi Formu</h4>
+          <div class="problem-box">
+            <b>Arılar Neden Önemlidir?</b><br><br>
+            Arılar çiçeklerden nektar toplar. Çiçekten çiçeğe
+            konarken polenleri taşırlar. Bu sayede birçok bitkinin
+            çoğalmasına yardımcı olurlar.
+          </div>
+
+          <p><b>Metnin konusu nedir?</b></p>
+          <div class="answer-line"></div>
+
+          <p><b>Metnin ana fikri nedir?</b></p>
+          <div class="answer-line"></div>
+
+          <p><b>Cevabını destekleyen bir cümleyi metinden bul.</b></p>
+          <div class="big-lines"></div>
+        </div>
+
+        <div class="assessment">
+          <b>Kayıt:</b> Öğrencinin konu, ana fikir ve metinsel kanıtı birbirinden ayırıp ayıramadığını gözlemleyin.
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- YAZMA -->
+<section id="yazma" class="panel">
+  <h2>Yazma Materyalleri</h2>
+
+  <div class="info">
+    Yazma çalışmaları; planlama, cümle oluşturma, yazım ve gözden geçirme aşamalarına ayrılmıştır.
+  </div>
+
+  <div class="grid">
+
+    <article class="card material-card">
+      <div class="material-head blue">
+        <div class="emoji">🧱</div>
+        <h3>Cümle Kurma Kartı</h3>
+        <p>Anlamlı ve düzenli cümle oluşturma</p>
+      </div>
+
+      <div class="material-body">
+        <div class="meta">
+          <span>15–20 dakika</span>
+          <span>1–3. sınıf</span>
+          <span>Kart çalışması</span>
+        </div>
+
+        <div class="teacher-note">
+          <b>Öğretmene:</b> Öğrenciden önce cümleyi sözlü olarak kurmasını,
+          sonra kartları düzenlemesini ve en son yazmasını isteyin.
+        </div>
+
+        <div class="student-sheet">
+          <h4>Cümle Mühendisi</h4>
+
+          <p>Kelime gruplarını doğru sıraya koy.</p>
+
+          <div class="word-box">
+            <div class="word">parkta</div>
+            <div class="word">oynuyor</div>
+            <div class="word">Ali</div>
+          </div>
+
+          <p>Doğru cümle:</p>
+          <div class="answer-line"></div>
+
+          <div class="word-box">
+            <div class="word">kitap</div>
+            <div class="word">okuyor</div>
+            <div class="word">Duru</div>
+          </div>
+
+          <p>Doğru cümle:</p>
+          <div class="answer-line"></div>
+
+          <p>Şimdi kendi cümleni yaz.</p>
+          <div class="big-lines"></div>
+        </div>
+
+        <div class="assessment">
+          <b>Kontrol:</b> Kelime sırası, cümlenin anlamlı olması, büyük harf ve nokta kullanımı.
+        </div>
+      </div>
+    </article>
+
+    <article class="card material-card">
+      <div class="material-head orange">
+        <div class="emoji">🖼️</div>
+        <h3>Hikâye Planlama Formu</h3>
+        <p>Yazmadan önce düşünceleri düzenleme</p>
+      </div>
+
+      <div class="material-body">
+        <div class="meta">
+          <span>25–30 dakika</span>
+          <span>2–4. sınıf</span>
+          <span>Bireysel</span>
+        </div>
+
+        <div class="student-sheet">
+          <h4>Hikâyemi Planlıyorum</h4>
+
+          <p><b>Hikâyenin adı:</b></p>
+          <div class="answer-line"></div>
+
+          <p><b>Başlangıç – Kim var? Nerede?</b></p>
+          <textarea placeholder="Karakterleri ve yeri yaz..."></textarea>
+
+          <p><b>Gelişme – Ne oldu?</b></p>
+          <textarea placeholder="Olayı anlat..."></textarea>
+
+          <p><b>Sonuç – Nasıl bitti?</b></p>
+          <textarea placeholder="Hikâyenin sonunu yaz..."></textarea>
+
+          <p><b>Hikâyemde kullanacağım bağlaçlar:</b></p>
+          <div class="word-box">
+            <div class="word">önce</div>
+            <div class="word">sonra</div>
+            <div class="word">fakat</div>
+            <div class="word">sonunda</div>
+          </div>
+
+          <p><b>Şimdi hikâyeni yaz:</b></p>
+          <div class="big-lines"></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card material-card">
+      <div class="material-head green">
+        <div class="emoji">✅</div>
+        <h3>Yazımı Kontrol Et</h3>
+        <p>Öğrencinin kendi yazısını gözden geçirmesi</p>
+      </div>
+
+      <div class="material-body">
+        <div class="meta">
+          <span>10–15 dakika</span>
+          <span>2–4. sınıf</span>
+          <span>Öz değerlendirme</span>
+        </div>
+
+        <div class="student-sheet">
+          <h4>Yazımı Kendim Kontrol Ediyorum</h4>
+
+          <div class="check-row">
+            <input type="checkbox"> Cümlelerimin başında büyük harf kullandım.
+          </div>
+          <div class="check-row">
+            <input type="checkbox"> Cümlelerimin sonuna uygun noktalama işareti koydum.
+          </div>
+          <div class="check-row">
+            <input type="checkbox"> Kelimeler arasında boşluk bıraktım.
+          </div>
+          <div class="check-row">
+            <input type="checkbox"> Yazımını bilmediğim kelimeleri kontrol ettim.
+          </div>
+          <div class="check-row">
+            <input type="checkbox"> Yazımda anlatmak istediğim düşünce anlaşılıyor.
+          </div>
+
+          <p><b>Yazımda düzeltmek istediğim bir yer:</b></p>
+          <div class="big-lines"></div>
+        </div>
+
+        <div class="assessment">
+          <b>Uygulama:</b> İlk çalışmalarda kontrol listesini öğretmenle birlikte kullanın.
+          Zamanla öğrencinin bağımsız kontrol etmesini sağlayın.
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- MATEMATİK -->
+<section id="matematik" class="panel">
+  <h2>Matematik Materyalleri</h2>
+
+  <div class="info">
+    Matematik etkinliklerinde önce somut nesne, sonra çizim veya görsel model,
+    en son matematik sembolü kullanılması önerilir.
+  </div>
+
+  <div class="grid">
+
+    <article class="card material-card">
+      <div class="material-head blue">
+        <div class="emoji">🔢</div>
+        <h3>Sayı Doğrusu Atla</h3>
+        <p>Sayı ilişkileri, ileri–geri sayma ve işlem anlamı</p>
+      </div>
+
+      <div class="material-body">
+        <div class="meta">
+          <span>15–20 dakika</span>
+          <span>1–3. sınıf</span>
+          <span>Hareketli etkinlik</span>
+        </div>
+
+        <div class="teacher-note">
+          <b>Öğretmene:</b> Öğrenci önce sayı doğrusu üzerinde fiziksel olarak ilerlesin,
+          daha sonra yaptığı hareketi matematik işlemiyle ifade etsin.
+        </div>
+
+        <div class="student-sheet">
+          <h4>Sayı Doğrusu</h4>
+
+          <div class="number-line">
+            <div>0</div><div>1</div><div>2</div><div>3</div><div>4</div>
+            <div>5</div><div>6</div><div>7</div><div>8</div><div>9</div>
+            <div>10</div><div>11</div><div>12</div><div>13</div><div>14</div>
+            <div>15</div><div>16</div><div>17</div><div>18</div><div>19</div>
+            <div>20</div>
+          </div>
+
+          <p><b>1.</b> 4’ten başla. 3 ileri git. Hangi sayıya ulaştın?</p>
+          <div class="answer-line"></div>
+
+          <p><b>2.</b> 12’den başla. 5 geri git. Hangi sayıya ulaştın?</p>
+          <div class="answer-line"></div>
+
+          <p><b>3.</b> Yaptığın hareketlerden birini işlem olarak yaz.</p>
+          <div class="answer-line"></div>
+        </div>
+
+        <div class="assessment">
+          <b>Değerlendirme:</b> Öğrencinin hareketi sayı, işlem ve sözel açıklama ile eşleştirip eşleştirmediğini kontrol edin.
+        </div>
+      </div>
+    </article>
+
+    <article class="card material-card">
+      <div class="material-head orange">
+        <div class="emoji">🛒</div>
+        <h3>Sınıf Marketi</h3>
+        <p>Para, toplama, çıkarma ve problem çözme</p>
+      </div>
+
+      <div class="material-body">
+        <div class="meta">
+          <span>30 dakika</span>
+          <span>2–4. sınıf</span>
+          <span>Rol oynama</span>
+        </div>
+
+        <div class="student-sheet">
+          <h4>Alışveriş Problemleri</h4>
+
+          <div class="problem-box">
+            Kalem 7 TL, silgi 4 TL, defter 12 TL’dir.
+          </div>
+
+          <p><b>1.</b> Kalem ve silgi birlikte kaç TL eder?</p>
+          <p>İşlem:</p>
+          <div class="answer-line"></div>
+          <p>Cevap:</p>
+          <div class="answer-line"></div>
+
+          <p><b>2.</b> 20 TL’n var. Defter alırsan kaç TL paran kalır?</p>
+          <p>İşlem:</p>
+          <div class="answer-line"></div>
+          <p>Cevap:</p>
+          <div class="answer-line"></div>
+
+          <p><b>3.</b> Kendi alışveriş problemini oluştur.</p>
+          <textarea placeholder="Ürünleri, fiyatları ve soruyu yaz..."></textarea>
+        </div>
+
+        <div class="assessment">
+          <b>Değerlendirme:</b> Öğrencinin önemli bilgileri seçmesi, uygun işlemi belirlemesi ve cevabı birimle yazması değerlendirilir.
+        </div>
+      </div>
+    </article>
+
+    <article class="card material-card">
+      <div class="material-head purple">
+        <div class="emoji">🧠</div>
+        <h3>Problemi Çözme Kartı</h3>
+        <p>Problem çözme basamaklarını görünür hâle getirme</p>
+      </div>
+
+      <div class="material-body">
+        <div class="student-sheet">
+          <h4>Problemi Çöz</h4>
+
+          <div class="check-row">
+            <input type="checkbox"> Soruyu dikkatlice okudum.
+          </div>
+          <div class="check-row">
+            <input type="checkbox"> Verilen bilgileri işaretledim.
+          </div>
+          <div class="check-row">
+            <input type="checkbox"> Benden ne istendiğini yazdım.
+          </div>
+          <div class="check-row">
+            <input type="checkbox"> Uygun işlemi seçtim.
+          </div>
+          <div class="check-row">
+            <input type="checkbox"> Sonucumu kontrol ettim.
+          </div>
+
+          <div class="problem-box">
+            Bir sepette 8 elma vardır. Sepete 5 elma daha konulmuştur.
+            Sepette kaç elma olmuştur?
+          </div>
+
+          <p><b>Verilenler:</b></p>
+          <div class="answer-line"></div>
+
+          <p><b>İstenen:</b></p>
+          <div class="answer-line"></div>
+
+          <p><b>Çizerek veya materyalle göster:</b></p>
+          <div class="big-lines"></div>
+
+          <p><b>İşlem:</b></p>
+          <div class="answer-line"></div>
+
+          <p><b>Cevap:</b></p>
+          <div class="answer-line"></div>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ÇALIŞMA BECERİLERİ -->
+<section id="calisma" class="panel">
+  <h2>Çalışma ve Öz Düzenleme Materyalleri</h2>
+
+  <div class="info">
+    Bu materyaller göreve başlama, yönerge izleme, zamanı kullanma ve çalışmayı kontrol etme becerilerini destekler.
+  </div>
+
+  <div class="grid">
+
+    <article class="card material-card">
+      <div class="material-head green">
+        <div class="emoji">🧭</div>
+        <h3>Görev Yol Haritam</h3>
+        <p>Uzun görevleri küçük basamaklara ayırma</p>
+      </div>
+
+      <div class="material-body">
+        <div class="student-sheet">
+          <h4>Bugünkü Görevim</h4>
+
+          <p><b>Görevin adı:</b></p>
+          <div class="answer-line"></div>
+
+          <div class="check-row">
+            <input type="checkbox"> 1. Malzemelerimi hazırladım.
+          </div>
+          <div class="check-row">
+            <input type="checkbox"> 2. İlk adımı yaptım.
+          </div>
+          <div class="check-row">
+            <input type="checkbox"> 3. Görevin ortasını tamamladım.
+          </div>
+          <div class="check-row">
+            <input type="checkbox"> 4. Çalışmamı kontrol ettim.
+          </div>
+          <div class="check-row">
+            <input type="checkbox"> 5. Çalışmamı teslim ettim.
+          </div>
+
+          <p><b>Bugün bana yardımcı olan şey:</b></p>
+          <textarea></textarea>
+        </div>
+
+        <div class="teacher-note">
+          <b>Uygulama:</b> İlk başta adımları öğretmen hazırlayabilir.
+          Öğrenci beceri kazandıkça kendi görev yol haritasını hazırlamalıdır.
+        </div>
+      </div>
+    </article>
+
+    <article class="card material-card">
+      <div class="material-head orange">
+        <div class="emoji">⏱️</div>
+        <h3>Çalışma–Mola Planım</h3>
+        <p>Görevde kalma ve planlı mola kullanma</p>
+      </div>
+
+      <div class="material-body">
+        <div class="student-sheet">
+          <h4>Çalışma Planım</h4>
+
+          <p><b>Bugünkü görevim:</b></p>
+          <div class="answer-line"></div>
+
+          <p>Çalışma sürem: ☐ 5 dakika ☐ 10 dakika ☐ 15 dakika</p>
+
+          <p><b>Çalışırken yapacağım:</b></p>
+          <div class="check-row">
+            <input type="checkbox"> Masamda kalacağım.
+          </div>
+          <div class="check-row">
+            <input type="checkbox"> Yönergeye bakacağım.
+          </div>
+          <div class="check-row">
+            <input type="checkbox"> Takılırsam yardım isteyeceğim.
+          </div>
+
+          <p><b>Mola sırasında yapacağım uygun şey:</b></p>
+          <div class="answer-line"></div>
+
+          <p><b>Çalışma sonunda:</b></p>
+          <div class="check-row">
+            <input type="checkbox"> Görevi tamamladım.
+          </div>
+          <div class="check-row">
+            <input type="checkbox"> Kontrol ettim.
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card material-card">
+      <div class="material-head blue">
+        <div class="emoji">👂</div>
+        <h3>Yönergeyi Dinle ve Uygula</h3>
+        <p>Tek ve iki aşamalı yönergeleri takip etme</p>
+      </div>
+
+      <div class="material-body">
+        <div class="student-sheet">
+          <h4>Dinle–Tekrarla–Yap</h4>
+
+          <p><b>Öğretmen yönergeyi söyleyecek.</b></p>
+
+          <p>1. Yönergeyi kendi cümlenle tekrar et.</p>
+          <div class="big-lines"></div>
+
+          <p>2. Görevi yap.</p>
+          <div class="big-lines"></div>
+
+          <p>3. Yaptığını kontrol et:</p>
+          <div class="check-row">
+            <input type="checkbox"> Ne yapacağımı anladım.
+          </div>
+          <div class="check-row">
+            <input type="checkbox"> Görevi tamamladım.
+          </div>
+        </div>
+
+        <div class="teacher-note">
+          <b>Örnek yönerge:</b> “Kırmızı kalemi al, başlığın altını çiz ve sonra kitabını kapat.”
+          Öğrenci hazır oldukça yönergeler iki veya üç aşamaya çıkarılabilir.
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ÖĞRETMEN TAKİP -->
+<section id="ogretmen" class="panel">
+  <h2>Öğretmen Gözlem ve Takip Formu</h2>
+
+  <div class="info warning">
+    Bu form tanı koymak için kullanılmaz. Öğrencinin hangi beceride,
+    ne sıklıkta ve hangi destekle ilerlediğini takip etmek içindir.
+  </div>
+
+  <div class="card">
+    <h3>Öğrenci Bilgileri</h3>
+
+    <div class="name-line">
+      Öğrenci: <span class="line"></span>
+      Sınıf: <span class="line"></span>
+      Tarih: <span class="line"></span>
+    </div>
+
+    <table style="width:100%;border-collapse:collapse">
+      <tr>
+        <th>Alan</th>
+        <th>Gözlenen güçlük</th>
+        <th>Kullanılan destek</th>
+        <th>Sonuç</th>
+      </tr>
+      <tr>
+        <td>Okuma</td>
+        <td><textarea></textarea></td>
+        <td><textarea></textarea></td>
+        <td><textarea></textarea></td>
+      </tr>
+      <tr>
+        <td>Yazma</td>
+        <td><textarea></textarea></td>
+        <td><textarea></textarea></td>
+        <td><textarea></textarea></td>
+      </tr>
+      <tr>
+        <td>Matematik</td>
+        <td><textarea></textarea></td>
+        <td><textarea></textarea></td>
+        <td><textarea></textarea></td>
+      </tr>
+      <tr>
+        <td>Çalışma becerisi</td>
+        <td><textarea></textarea></td>
+        <td><textarea></textarea></td>
+        <td><textarea></textarea></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Haftalık Kısa Değerlendirme</h3>
+
+    <div class="check-row">
+      <input type="checkbox"> Öğrenci hedef beceriyi daha az yardımla yaptı.
+    </div>
+    <div class="check-row">
+      <input type="checkbox"> Öğrenci aynı beceriyi farklı etkinlikte de kullandı.
+    </div>
+    <div class="check-row">
+      <input type="checkbox"> Öğrenci etkinliğe katılmaya devam etti.
+    </div>
+    <div class="check-row">
+      <input type="checkbox"> Kullanılan materyal öğrencinin işini kolaylaştırdı.
+    </div>
+    <div class="check-row">
+      <input type="checkbox"> Hedef veya materyal yeniden düzenlenmeli.
+    </div>
+
+    <p><b>Bir sonraki hafta için tek hedef:</b></p>
+    <textarea placeholder="Örneğin: Öğrenci, görsel yönergeyle 5 kelimeyi doğru okuyacak."></textarea>
+
+    <p><b>Öğrencinin güçlü yönü:</b></p>
+    <textarea></textarea>
+
+    <p><b>Veli / rehberlik servisiyle paylaşılacak gözlem:</b></p>
+    <textarea></textarea>
+  </div>
+
+  <div class="card">
+    <h3>Bilimsel dayanaklar</h3>
+    <p>
+      Bu materyaller doğrudan tanı veya tedavi aracı değildir; kanıt temelli öğretim
+      ilkelerinin sınıf içi uyarlamalarıdır.
+    </p>
+
+    <ul>
+      <li>
+        National Reading Panel – okuma öğretiminde ses bilgisel farkındalık,
+        fonik, akıcılık, kelime ve anlama çalışmaları.
+        <br>
+        <a href="https://www.nichd.nih.gov/publications/pubs/nrp" target="_blank">
+          National Reading Panel
+        </a>
+      </li>
+
+      <li>
+        Institute of Education Sciences – okuma ve matematikte kanıt temelli uygulama rehberleri.
+        <br>
+        <a href="https://ies.ed.gov/ncee/wwc/PracticeGuides" target="_blank">
+          What Works Clearinghouse Practice Guides
+        </a>
+      </li>
+
+      <li>
+        Education Endowment Foundation – ilkokul okuma, matematik ve özel eğitim gereksinimleri rehberleri.
+        <br>
+        <a href="https://educationendowmentfoundation.org.uk/education-evidence/guidance-reports" target="_blank">
+          EEF Guidance Reports
+        </a>
+      </li>
+
+      <li>
+        CAST – farklı öğrencilerin katılım, materyale erişim ve kendini ifade etme yollarını çeşitlendiren
+        Evrensel Tasarım Öğrenme yaklaşımı.
+        <br>
+        <a href="https://udlguidelines.cast.org/" target="_blank">
+          UDL Guidelines
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>
+    <b>Öğretim döngüsü:</b>
+    Modelle → birlikte yap → bağımsız yaptır → geri bildirim ver → yeniden değerlendir.
+  </p>
+  <p>
+    Öğrenme güçlüğü şüphesinde öğretmen tanı koymaz; okul rehberlik servisi,
+    aile ve gerekli uzmanlarla iş birliği yapar.
+  </p>
+</footer>
+
+<script>
+const tabs = document.querySelectorAll(".tab");
+const panels = document.querySelectorAll(".panel");
+
+tabs.forEach(tab => {
+  tab.addEventListener("click", function(){
+    const id = this.dataset.tab;
+
+    tabs.forEach(item => item.classList.remove("active"));
+    panels.forEach(panel => panel.classList.remove("active"));
+
+    this.classList.add("active");
+    document.getElementById(id).classList.add("active");
+
+    history.replaceState(null, "", "#" + id);
+    window.scrollTo({top:0, behavior:"smooth"});
+  });
+});
+
+function openAll(){
+  document.querySelectorAll("details").forEach(detail => {
+    detail.open = true;
+  });
+}
+
+function closeAll(){
+  document.querySelectorAll("details").forEach(detail => {
+    detail.open = false;
+  });
+}
+
+function printCurrent(){
+  const activePanel = document.querySelector(".panel.active");
+  document.body.setAttribute("data-print", activePanel.id);
+  window.print();
+
+  setTimeout(() => {
+    document.body.removeAttribute("data-print");
+  }, 1000);
+}
+
+window.addEventListener("afterprint", () => {
+  document.body.removeAttribute("data-print");
+});
+
+const hash = location.hash.substring(1);
+
+if(hash && document.getElementById(hash)){
+  const target = document.querySelector(`[data-tab="${hash}"]`);
+  if(target) target.click();
+}
+</script>
+
+</body>
+</html>
