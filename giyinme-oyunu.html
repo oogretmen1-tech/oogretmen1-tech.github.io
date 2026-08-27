@@ -3,715 +3,496 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kız Giydirme Oyunu 👗</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<title>Mevsimlere Göre Giydirme Oyunu</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root {
-  --pink: #e91e8c;
-  --pink-l: #fce4ec;
-  --purple: #7b1fa2;
-  --blue: #1565c0;
-  --green: #2e7d32;
-  --orange: #e65100;
-  --bg: #fff0f8;
+:root{
+  --pink:#e8407a; --pink-d:#b8265a; --pink-l:#ffe4ef;
+  --purple:#6a3fa0; --blue:#1668c1; --green:#2e7d32; --orange:#e2650a;
+  --ink:#3b2b3a; --paper:#fff6fb; --card:#ffffff; --line:#f3c9dd;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg); font-family: 'Nunito', sans-serif; min-height: 100vh; }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--paper);font-family:'Nunito',sans-serif;color:var(--ink);padding-bottom:30px}
 
-/* HEADER */
-.header {
-  background: linear-gradient(135deg, #e91e8c, #9c27b0);
-  padding: 18px 24px;
-  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
-}
-.header h1 { font-family: 'Fredoka One', cursive; font-size: 24px; color: #fff; }
-.score-box {
-  background: rgba(255,255,255,.2); border: 2px solid rgba(255,255,255,.4);
-  border-radius: 30px; padding: 8px 20px; color: #fff;
-  font-family: 'Fredoka One', cursive; font-size: 20px;
-  display: flex; align-items: center; gap: 8px;
-}
+/* ÜST BAŞLIK */
+.top{background:linear-gradient(135deg,#e8407a,#8e44ad);color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.top h1{font-family:'Baloo 2',cursive;font-size:20px;letter-spacing:.3px}
+.puan{background:rgba(255,255,255,.18);border:2px solid rgba(255,255,255,.45);border-radius:30px;padding:5px 16px;font-family:'Baloo 2',cursive;font-size:17px}
 
-/* GÖREV BANNER */
-.mission-bar {
-  background: linear-gradient(135deg, #fff3e0, #fce4ec);
-  border-bottom: 3px solid #f8bbd0;
-  padding: 14px 20px;
-  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
-}
-.mission-text {
-  font-family: 'Fredoka One', cursive;
-  font-size: 20px;
-  color: var(--pink);
-  display: flex; align-items: center; gap: 10px;
-}
-.mission-season {
-  background: var(--pink);
-  color: #fff; border-radius: 20px; padding: 6px 18px;
-  font-size: 14px; font-weight: 800;
-}
-.mission-btns { display: flex; gap: 8px; }
-.mis-btn {
-  background: #fff; border: 2px solid var(--pink); color: var(--pink);
-  border-radius: 20px; padding: 7px 16px; font-family: 'Nunito',sans-serif;
-  font-size: 13px; font-weight: 800; cursor: pointer; transition: all .2s;
-}
-.mis-btn:hover { background: var(--pink); color: #fff; }
+/* GÖREV ÇUBUĞU */
+.gorev{background:#fff;border-bottom:3px solid var(--line);padding:10px 14px;position:sticky;top:0;z-index:40}
+.gorev-yazi{font-family:'Baloo 2',cursive;font-size:17px;color:var(--pink);text-align:center;margin-bottom:8px}
+.mevsimler{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.mv{background:#fff;border:2.5px solid var(--line);border-radius:22px;padding:6px 13px;font-family:'Nunito';font-weight:800;font-size:13px;color:#9c5b7c;cursor:pointer;transition:.15s}
+.mv:active{transform:scale(.94)}
+.mv.on{color:#fff;border-color:transparent}
+.mv[data-s="kis"].on{background:#1668c1}
+.mv[data-s="yaz"].on{background:#e2650a}
+.mv[data-s="ilkbahar"].on{background:#2e9e4b}
+.mv[data-s="sonbahar"].on{background:#c1620a}
+.mv[data-s="okul"].on{background:#6a3fa0}
+.araclar{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.btn{border:none;border-radius:20px;padding:7px 15px;font-family:'Nunito';font-weight:800;font-size:13px;cursor:pointer;color:#fff;background:var(--pink)}
+.btn.gri{background:#fff;color:var(--pink);border:2px solid var(--pink)}
+.btn:active{transform:scale(.95)}
 
-/* MAIN LAYOUT */
-.game-area {
-  display: grid;
-  grid-template-columns: 280px 1fr 280px;
-  gap: 0;
-  max-height: calc(100vh - 140px);
-  overflow: hidden;
-}
+/* OYUN ALANI */
+.oyun{max-width:1080px;margin:0 auto;padding:14px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:14px;align-items:start}
+@media(max-width:860px){.oyun{grid-template-columns:1fr;padding:10px;gap:10px}}
 
-/* KIYAFETLERsol */
-.wardrobe {
-  background: linear-gradient(180deg, #fce4ec, #f8bbd0);
-  border-right: 3px solid #f48fb1;
-  padding: 16px 12px;
-  overflow-y: auto;
-}
-.wardrobe-title {
-  font-family: 'Fredoka One', cursive;
-  font-size: 16px; color: var(--pink);
-  text-align: center; margin-bottom: 12px;
-  background: #fff; border-radius: 12px; padding: 6px;
-}
-.category-title {
-  font-size: 11px; font-weight: 800; color: #ad1457;
-  text-transform: uppercase; letter-spacing: 1.5px;
-  margin: 10px 0 6px; display: flex; align-items: center; gap: 6px;
-}
-.category-title::after { content:''; flex:1; height:1px; background:#f48fb1; }
-.clothes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
-.clothing-item {
-  background: #fff;
-  border: 2.5px solid #f8bbd0;
-  border-radius: 14px;
-  padding: 10px 6px;
-  text-align: center;
-  cursor: pointer;
-  transition: all .2s;
-  position: relative;
-  user-select: none;
-}
-.clothing-item:hover { transform: translateY(-4px); box-shadow: 0 6px 16px rgba(233,30,140,.2); border-color: var(--pink); }
-.clothing-item.worn { opacity: .45; cursor: not-allowed; border-color: #aaa; }
-.clothing-item.wrong-season { border-color: #ef9a9a !important; }
-.clothing-item.correct-season { border-color: #a5d6a7 !important; }
-.item-emoji { font-size: 36px; display: block; margin-bottom: 4px; }
-.item-name { font-size: 11px; font-weight: 800; color: #555; }
-.item-season { font-size: 9px; color: #888; margin-top: 2px; }
+/* SAHNE */
+.sahne{position:sticky;top:118px;z-index:30}
+.sahne-kart{background:linear-gradient(180deg,#eaf6ff,#f6ecff);border:3px solid var(--line);border-radius:22px;overflow:hidden;position:relative}
+.dekor{position:absolute;inset:0;pointer-events:none;font-size:26px}
+.dekor span{position:absolute;opacity:.55;animation:sallan 4s ease-in-out infinite}
+@keyframes sallan{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.bebek{display:block;margin:0 auto;width:auto;height:min(46vh,400px);max-width:100%}
+.giyilenler{display:flex;gap:6px;flex-wrap:wrap;padding:8px;background:#fff;border-top:3px solid var(--line);min-height:44px}
+.cip{background:var(--pink-l);border:2px solid var(--line);border-radius:16px;padding:4px 8px 4px 10px;font-size:12px;font-weight:800;display:flex;align-items:center;gap:6px}
+.cip button{border:none;background:#e8407a;color:#fff;width:18px;height:18px;border-radius:50%;font-size:11px;cursor:pointer;line-height:1}
+.bos{color:#c39ab0;font-size:12.5px;font-weight:800;padding:6px}
 
-/* KIZ KARAKTERi - orta */
-.character-area {
-  background: linear-gradient(180deg, #e8f5e9 0%, #f3e5f5 50%, #e3f2fd 100%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  position: relative;
-  min-height: 500px;
-}
+/* GARDIROP */
+.gardirop{background:var(--card);border:3px solid var(--line);border-radius:22px;padding:10px}
+.sekmeler{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;border-bottom:2px dashed var(--line);margin-bottom:10px;scrollbar-width:none}
+.sekmeler::-webkit-scrollbar{display:none}
+.sk{flex:0 0 auto;background:#fff;border:2.5px solid var(--line);border-radius:18px;padding:7px 13px;font-weight:800;font-size:13px;color:#9c5b7c;cursor:pointer;white-space:nowrap}
+.sk.on{background:var(--pink);border-color:var(--pink);color:#fff}
+.izgara{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+@media(max-width:400px){.izgara{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.esya{background:#fff;border:2.5px solid #f6dce8;border-radius:16px;padding:6px 4px 7px;text-align:center;cursor:pointer;transition:.15s}
+.esya:active{transform:scale(.95)}
+.esya.giyili{border-color:var(--pink);background:var(--pink-l);box-shadow:0 0 0 3px #ffd9e8 inset}
+.esya svg{display:block;width:100%;height:74px}
+.ad{font-size:11.5px;font-weight:800;margin-top:3px;line-height:1.2}
+.mvs{font-size:10px;letter-spacing:1px;height:13px}
+.renkler{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:10px 0 4px}
+.renk{width:34px;height:34px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px var(--line);cursor:pointer}
+.renk.on{box-shadow:0 0 0 3px var(--pink)}
+.baslikcik{font-family:'Baloo 2',cursive;font-size:14px;color:var(--purple);margin:10px 0 2px;text-align:center}
 
-.scene-bg {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  overflow: hidden;
-}
+/* REHBER */
+.rehber{max-width:1080px;margin:0 auto;padding:0 14px}
+.rehber-kart{background:#fff;border:3px solid var(--line);border-radius:22px;padding:12px 14px}
+.rehber-kart h3{font-family:'Baloo 2',cursive;color:var(--purple);font-size:16px;margin-bottom:6px}
+.rehber-kart p{font-size:13.5px;font-weight:700;line-height:1.7}
+.rehber-kart b{color:var(--pink-d)}
 
-.char-wrap {
-  position: relative;
-  width: 200px;
-  height: 380px;
-  z-index: 5;
-}
-
-/* SVG karakter */
-.char-svg { width: 200px; height: 380px; }
-
-/* Giyilen kıyafet katmanları */
-.layer {
-  position: absolute;
-  top: 0; left: 0;
-  width: 200px; height: 380px;
-  pointer-events: none;
-  transition: opacity .3s;
-}
-
-/* Çıkar butonu */
-.remove-btn {
-  background: var(--pink); color: #fff; border: none; border-radius: 20px;
-  padding: 8px 20px; font-family: 'Nunito',sans-serif; font-size: 13px; font-weight: 800;
-  cursor: pointer; margin-top: 14px; z-index: 10;
-}
-.remove-btn:hover { background: #ad1457; }
-
-/* SAĞ - Giyilenler & Bilgi */
-.info-panel {
-  background: linear-gradient(180deg, #f3e5f5, #e8eaf6);
-  border-left: 3px solid #ce93d8;
-  padding: 16px 12px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.worn-title {
-  font-family: 'Fredoka One', cursive;
-  font-size: 16px; color: var(--purple);
-  background: #fff; border-radius: 12px; padding: 6px;
-  text-align: center;
-}
-.worn-list { display: flex; flex-direction: column; gap: 6px; }
-.worn-item {
-  background: #fff; border-radius: 10px; padding: 8px 12px;
-  display: flex; align-items: center; gap: 8px;
-  border: 1.5px solid #ce93d8; font-size: 13px; font-weight: 700;
-}
-.worn-item .wi-emoji { font-size: 20px; }
-.wi-remove {
-  margin-left: auto; background: #ef9a9a; border: none; border-radius: 50%;
-  width: 22px; height: 22px; cursor: pointer; font-size: 12px; color: #fff;
-  display: flex; align-items: center; justify-content: center;
-}
-
-/* Puan animasyonu */
-.point-popup {
-  position: fixed;
-  font-family: 'Fredoka One', cursive;
-  font-size: 32px;
-  pointer-events: none;
-  z-index: 999;
-  animation: floatUp 1.2s ease forwards;
-}
-@keyframes floatUp {
-  0% { opacity:1; transform: translateY(0) scale(1); }
-  100% { opacity:0; transform: translateY(-80px) scale(1.4); }
-}
-
-/* Feedback toast */
-.toast {
-  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-  background: #333; color: #fff; border-radius: 25px; padding: 12px 28px;
-  font-size: 15px; font-weight: 800; z-index: 998;
-  transition: all .3s; opacity: 0; pointer-events: none;
-}
-.toast.show { opacity: 1; }
-.toast.ok { background: #2e7d32; }
-.toast.wrong { background: #c62828; }
-.toast.info { background: #1565c0; }
-
-/* Konfeti */
-.confetti-piece {
-  position: fixed;
-  width: 10px; height: 10px;
-  border-radius: 2px;
-  animation: fall 2s ease forwards;
-  pointer-events: none;
-  z-index: 997;
-}
-@keyframes fall {
-  0% { transform: translateY(-20px) rotate(0deg); opacity:1; }
-  100% { transform: translateY(100vh) rotate(720deg); opacity:0; }
-}
-
-/* Mevsim seçici */
-.season-selector {
-  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
-}
-.season-btn {
-  background: #fff; border: 2.5px solid #f48fb1; border-radius: 20px;
-  padding: 8px 16px; font-family: 'Nunito',sans-serif; font-size: 13px; font-weight: 800;
-  color: var(--pink); cursor: pointer; transition: all .2s;
-}
-.season-btn:hover { transform: scale(1.05); }
-.season-btn.active { border-color: var(--pink); }
-.season-btn.kış.active { background: #e3f2fd; border-color: var(--blue); color: var(--blue); }
-.season-btn.yaz.active { background: #fff8e1; border-color: var(--orange); color: var(--orange); }
-.season-btn.ilkbahar.active { background: #e8f5e9; border-color: var(--green); color: var(--green); }
-.season-btn.sonbahar.active { background: #fff3e0; border-color: #ef6c00; color: #ef6c00; }
-.season-btn.okul.active { background: #f3e5f5; border-color: var(--purple); color: var(--purple); }
-
-@media (max-width: 700px) {
-  .game-area { grid-template-columns: 1fr; grid-template-rows: auto 400px auto; }
-  .wardrobe { border-right: none; border-bottom: 3px solid #f48fb1; max-height: 220px; }
-  .info-panel { border-left: none; border-top: 3px solid #ce93d8; }
-}
+/* BİLDİRİM */
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#3b2b3a;color:#fff;border-radius:24px;padding:11px 22px;font-weight:800;font-size:14px;z-index:99;opacity:0;pointer-events:none;transition:.25s;max-width:92vw;text-align:center}
+.toast.gor{opacity:1}
+.toast.ok{background:#2e7d32}.toast.hata{background:#c62828}.toast.bilgi{background:#1668c1}
+.pop{position:fixed;font-family:'Baloo 2',cursive;font-size:34px;z-index:98;pointer-events:none;animation:ucus 1.1s ease forwards}
+@keyframes ucus{0%{opacity:1;transform:translate(-50%,0) scale(1)}100%{opacity:0;transform:translate(-50%,-90px) scale(1.4)}}
+.konfeti{position:fixed;width:10px;height:14px;border-radius:2px;z-index:97;pointer-events:none;animation:dus 2.2s linear forwards}
+@keyframes dus{0%{transform:translateY(-20px) rotate(0)}100%{transform:translateY(102vh) rotate(720deg);opacity:.2}}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <h1>👗 Kız Giydirme Oyunu</h1>
-  <div class="score-box">⭐ <span id="scoreNum">0</span> puan</div>
+<div class="top">
+  <h1>👗 Mevsimlere Göre Giydirme Oyunu</h1>
+  <div class="puan">⭐ <span id="puan">0</span> puan &nbsp;|&nbsp; 🏆 <span id="rekor">0</span></div>
 </div>
 
-<!-- GÖREV -->
-<div class="mission-bar">
-  <div class="mission-text">
-    🎯 Görev:
-    <span id="missionText">Bir mevsim seç!</span>
+<div class="gorev">
+  <div class="gorev-yazi" id="gorevYazi">Önce bir mevsim seç, sonra Ayşe'yi giydir!</div>
+  <div class="mevsimler">
+    <button class="mv" data-s="kis" onclick="mevsimSec('kis')">❄️ Kış</button>
+    <button class="mv" data-s="ilkbahar" onclick="mevsimSec('ilkbahar')">🌸 İlkbahar</button>
+    <button class="mv" data-s="yaz" onclick="mevsimSec('yaz')">☀️ Yaz</button>
+    <button class="mv" data-s="sonbahar" onclick="mevsimSec('sonbahar')">🍂 Sonbahar</button>
+    <button class="mv" data-s="okul" onclick="mevsimSec('okul')">🎒 Okul</button>
   </div>
-  <div style="display:flex;flex-direction:column;gap:8px;">
-    <div class="season-selector">
-      <button class="season-btn kış" onclick="setMission('kış','❄️ Kış için giydir!','#1565c0')">❄️ Kış</button>
-      <button class="season-btn yaz" onclick="setMission('yaz','☀️ Yaz için giydir!','#e65100')">☀️ Yaz</button>
-      <button class="season-btn ilkbahar" onclick="setMission('ilkbahar','🌸 İlkbahar için giydir!','#2e7d32')">🌸 İlkbahar</button>
-      <button class="season-btn sonbahar" onclick="setMission('sonbahar','🍂 Sonbahar için giydir!','#ef6c00')">🍂 Sonbahar</button>
-      <button class="season-btn okul" onclick="setMission('okul','🎒 Okula hazırla!','#7b1fa2')">🎒 Okul</button>
-    </div>
-    <div style="text-align:right;">
-      <button class="mis-btn" onclick="resetAll()">🔄 Sıfırla</button>
-      <button class="mis-btn" style="margin-left:6px" onclick="checkOutfit()">✅ Kontrol Et</button>
-    </div>
+  <div class="araclar">
+    <button class="btn" onclick="kontrolEt()">✅ Kontrol Et</button>
+    <button class="btn gri" onclick="hepsiniCikar()">🧺 Kıyafetleri Çıkar</button>
+    <button class="btn gri" onclick="rastgele()">🎲 Rastgele</button>
+    <button class="btn gri" id="ipucuBtn" onclick="ipucuAcKapa()">💡 İpucu: Kapalı</button>
   </div>
 </div>
 
-<!-- OYUN ALANI -->
-<div class="game-area">
-
-  <!-- SOL: GARDROP -->
-  <div class="wardrobe">
-    <div class="wardrobe-title">👗 Gardırop</div>
-
-    <div class="category-title">👕 Üst Giyim</div>
-    <div class="clothes-grid" id="topClothes"></div>
-
-    <div class="category-title">👖 Alt Giyim</div>
-    <div class="clothes-grid" id="bottomClothes"></div>
-
-    <div class="category-title">🧥 Dış Giyim</div>
-    <div class="clothes-grid" id="outerClothes"></div>
-
-    <div class="category-title">👟 Ayakkabı</div>
-    <div class="clothes-grid" id="shoeClothes"></div>
-
-    <div class="category-title">🎀 Aksesuar</div>
-    <div class="clothes-grid" id="accessClothes"></div>
+<div class="oyun">
+  <div class="sahne">
+    <div class="sahne-kart" id="sahneKart">
+      <div class="dekor" id="dekor"></div>
+      <svg class="bebek" id="bebek" viewBox="0 0 240 470" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+    <div class="giyilenler" id="giyilenler"></div>
   </div>
 
-  <!-- ORTA: KIZ -->
-  <div class="character-area">
-    <!-- Arka plan sahne -->
-    <div class="scene-bg" id="sceneBg">
-      <div style="font-size:80px;opacity:.15;position:absolute;bottom:20px;" id="sceneEmoji">🏠</div>
-    </div>
-
-    <div class="char-wrap" id="charWrap">
-      <!-- Temel karakter SVG -->
-      <svg class="char-svg" id="charBase" viewBox="0 0 200 380" xmlns="http://www.w3.org/2000/svg">
-        <!-- Saç arka -->
-        <ellipse cx="100" cy="68" rx="44" ry="46" fill="#8B4513"/>
-
-        <!-- Yüz -->
-        <ellipse cx="100" cy="72" rx="38" ry="40" fill="#FDBCB4"/>
-
-        <!-- Saç ön dalgalar -->
-        <path d="M62 52 Q70 35 100 38 Q130 35 138 52" fill="#8B4513"/>
-        <path d="M62 52 Q58 70 60 90" fill="#8B4513"/>
-        <path d="M138 52 Q142 70 140 90" fill="#8B4513"/>
-        <!-- Saç yan uzun -->
-        <path d="M60 90 Q55 130 62 160" fill="#8B4513" stroke="#6d3410" stroke-width="1"/>
-        <path d="M140 90 Q145 130 138 160" fill="#8B4513" stroke="#6d3410" stroke-width="1"/>
-        <!-- Perçem -->
-        <path d="M78 42 Q90 30 100 38 Q90 38 80 50" fill="#6d3410"/>
-        <path d="M122 42 Q110 30 100 38 Q110 38 120 50" fill="#6d3410"/>
-
-        <!-- Gözler -->
-        <ellipse cx="88" cy="68" rx="8" ry="9" fill="white"/>
-        <ellipse cx="112" cy="68" rx="8" ry="9" fill="white"/>
-        <circle cx="88" cy="70" r="5" fill="#5D3A1A"/>
-        <circle cx="112" cy="70" r="5" fill="#5D3A1A"/>
-        <circle cx="89" cy="69" r="2.5" fill="#1a0a00"/>
-        <circle cx="113" cy="69" r="2.5" fill="#1a0a00"/>
-        <circle cx="90" cy="67" r="1.2" fill="white"/>
-        <circle cx="114" cy="67" r="1.2" fill="white"/>
-        <!-- Kirpikler -->
-        <path d="M80 61 Q82 57 84 61" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-        <path d="M86 59 Q88 55 90 59" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-        <path d="M92 59 Q94 55 96 59" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-        <path d="M104 59 Q106 55 108 59" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-        <path d="M110 59 Q112 55 114 59" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-        <path d="M116 61 Q118 57 120 61" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-
-        <!-- Kaşlar -->
-        <path d="M81 60 Q88 56 95 60" stroke="#6d3410" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-        <path d="M105 60 Q112 56 119 60" stroke="#6d3410" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-
-        <!-- Burun -->
-        <path d="M97 78 Q100 83 103 78" stroke="#e0927a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-
-        <!-- Ağız & Yanak -->
-        <path d="M88 92 Q100 100 112 92" stroke="#e91e8c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-        <circle cx="84" cy="86" r="7" fill="#ffb3ba" opacity=".5"/>
-        <circle cx="116" cy="86" r="7" fill="#ffb3ba" opacity=".5"/>
-
-        <!-- Kulaklar -->
-        <ellipse cx="62" cy="76" rx="6" ry="7" fill="#FDBCB4"/>
-        <ellipse cx="138" cy="76" rx="6" ry="7" fill="#FDBCB4"/>
-        <ellipse cx="62" cy="76" rx="3.5" ry="4" fill="#f09080"/>
-        <ellipse cx="138" cy="76" rx="3.5" ry="4" fill="#f09080"/>
-
-        <!-- Boyun -->
-        <rect x="88" y="108" width="24" height="22" rx="8" fill="#FDBCB4"/>
-
-        <!-- Temel iç çamaşır (her zaman görünür) -->
-        <!-- Atlet -->
-        <path d="M70 130 L72 200 L128 200 L130 130 Q115 120 100 122 Q85 120 70 130Z" fill="#FFE4E1"/>
-        <!-- Tayt -->
-        <path d="M72 200 L68 300 L88 302 L100 250 L112 302 L132 300 L128 200Z" fill="#E8D5E8"/>
-        <!-- Çorap -->
-        <rect x="70" y="298" width="18" height="20" rx="4" fill="#fff"/>
-        <rect x="112" y="298" width="18" height="20" rx="4" fill="#fff"/>
-        <!-- Ayak -->
-        <ellipse cx="79" cy="322" rx="12" ry="8" fill="#FDBCB4"/>
-        <ellipse cx="121" cy="322" rx="12" ry="8" fill="#FDBCB4"/>
-
-        <!-- Kollar (ten) -->
-        <path d="M70 130 Q50 150 48 200 L62 202 Q64 165 75 148Z" fill="#FDBCB4"/>
-        <path d="M130 130 Q150 150 152 200 L138 202 Q136 165 125 148Z" fill="#FDBCB4"/>
-        <!-- El -->
-        <ellipse cx="55" cy="205" rx="10" ry="8" fill="#FDBCB4"/>
-        <ellipse cx="145" cy="205" rx="10" ry="8" fill="#FDBCB4"/>
-      </svg>
-
-      <!-- Kıyafet katmanları -->
-      <div id="layerTop" class="layer"></div>
-      <div id="layerBottom" class="layer"></div>
-      <div id="layerOuter" class="layer"></div>
-      <div id="layerShoe" class="layer"></div>
-      <div id="layerAcc" class="layer"></div>
-    </div>
-
-    <button class="remove-btn" onclick="removeAll()">👗 Hepsini Çıkar</button>
-  </div>
-
-  <!-- SAĞ: BİLGİ -->
-  <div class="info-panel">
-    <div class="worn-title">✨ Giyilenler</div>
-    <div class="worn-list" id="wornList">
-      <div style="text-align:center;color:#aaa;font-size:13px;font-weight:700;padding:20px 0;">Henüz kıyafet seçilmedi...</div>
-    </div>
-
-    <div style="border-top:2px dashed #ce93d8;padding-top:12px;">
-      <div style="font-family:'Fredoka One',cursive;font-size:15px;color:var(--purple);margin-bottom:8px;">💡 Mevsim Rehberi</div>
-      <div id="seasonGuide" style="font-size:13px;font-weight:700;color:#555;line-height:1.8;background:#fff;border-radius:10px;padding:10px;"></div>
-    </div>
-
-    <div style="border-top:2px dashed #ce93d8;padding-top:12px;">
-      <div style="font-family:'Fredoka One',cursive;font-size:15px;color:var(--purple);margin-bottom:8px;">🏆 En Yüksek Puan</div>
-      <div style="font-family:'Fredoka One',cursive;font-size:32px;color:var(--pink);text-align:center;" id="highScore">0</div>
-    </div>
+  <div class="gardirop">
+    <div class="sekmeler" id="sekmeler"></div>
+    <div id="dolapIcerik"></div>
   </div>
 </div>
 
-<!-- TOAST -->
+<div class="rehber">
+  <div class="rehber-kart">
+    <h3 id="rehberBaslik">💡 Mevsim Rehberi</h3>
+    <p id="rehberYazi">Bir mevsim seçtiğinde o mevsime uygun kıyafetler burada yazacak.</p>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
+/* ============ SES ============ */
+var _ac=null;
+function _a(){if(!_ac)_ac=new (window.AudioContext||window.webkitAudioContext)();return _ac;}
+function _ses(fr,du,tp,vl){try{var c=_a(),t=c.currentTime,o=0;fr.forEach(function(f,i){var os=c.createOscillator(),g=c.createGain();os.connect(g);g.connect(c.destination);os.type=tp||'sine';os.frequency.value=f;var d=du[i]||.12;g.gain.setValueAtTime(vl||.3,t+o);g.gain.exponentialRampToValueAtTime(.001,t+o+d);os.start(t+o);os.stop(t+o+d);o+=d;});}catch(e){}}
+function sDogru(){_ses([523,659,784],[.09,.09,.16],'sine',.3);}
+function sYanlis(){_ses([300,220,165],[.1,.11,.2],'triangle',.22);}
+function sKazan(){_ses([523,659,784,1047,880,1175],[.1,.1,.1,.16,.1,.3],'sine',.35);}
+function sTik(){_ses([420,520],[.05,.07],'sine',.18);}
 
-// === SES EFEKTLERİ ===
-var _aC=null;
-function _aG(){if(!_aC)_aC=new(window.AudioContext||window.webkitAudioContext)();return _aC;}
-function _s(fr,du,tp,vl){try{var c=_aG(),t=c.currentTime,off=0;fr.forEach(function(f,i){var o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.type=tp||'sine';o.frequency.value=f;var d=du[i]||0.15;g.gain.setValueAtTime(vl||0.3,t+off);g.gain.exponentialRampToValueAtTime(0.001,t+off+d);o.start(t+off);o.stop(t+off+d);off+=d;});}catch(e){}}
-function sesDogru(){_s([440,554,659],[0.1,0.1,0.18],'sine',0.35);}
-function sesYanlis(){_s([300,220,160],[0.1,0.12,0.22],'sawtooth',0.25);}
-function sesKazan(){_s([523,659,784,1047,784,1047],[0.1,0.1,0.1,0.18,0.1,0.28],'sine',0.4);}
-function sesTikla(){_s([440,520],[0.06,0.08],'sine',0.2);}
-function sesEslesti(){_s([659,784,1047],[0.1,0.1,0.2],'sine',0.38);}
-// =====================
+/* ============ DURUM ============ */
+var S={ten:'#FBD3B8',sac:'uzun',sacRenk:'#6D4C41',mevsim:null,giy:{},aks:{},puan:0,rekor:0,ipucu:false,sekme:'ust'};
+var MEV={kis:'❄️',yaz:'☀️',ilkbahar:'🌸',sonbahar:'🍂',okul:'🎒'};
+var MEVAD={kis:'Kış',yaz:'Yaz',ilkbahar:'İlkbahar',sonbahar:'Sonbahar',okul:'Okul'};
 
-// ══════════════════════════════
-// VERİ
-// ══════════════════════════════
-var clothes = {
-  top: [
-    {id:'tisort', name:'Tişört', emoji:'👕', seasons:['yaz','ilkbahar','okul'],
-     svg:'<rect x="68" y="128" width="64" height="60" rx="8" fill="#FF6B9D"/><path d="M68 128 Q52 140 50 170 L66 172 Q64 150 75 140Z" fill="#FF6B9D"/><path d="M132 128 Q148 140 150 170 L134 172 Q136 150 125 140Z" fill="#FF6B9D"/><text x="100" y="165" text-anchor="middle" font-size="18">🌸</text>'},
-    {id:'kazak', name:'Kazak', emoji:'🧥', seasons:['kış','sonbahar'],
-     svg:'<rect x="66" y="126" width="68" height="68" rx="10" fill="#5C6BC0"/><path d="M66 126 Q48 142 46 190 L66 192 Q64 158 74 142Z" fill="#5C6BC0"/><path d="M134 126 Q152 142 154 190 L134 192 Q136 158 126 142Z" fill="#5C6BC0"/><rect x="66" y="126" width="68" height="14" rx="7" fill="#3949AB"/><text x="100" y="175" text-anchor="middle" font-size="14" fill="white" font-weight="bold">⛄</text>'},
-    {id:'gomlek', name:'Gömlek', emoji:'👔', seasons:['ilkbahar','okul','sonbahar'],
-     svg:'<rect x="68" y="128" width="64" height="62" rx="8" fill="#E3F2FD"/><path d="M68 128 Q52 142 50 188 L68 190 Q66 152 76 140Z" fill="#E3F2FD"/><path d="M132 128 Q148 142 150 188 L132 190 Q134 152 124 140Z" fill="#E3F2FD"/><rect x="94" y="128" width="12" height="8" rx="4" fill="#90CAF9"/><line x1="100" y1="136" x2="100" y2="190" stroke="#90CAF9" stroke-width="2"/>'},
-    {id:'uzunkol', name:'Uzun Kol', emoji:'🌊', seasons:['sonbahar','kış'],
-     svg:'<rect x="68" y="128" width="64" height="62" rx="8" fill="#26A69A"/><path d="M68 128 Q50 142 48 195 L68 197 Q66 155 76 140Z" fill="#26A69A"/><path d="M132 128 Q150 142 152 195 L132 197 Q134 155 124 140Z" fill="#26A69A"/>'},
-  ],
-  bottom: [
-    {id:'etek', name:'Etek', emoji:'👗', seasons:['yaz','ilkbahar'],
-     svg:'<path d="M78 196 Q68 260 65 310 L90 312 L100 260 L110 312 L135 310 Q132 260 122 196Z" fill="#FF80AB"/>'},
-    {id:'pantolon', name:'Pantolon', emoji:'👖', seasons:['kış','sonbahar','okul'],
-     svg:'<path d="M78 196 L72 310 L92 312 L100 252 L108 312 L128 310 L122 196Z" fill="#5C6BC0"/>'},
-    {id:'sort', name:'Şort', emoji:'🩳', seasons:['yaz'],
-     svg:'<path d="M78 196 L74 248 L92 250 L100 228 L108 250 L126 248 L122 196Z" fill="#FF7043"/>'},
-    {id:'taytetek', name:'Tüllü Etek', emoji:'💜', seasons:['ilkbahar','okul'],
-     svg:'<path d="M78 196 Q68 252 62 298 L90 300 L100 252 L110 300 L138 298 Q132 252 122 196Z" fill="#CE93D8"/><path d="M62 270 Q100 280 138 270 Q100 295 62 270Z" fill="#E1BEE7" opacity=".7"/>'},
-  ],
-  outer: [
-    {id:'mont', name:'Mont', emoji:'🧥', seasons:['kış'],
-     svg:'<rect x="60" y="124" width="80" height="80" rx="12" fill="#1565C0"/><path d="M60 124 Q38 144 36 208 L62 210 Q60 162 70 142Z" fill="#1565C0"/><path d="M140 124 Q162 144 164 208 L138 210 Q140 162 130 142Z" fill="#1565C0"/><rect x="60" y="124" width="80" height="16" rx="8" fill="#0D47A1"/>'},
-    {id:'yagmurluk', name:'Yağmurluk', emoji:'🌧️', seasons:['ilkbahar','sonbahar'],
-     svg:'<rect x="62" y="124" width="76" height="78" rx="12" fill="#F9A825" opacity=".9"/><path d="M62 124 Q42 144 40 206 L64 208 Q62 162 72 142Z" fill="#F9A825" opacity=".9"/><path d="M138 124 Q158 144 160 206 L136 208 Q138 162 128 142Z" fill="#F9A825" opacity=".9"/>'},
-    {id:'hirka', name:'Hırka', emoji:'🧶', seasons:['ilkbahar','sonbahar','okul'],
-     svg:'<rect x="64" y="126" width="72" height="76" rx="10" fill="#EF9A9A" opacity=".85"/><path d="M64 126 Q46 142 44 204 L66 206 Q64 160 74 142Z" fill="#EF9A9A" opacity=".85"/><path d="M136 126 Q154 142 156 204 L134 206 Q136 160 126 142Z" fill="#EF9A9A" opacity=".85"/><line x1="100" y1="126" x2="100" y2="202" stroke="#E57373" stroke-width="2" stroke-dasharray="6,4"/>'},
-  ],
-  shoe: [
-    {id:'bot', name:'Bot', emoji:'🥾', seasons:['kış','sonbahar'],
-     svg:'<rect x="68" y="308" width="24" height="28" rx="6" fill="#5D4037"/><ellipse cx="80" cy="336" rx="16" ry="8" fill="#4E342E"/><rect x="110" y="308" width="24" height="28" rx="6" fill="#5D4037"/><ellipse cx="122" cy="336" rx="16" ry="8" fill="#4E342E"/>'},
-    {id:'sandalet', name:'Sandalet', emoji:'👡', seasons:['yaz'],
-     svg:'<path d="M68 322 Q80 314 92 322 L90 334 L68 334Z" fill="#FF6B9D"/><path d="M76 322 L78 310" stroke="#FF6B9D" stroke-width="3" stroke-linecap="round"/><path d="M110 322 Q122 314 134 322 L132 334 L110 334Z" fill="#FF6B9D"/><path d="M118 322 L120 310" stroke="#FF6B9D" stroke-width="3" stroke-linecap="round"/>'},
-    {id:'spor', name:'Spor Ayakkabı', emoji:'👟', seasons:['ilkbahar','okul','sonbahar'],
-     svg:'<path d="M65 314 Q80 306 95 314 L94 334 L64 334Z" fill="#FFF9C4"/><ellipse cx="80" cy="334" rx="18" ry="5" fill="#F9A825"/><path d="M107 314 Q122 306 137 314 L136 334 L106 334Z" fill="#FFF9C4"/><ellipse cx="122" cy="334" rx="18" ry="5" fill="#F9A825"/>'},
-    {id:'kar', name:'Kar Botu', emoji:'❄️', seasons:['kış'],
-     svg:'<rect x="66" y="305" width="26" height="32" rx="8" fill="#90CAF9"/><ellipse cx="79" cy="337" rx="18" ry="7" fill="#64B5F6"/><rect x="108" y="305" width="26" height="32" rx="8" fill="#90CAF9"/><ellipse cx="121" cy="337" rx="18" ry="7" fill="#64B5F6"/>'},
-  ],
-  access: [
-    {id:'atkı', name:'Atkı', emoji:'🧣', seasons:['kış','sonbahar'],
-     svg:'<path d="M72 118 Q100 110 128 118 Q100 126 72 118Z" fill="#EF5350"/><path d="M72 118 Q65 125 62 150" stroke="#EF5350" stroke-width="8" stroke-linecap="round" fill="none"/>'},
-    {id:'bere', name:'Bere', emoji:'🧢', seasons:['kış'],
-     svg:'<ellipse cx="100" cy="40" rx="44" ry="30" fill="#5C6BC0"/><ellipse cx="100" cy="58" rx="48" ry="12" fill="#3949AB"/><circle cx="100" cy="15" r="10" fill="#FFF9C4"/>'},
-    {id:'sapka', name:'Şapka', emoji:'🎩', seasons:['yaz','ilkbahar'],
-     svg:'<ellipse cx="100" cy="60" rx="50" ry="10" fill="#FF8F00"/><rect x="72" y="20" width="56" height="42" rx="6" fill="#FFA000"/><path d="M100 18 Q100 8 100 2" stroke="#FF8F00" stroke-width="3"/>'},
-    {id:'cantaokul', name:'Okul Çantası', emoji:'🎒', seasons:['okul'],
-     svg:'<rect x="78" y="188" width="36" height="44" rx="8" fill="#7C4DFF"/><rect x="84" y="182" width="24" height="10" rx="5" fill="#651FFF"/><rect x="84" y="202" width="24" height="16" rx="4" fill="#651FFF" opacity=".5"/>'},
-    {id:'semsiye', name:'Şemsiye', emoji:'☂️', seasons:['ilkbahar','sonbahar'],
-     svg:'<path d="M100 90 L100 200" stroke="#1E88E5" stroke-width="4"/><path d="M60 90 Q100 50 140 90" fill="#42A5F5" stroke="#1E88E5" stroke-width="2"/>'},
-    {id:'gozluk', name:'Güneş Gözlüğü', emoji:'😎', seasons:['yaz'],
-     svg:'<rect x="76" y="68" width="22" height="14" rx="7" fill="#333" opacity=".8"/><rect x="102" y="68" width="22" height="14" rx="7" fill="#333" opacity=".8"/><line x1="98" y1="75" x2="102" y2="75" stroke="#555" stroke-width="2"/><line x1="62" y1="75" x2="76" y2="75" stroke="#555" stroke-width="2"/><line x1="124" y1="75" x2="138" y2="75" stroke="#555" stroke-width="2"/>'},
-  ]
+/* ============ ÇİZİM YARDIMCILARI ============ */
+function P(d,f,ek){return '<path d="'+d+'" fill="'+f+'"'+(ek||'')+'/>';}
+function ayna(s){return '<g transform="translate(240,0) scale(-1,1)">'+s+'</g>';}
+function iki(s){return s+ayna(s);}
+function yaka(){return '<ellipse cx="120" cy="160" rx="15" ry="7" fill="'+S.ten+'"/>';}
+
+/* gövde üstü (tişört, kazak vb.) */
+function govde(c,etek){etek=etek||244;return P('M86,164 Q120,150 154,164 L151,'+etek+' Q120,'+(etek+10)+' 89,'+etek+' Z',c)+yaka();}
+/* kısa kol */
+function kolK(c){return iki(P('M88,163 C74,175 66,190 63,206 Q78,216 93,211 C96,194 101,178 108,168 Z',c));}
+/* uzun kol */
+function kolU(c){return iki(P('M88,163 C70,183 59,215 59,249 Q71,257 82,249 C82,221 90,193 101,174 Z',c));}
+/* etek: hemY = etek boyu, hw = eteğin yarım genişliği */
+function etekCiz(c,hemY,hw){return P('M92,236 L'+(120-hw)+','+hemY+' Q120,'+(hemY+14)+' '+(120+hw)+','+hemY+' L148,236 Q120,246 92,236 Z',c);}
+/* pantolon: hemY = paça, dar = tayt gibi */
+function pant(c,hemY,dar){
+  var a=dar?5:0, wl=90+a, wr=150-a, bl=88+a, br=152-a, k=(hemY>320?296:hemY-8);
+  return P('M'+wl+',236 Q120,248 '+wr+',236 L'+br+','+hemY+' Q'+br+','+(hemY+8)+' '+(br-14)+','+(hemY+8)+' L124,'+(hemY+4)+' L120,'+k+' L116,'+(hemY+4)+' L'+(bl+14)+','+(hemY+8)+' Q'+bl+','+(hemY+8)+' '+bl+','+hemY+' Z',c);
+}
+/* elbise */
+function elbise(c,hemY,hw){return govde(c,238)+P('M92,232 L'+(120-hw)+','+hemY+' Q120,'+(hemY+16)+' '+(120+hw)+','+hemY+' L148,232 Q120,244 92,232 Z',c);}
+/* önü kapalı dış giyim */
+function kaban(c,koyu,hemY){
+  return P('M82,160 Q120,144 158,160 L155,'+hemY+' Q120,'+(hemY+12)+' 85,'+hemY+' Z',c)+kolU(c)
+    +P('M100,154 Q120,146 140,154 L131,178 Q120,167 109,178 Z',koyu)
+    +'<line x1="120" y1="168" x2="120" y2="'+hemY+'" stroke="'+koyu+'" stroke-width="3.5"/>';
+}
+/* önü açık dış giyim (hırka, ceket) */
+function acikKaban(c,koyu,hemY,kolsuz){
+  var p=P('M83,161 Q101,150 116,157 L114,'+hemY+' L86,'+(hemY-2)+' Z',c);
+  return p+ayna(p)+(kolsuz?'':kolU(c))+'<line x1="114" y1="160" x2="112" y2="'+hemY+'" stroke="'+koyu+'" stroke-width="2.5"/>'+ayna('<line x1="114" y1="160" x2="112" y2="'+hemY+'" stroke="'+koyu+'" stroke-width="2.5"/>');
+}
+/* alçak ayakkabı */
+function ayk(c,taban){return iki(P('M84,390 Q102,379 118,390 L119,406 Q102,414 84,409 Z',c)+P('M82,403 Q102,412 120,403 L120,413 Q102,420 82,412 Z',taban));}
+/* bot */
+function bot(c,taban,ustY){return iki(P('M86,'+ustY+' L84,404 Q102,414 119,406 L118,'+ustY+' Z',c)+P('M82,403 Q102,413 120,403 L120,414 Q102,421 82,413 Z',taban));}
+
+/* ============ SAÇ ============ */
+var kahkul='M62,74 C68,30 96,18 120,18 C146,18 176,30 178,76 C167,52 146,42 120,46 C95,50 75,60 62,74 Z';
+var SACLAR={
+  uzun:{ad:'Uzun Saç',
+    arka:function(c){return P('M56,92 C56,34 86,14 120,14 C154,14 184,34 184,92 C184,154 182,204 176,244 L150,242 C158,192 160,140 158,100 L82,100 C80,140 82,192 90,242 L64,244 C58,204 56,154 56,92 Z',c);},
+    on:function(c){var y=P('M62,78 C55,126 57,186 66,232 L88,228 C79,182 77,124 81,88 Z',c);return P(kahkul,c)+y+ayna(y);}},
+  kuyruk:{ad:'At Kuyruğu',
+    arka:function(c){return P('M56,92 C56,34 86,14 120,14 C154,14 184,34 184,92 C184,118 182,136 178,150 L62,150 C58,136 56,118 56,92 Z',c)+P('M168,72 C204,80 218,128 204,180 C199,198 176,204 172,192 C188,156 194,116 164,96 Z',c);},
+    on:function(c){return P(kahkul,c)+'<ellipse cx="172" cy="76" rx="11" ry="9" fill="#FF7BAC"/>';}},
+  topuz:{ad:'Topuz',
+    arka:function(c){return '<circle cx="120" cy="10" r="30" fill="'+c+'"/>'+P('M56,92 C56,34 86,14 120,14 C154,14 184,34 184,92 C184,118 182,136 178,150 L62,150 C58,136 56,118 56,92 Z',c);},
+    on:function(c){return P(kahkul,c)+'<rect x="96" y="24" width="48" height="12" rx="6" fill="#FF7BAC"/>';}},
+  orgu:{ad:'İki Örgü',
+    arka:function(c){return P('M56,92 C56,34 86,14 120,14 C154,14 184,34 184,92 C184,120 182,140 178,156 L62,156 C58,140 56,120 56,92 Z',c);},
+    on:function(c){var b='';for(var i=0;i<6;i++){b+='<ellipse cx="'+(62+i*0.6)+'" cy="'+(116+i*22)+'" rx="'+(15-i*1.2)+'" ry="13" fill="'+c+'"/>';}b+=P('M54,248 L74,248 L64,264 Z','#FF7BAC');return P(kahkul,c)+b+ayna(b);}}
 };
+var SAC_RENK=[{n:'Kahve',c:'#6D4C41'},{n:'Siyah',c:'#2E2A2C'},{n:'Sarı',c:'#E3B24C'},{n:'Kızıl',c:'#B85426'}];
+var TEN_RENK=[{n:'Açık',c:'#FBD3B8'},{n:'Buğday',c:'#E5AC85'},{n:'Esmer',c:'#C1875C'}];
 
-var seasonGuides = {
-  kış: '❄️ Kış için:\n✅ Mont, Kazak, Uzun Kol\n✅ Pantolon\n✅ Bot, Kar Botu\n✅ Atkı, Bere\n❌ Şort, Sandalet olmaz!',
-  yaz: '☀️ Yaz için:\n✅ Tişört\n✅ Etek, Şort\n✅ Sandalet\n✅ Şapka, Güneş Gözlüğü\n❌ Mont, Bere olmaz!',
-  ilkbahar: '🌸 İlkbahar için:\n✅ Tişört, Gömlek\n✅ Etek, Tüllü Etek\n✅ Hırka, Yağmurluk\n✅ Spor Ayakkabı\n✅ Şemsiye',
-  sonbahar: '🍂 Sonbahar için:\n✅ Uzun Kol, Kazak\n✅ Pantolon\n✅ Hırka, Yağmurluk\n✅ Bot\n✅ Atkı, Şemsiye',
-  okul: '🎒 Okul için:\n✅ Gömlek, Tişört\n✅ Pantolon, Tüllü Etek\n✅ Spor Ayakkabı\n✅ Okul Çantası\n✅ Hırka',
+/* ============ TEMEL BEDEN ============ */
+function beden(){
+  var t=S.ten;
+  var bacak=P('M96,244 C90,300 88,350 90,392 Q90,401 103,401 Q116,401 116,392 C116,350 117,300 119,248 Z',t);
+  var kol=P('M88,164 C72,182 62,214 62,248 Q72,256 82,248 C82,220 90,192 100,176 Z',t)+'<ellipse cx="71" cy="256" rx="13" ry="14" fill="'+t+'"/>';
+  return bacak+ayna(bacak)
+    +'<ellipse cx="102" cy="402" rx="17" ry="11" fill="'+t+'"/><ellipse cx="138" cy="402" rx="17" ry="11" fill="'+t+'"/>'
+    +P('M88,166 Q120,152 152,166 L148,244 Q120,254 92,244 Z',t)
+    +'<rect x="106" y="126" width="28" height="42" rx="12" fill="'+t+'"/>'
+    +kol+ayna(kol)
+    /* iç çamaşır */
+    +P('M96,168 Q120,158 144,168 L142,238 Q120,246 98,238 Z','#FFE9F2')
+    +P('M97,236 Q120,244 143,236 L141,272 Q131,279 125,272 L120,260 L115,272 Q109,279 99,272 Z','#F4DCEF');
+}
+function yuz(){
+  var t=S.ten;
+  return '<ellipse cx="68" cy="100" rx="9" ry="11" fill="'+t+'"/><ellipse cx="172" cy="100" rx="9" ry="11" fill="'+t+'"/>'
+  +'<ellipse cx="120" cy="92" rx="52" ry="54" fill="'+t+'"/>'
+  +'<ellipse cx="100" cy="98" rx="11" ry="12.5" fill="#fff"/><ellipse cx="140" cy="98" rx="11" ry="12.5" fill="#fff"/>'
+  +'<circle cx="100" cy="100" r="7.5" fill="#5B4636"/><circle cx="140" cy="100" r="7.5" fill="#5B4636"/>'
+  +'<circle cx="100" cy="100" r="3.6" fill="#221812"/><circle cx="140" cy="100" r="3.6" fill="#221812"/>'
+  +'<circle cx="97" cy="95" r="2.6" fill="#fff"/><circle cx="137" cy="95" r="2.6" fill="#fff"/>'
+  +'<path d="M89,86 Q100,80 111,86" stroke="#5B4636" stroke-width="2.6" fill="none" stroke-linecap="round"/>'
+  +'<path d="M129,86 Q140,80 151,86" stroke="#5B4636" stroke-width="2.6" fill="none" stroke-linecap="round"/>'
+  +'<path d="M117,112 Q120,118 124,113" stroke="#E09A80" stroke-width="2" fill="none" stroke-linecap="round"/>'
+  +'<path d="M108,124 Q120,136 133,124" stroke="#D94070" stroke-width="3" fill="none" stroke-linecap="round"/>'
+  +'<circle cx="86" cy="116" r="9" fill="#FF9DB6" opacity=".45"/><circle cx="154" cy="116" r="9" fill="#FF9DB6" opacity=".45"/>';
+}
+
+/* ============ KIYAFETLER ============ */
+var K={
+ ust:[
+  {id:'tisort',n:'Tişört',s:['yaz','ilkbahar','okul'],f:function(){return govde('#FF6FA5')+kolK('#FF6FA5')+'<circle cx="120" cy="202" r="13" fill="#FFD75E"/><circle cx="120" cy="202" r="5" fill="#FF8A65"/>';}},
+  {id:'bluz',n:'Bluz',s:['ilkbahar','yaz','okul'],f:function(){return govde('#FFFFFF')+kolK('#FFFFFF')+P('M89,236 Q120,248 151,236 Q120,258 89,236 Z','#F8BBD0')+'<path d="M106,170 Q120,182 134,170" stroke="#F48FB1" stroke-width="3" fill="none"/>';}},
+  {id:'gomlek',n:'Gömlek',s:['okul','ilkbahar','sonbahar'],f:function(){return govde('#E7F1FB')+kolU('#E7F1FB')+P('M104,158 Q120,152 136,158 L129,178 Q120,168 111,178 Z','#8FC0EA')+'<line x1="120" y1="172" x2="120" y2="244" stroke="#8FC0EA" stroke-width="2.5"/><circle cx="120" cy="192" r="3" fill="#5EA3DE"/><circle cx="120" cy="214" r="3" fill="#5EA3DE"/>';}},
+  {id:'kazak',n:'Kazak',s:['kis','sonbahar'],f:function(){return govde('#3F51B5',248)+kolU('#3F51B5')+'<rect x="88" y="240" width="64" height="12" rx="6" fill="#2F3F9E"/><ellipse cx="120" cy="160" rx="19" ry="9" fill="#2F3F9E"/>'+yaka()+'<path d="M100,196 L120,182 L140,196 L120,210 Z" fill="#C5CAE9"/>';}},
+  {id:'sweat',n:'Sweatshirt',s:['sonbahar','okul','kis'],f:function(){return govde('#7E57C2',248)+kolU('#7E57C2')+'<path d="M96,158 Q120,178 144,158 Q120,150 96,158 Z" fill="#5E35B1"/><rect x="98" y="206" width="44" height="26" rx="10" fill="#5E35B1"/>';}},
+  {id:'uzunkol',n:'Uzun Kollu',s:['sonbahar','ilkbahar'],f:function(){var c='#26A69A';return govde(c)+kolU(c)+'<rect x="88" y="180" width="64" height="8" fill="#B2DFDB"/><rect x="88" y="204" width="64" height="8" fill="#B2DFDB"/><rect x="88" y="228" width="62" height="8" fill="#B2DFDB"/>';}},
+  {id:'atlet',n:'Askılı Atlet',s:['yaz'],f:function(){return P('M96,170 Q120,160 144,170 L142,242 Q120,252 98,242 Z','#FFD75E')+'<path d="M100,170 L106,152" stroke="#FFD75E" stroke-width="7" stroke-linecap="round"/><path d="M140,170 L134,152" stroke="#FFD75E" stroke-width="7" stroke-linecap="round"/><circle cx="120" cy="206" r="10" fill="#FF7043"/>';}},
+  {id:'balikci',n:'Balıkçı Yaka',s:['kis'],f:function(){var c='#C62828';return govde(c,248)+kolU(c)+'<rect x="102" y="132" width="36" height="30" rx="12" fill="#AB2020"/>';}},
+  {id:'cizgili',n:'Çizgili Tişört',s:['yaz','ilkbahar','okul'],f:function(){var c='#FFFFFF';return govde(c)+kolK(c)+'<rect x="88" y="176" width="64" height="9" fill="#1E88E5"/><rect x="88" y="198" width="64" height="9" fill="#1E88E5"/><rect x="88" y="220" width="63" height="9" fill="#1E88E5"/>';}}
+ ],
+ alt:[
+  {id:'etek',n:'Etek',s:['yaz','ilkbahar','okul'],f:function(){return etekCiz('#FF80AB',306,50)+'<path d="M70,300 Q120,314 170,300" stroke="#F06292" stroke-width="4" fill="none"/>';}},
+  {id:'uzunetek',n:'Uzun Etek',s:['ilkbahar','sonbahar'],f:function(){return etekCiz('#9575CD',354,60)+'<circle cx="96" cy="300" r="5" fill="#D1C4E9"/><circle cx="146" cy="322" r="5" fill="#D1C4E9"/><circle cx="120" cy="272" r="5" fill="#D1C4E9"/>';}},
+  {id:'tutu',n:'Tütü Etek',s:['ilkbahar','yaz'],f:function(){return etekCiz('#CE93D8',300,58)+P('M62,278 Q120,296 178,278 Q120,308 62,278 Z','#F3E5F5',' opacity=".8"')+P('M70,258 Q120,272 170,258 Q120,284 70,258 Z','#F3E5F5',' opacity=".7"');}},
+  {id:'pantolon',n:'Pantolon',s:['okul','sonbahar','kis'],f:function(){return pant('#37474F',392)+'<rect x="90" y="236" width="60" height="10" rx="5" fill="#263238"/>';}},
+  {id:'kot',n:'Kot Pantolon',s:['okul','ilkbahar','sonbahar'],f:function(){return pant('#5C88C4',392)+'<rect x="90" y="236" width="60" height="10" rx="5" fill="#3F6FAE"/><path d="M98,252 L106,268 M142,252 L134,268" stroke="#3F6FAE" stroke-width="2.5" fill="none"/>';}},
+  {id:'sort',n:'Şort',s:['yaz'],f:function(){return pant('#FF7043',300)+'<rect x="90" y="236" width="60" height="9" rx="4" fill="#E64A19"/>';}},
+  {id:'tayt',n:'Tayt',s:['kis','okul','sonbahar'],f:function(){return pant('#2E2A2C',392,true)+'<rect x="95" y="236" width="50" height="9" rx="4" fill="#4A4446"/>';}},
+  {id:'kapri',n:'Kapri',s:['yaz','ilkbahar'],f:function(){return pant('#D7C4A8',344)+'<rect x="90" y="236" width="60" height="9" rx="4" fill="#BCA485"/>';}},
+  {id:'kalinpant',n:'Kalın Pantolon',s:['kis'],f:function(){return pant('#2E5D3A',392)+'<line x1="102" y1="250" x2="98" y2="388" stroke="#26492F" stroke-width="2.5"/><line x1="138" y1="250" x2="142" y2="388" stroke="#26492F" stroke-width="2.5"/>';}},
+  {id:'kotetek',n:'Kot Etek',s:['ilkbahar','okul','sonbahar'],f:function(){return etekCiz('#5C88C4',300,48)+'<line x1="120" y1="240" x2="120" y2="304" stroke="#3F6FAE" stroke-width="3"/><rect x="90" y="236" width="60" height="9" rx="4" fill="#3F6FAE"/>';}}
+ ],
+ elbise:[
+  {id:'yazelbise',n:'Yazlık Elbise',s:['yaz'],f:function(){return elbise('#FFD75E',332,58)+kolK('#FFD75E')+'<circle cx="98" cy="286" r="7" fill="#FF7043"/><circle cx="140" cy="304" r="7" fill="#FF7043"/><circle cx="120" cy="264" r="7" fill="#FF7043"/>';}},
+  {id:'baharelbise',n:'Bahar Elbisesi',s:['ilkbahar'],f:function(){return elbise('#F48FB1',322,54)+kolK('#F48FB1')+P('M66,312 Q120,330 174,312 Q120,340 66,312 Z','#FCE4EC')+'<rect x="92" y="230" width="56" height="10" rx="5" fill="#EC407A"/>';}},
+  {id:'kiselbise',n:'Kışlık Elbise',s:['kis','sonbahar'],f:function(){return elbise('#8E24AA',336,52)+kolU('#8E24AA')+'<rect x="92" y="230" width="56" height="11" rx="5" fill="#6A1B9A"/>';}},
+  {id:'tulum',n:'Salopet (Tulum)',s:['ilkbahar','okul','sonbahar'],f:function(){return pant('#5C88C4',392)+'<rect x="96" y="186" width="48" height="56" rx="8" fill="#5C88C4"/><path d="M100,186 L106,158" stroke="#5C88C4" stroke-width="9" stroke-linecap="round"/><path d="M140,186 L134,158" stroke="#5C88C4" stroke-width="9" stroke-linecap="round"/><rect x="106" y="204" width="28" height="20" rx="4" fill="#3F6FAE"/>';}},
+  {id:'okulelbise',n:'Okul Elbisesi',s:['okul'],f:function(){return elbise('#283593',322,50)+kolK('#283593')+P('M102,158 Q120,152 138,158 L130,178 Q120,168 110,178 Z','#FFFFFF')+'<rect x="92" y="228" width="56" height="10" rx="5" fill="#1A237E"/>';}}
+ ],
+ dis:[
+  {id:'mont',n:'Mont',s:['kis'],f:function(){return kaban('#1668C1','#0D47A1',256)+'<rect x="88" y="196" width="64" height="10" rx="5" fill="#0D47A1"/><rect x="88" y="222" width="64" height="10" rx="5" fill="#0D47A1"/>';}},
+  {id:'kaban',n:'Kaban',s:['kis','sonbahar'],f:function(){return kaban('#B71C1C','#8E1414',288)+'<circle cx="108" cy="196" r="4" fill="#FFCDD2"/><circle cx="108" cy="222" r="4" fill="#FFCDD2"/>';}},
+  {id:'yagmurluk',n:'Yağmurluk',s:['ilkbahar','sonbahar'],f:function(){return kaban('#F9B233','#E08E00',272)+'<ellipse cx="120" cy="152" rx="44" ry="20" fill="#E08E00"/>';}},
+  {id:'hirka',n:'Hırka',s:['ilkbahar','sonbahar','okul'],f:function(){return acikKaban('#F48FB1','#EC407A',256)+'<circle cx="112" cy="186" r="3.5" fill="#EC407A"/><circle cx="112" cy="212" r="3.5" fill="#EC407A"/>';}},
+  {id:'ceket',n:'Kot Ceket',s:['ilkbahar','sonbahar'],f:function(){return acikKaban('#5C88C4','#3F6FAE',244);}},
+  {id:'yelek',n:'Şişme Yelek',s:['sonbahar','ilkbahar'],f:function(){return acikKaban('#2E7D32','#1B5E20',250,true)+'<line x1="90" y1="190" x2="150" y2="190" stroke="#1B5E20" stroke-width="2.5"/><line x1="90" y1="214" x2="150" y2="214" stroke="#1B5E20" stroke-width="2.5"/>';}},
+  {id:'panco',n:'Panço',s:['sonbahar','kis'],f:function(){return P('M78,162 Q120,146 162,162 L172,250 Q120,266 68,250 Z','#8D6E63')+'<path d="M68,244 Q120,260 172,244" stroke="#5D4037" stroke-width="5" fill="none"/>'+yaka();}}
+ ],
+ ayakkabi:[
+  {id:'spor',n:'Spor Ayakkabı',s:['okul','ilkbahar','sonbahar'],f:function(){return ayk('#FFFFFF','#E53935')+iki('<path d="M92,392 L110,398" stroke="#E53935" stroke-width="3"/>');}},
+  {id:'bot',n:'Bot',s:['kis','sonbahar'],f:function(){return bot('#795548','#4E342E',352)+iki('<rect x="84" y="356" width="34" height="8" rx="4" fill="#5D4037"/>');}},
+  {id:'karbotu',n:'Kar Botu',s:['kis'],f:function(){return bot('#64B5F6','#1565C0',346)+iki('<rect x="82" y="344" width="38" height="14" rx="7" fill="#E3F2FD"/>');}},
+  {id:'sandalet',n:'Sandalet',s:['yaz'],f:function(){return iki(P('M84,398 Q102,392 119,396 L119,408 Q102,415 84,410 Z','#FF6FA5')+'<path d="M90,398 Q102,384 114,394" stroke="#FF6FA5" stroke-width="5" fill="none" stroke-linecap="round"/>');}},
+  {id:'babet',n:'Babet',s:['ilkbahar','okul','yaz'],f:function(){return iki(P('M84,394 Q102,384 118,394 L119,407 Q102,414 84,409 Z','#EC407A')+'<circle cx="101" cy="392" r="5" fill="#FCE4EC"/>');}},
+  {id:'cizme',n:'Yağmur Çizmesi',s:['ilkbahar','sonbahar'],f:function(){return bot('#F9B233','#C88700',350);}},
+  {id:'terlik',n:'Terlik',s:['yaz'],f:function(){return iki(P('M84,400 Q102,394 119,398 L119,409 Q102,415 84,411 Z','#26C6DA')+'<path d="M101,400 L101,392" stroke="#26C6DA" stroke-width="5" stroke-linecap="round"/>');}},
+  {id:'okulayk',n:'Okul Ayakkabısı',s:['okul','kis'],f:function(){return ayk('#2E2A2C','#111');}},
+  {id:'corapli',n:'Yün Çorap',s:['kis'],f:function(){return iki(P('M86,350 L84,404 Q102,414 119,406 L118,350 Z','#F8BBD0')+'<rect x="84" y="352" width="34" height="9" fill="#F06292"/><rect x="84" y="372" width="34" height="9" fill="#F06292"/>');}}
+ ],
+ aksesuar:[
+  {id:'bere',n:'Bere',y:'bas',s:['kis'],f:function(){return P('M72,66 C72,22 168,22 168,66 Z','#3F51B5')+'<rect x="66" y="58" width="108" height="20" rx="10" fill="#2F3F9E"/><circle cx="120" cy="16" r="13" fill="#FFF3C4"/>';}},
+  {id:'sapka',n:'Hasır Şapka',y:'bas',s:['yaz'],f:function(){return '<ellipse cx="120" cy="70" rx="70" ry="14" fill="#F4C55A"/>'+P('M84,70 C84,24 156,24 156,70 Z','#FFD983')+'<rect x="82" y="58" width="76" height="12" fill="#FF7BAC"/>';}},
+  {id:'toka',n:'Fiyonk Toka',y:'bas',s:['ilkbahar','yaz','okul'],f:function(){return '<ellipse cx="158" cy="46" rx="14" ry="10" transform="rotate(-20 158 46)" fill="#FF4F8B"/><ellipse cx="182" cy="42" rx="14" ry="10" transform="rotate(20 182 42)" fill="#FF4F8B"/><circle cx="170" cy="44" r="6" fill="#D81B60"/>';}},
+  {id:'kulaklik',n:'Kulak Koruyucu',y:'bas',s:['kis'],f:function(){return '<path d="M70,86 C74,34 166,34 170,86" stroke="#E91E63" stroke-width="7" fill="none"/><ellipse cx="68" cy="96" rx="14" ry="17" fill="#F06292"/><ellipse cx="172" cy="96" rx="14" ry="17" fill="#F06292"/>';}},
+  {id:'gozluk',n:'Güneş Gözlüğü',y:'yuz',s:['yaz'],f:function(){return '<rect x="86" y="88" width="30" height="22" rx="10" fill="#2E2A2C" opacity=".85"/><rect x="124" y="88" width="30" height="22" rx="10" fill="#2E2A2C" opacity=".85"/><rect x="114" y="96" width="12" height="4" fill="#2E2A2C"/><rect x="68" y="96" width="20" height="4" fill="#2E2A2C"/><rect x="152" y="96" width="20" height="4" fill="#2E2A2C"/>';}},
+  {id:'okulgozluk',n:'Gözlük',y:'yuz',s:['okul','kis','ilkbahar','sonbahar','yaz'],f:function(){return '<rect x="86" y="88" width="30" height="22" rx="9" fill="none" stroke="#6D4C41" stroke-width="3.5"/><rect x="124" y="88" width="30" height="22" rx="9" fill="none" stroke="#6D4C41" stroke-width="3.5"/><line x1="116" y1="98" x2="124" y2="98" stroke="#6D4C41" stroke-width="3"/>';}},
+  {id:'atki',n:'Atkı',y:'boyun',s:['kis','sonbahar'],f:function(){return P('M84,152 Q120,138 156,152 Q120,172 84,152 Z','#E53935')+P('M94,160 C86,190 84,214 87,238 L107,235 C104,208 105,184 110,163 Z','#E53935')+'<rect x="88" y="196" width="20" height="7" fill="#FFCDD2"/><rect x="86" y="220" width="20" height="7" fill="#FFCDD2"/>';}},
+  {id:'kolye',n:'Kolye',y:'boyun',s:['yaz','ilkbahar','okul'],f:function(){return '<path d="M100,158 Q120,180 140,158" stroke="#F9B233" stroke-width="3" fill="none"/><circle cx="120" cy="178" r="7" fill="#FF4F8B"/>';}},
+  {id:'eldiven',n:'Eldiven',y:'el',s:['kis'],f:function(){return iki('<ellipse cx="71" cy="256" rx="15" ry="16" fill="#E53935"/><rect x="60" y="240" width="22" height="10" rx="5" fill="#FFCDD2"/>');}},
+  {id:'semsiye',n:'Şemsiye',y:'el',s:['ilkbahar','sonbahar'],f:function(){return '<path d="M146,112 C158,58 218,58 230,112 Q216,102 202,112 Q188,102 174,112 Q160,102 146,112 Z" fill="#42A5F5"/><path d="M188,58 L188,52" stroke="#1565C0" stroke-width="4"/><line x1="188" y1="112" x2="188" y2="248" stroke="#8D6E63" stroke-width="5"/><path d="M188,248 Q178,258 170,248" stroke="#8D6E63" stroke-width="5" fill="none"/>';}},
+  {id:'canta',n:'Okul Çantası',y:'sirt',s:['okul'],f:function(){return '<path d="M100,168 L108,168 L114,206 L104,206 Z" fill="#5E35B1"/><path d="M140,168 L132,168 L126,206 L136,206 Z" fill="#5E35B1"/><rect x="156" y="188" width="42" height="56" rx="12" fill="#7E57C2"/><rect x="156" y="212" width="42" height="18" rx="6" fill="#5E35B1"/><rect x="168" y="180" width="18" height="12" rx="6" fill="#5E35B1"/>';}},
+  {id:'elcanta',n:'El Çantası',y:'sirt',s:['yaz','ilkbahar'],f:function(){return '<rect x="40" y="250" width="44" height="36" rx="10" fill="#FF7BAC"/><path d="M50,250 Q62,228 74,250" stroke="#D81B60" stroke-width="4" fill="none"/><rect x="40" y="262" width="44" height="8" fill="#D81B60"/>';}},
+  {id:'sirtcanta',n:'Sırt Çantası',y:'sirt',s:['okul','ilkbahar','sonbahar'],f:function(){return '<path d="M100,168 L108,168 L114,206 L104,206 Z" fill="#00695C"/><path d="M140,168 L132,168 L126,206 L136,206 Z" fill="#00695C"/><rect x="154" y="196" width="40" height="52" rx="12" fill="#26A69A"/><rect x="154" y="218" width="40" height="14" rx="5" fill="#00695C"/>';}}
+ ]
 };
+var SEKME=[{k:'ust',ad:'👕 Üst'},{k:'alt',ad:'👖 Alt'},{k:'elbise',ad:'👗 Elbise'},{k:'dis',ad:'🧥 Dış Giyim'},{k:'ayakkabi',ad:'👟 Ayakkabı'},{k:'aksesuar',ad:'🎀 Aksesuar'},{k:'sac',ad:'💇 Saç & Ten'}];
+var KUTU={ust:'52 140 136 122',alt:'58 224 124 196',elbise:'48 140 144 214',dis:'44 138 152 160',ayakkabi:'76 340 88 86',bas:'56 0 128 96',yuz:'70 74 100 52',boyun:'72 130 96 116',el:'34 46 210 220',sirt:'30 150 180 148'};
 
-var currentMission = null;
-var wornItems = {}; // {category: clothingId}
-var score = 0;
-var highScore = 0;
+function bul(kat,id){var a=K[kat]||[];for(var i=0;i<a.length;i++)if(a[i].id===id)return a[i];return null;}
 
-// ══════════════════════════════
-// KIYAFET KARTLARI OLUŞTUR
-// ══════════════════════════════
-function buildClothes() {
-  var cats = {top:'topClothes', bottom:'bottomClothes', outer:'outerClothes', shoe:'shoeClothes', access:'accessClothes'};
-  Object.keys(cats).forEach(function(cat) {
-    var container = document.getElementById(cats[cat]);
-    container.innerHTML = '';
-    clothes[cat].forEach(function(item) {
-      var div = document.createElement('div');
-      div.className = 'clothing-item';
-      div.id = 'item_'+item.id;
-      div.innerHTML = '<span class="item-emoji">'+item.emoji+'</span><div class="item-name">'+item.name+'</div>';
-      div.onclick = function(){ wearItem(cat, item); };
-      container.appendChild(div);
+/* ============ ÇİZ ============ */
+function ciz(){
+  var h=SACLAR[S.sac],s='';
+  s+=h.arka(S.sacRenk);
+  s+=beden();
+  s+=yuz();
+  if(S.giy.alt)s+=bul('alt',S.giy.alt).f();
+  if(S.giy.ust)s+=bul('ust',S.giy.ust).f();
+  if(S.giy.elbise)s+=bul('elbise',S.giy.elbise).f();
+  if(S.giy.dis)s+=bul('dis',S.giy.dis).f();
+  if(S.giy.ayakkabi)s+=bul('ayakkabi',S.giy.ayakkabi).f();
+  s+=h.on(S.sacRenk);
+  ['boyun','el','sirt','yuz','bas'].forEach(function(y){
+    if(S.aks[y])s+=bul('aksesuar',S.aks[y]).f();
+  });
+  document.getElementById('bebek').innerHTML=s;
+  cipleriYaz();
+}
+
+/* ============ GARDIROP ============ */
+function sekmeleriYaz(){
+  var h='';
+  SEKME.forEach(function(t){h+='<button class="sk'+(S.sekme===t.k?' on':'')+'" onclick="sekmeSec(\''+t.k+'\')">'+t.ad+'</button>';});
+  document.getElementById('sekmeler').innerHTML=h;
+}
+function sekmeSec(k){S.sekme=k;sTik();sekmeleriYaz();dolabiYaz();}
+
+function mvsRozet(it){
+  if(!S.ipucu)return '';
+  return it.s.map(function(m){return MEV[m];}).join('');
+}
+function kartHtml(kat,it){
+  var kutu=kat==='aksesuar'?KUTU[it.y]:KUTU[kat];
+  var giyili=(kat==='aksesuar')?(S.aks[it.y]===it.id):(S.giy[kat]===it.id);
+  return '<div class="esya'+(giyili?' giyili':'')+'" onclick="sec(\''+kat+'\',\''+it.id+'\')">'
+    +'<svg viewBox="'+kutu+'" xmlns="http://www.w3.org/2000/svg">'+it.f()+'</svg>'
+    +'<div class="ad">'+it.n+'</div><div class="mvs">'+mvsRozet(it)+'</div></div>';
+}
+function dolabiYaz(){
+  var c=document.getElementById('dolapIcerik');
+  if(S.sekme==='sac'){
+    var h='<div class="baslikcik">Saç Modeli</div><div class="izgara">';
+    Object.keys(SACLAR).forEach(function(k){
+      h+='<div class="esya'+(S.sac===k?' giyili':'')+'" onclick="sacSec(\''+k+'\')"><svg viewBox="40 0 160 260" xmlns="http://www.w3.org/2000/svg">'+SACLAR[k].arka(S.sacRenk)+yuz()+SACLAR[k].on(S.sacRenk)+'</svg><div class="ad">'+SACLAR[k].ad+'</div><div class="mvs"></div></div>';
     });
+    h+='</div><div class="baslikcik">Saç Rengi</div><div class="renkler">';
+    SAC_RENK.forEach(function(r){h+='<div class="renk'+(S.sacRenk===r.c?' on':'')+'" style="background:'+r.c+'" title="'+r.n+'" onclick="sacRenk(\''+r.c+'\')"></div>';});
+    h+='</div><div class="baslikcik">Ten Rengi</div><div class="renkler">';
+    TEN_RENK.forEach(function(r){h+='<div class="renk'+(S.ten===r.c?' on':'')+'" style="background:'+r.c+'" title="'+r.n+'" onclick="tenRenk(\''+r.c+'\')"></div>';});
+    h+='</div>';
+    c.innerHTML=h;return;
+  }
+  var g='<div class="izgara">';
+  K[S.sekme].forEach(function(it){g+=kartHtml(S.sekme,it);});
+  c.innerHTML=g+'</div>';
+}
+function sacSec(k){S.sac=k;sTik();ciz();dolabiYaz();}
+function sacRenk(c){S.sacRenk=c;sTik();ciz();dolabiYaz();}
+function tenRenk(c){S.ten=c;sTik();ciz();dolabiYaz();}
+
+/* ============ SEÇ / ÇIKAR ============ */
+function sec(kat,id){
+  var it=bul(kat,id);
+  if(kat==='aksesuar'){
+    if(S.aks[it.y]===id){delete S.aks[it.y];sTik();ciz();dolabiYaz();return;}
+    S.aks[it.y]=id;
+  }else{
+    if(S.giy[kat]===id){delete S.giy[kat];sTik();ciz();dolabiYaz();return;}
+    S.giy[kat]=id;
+    if(kat==='elbise'){delete S.giy.ust;delete S.giy.alt;}
+    if(kat==='ust'||kat==='alt')delete S.giy.elbise;
+  }
+  if(S.mevsim){
+    if(it.s.indexOf(S.mevsim)>-1){sDogru();bildir('✅ '+it.n+' '+MEVAD[S.mevsim].toLowerCase()+' için uygun!','ok');}
+    else{sYanlis();bildir('🤔 '+it.n+' '+MEVAD[S.mevsim].toLowerCase()+' için uygun değil.','hata');}
+  }else{sTik();}
+  ciz();dolabiYaz();
+}
+function cipleriYaz(){
+  var el=document.getElementById('giyilenler'),h='';
+  var adlar={ust:'Üst',alt:'Alt',elbise:'Elbise',dis:'Dış',ayakkabi:'Ayakkabı'};
+  Object.keys(adlar).forEach(function(k){
+    if(S.giy[k]){var it=bul(k,S.giy[k]);h+='<div class="cip">'+it.n+'<button onclick="cikar(\''+k+'\')">✕</button></div>';}
   });
-}
-
-// ══════════════════════════════
-// KIYAFETİ GİYDİR
-// ══════════════════════════════
-function wearItem(cat, item) {
-  // Önceki aynı kategori kıyafetini çıkar
-  if(wornItems[cat]) {
-    removeItem(cat);
-  }
-
-  wornItems[cat] = item.id;
-
-  // SVG katman güncelle
-  var layerMap = {top:'layerTop', bottom:'layerBottom', outer:'layerOuter', shoe:'layerShoe', access:'layerAcc'};
-  var layer = document.getElementById(layerMap[cat]);
-  layer.innerHTML = '<svg viewBox="0 0 200 380" xmlns="http://www.w3.org/2000/svg" width="200" height="380">'+item.svg+'</svg>';
-
-  // Kart işaretle
-  document.getElementById('item_'+item.id).classList.add('worn');
-
-  // Mevsim kontrolü - anlık geri bildirim
-  if(currentMission) {
-    var correct = item.seasons.includes(currentMission);
-    if(correct) {
-      sesDogru();
-      showToast('✅ '+ item.name +' bu mevsim için uygun!', 'ok');
-    } else {
-      sesYanlis(); showToast('⚠️ '+ item.name +' bu mevsim için uygun olmayabilir!', 'wrong');
-    }
-  }
-
-  updateWornList();
-}
-
-function removeItem(cat) {
-  if(!wornItems[cat]) return;
-  var oldId = wornItems[cat];
-  var oldEl = document.getElementById('item_'+oldId);
-  if(oldEl) oldEl.classList.remove('worn');
-
-  var layerMap = {top:'layerTop', bottom:'layerBottom', outer:'layerOuter', shoe:'layerShoe', access:'layerAcc'};
-  document.getElementById(layerMap[cat]).innerHTML = '';
-  delete wornItems[cat];
-  updateWornList();
-}
-
-function removeAll() {
-  Object.keys(wornItems).forEach(function(cat){ removeItem(cat); });
-}
-
-function resetAll() {
-  removeAll();
-  currentMission = null;
-  document.getElementById('missionText').textContent = 'Bir mevsim seç!';
-  document.getElementById('missionText').style.color = 'var(--pink)';
-  document.getElementById('seasonGuide').textContent = '';
-  document.getElementById('sceneBg').style.background = '';
-  document.getElementById('sceneEmoji').textContent = '🏠';
-  document.querySelectorAll('.season-btn').forEach(function(b){ b.classList.remove('active'); });
-}
-
-// ══════════════════════════════
-// GİYİLENLER LİSTESİ
-// ══════════════════════════════
-function updateWornList() {
-  var list = document.getElementById('wornList');
-  var keys = Object.keys(wornItems);
-  if(keys.length === 0) {
-    list.innerHTML = '<div style="text-align:center;color:#aaa;font-size:13px;font-weight:700;padding:20px 0;">Henüz kıyafet seçilmedi...</div>';
-    return;
-  }
-  list.innerHTML = '';
-  var catNames = {top:'Üst', bottom:'Alt', outer:'Dış', shoe:'Ayakkabı', access:'Aksesuar'};
-  keys.forEach(function(cat) {
-    var itemId = wornItems[cat];
-    var item = clothes[cat].find(function(c){return c.id===itemId;});
-    if(!item) return;
-    var div = document.createElement('div');
-    div.className = 'worn-item';
-    div.innerHTML = '<span class="wi-emoji">'+item.emoji+'</span><span>'+item.name+'<br><small style="color:#aaa">'+catNames[cat]+'</small></span><button class="wi-remove" onclick="removeItem(\''+cat+'\')">✕</button>';
-    list.appendChild(div);
+  Object.keys(S.aks).forEach(function(y){
+    var it=bul('aksesuar',S.aks[y]);if(it)h+='<div class="cip">'+it.n+'<button onclick="aksCikar(\''+y+'\')">✕</button></div>';
   });
+  el.innerHTML=h||'<div class="bos">Henüz kıyafet seçilmedi. Gardıroptan bir kıyafete dokun!</div>';
+}
+function cikar(k){delete S.giy[k];sTik();ciz();dolabiYaz();}
+function aksCikar(y){delete S.aks[y];sTik();ciz();dolabiYaz();}
+function hepsiniCikar(){S.giy={};S.aks={};sTik();ciz();dolabiYaz();}
+
+function rastgele(){
+  S.giy={};S.aks={};
+  function r(a){return a[Math.floor(Math.random()*a.length)];}
+  if(Math.random()<.4){S.giy.elbise=r(K.elbise).id;}
+  else{S.giy.ust=r(K.ust).id;S.giy.alt=r(K.alt).id;}
+  S.giy.ayakkabi=r(K.ayakkabi).id;
+  if(Math.random()<.6){var a=r(K.aksesuar);S.aks[a.y]=a.id;}
+  sTik();ciz();dolabiYaz();
+  bildir('🎲 Rastgele kıyafet giydi. Mevsime uygun mu?','bilgi');
 }
 
-// ══════════════════════════════
-// MİSYON
-// ══════════════════════════════
-var sceneData = {
-  kış: {bg:'linear-gradient(180deg,#bbdefb,#e3f2fd)', emoji:'❄️🌨️', color:'#1565c0'},
-  yaz: {bg:'linear-gradient(180deg,#fff9c4,#e8f5e9)', emoji:'☀️🌺', color:'#e65100'},
-  ilkbahar: {bg:'linear-gradient(180deg,#f3e5f5,#e8f5e9)', emoji:'🌸🦋', color:'#2e7d32'},
-  sonbahar: {bg:'linear-gradient(180deg,#fff3e0,#fce4ec)', emoji:'🍂🍁', color:'#ef6c00'},
-  okul: {bg:'linear-gradient(180deg,#e8eaf6,#f3e5f5)', emoji:'🎒📚', color:'#7b1fa2'},
+/* ============ MEVSİM ============ */
+var SAHNE={
+  kis:{bg:'linear-gradient(180deg,#d6ecff,#f2f8ff)',dek:['❄️','🌨️','⛄','❄️']},
+  yaz:{bg:'linear-gradient(180deg,#fff4c9,#e9fbe7)',dek:['☀️','🌻','🦋','🍉']},
+  ilkbahar:{bg:'linear-gradient(180deg,#ffe9f4,#e8f8ea)',dek:['🌸','🌷','🦋','🌦️']},
+  sonbahar:{bg:'linear-gradient(180deg,#ffeccd,#fce6d6)',dek:['🍂','🍁','🌰','🌧️']},
+  okul:{bg:'linear-gradient(180deg,#eae7ff,#f7ecff)',dek:['🎒','📚','✏️','🔔']}
 };
-
-function setMission(season, text, color) {
-  removeAll();
-  currentMission = season;
-  document.getElementById('missionText').textContent = text;
-  document.getElementById('missionText').style.color = color;
-  document.getElementById('seasonGuide').textContent = (seasonGuides[season]||'').replace(/\\n/g,'\n');
-  document.getElementById('seasonGuide').style.whiteSpace = 'pre-line';
-
-  var sc = sceneData[season];
-  document.getElementById('sceneBg').style.background = sc.bg;
-  document.getElementById('sceneEmoji').textContent = sc.emoji;
-
-  document.querySelectorAll('.season-btn').forEach(function(b){ b.classList.remove('active'); });
-  event.target.classList.add('active');
-
-  showToast('🎯 Görev: '+text, 'info');
+function mevsimSec(m){
+  S.mevsim=m;
+  document.querySelectorAll('.mv').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-s')===m);});
+  document.getElementById('gorevYazi').textContent='🎯 Görev: '+MEV[m]+' '+MEVAD[m]+' mevsimine uygun giydir!';
+  var sc=SAHNE[m];
+  document.getElementById('sahneKart').style.background=sc.bg;
+  var yer=[[6,8],[80,6],[8,72],[84,66]],d='';
+  sc.dek.forEach(function(e,i){d+='<span style="left:'+yer[i][0]+'%;top:'+yer[i][1]+'%;animation-delay:'+(i*.4)+'s">'+e+'</span>';});
+  document.getElementById('dekor').innerHTML=d;
+  rehberYaz(m);sTik();
+  bildir('🎯 '+MEVAD[m]+' için giydirme zamanı!','bilgi');
 }
-
-// ══════════════════════════════
-// KONTROL ET & PUANLA
-// ══════════════════════════════
-function checkOutfit() {
-  if(!currentMission) { showToast('Önce bir mevsim seç!', 'info'); return; }
-  var total = Object.keys(wornItems).length;
-  if(total === 0) { showToast('Hiç kıyafet seçmedin!', 'wrong'); return; }
-
-  var correct = 0, wrong = 0;
-  Object.keys(wornItems).forEach(function(cat) {
-    var item = clothes[cat].find(function(c){return c.id===wornItems[cat];});
-    if(item && item.seasons.includes(currentMission)) correct++;
-    else wrong++;
+function rehberYaz(m){
+  var adlar={ust:'Üst giyim',alt:'Alt giyim',elbise:'Elbise',dis:'Dış giyim',ayakkabi:'Ayakkabı',aksesuar:'Aksesuar'};
+  var p='';
+  Object.keys(adlar).forEach(function(k){
+    var l=K[k].filter(function(it){return it.s.indexOf(m)>-1;}).map(function(it){return it.n;});
+    if(l.length)p+='<b>'+adlar[k]+':</b> '+l.join(', ')+'<br>';
   });
-
-  var points = correct * 10 - wrong * 5;
-  if(points < 0) points = 0;
-  score += points;
-  if(score > highScore) highScore = score;
-  document.getElementById('scoreNum').textContent = score;
-  document.getElementById('highScore').textContent = highScore;
-
-  if(wrong === 0 && correct >= 3) { sesKazan();
-    showToast('🎉 Mükemmel! +'+points+' puan! Tüm kıyafetler uygun!', 'ok');
-    showPoints('+'+points, '#2e7d32');
-    confetti();
-  } else if(wrong === 0) { sesDogru();
-    showToast('✅ Harika! +'+points+' puan! Daha fazla kıyafet giydirebilirsin.', 'ok');
-    showPoints('+'+points, '#1565c0');
-  } else {
-    sesYanlis(); showToast('⚠️ '+correct+' doğru, '+wrong+' yanlış kıyafet! +'+points+' puan', wrong>correct?'wrong':'ok');
-    showPoints('+'+points, wrong>0?'#e65100':'#2e7d32');
-  }
+  document.getElementById('rehberBaslik').textContent='💡 '+MEV[m]+' '+MEVAD[m]+' Rehberi';
+  document.getElementById('rehberYazi').innerHTML=p;
+}
+function ipucuAcKapa(){
+  S.ipucu=!S.ipucu;
+  document.getElementById('ipucuBtn').textContent='💡 İpucu: '+(S.ipucu?'Açık':'Kapalı');
+  sTik();dolabiYaz();
 }
 
-// ══════════════════════════════
-// YARDIMCI FONKSİYONLAR
-// ══════════════════════════════
-function showToast(msg, type) {
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show '+type;
-  clearTimeout(t._timer);
-  t._timer = setTimeout(function(){ t.className='toast'; }, 3000);
+/* ============ PUANLAMA ============ */
+function kontrolEt(){
+  if(!S.mevsim){bildir('Önce yukarıdan bir mevsim seç!','bilgi');return;}
+  var hepsi=[];
+  ['ust','alt','elbise','dis','ayakkabi'].forEach(function(k){if(S.giy[k])hepsi.push(bul(k,S.giy[k]));});
+  Object.keys(S.aks).forEach(function(y){hepsi.push(bul('aksesuar',S.aks[y]));});
+  if(!hepsi.length){bildir('Hiç kıyafet giydirmedin!','hata');sYanlis();return;}
+  var d=0,y=0,yanlislar=[];
+  hepsi.forEach(function(it){if(it.s.indexOf(S.mevsim)>-1)d++;else{y++;yanlislar.push(it.n);}});
+  var tam=(S.giy.elbise||(S.giy.ust&&S.giy.alt))&&S.giy.ayakkabi;
+  var p=d*10-y*5+((tam&&y===0)?20:0);
+  if(p<0)p=0;
+  S.puan+=p;if(S.puan>S.rekor)S.rekor=S.puan;
+  document.getElementById('puan').textContent=S.puan;
+  document.getElementById('rekor').textContent=S.rekor;
+  if(y===0&&tam){sKazan();bildir('🎉 Harika! Kıyafetin tamamen uygun. +'+p+' puan','ok');pop('+'+p,'#2e7d32');konfeti();}
+  else if(y===0){sDogru();bildir('👍 Doğru seçimler! Kıyafeti tamamla (üst+alt veya elbise ve ayakkabı). +'+p+' puan','ok');pop('+'+p,'#1668c1');}
+  else{sYanlis();bildir('⚠️ '+d+' doğru, '+y+' yanlış: '+yanlislar.join(', ')+'. +'+p+' puan','hata');pop('+'+p,'#e2650a');}
 }
 
-function showPoints(text, color) {
-  var el = document.createElement('div');
-  el.className = 'point-popup';
-  el.textContent = text;
-  el.style.color = color;
-  el.style.left = '50%'; el.style.top = '40%';
-  el.style.transform = 'translateX(-50%)';
-  document.body.appendChild(el);
-  setTimeout(function(){ document.body.removeChild(el); }, 1200);
+/* ============ EFEKTLER ============ */
+function bildir(m,t){
+  var el=document.getElementById('toast');
+  el.textContent=m;el.className='toast gor '+(t||'');
+  clearTimeout(el._t);el._t=setTimeout(function(){el.className='toast';},2600);
+}
+function pop(t,c){
+  var el=document.createElement('div');el.className='pop';el.textContent=t;el.style.color=c;
+  el.style.left='50%';el.style.top='42%';document.body.appendChild(el);
+  setTimeout(function(){el.remove();},1100);
+}
+function konfeti(){
+  var r=['#ff6fa5','#ffd75e','#7e57c2','#42a5f5','#66bb6a','#ff7043'];
+  for(var i=0;i<34;i++){(function(i){setTimeout(function(){
+    var el=document.createElement('div');el.className='konfeti';
+    el.style.left=Math.random()*100+'vw';el.style.top='-20px';
+    el.style.background=r[Math.floor(Math.random()*r.length)];
+    el.style.animationDuration=(1.6+Math.random())+'s';
+    document.body.appendChild(el);setTimeout(function(){el.remove();},3000);
+  },i*55);})(i);}
 }
 
-function confetti() {
-  var colors = ['#ff6b9d','#ffd700','#7b1fa2','#2196f3','#4caf50','#ff5722'];
-  for(var i=0;i<30;i++){
-    (function(i){
-      setTimeout(function(){
-        var el=document.createElement('div');
-        el.className='confetti-piece';
-        el.style.left=Math.random()*100+'vw';
-        el.style.top='-20px';
-        el.style.background=colors[Math.floor(Math.random()*colors.length)];
-        el.style.transform='rotate('+Math.random()*360+'deg)';
-        el.style.animationDuration=(1.5+Math.random())+'s';
-        document.body.appendChild(el);
-        setTimeout(function(){document.body.removeChild(el);},3000);
-      }, i*60);
-    })(i);
-  }
-}
-
-// ══════════════════════════════
-// BAŞLAT
-// ══════════════════════════════
-buildClothes();
+/* ============ BAŞLAT ============ */
+sekmeleriYaz();dolabiYaz();ciz();
 </script>
 </body>
 </html>
