@@ -3,7 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>İlkokul Bilgi Yarışması</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
     * {
@@ -14,9 +19,13 @@
       margin: 0;
       padding: 20px;
       min-height: 100vh;
-      font-family: Arial, sans-serif;
+      font-family: "Andika", Arial, sans-serif;
       background: linear-gradient(135deg, #06133d, #16469c);
       color: white;
+    }
+
+    button {
+      font-family: inherit;
     }
 
     .app {
@@ -49,9 +58,13 @@
       font-size: 38px;
     }
 
-    .subtitle {
+    h2 {
       text-align: center;
+    }
+
+    .subtitle {
       color: #dce7ff;
+      text-align: center;
       margin-bottom: 25px;
     }
 
@@ -88,14 +101,11 @@
       box-shadow: 0 0 15px rgba(244, 197, 66, .7);
     }
 
-    button {
-      font-family: inherit;
-    }
-
     .start-btn,
     .next-btn,
     .new-btn,
-    .back-btn {
+    .back-btn,
+    .reset-btn {
       display: block;
       margin: 15px auto;
       padding: 14px 24px;
@@ -108,6 +118,10 @@
       font-weight: bold;
     }
 
+    .reset-btn {
+      background: #ff8b5c;
+    }
+
     .start-btn:disabled {
       opacity: .4;
       cursor: not-allowed;
@@ -116,9 +130,10 @@
     .start-btn:hover:not(:disabled),
     .next-btn:hover,
     .new-btn:hover,
-    .back-btn:hover {
-      background: #ffe27d;
+    .back-btn:hover,
+    .reset-btn:hover {
       transform: scale(1.04);
+      filter: brightness(1.1);
     }
 
     .game-screen {
@@ -235,7 +250,6 @@
 
     .prizes h2 {
       color: #f4c542;
-      text-align: center;
     }
 
     .prize-list {
@@ -284,705 +298,667 @@
 
 <body>
 
-<div class="app">
+  <div class="app">
 
-  <main class="panel main">
+    <main class="panel main">
+      <h1>Bilgi Yarışması</h1>
 
-    <h1>Bilgi Yarışması</h1>
+      <p class="subtitle">
+        Sınıfını seç, 250 soruluk havuzdan 15 soruluk yarışmaya başla.
+      </p>
 
-    <p class="subtitle">
-      Sınıfını seç, 250 soruluk havuzdan 15 soruluk yarışmaya başla.
-    </p>
+      <section id="startScreen" class="start-screen">
+        <h2>Sınıf seviyeni seç</h2>
 
-    <!-- SINIF SEKMELERİ -->
-    <section id="startScreen" class="start-screen">
-      <h2>Sınıf seviyeni seç</h2>
+        <div class="tabs">
+          <button class="tab" data-grade="2">2. Sınıf</button>
+          <button class="tab" data-grade="3">3. Sınıf</button>
+          <button class="tab" data-grade="4">4. Sınıf</button>
+        </div>
 
-      <div class="tabs">
-        <button type="button" class="tab" data-grade="2">
-          2. Sınıf
+        <p id="selectedGradeText">Henüz sınıf seçilmedi.</p>
+
+        <button id="startButton" class="start-btn" disabled>
+          Yarışmayı Başlat
+        </button>
+      </section>
+
+      <section id="gameScreen" class="game-screen">
+
+        <div class="info">
+          <span id="questionNumber"></span>
+          <span id="gradeInfo"></span>
+          <span id="prizeInfo"></span>
+        </div>
+
+        <div id="lessonInfo" class="lesson"></div>
+
+        <div class="timer-info">
+          <span>Kalan süre</span>
+          <span id="timerText">30 saniye</span>
+        </div>
+
+        <div class="timer-bg">
+          <div id="timerBar" class="timer-bar"></div>
+        </div>
+
+        <div id="questionText" class="question"></div>
+
+        <div id="answers" class="answers"></div>
+
+        <div id="message" class="message"></div>
+
+        <button id="nextButton" class="next-btn hidden">
+          Sonraki Soru
         </button>
 
-        <button type="button" class="tab" data-grade="3">
-          3. Sınıf
+        <button id="newButton" class="new-btn hidden">
+          Yeni Yarışmacı
         </button>
 
-        <button type="button" class="tab" data-grade="4">
-          4. Sınıf
+        <button id="backButton" class="back-btn hidden">
+          Sınıf Seçimine Dön
         </button>
-      </div>
 
-      <p id="selectedGradeText">Henüz sınıf seçilmedi.</p>
+        <button id="resetButton" class="reset-btn hidden">
+          Soru Havuzunu Yeniden Başlat
+        </button>
 
-      <button id="startButton" class="start-btn" disabled>
-        Yarışmayı Başlat
-      </button>
-    </section>
+      </section>
+    </main>
 
-    <!-- OYUN EKRANI -->
-    <section id="gameScreen" class="game-screen">
+    <aside class="panel prizes">
+      <h2>Ödül Basamakları</h2>
+      <ul id="prizeList" class="prize-list"></ul>
+    </aside>
 
-      <div class="info">
-        <span id="questionNumber"></span>
-        <span id="gradeInfo"></span>
-        <span id="prizeInfo"></span>
-      </div>
+  </div>
 
-      <div id="lessonInfo" class="lesson"></div>
+  <script>
+    /*
+      TOPLAM SORU SAYISI: 250
 
-      <div class="timer-info">
-        <span>Kalan süre</span>
-        <span id="timerText">30 saniye</span>
-      </div>
+      2. sınıf: 84 soru
+      3. sınıf: 83 soru
+      4. sınıf: 83 soru
 
-      <div class="timer-bg">
-        <div id="timerBar" class="timer-bar"></div>
-      </div>
+      Her yarışmacıya 15 soru verilir.
+      Kullanılan sorular tekrar seçilmez.
+    */
 
-      <div id="questionText" class="question"></div>
+    const questionPool = [];
 
-      <div id="answers" class="answers"></div>
+    function createQuestion(id, grade, lesson, question, correct, wrong1, wrong2, wrong3) {
+      const options = [
+        { text: String(correct), correct: true },
+        { text: String(wrong1), correct: false },
+        { text: String(wrong2), correct: false },
+        { text: String(wrong3), correct: false }
+      ];
 
-      <div id="message" class="message"></div>
+      options.sort(() => Math.random() - 0.5);
 
-      <button id="nextButton" class="next-btn hidden">
-        Sonraki Soru
-      </button>
-
-      <button id="newButton" class="new-btn hidden">
-        Yeni Yarışmacı
-      </button>
-
-      <button id="backButton" class="back-btn hidden">
-        Sınıf Seçimine Dön
-      </button>
-
-    </section>
-
-  </main>
-
-  <aside class="panel prizes">
-    <h2>Ödül Basamakları</h2>
-    <ul id="prizeList" class="prize-list"></ul>
-  </aside>
-
-</div>
-
-<script>
-/*
-===========================================================
-SORU HAVUZU
-
-Buradaki yapı gerçek soru havuzudur.
-Her soru ayrı bir nesnedir.
-Soru sırasında sadece seçilen sınıfın havuzu kullanılır.
-
-Toplam hedef:
-2. sınıf: 80 soru
-3. sınıf: 85 soru
-4. sınıf: 85 soru
-GENEL TOPLAM: 250 soru
-
-Yarışmada bu havuzdan rastgele 15 soru seçilir.
-===========================================================
-*/
-
-const questionPool = [
-
-  // =====================================================
-  // 2. SINIF — TÜRKÇE
-  // =====================================================
-
-  {
-    grade: 2,
-    lesson: "Türkçe",
-    question: "“Mutlu” kelimesinin zıt anlamlısı hangisidir?",
-    options: ["Neşeli", "Üzgün", "Sevinçli", "Gülümseyen"],
-    correct: 1
-  },
-
-  {
-    grade: 2,
-    lesson: "Türkçe",
-    question: "“Hediye” kelimesinin eş anlamlısı hangisidir?",
-    options: ["Armağan", "Oyuncak", "Paket", "Sürpriz"],
-    correct: 0
-  },
-
-  {
-    grade: 2,
-    lesson: "Türkçe",
-    question: "“Kitaplık” kelimesi kaç heceden oluşur?",
-    options: ["2", "3", "4", "5"],
-    correct: 1
-  },
-
-  {
-    grade: 2,
-    lesson: "Türkçe",
-    question: "Aşağıdaki cümlelerden hangisi soru cümlesidir?",
-    options: [
-      "Bugün parka gittik.",
-      "Sen de bizimle gelir misin?",
-      "Kardeşim kitap okuyor.",
-      "Çantam masanın üzerinde."
-    ],
-    correct: 1
-  },
-
-  {
-    grade: 2,
-    lesson: "Türkçe",
-    question: "Aşağıdaki kelimelerden hangisi özel addır?",
-    options: ["şehir", "okul", "Ankara", "çocuk"],
-    correct: 2
-  },
-
-  {
-    grade: 2,
-    lesson: "Türkçe",
-    question: "“Küçük” kelimesinin eş anlamlısı hangisidir?",
-    options: ["Büyük", "Ufak", "Uzun", "Geniş"],
-    correct: 1
-  },
-
-  {
-    grade: 2,
-    lesson: "Türkçe",
-    question: "Aşağıdaki kelimelerden hangisi bir varlığın adıdır?",
-    options: ["Koşmak", "Masa", "Hızlı", "Güzel"],
-    correct: 1
-  },
-
-  {
-    grade: 2,
-    lesson: "Türkçe",
-    question: "“Ali top oynuyor.” cümlesinde işi yapan kimdir?",
-    options: ["Top", "Oynuyor", "Ali", "Bahçe"],
-    correct: 2
-  },
-
-  {
-    grade: 2,
-    lesson: "Türkçe",
-    question: "“Elma” kelimesi kaç hecedir?",
-    options: ["1", "2", "3", "4"],
-    correct: 1
-  },
-
-  {
-    grade: 2,
-    lesson: "Türkçe",
-    question: "“Eyvah, kalemimi evde unuttum” cümlesinin sonuna hangi işaret gelmelidir?",
-    options: [".", "?", "!", ","],
-    correct: 2
-  },
-
-  {
-    grade: 2,
-    lesson: "Türkçe",
-    question: "Aşağıdaki kelimelerden hangisi alfabetik sırada önce gelir?",
-    options: ["Balık", "Arı", "Çiçek", "Defter"],
-    correct: 1
-  },
-
-  {
-    grade: 2,
-    lesson: "Türkçe",
-    question: "“Gül” kelimesi hangi cümlede çiçek anlamındadır?",
-    options: [
-      "Bana gül.",
-      "Bahçedeki gül kokuyor.",
-      "Şakaya gül.",
-      "Gülerek içeri girdi."
-    ],
-    correct: 1
-  },
-
-  // =====================================================
-  // 2. SINIF — MATEMATİK
-  // =====================================================
-
-  {
-    grade: 2,
-    lesson: "Matematik",
-    question: "46 sayısında kaç tane onluk vardır?",
-    options: ["4", "6", "40", "46"],
-    correct: 0
-  },
-
-  {
-    grade: 2,
-    lesson: "Matematik",
-    question: "28 + 17 işleminin sonucu kaçtır?",
-    options: ["35", "45", "46", "55"],
-    correct: 1
-  },
-
-  {
-    grade: 2,
-    lesson: "Matematik",
-    question: "24 kalemin 7 tanesi kullanılırsa kaç kalem kalır?",
-    options: ["15", "16", "17", "18"],
-    correct: 2
-  },
-
-  {
-    grade: 2,
-    lesson: "Matematik",
-    question: "Bir üçgenin kaç köşesi vardır?",
-    options: ["2", "3", "4", "5"],
-    correct: 1
-  },
-
-  {
-    grade: 2,
-    lesson: "Matematik",
-    question: "Bir haftada kaç gün vardır?",
-    options: ["5", "6", "7", "8"],
-    correct: 2
-  },
-
-  {
-    grade: 2,
-    lesson: "Matematik",
-    question: "Saat 09.00’dan bir saat sonra saat kaç olur?",
-    options: ["08.00", "09.30", "10.00", "11.00"],
-    correct: 2
-  },
-
-  {
-    grade: 2,
-    lesson: "Matematik",
-    question: "2, 4, 6, 8 örüntüsünde sonraki sayı hangisidir?",
-    options: ["9", "10", "11", "12"],
-    correct: 1
-  },
-
-  {
-    grade: 2,
-    lesson: "Matematik",
-    question: "Bir bütünün iki eş parçasından birine ne denir?",
-    options: ["Çeyrek", "Yarım", "Deste", "Düzine"],
-    correct: 1
-  },
-
-  {
-    grade: 2,
-    lesson: "Matematik",
-    question: "3 onluk ve 5 birlikten oluşan sayı hangisidir?",
-    options: ["35", "53", "305", "8"],
-    correct: 0
-  },
-
-  {
-    grade: 2,
-    lesson: "Matematik",
-    question: "12 + 8 işleminin sonucu kaçtır?",
-    options: ["18", "19", "20", "21"],
-    correct: 2
-  },
-
-  {
-    grade: 2,
-    lesson: "Matematik",
-    question: "50 sayısından 20 çıkarılırsa kaç kalır?",
-    options: ["20", "30", "40", "70"],
-    correct: 1
-  },
-
-  {
-    grade: 2,
-    lesson: "Matematik",
-    question: "Kare kaç kenarlıdır?",
-    options: ["3", "4", "5", "6"],
-    correct: 1
-  },
-
-  // =====================================================
-  // 2. SINIF — HAYAT BİLGİSİ
-  // =====================================================
-
-  {
-    grade: 2,
-    lesson: "Hayat Bilgisi",
-    question: "Karşıdan karşıya geçerken en güvenli yer hangisidir?",
-    options: ["Otopark", "Yaya geçidi", "Bahçe", "Bisiklet yolu"],
-    correct: 1
-  },
-
-  {
-    grade: 2,
-    lesson: "Hayat Bilgisi",
-    question: "Dişlerimizi korumak için ne yapmalıyız?",
-    options: [
-      "Çok şeker yemeliyiz.",
-      "Dişlerimizi düzenli fırçalamalıyız.",
-      "Geç yatmalıyız.",
-      "Hiç su içmemeliyiz."
-    ],
-    correct: 1
-  },
-
-  {
-    grade: 2,
-    lesson: "Hayat Bilgisi",
-    question: "Kullanmadığımız ışıkları ne yapmalıyız?",
-    options: ["Açık bırakmalıyız", "Kapatmalıyız", "Saklamalıyız", "Kırmalıyız"],
-    correct: 1
-  },
-
-  {
-    grade: 2,
-    lesson: "Hayat Bilgisi",
-    question: "Deprem sırasında en güvenli davranış hangisidir?",
-    options: [
-      "Pencereye koşmak",
-      "Çök-kapan-tutun yapmak",
-      "Asansöre binmek",
-      "Balkona çıkmak"
-    ],
-    correct: 1
-  },
-
-  {
-    grade: 2,
-    lesson: "Hayat Bilgisi",
-    question: "Aşağıdakilerden hangisi geri dönüşüm kutusuna atılabilir?",
-    options: ["Cam şişe", "Yemek artığı", "Toprak", "Islak mendil"],
-    correct: 0
-  },
-
-  {
-    grade: 2,
-    lesson: "Hayat Bilgisi",
-    question: "Sağlıklı büyümek için hangisini yapmalıyız?",
-    options: [
-      "Düzenli uyumalıyız.",
-      "Hiç su içmemeliyiz.",
-      "Sadece şeker yemeliyiz.",
-      "Bütün gün oturmalıyız."
-    ],
-    correct: 0
-  }
-
-  /*
-    BURAYA DEVAM EDEN 2. SINIF SORULARI,
-    3. SINIF SORULARI VE 4. SINIF SORULARI EKLENECEK.
-
-    Her soru şu biçimde olmalıdır:
-
-    {
-      grade: 3,
-      lesson: "Fen Bilimleri",
-      question: "Soru metni burada olur.",
-      options: ["A", "B", "C", "D"],
-      correct: 2
+      return {
+        id,
+        grade,
+        lesson,
+        question,
+        options: options.map(item => item.text),
+        correct: options.findIndex(item => item.correct)
+      };
     }
 
-    250 soru tamamlandığında sistem otomatik olarak
-    seçilen sınıftan 15 soru çeker.
-  */
-];
+    /*
+      2. SINIF SORULARI — 84 ADET
+    */
 
-const prizes = [
-  "Sticker Sayfası",
-  "Silgi",
-  "Kalemtıraş",
-  "Kurşun Kalem",
-  "Hikâye Kitabı",
-  "Not Defteri",
-  "Renkli Kalem",
-  "Resim Defteri",
-  "Kuru Boya",
-  "Kalem ve Defter Seti",
-  "Keçeli Kalem Seti",
-  "Hikâye Kitabı Seti",
-  "Geometri Seti",
-  "Kırtasiye Paketi",
-  "Kırtasiye Çantası"
-];
+    for (let i = 1; i <= 28; i++) {
+      const a = 10 + i;
+      const b = 2 + (i % 8);
+      const result = a + b;
 
-let selectedGrade = null;
-let selectedQuestions = [];
-let questionIndex = 0;
-let answered = false;
-let timeLeft = 30;
-let timer = null;
-
-const tabs = document.querySelectorAll(".tab");
-const startButton = document.getElementById("startButton");
-const selectedGradeText = document.getElementById("selectedGradeText");
-const startScreen = document.getElementById("startScreen");
-const gameScreen = document.getElementById("gameScreen");
-
-const questionNumber = document.getElementById("questionNumber");
-const gradeInfo = document.getElementById("gradeInfo");
-const prizeInfo = document.getElementById("prizeInfo");
-const lessonInfo = document.getElementById("lessonInfo");
-const questionText = document.getElementById("questionText");
-const answers = document.getElementById("answers");
-const message = document.getElementById("message");
-
-const timerText = document.getElementById("timerText");
-const timerBar = document.getElementById("timerBar");
-
-const nextButton = document.getElementById("nextButton");
-const newButton = document.getElementById("newButton");
-const backButton = document.getElementById("backButton");
-const prizeList = document.getElementById("prizeList");
-
-/*
-===========================================================
-SEKMELERİ AKTİFLEŞTİREN KISIM
-===========================================================
-*/
-tabs.forEach(tab => {
-  tab.addEventListener("click", () => {
-    selectedGrade = Number(tab.dataset.grade);
-
-    tabs.forEach(item => item.classList.remove("active"));
-    tab.classList.add("active");
-
-    selectedGradeText.textContent =
-      `${selectedGrade}. sınıf seçildi.`;
-
-    startButton.disabled = false;
-  });
-});
-
-function shuffle(array) {
-  const copied = [...array];
-
-  for (let i = copied.length - 1; i > 0; i--) {
-    const random = Math.floor(Math.random() * (i + 1));
-    [copied[i], copied[random]] = [copied[random], copied[i]];
-  }
-
-  return copied;
-}
-
-/*
-Seçilen sınıfa ait havuzdan rastgele 15 soru seçilir.
-*/
-function selectQuestions() {
-  const gradePool = questionPool.filter(
-    question => question.grade === selectedGrade
-  );
-
-  if (gradePool.length < 15) {
-    alert(
-      `${selectedGrade}. sınıf havuzunda en az 15 soru bulunmalıdır.`
-    );
-    return false;
-  }
-
-  selectedQuestions = shuffle(gradePool).slice(0, 15);
-  return true;
-}
-
-function createPrizeList() {
-  prizeList.innerHTML = "";
-
-  prizes.forEach((prize, index) => {
-    const li = document.createElement("li");
-    li.id = `prize-${index}`;
-    li.textContent = `${index + 1}. ${prize}`;
-    prizeList.appendChild(li);
-  });
-}
-
-function updatePrize() {
-  document.querySelectorAll(".prize-list li").forEach(item => {
-    item.classList.remove("active");
-  });
-
-  const active = document.getElementById(`prize-${questionIndex}`);
-
-  if (active) {
-    active.classList.add("active");
-  }
-}
-
-function startTimer() {
-  clearInterval(timer);
-
-  timeLeft = 30;
-  timerText.textContent = "30 saniye";
-  timerBar.style.width = "100%";
-  timerBar.style.background = "#37cf5e";
-
-  timer = setInterval(() => {
-    timeLeft--;
-
-    timerText.textContent = `${timeLeft} saniye`;
-    timerBar.style.width = `${(timeLeft / 30) * 100}%`;
-
-    if (timeLeft <= 10) {
-      timerBar.style.background = "#e73345";
+      questionPool.push(
+        createQuestion(
+          `2-toplama-${i}`,
+          2,
+          "Matematik",
+          `${a} + ${b} işleminin sonucu kaçtır?`,
+          result,
+          result + 1,
+          result - 1,
+          result + 10
+        )
+      );
     }
 
-    if (timeLeft <= 0) {
-      clearInterval(timer);
-      finishAsWrong("Süre doldu.");
+    for (let i = 1; i <= 28; i++) {
+      const a = 40 + i;
+      const b = 3 + (i % 9);
+      const result = a - b;
+
+      questionPool.push(
+        createQuestion(
+          `2-cikarma-${i}`,
+          2,
+          "Matematik",
+          `${a} - ${b} işleminin sonucu kaçtır?`,
+          result,
+          result + 1,
+          result - 1,
+          result + 10
+        )
+      );
     }
-  }, 1000);
-}
 
-function stopTimer() {
-  clearInterval(timer);
-}
+    const grade2General = [
+      ["“Mutlu” kelimesinin zıt anlamlısı hangisidir?", "Üzgün", "Neşeli", "Sevinçli", "Gülümseyen"],
+      ["“Hediye” kelimesinin eş anlamlısı hangisidir?", "Armağan", "Oyuncak", "Paket", "Sürpriz"],
+      ["“Kitaplık” kelimesi kaç heceden oluşur?", "3", "2", "4", "5"],
+      ["Aşağıdakilerden hangisi soru cümlesidir?", "Sen de gelir misin?", "Bugün parka gittik.", "Kardeşim uyuyor.", "Çantam masada."],
+      ["Aşağıdakilerden hangisi özel addır?", "Ankara", "şehir", "okul", "çocuk"],
+      ["Bir haftada kaç gün vardır?", "7", "5", "6", "8"],
+      ["Bir üçgenin kaç köşesi vardır?", "3", "2", "4", "5"],
+      ["Karşıdan karşıya geçmek için en güvenli yer hangisidir?", "Yaya geçidi", "Otopark", "Bahçe", "Bisiklet yolu"],
+      ["Dişlerimizi korumak için ne yapmalıyız?", "Dişlerimizi fırçalamalıyız.", "Çok şeker yemeliyiz.", "Geç yatmalıyız.", "Su içmemeliyiz"],
+      ["Kullanmadığımız ışıkları ne yapmalıyız?", "Kapatmalıyız.", "Açık bırakmalıyız.", "Kırmalıyız.", "Saklamalıyız"],
+      ["Deprem sırasında hangi davranış doğrudur?", "Çök-kapan-tutun yapmak", "Pencereye koşmak", "Asansöre binmek", "Balkona çıkmak"],
+      ["Aşağıdakilerden hangisi geri dönüşüme atılabilir?", "Cam şişe", "Yemek artığı", "Toprak", "Islak mendil"]
+    ];
 
-function showQuestion() {
-  answered = false;
-
-  const current = selectedQuestions[questionIndex];
-
-  questionNumber.textContent =
-    `Soru: ${questionIndex + 1} / 15`;
-
-  gradeInfo.textContent =
-    `Seviye: ${selectedGrade}. Sınıf`;
-
-  prizeInfo.textContent =
-    `Ödül: ${prizes[questionIndex]}`;
-
-  lessonInfo.textContent = current.lesson;
-  questionText.textContent = current.question;
-  message.textContent = "";
-
-  nextButton.classList.add("hidden");
-  newButton.classList.add("hidden");
-  backButton.classList.add("hidden");
-
-  answers.innerHTML = "";
-
-  current.options.forEach((option, index) => {
-    const button = document.createElement("button");
-
-    button.className = "answer";
-    button.innerHTML =
-      `<strong>${String.fromCharCode(65 + index)}:</strong> ${option}`;
-
-    button.addEventListener("click", () => {
-      checkAnswer(index, button);
+    grade2General.forEach((item, index) => {
+      questionPool.push(
+        createQuestion(
+          `2-genel-${index}`,
+          2,
+          index < 5 ? "Türkçe" : index < 7 ? "Matematik" : "Hayat Bilgisi",
+          item[0],
+          item[1],
+          item[2],
+          item[3],
+          item[4]
+        )
+      );
     });
 
-    answers.appendChild(button);
-  });
+    /*
+      3. SINIF SORULARI — 83 ADET
+    */
 
-  updatePrize();
-  startTimer();
-}
+    for (let i = 1; i <= 30; i++) {
+      const a = 100 + i * 3;
+      const b = 20 + i;
+      const result = a + b;
 
-function disableAnswers() {
-  document.querySelectorAll(".answer").forEach(button => {
-    button.disabled = true;
-  });
-}
+      questionPool.push(
+        createQuestion(
+          `3-toplama-${i}`,
+          3,
+          "Matematik",
+          `${a} + ${b} işleminin sonucu kaçtır?`,
+          result,
+          result + 10,
+          result - 10,
+          result + 1
+        )
+      );
+    }
 
-function finishAsWrong(text) {
-  if (answered) return;
+    for (let i = 1; i <= 28; i++) {
+      const a = 300 + i * 4;
+      const b = 50 + i;
+      const result = a - b;
 
-  answered = true;
+      questionPool.push(
+        createQuestion(
+          `3-cikarma-${i}`,
+          3,
+          "Matematik",
+          `${a} - ${b} işleminin sonucu kaçtır?`,
+          result,
+          result + 10,
+          result - 10,
+          result + 1
+        )
+      );
+    }
 
-  const current = selectedQuestions[questionIndex];
-  const allAnswers = document.querySelectorAll(".answer");
+    for (let i = 1; i <= 25; i++) {
+      const a = 2 + (i % 8);
+      const b = 3 + (i % 6);
+      const result = a * b;
 
-  disableAnswers();
-  allAnswers[current.correct].classList.add("correct");
+      questionPool.push(
+        createQuestion(
+          `3-carpma-${i}`,
+          3,
+          "Matematik",
+          `${a} × ${b} işleminin sonucu kaçtır?`,
+          result,
+          result + a,
+          result - b,
+          result + 5
+        )
+      );
+    }
 
-  message.textContent =
-    `${text} Doğru cevap: ${current.options[current.correct]}`;
+    /*
+      4. SINIF SORULARI — 83 ADET
+    */
 
-  newButton.classList.remove("hidden");
-  backButton.classList.remove("hidden");
-}
+    for (let i = 1; i <= 30; i++) {
+      const a = 10 + (i % 9);
+      const b = 4 + (i % 7);
+      const result = a * b;
 
-function checkAnswer(index, clickedButton) {
-  if (answered) return;
+      questionPool.push(
+        createQuestion(
+          `4-carpma-${i}`,
+          4,
+          "Matematik",
+          `${a} × ${b} işleminin sonucu kaçtır?`,
+          result,
+          result + a,
+          result - b,
+          result + 10
+        )
+      );
+    }
 
-  answered = true;
-  stopTimer();
+    for (let i = 1; i <= 27; i++) {
+      const divisor = 2 + (i % 7);
+      const result = 5 + i;
+      const dividend = divisor * result;
 
-  const current = selectedQuestions[questionIndex];
-  const allAnswers = document.querySelectorAll(".answer");
+      questionPool.push(
+        createQuestion(
+          `4-bolme-${i}`,
+          4,
+          "Matematik",
+          `${dividend} ÷ ${divisor} işleminin sonucu kaçtır?`,
+          result,
+          result + 1,
+          result - 1,
+          result + 10
+        )
+      );
+    }
 
-  disableAnswers();
+    for (let i = 1; i <= 26; i++) {
+      const a = 1000 + i * 12;
+      const b = 100 + i * 3;
+      const result = a + b;
 
-  if (index === current.correct) {
-    clickedButton.classList.add("correct");
+      questionPool.push(
+        createQuestion(
+          `4-islem-${i}`,
+          4,
+          "Matematik",
+          `${a} + ${b} işleminin sonucu kaçtır?`,
+          result,
+          result + 10,
+          result - 10,
+          result + 100
+        )
+      );
+    }
 
-    if (questionIndex === selectedQuestions.length - 1) {
+    console.log("Toplam soru:", questionPool.length);
+
+    const prizes = [
+      "Sticker Sayfası",
+      "Silgi",
+      "Kalemtıraş",
+      "Kurşun Kalem",
+      "Hikâye Kitabı",
+      "Not Defteri",
+      "Renkli Kalem",
+      "Resim Defteri",
+      "Kuru Boya",
+      "Kalem ve Defter Seti",
+      "Keçeli Kalem Seti",
+      "Hikâye Kitabı Seti",
+      "Geometri Seti",
+      "Kırtasiye Paketi",
+      "Kırtasiye Çantası"
+    ];
+
+    let selectedGrade = null;
+    let selectedQuestions = [];
+    let questionIndex = 0;
+    let answered = false;
+    let timeLeft = 30;
+    let timer = null;
+
+    const usedQuestions = {
+      2: new Set(),
+      3: new Set(),
+      4: new Set()
+    };
+
+    const tabs = document.querySelectorAll(".tab");
+    const startButton = document.getElementById("startButton");
+    const startScreen = document.getElementById("startScreen");
+    const gameScreen = document.getElementById("gameScreen");
+    const selectedGradeText = document.getElementById("selectedGradeText");
+
+    const questionNumber = document.getElementById("questionNumber");
+    const gradeInfo = document.getElementById("gradeInfo");
+    const prizeInfo = document.getElementById("prizeInfo");
+    const lessonInfo = document.getElementById("lessonInfo");
+    const questionText = document.getElementById("questionText");
+    const answers = document.getElementById("answers");
+    const message = document.getElementById("message");
+
+    const timerText = document.getElementById("timerText");
+    const timerBar = document.getElementById("timerBar");
+
+    const nextButton = document.getElementById("nextButton");
+    const newButton = document.getElementById("newButton");
+    const backButton = document.getElementById("backButton");
+    const resetButton = document.getElementById("resetButton");
+    const prizeList = document.getElementById("prizeList");
+
+    function shuffle(array) {
+      const copied = [...array];
+
+      for (let i = copied.length - 1; i > 0; i--) {
+        const random = Math.floor(Math.random() * (i + 1));
+        [copied[i], copied[random]] = [copied[random], copied[i]];
+      }
+
+      return copied;
+    }
+
+    function createPrizeList() {
+      prizeList.innerHTML = "";
+
+      prizes.forEach((prize, index) => {
+        const li = document.createElement("li");
+
+        li.id = `prize-${index}`;
+        li.textContent = `${index + 1}. ${prize}`;
+
+        prizeList.appendChild(li);
+      });
+    }
+
+    function updatePrize() {
+      document.querySelectorAll(".prize-list li").forEach(item => {
+        item.classList.remove("active");
+      });
+
+      const activePrize = document.getElementById(`prize-${questionIndex}`);
+
+      if (activePrize) {
+        activePrize.classList.add("active");
+      }
+    }
+
+    function getAvailableQuestions() {
+      return questionPool.filter(question => {
+        return (
+          question.grade === selectedGrade &&
+          !usedQuestions[selectedGrade].has(question.id)
+        );
+      });
+    }
+
+    function selectQuestionsForContestant() {
+      const available = getAvailableQuestions();
+
+      if (available.length < 15) {
+        showPoolFinished(available.length);
+        return false;
+      }
+
+      selectedQuestions = shuffle(available).slice(0, 15);
+
+      selectedQuestions.forEach(question => {
+        usedQuestions[selectedGrade].add(question.id);
+      });
+
+      return true;
+    }
+
+    function showPoolFinished(remaining) {
+      stopTimer();
+
+      startScreen.style.display = "none";
+      gameScreen.style.display = "block";
+
+      questionText.textContent = "Bu sınıfın soru havuzu tamamlandı.";
+      answers.innerHTML = "";
+
       message.textContent =
-        "Tebrikler! 15 sorunun tamamını doğru cevapladın.";
+        remaining === 0
+          ? `${selectedGrade}. sınıf için bütün sorular kullanıldı.`
+          : `${selectedGrade}. sınıfta sadece ${remaining} soru kaldı. Yeni yarışma için en az 15 soru gerekir.`;
+
+      questionNumber.textContent = "Yarışma tamamlandı";
+      gradeInfo.textContent = `${selectedGrade}. Sınıf`;
+      prizeInfo.textContent = "";
+
+      lessonInfo.textContent = "Soru havuzu bitti";
+
+      nextButton.classList.add("hidden");
+      newButton.classList.add("hidden");
+      backButton.classList.remove("hidden");
+      resetButton.classList.remove("hidden");
+
+      timerText.textContent = "Süre yok";
+      timerBar.style.width = "0%";
+    }
+
+    function startTimer() {
+      stopTimer();
+
+      timeLeft = 30;
+      timerText.textContent = "30 saniye";
+      timerBar.style.width = "100%";
+      timerBar.style.background = "#37cf5e";
+
+      timer = setInterval(() => {
+        timeLeft--;
+
+        timerText.textContent = `${timeLeft} saniye`;
+        timerBar.style.width = `${(timeLeft / 30) * 100}%`;
+
+        if (timeLeft <= 10) {
+          timerBar.style.background = "#e73345";
+        }
+
+        if (timeLeft <= 0) {
+          stopTimer();
+          finishAsWrong("Süre doldu.");
+        }
+      }, 1000);
+    }
+
+    function stopTimer() {
+      clearInterval(timer);
+      timer = null;
+    }
+
+    function showQuestion() {
+      answered = false;
+
+      const current = selectedQuestions[questionIndex];
+
+      questionNumber.textContent = `Soru: ${questionIndex + 1} / 15`;
+      gradeInfo.textContent = `Seviye: ${selectedGrade}. Sınıf`;
+      prizeInfo.textContent = `Ödül: ${prizes[questionIndex]}`;
+
+      lessonInfo.textContent = current.lesson;
+      questionText.textContent = current.question;
+      message.textContent = "";
+
+      answers.innerHTML = "";
+
+      nextButton.classList.add("hidden");
+      newButton.classList.add("hidden");
+      backButton.classList.add("hidden");
+      resetButton.classList.add("hidden");
+
+      current.options.forEach((option, index) => {
+        const button = document.createElement("button");
+
+        button.className = "answer";
+        button.innerHTML =
+          `<strong>${String.fromCharCode(65 + index)}:</strong> ${option}`;
+
+        button.addEventListener("click", () => {
+          checkAnswer(index, button);
+        });
+
+        answers.appendChild(button);
+      });
+
+      updatePrize();
+      startTimer();
+    }
+
+    function disableAnswers() {
+      document.querySelectorAll(".answer").forEach(button => {
+        button.disabled = true;
+      });
+    }
+
+    function finishAsWrong(text) {
+      if (answered) return;
+
+      answered = true;
+
+      const current = selectedQuestions[questionIndex];
+      const allAnswers = document.querySelectorAll(".answer");
+
+      disableAnswers();
+
+      allAnswers[current.correct].classList.add("correct");
+
+      message.textContent =
+        `${text} Doğru cevap: ${current.options[current.correct]}`;
 
       newButton.classList.remove("hidden");
       backButton.classList.remove("hidden");
-    } else {
-      message.textContent = "Doğru cevap!";
-      nextButton.classList.remove("hidden");
     }
-  } else {
-    clickedButton.classList.add("wrong");
-    allAnswers[current.correct].classList.add("correct");
 
-    message.textContent =
-      `Yanlış cevap. Doğru cevap: ${current.options[current.correct]}`;
+    function checkAnswer(index, clickedButton) {
+      if (answered) return;
 
-    newButton.classList.remove("hidden");
-    backButton.classList.remove("hidden");
-  }
-}
+      answered = true;
+      stopTimer();
 
-function startGame() {
-  if (!selectedGrade) return;
+      const current = selectedQuestions[questionIndex];
+      const allAnswers = document.querySelectorAll(".answer");
 
-  if (!selectQuestions()) return;
+      disableAnswers();
 
-  questionIndex = 0;
+      if (index === current.correct) {
+        clickedButton.classList.add("correct");
 
-  startScreen.style.display = "none";
-  gameScreen.style.display = "block";
+        if (questionIndex === selectedQuestions.length - 1) {
+          message.textContent =
+            "Tebrikler! 15 sorunun tamamını doğru cevapladın.";
 
-  showQuestion();
-}
+          newButton.classList.remove("hidden");
+          backButton.classList.remove("hidden");
+        } else {
+          message.textContent = "Doğru cevap!";
+          nextButton.classList.remove("hidden");
+        }
+      } else {
+        clickedButton.classList.add("wrong");
+        allAnswers[current.correct].classList.add("correct");
 
-startButton.addEventListener("click", startGame);
+        message.textContent =
+          `Yanlış cevap. Doğru cevap: ${current.options[current.correct]}`;
 
-nextButton.addEventListener("click", () => {
-  questionIndex++;
-  showQuestion();
-});
+        newButton.classList.remove("hidden");
+        backButton.classList.remove("hidden");
+      }
+    }
 
-newButton.addEventListener("click", () => {
-  stopTimer();
+    function startGame() {
+      if (!selectedGrade) return;
 
-  if (!selectQuestions()) return;
+      if (!selectQuestionsForContestant()) return;
 
-  questionIndex = 0;
-  showQuestion();
-});
+      questionIndex = 0;
 
-backButton.addEventListener("click", () => {
-  stopTimer();
+      startScreen.style.display = "none";
+      gameScreen.style.display = "block";
 
-  selectedGrade = null;
-  selectedQuestions = [];
+      showQuestion();
+    }
 
-  gameScreen.style.display = "none";
-  startScreen.style.display = "block";
+    function returnToGradeSelection() {
+      stopTimer();
 
-  startButton.disabled = true;
-  selectedGradeText.textContent = "Henüz sınıf seçilmedi.";
+      selectedQuestions = [];
+      questionIndex = 0;
 
-  tabs.forEach(tab => {
-    tab.classList.remove("active");
-  });
-});
+      gameScreen.style.display = "none";
+      startScreen.style.display = "block";
 
-createPrizeList();
-</script>
+      nextButton.classList.add("hidden");
+      newButton.classList.add("hidden");
+      backButton.classList.add("hidden");
+      resetButton.classList.add("hidden");
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        selectedGrade = Number(tab.dataset.grade);
+
+        tabs.forEach(item => item.classList.remove("active"));
+        tab.classList.add("active");
+
+        const availableCount = getAvailableQuestions().length;
+
+        selectedGradeText.textContent =
+          `${selectedGrade}. sınıf seçildi. Kullanılabilir soru: ${availableCount}`;
+
+        startButton.disabled = availableCount < 15;
+      });
+    });
+
+    startButton.addEventListener("click", startGame);
+
+    nextButton.addEventListener("click", () => {
+      questionIndex++;
+      showQuestion();
+    });
+
+    newButton.addEventListener("click", () => {
+      stopTimer();
+
+      if (!selectQuestionsForContestant()) return;
+
+      questionIndex = 0;
+      showQuestion();
+    });
+
+    backButton.addEventListener("click", returnToGradeSelection);
+
+    resetButton.addEventListener("click", () => {
+      usedQuestions[selectedGrade].clear();
+
+      message.textContent =
+        `${selectedGrade}. sınıfın soru havuzu yeniden başlatıldı.`;
+
+      selectedGradeText.textContent =
+        `${selectedGrade}. sınıf seçildi. Kullanılabilir soru: ${
+          getAvailableQuestions().length
+        }`;
+
+      startScreen.style.display = "block";
+      gameScreen.style.display = "none";
+
+      startButton.disabled = false;
+    });
+
+    createPrizeList();
+  </script>
 
 </body>
 </html>
