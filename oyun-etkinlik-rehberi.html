@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detaylı İlkokul Oyun Etkinlik Rehberi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Andika', 'Andika New Basic', 'Comic Neue', Arial, Helvetica, sans-serif;
+      background: #f6f7fb;
+      color: #1f2937;
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    header {
+      padding: 45px 20px;
+      color: white;
+      text-align: center;
+      background: linear-gradient(135deg, #5b21b6, #2563eb);
+    }
+    header h1 { margin: 0; font-size: clamp(1.8rem, 4vw, 3rem); }
+    header p { max-width: 800px; margin: 12px auto 0; }
+
+    main { width: min(1050px, calc(100% - 30px)); margin: 26px auto 60px; }
+
+    .geri {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #fff; border: 2px solid #5b21b6; color: #5b21b6;
+      font-family: inherit; font-weight: bold; font-size: 0.95rem;
+      padding: 9px 18px; border-radius: 30px; text-decoration: none;
+      margin-bottom: 20px; transition: all .2s;
+    }
+    .geri:hover { background: #5b21b6; color: #fff; }
+
+    .aciklama {
+      background: #fff7ed;
+      border-left: 6px solid #f97316;
+      padding: 16px 18px;
+      border-radius: 10px;
+      margin-bottom: 24px;
+    }
+
+    .arama {
+      width: 100%;
+      padding: 14px;
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 1rem;
+      margin-bottom: 18px;
+    }
+    .arama:focus { outline: 3px solid #c4b5fd; border-color: #6d28d9; }
+
+    .filtreler { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+
+    .filtre-btn {
+      border: 1px solid #c4b5fd;
+      background: white;
+      color: #5b21b6;
+      font-family: inherit;
+      font-size: 0.95rem;
+      padding: 10px 15px;
+      border-radius: 99px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .filtre-btn.aktif, .filtre-btn:hover { color: white; background: #6d28d9; }
+    .filtre-btn:focus-visible { outline: 3px solid #a78bfa; outline-offset: 2px; }
+
+    .sayac { color: #64748b; font-size: 0.9rem; margin: 0 0 24px; }
+
+    .liste { display: flex; flex-direction: column; gap: 20px; }
+
+    .bolum {
+      margin: 36px 0 0;
+      padding: 13px 16px;
+      border-radius: 10px;
+      background: #5b21b6;
+      color: white;
+      font-size: 1.2rem;
+    }
+
+    .kart {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 18px rgba(15, 23, 42, 0.10);
+    }
+
+    .kart-baslik {
+      color: white;
+      background: linear-gradient(135deg, #7c3aed, #2563eb);
+      padding: 18px 20px;
+    }
+    .kart-baslik h3 { margin: 0 0 7px; font-size: 1.35rem; }
+
+    .etiket {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: bold;
+      background: rgba(255,255,255,0.22);
+    }
+
+    .kart-icerik { padding: 20px; }
+
+    .kisa-bilgiler { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 18px; }
+    .bilgi { padding: 7px 10px; border-radius: 8px; background: #f1f5f9; font-size: 0.92rem; }
+
+    .detay-btn {
+      width: 100%;
+      border: 0;
+      padding: 12px;
+      border-radius: 8px;
+      color: #4c1d95;
+      background: #ede9fe;
+      font-family: inherit;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .detay-btn:hover { background: #ddd6fe; }
+    .detay-btn:focus-visible { outline: 3px solid #a78bfa; outline-offset: 2px; }
+
+    .detay { display: none; margin-top: 18px; padding-top: 8px; border-top: 1px solid #e2e8f0; }
+    .detay.acik { display: block; }
+    .detay h4 { margin: 22px 0 7px; color: #5b21b6; font-size: 1.08rem; }
+
+    /* Satır sonlarının korunması için: metinler çok satırlı yazılıyor */
+    .sozler, .hareketler, .ogretmen-notu, .duz-metin { white-space: pre-line; }
+
+    .sozler {
+      padding: 15px; border-radius: 10px;
+      background: #fffbeb; border-left: 5px solid #f59e0b;
+      font-weight: bold;
+    }
+    .hareketler {
+      padding: 15px; border-radius: 10px;
+      background: #eff6ff; border-left: 5px solid #2563eb;
+    }
+    .ogretmen-notu {
+      padding: 15px; border-radius: 10px;
+      background: #ecfdf5; border-left: 5px solid #16a34a;
+    }
+    .duz-metin { margin: 0; }
+
+    .gizli { display: none; }
+
+    #bosMesaj { display: none; text-align: center; padding: 25px; color: #64748b; }
+
+    footer { padding: 22px; text-align: center; color: white; background: #1e293b; }
+
+    @media (max-width: 520px) {
+      body { font-size: 16px; }
+      .kart-baslik h3 { font-size: 1.15rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>🎈 Detaylı İlkokul Oyun Rehberi</h1>
+    <p>
+      Her oyunda öğretmenin sözleri, öğrencinin hareketleri,
+      uygulama basamakları, kurallar ve öğretmen notları bulunur.
+    </p>
+  </header>
+
+  <main>
+
+    <a class="geri" href="index.html?page=ogretmenrehberi">← Ana Sayfa</a>
+
+    <div class="aciklama">
+      <strong>Önemli:</strong> Parmak oyunları ve tekerlemeler yöreden yöreye
+      küçük farklılıklar gösterebilir. Buradaki metinler sınıfta rahatça
+      kullanılabilecek örnek uygulama metinleridir.
+    </div>
+
+    <input
+      class="arama"
+      id="arama"
+      type="text"
+      placeholder="Oyun ara: parmak, yağmur, deve cüce, sayışmaca..."
+      oninput="filtrele()"
+    >
+
+    <div class="filtreler">
+      <button class="filtre-btn aktif" onclick="kategoriSec('hepsi', this)">Tümü</button>
+      <button class="filtre-btn" onclick="kategoriSec('parmak', this)">Parmak Oyunları</button>
+      <button class="filtre-btn" onclick="kategoriSec('vucut', this)">Vücut ve Taklit</button>
+      <button class="filtre-btn" onclick="kategoriSec('sayismaca', this)">Sayışmaca ve Tekerleme</button>
+      <button class="filtre-btn" onclick="kategoriSec('bahce', this)">Bahçe Oyunları</button>
+    </div>
+
+    <p class="sayac" id="sayac"></p>
+
+    <div class="liste" id="liste"></div>
+
+    <p id="bosMesaj">Aramanıza uygun etkinlik bulunamadı. Farklı bir kelime deneyin veya "Tümü" filtresini seçin.</p>
+  </main>
+
+  <footer>
+    İlkokul Oyun Etkinlik Rehberi
+  </footer>
+
+  <script>
+    let aktifKategori = "hepsi";
+
+    const kategoriAdlari = {
+      parmak: "Parmak Oyunu",
+      vucut: "Vücut ve Taklit",
+      sayismaca: "Sayışmaca ve Tekerleme",
+      bahce: "Bahçe Oyunu"
+    };
+
+    const oyunlar = [
+
+      {
+        kategori: "parmak",
+        bolum: "🖐️ Parmak Oyunları",
+        ad: "Beş Küçük Parmak",
+        kisi: "1–35 öğrenci",
+        yer: "Sınıf, ev, okul öncesi veya ilkokul",
+        sure: "5–10 dakika",
+        beceri: "Parmak kasları, ritim, dil gelişimi, sıra takibi",
+        malzeme: "Malzeme gerekmez.",
+        sozler: `Öğretmen ve öğrenciler bir ellerini açar.
+
+Bu parmak pazara gitmiş,
+Bu parmak elma almış,
+Bu parmak eve gelmiş,
+Bu parmak elmayı yıkamış,
+Bu küçük parmak da:
+“Bana ne, bana ne?” demiş.
+
+Sonra hep birlikte:
+“Afiyet olsun!” denir.`,
+        hareketler: `1. “Bu parmak pazara gitmiş” denirken başparmak gösterilir.
+2. “Elma almış” denirken işaret parmağı gösterilir.
+3. “Eve gelmiş” denirken orta parmak gösterilir.
+4. “Elmayı yıkamış” denirken yüzük parmağı gösterilir.
+5. “Bana ne?” denirken küçük parmak sallanır.
+6. “Afiyet olsun!” denirken tüm parmaklar kapatılır, sonra avuç içi açılır.`,
+        nasil: `Öğretmen önce oyunu yavaş biçimde tek başına gösterir.
+Daha sonra öğrenciler sözleri ve parmak hareketlerini öğretmenle birlikte tekrar eder.
+İkinci turda öğretmen bazı sözcükleri söylemeden bekler; öğrenciler eksik sözü tamamlar.
+Üçüncü turda öğrenciler ikili gruplar hâlinde birbirlerine oyunu anlatır.`,
+        kural: `Parmaklar sırayla gösterilir. Amaç hızlı söylemek değil, söz ile hareketi eşleştirmektir.`,
+        not: `1. sınıfta parmak isimleriyle birleştirilebilir. Her parmağa farklı renkli yüzük çizilerek sanat etkinliği de yapılabilir.`
+      },
+
+      {
+        kategori: "parmak",
+        bolum: "🖐️ Parmak Oyunları",
+        ad: "Yağmur Yağıyor",
+        kisi: "1–35 öğrenci",
+        yer: "Sınıf",
+        sure: "5 dakika",
+        beceri: "Ritim, dinleme, ses taklidi, dikkat",
+        malzeme: "Malzeme gerekmez.",
+        sozler: `Öğretmen anlatır:
+
+“Gökyüzünde küçük bulutlar çıktı.
+İnce ince yağmur yağmaya başladı.
+Yağmur hızlandı.
+Gök gürledi!
+Şimşek çaktı!
+Yağmur yavaşladı.
+Bulutlar dağıldı, güneş açtı.”`,
+        hareketler: `1. “İnce yağmur” denirken iki parmak avuç içine hafifçe vurulur.
+2. “Yağmur hızlandı” denirken iki elin parmakları dizlere daha hızlı vurulur.
+3. “Gök gürledi” denirken eller dizlere güçlü ama kontrollü biçimde vurulur.
+4. “Şimşek çaktı” denirken bir kez alkış yapılır.
+5. “Yağmur yavaşladı” denirken hareketler yavaşlatılır.
+6. “Güneş açtı” denirken kollar iki yana açılır ve gülümseme yapılır.`,
+        nasil: `Öğretmen önce öyküyü söyler ve hareketleri gösterir.
+Öğrenciler ikinci turda öğretmene eşlik eder.
+Üçüncü turda öğretmen sadece hareket yapar; öğrenciler hangi hava olayını canlandırdığını söyler.
+İstenirse sınıf iki gruba ayrılır: bir grup yağmur sesini, diğer grup gök gürültüsünü yapar.`,
+        kural: `Dizlere zarar verecek kadar sert vurulmaz. Şimşek için yalnızca tek kontrollü alkış yapılır.`,
+        not: `Ders başlangıcında dikkat toplamak veya sessizleşme etkinliği olarak çok uygundur. Fen Bilimleri dersinde hava olaylarına bağlanabilir.`
+      },
+
+      {
+        kategori: "parmak",
+        bolum: "🖐️ Parmak Oyunları",
+        ad: "Arı Vız Vız",
+        kisi: "1–30 öğrenci",
+        yer: "Sınıf veya bahçe",
+        sure: "5–8 dakika",
+        beceri: "Parmak kontrolü, yön takibi, ses farkındalığı",
+        malzeme: "Malzeme gerekmez.",
+        sozler: `Öğretmen söyler:
+
+“Minik arı vız vız vız,
+Çiçeklere konar vız vız vız,
+Balını toplar vız vız vız,
+Yuvasına döner vız vız vız.”
+
+Sonunda:
+“Arı nereye kondu?” diye sorulur.`,
+        hareketler: `1. Başparmak ve işaret parmağı birleştirilir; arı şekli yapılır.
+2. El havada küçük daireler çizerek uçurulur.
+3. “Çiçeklere konar” denirken parmak ucu diğer avuç içine dokundurulur.
+4. “Balını toplar” denirken parmaklar kapanır.
+5. “Yuvasına döner” denirken el göğse doğru getirilir.
+6. Son soruda arı; omuza, dize, başa veya avuç içine konabilir.`,
+        nasil: `Öğretmen arının uçuş yönünü belirler; çocuklar aynı yönü takip eder.
+Daha sonra öğretmen “Arı dizine kondu”, “Arı başına kondu” gibi yönergeler verir.
+İleri aşamada öğrenciler sırayla arının nereye konacağını söyler.`,
+        kural: `Öğrenciler arkadaşlarının yüzüne veya vücuduna dokunmaz; kendi vücutlarında hareketi yaparlar.`,
+        not: `Hayvanlar, bitkiler ve arıların doğadaki görevi hakkında kısa sohbetle tamamlanabilir.`
+      },
+
+      {
+        kategori: "parmak",
+        bolum: "🖐️ Parmak Oyunları",
+        ad: "Minik Tavşan ve Havuç",
+        kisi: "1–30 öğrenci",
+        yer: "Sınıf",
+        sure: "5–10 dakika",
+        beceri: "Hayal gücü, ince motor beceri, dil gelişimi",
+        malzeme: "Malzeme gerekmez.",
+        sozler: `“Minik tavşan hop hop hop,
+Yeşil çayırda top top top.
+Bir havuç gördü uzakta,
+Koştu hemen o tarafa.
+
+Havuçları yedi,
+Karnını doyurdu,
+Yuvasına gitti,
+Uyudu.”`,
+        hareketler: `1. İşaret ve orta parmak yukarı kaldırılır: tavşanın kulakları.
+2. El masa üzerinde veya havada küçük zıplamalar yapar.
+3. “Havuç gördü” denirken gözlerin üstüne el siper yapılır.
+4. “Koştu” denirken iki parmak hızlı hızlı yürütülür.
+5. “Yedi” denirken parmaklar ağza yaklaştırılır.
+6. “Uyudu” denirken iki el yanakta birleştirilir.`,
+        nasil: `Öğretmen tekerlemeyi bir kez söyler.
+İkinci turda öğrenciler hareketleri ekler.
+Sonraki turda öğretmen bazı sözcükleri değiştirir: tavşan yerine kurbağa, havuç yerine yaprak gibi.
+Öğrenciler yeni hayvana uygun hareket bulur.`,
+        kural: `Hareketler oturulan yerde yapılabilir. Sınıf içinde koşulmaz.`,
+        not: `Öğrencilerin yeni bir hayvan seçip kısa tekerleme üretmesiyle yaratıcı yazma etkinliğine dönüşebilir.`
+      },
+
+      {
+        kategori: "vucut",
+        bolum: "🤸 Vücudu Kullanma ve Taklit Oyunları",
+        ad: "Deve – Cüce",
+        kisi: "5–35 öğrenci",
+        yer: "Sınıf, bahçe veya spor salonu",
+        sure: "5–10 dakika",
+        beceri: "Dikkat, hızlı tepki, dinleme, denge",
+        malzeme: "Malzeme gerekmez.",
+        sozler: `Öğretmen yalnızca iki komut verir:
+
+“Deve!”
+“Cüce!”
+
+İleri turda öğretmen şaşırtmak için farklı kelimeler de söyleyebilir:
+“Kalem!”, “Kitap!”, “Masa!”
+
+Bu kelimelerde öğrenciler hareket etmez.`,
+        hareketler: `1. “Deve” denince öğrenciler dik durur ve kollarını yukarı uzatır.
+2. “Cüce” denince öğrenciler kontrollü biçimde çömelir.
+3. Öğretmen komutları yavaş söyler.
+4. Her turda hız biraz artırılır.
+5. Son turda öğretmen hareket yapıp ters kelime söyleyebilir; öğrenciler yalnızca duydukları söze göre hareket eder.`,
+        nasil: `Önce herkes deve ve cüce hareketlerini birlikte dener.
+Sonra öğretmen komutları karışık sırada verir.
+Yanlış yapan öğrenci elenmez; yalnızca bir sonraki turda öğretmene yardımcı olabilir.
+İstenirse doğru hareket yapan takımlara puan verilir.`,
+        kural: `Çömelirken arkadaşlara çarpmamak için öğrenciler arasında boşluk bırakılır.`,
+        not: `Sınıf enerjisini yükseltmek için kullanılabilir. Ders aralarında 3 dakikalık hareket molası olarak da uygundur.`
+      },
+
+      {
+        kategori: "vucut",
+        bolum: "🤸 Vücudu Kullanma ve Taklit Oyunları",
+        ad: "Ayna Oyunu",
+        kisi: "Çift sayıda öğrenci",
+        yer: "Sınıf veya spor salonu",
+        sure: "10 dakika",
+        beceri: "Gözlem, uyum, dikkat, beden kontrolü",
+        malzeme: "Malzeme gerekmez.",
+        sozler: `Öğretmen yönergesi:
+
+“Biriniz ayna olacak, biriniz hareketi yapan kişi olacak.
+Ayna olan kişi konuşmadan arkadaşının hareketlerini taklit edecek.
+Hareketler yavaş ve dikkatli olacak.”`,
+        hareketler: `1. Öğrenciler ikili gruplar hâlinde karşılıklı durur.
+2. Bir öğrenci elini kaldırır; diğeri aynı eli kaldırır.
+3. Lider öğrenci gülümser, başını eğer, omzunu çevirir, yavaşça çömelir.
+4. Ayna olan öğrenci hareketleri eş zamanlı taklit eder.
+5. İki dakika sonra roller değiştirilir.`,
+        nasil: `Öğretmen önce bir öğrenciyle örnek gösterir.
+Ardından ikililer çalışmaya başlar.
+İleri aşamada lider öğrenci bir mesleği veya hayvanı konuşmadan canlandırır; ayna olan öğrenci taklit eder.
+Sonunda öğrenciler hangi hareketlerin kolay ya da zor olduğunu paylaşır.`,
+        kural: `Hızlı, tehlikeli, itmeli veya zıplamalı hareketler yapılmaz. Öğrenciler birbirine dokunmaz.`,
+        not: `Empati, dikkat ve arkadaşını gözlemleme becerisi için çok yararlıdır.`
+      },
+
+      {
+        kategori: "sayismaca",
+        bolum: "🎤 Sayışmacalar ve Tekerlemeler",
+        ad: "Sayışmaca: O Piti Piti",
+        kisi: "3–35 öğrenci",
+        yer: "Sınıf veya bahçe",
+        sure: "2–3 dakika",
+        beceri: "Ritim, sıra alma, adil ebe seçimi",
+        malzeme: "Malzeme gerekmez.",
+        sozler: `O piti piti,
+Karamela sepeti,
+Terazi lastik,
+Jimnastik,
+Biz size geldik,
+Bitlendik,
+Hamama gittik,
+Temizlendik.`,
+        hareketler: `1. Öğrenciler daire olur veya yan yana dizilir.
+2. Sayışmacayı söyleyen kişi her kelimede bir öğrenciyi sırayla işaret eder.
+3. Son kelime kimin üzerine gelirse o öğrenci ebe seçilir.
+4. Yeni oyunda farklı bir öğrenci sayışmacayı söyleyebilir.`,
+        nasil: `Öğretmen önce sayışmacanın ritmini öğretir.
+Ardından tüm sınıf birlikte söyler.
+Ebe seçileceği zaman bir öğrenci sayışmayı ritimli biçimde okur ve her sözcükte sıradaki kişiyi gösterir.`,
+        kural: `Sıra atlanmaz. Sayışmacayı söyleyen öğrenci, arkadaşlarını bilerek seçmeye çalışmaz; sırayla ilerler.`,
+        not: `Sayışmacalar bazı bölgelerde farklı sözlerle söylenebilir. Sınıfta öğrencilerin ailelerinden öğrendikleri farklı sayışmacalar da paylaşılabilir.`
+      },
+
+      {
+        kategori: "sayismaca",
+        bolum: "🎤 Sayışmacalar ve Tekerlemeler",
+        ad: "Tekerleme: Şu Köşe Yaz Köşesi",
+        kisi: "1–35 öğrenci",
+        yer: "Sınıf",
+        sure: "5 dakika",
+        beceri: "Diksiyon, doğru telaffuz, dinleme",
+        malzeme: "Malzeme gerekmez.",
+        sozler: `Şu köşe yaz köşesi,
+Şu köşe kış köşesi,
+Ortada su şişesi.`,
+        hareketler: `1. “Şu köşe yaz köşesi” denirken sınıfın bir köşesi gösterilir.
+2. “Şu köşe kış köşesi” denirken diğer köşe gösterilir.
+3. “Ortada su şişesi” denirken sınıfın ortası gösterilir.
+4. İstenirse öğrenciler sözleri söylerken ritim için dizlerine hafifçe vurabilir.`,
+        nasil: `Öğretmen önce yavaş ve anlaşılır biçimde okur.
+Öğrenciler topluca tekrar eder.
+İkinci turda normal hızla söylenir.
+Üçüncü turda öğrenciler ikili gruplarda birbirlerini dinleyerek söyler.
+İsteyen öğrenci sınıfın önünde gönüllü olarak dener.`,
+        kural: `Hata yapan öğrenciye gülünmez. Amaç yarışmak değil, sesleri doğru söylemeye çalışmaktır.`,
+        not: `“Ş”, “k”, “s” seslerinin telaffuzu için kullanılabilir.`
+      },
+
+      {
+        kategori: "bahce",
+        bolum: "🌳 Bahçe Oyunları",
+        ad: "Yağ Satarım Bal Satarım",
+        kisi: "8–30 öğrenci",
+        yer: "Okul bahçesi veya geniş salon",
+        sure: "10–15 dakika",
+        beceri: "Dikkat, hız, grup katılımı",
+        malzeme: "Mendil veya küçük bez parçası",
+        sozler: `Öğrenciler dairede otururken ebe dolaşır ve söyler:
+
+“Yağ satarım, bal satarım,
+Ustam ölmüş, ben satarım.
+Ustamın kürkü sarıdır,
+Satsam on beş liradır.
+Zambak zumbak,
+Dön arkana iyi bak!”`,
+        hareketler: `1. Öğrenciler geniş bir daire biçiminde oturur.
+2. Ebe mendili eline alır ve dairenin dışından yürür.
+3. Şarkı söylenirken ebe mendili sessizce bir öğrencinin arkasına bırakır.
+4. Mendili fark eden öğrenci mendili alır ve ebeyi kovalar.
+5. Ebe boş kalan yere oturmaya çalışır.`,
+        nasil: `Öğretmen önce alanı belirler ve öğrencilerin dairenin dışına taşmamasını sağlar.
+Ebe, mendili bırakacağı öğrenciyi seçer.
+Mendili alan öğrenci ebeyi yakalarsa eski ebe tekrar ebe olur.
+Ebe boş yere oturabilirse, mendili alan öğrenci yeni ebe olur.`,
+        kural: `Koşu kontrollü yapılır. İtmek, çekmek, sert temas kurmak yasaktır. Dairenin çok dar olmamasına dikkat edilir.`,
+        not: `Kalabalık sınıflarda iki ayrı daire kurularak herkesin daha sık oynama fırsatı bulması sağlanabilir.`
+      }
+    ];
+
+    /* HTML özniteliği içine güvenle yazmak için */
+    function nitelikTemizle(metin) {
+      return metin.replace(/[<>"]/g, " ").replace(/\s+/g, " ").trim();
+    }
+
+    /* Türkçe karakterlere uygun küçük harfe çevirme (İ / I sorunu) */
+    function kucult(metin) {
+      return metin.toLocaleLowerCase("tr");
+    }
+
+    function oyunlariOlustur() {
+      const liste = document.getElementById("liste");
+      let html = "";
+      let sonBolum = "";
+
+      oyunlar.forEach((oyun, index) => {
+        if (oyun.bolum !== sonBolum) {
+          html += `<h2 class="bolum">${oyun.bolum}</h2>`;
+          sonBolum = oyun.bolum;
+        }
+
+        /* Kapalı bölümlerdeki metin de aranabilsin diye tüm içerik
+           data-arama özniteliğinde toplanıyor. */
+        const aramaMetni = nitelikTemizle(kucult([
+          oyun.ad, kategoriAdlari[oyun.kategori] || oyun.kategori, oyun.bolum,
+          oyun.kisi, oyun.yer, oyun.sure, oyun.beceri, oyun.malzeme,
+          oyun.sozler, oyun.hareketler, oyun.nasil, oyun.kural, oyun.not
+        ].join(" ")));
+
+        html += `
+          <article class="kart" data-kategori="${oyun.kategori}" data-arama="${aramaMetni}">
+            <div class="kart-baslik">
+              <h3>${index + 1}. ${oyun.ad}</h3>
+              <span class="etiket">${kategoriAdlari[oyun.kategori] || oyun.kategori}</span>
+            </div>
+
+            <div class="kart-icerik">
+              <div class="kisa-bilgiler">
+                <span class="bilgi">👥 ${oyun.kisi}</span>
+                <span class="bilgi">📍 ${oyun.yer}</span>
+                <span class="bilgi">⏱️ ${oyun.sure}</span>
+                <span class="bilgi">🎯 ${oyun.beceri}</span>
+              </div>
+
+              <button class="detay-btn" aria-expanded="false" onclick="detayAc(this)">
+                Oyunun tüm ayrıntılarını göster
+              </button>
+
+              <div class="detay">
+                <h4>Gerekli malzemeler</h4>
+                <p class="duz-metin">${oyun.malzeme}</p>
+
+                <h4>Öğretmenin söyleyeceği sözler / şarkı / tekerleme</h4>
+                <div class="sozler">${oyun.sozler}</div>
+
+                <h4>Çocuğun yapacağı parmak veya vücut hareketleri</h4>
+                <div class="hareketler">${oyun.hareketler}</div>
+
+                <h4>Oyunun uygulanışı</h4>
+                <p class="duz-metin">${oyun.nasil}</p>
+
+                <h4>Kurallar</h4>
+                <p class="duz-metin">${oyun.kural}</p>
+
+                <h4>Öğretmen notu ve uyarlama</h4>
+                <div class="ogretmen-notu">${oyun.not}</div>
+              </div>
+            </div>
+          </article>
+        `;
+      });
+
+      liste.innerHTML = html;
+    }
+
+    function detayAc(buton) {
+      const detay = buton.nextElementSibling;
+      const acik = detay.classList.toggle("acik");
+
+      buton.setAttribute("aria-expanded", acik ? "true" : "false");
+      buton.textContent = acik
+        ? "Ayrıntıları gizle"
+        : "Oyunun tüm ayrıntılarını göster";
+    }
+
+    function kategoriSec(kategori, buton) {
+      aktifKategori = kategori;
+
+      document.querySelectorAll(".filtre-btn").forEach(btn => {
+        btn.classList.remove("aktif");
+      });
+
+      buton.classList.add("aktif");
+      filtrele();
+    }
+
+    function filtrele() {
+      const aranan = kucult(document.getElementById("arama").value).trim();
+      const kartlar = document.querySelectorAll(".kart");
+      const bolumler = document.querySelectorAll(".bolum");
+      let bulunan = 0;
+
+      kartlar.forEach(kart => {
+        const kategoriUygun =
+          aktifKategori === "hepsi" ||
+          kart.dataset.kategori === aktifKategori;
+
+        const metinUygun = kart.dataset.arama.includes(aranan);
+
+        if (kategoriUygun && metinUygun) {
+          kart.classList.remove("gizli");
+          bulunan++;
+        } else {
+          kart.classList.add("gizli");
+        }
+      });
+
+      bolumler.forEach(bolum => {
+        let sonraki = bolum.nextElementSibling;
+        let gorunenKartVar = false;
+
+        while (sonraki && !sonraki.classList.contains("bolum")) {
+          if (
+            sonraki.classList.contains("kart") &&
+            !sonraki.classList.contains("gizli")
+          ) {
+            gorunenKartVar = true;
+          }
+          sonraki = sonraki.nextElementSibling;
+        }
+
+        bolum.style.display = gorunenKartVar ? "block" : "none";
+      });
+
+      document.getElementById("bosMesaj").style.display =
+        bulunan === 0 ? "block" : "none";
+
+      document.getElementById("sayac").textContent =
+        bulunan + " etkinlik listeleniyor (toplam " + oyunlar.length + ")";
+    }
+
+    oyunlariOlustur();
+    filtrele();
+  </script>
+
+</body>
+</html>
