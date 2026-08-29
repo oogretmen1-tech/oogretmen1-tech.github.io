@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Okuma Anlama Atölyesi | 2. Sınıf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --murekkep:#16324F;
+    --murekkep-acik:#3C5A78;
+    --deniz:#2E6F9E;
+    --gok:#DCE9F5;
+    --kagit:#F5F8FC;
+    --beyaz:#FFFFFF;
+    --vurgu:#FFD24A;
+    --yesil:#1E8E5A;
+    --yesil-acik:#E3F4EC;
+    --kirmizi:#D64545;
+    --kirmizi-acik:#FBE9E9;
+    --gri:#8A9BAE;
+    --cizgi:#D5E1EE;
+    --golge:0 2px 0 var(--cizgi), 0 8px 24px rgba(22,50,79,.07);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:'Andika','Andika New Basic',Verdana,sans-serif;
+    background:var(--kagit);
+    color:var(--murekkep);
+    font-size:17px;
+    line-height:1.6;
+    padding:14px;
+  }
+  .sarmal{max-width:1180px;margin:0 auto}
+
+  /* ---------- Üst bölüm ---------- */
+  header{
+    background:linear-gradient(135deg,#1D4370,#2E6F9E);
+    color:#fff;border-radius:20px;padding:22px 24px;box-shadow:var(--golge);
+  }
+  header h1{font-size:1.65rem;font-weight:700;letter-spacing:.2px}
+  header p{opacity:.9;font-size:.95rem;margin-top:4px}
+
+  .metin-secim{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 18px}
+  .sekme{
+    background:var(--beyaz);border:2px solid var(--cizgi);color:var(--murekkep-acik);
+    border-radius:14px;padding:10px 15px;font:inherit;font-size:.95rem;cursor:pointer;
+    display:flex;align-items:center;gap:9px;transition:.15s;
+  }
+  .sekme:hover{border-color:var(--deniz)}
+  .sekme .no{
+    background:var(--gok);color:var(--deniz);font-weight:700;border-radius:9px;
+    width:26px;height:26px;display:grid;place-items:center;font-size:.85rem;flex:none;
+  }
+  .sekme.secili{background:var(--murekkep);border-color:var(--murekkep);color:#fff}
+  .sekme.secili .no{background:var(--vurgu);color:var(--murekkep)}
+  .sekme .tik{display:none;font-weight:700}
+  .sekme.bitti .tik{display:inline;color:var(--yesil)}
+  .sekme.secili.bitti .tik{color:var(--vurgu)}
+
+  /* ---------- Yerleşim ---------- */
+  .duzen{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:18px;align-items:start}
+  @media (max-width:920px){.duzen{grid-template-columns:1fr}}
+
+  .kart{background:var(--beyaz);border-radius:20px;box-shadow:var(--golge);padding:22px}
+
+  /* ---------- Metin ---------- */
+  .okuma{position:sticky;top:14px;max-height:calc(100vh - 28px);overflow:auto}
+  @media (max-width:920px){.okuma{position:static;max-height:none}}
+  .tur-etiket{
+    display:inline-block;background:var(--gok);color:var(--deniz);font-size:.8rem;
+    padding:4px 11px;border-radius:20px;margin-bottom:10px;
+  }
+  .metin-baslik{font-size:1.4rem;font-weight:700;margin-bottom:14px;line-height:1.3}
+  .metin-govde{font-size:1.12rem;line-height:2;padding-left:16px;border-left:3px solid var(--gok)}
+  .metin-govde p{margin-bottom:13px}
+  .metin-govde.siir p{white-space:pre-line;line-height:1.95}
+  .c{
+    background-image:linear-gradient(var(--vurgu),var(--vurgu));
+    background-repeat:no-repeat;background-size:0% 100%;
+    background-position:0 0;border-radius:4px;
+    transition:background-size .55s ease;
+  }
+  .c.isik{background-size:100% 100%}
+  .ipucu{margin-top:14px;font-size:.85rem;color:var(--gri);border-top:1px dashed var(--cizgi);padding-top:10px}
+
+  /* ---------- İlerleme ---------- */
+  .ilerleme-kutu{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+  .cubuk{flex:1;height:12px;background:var(--gok);border-radius:20px;overflow:hidden}
+  .cubuk i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--deniz),var(--yesil));border-radius:20px;transition:width .4s}
+  .sayac{font-weight:700;color:var(--deniz);font-size:.95rem;white-space:nowrap}
+
+  /* ---------- Etkinlik blokları ---------- */
+  .blok{margin-bottom:26px}
+  .blok-baslik{
+    display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.08rem;
+    margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--gok);
+  }
+  .blok-baslik .rozet{
+    background:var(--murekkep);color:#fff;width:28px;height:28px;border-radius:9px;
+    display:grid;place-items:center;font-size:.85rem;flex:none;
+  }
+  .yonerge{font-size:.88rem;color:var(--gri);margin:-6px 0 12px}
+
+  .soru{margin-bottom:16px}
+  .soru-metni{font-weight:700;margin-bottom:8px}
+  .secenekler{display:flex;flex-direction:column;gap:7px}
+  .secenek{
+    text-align:left;font:inherit;background:var(--kagit);border:2px solid var(--cizgi);
+    border-radius:13px;padding:11px 14px;cursor:pointer;color:var(--murekkep);
+    display:flex;align-items:center;gap:11px;transition:.15s;
+  }
+  .secenek:hover:not(:disabled){border-color:var(--deniz);background:var(--beyaz)}
+  .secenek .harf{
+    background:var(--gok);color:var(--deniz);font-weight:700;width:27px;height:27px;
+    border-radius:8px;display:grid;place-items:center;flex:none;font-size:.85rem;
+  }
+  .secenek.dogru{background:var(--yesil-acik);border-color:var(--yesil);color:var(--yesil);font-weight:700}
+  .secenek.dogru .harf{background:var(--yesil);color:#fff}
+  .secenek.yanlis{background:var(--kirmizi-acik);border-color:var(--kirmizi);color:var(--kirmizi);opacity:.75}
+  .secenek.yanlis .harf{background:var(--kirmizi);color:#fff}
+  .secenek:disabled{cursor:default}
+
+  /* Doğru - Yanlış */
+  .dy-satir{
+    display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px dashed var(--cizgi);
+  }
+  .dy-satir:last-child{border-bottom:none}
+  .dy-metin{flex:1}
+  .dy-tus{
+    font:inherit;font-weight:700;border:2px solid var(--cizgi);background:var(--kagit);
+    border-radius:11px;width:46px;height:42px;cursor:pointer;color:var(--murekkep-acik);flex:none;transition:.15s;
+  }
+  .dy-tus:hover:not(:disabled){border-color:var(--deniz)}
+  .dy-tus.secildi-dogru{background:var(--yesil);border-color:var(--yesil);color:#fff}
+  .dy-tus.secildi-yanlis{background:var(--kirmizi);border-color:var(--kirmizi);color:#fff}
+  .dy-tus:disabled{cursor:default;opacity:.6}
+  .dy-tus.secildi-dogru:disabled,.dy-tus.secildi-yanlis:disabled{opacity:1}
+
+  /* Kelime eşleştirme */
+  .eslestirme{display:grid;grid-template-columns:1fr 1.35fr;gap:10px}
+  .sutun{display:flex;flex-direction:column;gap:8px}
+  .es{
+    font:inherit;text-align:left;background:var(--kagit);border:2px solid var(--cizgi);
+    border-radius:12px;padding:10px 13px;cursor:pointer;color:var(--murekkep);transition:.15s;
+  }
+  .es.kelime{font-weight:700}
+  .es:hover:not(:disabled){border-color:var(--deniz)}
+  .es.aktif{background:var(--murekkep);border-color:var(--murekkep);color:#fff}
+  .es.tamam{background:var(--yesil-acik);border-color:var(--yesil);color:var(--yesil);cursor:default}
+  .es.hatali{background:var(--kirmizi-acik);border-color:var(--kirmizi)}
+
+  /* Sıralama */
+  .sira-liste{display:flex;flex-direction:column;gap:8px}
+  .sira{
+    font:inherit;text-align:left;background:var(--kagit);border:2px solid var(--cizgi);
+    border-radius:12px;padding:11px 13px;cursor:pointer;color:var(--murekkep);
+    display:flex;align-items:center;gap:11px;transition:.15s;
+  }
+  .sira:hover:not(:disabled){border-color:var(--deniz)}
+  .sira .kutucuk{
+    width:28px;height:28px;border-radius:8px;background:var(--gok);color:var(--deniz);
+    display:grid;place-items:center;font-weight:700;flex:none;font-size:.85rem;
+  }
+  .sira.tamam{background:var(--yesil-acik);border-color:var(--yesil);cursor:default}
+  .sira.tamam .kutucuk{background:var(--yesil);color:#fff}
+
+  .sarsil{animation:sars .3s}
+  @keyframes sars{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+  /* Bitiş */
+  .bitis{
+    display:none;text-align:center;background:linear-gradient(135deg,#1E8E5A,#2E6F9E);
+    color:#fff;border-radius:18px;padding:22px;margin-top:6px;
+  }
+  .bitis.acik{display:block}
+  .bitis h3{font-size:1.25rem;margin-bottom:6px}
+  .bitis .yildizlar{font-size:1.7rem;letter-spacing:6px;margin:8px 0}
+  .yenile{
+    font:inherit;font-weight:700;background:var(--beyaz);color:var(--murekkep);border:none;
+    border-radius:12px;padding:10px 20px;cursor:pointer;margin-top:8px;
+  }
+  .alt-not{text-align:center;color:var(--gri);font-size:.85rem;margin:22px 0 6px}
+
+  @media print{
+    body{background:#fff;padding:0}
+    .metin-secim,.ilerleme-kutu,.bitis,header{display:none}
+    .duzen{grid-template-columns:1fr}
+    .kart{box-shadow:none;border:1px solid #ccc;page-break-inside:avoid}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="sarmal">
+
+  <header>
+    <h1>Okuma Anlama Atölyesi</h1>
+    <p>2. Sınıf • Türkçe — Metni oku, soruları cevapla. Doğru cevap verdiğinde ipucu cümle metinde sarıyla işaretlenir.</p>
+  </header>
+
+  <nav class="metin-secim" id="sekmeler"></nav>
+
+  <div class="duzen">
+    <section class="kart okuma" id="okumaAlani"></section>
+    <section class="kart" id="calismaAlani"></section>
+  </div>
+
+  <p class="alt-not">Toplam 5 metin • 80 etkinlik</p>
+</div>
+
+<script>
+const METINLER = [
+  {
+    baslik:"Kayıp Kalem",
+    tur:"Öykü",
+    paragraflar:[
+      [{t:"Ali'nin kırmızı bir kalemi vardı.",k:"a1"},{t:"Bu kalemi doğum gününde ablası hediye etmişti.",k:"a1"},{t:"Ali kalemini çok seviyordu."}],
+      [{t:"Bir sabah Ali kalem kutusunu açtı.",k:"a2"},{t:"Kırmızı kalem yoktu.",k:"a2"},{t:"Ali'nin gözleri doldu."}],
+      [{t:"Sıra arkadaşı Zeynep, “Üzülme, birlikte arayalım.” dedi.",k:"a3"},{t:"İkisi sınıfın her yerine baktılar."},{t:"Sıraların altına, dolabın arkasına, çöp kutusunun yanına..."}],
+      [{t:"Sonunda kalemi Zeynep buldu.",k:"a4"},{t:"Kalem, kapının yanındaki halının altında duruyordu.",k:"a4"}],
+      [{t:"Ali çok sevindi."},{t:"Zeynep'e teşekkür etti."},{t:"O gün Ali, kırmızı kalemiyle Zeynep'in resmini yaptı.",k:"a5"}]
+    ],
+    sorular:[
+      {s:"Ali'ye kırmızı kalemi kim hediye etmiş?",secenekler:["Ablası","Öğretmeni","Zeynep","Dedesi"],dogru:0,kanit:"a1"},
+      {s:"Kalem nerede bulunmuş?",secenekler:["Çöp kutusunun içinde","Halının altında","Dolabın üstünde","Çantasının içinde"],dogru:1,kanit:"a4"},
+      {s:"Zeynep'in davranışı için ne söyleyebiliriz?",secenekler:["Yardımseverdir","Bencildir","Kavgacıdır","Tembeldir"],dogru:0,kanit:"a3"},
+      {s:"Ali, kalemini bulduktan sonra ne yapmış?",secenekler:["Kalemi ablasına vermiş","Kalemi saklamış","Zeynep'in resmini yapmış","Kalemi kırmış"],dogru:2,kanit:"a5"}
+    ],
+    dogruYanlis:[
+      {c:"Ali'nin kalemi mavi renkteydi.",d:false},
+      {c:"Zeynep, Ali'nin sıra arkadaşıdır.",d:true},
+      {c:"Kalemi Ali'nin öğretmeni bulmuştur.",d:false},
+      {c:"Ali kalemini bulunca sevinmiştir.",d:true}
+    ],
+    kelimeler:[
+      {k:"hediye",a:"Sevindirmek için karşılıksız verilen armağan"},
+      {k:"sevinmek",a:"Güzel bir olay karşısında mutlu olmak"},
+      {k:"aramak",a:"Kaybolan bir şeyi bulmaya çalışmak"},
+      {k:"teşekkür etmek",a:"İyilik yapan kişiye memnunluğunu söylemek"}
+    ],
+    siralama:[
+      "Ali kalem kutusunu açtı ve kalemini bulamadı.",
+      "Zeynep birlikte aramayı önerdi.",
+      "Kalem, halının altında bulundu.",
+      "Ali, kalemiyle Zeynep'in resmini yaptı."
+    ]
+  },
+
+  {
+    baslik:"Çalışkan Karıncalar",
+    tur:"Bilgilendirici Metin",
+    paragraflar:[
+      [{t:"Karıncalar çok küçük hayvanlardır."},{t:"Ama birlikte çalışarak büyük işler başarırlar.",k:"b1"}],
+      [{t:"Karıncalar yuvalarını toprağın altına yaparlar.",k:"b2"},{t:"Yuvanın içinde uzun yollar ve küçük odalar bulunur."}],
+      [{t:"Her karıncanın bir görevi vardır.",k:"b3"},{t:"Bazıları yiyecek toplar."},{t:"Bazıları yuvayı temizler."},{t:"Bazıları da yavrulara bakar."}],
+      [{t:"Karıncalar yazın yiyecek toplar ve bunları yuvalarında saklarlar.",k:"b4"},{t:"Kışın hava soğuyunca dışarı çıkmazlar."},{t:"Sakladıkları yiyecekleri yerler.",k:"b4"}],
+      [{t:"Bir karınca, kendi ağırlığının çok üstündeki yükleri taşıyabilir.",k:"b5"}]
+    ],
+    sorular:[
+      {s:"Karıncalar yuvalarını nereye yapar?",secenekler:["Ağaç dallarına","Toprağın altına","Duvarların üstüne","Suyun içine"],dogru:1,kanit:"b2"},
+      {s:"Karıncalar kışın nasıl beslenir?",secenekler:["Yazın sakladıkları yiyecekleri yerler","Dışarıda yiyecek ararlar","Hiçbir şey yemezler","Başka hayvanlardan alırlar"],dogru:0,kanit:"b4"},
+      {s:"Metne göre karıncaların en önemli özelliği nedir?",secenekler:["Çok hızlı koşmaları","Renklerinin siyah olması","Birlikte çalışmaları","Uçabilmeleri"],dogru:2,kanit:"b1"},
+      {s:"“Her karıncanın bir görevi vardır.” cümlesi ne anlatır?",secenekler:["Karıncaların hiç işi yoktur","Tüm karıncalar aynı işi yapar","Karıncalar iş bölümü yapar","Karıncalar çalışmaz"],dogru:2,kanit:"b3"}
+    ],
+    dogruYanlis:[
+      {c:"Karıncalar işlerini yalnız başlarına yapar.",d:false},
+      {c:"Karıncalar yiyeceklerini yaz mevsiminde toplar.",d:true},
+      {c:"Karınca, kendi ağırlığından fazlasını taşıyabilir.",d:true},
+      {c:"Karıncaların yuvasında sadece tek bir oda vardır.",d:false}
+    ],
+    kelimeler:[
+      {k:"yuva",a:"Hayvanların yaşadığı, barındığı yer"},
+      {k:"görev",a:"Bir kişinin yapmakla sorumlu olduğu iş"},
+      {k:"saklamak",a:"Sonra kullanmak için bir yerde tutmak"},
+      {k:"başarmak",a:"Bir işi istenen biçimde sonuçlandırmak"}
+    ],
+    siralama:[
+      "Karıncalar yazın yiyecek arar.",
+      "Buldukları yiyeceği yuvaya taşırlar.",
+      "Yiyecekleri yuvadaki odalarda saklarlar.",
+      "Kış gelince sakladıklarını yerler."
+    ]
+  },
+
+  {
+    baslik:"Dedemin Bahçesi",
+    tur:"Anı",
+    paragraflar:[
+      [{t:"Yaz tatilinde dedemin köyüne gittim.",k:"c1"},{t:"Dedemin evinin arkasında büyük bir bahçe var."}],
+      [{t:"Bahçede domates, salatalık ve biber yetişiyor.",k:"c2"},{t:"Bir de kocaman bir dut ağacı var."}],
+      [{t:"Her sabah dedemle bahçeye iniyorduk.",k:"c3"},{t:"Dedem bana sulama hortumunu veriyordu."},{t:"Ben de fidanları suluyordum."}],
+      [{t:"Bir gün dedem bana küçük bir fide verdi.",k:"c4"},{t:"“Bunu sen dik ve her gün sula.” dedi."}],
+      [{t:"Fidem büyüdü, yaprakları açtı."},{t:"Sonunda küçük bir domates çıktı."},{t:"O domatesi ailemle birlikte yedik."},{t:"Kendi emeğimle yetiştirdiğim için dünyanın en güzel domatesiydi.",k:"c5"}]
+    ],
+    sorular:[
+      {s:"Yazar tatilde nereye gitmiş?",secenekler:["Deniz kenarına","Dedesinin köyüne","Teyzesinin evine","Dağ evine"],dogru:1,kanit:"c1"},
+      {s:"Bahçede aşağıdakilerden hangisi yetişmiyor?",secenekler:["Domates","Salatalık","Karpuz","Biber"],dogru:2,kanit:"c2"},
+      {s:"Dede, torununa ne vermiş?",secenekler:["Küçük bir fide","Bir sepet dut","Bir kova su","Bir kürek"],dogru:0,kanit:"c4"},
+      {s:"Yazar, domatesi neden “dünyanın en güzeli” bulmuş?",secenekler:["Çok büyük olduğu için","Dedesi öyle dediği için","Kendi emeğiyle yetiştirdiği için","Pazardan aldığı için"],dogru:2,kanit:"c5"}
+    ],
+    dogruYanlis:[
+      {c:"Bahçede bir dut ağacı vardır.",d:true},
+      {c:"Yazar, fidesini sulamayı unutmuştur.",d:false},
+      {c:"Yazar her sabah dedesiyle bahçeye iniyordu.",d:true},
+      {c:"Domatesi yazar tek başına yemiştir.",d:false}
+    ],
+    kelimeler:[
+      {k:"fide",a:"Toprağa dikilmek için yetiştirilen genç bitki"},
+      {k:"emek",a:"Bir işi yapmak için harcanan çaba"},
+      {k:"yetişmek",a:"Bir bitkinin büyüyüp olgunlaşması"},
+      {k:"sulamak",a:"Bitkilere gerekli suyu vermek"}
+    ],
+    siralama:[
+      "Yazar, yaz tatilinde dedesinin köyüne gitti.",
+      "Dedesi ona küçük bir fide verdi.",
+      "Yazar fideyi dikti ve her gün suladı.",
+      "Fideden çıkan domatesi ailesiyle yedi."
+    ]
+  },
+
+  {
+    baslik:"Suyun Yolculuğu",
+    tur:"Bilgilendirici Metin",
+    paragraflar:[
+      [{t:"Denizler, göller ve ırmaklar suyla doludur."},{t:"Güneş bu suları ısıtır.",k:"d1"}],
+      [{t:"Isınan su buhar olup yukarı yükselir.",k:"d1"},{t:"Gökyüzünde soğuyan buhar küçük damlacıklara dönüşür."},{t:"Damlacıklar bir araya gelince bulutları oluşturur.",k:"d2"}],
+      [{t:"Bulutlar ağırlaşınca damlalar yeryüzüne düşer."},{t:"Buna yağmur deriz."},{t:"Hava çok soğuksa yağmur yerine kar yağar.",k:"d3"}],
+      [{t:"Yeryüzüne düşen su yeniden denizlere ve göllere döner."},{t:"Bu yolculuk hiç bitmez, sürekli tekrarlanır.",k:"d4"}],
+      [{t:"Su, bütün canlılar için gereklidir."},{t:"Bu yüzden suyu israf etmemeliyiz.",k:"d5"}]
+    ],
+    sorular:[
+      {s:"Denizlerdeki suyu ısıtan nedir?",secenekler:["Rüzgâr","Güneş","Bulutlar","Yağmur"],dogru:1,kanit:"d1"},
+      {s:"Bulutlar nasıl oluşur?",secenekler:["Su damlacıklarının bir araya gelmesiyle","Rüzgârın toz taşımasıyla","Karın erimesiyle","Toprağın ısınmasıyla"],dogru:0,kanit:"d2"},
+      {s:"Hava çok soğuk olursa ne yağar?",secenekler:["Yağmur","Dolu","Kar","Buhar"],dogru:2,kanit:"d3"},
+      {s:"Metnin bize verdiği öğüt nedir?",secenekler:["Yağmurda dışarı çıkmamalıyız","Suyu israf etmemeliyiz","Denizde yüzmeliyiz","Bulutları saymalıyız"],dogru:1,kanit:"d5"}
+    ],
+    dogruYanlis:[
+      {c:"Su, ısınınca buhar olur.",d:true},
+      {c:"Suyun yolculuğu bir kez olur ve biter.",d:false},
+      {c:"Bulutlar ağırlaşınca yağmur yağar.",d:true},
+      {c:"Su sadece insanlar için gereklidir.",d:false}
+    ],
+    kelimeler:[
+      {k:"buhar",a:"Isınan suyun havaya karışmış hâli"},
+      {k:"damla",a:"Suyun yuvarlak, çok küçük parçası"},
+      {k:"israf",a:"Bir şeyi gereksiz yere harcamak"},
+      {k:"canlı",a:"Doğan, büyüyen ve beslenen varlık"}
+    ],
+    siralama:[
+      "Güneş, denizlerdeki suyu ısıtır.",
+      "Isınan su buhar olup yükselir.",
+      "Soğuyan buhardan bulutlar oluşur.",
+      "Bulutlardan yağmur veya kar yağar."
+    ]
+  },
+
+  {
+    baslik:"Kitap Dostum",
+    tur:"Şiir",
+    siir:true,
+    paragraflar:[
+      [{t:"Rafta duran küçük kitap,\nSayfaların bir hazine.\nAçtım seni bu akşam ben,\nGirdim masal ülkesine.",k:"e1"}],
+      [{t:"Kimi zaman bir kaptanım,\nKimi zaman bir kelebek.\nSen yanımda oldukça hiç,\nSıkılmıyor bu küçük yürek.",k:"e2"}],
+      [{t:"Her gün seni okuyorum,\nYeni sözler öğrenirim.\nSen benim en iyi dostum,\nKitap dostum, severim.",k:"e3"}]
+    ],
+    sorular:[
+      {s:"Şiirde kitap neye benzetilmiştir?",secenekler:["Bir hazineye","Bir kuşa","Bir aynaya","Bir bahçeye"],dogru:0,kanit:"e1"},
+      {s:"Şair kitabı okurken kendini nerede hissetmiş?",secenekler:["Okulda","Masal ülkesinde","Denizde","Bahçede"],dogru:1,kanit:"e1"},
+      {s:"Şair kitap okuyunca ne oluyor?",secenekler:["Uykusu geliyor","Canı sıkılıyor","Hiç sıkılmıyor","Yoruluyor"],dogru:2,kanit:"e2"},
+      {s:"Şiire göre okumanın yararı nedir?",secenekler:["Yeni sözcükler öğretmesi","Zamanı hızlı geçirmesi","Arkadaş kazandırması","Ders notunu artırması"],dogru:0,kanit:"e3"}
+    ],
+    dogruYanlis:[
+      {c:"Şiir üç dörtlükten oluşmaktadır.",d:true},
+      {c:"Şair kitabı rafta görmüştür.",d:true},
+      {c:"Şair kitap okumaktan sıkılmaktadır.",d:false},
+      {c:"Şair kitabı en iyi dostu olarak görüyor.",d:true}
+    ],
+    kelimeler:[
+      {k:"hazine",a:"Çok değerli şeylerin saklandığı yer"},
+      {k:"raf",a:"Eşyaların dizildiği düz tahta bölüm"},
+      {k:"dost",a:"Sevilen, güvenilen yakın arkadaş"},
+      {k:"dörtlük",a:"Şiirde dört dizeden oluşan bölüm"}
+    ],
+    siralama:[
+      "Şair, rafta duran kitabı gördü.",
+      "Kitabı açıp okumaya başladı.",
+      "Kendini masal ülkesinde hissetti.",
+      "Yeni sözcükler öğrendi ve kitabı dost bildi."
+    ]
+  }
+];
+
+/* ---------- Yardımcılar ---------- */
+const karistir = a => a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(v=>v[1]);
+const yap = (etiket,sinif,icerik) => {
+  const e = document.createElement(etiket);
+  if(sinif) e.className = sinif;
+  if(icerik!==undefined) e.innerHTML = icerik;
+  return e;
+};
+const sarsGoster = el => { el.classList.add("sarsil"); setTimeout(()=>el.classList.remove("sarsil"),320); };
+
+const sekmeler = document.getElementById("sekmeler");
+const okumaAlani = document.getElementById("okumaAlani");
+const calismaAlani = document.getElementById("calismaAlani");
+const paneller = [];
+let aktif = 0;
+
+/* ---------- Metin paneli ---------- */
+function metinPaneli(m){
+  const kap = yap("div");
+  kap.appendChild(yap("span","tur-etiket",m.tur));
+  kap.appendChild(yap("h2","metin-baslik",m.baslik));
+  const govde = yap("div","metin-govde" + (m.siir ? " siir" : ""));
+  m.paragraflar.forEach(par=>{
+    const p = yap("p");
+    par.forEach((c,i)=>{
+      const s = yap("span","c",(i?" ":"") + c.t);
+      if(c.k) s.dataset.k = c.k;
+      p.appendChild(s);
+    });
+    govde.appendChild(p);
+  });
+  kap.appendChild(govde);
+  kap.appendChild(yap("p","ipucu","Metni sesli oku. Sorulara cevap verirken metne tekrar bakabilirsin."));
+  return kap;
+}
+
+function kanitiGoster(kap,anahtar){
+  if(!anahtar) return;
+  kap.querySelectorAll('.c[data-k="'+anahtar+'"]').forEach(s=>s.classList.add("isik"));
+}
+
+/* ---------- Çalışma paneli ---------- */
+function calismaPaneli(m,indeks){
+  const kap = yap("div");
+  const toplam = m.sorular.length + m.dogruYanlis.length + m.kelimeler.length + m.siralama.length;
+  let cozulen = 0;
+
+  const ilerlemeKutu = yap("div","ilerleme-kutu");
+  const cubuk = yap("div","cubuk"); const dolgu = yap("i");
+  cubuk.appendChild(dolgu);
+  const sayac = yap("span","sayac","0 / "+toplam);
+  ilerlemeKutu.appendChild(cubuk); ilerlemeKutu.appendChild(sayac);
+  kap.appendChild(ilerlemeKutu);
+
+  const bitis = yap("div","bitis");
+  const puanEkle = () => {
+    cozulen++;
+    dolgu.style.width = (cozulen/toplam*100)+"%";
+    sayac.textContent = cozulen+" / "+toplam;
+    if(cozulen===toplam){
+      bitis.classList.add("acik");
+      document.querySelectorAll(".sekme")[indeks].classList.add("bitti");
+      bitis.scrollIntoView({behavior:"smooth",block:"nearest"});
+    }
+  };
+
+  function baslikYap(no,yazi,yonerge){
+    const b = yap("div","blok");
+    const bb = yap("div","blok-baslik");
+    bb.appendChild(yap("span","rozet",no));
+    bb.appendChild(yap("span",null,yazi));
+    b.appendChild(bb);
+    if(yonerge) b.appendChild(yap("p","yonerge",yonerge));
+    return b;
+  }
+
+  /* 1 - Çoktan seçmeli */
+  const b1 = baslikYap("1","Metni Anlıyorum","Doğru seçeneği işaretle. Doğru cevapta ipucu cümle metinde işaretlenir.");
+  m.sorular.forEach((so,si)=>{
+    const kutu = yap("div","soru");
+    kutu.appendChild(yap("p","soru-metni",(si+1)+". "+so.s));
+    const liste = yap("div","secenekler");
+    const harfler = ["A","B","C","D"];
+    so.secenekler.forEach((sec,i)=>{
+      const t = yap("button","secenek");
+      t.type = "button";
+      t.appendChild(yap("span","harf",harfler[i]));
+      t.appendChild(yap("span",null,sec));
+      t.onclick = () => {
+        if(i===so.dogru){
+          t.classList.add("dogru");
+          liste.querySelectorAll("button").forEach(x=>x.disabled=true);
+          kanitiGoster(paneller[indeks].metin,so.kanit);
+          puanEkle();
+        } else {
+          t.classList.add("yanlis"); t.disabled = true; sarsGoster(t);
+        }
+      };
+      liste.appendChild(t);
+    });
+    kutu.appendChild(liste);
+    b1.appendChild(kutu);
+  });
+  kap.appendChild(b1);
+
+  /* 2 - Doğru / Yanlış */
+  const b2 = baslikYap("2","Doğru mu, Yanlış mı?","Cümle metne göre doğruysa D, yanlışsa Y tuşuna dokun.");
+  m.dogruYanlis.forEach((dy,i)=>{
+    const satir = yap("div","dy-satir");
+    satir.appendChild(yap("span","dy-metin",(i+1)+". "+dy.c));
+    const tusD = yap("button","dy-tus","D");
+    const tusY = yap("button","dy-tus","Y");
+    tusD.type = tusY.type = "button";
+    const kontrol = (secim,tus) => {
+      if(secim===dy.d){
+        tus.classList.add(dy.d ? "secildi-dogru" : "secildi-yanlis");
+        tusD.disabled = tusY.disabled = true;
+        puanEkle();
+      } else { sarsGoster(satir); tus.disabled = true; }
+    };
+    tusD.onclick = () => kontrol(true,tusD);
+    tusY.onclick = () => kontrol(false,tusY);
+    satir.appendChild(tusD); satir.appendChild(tusY);
+    b2.appendChild(satir);
+  });
+  kap.appendChild(b2);
+
+  /* 3 - Kelime eşleştirme */
+  const b3 = baslikYap("3","Kelime Bilgisi","Önce kelimeye, sonra anlamına dokun.");
+  const es = yap("div","eslestirme");
+  const solSutun = yap("div","sutun");
+  const sagSutun = yap("div","sutun");
+  let secili = null;
+  m.kelimeler.forEach((kl,i)=>{
+    const t = yap("button","es kelime",kl.k);
+    t.type = "button"; t.dataset.no = i;
+    t.onclick = () => {
+      if(t.classList.contains("tamam")) return;
+      solSutun.querySelectorAll(".es").forEach(x=>x.classList.remove("aktif"));
+      t.classList.add("aktif"); secili = t;
+    };
+    solSutun.appendChild(t);
+  });
+  karistir(m.kelimeler.map((kl,i)=>({...kl,no:i}))).forEach(kl=>{
+    const t = yap("button","es",kl.a);
+    t.type = "button"; t.dataset.no = kl.no;
+    t.onclick = () => {
+      if(!secili || t.classList.contains("tamam")) return;
+      if(t.dataset.no === secili.dataset.no){
+        t.classList.add("tamam"); secili.classList.add("tamam");
+        secili.classList.remove("aktif"); secili = null;
+        puanEkle();
+      } else {
+        t.classList.add("hatali"); sarsGoster(t);
+        setTimeout(()=>t.classList.remove("hatali"),500);
+      }
+    };
+    sagSutun.appendChild(t);
+  });
+  es.appendChild(solSutun); es.appendChild(sagSutun);
+  b3.appendChild(es);
+  kap.appendChild(b3);
+
+  /* 4 - Sıralama */
+  const b4 = baslikYap("4","Olayları Sıraya Koy","Cümlelere oluş sırasına göre, baştan sona doğru dokun.");
+  const sl = yap("div","sira-liste");
+  let sonraki = 0;
+  karistir(m.siralama.map((c,i)=>({c,i}))).forEach(og=>{
+    const t = yap("button","sira");
+    t.type = "button";
+    const kutucuk = yap("span","kutucuk","?");
+    t.appendChild(kutucuk);
+    t.appendChild(yap("span",null,og.c));
+    t.onclick = () => {
+      if(t.classList.contains("tamam")) return;
+      if(og.i === sonraki){
+        kutucuk.textContent = ++sonraki;
+        t.classList.add("tamam");
+        puanEkle();
+      } else sarsGoster(t);
+    };
+    sl.appendChild(t);
+  });
+  b4.appendChild(sl);
+  kap.appendChild(b4);
+
+  /* Bitiş kartı */
+  bitis.appendChild(yap("h3","Tebrikler! Bu metni tamamladın."));
+  bitis.appendChild(yap("div","yildizlar","★ ★ ★"));
+  bitis.appendChild(yap("p",null,"Şimdi başka bir metin seçebilirsin."));
+  const yenile = yap("button","yenile","Yeniden Dene");
+  yenile.type = "button";
+  yenile.onclick = () => {
+    paneller[indeks] = kur(m,indeks);
+    goster(indeks);
+  };
+  bitis.appendChild(yenile);
+  kap.appendChild(bitis);
+
+  return kap;
+}
+
+function kur(m,i){ return {metin:metinPaneli(m),calisma:calismaPaneli(m,i)}; }
+
+function goster(i){
+  aktif = i;
+  okumaAlani.innerHTML = ""; calismaAlani.innerHTML = "";
+  okumaAlani.appendChild(paneller[i].metin);
+  calismaAlani.appendChild(paneller[i].calisma);
+  document.querySelectorAll(".sekme").forEach((s,j)=>s.classList.toggle("secili",j===i));
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+METINLER.forEach((m,i)=>{
+  paneller.push(kur(m,i));
+  const t = yap("button","sekme");
+  t.type = "button";
+  t.appendChild(yap("span","no",i+1));
+  t.appendChild(yap("span",null,m.baslik));
+  t.appendChild(yap("span","tik","✓"));
+  t.onclick = () => goster(i);
+  sekmeler.appendChild(t);
+});
+goster(0);
+</script>
+</body>
+</html>
