@@ -9,2114 +9,382 @@
 <link href="https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 <style>
 /* ===== Andika yazi sistemi - klasik (tek katli) a ===== */
-:root{--yazi:'Andika','Segoe UI',Arial,sans-serif;}
+:root{
+  --yazi:'Andika','Segoe UI',Arial,sans-serif;
+  --renk:#E8503A; --renk2:#FF8E53; --tint:#FFF2EC;
+  --metin:#2C2C3A; --soluk:#8A8A9E;
+}
 html,body,button,input,select,textarea,h1,h2,h3,h4,h5,h6,p,span,div,li,td,th,label,a,strong,b,em,small,summary,option{font-family:var(--yazi);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:#F4F6FB;
+  color:var(--metin);
+  padding-bottom:90px;
+  -webkit-text-size-adjust:100%;
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family:'Andika','Segoe UI',Arial,sans-serif;
-    background: linear-gradient(135deg, #fef6e4 0%, #e8f5ff 100%);
-    color: #333;
-    padding-bottom: 80px;
-  }
-  header {
-    background: linear-gradient(135deg, #6C5CE7, #42C2FF);
-    color: white;
-    text-align: center;
-    padding: 28px 16px 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  }
-  header h1 { font-size: 1.5rem; margin-bottom: 6px; }
-  header p { font-size: .95rem; opacity: 0.95; }
+/* ---------- ust baslik ---------- */
+header{
+  background:linear-gradient(135deg,#5B4BE0 0%,#8E5BE8 45%,#2FA8E0 100%);
+  color:#fff;text-align:center;padding:26px 16px 22px;
+  border-radius:0 0 28px 28px;box-shadow:0 6px 20px rgba(60,40,150,.25);
+}
+header h1{font-size:1.6rem;letter-spacing:.5px;}
+header p{font-size:.92rem;opacity:.93;margin-top:5px;}
+.ilerleme-kutu{max-width:420px;margin:14px auto 0;}
+.ilerleme-cubuk{height:10px;background:rgba(255,255,255,.3);border-radius:20px;overflow:hidden;}
+.ilerleme-dolu{height:100%;width:0;background:#FFD93D;border-radius:20px;transition:width .35s;}
+.ilerleme-yazi{font-size:.78rem;margin-top:6px;opacity:.95;}
 
-  nav.menu {
-    position: sticky; top: 0; z-index: 50;
-    background: white;
-    padding: 10px 8px;
-    display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  }
-  .menu-harf {
-    width: 36px; height: 36px;
-    border: none; border-radius: 50%;
-    background: #f1f1f1; font-weight: bold; font-size: .95rem;
-    cursor: pointer; transition: transform .15s;
-  }
-  .menu-harf:hover { background: #6C5CE7; color: white; transform: scale(1.15); }
+/* ---------- ayar cubugu ---------- */
+.ayarlar{
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+  padding:12px 10px;background:#fff;margin:0 auto;
+  border-bottom:1px solid #ECECF4;
+}
+.ayar-btn{
+  border:2px solid #E4E4F0;background:#fff;color:#555;
+  border-radius:20px;padding:7px 14px;font-size:.8rem;font-weight:700;cursor:pointer;
+  transition:.15s;
+}
+.ayar-btn.acik{background:#5B4BE0;border-color:#5B4BE0;color:#fff;}
+.ayar-btn:active{transform:scale(.95);}
 
-  .sayfa {
-    max-width: 560px; margin: 24px auto;
-    background: white; border-radius: 24px;
-    padding: 22px 16px 28px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    border-top: 10px solid var(--renk);
-  }
-  .sayfa-ust { display:flex; justify-content: space-between; align-items:center; margin-bottom: 10px; }
-  .grup-etiket {
-    background: var(--renk); color:white; font-size: .72rem; font-weight:bold;
-    padding: 4px 10px; border-radius: 20px;
-  }
-  .sayfa-no { color: #999; font-size: .78rem; }
+/* ---------- menu ---------- */
+nav.menu{
+  position:sticky;top:0;z-index:60;background:#fff;
+  padding:10px 8px;box-shadow:0 3px 12px rgba(40,40,90,.10);
+}
+.menu-satir{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:5px;}
+.menu-satir:last-child{margin-bottom:0;}
+.menu-harf{
+  width:34px;height:34px;border:none;border-radius:12px;
+  background:var(--mrenk);color:#fff;font-weight:700;font-size:.92rem;
+  cursor:pointer;transition:transform .15s;opacity:.88;
+}
+.menu-harf:hover,.menu-harf:active{transform:scale(1.15);opacity:1;}
+.menu-harf.bitti::after{content:"✓";position:absolute;}
 
-  .harf-baslik { text-align:center; margin-bottom: 14px; display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; }
-  .harf-buyuk-btn, .harf-kucuk-btn {
-    border:none; cursor:pointer; border-radius: 14px;
-    background: var(--renk); color:white;
-    font-family:'Andika','Segoe UI',Arial,sans-serif;font-weight:700; font-weight:700;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  }
-  .harf-buyuk-btn { font-size: 2.4rem; width: 64px; height: 74px; }
-  .harf-kucuk-btn { font-size: 1.9rem; width: 56px; height: 74px; opacity:.85; }
-  .harf-adi { color:#888; font-size: .9rem; font-weight:bold; }
-  .harf-buyuk-btn:active, .harf-kucuk-btn:active { transform: scale(0.92); }
+/* ---------- grup ayraci ---------- */
+.grup-ayrac{
+  max-width:600px;margin:26px auto 6px;padding:14px 18px;
+  border-radius:20px;color:#fff;text-align:center;
+  background:linear-gradient(135deg,var(--renk),var(--renk2));
+  box-shadow:0 6px 16px rgba(0,0,0,.12);
+}
+.grup-ayrac h3{font-size:1.05rem;}
+.grup-ayrac span{font-size:.85rem;opacity:.95;letter-spacing:3px;font-weight:700;}
 
-  .yonerge { text-align:center; color:#777; font-size: .82rem; margin: 14px 0 10px; font-weight:bold; }
+/* ---------- sayfa ---------- */
+.sayfa{
+  max-width:600px;margin:18px auto;background:#fff;border-radius:26px;
+  padding:20px 16px 24px;box-shadow:0 8px 22px rgba(40,40,90,.10);
+  border-top:10px solid var(--renk);
+  scroll-margin-top:120px;
+}
+.sayfa-ust{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.grup-etiket{
+  background:var(--renk);color:#fff;font-size:.7rem;font-weight:700;
+  padding:5px 12px;border-radius:20px;letter-spacing:1px;
+}
+.sayfa-no{color:var(--soluk);font-size:.76rem;font-weight:700;}
 
-  .bolum { margin-top: 16px; }
-  .hece-izgara {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
-  }
-  .hece-kart {
-    display:flex; flex-direction:column; gap: 4px;
-    background: #FAFAFA; border-radius: 12px; padding: 6px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-  }
-  .hece-kart.bos { opacity: .45; }
-  .hece-btn {
-    border:none; border-radius: 8px; padding: 8px 4px;
-    background: #FFE8B3; font-weight:bold; font-size: .95rem;
-    cursor:pointer;
-  }
-  .kelime-btn {
-    border:none; border-radius: 8px; padding: 6px 4px;
-    background: #C8F0E0; font-weight:bold; font-size: .68rem;
-    cursor:pointer; line-height:1.2;
-  }
-  .hece-btn:active, .kelime-btn:active { transform: scale(0.93); }
+.harf-baslik{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:6px 0 4px;}
+.harf-btn{
+  border:none;cursor:pointer;border-radius:18px;color:#fff;font-weight:700;
+  background:linear-gradient(135deg,var(--renk),var(--renk2));
+  box-shadow:0 6px 14px rgba(0,0,0,.18);
+}
+.harf-buyuk{font-size:2.6rem;width:70px;height:82px;}
+.harf-kucuk{font-size:2.2rem;width:62px;height:82px;opacity:.9;}
+.harf-adi{color:var(--soluk);font-size:.9rem;font-weight:700;}
+.harf-btn:active{transform:scale(.92);}
+.ogrenilen-serit{
+  text-align:center;font-size:.72rem;color:var(--soluk);font-weight:700;
+  background:var(--tint);border-radius:14px;padding:7px 10px;margin:10px 0 4px;
+  line-height:1.6;
+}
 
-  footer { text-align:center; color:#999; font-size:.8rem; padding: 30px 16px; }
+.bolum{margin-top:18px;}
+.bolum-basligi{
+  display:flex;align-items:center;gap:8px;font-size:.82rem;font-weight:700;
+  color:var(--renk);margin-bottom:9px;padding-bottom:6px;border-bottom:2px dashed var(--tint);
+}
+.izgara{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.hece-btn{
+  border:none;border-radius:14px;padding:12px 4px;cursor:pointer;
+  background:var(--tint);color:var(--metin);font-weight:700;font-size:1.15rem;
+  box-shadow:0 2px 6px rgba(0,0,0,.05);transition:.12s;
+}
+.hece-btn:active{transform:scale(.93);background:var(--renk);color:#fff;}
 
-  .yukari-btn {
-    position: fixed; bottom: 18px; right: 18px;
-    width: 50px; height: 50px; border-radius: 50%;
-    background: #6C5CE7; color:white; border:none;
-    font-size: 1.3rem; box-shadow: 0 4px 10px rgba(0,0,0,0.25); cursor:pointer;
-    z-index: 60;
-  }
+.kelime-izgara{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.kelime-kart{
+  background:#FBFBFF;border:2px solid var(--tint);border-radius:16px;
+  padding:10px 4px;text-align:center;cursor:pointer;transition:.12s;
+}
+.kelime-kart:active{transform:scale(.95);border-color:var(--renk);}
+.kelime-emoji{font-size:1.9rem;line-height:1.2;}
+.kelime-yazi{font-weight:700;font-size:1.02rem;margin-top:4px;word-break:break-word;}
+.h1r{color:var(--renk);}
+.h2r{color:#3C7DD9;}
 
-  @media (max-width: 380px) {
-    .hece-izgara { grid-template-columns: repeat(3, 1fr); }
-  }
+.birlestir{display:flex;flex-direction:column;gap:8px;}
+.birlestir-satir{
+  display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;
+  background:var(--tint);border-radius:16px;padding:9px 6px;
+}
+.parca{background:#fff;border:2px solid var(--renk);color:var(--renk);
+  border-radius:12px;padding:5px 12px;font-weight:700;font-size:1rem;cursor:pointer;}
+.isaret{font-weight:700;color:var(--soluk);}
+.sonuc{background:var(--renk);color:#fff;border:none;border-radius:12px;
+  padding:6px 14px;font-weight:700;font-size:1.05rem;cursor:pointer;}
+
+.bilgi{background:var(--tint);border-radius:16px;padding:14px;text-align:center;
+  font-size:.9rem;font-weight:700;color:var(--metin);line-height:1.6;}
+.cumle-kutu{
+  background:#FFFDF3;border-left:6px solid #FFD93D;border-radius:12px;
+  padding:11px 14px;margin-bottom:8px;font-size:1.08rem;font-weight:700;cursor:pointer;
+}
+.cumle-kutu:active{background:#FFF7D6;}
+
+.karisik-alan{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:9px;}
+.yenile-btn{
+  width:100%;border:2px dashed var(--renk);background:#fff;color:var(--renk);
+  border-radius:14px;padding:9px;font-weight:700;font-size:.85rem;cursor:pointer;
+}
+.yenile-btn:active{background:var(--tint);}
+
+.okudum-btn{
+  width:100%;margin-top:18px;border:none;border-radius:16px;padding:12px;
+  background:#EFEFF7;color:#7A7A92;font-weight:700;font-size:.92rem;cursor:pointer;
+}
+.okudum-btn.tamam{background:#2FB380;color:#fff;}
+
+.sayfa-gezinti{display:flex;justify-content:space-between;gap:8px;margin-top:12px;}
+.gez-btn{
+  flex:1;border:none;border-radius:14px;padding:10px;background:var(--tint);
+  color:var(--renk);font-weight:700;font-size:.82rem;cursor:pointer;
+}
+.gez-btn:disabled{opacity:.35;}
+
+footer{text-align:center;color:#9A9AB0;font-size:.78rem;padding:26px 16px;}
+.yukari-btn{
+  position:fixed;bottom:18px;right:18px;width:52px;height:52px;border-radius:50%;
+  background:#5B4BE0;color:#fff;border:none;font-size:1.3rem;
+  box-shadow:0 6px 14px rgba(0,0,0,.25);cursor:pointer;z-index:70;
+}
+body.buyukharf .hece-btn,body.buyukharf .kelime-yazi,body.buyukharf .parca,
+body.buyukharf .sonuc,body.buyukharf .bilgi{background:var(--tint);border-radius:16px;padding:14px;text-align:center;
+  font-size:.9rem;font-weight:700;color:var(--metin);line-height:1.6;}
+.cumle-kutu{text-transform:uppercase;}
+body.renksiz .h1r,body.renksiz .h2r{color:var(--metin);}
+
+@media (max-width:400px){
+  .izgara,.karisik-alan{grid-template-columns:repeat(3,1fr);}
+  .kelime-izgara{grid-template-columns:repeat(2,1fr);}
+  header h1{font-size:1.35rem;}
+}
+@media print{
+  nav.menu,.ayarlar,.yukari-btn,.okudum-btn,.sayfa-gezinti,.yenile-btn,.ilerleme-kutu{display:none;}
+  .sayfa{break-inside:avoid;box-shadow:none;border:1px solid #ddd;margin:8px auto;}
+  body{background:#fff;}
+}
 </style>
 </head>
 <body>
 
 <header>
   <h1>📖 Hece Kitapçığı</h1>
-  <p>1. Sınıf İlk Okuma Yazma — Maarif Modeli</p>
+  <p>1. Sınıf İlk Okuma Yazma • Ses Gruplarına Göre</p>
+  <div class="ilerleme-kutu">
+    <div class="ilerleme-cubuk"><div class="ilerleme-dolu" id="dolu"></div></div>
+    <div class="ilerleme-yazi" id="ilerlemeYazi">0 / 29 sayfa okundu</div>
+  </div>
 </header>
 
-<nav class="menu"><button class="menu-harf" onclick="git('A')">A</button><button class="menu-harf" onclick="git('N')">N</button><button class="menu-harf" onclick="git('E')">E</button><button class="menu-harf" onclick="git('T')">T</button><button class="menu-harf" onclick="git('İ')">İ</button><button class="menu-harf" onclick="git('L')">L</button><button class="menu-harf" onclick="git('O')">O</button><button class="menu-harf" onclick="git('K')">K</button><button class="menu-harf" onclick="git('U')">U</button><button class="menu-harf" onclick="git('R')">R</button><button class="menu-harf" onclick="git('I')">I</button><button class="menu-harf" onclick="git('M')">M</button><button class="menu-harf" onclick="git('Ü')">Ü</button><button class="menu-harf" onclick="git('S')">S</button><button class="menu-harf" onclick="git('Ö')">Ö</button><button class="menu-harf" onclick="git('Y')">Y</button><button class="menu-harf" onclick="git('D')">D</button><button class="menu-harf" onclick="git('Z')">Z</button><button class="menu-harf" onclick="git('Ç')">Ç</button><button class="menu-harf" onclick="git('B')">B</button><button class="menu-harf" onclick="git('G')">G</button><button class="menu-harf" onclick="git('C')">C</button><button class="menu-harf" onclick="git('Ş')">Ş</button><button class="menu-harf" onclick="git('P')">P</button><button class="menu-harf" onclick="git('H')">H</button><button class="menu-harf" onclick="git('V')">V</button><button class="menu-harf" onclick="git('Ğ')">Ğ</button><button class="menu-harf" onclick="git('J')">J</button><button class="menu-harf" onclick="git('F')">F</button></nav>
-
-<main>
-
-  <section class="sayfa" id="sayfa-A" style="--renk:#FF6B6B">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">ANETİL Grubu</span>
-      <span class="sayfa-no">1 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('A')">A</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('a')">a</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-    <div class="bolum">
-      <p class="yonerge">📖 A ile Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('an')">an</button>
-    <button class="kelime-btn" onclick="seslendir('ANNE')">ANNE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('at')">at</button>
-    <button class="kelime-btn" onclick="seslendir('ATLAS')">ATLAS</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('al')">al</button>
-    <button class="kelime-btn" onclick="seslendir('ALİ')">ALİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ak')">ak</button>
-    <button class="kelime-btn" onclick="seslendir('AKVARYUM')">AKVARYUM</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ar')">ar</button>
-    <button class="kelime-btn" onclick="seslendir('ARI')">ARI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('am')">am</button>
-    <button class="kelime-btn" onclick="seslendir('AMBAR')">AMBAR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('as')">as</button>
-    <button class="kelime-btn" onclick="seslendir('ASLAN')">ASLAN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ay')">ay</button>
-    <button class="kelime-btn" onclick="seslendir('AYI')">AYI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ad')">ad</button>
-    <button class="kelime-btn" onclick="seslendir('ADIM')">ADIM</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('az')">az</button>
-    <button class="kelime-btn" onclick="seslendir('AZIK')">AZIK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('aç')">aç</button>
-    <button class="kelime-btn" onclick="seslendir('AÇI')">AÇI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ab')">ab</button>
-    <button class="kelime-btn" onclick="seslendir('KİTAB')">KİTAB</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ag')">ag</button>
-    <button class="kelime-btn" onclick="seslendir('BAGAJ')">BAGAJ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ac')">ac</button>
-    <button class="kelime-btn" onclick="seslendir('İLAÇ')">İLAÇ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('aş')">aş</button>
-    <button class="kelime-btn" onclick="seslendir('AŞÇI')">AŞÇI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ap')">ap</button>
-    <button class="kelime-btn" onclick="seslendir('KİTAP')">KİTAP</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-N" style="--renk:#4ECDC4">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">ANETİL Grubu</span>
-      <span class="sayfa-no">2 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('N')">N</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('n')">n</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-
-    <div class="bolum">
-      <p class="yonerge">📖 Açık Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('na')">na</button>
-    <button class="kelime-btn" onclick="seslendir('NAR')">NAR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ne')">ne</button>
-    <button class="kelime-btn" onclick="seslendir('NENE')">NENE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('nı')">nı</button>
-    <button class="kelime-btn" onclick="seslendir('KAYNANA')">KAYNANA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ni')">ni</button>
-    <button class="kelime-btn" onclick="seslendir('NİNE')">NİNE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('no')">no</button>
-    <button class="kelime-btn" onclick="seslendir('NOTA')">NOTA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('nö')">nö</button>
-    <button class="kelime-btn" onclick="seslendir('NÖBET')">NÖBET</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('nu')">nu</button>
-    <button class="kelime-btn" onclick="seslendir('NUR')">NUR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('nü')">nü</button>
-    <button class="kelime-btn" onclick="seslendir('NÜFUS')">NÜFUS</button>
-  </div></div>
-    </div>
-
-    <div class="bolum">
-      <p class="yonerge">📕 Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('an')">an</button>
-    <button class="kelime-btn" onclick="seslendir('ANNE')">ANNE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('en')">en</button>
-    <button class="kelime-btn" onclick="seslendir('ELEN')">ELEN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ın')">ın</button>
-    <button class="kelime-btn" onclick="seslendir('KIZGIN')">KIZGIN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('in')">in</button>
-    <button class="kelime-btn" onclick="seslendir('İNCİ')">İNCİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('on')">on</button>
-    <button class="kelime-btn" onclick="seslendir('KONU')">KONU</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ön')">ön</button>
-    <button class="kelime-btn" onclick="seslendir('DÖNER')">DÖNER</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('un')">un</button>
-    <button class="kelime-btn" onclick="seslendir('UNUTMA')">UNUTMA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ün')">ün</button>
-    <button class="kelime-btn" onclick="seslendir('GÜN')">GÜN</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-E" style="--renk:#FFD93D">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">ANETİL Grubu</span>
-      <span class="sayfa-no">3 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('E')">E</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('e')">e</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-    <div class="bolum">
-      <p class="yonerge">📖 E ile Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('en')">en</button>
-    <button class="kelime-btn" onclick="seslendir('ELEN')">ELEN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('et')">et</button>
-    <button class="kelime-btn" onclick="seslendir('ETEK')">ETEK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('el')">el</button>
-    <button class="kelime-btn" onclick="seslendir('ELMA')">ELMA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ek')">ek</button>
-    <button class="kelime-btn" onclick="seslendir('EKMEK')">EKMEK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('er')">er</button>
-    <button class="kelime-btn" onclick="seslendir('ERİK')">ERİK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('em')">em</button>
-    <button class="kelime-btn" onclick="seslendir('EMEK')">EMEK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('es')">es</button>
-    <button class="kelime-btn" onclick="seslendir('ESKİ')">ESKİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ey')">ey</button>
-    <button class="kelime-btn" onclick="seslendir('DEYİM')">DEYİM</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ed')">ed</button>
-    <button class="kelime-btn" onclick="seslendir('EDEP')">EDEP</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ez')">ez</button>
-    <button class="kelime-btn" onclick="seslendir('EZİK')">EZİK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('eç')">eç</button>
-    <button class="kelime-btn" onclick="seslendir('GEÇ')">GEÇ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('eb')">eb</button>
-    <button class="kelime-btn" onclick="seslendir('SEBEP')">SEBEP</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('eg')">eg</button>
-    <button class="kelime-btn" onclick="seslendir('REGL')">REGL</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ec')">ec</button>
-    <button class="kelime-btn" onclick="seslendir('SEÇ')">SEÇ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('eş')">eş</button>
-    <button class="kelime-btn" onclick="seslendir('EŞEK')">EŞEK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ep')">ep</button>
-    <button class="kelime-btn" onclick="seslendir('SEPET')">SEPET</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-T" style="--renk:#6C5CE7">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">ANETİL Grubu</span>
-      <span class="sayfa-no">4 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('T')">T</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('t')">t</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-
-    <div class="bolum">
-      <p class="yonerge">📖 Açık Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ta')">ta</button>
-    <button class="kelime-btn" onclick="seslendir('TAVUK')">TAVUK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('te')">te</button>
-    <button class="kelime-btn" onclick="seslendir('TENE')">TENE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('tı')">tı</button>
-    <button class="kelime-btn" onclick="seslendir('TIRTIL')">TIRTIL</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ti')">ti</button>
-    <button class="kelime-btn" onclick="seslendir('TİLKİ')">TİLKİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('to')">to</button>
-    <button class="kelime-btn" onclick="seslendir('TOP')">TOP</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('tö')">tö</button>
-    <button class="kelime-btn" onclick="seslendir('TÖREN')">TÖREN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('tu')">tu</button>
-    <button class="kelime-btn" onclick="seslendir('TUZ')">TUZ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('tü')">tü</button>
-    <button class="kelime-btn" onclick="seslendir('TÜY')">TÜY</button>
-  </div></div>
-    </div>
-
-    <div class="bolum">
-      <p class="yonerge">📕 Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('at')">at</button>
-    <button class="kelime-btn" onclick="seslendir('ATLAS')">ATLAS</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('et')">et</button>
-    <button class="kelime-btn" onclick="seslendir('ETEK')">ETEK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ıt')">ıt</button>
-    <button class="kelime-btn" onclick="seslendir('KISITLI')">KISITLI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('it')">it</button>
-    <button class="kelime-btn" onclick="seslendir('İTFAİYE')">İTFAİYE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ot')">ot</button>
-    <button class="kelime-btn" onclick="seslendir('OTOBÜS')">OTOBÜS</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öt')">öt</button>
-    <button class="kelime-btn" onclick="seslendir('ÖTEN')">ÖTEN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ut')">ut</button>
-    <button class="kelime-btn" onclick="seslendir('UTKU')">UTKU</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üt')">üt</button>
-    <button class="kelime-btn" onclick="seslendir('ÜTÜ')">ÜTÜ</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-İ" style="--renk:#FF8C42">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">ANETİL Grubu</span>
-      <span class="sayfa-no">5 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('İ')">İ</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('i')">i</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-    <div class="bolum">
-      <p class="yonerge">📖 İ ile Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('in')">in</button>
-    <button class="kelime-btn" onclick="seslendir('İNCİ')">İNCİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('it')">it</button>
-    <button class="kelime-btn" onclick="seslendir('İTFAİYE')">İTFAİYE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('il')">il</button>
-    <button class="kelime-btn" onclick="seslendir('İLAÇ')">İLAÇ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ik')">ik</button>
-    <button class="kelime-btn" onclick="seslendir('İKİZ')">İKİZ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ir')">ir</button>
-    <button class="kelime-btn" onclick="seslendir('İRİ')">İRİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('im')">im</button>
-    <button class="kelime-btn" onclick="seslendir('İMAM')">İMAM</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('is')">is</button>
-    <button class="kelime-btn" onclick="seslendir('İSİM')">İSİM</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('iy')">iy</button>
-    <button class="kelime-btn" onclick="seslendir('İYİLİK')">İYİLİK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('id')">id</button>
-    <button class="kelime-btn" onclick="seslendir('İDARE')">İDARE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('iz')">iz</button>
-    <button class="kelime-btn" onclick="seslendir('İZMİR')">İZMİR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('iç')">iç</button>
-    <button class="kelime-btn" onclick="seslendir('İÇECEK')">İÇECEK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ib')">ib</button>
-    <button class="kelime-btn" onclick="seslendir('NASİB')">NASİB</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ig')">ig</button>
-    <button class="kelime-btn" onclick="seslendir('İĞNE')">İĞNE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ic')">ic</button>
-    <button class="kelime-btn" onclick="seslendir('İCAT')">İCAT</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('iş')">iş</button>
-    <button class="kelime-btn" onclick="seslendir('İŞÇİ')">İŞÇİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ip')">ip</button>
-    <button class="kelime-btn" onclick="seslendir('İPEK')">İPEK</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-L" style="--renk:#42C2FF">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">ANETİL Grubu</span>
-      <span class="sayfa-no">6 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('L')">L</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('l')">l</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-
-    <div class="bolum">
-      <p class="yonerge">📖 Açık Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('la')">la</button>
-    <button class="kelime-btn" onclick="seslendir('LALE')">LALE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('le')">le</button>
-    <button class="kelime-btn" onclick="seslendir('LEYLEK')">LEYLEK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('lı')">lı</button>
-    <button class="kelime-btn" onclick="seslendir('BALIK')">BALIK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('li')">li</button>
-    <button class="kelime-btn" onclick="seslendir('LİMON')">LİMON</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('lo')">lo</button>
-    <button class="kelime-btn" onclick="seslendir('LOKUM')">LOKUM</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('lö')">lö</button>
-    <button class="kelime-btn" onclick="seslendir('LÖKOSİT')">LÖKOSİT</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('lu')">lu</button>
-    <button class="kelime-btn" onclick="seslendir('LUNAPARK')">LUNAPARK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('lü')">lü</button>
-    <button class="kelime-btn" onclick="seslendir('LÜLE')">LÜLE</button>
-  </div></div>
-    </div>
-
-    <div class="bolum">
-      <p class="yonerge">📕 Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('al')">al</button>
-    <button class="kelime-btn" onclick="seslendir('ALİ')">ALİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('el')">el</button>
-    <button class="kelime-btn" onclick="seslendir('ELMA')">ELMA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ıl')">ıl</button>
-    <button class="kelime-btn" onclick="seslendir('KIZIL')">KIZIL</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('il')">il</button>
-    <button class="kelime-btn" onclick="seslendir('İLAÇ')">İLAÇ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ol')">ol</button>
-    <button class="kelime-btn" onclick="seslendir('OLTA')">OLTA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öl')">öl</button>
-    <button class="kelime-btn" onclick="seslendir('ÖLÇÜ')">ÖLÇÜ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ul')">ul</button>
-    <button class="kelime-btn" onclick="seslendir('ULUS')">ULUS</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ül')">ül</button>
-    <button class="kelime-btn" onclick="seslendir('ÜLKE')">ÜLKE</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-O" style="--renk:#A8E063">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">OKURIM Grubu</span>
-      <span class="sayfa-no">7 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('O')">O</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('o')">o</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-    <div class="bolum">
-      <p class="yonerge">📖 O ile Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('on')">on</button>
-    <button class="kelime-btn" onclick="seslendir('KONU')">KONU</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ot')">ot</button>
-    <button class="kelime-btn" onclick="seslendir('OTOBÜS')">OTOBÜS</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ol')">ol</button>
-    <button class="kelime-btn" onclick="seslendir('OLTA')">OLTA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ok')">ok</button>
-    <button class="kelime-btn" onclick="seslendir('OKUL')">OKUL</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('or')">or</button>
-    <button class="kelime-btn" onclick="seslendir('ORMAN')">ORMAN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('om')">om</button>
-    <button class="kelime-btn" onclick="seslendir('KOMUTAN')">KOMUTAN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('os')">os</button>
-    <button class="kelime-btn" onclick="seslendir('KOSKOCA')">KOSKOCA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('oy')">oy</button>
-    <button class="kelime-btn" onclick="seslendir('OYUN')">OYUN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('od')">od</button>
-    <button class="kelime-btn" onclick="seslendir('ODA')">ODA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('oz')">oz</button>
-    <button class="kelime-btn" onclick="seslendir('PAMUK OCU')">PAMUK OCU</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('oç')">oç</button>
-    <button class="kelime-btn" onclick="seslendir('KOÇ')">KOÇ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ob')">ob</button>
-    <button class="kelime-btn" onclick="seslendir('ROBOT')">ROBOT</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('og')">og</button>
-    <button class="kelime-btn" onclick="seslendir('YOĞURT')">YOĞURT</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('oc')">oc</button>
-    <button class="kelime-btn" onclick="seslendir('OCAK')">OCAK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('oş')">oş</button>
-    <button class="kelime-btn" onclick="seslendir('HOŞ')">HOŞ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('op')">op</button>
-    <button class="kelime-btn" onclick="seslendir('TOP')">TOP</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-K" style="--renk:#FF6FB5">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">OKURIM Grubu</span>
-      <span class="sayfa-no">8 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('K')">K</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('k')">k</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-
-    <div class="bolum">
-      <p class="yonerge">📖 Açık Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ka')">ka</button>
-    <button class="kelime-btn" onclick="seslendir('KALEM')">KALEM</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ke')">ke</button>
-    <button class="kelime-btn" onclick="seslendir('KEDİ')">KEDİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('kı')">kı</button>
-    <button class="kelime-btn" onclick="seslendir('KIRMIZI')">KIRMIZI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ki')">ki</button>
-    <button class="kelime-btn" onclick="seslendir('KİTAP')">KİTAP</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ko')">ko</button>
-    <button class="kelime-btn" onclick="seslendir('KOL')">KOL</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('kö')">kö</button>
-    <button class="kelime-btn" onclick="seslendir('KÖPEK')">KÖPEK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ku')">ku</button>
-    <button class="kelime-btn" onclick="seslendir('KUTU')">KUTU</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('kü')">kü</button>
-    <button class="kelime-btn" onclick="seslendir('KÜTÜK')">KÜTÜK</button>
-  </div></div>
-    </div>
-
-    <div class="bolum">
-      <p class="yonerge">📕 Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ak')">ak</button>
-    <button class="kelime-btn" onclick="seslendir('AKVARYUM')">AKVARYUM</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ek')">ek</button>
-    <button class="kelime-btn" onclick="seslendir('EKMEK')">EKMEK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ık')">ık</button>
-    <button class="kelime-btn" onclick="seslendir('IKSIR')">IKSIR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ik')">ik</button>
-    <button class="kelime-btn" onclick="seslendir('İKİZ')">İKİZ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ok')">ok</button>
-    <button class="kelime-btn" onclick="seslendir('OKUL')">OKUL</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ök')">ök</button>
-    <button class="kelime-btn" onclick="seslendir('ÖKÜZ')">ÖKÜZ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('uk')">uk</button>
-    <button class="kelime-btn" onclick="seslendir('UKDE')">UKDE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ük')">ük</button>
-    <button class="kelime-btn" onclick="seslendir('ÜÇGEN')">ÜÇGEN</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-U" style="--renk:#FFA94D">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">OKURIM Grubu</span>
-      <span class="sayfa-no">9 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('U')">U</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('u')">u</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-    <div class="bolum">
-      <p class="yonerge">📖 U ile Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('un')">un</button>
-    <button class="kelime-btn" onclick="seslendir('UNUTMA')">UNUTMA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ut')">ut</button>
-    <button class="kelime-btn" onclick="seslendir('UTKU')">UTKU</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ul')">ul</button>
-    <button class="kelime-btn" onclick="seslendir('ULUS')">ULUS</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('uk')">uk</button>
-    <button class="kelime-btn" onclick="seslendir('UKDE')">UKDE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ur')">ur</button>
-    <button class="kelime-btn" onclick="seslendir('UTKU')">UTKU</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('um')">um</button>
-    <button class="kelime-btn" onclick="seslendir('UMUT')">UMUT</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('us')">us</button>
-    <button class="kelime-btn" onclick="seslendir('USTA')">USTA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('uy')">uy</button>
-    <button class="kelime-btn" onclick="seslendir('UYKU')">UYKU</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ud')">ud</button>
-    <button class="kelime-btn" onclick="seslendir('UDİ')">UDİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('uz')">uz</button>
-    <button class="kelime-btn" onclick="seslendir('UZUN')">UZUN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('uç')">uç</button>
-    <button class="kelime-btn" onclick="seslendir('UÇAK')">UÇAK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ub')">ub</button>
-    <button class="kelime-btn" onclick="seslendir('MAHSUB')">MAHSUB</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ug')">ug</button>
-    <button class="kelime-btn" onclick="seslendir('UĞUR')">UĞUR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('uc')">uc</button>
-    <button class="kelime-btn" onclick="seslendir('UCUZ')">UCUZ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('uş')">uş</button>
-    <button class="kelime-btn" onclick="seslendir('KUŞ')">KUŞ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('up')">up</button>
-    <button class="kelime-btn" onclick="seslendir('GRUP')">GRUP</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-R" style="--renk:#74B9FF">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">OKURIM Grubu</span>
-      <span class="sayfa-no">10 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('R')">R</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('r')">r</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-
-    <div class="bolum">
-      <p class="yonerge">📖 Açık Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ra')">ra</button>
-    <button class="kelime-btn" onclick="seslendir('RADYO')">RADYO</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('re')">re</button>
-    <button class="kelime-btn" onclick="seslendir('RENK')">RENK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('rı')">rı</button>
-    <button class="kelime-btn" onclick="seslendir('KARINCA')">KARINCA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ri')">ri</button>
-    <button class="kelime-btn" onclick="seslendir('RİCA')">RİCA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ro')">ro</button>
-    <button class="kelime-btn" onclick="seslendir('ROBOT')">ROBOT</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('rö')">rö</button>
-    <button class="kelime-btn" onclick="seslendir('RÖTAR')">RÖTAR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ru')">ru</button>
-    <button class="kelime-btn" onclick="seslendir('RUZGAR')">RUZGAR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('rü')">rü</button>
-    <button class="kelime-btn" onclick="seslendir('RÜZGAR')">RÜZGAR</button>
-  </div></div>
-    </div>
-
-    <div class="bolum">
-      <p class="yonerge">📕 Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ar')">ar</button>
-    <button class="kelime-btn" onclick="seslendir('ARI')">ARI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('er')">er</button>
-    <button class="kelime-btn" onclick="seslendir('ERİK')">ERİK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ır')">ır</button>
-    <button class="kelime-btn" onclick="seslendir('IRMAK')">IRMAK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ir')">ir</button>
-    <button class="kelime-btn" onclick="seslendir('İRİ')">İRİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('or')">or</button>
-    <button class="kelime-btn" onclick="seslendir('ORMAN')">ORMAN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ör')">ör</button>
-    <button class="kelime-btn" onclick="seslendir('ÖRDEK')">ÖRDEK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ur')">ur</button>
-    <button class="kelime-btn" onclick="seslendir('UTKU')">UTKU</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ür')">ür</button>
-    <button class="kelime-btn" onclick="seslendir('ÜRÜN')">ÜRÜN</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-I" style="--renk:#FF6B6B">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">OKURIM Grubu</span>
-      <span class="sayfa-no">11 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('I')">I</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('ı')">ı</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-    <div class="bolum">
-      <p class="yonerge">📖 I ile Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ın')">ın</button>
-    <button class="kelime-btn" onclick="seslendir('KIZGIN')">KIZGIN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ıt')">ıt</button>
-    <button class="kelime-btn" onclick="seslendir('KISITLI')">KISITLI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ıl')">ıl</button>
-    <button class="kelime-btn" onclick="seslendir('KIZIL')">KIZIL</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ık')">ık</button>
-    <button class="kelime-btn" onclick="seslendir('IKSIR')">IKSIR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ır')">ır</button>
-    <button class="kelime-btn" onclick="seslendir('IRMAK')">IRMAK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ım')">ım</button>
-    <button class="kelime-btn" onclick="seslendir('KIRIM')">KIRIM</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ıs')">ıs</button>
-    <button class="kelime-btn" onclick="seslendir('ISITICI')">ISITICI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ıy')">ıy</button>
-    <button class="kelime-btn" onclick="seslendir('KIYI')">KIYI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ıd')">ıd</button>
-    <button class="kelime-btn" onclick="seslendir('KIDEM')">KIDEM</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ız')">ız</button>
-    <button class="kelime-btn" onclick="seslendir('KIZIL')">KIZIL</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ıç')">ıç</button>
-    <button class="kelime-btn" onclick="seslendir('KAPIÇ')">KAPIÇ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ıb')">ıb</button>
-    <button class="kelime-btn" onclick="seslendir('KALIB')">KALIB</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ığ')">ığ</button>
-    <button class="kelime-btn" onclick="seslendir('IĞDIR')">IĞDIR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ıc')">ıc</button>
-    <button class="kelime-btn" onclick="seslendir('KAPICI')">KAPICI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ış')">ış</button>
-    <button class="kelime-btn" onclick="seslendir('IŞIK')">IŞIK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ıp')">ıp</button>
-    <button class="kelime-btn" onclick="seslendir('KALIP')">KALIP</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-M" style="--renk:#4ECDC4">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">OKURIM Grubu</span>
-      <span class="sayfa-no">12 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('M')">M</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('m')">m</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-
-    <div class="bolum">
-      <p class="yonerge">📖 Açık Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ma')">ma</button>
-    <button class="kelime-btn" onclick="seslendir('MASA')">MASA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('me')">me</button>
-    <button class="kelime-btn" onclick="seslendir('MEYVE')">MEYVE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('mı')">mı</button>
-    <button class="kelime-btn" onclick="seslendir('KAMış')">KAMış</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('mi')">mi</button>
-    <button class="kelime-btn" onclick="seslendir('MİDE')">MİDE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('mo')">mo</button>
-    <button class="kelime-btn" onclick="seslendir('MOTOR')">MOTOR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('mö')">mö</button>
-    <button class="kelime-btn" onclick="seslendir('MÖSYÖ')">MÖSYÖ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('mu')">mu</button>
-    <button class="kelime-btn" onclick="seslendir('MUZ')">MUZ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('mü')">mü</button>
-    <button class="kelime-btn" onclick="seslendir('MÜZİK')">MÜZİK</button>
-  </div></div>
-    </div>
-
-    <div class="bolum">
-      <p class="yonerge">📕 Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('am')">am</button>
-    <button class="kelime-btn" onclick="seslendir('AMBAR')">AMBAR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('em')">em</button>
-    <button class="kelime-btn" onclick="seslendir('EMEK')">EMEK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ım')">ım</button>
-    <button class="kelime-btn" onclick="seslendir('KIRIM')">KIRIM</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('im')">im</button>
-    <button class="kelime-btn" onclick="seslendir('İMAM')">İMAM</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('om')">om</button>
-    <button class="kelime-btn" onclick="seslendir('KOMUTAN')">KOMUTAN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öm')">öm</button>
-    <button class="kelime-btn" onclick="seslendir('ÖMÜR')">ÖMÜR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('um')">um</button>
-    <button class="kelime-btn" onclick="seslendir('UMUT')">UMUT</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üm')">üm</button>
-    <button class="kelime-btn" onclick="seslendir('ÜMİT')">ÜMİT</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-Ü" style="--renk:#FFD93D">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">ÜSOYDZ Grubu</span>
-      <span class="sayfa-no">13 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('Ü')">Ü</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('ü')">ü</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-    <div class="bolum">
-      <p class="yonerge">📖 Ü ile Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ün')">ün</button>
-    <button class="kelime-btn" onclick="seslendir('GÜN')">GÜN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üt')">üt</button>
-    <button class="kelime-btn" onclick="seslendir('ÜTÜ')">ÜTÜ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ül')">ül</button>
-    <button class="kelime-btn" onclick="seslendir('ÜLKE')">ÜLKE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ük')">ük</button>
-    <button class="kelime-btn" onclick="seslendir('ÜÇGEN')">ÜÇGEN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ür')">ür</button>
-    <button class="kelime-btn" onclick="seslendir('ÜRÜN')">ÜRÜN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üm')">üm</button>
-    <button class="kelime-btn" onclick="seslendir('ÜMİT')">ÜMİT</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üs')">üs</button>
-    <button class="kelime-btn" onclick="seslendir('ÜSTÜN')">ÜSTÜN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üy')">üy</button>
-    <button class="kelime-btn" onclick="seslendir('TÜY')">TÜY</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üd')">üd</button>
-    <button class="kelime-btn" onclick="seslendir('GÜDÜK')">GÜDÜK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üz')">üz</button>
-    <button class="kelime-btn" onclick="seslendir('ÜZÜM')">ÜZÜM</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üç')">üç</button>
-    <button class="kelime-btn" onclick="seslendir('ÜÇGEN')">ÜÇGEN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üb')">üb</button>
-    <button class="kelime-btn" onclick="seslendir('KULÜB')">KULÜB</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üg')">üg</button>
-    <button class="kelime-btn" onclick="seslendir('DÜĞÜN')">DÜĞÜN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üc')">üc</button>
-    <button class="kelime-btn" onclick="seslendir('ÜCRET')">ÜCRET</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üş')">üş</button>
-    <button class="kelime-btn" onclick="seslendir('TÜYÜŞ')">TÜYÜŞ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üp')">üp</button>
-    <button class="kelime-btn" onclick="seslendir('TÜP')">TÜP</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-S" style="--renk:#6C5CE7">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">ÜSOYDZ Grubu</span>
-      <span class="sayfa-no">14 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('S')">S</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('s')">s</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-
-    <div class="bolum">
-      <p class="yonerge">📖 Açık Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('sa')">sa</button>
-    <button class="kelime-btn" onclick="seslendir('SAAT')">SAAT</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('se')">se</button>
-    <button class="kelime-btn" onclick="seslendir('SEPET')">SEPET</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('sı')">sı</button>
-    <button class="kelime-btn" onclick="seslendir('SIRA')">SIRA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('si')">si</button>
-    <button class="kelime-btn" onclick="seslendir('SİNEK')">SİNEK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('so')">so</button>
-    <button class="kelime-btn" onclick="seslendir('SOBA')">SOBA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('sö')">sö</button>
-    <button class="kelime-btn" onclick="seslendir('SÖZLÜK')">SÖZLÜK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('su')">su</button>
-    <button class="kelime-btn" onclick="seslendir('SUSAM')">SUSAM</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('sü')">sü</button>
-    <button class="kelime-btn" onclick="seslendir('SÜT')">SÜT</button>
-  </div></div>
-    </div>
-
-    <div class="bolum">
-      <p class="yonerge">📕 Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('as')">as</button>
-    <button class="kelime-btn" onclick="seslendir('ASLAN')">ASLAN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('es')">es</button>
-    <button class="kelime-btn" onclick="seslendir('ESKİ')">ESKİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ıs')">ıs</button>
-    <button class="kelime-btn" onclick="seslendir('ISITICI')">ISITICI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('is')">is</button>
-    <button class="kelime-btn" onclick="seslendir('İSİM')">İSİM</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('os')">os</button>
-    <button class="kelime-btn" onclick="seslendir('KOSKOCA')">KOSKOCA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ös')">ös</button>
-    <button class="kelime-btn" onclick="seslendir('KÖSELE')">KÖSELE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('us')">us</button>
-    <button class="kelime-btn" onclick="seslendir('USTA')">USTA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üs')">üs</button>
-    <button class="kelime-btn" onclick="seslendir('ÜSTÜN')">ÜSTÜN</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-Ö" style="--renk:#FF8C42">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">ÜSOYDZ Grubu</span>
-      <span class="sayfa-no">15 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('Ö')">Ö</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('ö')">ö</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-    <div class="bolum">
-      <p class="yonerge">📖 Ö ile Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ön')">ön</button>
-    <button class="kelime-btn" onclick="seslendir('DÖNER')">DÖNER</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öt')">öt</button>
-    <button class="kelime-btn" onclick="seslendir('ÖTEN')">ÖTEN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öl')">öl</button>
-    <button class="kelime-btn" onclick="seslendir('ÖLÇÜ')">ÖLÇÜ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ök')">ök</button>
-    <button class="kelime-btn" onclick="seslendir('ÖKÜZ')">ÖKÜZ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ör')">ör</button>
-    <button class="kelime-btn" onclick="seslendir('ÖRDEK')">ÖRDEK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öm')">öm</button>
-    <button class="kelime-btn" onclick="seslendir('ÖMÜR')">ÖMÜR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ös')">ös</button>
-    <button class="kelime-btn" onclick="seslendir('KÖSELE')">KÖSELE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öy')">öy</button>
-    <button class="kelime-btn" onclick="seslendir('KÖY')">KÖY</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öd')">öd</button>
-    <button class="kelime-btn" onclick="seslendir('ÖDEV')">ÖDEV</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öz')">öz</button>
-    <button class="kelime-btn" onclick="seslendir('ÖZEL')">ÖZEL</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öç')">öç</button>
-    <button class="kelime-btn" onclick="seslendir('ÖÇ')">ÖÇ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öb')">öb</button>
-    <button class="kelime-btn" onclick="seslendir('ÖBEK')">ÖBEK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ög')">ög</button>
-    <button class="kelime-btn" onclick="seslendir('ÖĞRETMEN')">ÖĞRETMEN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öc')">öc</button>
-    <button class="kelime-btn" onclick="seslendir('ÖCÜ')">ÖCÜ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öş')">öş</button>
-    <button class="kelime-btn" onclick="seslendir('GÖŞ')">GÖŞ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öp')">öp</button>
-    <button class="kelime-btn" onclick="seslendir('ÖP')">ÖP</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-Y" style="--renk:#42C2FF">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">ÜSOYDZ Grubu</span>
-      <span class="sayfa-no">16 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('Y')">Y</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('y')">y</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-
-    <div class="bolum">
-      <p class="yonerge">📖 Açık Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ya')">ya</button>
-    <button class="kelime-btn" onclick="seslendir('YASTIK')">YASTIK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ye')">ye</button>
-    <button class="kelime-btn" onclick="seslendir('YEMEK')">YEMEK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('yı')">yı</button>
-    <button class="kelime-btn" onclick="seslendir('YILDIZ')">YILDIZ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('yi')">yi</button>
-    <button class="kelime-btn" onclick="seslendir('YİYECEK')">YİYECEK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('yo')">yo</button>
-    <button class="kelime-btn" onclick="seslendir('YOĞURT')">YOĞURT</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('yö')">yö</button>
-    <button class="kelime-btn" onclick="seslendir('YÖN')">YÖN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('yu')">yu</button>
-    <button class="kelime-btn" onclick="seslendir('YUMURTA')">YUMURTA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('yü')">yü</button>
-    <button class="kelime-btn" onclick="seslendir('YÜZÜK')">YÜZÜK</button>
-  </div></div>
-    </div>
-
-    <div class="bolum">
-      <p class="yonerge">📕 Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ay')">ay</button>
-    <button class="kelime-btn" onclick="seslendir('AYI')">AYI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ey')">ey</button>
-    <button class="kelime-btn" onclick="seslendir('DEYİM')">DEYİM</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ıy')">ıy</button>
-    <button class="kelime-btn" onclick="seslendir('KIYI')">KIYI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('iy')">iy</button>
-    <button class="kelime-btn" onclick="seslendir('İYİLİK')">İYİLİK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('oy')">oy</button>
-    <button class="kelime-btn" onclick="seslendir('OYUN')">OYUN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öy')">öy</button>
-    <button class="kelime-btn" onclick="seslendir('KÖY')">KÖY</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('uy')">uy</button>
-    <button class="kelime-btn" onclick="seslendir('UYKU')">UYKU</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üy')">üy</button>
-    <button class="kelime-btn" onclick="seslendir('TÜY')">TÜY</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-D" style="--renk:#A8E063">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">ÜSOYDZ Grubu</span>
-      <span class="sayfa-no">17 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('D')">D</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('d')">d</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-
-    <div class="bolum">
-      <p class="yonerge">📖 Açık Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('da')">da</button>
-    <button class="kelime-btn" onclick="seslendir('DALGA')">DALGA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('de')">de</button>
-    <button class="kelime-btn" onclick="seslendir('DEFTER')">DEFTER</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('dı')">dı</button>
-    <button class="kelime-btn" onclick="seslendir('KADIN')">KADIN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('di')">di</button>
-    <button class="kelime-btn" onclick="seslendir('DİSKO')">DİSKO</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('do')">do</button>
-    <button class="kelime-btn" onclick="seslendir('DOLAP')">DOLAP</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('dö')">dö</button>
-    <button class="kelime-btn" onclick="seslendir('DÖNER')">DÖNER</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('du')">du</button>
-    <button class="kelime-btn" onclick="seslendir('DUMAN')">DUMAN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('dü')">dü</button>
-    <button class="kelime-btn" onclick="seslendir('DÜĞÜN')">DÜĞÜN</button>
-  </div></div>
-    </div>
-
-    <div class="bolum">
-      <p class="yonerge">📕 Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ad')">ad</button>
-    <button class="kelime-btn" onclick="seslendir('ADIM')">ADIM</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ed')">ed</button>
-    <button class="kelime-btn" onclick="seslendir('EDEP')">EDEP</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ıd')">ıd</button>
-    <button class="kelime-btn" onclick="seslendir('KIDEM')">KIDEM</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('id')">id</button>
-    <button class="kelime-btn" onclick="seslendir('İDARE')">İDARE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('od')">od</button>
-    <button class="kelime-btn" onclick="seslendir('ODA')">ODA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öd')">öd</button>
-    <button class="kelime-btn" onclick="seslendir('ÖDEV')">ÖDEV</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ud')">ud</button>
-    <button class="kelime-btn" onclick="seslendir('UDİ')">UDİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üd')">üd</button>
-    <button class="kelime-btn" onclick="seslendir('GÜDÜK')">GÜDÜK</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-Z" style="--renk:#FF6FB5">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">ÜSOYDZ Grubu</span>
-      <span class="sayfa-no">18 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('Z')">Z</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('z')">z</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-
-    <div class="bolum">
-      <p class="yonerge">📖 Açık Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('za')">za</button>
-    <button class="kelime-btn" onclick="seslendir('ZAMAN')">ZAMAN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ze')">ze</button>
-    <button class="kelime-btn" onclick="seslendir('ZENCEFİL')">ZENCEFİL</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('zı')">zı</button>
-    <button class="kelime-btn" onclick="seslendir('YAZI')">YAZI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('zi')">zi</button>
-    <button class="kelime-btn" onclick="seslendir('ZİL')">ZİL</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('zo')">zo</button>
-    <button class="kelime-btn" onclick="seslendir('ZOR')">ZOR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('zö')">zö</button>
-    <button class="kelime-btn" onclick="seslendir('GÖZÖZÜ')">GÖZÖZÜ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('zu')">zu</button>
-    <button class="kelime-btn" onclick="seslendir('YÜZÜK')">YÜZÜK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('zü')">zü</button>
-    <button class="kelime-btn" onclick="seslendir('ZÜRAFA')">ZÜRAFA</button>
-  </div></div>
-    </div>
-
-    <div class="bolum">
-      <p class="yonerge">📕 Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('az')">az</button>
-    <button class="kelime-btn" onclick="seslendir('AZIK')">AZIK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ez')">ez</button>
-    <button class="kelime-btn" onclick="seslendir('EZİK')">EZİK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ız')">ız</button>
-    <button class="kelime-btn" onclick="seslendir('KIZIL')">KIZIL</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('iz')">iz</button>
-    <button class="kelime-btn" onclick="seslendir('İZMİR')">İZMİR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('oz')">oz</button>
-    <button class="kelime-btn" onclick="seslendir('PAMUKOĞZ')">PAMUKOĞZ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öz')">öz</button>
-    <button class="kelime-btn" onclick="seslendir('ÖZEL')">ÖZEL</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('uz')">uz</button>
-    <button class="kelime-btn" onclick="seslendir('UZUN')">UZUN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üz')">üz</button>
-    <button class="kelime-btn" onclick="seslendir('ÜZÜM')">ÜZÜM</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-Ç" style="--renk:#FFA94D">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">ÇBGCŞ Grubu</span>
-      <span class="sayfa-no">19 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('Ç')">Ç</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('ç')">ç</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-
-    <div class="bolum">
-      <p class="yonerge">📖 Açık Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ça')">ça</button>
-    <button class="kelime-btn" onclick="seslendir('ÇATAL')">ÇATAL</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('çe')">çe</button>
-    <button class="kelime-btn" onclick="seslendir('ÇEVRE')">ÇEVRE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('çı')">çı</button>
-    <button class="kelime-btn" onclick="seslendir('YEMÇİ')">YEMÇİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('çi')">çi</button>
-    <button class="kelime-btn" onclick="seslendir('ÇİÇEK')">ÇİÇEK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ço')">ço</button>
-    <button class="kelime-btn" onclick="seslendir('ÇOBAN')">ÇOBAN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('çö')">çö</button>
-    <button class="kelime-btn" onclick="seslendir('ÇÖL')">ÇÖL</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('çu')">çu</button>
-    <button class="kelime-btn" onclick="seslendir('ÇUKUR')">ÇUKUR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('çü')">çü</button>
-    <button class="kelime-btn" onclick="seslendir('ÇÜRÜK')">ÇÜRÜK</button>
-  </div></div>
-    </div>
-
-    <div class="bolum">
-      <p class="yonerge">📕 Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('aç')">aç</button>
-    <button class="kelime-btn" onclick="seslendir('AÇI')">AÇI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('eç')">eç</button>
-    <button class="kelime-btn" onclick="seslendir('GEÇ')">GEÇ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ıç')">ıç</button>
-    <button class="kelime-btn" onclick="seslendir('KAPIÇ')">KAPIÇ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('iç')">iç</button>
-    <button class="kelime-btn" onclick="seslendir('İÇECEK')">İÇECEK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('oç')">oç</button>
-    <button class="kelime-btn" onclick="seslendir('KOÇ')">KOÇ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öç')">öç</button>
-    <button class="kelime-btn" onclick="seslendir('ÖÇ')">ÖÇ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('uç')">uç</button>
-    <button class="kelime-btn" onclick="seslendir('UÇAK')">UÇAK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üç')">üç</button>
-    <button class="kelime-btn" onclick="seslendir('ÜÇGEN')">ÜÇGEN</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-B" style="--renk:#74B9FF">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">ÇBGCŞ Grubu</span>
-      <span class="sayfa-no">20 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('B')">B</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('b')">b</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-
-    <div class="bolum">
-      <p class="yonerge">📖 Açık Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ba')">ba</button>
-    <button class="kelime-btn" onclick="seslendir('BALON')">BALON</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('be')">be</button>
-    <button class="kelime-btn" onclick="seslendir('BEBEK')">BEBEK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('bı')">bı</button>
-    <button class="kelime-btn" onclick="seslendir('BIÇAK')">BIÇAK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('bi')">bi</button>
-    <button class="kelime-btn" onclick="seslendir('BİBER')">BİBER</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('bo')">bo</button>
-    <button class="kelime-btn" onclick="seslendir('BORU')">BORU</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('bö')">bö</button>
-    <button class="kelime-btn" onclick="seslendir('BÖCEK')">BÖCEK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('bu')">bu</button>
-    <button class="kelime-btn" onclick="seslendir('BUZ')">BUZ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('bü')">bü</button>
-    <button class="kelime-btn" onclick="seslendir('BÜYÜK')">BÜYÜK</button>
-  </div></div>
-    </div>
-
-    <div class="bolum">
-      <p class="yonerge">📕 Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ab')">ab</button>
-    <button class="kelime-btn" onclick="seslendir('KAB')">KAB</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('eb')">eb</button>
-    <button class="kelime-btn" onclick="seslendir('SEBEP')">SEBEP</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ıb')">ıb</button>
-    <button class="kelime-btn" onclick="seslendir('KALIB')">KALIB</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ib')">ib</button>
-    <button class="kelime-btn" onclick="seslendir('NASİB')">NASİB</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ob')">ob</button>
-    <button class="kelime-btn" onclick="seslendir('ROBOT')">ROBOT</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öb')">öb</button>
-    <button class="kelime-btn" onclick="seslendir('ÖBEK')">ÖBEK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ub')">ub</button>
-    <button class="kelime-btn" onclick="seslendir('MAHSUB')">MAHSUB</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üb')">üb</button>
-    <button class="kelime-btn" onclick="seslendir('KULÜB')">KULÜB</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-G" style="--renk:#FF6B6B">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">ÇBGCŞ Grubu</span>
-      <span class="sayfa-no">21 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('G')">G</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('g')">g</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-
-    <div class="bolum">
-      <p class="yonerge">📖 Açık Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ga')">ga</button>
-    <button class="kelime-btn" onclick="seslendir('GAZETE')">GAZETE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ge')">ge</button>
-    <button class="kelime-btn" onclick="seslendir('GEMİ')">GEMİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('gı')">gı</button>
-    <button class="kelime-btn" onclick="seslendir('DERGİ')">DERGİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('gi')">gi</button>
-    <button class="kelime-btn" onclick="seslendir('GİYSİ')">GİYSİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('go')">go</button>
-    <button class="kelime-btn" onclick="seslendir('GONCA')">GONCA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('gö')">gö</button>
-    <button class="kelime-btn" onclick="seslendir('GÖZ')">GÖZ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('gu')">gu</button>
-    <button class="kelime-btn" onclick="seslendir('KUĞU')">KUĞU</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('gü')">gü</button>
-    <button class="kelime-btn" onclick="seslendir('GÜNEŞ')">GÜNEŞ</button>
-  </div></div>
-    </div>
-
-    <div class="bolum">
-      <p class="yonerge">📕 Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ag')">ag</button>
-    <button class="kelime-btn" onclick="seslendir('BAGAJ')">BAGAJ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('eg')">eg</button>
-    <button class="kelime-btn" onclick="seslendir('REGL')">REGL</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ıg')">ıg</button>
-    <button class="kelime-btn" onclick="seslendir('KIĞ')">KIĞ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ig')">ig</button>
-    <button class="kelime-btn" onclick="seslendir('İĞNE')">İĞNE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('og')">og</button>
-    <button class="kelime-btn" onclick="seslendir('YOĞURT')">YOĞURT</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ög')">ög</button>
-    <button class="kelime-btn" onclick="seslendir('ÖĞRETMEN')">ÖĞRETMEN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ug')">ug</button>
-    <button class="kelime-btn" onclick="seslendir('UĞUR')">UĞUR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üg')">üg</button>
-    <button class="kelime-btn" onclick="seslendir('DÜĞÜN')">DÜĞÜN</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-C" style="--renk:#4ECDC4">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">ÇBGCŞ Grubu</span>
-      <span class="sayfa-no">22 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('C')">C</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('c')">c</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-
-    <div class="bolum">
-      <p class="yonerge">📖 Açık Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ca')">ca</button>
-    <button class="kelime-btn" onclick="seslendir('CAM')">CAM</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ce')">ce</button>
-    <button class="kelime-btn" onclick="seslendir('CEVİZ')">CEVİZ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('cı')">cı</button>
-    <button class="kelime-btn" onclick="seslendir('BALCI')">BALCI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ci')">ci</button>
-    <button class="kelime-btn" onclick="seslendir('CİCİ')">CİCİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('co')">co</button>
-    <button class="kelime-btn" onclick="seslendir('COŞKU')">COŞKU</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('cö')">cö</button>
-    <button class="kelime-btn" onclick="seslendir('CÖMERT')">CÖMERT</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('cu')">cu</button>
-    <button class="kelime-btn" onclick="seslendir('CUMA')">CUMA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('cü')">cü</button>
-    <button class="kelime-btn" onclick="seslendir('CÜCE')">CÜCE</button>
-  </div></div>
-    </div>
-
-    <div class="bolum">
-      <p class="yonerge">📕 Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ac')">ac</button>
-    <button class="kelime-btn" onclick="seslendir('İLAÇ')">İLAÇ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ec')">ec</button>
-    <button class="kelime-btn" onclick="seslendir('SEÇ')">SEÇ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ıc')">ıc</button>
-    <button class="kelime-btn" onclick="seslendir('KAPICI')">KAPICI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ic')">ic</button>
-    <button class="kelime-btn" onclick="seslendir('İCAT')">İCAT</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('oc')">oc</button>
-    <button class="kelime-btn" onclick="seslendir('OCAK')">OCAK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öc')">öc</button>
-    <button class="kelime-btn" onclick="seslendir('ÖCÜ')">ÖCÜ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('uc')">uc</button>
-    <button class="kelime-btn" onclick="seslendir('UCUZ')">UCUZ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üc')">üc</button>
-    <button class="kelime-btn" onclick="seslendir('ÜCRET')">ÜCRET</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-Ş" style="--renk:#FFD93D">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">ÇBGCŞ Grubu</span>
-      <span class="sayfa-no">23 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('Ş')">Ş</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('ş')">ş</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-
-    <div class="bolum">
-      <p class="yonerge">📖 Açık Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('şa')">şa</button>
-    <button class="kelime-btn" onclick="seslendir('ŞAPKA')">ŞAPKA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('şe')">şe</button>
-    <button class="kelime-btn" onclick="seslendir('ŞEKER')">ŞEKER</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('şı')">şı</button>
-    <button class="kelime-btn" onclick="seslendir('KARŞI')">KARŞI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('şi')">şi</button>
-    <button class="kelime-btn" onclick="seslendir('ŞİİR')">ŞİİR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('şo')">şo</button>
-    <button class="kelime-btn" onclick="seslendir('ŞOFÖR')">ŞOFÖR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('şö')">şö</button>
-    <button class="kelime-btn" onclick="seslendir('ŞÖMİNE')">ŞÖMİNE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('şu')">şu</button>
-    <button class="kelime-btn" onclick="seslendir('ŞUBAT')">ŞUBAT</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('şü')">şü</button>
-    <button class="kelime-btn" onclick="seslendir('ŞÜKÜR')">ŞÜKÜR</button>
-  </div></div>
-    </div>
-
-    <div class="bolum">
-      <p class="yonerge">📕 Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('aş')">aş</button>
-    <button class="kelime-btn" onclick="seslendir('AŞÇI')">AŞÇI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('eş')">eş</button>
-    <button class="kelime-btn" onclick="seslendir('EŞEK')">EŞEK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ış')">ış</button>
-    <button class="kelime-btn" onclick="seslendir('IŞIK')">IŞIK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('iş')">iş</button>
-    <button class="kelime-btn" onclick="seslendir('İŞÇİ')">İŞÇİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('oş')">oş</button>
-    <button class="kelime-btn" onclick="seslendir('HOŞ')">HOŞ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öş')">öş</button>
-    <button class="kelime-btn" onclick="seslendir('GÖŞ')">GÖŞ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('uş')">uş</button>
-    <button class="kelime-btn" onclick="seslendir('KUŞ')">KUŞ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üş')">üş</button>
-    <button class="kelime-btn" onclick="seslendir('TÜYÜŞ')">TÜYÜŞ</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-P" style="--renk:#6C5CE7">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">PHVĞJF Grubu</span>
-      <span class="sayfa-no">24 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('P')">P</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('p')">p</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-
-    <div class="bolum">
-      <p class="yonerge">📖 Açık Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('pa')">pa</button>
-    <button class="kelime-btn" onclick="seslendir('PASTA')">PASTA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('pe')">pe</button>
-    <button class="kelime-btn" onclick="seslendir('PENCERE')">PENCERE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('pı')">pı</button>
-    <button class="kelime-btn" onclick="seslendir('KAPI')">KAPI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('pi')">pi</button>
-    <button class="kelime-btn" onclick="seslendir('PİYANO')">PİYANO</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('po')">po</button>
-    <button class="kelime-btn" onclick="seslendir('POSTA')">POSTA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('pö')">pö</button>
-    <button class="kelime-btn" onclick="seslendir('PÖSTEKİ')">PÖSTEKİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('pu')">pu</button>
-    <button class="kelime-btn" onclick="seslendir('PUAN')">PUAN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('pü')">pü</button>
-    <button class="kelime-btn" onclick="seslendir('PÜSKÜL')">PÜSKÜL</button>
-  </div></div>
-    </div>
-
-    <div class="bolum">
-      <p class="yonerge">📕 Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ap')">ap</button>
-    <button class="kelime-btn" onclick="seslendir('KİTAP')">KİTAP</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ep')">ep</button>
-    <button class="kelime-btn" onclick="seslendir('SEPET')">SEPET</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ıp')">ıp</button>
-    <button class="kelime-btn" onclick="seslendir('KALIP')">KALIP</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ip')">ip</button>
-    <button class="kelime-btn" onclick="seslendir('İPEK')">İPEK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('op')">op</button>
-    <button class="kelime-btn" onclick="seslendir('TOP')">TOP</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öp')">öp</button>
-    <button class="kelime-btn" onclick="seslendir('ÖP')">ÖP</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('up')">up</button>
-    <button class="kelime-btn" onclick="seslendir('GRUP')">GRUP</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üp')">üp</button>
-    <button class="kelime-btn" onclick="seslendir('TÜP')">TÜP</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-H" style="--renk:#FF8C42">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">PHVĞJF Grubu</span>
-      <span class="sayfa-no">25 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('H')">H</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('h')">h</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-
-    <div class="bolum">
-      <p class="yonerge">📖 Açık Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ha')">ha</button>
-    <button class="kelime-btn" onclick="seslendir('HAVUÇ')">HAVUÇ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('he')">he</button>
-    <button class="kelime-btn" onclick="seslendir('HEYBE')">HEYBE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('hı')">hı</button>
-    <button class="kelime-btn" onclick="seslendir('HIRSIZ')">HIRSIZ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('hi')">hi</button>
-    <button class="kelime-btn" onclick="seslendir('HİKAYE')">HİKAYE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ho')">ho</button>
-    <button class="kelime-btn" onclick="seslendir('HOROZ')">HOROZ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('hö')">hö</button>
-    <button class="kelime-btn" onclick="seslendir('HÖYÜK')">HÖYÜK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('hu')">hu</button>
-    <button class="kelime-btn" onclick="seslendir('HUZUR')">HUZUR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('hü')">hü</button>
-    <button class="kelime-btn" onclick="seslendir('HÜZÜN')">HÜZÜN</button>
-  </div></div>
-    </div>
-
-    <div class="bolum">
-      <p class="yonerge">📕 Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ah')">ah</button>
-    <button class="kelime-btn" onclick="seslendir('SİLAH')">SİLAH</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('eh')">eh</button>
-    <button class="kelime-btn" onclick="seslendir('MEHTAP')">MEHTAP</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ıh')">ıh</button>
-    <button class="kelime-btn" onclick="seslendir('KIH')">KIH</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ih')">ih</button>
-    <button class="kelime-btn" onclick="seslendir('İHTAR')">İHTAR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('oh')">oh</button>
-    <button class="kelime-btn" onclick="seslendir('OH')">OH</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öh')">öh</button>
-    <button class="kelime-btn" onclick="seslendir('ÖHÖ')">ÖHÖ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('uh')">uh</button>
-    <button class="kelime-btn" onclick="seslendir('UH')">UH</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üh')">üh</button>
-    <button class="kelime-btn" onclick="seslendir('PÜH')">PÜH</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-V" style="--renk:#42C2FF">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">PHVĞJF Grubu</span>
-      <span class="sayfa-no">26 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('V')">V</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('v')">v</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-
-    <div class="bolum">
-      <p class="yonerge">📖 Açık Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('va')">va</button>
-    <button class="kelime-btn" onclick="seslendir('VAZO')">VAZO</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ve')">ve</button>
-    <button class="kelime-btn" onclick="seslendir('VERGİ')">VERGİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('vı')">vı</button>
-    <button class="kelime-btn" onclick="seslendir('AVIZE')">AVIZE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('vi')">vi</button>
-    <button class="kelime-btn" onclick="seslendir('VİDA')">VİDA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('vo')">vo</button>
-    <button class="kelime-btn" onclick="seslendir('VOLEYBOL')">VOLEYBOL</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('vö')">vö</button>
-    <button class="kelime-btn" onclick="seslendir('VÖVÖ')">VÖVÖ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('vu')">vu</button>
-    <button class="kelime-btn" onclick="seslendir('VURMA')">VURMA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('vü')">vü</button>
-    <button class="kelime-btn" onclick="seslendir('TÜVÜN')">TÜVÜN</button>
-  </div></div>
-    </div>
-
-    <div class="bolum">
-      <p class="yonerge">📕 Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('av')">av</button>
-    <button class="kelime-btn" onclick="seslendir('AVCI')">AVCI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ev')">ev</button>
-    <button class="kelime-btn" onclick="seslendir('EVDE')">EVDE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ıv')">ıv</button>
-    <button class="kelime-btn" onclick="seslendir('KIVRIM')">KIVRIM</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('iv')">iv</button>
-    <button class="kelime-btn" onclick="seslendir('İVEDİ')">İVEDİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ov')">ov</button>
-    <button class="kelime-btn" onclick="seslendir('KOVA')">KOVA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öv')">öv</button>
-    <button class="kelime-btn" onclick="seslendir('ÖVÜNÇ')">ÖVÜNÇ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('uv')">uv</button>
-    <button class="kelime-btn" onclick="seslendir('KUVVET')">KUVVET</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üv')">üv</button>
-    <button class="kelime-btn" onclick="seslendir('DÜVME')">DÜVME</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-Ğ" style="--renk:#A8E063">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">PHVĞJF Grubu</span>
-      <span class="sayfa-no">27 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('Ğ')">Ğ</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('ğ')">ğ</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-
-    <div class="bolum">
-      <p class="yonerge">📖 Açık Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ğa')">ğa</button>
-    <button class="kelime-btn" onclick="seslendir('DAĞA')">DAĞA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ğe')">ğe</button>
-    <button class="kelime-btn" onclick="seslendir('DEĞER')">DEĞER</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ğı')">ğı</button>
-    <button class="kelime-btn" onclick="seslendir('SAĞI')">SAĞI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ği')">ği</button>
-    <button class="kelime-btn" onclick="seslendir('DEĞİL')">DEĞİL</button>
-  </div><div class="hece-kart bos">
-      <button class="hece-btn" onclick="seslendir('ğo')">ğo</button>
-    </div><div class="hece-kart bos">
-      <button class="hece-btn" onclick="seslendir('ğö')">ğö</button>
-    </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ğu')">ğu</button>
-    <button class="kelime-btn" onclick="seslendir('DOĞU')">DOĞU</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ğü')">ğü</button>
-    <button class="kelime-btn" onclick="seslendir('DÜĞÜM')">DÜĞÜM</button>
-  </div></div>
-    </div>
-
-    <div class="bolum">
-      <p class="yonerge">📕 Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ağ')">ağ</button>
-    <button class="kelime-btn" onclick="seslendir('DAĞ')">DAĞ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('eğ')">eğ</button>
-    <button class="kelime-btn" onclick="seslendir('EĞRİ')">EĞRİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ığ')">ığ</button>
-    <button class="kelime-btn" onclick="seslendir('IĞDIR')">IĞDIR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('iğ')">iğ</button>
-    <button class="kelime-btn" onclick="seslendir('İĞNE')">İĞNE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('oğ')">oğ</button>
-    <button class="kelime-btn" onclick="seslendir('OĞUL')">OĞUL</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öğ')">öğ</button>
-    <button class="kelime-btn" onclick="seslendir('ÖĞRETMEN')">ÖĞRETMEN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('uğ')">uğ</button>
-    <button class="kelime-btn" onclick="seslendir('UĞUR')">UĞUR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üğ')">üğ</button>
-    <button class="kelime-btn" onclick="seslendir('DÜĞÜN')">DÜĞÜN</button>
-  </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-J" style="--renk:#FF6FB5">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">PHVĞJF Grubu</span>
-      <span class="sayfa-no">28 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('J')">J</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('j')">j</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-
-    <div class="bolum">
-      <p class="yonerge">📖 Açık Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ja')">ja</button>
-    <button class="kelime-btn" onclick="seslendir('GARAJA')">GARAJA</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('je')">je</button>
-    <button class="kelime-btn" onclick="seslendir('JEOLOG')">JEOLOG</button>
-  </div><div class="hece-kart bos">
-      <button class="hece-btn" onclick="seslendir('jı')">jı</button>
-    </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ji')">ji</button>
-    <button class="kelime-btn" onclick="seslendir('JİMNASTİK')">JİMNASTİK</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('jo')">jo</button>
-    <button class="kelime-btn" onclick="seslendir('JOKEY')">JOKEY</button>
-  </div><div class="hece-kart bos">
-      <button class="hece-btn" onclick="seslendir('jö')">jö</button>
-    </div><div class="hece-kart bos">
-      <button class="hece-btn" onclick="seslendir('ju')">ju</button>
-    </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('jü')">jü</button>
-    <button class="kelime-btn" onclick="seslendir('JÜRİ')">JÜRİ</button>
-  </div></div>
-    </div>
-
-    <div class="bolum">
-      <p class="yonerge">📕 Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('aj')">aj</button>
-    <button class="kelime-btn" onclick="seslendir('GARAJ')">GARAJ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ej')">ej</button>
-    <button class="kelime-btn" onclick="seslendir('KOLAJ')">KOLAJ</button>
-  </div><div class="hece-kart bos">
-      <button class="hece-btn" onclick="seslendir('ıj')">ıj</button>
-    </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ij')">ij</button>
-    <button class="kelime-btn" onclick="seslendir('PRESTİJ')">PRESTİJ</button>
-  </div><div class="hece-kart bos">
-      <button class="hece-btn" onclick="seslendir('oj')">oj</button>
-    </div><div class="hece-kart bos">
-      <button class="hece-btn" onclick="seslendir('öj')">öj</button>
-    </div><div class="hece-kart bos">
-      <button class="hece-btn" onclick="seslendir('uj')">uj</button>
-    </div><div class="hece-kart bos">
-      <button class="hece-btn" onclick="seslendir('üj')">üj</button>
-    </div></div>
-    </div>
-  </section>
-
-  <section class="sayfa" id="sayfa-F" style="--renk:#FFA94D">
-    <div class="sayfa-ust">
-      <span class="grup-etiket">PHVĞJF Grubu</span>
-      <span class="sayfa-no">29 / 29</span>
-    </div>
-    <h2 class="harf-baslik">
-      <button class="harf-buyuk-btn" onclick="seslendir('F')">F</button>
-      <button class="harf-kucuk-btn" onclick="seslendir('f')">f</button>
-      <span class="harf-adi">harfi</span>
-    </h2>
-
-    <div class="bolum">
-      <p class="yonerge">📖 Açık Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('fa')">fa</button>
-    <button class="kelime-btn" onclick="seslendir('FANUS')">FANUS</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('fe')">fe</button>
-    <button class="kelime-btn" onclick="seslendir('FENER')">FENER</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('fı')">fı</button>
-    <button class="kelime-btn" onclick="seslendir('FISILTI')">FISILTI</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('fi')">fi</button>
-    <button class="kelime-btn" onclick="seslendir('FİL')">FİL</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('fo')">fo</button>
-    <button class="kelime-btn" onclick="seslendir('FOTOĞRAF')">FOTOĞRAF</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('fö')">fö</button>
-    <button class="kelime-btn" onclick="seslendir('FÖN')">FÖN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('fu')">fu</button>
-    <button class="kelime-btn" onclick="seslendir('FUAR')">FUAR</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('fü')">fü</button>
-    <button class="kelime-btn" onclick="seslendir('FÜZE')">FÜZE</button>
-  </div></div>
-    </div>
-
-    <div class="bolum">
-      <p class="yonerge">📕 Kapalı Heceler — dokun, dinle!</p>
-      <div class="hece-izgara"><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('af')">af</button>
-    <button class="kelime-btn" onclick="seslendir('AFİŞ')">AFİŞ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ef')">ef</button>
-    <button class="kelime-btn" onclick="seslendir('EFE')">EFE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('ıf')">ıf</button>
-    <button class="kelime-btn" onclick="seslendir('TARİF')">TARİF</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('if')">if</button>
-    <button class="kelime-btn" onclick="seslendir('İFADE')">İFADE</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('of')">of</button>
-    <button class="kelime-btn" onclick="seslendir('KOFTİ')">KOFTİ</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('öf')">öf</button>
-    <button class="kelime-btn" onclick="seslendir('ÖF')">ÖF</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('uf')">uf</button>
-    <button class="kelime-btn" onclick="seslendir('TUFAN')">TUFAN</button>
-  </div><div class="hece-kart">
-    <button class="hece-btn" onclick="seslendir('üf')">üf</button>
-    <button class="kelime-btn" onclick="seslendir('ÜFLE')">ÜFLE</button>
-  </div></div>
-    </div>
-  </section>
-</main>
-
-<footer>Her heceye ve kelimeye dokunarak sesini dinleyebilirsin. 🎧</footer>
-
-<button class="yukari-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆️</button>
+<div class="ayarlar">
+  <button class="ayar-btn" id="btnBuyuk" onclick="buyukHarf()">🔠 Büyük Harf</button>
+  <button class="ayar-btn acik" id="btnRenk" onclick="heceRenk()">🎨 Hece Renkleri</button>
+  <button class="ayar-btn" id="btnHiz" onclick="hizDegis()">🐢 Ses: Yavaş</button>
+</div>
+
+<nav class="menu" id="menu"></nav>
+<main id="icerik"></main>
+
+<footer>Ses grubu sırası: ANETİL • OKURIM • ÜSÖYDZ • ÇBGCŞP • HVĞJF<br>
+Her sayfada yalnızca o güne kadar öğrenilen harfler kullanılır.</footer>
+<button class="yukari-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
-function seslendir(metin) {
-  if (!('speechSynthesis' in window)) return;
+const VERI = {"gruplar": [{"ad": "ANETİL", "harfler": "a n e t i l", "no": 1, "renk": "#E8503A", "renk2": "#FF8E53", "tint": "#FFF2EC", "harflerB": "A N E T İ L"}, {"ad": "OKURIM", "harfler": "o k u r ı m", "no": 2, "renk": "#0E9E92", "renk2": "#4ECDC4", "tint": "#EAFAF8", "harflerB": "O K U R I M"}, {"ad": "ÜSÖYDZ", "harfler": "ü s ö y d z", "no": 3, "renk": "#6C4FD8", "renk2": "#A78BFA", "tint": "#F2EFFE", "harflerB": "Ü S Ö Y D Z"}, {"ad": "ÇBGCŞP", "harfler": "ç b g c ş p", "no": 4, "renk": "#1E9E68", "renk2": "#7BD389", "tint": "#ECFAF2", "harflerB": "Ç B G C Ş P"}, {"ad": "HVĞJF", "harfler": "h v ğ j f", "no": 5, "renk": "#2274C4", "renk2": "#56B4F5", "tint": "#EBF4FE", "harflerB": "H V Ğ J F"}], "sayfalar": [{"h": "a", "H": "A", "no": 1, "grup": 0, "acik": [], "kapali": [], "kelimeler": [], "cumleler": [], "sesibul": [{"k": "arı", "e": "🐝"}, {"k": "at", "e": "🐎"}, {"k": "ay", "e": "🌙"}, {"k": "araba", "e": "🚗"}, {"k": "aslan", "e": "🦁"}, {"k": "armut", "e": "🍐"}], "ogrenilen": ["a"]}, {"h": "n", "H": "N", "no": 2, "grup": 0, "acik": ["na"], "kapali": ["an"], "kelimeler": [{"k": "ana", "h": ["a", "na"], "e": "👩"}], "cumleler": [], "sesibul": [{"k": "nar", "e": "🍎"}, {"k": "nane", "e": "🌿"}, {"k": "nine", "e": "👵"}, {"k": "not", "e": "📝"}], "ogrenilen": ["a", "n"]}, {"h": "e", "H": "E", "no": 3, "grup": 0, "acik": ["ne"], "kapali": ["en"], "kelimeler": [{"k": "anne", "h": ["an", "ne"], "e": "👩"}, {"k": "nane", "h": ["na", "ne"], "e": "🌿"}, {"k": "ana", "h": ["a", "na"], "e": "👩"}], "cumleler": [], "sesibul": [{"k": "ev", "e": "🏠"}, {"k": "el", "e": "✋"}, {"k": "elma", "e": "🍎"}, {"k": "ekmek", "e": "🍞"}], "ogrenilen": ["a", "n", "e"]}, {"h": "t", "H": "T", "no": 4, "grup": 0, "acik": ["ta", "te"], "kapali": ["at", "et"], "kelimeler": [{"k": "at", "h": ["at"], "e": "🐎"}, {"k": "et", "h": ["et"], "e": "🥩"}, {"k": "anten", "h": ["an", "ten"], "e": "📡"}, {"k": "tane", "h": ["ta", "ne"], "e": "🔟"}, {"k": "anne", "h": ["an", "ne"], "e": "👩"}, {"k": "nane", "h": ["na", "ne"], "e": "🌿"}], "cumleler": [], "sesibul": [], "ogrenilen": ["a", "n", "e", "t"]}, {"h": "i", "H": "İ", "no": 5, "grup": 0, "acik": ["ni", "ti"], "kapali": ["in", "it"], "kelimeler": [{"k": "nine", "h": ["ni", "ne"], "e": "👵"}, {"k": "inat", "h": ["i", "nat"], "e": "😤"}, {"k": "at", "h": ["at"], "e": "🐎"}, {"k": "et", "h": ["et"], "e": "🥩"}, {"k": "anten", "h": ["an", "ten"], "e": "📡"}], "cumleler": [], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i"]}, {"h": "l", "H": "L", "no": 6, "grup": 0, "acik": ["la", "le", "li"], "kapali": ["al", "el", "il"], "kelimeler": [{"k": "lale", "h": ["la", "le"], "e": "🌷"}, {"k": "el", "h": ["el"], "e": "✋"}, {"k": "tel", "h": ["tel"], "e": "🔌"}, {"k": "tatil", "h": ["ta", "til"], "e": "🏖️"}, {"k": "alet", "h": ["a", "let"], "e": "🔧"}, {"k": "ninni", "h": ["nin", "ni"], "e": "🎶"}], "cumleler": ["Nine, lale al!"], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l"]}, {"h": "o", "H": "O", "no": 7, "grup": 1, "acik": ["no", "to", "lo"], "kapali": ["on", "ot", "ol"], "kelimeler": [{"k": "ot", "h": ["ot"], "e": "🌱"}, {"k": "on", "h": ["on"], "e": "🔟"}, {"k": "not", "h": ["not"], "e": "📝"}, {"k": "otel", "h": ["o", "tel"], "e": "🏨"}, {"k": "lale", "h": ["la", "le"], "e": "🌷"}, {"k": "el", "h": ["el"], "e": "✋"}], "cumleler": ["Nine, not al!", "Otele ot al!"], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l", "o"]}, {"h": "k", "H": "K", "no": 8, "grup": 1, "acik": ["ka", "ke", "ki", "ko"], "kapali": ["ak", "ek", "ik", "ok"], "kelimeler": [{"k": "kale", "h": ["ka", "le"], "e": "🏰"}, {"k": "kek", "h": ["kek"], "e": "🍰"}, {"k": "kanat", "h": ["ka", "nat"], "e": "🪶"}, {"k": "kilit", "h": ["ki", "lit"], "e": "🔒"}, {"k": "koli", "h": ["ko", "li"], "e": "📦"}, {"k": "etek", "h": ["e", "tek"], "e": "👗"}], "cumleler": ["Nine, kek al!", "Kilit ile kale."], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l", "o", "k"]}, {"h": "u", "H": "U", "no": 9, "grup": 1, "acik": ["nu", "tu", "lu", "ku"], "kapali": ["un", "ut", "ul", "uk"], "kelimeler": [{"k": "un", "h": ["un"], "e": "🌾"}, {"k": "kutu", "h": ["ku", "tu"], "e": "📦"}, {"k": "okul", "h": ["o", "kul"], "e": "🏫"}, {"k": "kule", "h": ["ku", "le"], "e": "🗼"}], "cumleler": ["Okula kek al!", "Okula kutu al!"], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l", "o", "k", "u"]}, {"h": "r", "H": "R", "no": 10, "grup": 1, "acik": ["ra", "re", "ri", "ro", "ru"], "kapali": ["ar", "er", "ir", "or", "ur"], "kelimeler": [{"k": "kar", "h": ["kar"], "e": "❄️"}, {"k": "kartal", "h": ["kar", "tal"], "e": "🦅"}, {"k": "roket", "h": ["ro", "ket"], "e": "🚀"}, {"k": "kurt", "h": ["kurt"], "e": "🐺"}, {"k": "tarla", "h": ["tar", "la"], "e": "🌾"}, {"k": "renk", "h": ["renk"], "e": "🎨"}], "cumleler": ["Kalk, otur, kalk!", "Kartal, kanat, kule."], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l", "o", "k", "u", "r"]}, {"h": "ı", "H": "I", "no": 11, "grup": 1, "acik": ["nı", "tı", "lı", "kı", "rı"], "kapali": ["ın", "ıt", "ıl", "ık", "ır"], "kelimeler": [{"k": "ılık", "h": ["ı", "lık"], "e": "♨️"}, {"k": "kına", "h": ["kı", "na"], "e": "🌿"}, {"k": "atkı", "h": ["at", "kı"], "e": "🧣"}, {"k": "kırık", "h": ["kı", "rık"], "e": "💔"}, {"k": "tırtıl", "h": ["tır", "tıl"], "e": "🐛"}], "cumleler": ["Atkını al!", "Kilit kırık."], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l", "o", "k", "u", "r", "ı"]}, {"h": "m", "H": "M", "no": 12, "grup": 1, "acik": ["ma", "me", "mi", "mo", "mu", "mı"], "kapali": ["am", "em", "im", "om", "um", "ım"], "kelimeler": [{"k": "elma", "h": ["el", "ma"], "e": "🍎"}, {"k": "kalem", "h": ["ka", "lem"], "e": "✏️"}, {"k": "limon", "h": ["li", "mon"], "e": "🍋"}, {"k": "makarna", "h": ["ma", "kar", "na"], "e": "🍝"}, {"k": "mum", "h": ["mum"], "e": "🕯️"}, {"k": "martı", "h": ["mar", "tı"], "e": "🕊️"}], "cumleler": ["Kalemi al!", "Makarna, elma, limon."], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l", "o", "k", "u", "r", "ı", "m"]}, {"h": "ü", "H": "Ü", "no": 13, "grup": 2, "acik": ["nü", "tü", "lü", "kü", "rü", "mü"], "kapali": ["ün", "üt", "ül", "ük", "ür", "üm"], "kelimeler": [{"k": "ütü", "h": ["ü", "tü"], "e": "🧺"}, {"k": "kütük", "h": ["kü", "tük"], "e": "🪵"}, {"k": "kürk", "h": ["kürk"], "e": "🧥"}, {"k": "kül", "h": ["kül"], "e": "🌫️"}, {"k": "ünlü", "h": ["ün", "lü"], "e": "⭐"}], "cumleler": ["Kütük kalın.", "Ütü ile ütüle!"], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l", "o", "k", "u", "r", "ı", "m", "ü"]}, {"h": "s", "H": "S", "no": 14, "grup": 2, "acik": ["sa", "se", "si", "so", "su", "sı", "sü"], "kapali": ["as", "es", "is", "os", "us", "ıs", "üs"], "kelimeler": [{"k": "masa", "h": ["ma", "sa"], "e": "🪑"}, {"k": "su", "h": ["su"], "e": "💧"}, {"k": "ses", "h": ["ses"], "e": "🔊"}, {"k": "simit", "h": ["si", "mit"], "e": "🥯"}, {"k": "makas", "h": ["ma", "kas"], "e": "✂️"}, {"k": "musluk", "h": ["mus", "luk"], "e": "🚰"}], "cumleler": ["Simit ile su al!", "Sesim kısık."], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l", "o", "k", "u", "r", "ı", "m", "ü", "s"]}, {"h": "ö", "H": "Ö", "no": 15, "grup": 2, "acik": ["nö", "tö", "lö", "kö", "rö", "mö", "sö"], "kapali": ["ön", "öt", "öl", "ök", "ör", "öm", "ös"], "kelimeler": [{"k": "kök", "h": ["kök"], "e": "🌱"}, {"k": "kömür", "h": ["kö", "mür"], "e": "⚫"}, {"k": "önlük", "h": ["ön", "lük"], "e": "🦺"}, {"k": "öksürük", "h": ["ök", "sü", "rük"], "e": "🤧"}, {"k": "ön", "h": ["ön"], "e": "⬆️"}], "cumleler": ["Önlüküm mor.", "Kömür kara."], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l", "o", "k", "u", "r", "ı", "m", "ü", "s", "ö"]}, {"h": "y", "H": "Y", "no": 16, "grup": 2, "acik": ["ya", "ye", "yi", "yo", "yu", "yı", "yü", "yö"], "kapali": ["ay", "ey", "iy", "oy", "uy", "ıy", "üy", "öy"], "kelimeler": [{"k": "ay", "h": ["ay"], "e": "🌙"}, {"k": "yol", "h": ["yol"], "e": "🛣️"}, {"k": "ayı", "h": ["a", "yı"], "e": "🐻"}, {"k": "koyun", "h": ["ko", "yun"], "e": "🐑"}, {"k": "yumurta", "h": ["yu", "mur", "ta"], "e": "🥚"}, {"k": "yastık", "h": ["yas", "tık"], "e": "🛏️"}], "cumleler": ["Yumurta al!", "Ay sarı, kar ak."], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l", "o", "k", "u", "r", "ı", "m", "ü", "s", "ö", "y"]}, {"h": "d", "H": "D", "no": 17, "grup": 2, "acik": ["da", "de", "di", "do", "du", "dı", "dü", "dö"], "kapali": ["ad", "ed", "id", "od", "ud", "ıd", "üd", "öd"], "kelimeler": [{"k": "dede", "h": ["de", "de"], "e": "👴"}, {"k": "kedi", "h": ["ke", "di"], "e": "🐈"}, {"k": "dut", "h": ["dut"], "e": "🫐"}, {"k": "domates", "h": ["do", "ma", "tes"], "e": "🍅"}, {"k": "dal", "h": ["dal"], "e": "🌿"}, {"k": "ada", "h": ["a", "da"], "e": "🏝️"}], "cumleler": ["Dede dut aldı.", "Kedim uyudu."], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l", "o", "k", "u", "r", "ı", "m", "ü", "s", "ö", "y", "d"]}, {"h": "z", "H": "Z", "no": 18, "grup": 2, "acik": ["za", "ze", "zi", "zo", "zu", "zı", "zü", "zö"], "kapali": ["az", "ez", "iz", "oz", "uz", "ız", "üz", "öz"], "kelimeler": [{"k": "zil", "h": ["zil"], "e": "🔔"}, {"k": "kuzu", "h": ["ku", "zu"], "e": "🐑"}, {"k": "üzüm", "h": ["ü", "züm"], "e": "🍇"}, {"k": "deniz", "h": ["de", "niz"], "e": "🌊"}, {"k": "zeytin", "h": ["zey", "tin"], "e": "🫒"}, {"k": "muz", "h": ["muz"], "e": "🍌"}], "cumleler": ["Kuzu otladı.", "Muz ile üzüm al!"], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l", "o", "k", "u", "r", "ı", "m", "ü", "s", "ö", "y", "d", "z"]}, {"h": "ç", "H": "Ç", "no": 19, "grup": 3, "acik": ["ça", "çe", "çi", "ço", "çu", "çı", "çü", "çö"], "kapali": ["aç", "eç", "iç", "oç", "uç", "ıç", "üç", "öç"], "kelimeler": [{"k": "çay", "h": ["çay"], "e": "🍵"}, {"k": "çilek", "h": ["çi", "lek"], "e": "🍓"}, {"k": "çiçek", "h": ["çi", "çek"], "e": "🌸"}, {"k": "çatal", "h": ["ça", "tal"], "e": "🍴"}, {"k": "küçük", "h": ["kü", "çük"], "e": "🐣"}, {"k": "çanta", "h": ["çan", "ta"], "e": "🎒"}], "cumleler": ["Çayımı içtim.", "Küçük kuzu çayırda."], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l", "o", "k", "u", "r", "ı", "m", "ü", "s", "ö", "y", "d", "z", "ç"]}, {"h": "b", "H": "B", "no": 20, "grup": 3, "acik": ["ba", "be", "bi", "bo", "bu", "bı", "bü", "bö"], "kapali": ["ab", "eb", "ib", "ob", "ub", "ıb", "üb", "öb"], "kelimeler": [{"k": "baba", "h": ["ba", "ba"], "e": "👨"}, {"k": "balık", "h": ["ba", "lık"], "e": "🐟"}, {"k": "bulut", "h": ["bu", "lut"], "e": "☁️"}, {"k": "bebek", "h": ["be", "bek"], "e": "👶"}, {"k": "bardak", "h": ["bar", "dak"], "e": "🥛"}, {"k": "balon", "h": ["ba", "lon"], "e": "🎈"}], "cumleler": ["Babam balık tuttu.", "Bebek uyudu."], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l", "o", "k", "u", "r", "ı", "m", "ü", "s", "ö", "y", "d", "z", "ç", "b"]}, {"h": "g", "H": "G", "no": 21, "grup": 3, "acik": ["ga", "ge", "gi", "go", "gu", "gı", "gü", "gö"], "kapali": ["ag", "eg", "ig", "og", "ug", "ıg", "üg", "ög"], "kelimeler": [{"k": "gemi", "h": ["ge", "mi"], "e": "🚢"}, {"k": "gül", "h": ["gül"], "e": "🌹"}, {"k": "gitar", "h": ["gi", "tar"], "e": "🎸"}, {"k": "gaga", "h": ["ga", "ga"], "e": "🦆"}, {"k": "gözlük", "h": ["göz", "lük"], "e": "👓"}, {"k": "gol", "h": ["gol"], "e": "⚽"}], "cumleler": ["Gemi limana girdi.", "Gül çok güzel."], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l", "o", "k", "u", "r", "ı", "m", "ü", "s", "ö", "y", "d", "z", "ç", "b", "g"]}, {"h": "c", "H": "C", "no": 22, "grup": 3, "acik": ["ca", "ce", "ci", "co", "cu", "cı", "cü", "cö"], "kapali": ["ac", "ec", "ic", "oc", "uc", "ıc", "üc", "öc"], "kelimeler": [{"k": "cam", "h": ["cam"], "e": "🪟"}, {"k": "cüce", "h": ["cü", "ce"], "e": "🧙"}, {"k": "gece", "h": ["ge", "ce"], "e": "🌃"}, {"k": "ceket", "h": ["ce", "ket"], "e": "🧥"}, {"k": "böcek", "h": ["bö", "cek"], "e": "🐞"}, {"k": "cadde", "h": ["cad", "de"], "e": "🛣️"}], "cumleler": ["Cam kırıldı.", "Gece oldu."], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l", "o", "k", "u", "r", "ı", "m", "ü", "s", "ö", "y", "d", "z", "ç", "b", "g", "c"]}, {"h": "ş", "H": "Ş", "no": 23, "grup": 3, "acik": ["şa", "şe", "şi", "şo", "şu", "şı", "şü", "şö"], "kapali": ["aş", "eş", "iş", "oş", "uş", "ış", "üş", "öş"], "kelimeler": [{"k": "şeker", "h": ["şe", "ker"], "e": "🍬"}, {"k": "kuş", "h": ["kuş"], "e": "🐦"}, {"k": "şişe", "h": ["şi", "şe"], "e": "🍾"}, {"k": "güneş", "h": ["gü", "neş"], "e": "☀️"}, {"k": "kaşık", "h": ["ka", "şık"], "e": "🥄"}, {"k": "şemsiye", "h": ["şem", "si", "ye"], "e": "☂️"}], "cumleler": ["Kuş uçtu.", "Güneş açtı."], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l", "o", "k", "u", "r", "ı", "m", "ü", "s", "ö", "y", "d", "z", "ç", "b", "g", "c", "ş"]}, {"h": "p", "H": "P", "no": 24, "grup": 3, "acik": ["pa", "pe", "pi", "po", "pu", "pı", "pü", "pö"], "kapali": ["ap", "ep", "ip", "op", "up", "ıp", "üp", "öp"], "kelimeler": [{"k": "para", "h": ["pa", "ra"], "e": "💰"}, {"k": "kitap", "h": ["ki", "tap"], "e": "📕"}, {"k": "top", "h": ["top"], "e": "⚽"}, {"k": "şapka", "h": ["şap", "ka"], "e": "🎩"}, {"k": "kapı", "h": ["ka", "pı"], "e": "🚪"}, {"k": "pasta", "h": ["pas", "ta"], "e": "🎂"}], "cumleler": ["Kitap okudum.", "Kapıyı aç!"], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l", "o", "k", "u", "r", "ı", "m", "ü", "s", "ö", "y", "d", "z", "ç", "b", "g", "c", "ş", "p"]}, {"h": "h", "H": "H", "no": 25, "grup": 4, "acik": ["ha", "he", "hi", "ho", "hu", "hı", "hü", "hö"], "kapali": ["ah", "eh", "ih", "oh", "uh", "ıh", "üh", "öh"], "kelimeler": [{"k": "halı", "h": ["ha", "lı"], "e": "🧶"}, {"k": "horoz", "h": ["ho", "roz"], "e": "🐓"}, {"k": "hediye", "h": ["he", "di", "ye"], "e": "🎁"}, {"k": "hasta", "h": ["has", "ta"], "e": "🤒"}, {"k": "sabah", "h": ["sa", "bah"], "e": "🌅"}, {"k": "hamur", "h": ["ha", "mur"], "e": "🥟"}], "cumleler": ["Sabah oldu.", "Hediyeyi açtım."], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l", "o", "k", "u", "r", "ı", "m", "ü", "s", "ö", "y", "d", "z", "ç", "b", "g", "c", "ş", "p", "h"]}, {"h": "v", "H": "V", "no": 26, "grup": 4, "acik": ["va", "ve", "vi", "vo", "vu", "vı", "vü", "vö"], "kapali": ["av", "ev", "iv", "ov", "uv", "ıv", "üv", "öv"], "kelimeler": [{"k": "vazo", "h": ["va", "zo"], "e": "🏺"}, {"k": "davul", "h": ["da", "vul"], "e": "🥁"}, {"k": "vapur", "h": ["va", "pur"], "e": "⛴️"}, {"k": "ev", "h": ["ev"], "e": "🏠"}, {"k": "tavuk", "h": ["ta", "vuk"], "e": "🐔"}, {"k": "vişne", "h": ["viş", "ne"], "e": "🍒"}], "cumleler": ["Davul çaldı.", "Eve gidelim."], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l", "o", "k", "u", "r", "ı", "m", "ü", "s", "ö", "y", "d", "z", "ç", "b", "g", "c", "ş", "p", "h", "v"]}, {"h": "ğ", "H": "Ğ", "no": 27, "grup": 4, "acik": [], "kapali": ["ağ", "eğ", "iğ", "oğ", "uğ", "ığ", "üğ", "öğ"], "kelimeler": [{"k": "ağaç", "h": ["a", "ğaç"], "e": "🌳"}, {"k": "dağ", "h": ["dağ"], "e": "⛰️"}, {"k": "yağmur", "h": ["yağ", "mur"], "e": "🌧️"}, {"k": "kağıt", "h": ["ka", "ğıt"], "e": "📄"}, {"k": "iğne", "h": ["iğ", "ne"], "e": "💉"}, {"k": "soğuk", "h": ["so", "ğuk"], "e": "🥶"}], "cumleler": ["Yağmur yağıyor.", "Ağaçta kuş var."], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l", "o", "k", "u", "r", "ı", "m", "ü", "s", "ö", "y", "d", "z", "ç", "b", "g", "c", "ş", "p", "h", "v", "ğ"]}, {"h": "j", "H": "J", "no": 28, "grup": 4, "acik": ["ja", "je", "ji", "jo", "ju", "jı", "jü", "jö"], "kapali": ["aj", "ej", "ij", "oj", "uj", "ıj", "üj", "öj"], "kelimeler": [{"k": "jeton", "h": ["je", "ton"], "e": "🪙"}, {"k": "jilet", "h": ["ji", "let"], "e": "🪒"}, {"k": "jöle", "h": ["jö", "le"], "e": "🍮"}, {"k": "bagaj", "h": ["ba", "gaj"], "e": "🧳"}, {"k": "kolej", "h": ["ko", "lej"], "e": "🏫"}, {"k": "müjde", "h": ["müj", "de"], "e": "💌"}], "cumleler": ["Jeton attım.", "Bagajı aldım."], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l", "o", "k", "u", "r", "ı", "m", "ü", "s", "ö", "y", "d", "z", "ç", "b", "g", "c", "ş", "p", "h", "v", "ğ", "j"]}, {"h": "f", "H": "F", "no": 29, "grup": 4, "acik": ["fa", "fe", "fi", "fo", "fu", "fı", "fü", "fö"], "kapali": ["af", "ef", "if", "of", "uf", "ıf", "üf", "öf"], "kelimeler": [{"k": "fil", "h": ["fil"], "e": "🐘"}, {"k": "fener", "h": ["fe", "ner"], "e": "🔦"}, {"k": "fırça", "h": ["fır", "ça"], "e": "🪥"}, {"k": "fındık", "h": ["fın", "dık"], "e": "🌰"}, {"k": "futbol", "h": ["fut", "bol"], "e": "⚽"}, {"k": "fotoğraf", "h": ["fo", "toğ", "raf"], "e": "📷"}], "cumleler": ["Fil çok büyük.", "Artık bütün harfleri okuyorum!"], "sesibul": [], "ogrenilen": ["a", "n", "e", "t", "i", "l", "o", "k", "u", "r", "ı", "m", "ü", "s", "ö", "y", "d", "z", "ç", "b", "g", "c", "ş", "p", "h", "v", "ğ", "j", "f"]}]};
+const UNLU = "aeiouıüö";
+let hiz = 0.7, buyukAcik = false, renkAcik = true;
+let okunan = {};
+try { okunan = JSON.parse(localStorage.getItem("hece_okunan") || "{}"); } catch(e) { okunan = {}; }
+
+function kaydet(){ try{ localStorage.setItem("hece_okunan", JSON.stringify(okunan)); }catch(e){} }
+
+function seslendir(metin){
+  if(!("speechSynthesis" in window)) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(metin);
-  u.lang = 'tr-TR';
-  u.rate = 0.85;
+  u.lang = "tr-TR"; u.rate = hiz;
   const sesler = window.speechSynthesis.getVoices();
-  const trSes = sesler.find(s => s.lang && s.lang.startsWith('tr'));
-  if (trSes) u.voice = trSes;
+  const tr = sesler.find(s => s.lang && s.lang.toLowerCase().startsWith("tr"));
+  if(tr) u.voice = tr;
   window.speechSynthesis.speak(u);
 }
-if ('speechSynthesis' in window) {
-  window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
-}
-function git(harf) {
-  const el = document.getElementById('sayfa-' + harf);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-</script>
+if("speechSynthesis" in window){ window.speechSynthesis.onvoiceschanged = () => {}; }
 
+function buyukHarf(){
+  buyukAcik = !buyukAcik;
+  document.body.classList.toggle("buyukharf", buyukAcik);
+  document.getElementById("btnBuyuk").classList.toggle("acik", buyukAcik);
+}
+function heceRenk(){
+  renkAcik = !renkAcik;
+  document.body.classList.toggle("renksiz", !renkAcik);
+  document.getElementById("btnRenk").classList.toggle("acik", renkAcik);
+}
+function hizDegis(){
+  const b = document.getElementById("btnHiz");
+  if(hiz === 0.7){ hiz = 1.0; b.textContent = "🐇 Ses: Normal"; }
+  else { hiz = 0.7; b.textContent = "🐢 Ses: Yavaş"; }
+}
+
+function heceli(hec){
+  return hec.map((h,i) => '<span class="' + (i%2===0 ? "h1r":"h2r") + '">' + h + '</span>').join("");
+}
+function esc(s){ return s.replace(/'/g,"\\'"); }
+
+function karisikUret(sayfa){
+  const ogr = sayfa.ogrenilen;
+  const unluler = ogr.filter(x => UNLU.includes(x));
+  const unsuzler = ogr.filter(x => !UNLU.includes(x));
+  let liste = [];
+  unsuzler.forEach(c => { if(c !== "ğ") unluler.forEach(v => liste.push(c+v)); });
+  unluler.forEach(v => unsuzler.forEach(c => liste.push(v+c)));
+  liste = [...new Set(liste)];
+  for(let i = liste.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i+1));
+    [liste[i], liste[j]] = [liste[j], liste[i]];
+  }
+  return liste.slice(0, 8);
+}
+function karisikYenile(no){
+  const s = VERI.sayfalar[no-1];
+  const alan = document.getElementById("karisik-" + no);
+  alan.innerHTML = karisikUret(s).map(h =>
+    '<button class="hece-btn" onclick="seslendir(\'' + h + '\')">' + h + '</button>').join("");
+}
+
+function okuduml(no){
+  okunan[no] = !okunan[no];
+  kaydet();
+  guncelle();
+}
+function guncelle(){
+  VERI.sayfalar.forEach(s => {
+    const b = document.getElementById("okudum-" + s.no);
+    if(!b) return;
+    const t = !!okunan[s.no];
+    b.classList.toggle("tamam", t);
+    b.textContent = t ? "✓ Bu sayfayı okudum" : "☐ Bu sayfayı okudum olarak işaretle";
+  });
+  const adet = VERI.sayfalar.filter(s => okunan[s.no]).length;
+  document.getElementById("dolu").style.width = (adet / VERI.sayfalar.length * 100) + "%";
+  document.getElementById("ilerlemeYazi").textContent = adet + " / " + VERI.sayfalar.length + " sayfa okundu";
+}
+function git(no){
+  const el = document.getElementById("sayfa-" + no);
+  if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+/* ---------- menu ---------- */
+let menuHtml = "";
+VERI.gruplar.forEach((g, gi) => {
+  const harfler = VERI.sayfalar.filter(s => s.grup === gi);
+  menuHtml += '<div class="menu-satir">' + harfler.map(s =>
+    '<button class="menu-harf" style="--mrenk:' + g.renk + '" onclick="git(' + s.no + ')">' + s.H + '</button>'
+  ).join("") + '</div>';
+});
+document.getElementById("menu").innerHTML = menuHtml;
+
+/* ---------- sayfalar ---------- */
+let html = "";
+VERI.sayfalar.forEach((s, idx) => {
+  const g = VERI.gruplar[s.grup];
+  if(idx === 0 || VERI.sayfalar[idx-1].grup !== s.grup){
+    html += '<div class="grup-ayrac" style="--renk:' + g.renk + ';--renk2:' + g.renk2 + '">' +
+            '<h3>' + g.no + '. Ses Grubu</h3><span>' + g.harflerB + '</span></div>';
+  }
+
+  let ic = "";
+  ic += '<div class="sayfa-ust"><span class="grup-etiket">' + g.ad + ' Grubu</span>' +
+        '<span class="sayfa-no">' + s.no + ' / ' + VERI.sayfalar.length + '</span></div>';
+  ic += '<div class="harf-baslik">' +
+        '<button class="harf-btn harf-buyuk" onclick="seslendir(\'' + s.h + '\')">' + s.H + '</button>' +
+        '<button class="harf-btn harf-kucuk" onclick="seslendir(\'' + s.h + '\')">' + s.h + '</button>' +
+        '<span class="harf-adi">sesi</span></div>';
+  ic += '<div class="ogrenilen-serit">Bildiğimiz harfler: ' +
+        s.ogrenilen.join(" · ") + '</div>';
+
+  if(s.sesibul.length){
+    ic += '<div class="bolum"><div class="bolum-basligi">🔎 Sesi Bul — resme dokun, adını söyle</div>' +
+      '<div class="kelime-izgara">' + s.sesibul.map(o =>
+        '<div class="kelime-kart" onclick="seslendir(\'' + esc(o.k) + '\')"><div class="kelime-emoji">' + o.e + '</div></div>'
+      ).join("") + '</div></div>';
+  }
+  if(!s.acik.length && !s.kapali.length){
+    ic += '<div class="bolum"><div class="bilgi">Bu sayfada yalnızca <b>' + s.h +
+          '</b> sesini tanıyoruz.<br>Hece kurmak için ikinci harfi bekliyoruz. 🙂</div></div>';
+  }
+  if(s.acik.length){
+    ic += '<div class="bolum"><div class="bolum-basligi">🟢 Açık Heceler</div><div class="izgara">' +
+      s.acik.map(h => '<button class="hece-btn" onclick="seslendir(\'' + h + '\')">' + h + '</button>').join("") +
+      '</div></div>';
+  }
+  if(s.kapali.length){
+    ic += '<div class="bolum"><div class="bolum-basligi">🔵 Kapalı Heceler</div><div class="izgara">' +
+      s.kapali.map(h => '<button class="hece-btn" onclick="seslendir(\'' + h + '\')">' + h + '</button>').join("") +
+      '</div></div>';
+  }
+  const ikili = s.kelimeler.filter(k => k.h.length === 2).slice(0,4);
+  if(ikili.length){
+    ic += '<div class="bolum"><div class="bolum-basligi">🧩 Hece Birleştir</div><div class="birlestir">' +
+      ikili.map(k => '<div class="birlestir-satir">' +
+        k.h.map(p => '<button class="parca" onclick="seslendir(\'' + p + '\')">' + p + '</button>').join('<span class="isaret">+</span>') +
+        '<span class="isaret">=</span><button class="sonuc" onclick="seslendir(\'' + esc(k.k) + '\')">' + k.k + '</button></div>'
+      ).join("") + '</div></div>';
+  }
+  if(s.kelimeler.length){
+    ic += '<div class="bolum"><div class="bolum-basligi">📚 Kelimeler — hecelere dikkat!</div><div class="kelime-izgara">' +
+      s.kelimeler.map(k => '<div class="kelime-kart" onclick="seslendir(\'' + esc(k.k) + '\')">' +
+        '<div class="kelime-emoji">' + k.e + '</div><div class="kelime-yazi">' + heceli(k.h) + '</div></div>').join("") +
+      '</div></div>';
+  }
+  if(s.cumleler.length){
+    ic += '<div class="bolum"><div class="bolum-basligi">✏️ Cümle Okuyalım</div>' +
+      s.cumleler.map(c => '<div class="cumle-kutu" onclick="seslendir(\'' + esc(c) + '\')">' + c + '</div>').join("") +
+      '</div>';
+  }
+  if(s.no > 1){
+    ic += '<div class="bolum"><div class="bolum-basligi">🎲 Karışık Hece Okuma</div>' +
+      '<div class="karisik-alan" id="karisik-' + s.no + '"></div>' +
+      '<button class="yenile-btn" onclick="karisikYenile(' + s.no + ')">🔄 Yeni Heceler Getir</button></div>';
+  }
+  ic += '<button class="okudum-btn" id="okudum-' + s.no + '" onclick="okuduml(' + s.no + ')"></button>';
+  ic += '<div class="sayfa-gezinti">' +
+        '<button class="gez-btn" onclick="git(' + (s.no-1) + ')" ' + (s.no===1?'disabled':'') + '>← Önceki</button>' +
+        '<button class="gez-btn" onclick="git(' + (s.no+1) + ')" ' + (s.no===VERI.sayfalar.length?'disabled':'') + '>Sonraki →</button></div>';
+
+  html += '<section class="sayfa" id="sayfa-' + s.no + '" style="--renk:' + g.renk +
+          ';--renk2:' + g.renk2 + ';--tint:' + g.tint + '">' + ic + '</section>';
+});
+document.getElementById("icerik").innerHTML = html;
+VERI.sayfalar.forEach(s => { if(s.no > 1) karisikYenile(s.no); });
+guncelle();
+</script>
 </body>
 </html>
