@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>İlkokul Bilgi Yarışması</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,8 +19,8 @@
       padding: 20px;
       min-height: 100vh;
       font-family: "Andika", Arial, sans-serif;
-      background: linear-gradient(135deg, #06133d, #16469c);
       color: white;
+      background: linear-gradient(135deg, #06133d, #16469c);
     }
 
     button {
@@ -63,9 +62,9 @@
     }
 
     .subtitle {
-      margin-bottom: 25px;
       color: #dce7ff;
       text-align: center;
+      margin-bottom: 25px;
     }
 
     .start-screen {
@@ -119,7 +118,7 @@
     }
 
     .reset-btn {
-      background: #ff9166;
+      background: #ff9066;
     }
 
     .start-btn:disabled {
@@ -281,8 +280,11 @@
     @media (max-width: 550px) {
       .tabs,
       .answers {
-        display: grid;
         grid-template-columns: 1fr;
+      }
+
+      .tabs {
+        display: grid;
       }
 
       .main {
@@ -301,11 +303,10 @@
   <div class="app">
 
     <main class="panel main">
-
       <h1>Bilgi Yarışması</h1>
 
       <p class="subtitle">
-        Sınıfını seç, 250 soruluk havuzdan 15 soruluk yarışmaya başla.
+        Sınıfını seç ve 15 soruluk yarışmaya başla.
       </p>
 
       <section id="startScreen" class="start-screen">
@@ -366,7 +367,6 @@
         </button>
 
       </section>
-
     </main>
 
     <aside class="panel prizes">
@@ -402,27 +402,25 @@
       wrong2,
       wrong3
     ) {
-      const choices = [
-        { text: String(correct), isCorrect: true },
-        { text: String(wrong1), isCorrect: false },
-        { text: String(wrong2), isCorrect: false },
-        { text: String(wrong3), isCorrect: false }
-      ];
-
-      const mixedChoices = shuffle(choices);
+      const options = shuffle([
+        { text: String(correct), correct: true },
+        { text: String(wrong1), correct: false },
+        { text: String(wrong2), correct: false },
+        { text: String(wrong3), correct: false }
+      ]);
 
       questionPool.push({
         id,
         grade,
         lesson,
         question,
-        options: mixedChoices.map(item => item.text),
-        correct: mixedChoices.findIndex(item => item.isCorrect)
+        options: options.map(option => option.text),
+        correct: options.findIndex(option => option.correct)
       });
     }
 
-    function addFixedQuestions(grade, lesson, questions) {
-      questions.forEach((item, index) => {
+    function addQuestionsFromList(grade, lesson, list) {
+      list.forEach((item, index) => {
         addQuestion(
           `${grade}-${lesson}-${index}`,
           grade,
@@ -446,14 +444,13 @@
       ["“Hediye” kelimesinin eş anlamlısı hangisidir?", "Armağan", "Oyuncak", "Paket", "Sürpriz"],
       ["“Küçük” kelimesinin eş anlamlısı hangisidir?", "Ufak", "Büyük", "Uzun", "Geniş"],
       ["Hangisi özel addır?", "Ankara", "şehir", "okul", "çocuk"],
-      ["Hangisi soru cümlesidir?", "Sen de gelir misin?", "Bugün parka gittik.", "Kardeşim uyuyor.", "Çanta masada."],
+      ["Hangisi soru cümlesidir?", "Sen de gelir misin?", "Bugün parka gittik.", "Kardeşim uyuyor.", "Çantam masada."],
       ["“Elma” kelimesi kaç hecedir?", "2", "1", "3", "4"],
       ["“Kitaplık” kelimesi kaç hecedir?", "3", "2", "4", "5"],
       ["“Ali top oynuyor.” cümlesinde işi yapan kimdir?", "Ali", "Top", "Oynuyor", "Bahçe"],
       ["Hangisi bir varlığın adıdır?", "Masa", "Koşmak", "Güzel", "Hızlı"],
       ["“Eyvah!” kelimesinin sonuna hangi işaret gelir?", "Ünlem", "Nokta", "Virgül", "Soru işareti"],
       ["Hangisi alfabetik sırada önce gelir?", "Arı", "Balık", "Çiçek", "Defter"],
-      ["“Gül” kelimesi hangi cümlede çiçek anlamındadır?", "Bahçedeki gül kokuyor.", "Bana gül.", "Şakaya gül.", "Gülerek geldi."],
       ["“Sıcak” kelimesinin zıt anlamlısı hangisidir?", "Soğuk", "Ilık", "Ateş", "Buhar"],
       ["“Çabuk” kelimesinin eş anlamlısı hangisidir?", "Hızlı", "Yavaş", "Durgun", "Ağır"],
       ["Cümlelerin sonuna genellikle hangi işaret konur?", "Nokta", "Virgül", "Soru işareti", "Ünlem"],
@@ -464,22 +461,23 @@
       ["Hangisi bir renk adıdır?", "Kırmızı", "Koşmak", "Masa", "Tatlı"],
       ["“Ben kitap okuyorum.” cümlesinde yapılan iş nedir?", "Okumak", "Ben", "Kitap", "Cümle"],
       ["Hangisi doğru yazılmıştır?", "Atatürk", "atatürk", "ATATÜRK", "atatürk'"],
-      ["Bir cümle kaç kelimeden oluşur?", "Bir veya daha fazla", "Daima bir", "Daima iki", "Hiçbir"],
       ["“Uzun” kelimesinin zıt anlamlısı hangisidir?", "Kısa", "Büyük", "Geniş", "Yüksek"],
       ["Hangisi meyve adıdır?", "Portakal", "Masa", "Kalem", "Koşu"],
       ["Hangisi taşıt adıdır?", "Otobüs", "Ağaç", "Defter", "Kedi"],
       ["Hangisi doğa olayıdır?", "Yağmur", "Kitap", "Kalem", "Oyuncak"],
-      ["“Güzel” kelimesinin zıt anlamlısı hangisidir?", "Çirkin", "İyi", "Temiz", "Neşeli"]
+      ["“Güzel” kelimesinin zıt anlamlısı hangisidir?", "Çirkin", "İyi", "Temiz", "Neşeli"],
+      ["Hangisi canlı bir varlıktır?", "Kuş", "Masa", "Taş", "Kalem"],
+      ["“Okul” kelimesinin ilk harfi hangisidir?", "O", "K", "U", "L"]
     ];
 
-    addFixedQuestions(2, "Türkçe", grade2Turkish);
+    addQuestionsFromList(2, "Türkçe", grade2Turkish);
 
     for (let i = 1; i <= 28; i++) {
       const a = 20 + i;
       const b = 5 + (i % 9);
 
       addQuestion(
-        `2-matematik-${i}`,
+        `2-Matematik-${i}`,
         2,
         "Matematik",
         `${a} + ${b} işleminin sonucu kaçtır?`,
@@ -503,29 +501,29 @@
       ["Acil durumda hangi numara aranır?", "112", "1555", "9999", "000"],
       ["Kış mevsiminde genellikle ne giyeriz?", "Kalın giysiler", "Mayo", "Şort", "Terlik"],
       ["Güneş hangi yönden doğar?", "Doğu", "Batı", "Kuzey", "Güney"],
-      ["Evde elektrikli araçları kullanırken ne yapmalıyız?", "Dikkatli olmalıyız.", "Kabloları çekmeliyiz.", "Islak elle dokunmalıyız.", "Prizleri kırmalıyız."],
       ["Hangisi sağlıklı bir yiyecektir?", "Elma", "Şeker", "Cips", "Gazlı içecek"],
       ["Ağaçların bize yararı nedir?", "Oksijen sağlar.", "Çöpleri artırır.", "Suyu kirletir.", "Gürültü çıkarır."],
       ["Hangisi kişisel eşyamızdır?", "Diş fırçası", "Sınıf tahtası", "Okul sırası", "Park bankı"],
       ["Uyumadan önce ne yapmalıyız?", "Dişlerimizi fırçalamalıyız.", "Çok oyun oynamalıyız.", "Geç saatlere kadar uyanık kalmalıyız.", "Şeker yemeliyiz."],
       ["Hangisi canlıdır?", "Ağaç", "Taş", "Masa", "Kalem"],
       ["Su tasarrufu için ne yapmalıyız?", "Musluğu gereksiz yere açık bırakmamalıyız.", "Suyu boşa akıtmalıyız.", "Musluğu kırmalıyız.", "Suyu kirletmeliyiz."],
-      ["Okulda yangın çıkarsa ne yapmalıyız?", "Öğretmenimizin yönlendirmesine uymalıyız.", "Saklanmalıyız.", "Koşarak camdan çıkmalıyız.", "Yangına yaklaşmalıyız."],
+      ["Okulda yangın çıkarsa ne yapmalıyız?", "Öğretmenimizin yönlendirmesine uymalıyız.", "Saklanmalıyız.", "Camdan çıkmalıyız.", "Yangına yaklaşmalıyız."],
       ["Hangisi bir mevsimdir?", "İlkbahar", "Pazartesi", "Sabah", "Gece"],
       ["Hangisi bir duyu organıdır?", "Göz", "Kalp", "Mide", "Akciğer"],
-      ["Kişisel temizliğimiz için ne yapmalıyız?", "Banyo yapmalıyız.", "Ellerimizi kirletmeliyiz.", "Dişlerimizi hiç fırçalamamalıyız.", "Çöplere dokunmalıyız."],
+      ["Kişisel temizliğimiz için ne yapmalıyız?", "Banyo yapmalıyız.", "Ellerimizi kirletmeliyiz.", "Dişlerimizi fırçalamamalıyız.", "Çöplere dokunmalıyız."],
       ["Hangisi tasarruf davranışıdır?", "Kullanmadığımız lambayı kapatmak", "Suyu açık bırakmak", "Yiyecekleri çöpe atmak", "Kâğıdı gereksiz kullanmak"],
       ["Toplum içinde nasıl davranmalıyız?", "Saygılı olmalıyız.", "Bağırmalıyız.", "Sıraya geçmemeliyiz.", "Çevreyi kirletmeliyiz."],
       ["Bisiklet kullanırken ne takmalıyız?", "Kask", "Atkı", "Güneş gözlüğü", "Terlik"],
       ["Hayvanlara nasıl davranmalıyız?", "Sevgi ve şefkatle", "Zarar vererek", "Korkutarak", "Yiyeceklerini alarak"],
-      ["Hangisi doğal kaynaklardan biridir?", "Su", "Plastik oyuncak", "Defter", "Televizyon"]
+      ["Hangisi doğal kaynaklardan biridir?", "Su", "Plastik oyuncak", "Defter", "Televizyon"],
+      ["Yaya geçidinde kimler önceliklidir?", "Yayalar", "Park etmiş araçlar", "Binalar", "Ağaçlar"]
     ];
 
-    addFixedQuestions(2, "Hayat Bilgisi", grade2Life);
+    addQuestionsFromList(2, "Hayat Bilgisi", grade2Life);
 
     /*
       3. SINIF
-      21 Türkçe + 21 Matematik + 21 Fen + 20 Hayat = 83
+      21 Türkçe + 21 Matematik + 21 Fen Bilimleri + 20 Hayat Bilgisi = 83
     */
 
     const grade3Turkish = [
@@ -542,32 +540,31 @@
       ["“Misafir” kelimesinin eş anlamlısı hangisidir?", "Konuk", "Komşu", "Arkadaş", "Yolcu"],
       ["“İleri” kelimesinin zıt anlamlısı hangisidir?", "Geri", "Yukarı", "Uzak", "Ön"],
       ["Hangisi ünlem cümlesidir?", "Ne güzel bir gün!", "Saat kaç?", "Eve gittim.", "Kitap masada."],
-      ["Hangisi doğru yazılmıştır?", "İstanbul", "istanbul", "İSTANBUL'", "ıstanbul"],
+      ["Hangisi doğru yazılmıştır?", "İstanbul", "istanbul", "ıstanbul", "İSTANBUL'"],
       ["“Çalışkan” kelimesinin zıt anlamlısı hangisidir?", "Tembel", "Başarılı", "Akıllı", "Düzenli"],
       ["Hangisi bir atasözüdür?", "Damlaya damlaya göl olur.", "Kitap okuyorum.", "Okula gittim.", "Kalemim kırıldı."],
-      ["Hangisi bir varlığın özelliğini bildirir?", "Kırmızı", "Koşmak", "Masa", "Sevinç"],
-      ["“Kırmızı araba hızla ilerledi.” cümlesinde varlığın özelliği nedir?", "Kırmızı", "Araba", "İlerledi", "Hızla"],
+      ["Hangisi bir özelliği bildirir?", "Kırmızı", "Koşmak", "Masa", "Sevinç"],
       ["Hangisi eş sesli bir kelimedir?", "Gül", "Masa", "Kitap", "Okul"],
       ["“Yardım” kelimesinin eş anlamlısı hangisidir?", "Destek", "Düşmanlık", "Kavga", "Yarış"],
-      ["Bir paragrafın ana düşüncesi neyi anlatır?", "Ana fikri", "Sadece başlığı", "Sadece son kelimeyi", "Sayfa numarasını"]
+      ["Bir paragrafın ana düşüncesi neyi anlatır?", "Ana fikri", "Başlığı", "Sayfa numarasını", "Yazarın yaşını"],
+      ["“Hızlı” kelimesinin zıt anlamlısı hangisidir?", "Yavaş", "Çabuk", "Seri", "Süratli"]
     ];
 
-    addFixedQuestions(3, "Türkçe", grade3Turkish);
+    addQuestionsFromList(3, "Türkçe", grade3Turkish);
 
     for (let i = 1; i <= 21; i++) {
       const a = 100 + i * 3;
       const b = 20 + i;
-      const result = a + b;
 
       addQuestion(
-        `3-matematik-${i}`,
+        `3-Matematik-${i}`,
         3,
         "Matematik",
         `${a} + ${b} işleminin sonucu kaçtır?`,
-        result,
-        result + 10,
-        result - 10,
-        result + 1
+        a + b,
+        a + b + 10,
+        a + b - 10,
+        a + b + 1
       );
     }
 
@@ -579,7 +576,7 @@
       ["Ses hangi ortamda yayılır?", "Maddelerde", "Sadece boşlukta", "Sadece ışıkta", "Hiçbir yerde"],
       ["Hangisi katı bir maddedir?", "Taş", "Su", "Hava", "Buhar"],
       ["Hangisi sıvı bir maddedir?", "Su", "Kalem", "Tahta", "Taş"],
-      ["İnsanların nefes almasını sağlayan organ hangisidir?", "Akciğer", "Mide", "Kalp", "Kulak"],
+      ["Nefes almamızı sağlayan organ hangisidir?", "Akciğer", "Mide", "Kalp", "Kulak"],
       ["Güneş bir nedir?", "Yıldız", "Gezegen", "Uydu", "Bulut"],
       ["Hayvanların yaşadığı yere ne denir?", "Yaşam alanı", "Mutfak", "Sınıf", "Dolap"],
       ["Hangisi canlıdır?", "Kedi", "Taş", "Masa", "Kalem"],
@@ -589,84 +586,83 @@
       ["Hangisi enerji kaynağıdır?", "Güneş", "Defter", "Masa", "Silgi"],
       ["Elektrik hangi araçla ölçülür?", "Sayaç", "Cetvel", "Termometre", "Büyüteç"],
       ["Hangisi geri dönüşebilir?", "Kâğıt", "Yemek artığı", "Çamur", "Toz"],
-      ["İnsan vücudunda kanı pompalayan organ hangisidir?", "Kalp", "Mide", "Akciğer", "Burun"],
+      ["Kanı vücuda pompalayan organ hangisidir?", "Kalp", "Mide", "Akciğer", "Burun"],
       ["Hangisi bir hava olayıdır?", "Yağmur", "Masa", "Kalem", "Kitap"],
-      ["Düzenli beslenmek neden önemlidir?", "Sağlıklı olmak için", "Daha çok yorulmak için", "Daha az uyumak için", "Çevreyi kirletmek için"],
-      ["Güneş’in Dünya için önemli olmasının nedeni nedir?", "Işık ve ısı vermesi", "Yağmur yağdırması", "Dönmemesi", "Suyun altında olması"]
+      ["Düzenli beslenmek neden önemlidir?", "Sağlıklı olmak için", "Yorulmak için", "Az uyumak için", "Çevreyi kirletmek için"],
+      ["Güneş’in Dünya için önemi nedir?", "Işık ve ısı vermesi", "Yağmur yağdırması", "Dönmemesi", "Suyun altında olması"]
     ];
 
-    addFixedQuestions(3, "Fen Bilimleri", grade3Science);
+    addQuestionsFromList(3, "Fen Bilimleri", grade3Science);
 
     const grade3Life = [
-      ["Trafik ışığında kırmızı ışık ne anlama gelir?", "Dur", "Geç", "Hızlan", "Koş"],
-      ["Acil durumlarda hangi numara aranır?", "112", "1000", "9999", "000"],
+      ["Kırmızı trafik ışığı ne anlama gelir?", "Dur", "Geç", "Hızlan", "Koş"],
+      ["Acil durumda hangi numara aranır?", "112", "1000", "9999", "000"],
       ["Sağlıklı olmak için ne yapmalıyız?", "Dengeli beslenmeliyiz.", "Sadece şeker yemeliyiz.", "Hiç uyumamalıyız.", "Su içmemeliyiz."],
       ["Çevreyi korumak için ne yapmalıyız?", "Çöpleri ayırmalıyız.", "Çöpleri yere atmalıyız.", "Suları kirletmeliyiz.", "Ağaçları kesmeliyiz."],
       ["Hangisi bir sorumluluktur?", "Ödev yapmak", "Eşyaları kırmak", "Bağırmak", "Çöpleri yere atmak"],
-      ["Okulda kimlerden yardım isteyebiliriz?", "Öğretmenimizden", "Tanımadığımız kişilerden", "Sokaktaki araçlardan", "Oyuncaklardan"],
-      ["İsrafı önlemek için ne yapmalıyız?", "İhtiyacımız kadar tüketmeliyiz.", "Yiyecekleri çöpe atmalıyız.", "Suyu açık bırakmalıyız.", "Elektriği boşa harcamalıyız."],
-      ["Hangisi milli bayramlarımızdan biridir?", "23 Nisan", "1 Ocak", "Pazar", "Yaz tatili"],
-      ["Evde güvenli davranış hangisidir?", "Elektrikli araçlara ıslak elle dokunmamak", "Prizlere cisim sokmak", "Pencereye tırmanmak", "İlaçları izinsiz içmek"],
+      ["Okulda kimden yardım isteyebiliriz?", "Öğretmenimizden", "Tanımadığımız kişilerden", "Araçlardan", "Oyuncaklardan"],
+      ["İsrafı önlemek için ne yapmalıyız?", "İhtiyacımız kadar tüketmeliyiz.", "Yiyecekleri çöpe atmalıyız.", "Suyu açık bırakmalıyız.", "Elektriği harcamalıyız."],
+      ["Hangisi milli bayramdır?", "23 Nisan", "1 Ocak", "Pazar", "Yaz tatili"],
+      ["Evde güvenli davranış hangisidir?", "Elektriğe ıslak elle dokunmamak", "Prize cisim sokmak", "Pencereye tırmanmak", "İlacı izinsiz içmek"],
       ["Hangisi kişisel bilgidir?", "Telefon numarası", "Hava durumu", "Kitap adı", "Renk adı"],
-      ["Arkadaşlarımızla nasıl iletişim kurmalıyız?", "Saygılı konuşarak", "Bağırarak", "Alay ederek", "Kavga ederek"],
-      ["Hangisi doğal afettir?", "Deprem", "Sınav", "Oyun", "Yolculuk"],
-      ["Kaynakları korumak için ne yapmalıyız?", "Tasarruf etmeliyiz.", "Boşa harcamalıyız.", "Kirletmeliyiz.", "Kırmalıyız."],
+      ["Arkadaşlarımızla nasıl konuşmalıyız?", "Saygılı konuşmalıyız.", "Bağırmalıyız.", "Alay etmeliyiz.", "Kavga etmeliyiz"],
+      ["Hangisi doğal afettir?", "Deprem", "Sınav", "Oyun", "Gezi"],
+      ["Kaynakları korumak için ne yapmalıyız?", "Tasarruf etmeliyiz.", "Boşa harcamalıyız.", "Kirletmeliyiz.", "Kırmalıyız"],
       ["Hangisi bir meslektir?", "Öğretmenlik", "Pazartesi", "Mavi", "Bahçe"],
       ["İnsanların birlikte yaşadığı yere ne denir?", "Toplum", "Oyuncak", "Çanta", "Dolap"],
-      ["Kütüphanede nasıl davranmalıyız?", "Sessiz olmalıyız.", "Bağırmalıyız.", "Kitapları yırtmalıyız.", "Koşmalıyız."],
-      ["Hangisi sağlıklı bir alışkanlıktır?", "Spor yapmak", "Geç yatmak", "Ellerini yıkamamak", "Sürekli abur cubur yemek"],
-      ["Aile içinde nasıl davranmalıyız?", "Yardımlaşmalıyız.", "Saygısız davranmalıyız.", "Bağırmalıyız.", "Eşyaları kırmalıyız."],
-      ["Yaya geçidinde kimler önceliklidir?", "Yayalar", "Park etmiş araçlar", "Bisikletler", "Binalar"],
-      ["Hangisi bir iletişim aracıdır?", "Telefon", "Masa", "Kalem", "Dolap"]
+      ["Kütüphanede nasıl davranmalıyız?", "Sessiz olmalıyız.", "Bağırmalıyız.", "Kitapları yırtmalıyız.", "Koşmalıyız"],
+      ["Hangisi sağlıklı alışkanlıktır?", "Spor yapmak", "Geç yatmak", "Ellerini yıkamamak", "Sürekli abur cubur yemek"],
+      ["Aile içinde ne yapmalıyız?", "Yardımlaşmalıyız.", "Bağırmalıyız.", "Eşyaları kırmalıyız.", "Saygısız davranmalıyız"],
+      ["Yaya geçidinde kimler önceliklidir?", "Yayalar", "Park etmiş araçlar", "Binalar", "Ağaçlar"],
+      ["Hangisi iletişim aracıdır?", "Telefon", "Masa", "Kalem", "Dolap"]
     ];
 
-    addFixedQuestions(3, "Hayat Bilgisi", grade3Life);
+    addQuestionsFromList(3, "Hayat Bilgisi", grade3Life);
 
     /*
       4. SINIF
-      21 Türkçe + 21 Matematik + 21 Fen + 20 Sosyal = 83
+      21 Türkçe + 21 Matematik + 21 Fen Bilimleri + 20 Sosyal Bilgiler = 83
     */
 
     const grade4Turkish = [
       ["“Konuk” kelimesinin eş anlamlısı hangisidir?", "Misafir", "Komşu", "Yolcu", "Arkadaş"],
       ["“Cesur” kelimesinin zıt anlamlısı hangisidir?", "Korkak", "Yürekli", "Güçlü", "Kararlı"],
       ["Hangisi deyimdir?", "Etekleri zil çalmak", "Kitap okumak", "Okula gitmek", "Kalem almak"],
-      ["Hangisi bir atasözüdür?", "Sakla samanı, gelir zamanı.", "Kapıyı açtı.", "Çocuklar oynadı.", "Hava soğuktu."],
-      ["Bir metnin ana fikri nedir?", "Vermek istediği temel düşünce", "Yazarın adı", "Sayfa sayısı", "Başlık uzunluğu"],
-      ["Hangisi neden-sonuç cümlesidir?", "Yağmur yağdığı için pikniğe gitmedik.", "Pikniğe gittik.", "Çanta mavidir.", "Kitap masadadır."],
+      ["Hangisi atasözüdür?", "Sakla samanı, gelir zamanı.", "Kapıyı açtı.", "Çocuklar oynadı.", "Hava soğuktu."],
+      ["Bir metnin ana fikri nedir?", "Temel düşüncesi", "Yazarın adı", "Sayfa sayısı", "Kitabın fiyatı"],
+      ["Hangisi neden-sonuç cümlesidir?", "Yağmur yağdığı için gitmedik.", "Pikniğe gittik.", "Çanta mavidir.", "Kitap masadadır."],
       ["Hangisi amaç-sonuç cümlesidir?", "Başarılı olmak için çalıştı.", "Çok yoruldu.", "Hava soğuktu.", "Kitabı aldı."],
       ["“Akıllı” kelimesinin eş anlamlısı hangisidir?", "Zeki", "Tembel", "Yavaş", "Korkak"],
       ["“Eski” kelimesinin zıt anlamlısı hangisidir?", "Yeni", "Büyük", "Küçük", "Uzak"],
-      ["Hangisi mecaz anlamlı kullanılmıştır?", "Kalbi kırıldı.", "Bardağı kırıldı.", "Cam kırıldı.", "Dal kırıldı."],
-      ["Hangisi gerçek anlamlıdır?", "Çantayı taşıdı.", "Sözleri çok ağırdı.", "İçi yandı.", "Kalbi temizdi."],
+      ["Hangisi mecaz anlamlıdır?", "Kalbi kırıldı.", "Bardağı kırıldı.", "Cam kırıldı.", "Dal kırıldı."],
+      ["Hangisi gerçek anlamlıdır?", "Çantayı taşıdı.", "Sözleri ağırdı.", "İçi yandı.", "Kalbi temizdi."],
       ["Hangisi ünlem cümlesidir?", "Ne güzel bir manzara!", "Saat kaç?", "Eve gittim.", "Kitap okuyorum."],
       ["Hangisi kurallı cümledir?", "Çocuklar bahçede oynuyor.", "Bahçede oynuyor çocuklar.", "Oynuyor bahçede çocuklar.", "Bahçede çocuklar."],
       ["Hangisi birleşik kelimedir?", "Başkent", "Kalem", "Masa", "Okul"],
       ["“Hızlı” kelimesinin zıt anlamlısı hangisidir?", "Yavaş", "Çabuk", "Seri", "Süratli"],
       ["Hangisi özel addır?", "Kızılırmak", "nehir", "dağ", "göl"],
       ["Bir paragrafın başlığı neyi belirtir?", "Konusunu", "Yazarın yaşını", "Sayfa sayısını", "Kitabın fiyatını"],
-      ["Hangisi soru anlamı taşır?", "Bu kitabı sen mi aldın?", "Kitabı masaya koydu.", "Bugün hava güzel.", "Çocuk dışarı çıktı."],
+      ["Hangisi soru anlamı taşır?", "Bu kitabı sen mi aldın?", "Kitabı koydu.", "Hava güzel.", "Çocuk çıktı."],
       ["Hangisi çoğul isimdir?", "Ağaçlar", "Ağaç", "Yeşil", "Büyümek"],
-      ["Hangisi sıfat görevindedir?", "Mavi", "Koşmak", "Kalem", "Sevinç"],
+      ["Hangisi sıfattır?", "Mavi", "Koşmak", "Kalem", "Sevinç"],
       ["“Yardım” kelimesinin eş anlamlısı hangisidir?", "Destek", "Kavga", "Düşmanlık", "Yarış"]
     ];
 
-    addFixedQuestions(4, "Türkçe", grade4Turkish);
+    addQuestionsFromList(4, "Türkçe", grade4Turkish);
 
     for (let i = 1; i <= 21; i++) {
       const a = 12 + (i % 7);
       const b = 6 + (i % 5);
-      const result = a * b;
 
       addQuestion(
-        `4-matematik-${i}`,
+        `4-Matematik-${i}`,
         4,
         "Matematik",
         `${a} × ${b} işleminin sonucu kaçtır?`,
-        result,
-        result + a,
-        result - b,
-        result + 10
+        a * b,
+        a * b + a,
+        a * b - b,
+        a * b + 10
       );
     }
 
@@ -679,51 +675,47 @@
       ["Elektrik devresinde enerji sağlayan araç hangisidir?", "Pil", "Kablo", "Anahtar", "Ampul"],
       ["Sesin oluşmasını sağlayan olay nedir?", "Titreşim", "Donma", "Erime", "Buharlaşma"],
       ["Bitkiler fotosentez yaparken hangi gazı kullanır?", "Karbondioksit", "Oksijen", "Azot", "Helyum"],
-      ["İnsan vücudunda besinlerin sindirildiği organlardan biri hangisidir?", "Mide", "Kulak", "Burun", "Göz"],
+      ["Besinlerin sindirildiği organlardan biri hangisidir?", "Mide", "Kulak", "Burun", "Göz"],
       ["Kanı vücuda pompalayan organ hangisidir?", "Kalp", "Akciğer", "Böbrek", "Mide"],
       ["Hangisi yenilenebilir enerji kaynağıdır?", "Güneş", "Kömür", "Petrol", "Doğal gaz"],
       ["Işık hangi doğrultuda yayılır?", "Doğrusal", "Dairesel", "Kırık", "Düzensiz"],
-      ["Ay’ın ışık kaynağı olmasının nedeni nedir?", "Güneş’ten aldığı ışığı yansıtması", "Kendi ışığını üretmesi", "Dünya’dan büyük olması", "Bir yıldız olması"],
-      ["Hangisi omurgalı bir hayvandır?", "Kedi", "Solucan", "Salyangoz", "Denizanası"],
+      ["Ay’ın ışık kaynağı olmasının nedeni nedir?", "Güneş ışığını yansıtması", "Kendi ışığını üretmesi", "Bir yıldız olması", "Dünya’dan büyük olması"],
+      ["Hangisi omurgalı hayvandır?", "Kedi", "Solucan", "Salyangoz", "Denizanası"],
       ["Bitkilerde suyun taşınmasına yardımcı olan bölüm hangisidir?", "Gövde", "Çiçek", "Meyve", "Tohum"],
       ["Besin zincirinin ilk basamağında genellikle ne bulunur?", "Bitkiler", "İnsanlar", "Etçiller", "Mantarlar"],
       ["Kuvvet aşağıdakilerden hangisini değiştirebilir?", "Hareketi", "Rengi her zaman", "Tadını", "Kokusunu her zaman"],
-      ["Geri dönüşümün amacı nedir?", "Atıkları yeniden değerlendirmek", "Çöpleri artırmak", "Suyu kirletmek", "Enerjiyi boşa harcamak"],
+      ["Geri dönüşümün amacı nedir?", "Atıkları yeniden değerlendirmek", "Çöpleri artırmak", "Suyu kirletmek", "Enerjiyi harcamak"],
       ["Hangisi ışığı geçirmez?", "Tahta", "Cam", "Su", "Hava"],
       ["Dengeli beslenmede ne bulunmalıdır?", "Farklı besin grupları", "Sadece şeker", "Sadece ekmek", "Sadece meyve suyu"],
-      ["Hangisi doğal bir uyduya örnektir?", "Ay", "Dünya", "Güneş", "Mars"]
+      ["Hangisi doğal uydudur?", "Ay", "Dünya", "Güneş", "Mars"]
     ];
 
-    addFixedQuestions(4, "Fen Bilimleri", grade4Science);
+    addQuestionsFromList(4, "Fen Bilimleri", grade4Science);
 
     const grade4Social = [
       ["Türkiye’nin başkenti hangisidir?", "Ankara", "İstanbul", "İzmir", "Bursa"],
       ["Türkiye Cumhuriyeti’nin kurucusu kimdir?", "Mustafa Kemal Atatürk", "Fatih Sultan Mehmet", "Mimar Sinan", "Yunus Emre"],
-      ["Haritalarda yön bulmak için hangi araçtan yararlanılır?", "Pusula", "Termometre", "Cetvel", "Saat"],
+      ["Yön bulmak için hangi araçtan yararlanılır?", "Pusula", "Termometre", "Cetvel", "Saat"],
       ["Güneş’in doğduğu yön hangisidir?", "Doğu", "Batı", "Kuzey", "Güney"],
       ["Güneş’in battığı yön hangisidir?", "Batı", "Doğu", "Kuzey", "Güney"],
       ["Kuzeyin karşısında hangi yön bulunur?", "Güney", "Doğu", "Batı", "Kuzeydoğu"],
       ["Hangisi kültürel mirasımızdır?", "Tarihi eserler", "Plastik şişeler", "Trafik ışıkları", "Market arabaları"],
-      ["23 Nisan hangi bayramdır?", "Ulusal Egemenlik ve Çocuk Bayramı", "Zafer Bayramı", "Cumhuriyet Bayramı", "Emek ve Dayanışma Günü"],
+      ["23 Nisan hangi bayramdır?", "Ulusal Egemenlik ve Çocuk Bayramı", "Zafer Bayramı", "Cumhuriyet Bayramı", "Emek Bayramı"],
       ["29 Ekim hangi bayramdır?", "Cumhuriyet Bayramı", "Çocuk Bayramı", "Zafer Bayramı", "Gençlik Bayramı"],
       ["Türkiye’nin yönetim şekli nedir?", "Cumhuriyet", "Krallık", "İmparatorluk", "Dükalık"],
       ["Hangisi doğal çevre unsurudur?", "Dağ", "Köprü", "Bina", "Yol"],
       ["Hangisi beşerî çevre unsurudur?", "Köprü", "Göl", "Dağ", "Orman"],
       ["İnsanların geçimini sağlamak için yaptığı işe ne denir?", "Meslek", "Oyun", "Tatil", "Gezi"],
-      ["Hangisi bir ulaşım aracıdır?", "Tren", "Masa", "Dolap", "Defter"],
+      ["Hangisi ulaşım aracıdır?", "Tren", "Masa", "Dolap", "Defter"],
       ["Geçmişte yaşanan olayları inceleyen bilim dalı hangisidir?", "Tarih", "Matematik", "Müzik", "Beden eğitimi"],
-      ["Hangisi demokratik bir davranıştır?", "Farklı düşüncelere saygı duymak", "Başkalarını susturmak", "Kuralları çiğnemek", "Haksızlık yapmak"],
+      ["Hangisi demokratik davranıştır?", "Farklı düşüncelere saygı duymak", "Başkalarını susturmak", "Kuralları çiğnemek", "Haksızlık yapmak"],
       ["Ülkemizde kullanılan para birimi hangisidir?", "Türk lirası", "Dolar", "Euro", "Sterlin"],
-      ["Hangisi bir doğal afettir?", "Deprem", "Sınav", "Tatil", "Yarışma"],
+      ["Hangisi doğal afettir?", "Deprem", "Sınav", "Tatil", "Yarışma"],
       ["Tarihi eserleri korumak neden önemlidir?", "Geçmişimizi tanımak için", "Çevreyi kirletmek için", "Eşyaları yok etmek için", "Trafiği artırmak için"],
-      ["Hangisi ülkemizin komşularından biridir?", "Bulgaristan", "Brezilya", "Japonya", "Avustralya"]
+      ["Hangisi ülkemizin komşularındandır?", "Bulgaristan", "Brezilya", "Japonya", "Avustralya"]
     ];
 
-    addFixedQuestions(4, "Sosyal Bilgiler", grade4Social);
-
-    /*
-      SORU KONTROLÜ
-    */
+    addQuestionsFromList(4, "Sosyal Bilgiler", grade4Social);
 
     console.log("Toplam soru sayısı:", questionPool.length);
 
@@ -753,13 +745,35 @@
     let selectedQuestions = [];
     let questionIndex = 0;
     let answered = false;
-    let timeLeft = 30;
     let timer = null;
+    let timeLeft = 30;
 
     const usedQuestions = {
       2: new Set(),
       3: new Set(),
       4: new Set()
+    };
+
+    const lessonQuotas = {
+      2: {
+        "Türkçe": 5,
+        "Matematik": 5,
+        "Hayat Bilgisi": 5
+      },
+
+      3: {
+        "Türkçe": 4,
+        "Matematik": 4,
+        "Fen Bilimleri": 4,
+        "Hayat Bilgisi": 3
+      },
+
+      4: {
+        "Türkçe": 4,
+        "Matematik": 4,
+        "Fen Bilimleri": 4,
+        "Sosyal Bilgiler": 3
+      }
     };
 
     const tabs = document.querySelectorAll(".tab");
@@ -803,29 +817,56 @@
         item.classList.remove("active");
       });
 
-      const activePrize = document.getElementById(`prize-${questionIndex}`);
+      const activePrize =
+        document.getElementById(`prize-${questionIndex}`);
 
       if (activePrize) {
         activePrize.classList.add("active");
       }
     }
 
-    function availableQuestions() {
+    function getAvailableQuestions() {
       return questionPool.filter(question =>
         question.grade === selectedGrade &&
         !usedQuestions[selectedGrade].has(question.id)
       );
     }
 
-    function selectQuestions() {
-      const available = availableQuestions();
+    /*
+      EN ÖNEMLİ BÖLÜM:
 
-      if (available.length < 15) {
-        finishPoolMessage(available.length);
-        return false;
+      Her yeni yarışmacıda her dersten belirlenen miktarda soru alınır.
+      Daha sonra bu 15 soru karıştırılır.
+    */
+
+    function selectQuestionsForContestant() {
+      const quotas = lessonQuotas[selectedGrade];
+      const contestantQuestions = [];
+
+      for (const lesson in quotas) {
+        const requiredCount = quotas[lesson];
+
+        const availableLessonQuestions = questionPool.filter(question =>
+          question.grade === selectedGrade &&
+          question.lesson === lesson &&
+          !usedQuestions[selectedGrade].has(question.id)
+        );
+
+        if (availableLessonQuestions.length < requiredCount) {
+          showPoolFinished(
+            `${lesson} dersinde yeni yarışma için yeterli soru kalmadı.`
+          );
+
+          return false;
+        }
+
+        const selectedLessonQuestions =
+          shuffle(availableLessonQuestions).slice(0, requiredCount);
+
+        contestantQuestions.push(...selectedLessonQuestions);
       }
 
-      selectedQuestions = shuffle(available).slice(0, 15);
+      selectedQuestions = shuffle(contestantQuestions);
 
       selectedQuestions.forEach(question => {
         usedQuestions[selectedGrade].add(question.id);
@@ -873,7 +914,7 @@
         `Soru: ${questionIndex + 1} / 15`;
 
       gradeInfo.textContent =
-        `Seviye: ${selectedGrade}. Sınıf`;
+        `${selectedGrade}. Sınıf`;
 
       prizeInfo.textContent =
         `Ödül: ${prizes[questionIndex]}`;
@@ -913,7 +954,7 @@
       });
     }
 
-    function finishAsWrong(text) {
+    function finishAsWrong(reason) {
       if (answered) return;
 
       answered = true;
@@ -926,7 +967,7 @@
       allAnswers[current.correct].classList.add("correct");
 
       message.textContent =
-        `${text} Doğru cevap: ${current.options[current.correct]}`;
+        `${reason} Doğru cevap: ${current.options[current.correct]}`;
 
       newButton.classList.remove("hidden");
       backButton.classList.remove("hidden");
@@ -948,7 +989,7 @@
 
         if (questionIndex === 14) {
           message.textContent =
-            "Tebrikler! 15 sorunun tamamını doğru cevapladın.";
+            "Tebrikler! 15 soruluk yarışmayı tamamladın.";
 
           newButton.classList.remove("hidden");
           backButton.classList.remove("hidden");
@@ -968,29 +1009,30 @@
       }
     }
 
-    function finishPoolMessage(remaining) {
+    function showPoolFinished(reason = "") {
       stopTimer();
 
       startScreen.style.display = "none";
       gameScreen.style.display = "block";
 
-      questionNumber.textContent = "Soru havuzu tamamlandı";
+      questionNumber.textContent = "Soru havuzu bitti";
       gradeInfo.textContent = `${selectedGrade}. Sınıf`;
       prizeInfo.textContent = "";
-      lessonInfo.textContent = "Yarışma bitti";
+      lessonInfo.textContent = "Yarışma tamamlandı";
 
       questionText.textContent =
-        "Bu sınıfın soru havuzu tamamlandı.";
+        "Bu sınıf için yeni yarışma başlatılamıyor.";
 
       answers.innerHTML = "";
 
-      if (remaining === 0) {
-        message.textContent =
-          "Bu sınıftaki bütün sorular kullanıldı.";
-      } else {
-        message.textContent =
-          `Bu sınıfta ${remaining} soru kaldı. Yeni yarışma için en az 15 soru gerekir.`;
-      }
+      const remaining = getAvailableQuestions().length;
+
+      message.textContent = reason ||
+        (
+          remaining === 0
+            ? "Bu sınıftaki bütün sorular kullanıldı."
+            : "Yeni yarışma için her dersten yeterli soru kalmadı."
+        );
 
       timerText.textContent = "Süre yok";
       timerBar.style.width = "0%";
@@ -1004,7 +1046,10 @@
     function startGame() {
       if (!selectedGrade) return;
 
-      if (!selectQuestions()) return;
+      const started =
+        selectQuestionsForContestant();
+
+      if (!started) return;
 
       questionIndex = 0;
 
@@ -1022,43 +1067,43 @@
 
       selectedQuestions = [];
       questionIndex = 0;
-
-      nextButton.classList.add("hidden");
-      newButton.classList.add("hidden");
-      backButton.classList.add("hidden");
-      resetButton.classList.add("hidden");
     }
 
-    function resetSelectedGradePool() {
+    function resetPool() {
       usedQuestions[selectedGrade].clear();
+
+      selectedQuestions = [];
+      questionIndex = 0;
 
       gameScreen.style.display = "none";
       startScreen.style.display = "block";
 
       selectedGradeText.textContent =
         `${selectedGrade}. sınıf seçildi. Kullanılabilir soru: ${
-          availableQuestions().length
+          getAvailableQuestions().length
         }`;
 
       startButton.disabled = false;
-
-      selectedQuestions = [];
-      questionIndex = 0;
     }
 
     tabs.forEach(tab => {
       tab.addEventListener("click", () => {
         selectedGrade = Number(tab.dataset.grade);
 
-        tabs.forEach(item => item.classList.remove("active"));
+        tabs.forEach(item => {
+          item.classList.remove("active");
+        });
+
         tab.classList.add("active");
 
-        const count = availableQuestions().length;
+        const availableCount =
+          getAvailableQuestions().length;
 
         selectedGradeText.textContent =
-          `${selectedGrade}. sınıf seçildi. Kullanılabilir soru: ${count}`;
+          `${selectedGrade}. sınıf seçildi. Kullanılabilir soru: ${availableCount}`;
 
-        startButton.disabled = count < 15;
+        startButton.disabled =
+          availableCount < 15;
       });
     });
 
@@ -1070,26 +1115,24 @@
     });
 
     newButton.addEventListener("click", () => {
-      if (selectQuestions()) {
-        questionIndex = 0;
-        showQuestion();
-      }
+      const started =
+        selectQuestionsForContestant();
+
+      if (!started) return;
+
+      questionIndex = 0;
+      showQuestion();
     });
 
     backButton.addEventListener("click", returnToStart);
 
-    resetButton.addEventListener("click", resetSelectedGradePool);
+    resetButton.addEventListener("click", resetPool);
 
     createPrizeList();
 
-    /*
-      Beklenen sonuç:
-      2. sınıf: 84 soru
-      3. sınıf: 83 soru
-      4. sınıf: 83 soru
-      Toplam: 250 soru
-    */
+    console.log("Toplam soru:", questionPool.length);
   </script>
 
 </body>
 </html>
+
