@@ -4,7 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>4. Sınıf Sosyal Bilgiler - Tüm Üniteler</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <style>
+html, body, body * {
+font-family: 'Andika', 'Andika New Basic', 'Segoe UI', Arial, sans-serif;
+}
+
         * {
             margin: 0;
             padding: 0;
@@ -12,7 +19,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Andika', 'Andika New Basic', 'Segoe UI', Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 20px;
             line-height: 1.6;
@@ -491,7 +498,7 @@
                         </div>
                         <div class="mini-card">
                             <strong style="color: #2ecc71;">👨‍👩‍👧 HALKÇILIK</strong><br>
-                            Halk devlet için, devlet halk içindir.
+                            Devlet halk içindir. Herkes kanun önünde eşittir, hiç kimseye ayrıcalık tanınmaz.
                         </div>
                         <div class="mini-card">
                             <strong style="color: #f39c12;">📜 LAİKLİK</strong><br>
@@ -601,7 +608,7 @@
                         <div class="warning-box">
                             <strong style="font-size: 1.3em;">🔥 YANGIN</strong><br><br>
                             <strong>Yangın Anında:</strong><br>
-                            • 110 İtfaiye'yi ara<br>
+                            • 112 Acil Çağrı Merkezi'ni ara (itfaiye)<br>
                             • Eğilerek yürü (duman üstte)<br>
                             • Ağzını ıslak bezle kapat<br>
                             • Asansör kullanma<br>
@@ -616,7 +623,7 @@
                         ✓ İlk yardım çantası<br>
                         ✓ Islık<br>
                         ✓ Radyo<br>
-                        ✓ Acil telefon numaraları (112, 110, 155)<br>
+                        ✓ Acil telefon numaraları (112 Acil Çağrı, 183 ALO Çocuk)<br>
                         ✓ Battaniye<br>
                         ✓ Önemli belgeler (nüfus cüzdanı kopyası)
                     </div>
@@ -693,14 +700,14 @@
                                 <td>1769</td>
                             </tr>
                             <tr>
-                                <td>💡 Ampul</td>
-                                <td>Thomas Edison</td>
-                                <td>1879</td>
-                            </tr>
-                            <tr>
                                 <td>☎️ Telefon</td>
                                 <td>Alexander Graham Bell</td>
                                 <td>1876</td>
+                            </tr>
+                            <tr>
+                                <td>💡 Ampul</td>
+                                <td>Thomas Edison</td>
+                                <td>1879</td>
                             </tr>
                             <tr>
                                 <td>✈️ Uçak</td>
@@ -718,7 +725,7 @@
                                 <td>1973</td>
                             </tr>
                             <tr>
-                                <td>🌐 İnternet</td>
+                                <td>🌐 World Wide Web (www)</td>
                                 <td>Tim Berners-Lee</td>
                                 <td>1989</td>
                             </tr>
@@ -1269,6 +1276,8 @@
             }
         }
 
+        let quizAnswers = {};
+
         // Quiz başlatma fonksiyonları
         function startQuiz1() {
             const questions = [
@@ -1289,7 +1298,7 @@
                 {q: "Cumhuriyet hangi tarihte ilan edilmiştir?", 
                  opts: ["19 Mayıs 1919", "23 Nisan 1920", "30 Ağustos 1922", "29 Ekim 1923"], correct: 3},
                 {q: "Bayrağımızın rengi nedir?", 
-                 opts: ["Kırmızı", "Al (kırmızı)", "Beyaz", "Mavi"], correct: 1}
+                 opts: ["Yeşil", "Al (kırmızı)", "Beyaz", "Mavi"], correct: 1}
             ];
             runQuiz(questions, 'quiz2Result');
         }
@@ -1301,7 +1310,7 @@
                 {q: "Deprem anında ne yapmalıyız?", 
                  opts: ["Pencereye koşmalıyız", "Çök-kapan-tutun", "Dışarı koşmalıyız", "Asansöre binmeliyiz"], correct: 1},
                 {q: "Acil yardım numarası hangisidir?", 
-                 opts: ["110", "112", "155", "156"], correct: 1}
+                 opts: ["100", "112", "155", "156"], correct: 1}
             ];
             runQuiz(questions, 'quiz3Result');
         }
@@ -1355,6 +1364,10 @@
         }
 
         function runQuiz(questions, resultId) {
+            /* Yarışma yeniden başlatılınca önceki cevaplar temizlensin */
+            for (let key in quizAnswers) {
+                if (key.startsWith(resultId)) delete quizAnswers[key];
+            }
             let quizHtml = '';
             for (let i = 0; i < questions.length; i++) {
                 quizHtml += `<div style="margin: 20px 0; padding: 15px; background: white; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">`;
@@ -1367,7 +1380,6 @@
             document.getElementById(resultId).innerHTML = quizHtml;
         }
 
-        let quizAnswers = {};
         function selectAnswer(qIndex, selected, correct, resultId) {
             if (quizAnswers[resultId + '_q' + qIndex] !== undefined) return;
             

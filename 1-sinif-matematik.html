@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Minik Matematikçiler</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
 <style>
 :root{
   --mor:#7557d9;
@@ -19,6 +23,10 @@
   --gölge:0 8px 20px rgba(47,58,110,.16);
 }
 
+html,body,body *{
+  font-family:'Andika','Andika New Basic',"Trebuchet MS",Arial,sans-serif;
+}
+
 *{
   box-sizing:border-box;
   -webkit-tap-highlight-color:transparent;
@@ -31,7 +39,7 @@ html{
 body{
   margin:0;
   color:var(--koyu);
-  font-family:"Trebuchet MS","Arial Rounded MT Bold",Arial,sans-serif;
+  font-family:'Andika','Andika New Basic',"Trebuchet MS",Arial,sans-serif;
   font-size:21px;
   line-height:1.6;
   background:
@@ -549,6 +557,23 @@ footer{
     width:calc(50% - 8px);
   }
 }
+
+/* ================= SAYI DOĞRUSU ================= */
+.sd-kaydir{
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding:6px 2px 12px;
+  -webkit-overflow-scrolling:touch;
+  border-radius:16px;
+  background:#ffffffcc;
+  border:3px solid #e2dbff;
+}
+.sd-kaydir svg{display:block}
+.sd-butonlar{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.sd-ipucu{font-size:18px;color:#5b4bb5;margin:8px 0 0}
+.sd-tik{cursor:pointer}
+.sd-tik:hover .sd-hedef{fill:#ffd166}
+
 </style>
 </head>
 
@@ -646,13 +671,20 @@ footer{
       <div class="feedback" id="saymaCevap"></div>
     </div>
 
-    <div class="card">
+    <div class="card activity" style="grid-column:1/-1">
       <h3>🔢 Sayı Doğrusu</h3>
-      <p>Sayıları küçükten büyüğe doğru inceleyelim.</p>
-      <div class="number-line" id="sayiDogrusu"></div>
-      <button onclick="sayiGoster(10)">0–10</button>
-      <button onclick="sayiGoster(20)">0–20</button>
-      <button onclick="sayiGoster(100)">0–100</button>
+      <p>
+        Sayı doğrusunda sayılar <b>soldan sağa</b> doğru büyür.
+        Sağa gittikçe sayı <b>artar</b>, sola gittikçe <b>azalır</b>.
+      </p>
+      <div class="sd-butonlar">
+        <button class="green" data-max="10" onclick="sayiDogrusuGoster(10)">0 – 10</button>
+        <button data-max="20" onclick="sayiDogrusuGoster(20)">0 – 20</button>
+        <button data-max="100" onclick="sayiDogrusuGoster(100)">0 – 100</button>
+      </div>
+      <div class="sd-kaydir"><div id="sayiDogrusu"></div></div>
+      <p class="sd-ipucu">👉 Doğru üzerindeki bir sayıya dokun, kurbağa oraya zıplasın!</p>
+      <div class="feedback" id="sayiDogrusuCevap"></div>
     </div>
 
     <div class="card">
@@ -666,7 +698,7 @@ footer{
       <div id="onlukCevap"></div>
     </div>
 
-    <div class="card">
+    <div class="card" style="grid-column:1/-1">
       <h3>🚶 Ritmik Sayma</h3>
       <p>Kaçar kaçar sayalım?</p>
       <select id="ritmik">
@@ -676,7 +708,8 @@ footer{
         <option value="10">Onar</option>
       </select>
       <button onclick="ritmikSay()">Başla</button>
-      <div class="number-line" id="ritmikCevap"></div>
+      <div class="sd-kaydir"><div id="ritmikCevap"></div></div>
+      <div class="feedback" id="ritmikYazi"></div>
     </div>
 
     <div class="card activity">
@@ -928,12 +961,14 @@ footer{
         <b class="three">3</b>
         <b class="six">6</b>
         <b class="nine">9</b>
-        <div class="hand hour"></div>
-        <div class="hand minute"></div>
+        <div class="hand hour" id="akrep"></div>
+        <div class="hand minute" id="yelkovan"></div>
       </div>
-      <p style="text-align:center">
-        Yelkovan 12’yi gösteriyor. Saat <b>1 tam.</b>
+      <p style="text-align:center" id="saatYazi">
+        Kısa olan <b>akrep</b> 1'i, uzun olan <b>yelkovan</b> 12'yi gösteriyor.
+        Saat <b>1 tam</b>.
       </p>
+      <button onclick="saatDegistir()">🔄 Başka Bir Saat</button>
     </div>
   </div>
 </section>
@@ -984,9 +1019,9 @@ footer{
     <div class="card activity">
       <h3>🎲 Mümkün mü?</h3>
       <p>Bir torbada kırmızı ve mavi toplar var. Mavi top çekilebilir mi?</p>
-      <button onclick="mesaj('Evet, bu mümkündür! 🎉')">Mümkün</button>
-      <button onclick="mesaj('Bu soruda doğru cevap mümkün.')">Kesin</button>
-      <button onclick="mesaj('Bu soruda doğru cevap mümkün.')">İmkânsız</button>
+      <button onclick="mesaj('Doğru! Torbada mavi top olduğu için mavi top çekmek MÜMKÜNDÜR. 🎉')">Mümkün</button>
+      <button onclick="mesaj('Kesin değil. Torbada kırmızı toplar da var; elimize kırmızı da gelebilir.')">Kesin</button>
+      <button onclick="mesaj('İmkânsız değil. Torbanın içinde mavi top var, mavi top gelebilir.')">İmkânsız</button>
     </div>
   </div>
 </section>
@@ -1091,14 +1126,6 @@ function saymayiKontrolEt(){
     "Bu grupta "+saymaHedefi+" elma var. Harika! 🍎";
 }
 
-/* SAYI DOĞRUSU */
-function sayiGoster(sayi){
-  let alan=document.getElementById("sayiDogrusu");
-  alan.innerHTML="";
-  for(let i=0;i<=sayi;i++){
-    alan.innerHTML+="<span>"+i+"</span>";
-  }
-}
 
 /* ONLUK VE BİRLİK */
 function onlukGoster(){
@@ -1114,16 +1141,6 @@ function onlukGoster(){
   `;
 }
 
-/* RİTMİK SAYMA */
-function ritmikSay(){
-  let adim=Number(document.getElementById("ritmik").value);
-  let alan=document.getElementById("ritmikCevap");
-  alan.innerHTML="";
-
-  for(let i=0;i<=100;i+=adim){
-    alan.innerHTML+="<span>"+i+"</span>";
-  }
-}
 
 /* KARŞILAŞTIRMA */
 let k1=0,k2=0;
@@ -1266,13 +1283,16 @@ function balonOyunu(){
   document.getElementById("balonGorev").textContent=
     "Üzerinde "+balonHedefi+" yazan balona dokun! 🎈";
 
-  let sayilar=[];
+  let sayilar=[balonHedefi];
   while(sayilar.length<6){
     let sayi=Math.floor(Math.random()*10)+1;
     if(!sayilar.includes(sayi)) sayilar.push(sayi);
   }
-
-  sayilar[0]=balonHedefi;
+  /* hedef balonun yeri her seferinde degissin */
+  for(let i=sayilar.length-1;i>0;i--){
+    let j=Math.floor(Math.random()*(i+1));
+    [sayilar[i],sayilar[j]]=[sayilar[j],sayilar[i]];
+  }
 
   document.getElementById("balonlar").innerHTML=
     sayilar.map(sayi=>
@@ -1334,11 +1354,18 @@ function vagonSec(sayi){
 
 function vagonKontrol(){
   let dogru=[...vagonSayilari].sort((a,b)=>a-b);
+  let mesaj;
 
-  document.getElementById("vagonMesaj").textContent=
-    JSON.stringify(dogru)===JSON.stringify(secilenVagonlar)
-    ?"Vagonları doğru sıraladın! 🚂🎉"
-    :"Küçük sayı önce gelmeli. Bir daha dene.";
+  if(secilenVagonlar.length<vagonSayilari.length){
+    mesaj="Önce bütün vagonlara dokun. "+
+      (vagonSayilari.length-secilenVagonlar.length)+" vagon kaldı.";
+  }else if(JSON.stringify(dogru)===JSON.stringify(secilenVagonlar)){
+    mesaj="Vagonları doğru sıraladın! 🚂🎉";
+  }else{
+    mesaj="En küçük sayı en önde olmalı. Karıştır'a basıp yeniden dene.";
+  }
+
+  document.getElementById("vagonMesaj").textContent=mesaj;
 }
 
 /* KART */
@@ -1356,6 +1383,16 @@ function kartCevir(){
     "Sayıyı oku ve yıldızları tek tek say.";
 }
 
+/* TAM SAAT */
+function saatDegistir(){
+  const saat = Math.floor(Math.random()*12)+1;
+  document.getElementById("akrep").style.transform = "rotate("+(saat*30)+"deg)";
+  document.getElementById("yelkovan").style.transform = "rotate(0deg)";
+  document.getElementById("saatYazi").innerHTML =
+    "Kısa olan <b>akrep</b> " + saat + "'i, uzun olan <b>yelkovan</b> 12'yi gösteriyor. " +
+    "Saat <b>" + saat + " tam</b>.";
+}
+
 /* ZAR */
 function zarAt(){
   let sayi=Math.floor(Math.random()*6)+1;
@@ -1365,9 +1402,140 @@ function zarAt(){
     zarlar[sayi-1]+"<br><small>"+sayi+" adım ilerle!</small>";
 }
 
+
+/* ================= SAYI DOĞRUSU ================= */
+let sdMax = 10;
+let sdSecili = null;
+
+function sayiDogrusuGoster(max){
+  sdMax = max;
+  sdSecili = null;
+  sayiDogrusuCiz();
+  document.getElementById("sayiDogrusuCevap").textContent = "";
+  document.querySelectorAll(".sd-butonlar button").forEach(b=>{
+    b.classList.toggle("green", Number(b.dataset.max) === max);
+  });
+}
+
+/* Sayı doğrusunun SVG çizimi */
+function sayiDogrusuCiz(){
+  const alan = document.getElementById("sayiDogrusu");
+  if(!alan) return;
+
+  const max  = sdMax;
+  const adim = max <= 10 ? 68 : (max <= 20 ? 48 : 27);
+  const solPay = 46, sagPay = 52;
+  const eksenY = 80;
+  const genislik = solPay + sagPay + max * adim;
+  const yukseklik = 138;
+
+  /* etiket sıklığı: 0-20 arası her sayı, 100'de beşer */
+  const etiketAdim = max <= 20 ? 1 : 5;
+  /* büyük çentik */
+  const buyukAdim = max <= 10 ? 1 : (max <= 20 ? 5 : 10);
+
+  let s = '<svg viewBox="0 0 '+genislik+' '+yukseklik+'" width="'+genislik+'" height="'+yukseklik+'" xmlns="http://www.w3.org/2000/svg">';
+
+  /* ana doğru */
+  s += '<line x1="14" y1="'+eksenY+'" x2="'+(genislik-14)+'" y2="'+eksenY+'" stroke="#49339b" stroke-width="5" stroke-linecap="round"/>';
+  /* sol ve sağ ok uçları */
+  s += '<polygon points="6,'+eksenY+' 24,'+(eksenY-10)+' 24,'+(eksenY+10)+'" fill="#49339b"/>';
+  s += '<polygon points="'+genislik+','+eksenY+' '+(genislik-18)+','+(eksenY-10)+' '+(genislik-18)+','+(eksenY+10)+'" fill="#49339b"/>';
+
+  for(let i=0; i<=max; i++){
+    const x = solPay + i * adim;
+    const buyuk = (i % buyukAdim === 0);
+    const uzunluk = buyuk ? 20 : 11;
+    const renk = buyuk ? "#49339b" : "#9b8ede";
+
+    s += '<line x1="'+x+'" y1="'+(eksenY-uzunluk)+'" x2="'+x+'" y2="'+(eksenY+uzunluk)+'" stroke="'+renk+'" stroke-width="'+(buyuk?4:3)+'" stroke-linecap="round"/>';
+
+    if(i % etiketAdim === 0){
+      s += '<text x="'+x+'" y="'+(eksenY+46)+'" text-anchor="middle" font-size="'+(max<=20?26:20)+'" font-weight="bold" fill="#26334d">'+i+'</text>';
+    }
+
+    /* dokunma alanı */
+    s += '<g class="sd-tik" data-sayi="'+i+'">'
+       + '<circle class="sd-hedef" cx="'+x+'" cy="'+eksenY+'" r="'+(adim/2.4)+'" fill="transparent"/>'
+       + '</g>';
+  }
+
+  /* seçili sayının işaretçisi */
+  if(sdSecili !== null){
+    const x = solPay + sdSecili * adim;
+    s += '<circle cx="'+x+'" cy="'+eksenY+'" r="14" fill="#ff6f91" stroke="#fff" stroke-width="4"/>';
+    s += '<text x="'+x+'" y="'+(eksenY-30)+'" text-anchor="middle" font-size="40">🐸</text>';
+  }
+
+  s += '</svg>';
+  alan.innerHTML = s;
+
+  alan.querySelectorAll(".sd-tik").forEach(g=>{
+    g.addEventListener("click", ()=>{
+      sdSecili = Number(g.dataset.sayi);
+      sayiDogrusuCiz();
+      const c = document.getElementById("sayiDogrusuCevap");
+      let yazi = "🐸 Kurbağa " + sdSecili + " sayısına zıpladı.";
+      if(sdSecili > 0) yazi += " " + sdSecili + " sayısı " + (sdSecili-1) + " sayısından 1 fazladır.";
+      if(sdSecili < sdMax) yazi += " Sağındaki sayı " + (sdSecili+1) + ".";
+      c.textContent = yazi;
+    });
+  });
+}
+
+/* RİTMİK SAYMA — sayı doğrusunda zıplayarak */
+function ritmikSay(){
+  const adim = Number(document.getElementById("ritmik").value);
+  const alan = document.getElementById("ritmikCevap");
+  const max  = (adim <= 2) ? 20 : 100;
+
+  const birim = (max === 20) ? 48 : 27;
+  const solPay = 46, sagPay = 52;
+  const eksenY = 108;
+  const genislik = solPay + sagPay + max * birim;
+  const yukseklik = 168;
+  const etiketAdim = (max === 20) ? (adim === 1 ? 1 : 2) : (adim === 5 ? 5 : 10);
+
+  let s = '<svg viewBox="0 0 '+genislik+' '+yukseklik+'" width="'+genislik+'" height="'+yukseklik+'" xmlns="http://www.w3.org/2000/svg">';
+  s += '<line x1="14" y1="'+eksenY+'" x2="'+(genislik-14)+'" y2="'+eksenY+'" stroke="#49339b" stroke-width="5" stroke-linecap="round"/>';
+  s += '<polygon points="6,'+eksenY+' 24,'+(eksenY-10)+' 24,'+(eksenY+10)+'" fill="#49339b"/>';
+  s += '<polygon points="'+genislik+','+eksenY+' '+(genislik-18)+','+(eksenY-10)+' '+(genislik-18)+','+(eksenY+10)+'" fill="#49339b"/>';
+
+  for(let i=0; i<=max; i++){
+    const x = solPay + i * birim;
+    const sayilan = (i % adim === 0);
+    s += '<line x1="'+x+'" y1="'+(eksenY-(sayilan?18:9))+'" x2="'+x+'" y2="'+(eksenY+(sayilan?18:9))+'" stroke="'+(sayilan?"#49339b":"#b7addf")+'" stroke-width="'+(sayilan?4:2)+'" stroke-linecap="round"/>';
+    if(i % etiketAdim === 0){
+      s += '<text x="'+x+'" y="'+(eksenY+44)+'" text-anchor="middle" font-size="'+(max===20?24:19)+'" font-weight="bold" fill="'+(sayilan?"#26334d":"#8e86b8")+'">'+i+'</text>';
+    }
+    if(sayilan){
+      s += '<circle cx="'+x+'" cy="'+eksenY+'" r="'+(max===20?11:7)+'" fill="#42c486" stroke="#fff" stroke-width="3"/>';
+    }
+  }
+
+  /* zıplama yayları */
+  for(let i=0; i+adim<=max; i+=adim){
+    const x1 = solPay + i * birim;
+    const x2 = solPay + (i+adim) * birim;
+    const orta = (x1+x2)/2;
+    s += '<path d="M '+x1+' '+(eksenY-16)+' Q '+orta+' '+(eksenY-70)+' '+x2+' '+(eksenY-16)+'" fill="none" stroke="#ff6f91" stroke-width="4" stroke-linecap="round"/>';
+    s += '<polygon points="'+x2+','+(eksenY-14)+' '+(x2-11)+','+(eksenY-30)+' '+(x2+4)+','+(eksenY-32)+'" fill="#ff6f91"/>';
+  }
+
+  s += '</svg>';
+  alan.innerHTML = s;
+
+  const liste = [];
+  for(let i=0; i<=max; i+=adim){ liste.push(i); }
+  const adlar = {1:"Birer birer", 2:"İkişer ikişer", 5:"Beşer beşer", 10:"Onar onar"};
+  document.getElementById("ritmikYazi").textContent =
+    (adlar[adim] || (adim + "'er " + adim + "'er")) + " sayıyoruz: " + liste.join(" - ");
+}
+
+
 /* BAŞLANGIÇ */
 yeniSayma();
-sayiGoster(20);
+sayiDogrusuGoster(10);
 onlukGoster();
 yeniKarsilastirma();
 yeniToplama();

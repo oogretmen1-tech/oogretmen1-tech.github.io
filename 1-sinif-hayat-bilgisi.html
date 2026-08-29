@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>1. Sınıf Hayat Bilgisi</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
 <style>
 :root{
   --turuncu:#ff754e;
@@ -16,13 +20,17 @@
   --koyu:#4c342b;
 }
 
+html,body,body *{
+  font-family:'Andika','Andika New Basic',Arial,sans-serif;
+}
+
 *{
   box-sizing:border-box;
 }
 
 body{
   margin:0;
-  font-family:Arial, "Trebuchet MS", sans-serif;
+  font-family:'Andika','Andika New Basic',Arial,sans-serif;
   background:linear-gradient(135deg,#fff4de,#e8f7ff);
   color:var(--koyu);
 }
@@ -757,12 +765,17 @@ function renderUnit(){
         <b>Ayrıntılı açıklama:</b><br>
         ${topic[3]}
         <br><br>
-        <button class="general-button listen-button" 
-          onclick="event.stopPropagation(); readText('${safeText(topic[1] + '. ' + topic[3])}')">
+        <button class="general-button listen-button dinle-dugmesi">
           🔊 Dinle
         </button>
       </div>
     `;
+
+    const dinleDugmesi = card.querySelector(".dinle-dugmesi");
+    dinleDugmesi.onclick = (olay)=>{
+      olay.stopPropagation();
+      readText(topic[1] + ". " + topic[3]);
+    };
 
     card.onclick = ()=>{
       card.classList.toggle("open");
@@ -774,13 +787,10 @@ function renderUnit(){
   createTabs();
   gameContent.innerHTML = "";
   gameMessage.textContent = "Bir oyun seçerek başlayabilirsin! 🌟";
+  window.checkOrderGame = null;
 }
 
 /* SESLİ ANLATIM */
-
-function safeText(text){
-  return text.replace(/'/g,"\\'");
-}
 
 function readText(text){
   if(!("speechSynthesis" in window)){
@@ -795,11 +805,25 @@ function readText(text){
   speech.rate = 0.82;
   speech.pitch = 0.9;
 
-  const voices = speechSynthesis.getVoices();
-  const turkishVoice = voices.find(v => v.lang.toLowerCase().startsWith("tr"));
+  const sesler = speechSynthesis.getVoices();
+  const turkceSes = sesler.find(v => v.lang.toLowerCase().startsWith("tr"));
 
-  if(turkishVoice){
-    speech.voice = turkishVoice;
+  if(turkceSes){
+    speech.voice = turkceSes;
+    speechSynthesis.speak(speech);
+    return;
+  }
+
+  /* Sesler henüz yüklenmemişse yüklenince tekrar dene */
+  if(sesler.length === 0){
+    speechSynthesis.onvoiceschanged = ()=>{
+      speechSynthesis.onvoiceschanged = null;
+      const yeniSesler = speechSynthesis.getVoices();
+      const ses = yeniSesler.find(v => v.lang.toLowerCase().startsWith("tr"));
+      if(ses){ speech.voice = ses; }
+      speechSynthesis.speak(speech);
+    };
+    return;
   }
 
   speechSynthesis.speak(speech);
@@ -939,7 +963,10 @@ function startOrderGame(){
       gameMessage.textContent = "Mükemmel! Olayları doğru sıraya koydun! 🎉";
       addPoint(25);
     }else{
-      gameMessage.textContent = "Bazı kartların sırası karışmış. Bir daha dene! 💪";
+      let doguSayisi = 0;
+      unit.order.forEach((metin,sira)=>{ if(orderList[sira] === metin) doguSayisi++; });
+      gameMessage.textContent =
+        doguSayisi + " kart doğru yerde. Diğerlerinin yerini değiştirip tekrar dene! 💪";
     }
   };
 

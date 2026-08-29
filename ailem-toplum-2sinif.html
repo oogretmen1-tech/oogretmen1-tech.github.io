@@ -23,11 +23,15 @@
   --beyaz:#fff;
 }
 
+html,body,body *{
+  font-family:'Andika','Andika New Basic','Segoe UI',Arial,sans-serif;
+}
+
 *{box-sizing:border-box}
 
 body{
   margin:0;
-  font-family:'Andika','Segoe UI',Arial,sans-serif"Trebuchet MS",Arial,sans-serif;
+  font-family:'Andika','Andika New Basic','Segoe UI',Arial,sans-serif;
   background:var(--arka);
   color:var(--metin);
   line-height:1.6;
@@ -767,6 +771,10 @@ function task(button,correct){
 }
 
 function decision(button,correct){
+  const kutu=button.parentElement;
+  if(kutu.dataset.cevaplandi)return;
+  kutu.dataset.cevaplandi="1";
+
   const feedback=document.getElementById("decisionFeedback");
 
   if(correct){
@@ -830,7 +838,9 @@ function showRelative(){
     area.appendChild(btn);
   });
 
-  document.getElementById("relativeFeedback").className="feedback";
+  const geriBildirim=document.getElementById("relativeFeedback");
+  geriBildirim.className="feedback";
+  geriBildirim.innerHTML="";
 }
 
 function nextRelative(){
@@ -843,10 +853,16 @@ showRelative();
 let sepet=[];
 
 function addBasket(urun,ihtiyac){
+  const feedback=document.getElementById("basketFeedback");
+
+  if(sepet.includes(urun)){
+    feedback.className="feedback";
+    feedback.innerHTML=urun+" zaten sepetinde.";
+    return;
+  }
+
   sepet.push(urun);
   document.getElementById("basket").innerHTML=sepet.join(" • ");
-
-  const feedback=document.getElementById("basketFeedback");
 
   if(ihtiyac){
     feedback.className="feedback good";
