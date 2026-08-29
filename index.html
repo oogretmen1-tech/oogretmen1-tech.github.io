@@ -236,18 +236,18 @@ nav {
 /* ===== OYUNLAR ===== */
 .games-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:20px; }
 .game-card {
-  background:#fff; border-radius:22px; padding:28px 20px; color:var(--dark); text-align:center;
-  box-shadow:var(--card-shadow); border:3px solid transparent;
-  transition:transform .22s, box-shadow .22s; cursor:pointer; text-decoration:none; display:block;
+  border-radius:22px; padding:28px 20px; color:#fff; text-align:center;
+  box-shadow:0 8px 22px rgba(41,70,110,.18); border:none;
+  transition:transform .22s, box-shadow .22s, filter .22s; cursor:pointer; text-decoration:none; display:block;
 }
-.game-card:hover { transform:translateY(-6px); box-shadow:0 16px 36px rgba(0,0,0,.13); }
-.game-card .gicon { font-size: 2.8rem; margin-bottom: 10px; }
-.game-card h4 { font-family:'Andika', sans-serif; font-size:1.1rem; font-weight:800; color:var(--dark); }
-.game-card p { font-size:.82rem; color:#777; margin-top:6px; line-height:1.4; }
-.g1 { border-color:var(--orange); }
-.g2 { border-color:var(--teal); }
-.g3 { border-color:var(--pink); }
-.g4 { border-color:var(--s4); }
+.game-card:hover { transform:translateY(-6px); box-shadow:0 18px 38px rgba(0,0,0,.22); filter:brightness(1.05); }
+.game-card .gicon { font-size: 2.8rem; margin-bottom: 10px; filter:drop-shadow(0 2px 4px rgba(0,0,0,.18)); }
+.game-card h4 { font-family:'Andika', sans-serif; font-size:1.1rem; font-weight:800; color:#fff; text-shadow:0 1px 3px rgba(0,0,0,.18); }
+.game-card p { font-size:.82rem; color:#fff; opacity:.95; margin-top:6px; line-height:1.4; }
+.g1 { background:linear-gradient(150deg, #FFB05C, var(--orange) 55%, #F27B14); }
+.g2 { background:linear-gradient(150deg, #6FE3CE, var(--teal) 55%, #22A08A); }
+.g3 { background:linear-gradient(150deg, #FFB9DA, var(--pink) 55%, #F26FA9); }
+.g4 { background:linear-gradient(150deg, #7FB4FF, var(--s4) 55%, #2A6FE0); }
 
 /* ===== HAKKIMDA ===== */
 .about-box { background:#fff; border-radius:28px; box-shadow:var(--card-shadow); display:flex; gap:36px; align-items:center; padding:40px; flex-wrap:wrap; }
@@ -1267,13 +1267,27 @@ footer span { color:var(--metal-1); font-weight:800; }
 </footer>
 
 <script>
-function showPage(id, anchor) {
-  document.querySelectorAll('.page-section').forEach(p => p.classList.remove('aktif'));
-  const el = document.getElementById('page-' + id);
-  if (el) el.classList.add('aktif');
-  if (anchor) {
-    setTimeout(() => {
-      const target = document.getElementById(anchor);
+/* =========================================================
+   SAYFA GEÇİŞİ + GERİ TUŞU HAFIZASI
+   - Her kategoriye girildiğinde adres çubuğu "?page=turkce"
+     şeklinde güncellenir ve tarayıcı geçmişine eklenir.
+   - Bir etkinliğe girip geri basıldığında, ana sayfaya değil
+     çıkılan kategoriye ve aynı kaydırma noktasına dönülür.
+   ========================================================= */
+
+var DO_KEY = 'dijitalogretmen-durum';
+
+/* --- Sayfayı ekrana getir (geçmişe dokunmadan) --- */
+function renderPage(id, anchor, scrollTo) {
+  document.querySelectorAll('.page-section').forEach(function(p){ p.classList.remove('aktif'); });
+  var el = document.getElementById('page-' + id) || document.getElementById('page-home');
+  el.classList.add('aktif');
+
+  if (typeof scrollTo === 'number') {
+    window.scrollTo(0, scrollTo);
+  } else if (anchor) {
+    setTimeout(function(){
+      var target = document.getElementById(anchor);
       if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       else window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 30);
@@ -1281,29 +1295,119 @@ function showPage(id, anchor) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
+
+/* --- Kategoriye geç ve geçmişe kaydet --- */
+function showPage(id, anchor) {
+  renderPage(id, anchor);
+  var url = (id === 'home')
+    ? window.location.pathname
+    : window.location.pathname + '?page=' + id;
+  try {
+    history.pushState({ page: id, anchor: anchor || null }, '', url);
+  } catch (e) {}
+  durumuKaydet();
+}
+
 function showHome() {
   showPage('home');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* Her sınıf kartı diğerlerinden bağımsız çalışır: birine basmak
-   sadece o kartı açar/kapatır, diğerlerini etkilemez. Aynı anda
-   birden fazla kart açık kalabilir. */
+/* --- Sınıf kartları (aç/kapa) --- */
 function toggleClassCard(header) {
-  const card = header.closest('.class-card');
+  var card = header.closest('.class-card');
   if (!card) return;
   card.classList.toggle('acik');
+  durumuKaydet();
 }
 
-/* Bir alt sayfadan "index.html?page=turkce" gibi bir linkle gelindiyse,
-   ana sayfaya değil doğrudan ilgili kategoriye gidilir. */
-(function(){
-  const params = new URLSearchParams(window.location.search);
-  const target = params.get('page');
-  if (target && document.getElementById('page-' + target)) {
-    showPage(target);
+/* --- Hangi kategori açık? --- */
+function acikSayfa() {
+  var el = document.querySelector('.page-section.aktif');
+  return el ? el.id.replace('page-', '') : 'home';
+}
+
+/* --- Durumu sakla: kategori, kaydırma yeri, açık sınıf kartları --- */
+function durumuKaydet() {
+  try {
+    var acikKartlar = [];
+    document.querySelectorAll('.class-card').forEach(function(c, i){
+      if (c.classList.contains('acik')) acikKartlar.push(i);
+    });
+    sessionStorage.setItem(DO_KEY, JSON.stringify({
+      page: acikSayfa(),
+      scroll: window.scrollY || window.pageYOffset || 0,
+      cards: acikKartlar
+    }));
+  } catch (e) {}
+}
+
+function durumuOku() {
+  try { return JSON.parse(sessionStorage.getItem(DO_KEY) || 'null'); }
+  catch (e) { return null; }
+}
+
+/* Kaydırma sırasında durumu güncelle (fazla yormamak için gecikmeli) */
+var kaydirmaZaman = null;
+window.addEventListener('scroll', function(){
+  if (kaydirmaZaman) clearTimeout(kaydirmaZaman);
+  kaydirmaZaman = setTimeout(durumuKaydet, 150);
+}, { passive: true });
+
+/* Başka bir sayfaya (etkinliğe) geçmeden hemen önce durumu yaz */
+window.addEventListener('beforeunload', durumuKaydet);
+document.addEventListener('click', function(e){
+  var a = e.target.closest('a[href]');
+  if (a && a.getAttribute('href') && a.getAttribute('href').charAt(0) !== '#') {
+    durumuKaydet();
   }
+}, true);
+
+/* --- Tarayıcının geri/ileri tuşu --- */
+window.addEventListener('popstate', function(e){
+  var durum = e.state || {};
+  var params = new URLSearchParams(window.location.search);
+  var id = durum.page || params.get('page') || 'home';
+  var kayit = durumuOku();
+  var yer = (kayit && kayit.page === id) ? kayit.scroll : 0;
+  renderPage(id, null, yer);
+});
+
+/* --- Sayfa ilk açıldığında: doğru kategoriyi ve yeri geri getir --- */
+(function(){
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+  var params = new URLSearchParams(window.location.search);
+  var hedef = params.get('page');
+  var kayit = durumuOku();
+
+  /* Adreste ?page= yoksa, en son bakılan kategoriye dön */
+  if (!hedef && kayit && kayit.page) hedef = kayit.page;
+  if (!hedef || !document.getElementById('page-' + hedef)) hedef = 'home';
+
+  /* Açık bırakılan sınıf kartlarını geri aç */
+  if (kayit && kayit.cards && kayit.cards.length) {
+    var kartlar = document.querySelectorAll('.class-card');
+    kayit.cards.forEach(function(i){ if (kartlar[i]) kartlar[i].classList.add('acik'); });
+  }
+
+  var yer = (kayit && kayit.page === hedef) ? kayit.scroll : 0;
+  renderPage(hedef, null, yer);
+
+  try {
+    var url = (hedef === 'home')
+      ? window.location.pathname
+      : window.location.pathname + '?page=' + hedef;
+    history.replaceState({ page: hedef, anchor: null }, '', url);
+  } catch (e) {}
 })();
+
+/* Geri tuşuyla önbellekten dönüldüğünde de yeri koru */
+window.addEventListener('pageshow', function(e){
+  if (!e.persisted) return;
+  var kayit = durumuOku();
+  if (!kayit) return;
+  renderPage(kayit.page, null, kayit.scroll);
+});
 </script>
 </body>
 </html>
