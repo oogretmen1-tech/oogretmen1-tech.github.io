@@ -189,49 +189,120 @@ function goster(id,btn){
   document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
   document.getElementById(id).classList.add("active");
   btn.classList.add("active");
-  window.speechSynthesis.cancel();
+  if(window.SES) SES.dur();
 }
 
-// TÜRKÇE SES AYARI - GELİŞTİRİLMİŞ
-var turkcesSes = null;
-var sesHazir = false;
+// ===== SES MOTORU (Chrome kesilme + sessizlik düzeltmeleri) =====
+(function(){
+  var destek = ('speechSynthesis' in window);
+  var trSes=null, yuklendi=false, kuyruk=[], indeks=0, toplam=0, okunan=0;
+  var opts={}, canliMi=false, nabiz=null, uyarildi=false;
 
-function turkSesiGuncelle() {
-  var sesler = window.speechSynthesis.getVoices();
-  if (!sesler.length) return;
-  sesHazir = true;
-  for (var i = 0; i < sesler.length; i++) {
-    if (sesler[i].lang === 'tr-TR' || sesler[i].lang === 'tr') {
-      turkcesSes = sesler[i]; break;
+  function sesleriTara(){
+    if(!destek) return;
+    var l = speechSynthesis.getVoices();
+    if(!l.length) return;
+    yuklendi = true; trSes = null;
+    for(var i=0;i<l.length;i++){
+      var d=(l[i].lang||'').toLowerCase().replace('_','-');
+      if(d==='tr' || d.indexOf('tr-')===0){ trSes=l[i]; break; }
+    }
+    if(!trSes){
+      for(var j=0;j<l.length;j++){
+        if((l[j].name||'').toLowerCase().indexOf('turk')>-1){ trSes=l[j]; break; }
+      }
     }
   }
-  if (!turkcesSes) turkcesSes = sesler[0];
-}
-
-function turkSesiAl() { return turkcesSes; }
-
-window.speechSynthesis.onvoiceschanged = turkSesiGuncelle;
-turkSesiGuncelle();
-setTimeout(turkSesiGuncelle, 300);
-setTimeout(turkSesiGuncelle, 1000);
-setTimeout(turkSesiGuncelle, 2500);
-
-function sesliOku(metin, hiz, bitti) {
-  hiz = hiz || 1;
-  window.speechSynthesis.cancel();
-  function _gercekOku() {
-    var utt = new SpeechSynthesisUtterance(metin);
-    utt.lang = "tr-TR";
-    utt.rate = hiz;
-    utt.pitch = 1.05;
-    utt.volume = 1;
-    if (turkcesSes) utt.voice = turkcesSes;
-    if (bitti) utt.onend = bitti;
-    utt.onerror = function(e) { console.log('Ses hatası:', e.error); };
-    window.speechSynthesis.speak(utt);
+  if(destek){
+    sesleriTara();
+    speechSynthesis.onvoiceschanged = sesleriTara;
+    setTimeout(sesleriTara,500); setTimeout(sesleriTara,1500);
   }
-  if (sesHazir) { _gercekOku(); }
-  else { setTimeout(function(){ turkSesiGuncelle(); _gercekOku(); }, 400); }
+
+  function uyari(mesaj){
+    var k=document.getElementById('sesUyariKutu');
+    if(!k){
+      k=document.createElement('div'); k.id='sesUyariKutu';
+      k.style.cssText='position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:9999;'+
+        'background:#16345C;color:#fff;font-family:inherit;font-size:14px;font-weight:700;padding:12px 18px;'+
+        'border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.3);max-width:90%;text-align:center;cursor:pointer';
+      k.onclick=function(){ k.remove(); };
+      document.body.appendChild(k);
+    }
+    k.textContent=mesaj;
+    clearTimeout(k._t); k._t=setTimeout(function(){ if(k.parentNode) k.remove(); },6000);
+  }
+
+  // Chrome uzun metinlerde ~15 sn sonra susuyor: metni cümlelere bölüyoruz
+  function parcala(metin){
+    var cumleler = String(metin).replace(/\s+/g,' ').trim().match(/[^.!?…:;]+[.!?…:;]*/g) || [String(metin)];
+    var out=[], tmp='';
+    cumleler.forEach(function(c){
+      c=c.trim(); if(!c) return;
+      if((tmp+' '+c).trim().length > 160){
+        if(tmp) out.push(tmp.trim());
+        while(c.length > 160){
+          var kes=c.lastIndexOf(' ',160); if(kes<40) kes=160;
+          out.push(c.slice(0,kes).trim()); c=c.slice(kes);
+        }
+        tmp=c;
+      } else { tmp=(tmp+' '+c).trim(); }
+    });
+    if(tmp) out.push(tmp.trim());
+    return out;
+  }
+
+  function nabizBaslat(){
+    nabizDur();
+    nabiz=setInterval(function(){
+      if(canliMi && speechSynthesis.speaking && !speechSynthesis.paused){
+        speechSynthesis.pause(); speechSynthesis.resume();
+      }
+    },9000);
+  }
+  function nabizDur(){ if(nabiz){ clearInterval(nabiz); nabiz=null; } }
+
+  function sonraki(){
+    if(!canliMi) return;
+    if(indeks>=kuyruk.length){ canliMi=false; nabizDur(); if(opts.bitti) opts.bitti(); return; }
+    var parca=kuyruk[indeks];
+    var u=new SpeechSynthesisUtterance(parca);
+    u.lang='tr-TR'; u.rate=opts.hiz||1; u.pitch=opts.tiz||1; u.volume=1;
+    if(trSes) u.voice=trSes;
+    u.onend=function(){
+      okunan+=parca.length; indeks++;
+      if(opts.ilerleme) opts.ilerleme(toplam ? Math.min(100, okunan/toplam*100) : 100);
+      sonraki();
+    };
+    u.onerror=function(){ indeks++; sonraki(); };
+    speechSynthesis.speak(u);
+  }
+
+  window.SES={
+    destekVar: destek,
+    turkceVar: function(){ return !!trSes; },
+    oku: function(metin, ayar){
+      ayar=ayar||{};
+      if(!destek){ uyari('Bu tarayıcı sesli okumayı desteklemiyor. Chrome veya Edge deneyin.'); return; }
+      sesleriTara();
+      if(yuklendi && !trSes && !uyarildi){
+        uyarildi=true;
+        uyari('Cihazınızda Türkçe ses paketi yok. Okuma mevcut sesle yapılacak.');
+      }
+      this.dur();
+      opts=ayar; kuyruk=parcala(metin); indeks=0; okunan=0;
+      toplam=kuyruk.reduce(function(a,b){ return a+b.length; },0);
+      canliMi=true; nabizBaslat();
+      setTimeout(sonraki,180); // cancel() ile speak() çakışmasını önler
+    },
+    dur: function(){ canliMi=false; nabizDur(); if(destek) speechSynthesis.cancel(); }
+  };
+
+  window.addEventListener('beforeunload', function(){ if(destek) speechSynthesis.cancel(); });
+})();
+
+function sesliOku(metin, hiz, bitti){
+  SES.oku(metin, { hiz: hiz || 1, tiz: 1.05, bitti: bitti });
 }
 
 // =====================
@@ -289,33 +360,23 @@ function hikayeAc(i, el){
   document.getElementById("hikayeBaslik").textContent = h.emoji + " " + h.baslik;
   document.getElementById("hikayeMetin").textContent = h.metin;
   document.getElementById("hikayeBar").style.width = "0%";
-  window.speechSynthesis.cancel();
+  SES.dur();
   dalgaDur("sesDalgasi");
 }
 
 function hikayeOynat(){
   const h = hikayeler[aktifHikaye];
   dalgaBaslat("sesDalgasi");
-  const utt = new SpeechSynthesisUtterance(h.metin);
-  utt.lang = "tr-TR";
-  utt.rate = hikayeHiz;
-  utt.pitch = 1.1;
-  const ses = turkSesiAl();
-  if(ses) utt.voice = ses;
-  let baslangic = Date.now();
-  const sure = (h.metin.length / 5) / hikayeHiz * 1000;
-  const interval = setInterval(()=>{
-    const gecen = Date.now() - baslangic;
-    const yuzde = Math.min(100, (gecen/sure)*100);
-    document.getElementById("hikayeBar").style.width = yuzde + "%";
-    if(yuzde >= 100) clearInterval(interval);
-  }, 200);
-  utt.onend = ()=>{ dalgaDur("sesDalgasi"); clearInterval(interval); document.getElementById("hikayeBar").style.width="100%"; };
-  window.speechSynthesis.speak(utt);
+  SES.oku(h.metin, {
+    hiz: hikayeHiz,
+    tiz: 1.1,
+    ilerleme: y => { document.getElementById("hikayeBar").style.width = y + "%"; },
+    bitti: () => { dalgaDur("sesDalgasi"); document.getElementById("hikayeBar").style.width = "100%"; }
+  });
 }
 
 function hikayeDur(){
-  window.speechSynthesis.cancel();
+  SES.dur();
   dalgaDur("sesDalgasi");
 }
 
@@ -359,24 +420,22 @@ function metinSec(i, el){
   el.classList.add("secili");
   document.getElementById("metinKutu").textContent = metinler[i].icerik;
   document.getElementById("metinBar").style.width = "0%";
-  window.speechSynthesis.cancel();
+  SES.dur();
   dalgaDur("metinDalga");
 }
 
 function metinOynat(){
   const m = metinler[aktifMetin];
   dalgaBaslat("metinDalga");
-  const utt = new SpeechSynthesisUtterance(m.icerik);
-  utt.lang = "tr-TR"; utt.rate = metinHiz; utt.pitch = 1.0;
-  const ses = turkSesiAl(); if(ses) utt.voice = ses;
-  let bas = Date.now();
-  const sure = (m.icerik.length/5)/metinHiz*1000;
-  const iv = setInterval(()=>{ const g=Date.now()-bas; const y=Math.min(100,(g/sure)*100); document.getElementById("metinBar").style.width=y+"%"; if(y>=100)clearInterval(iv); },200);
-  utt.onend=()=>{ dalgaDur("metinDalga"); clearInterval(iv); document.getElementById("metinBar").style.width="100%"; };
-  window.speechSynthesis.speak(utt);
+  SES.oku(m.icerik, {
+    hiz: metinHiz,
+    tiz: 1.0,
+    ilerleme: y => { document.getElementById("metinBar").style.width = y + "%"; },
+    bitti: () => { dalgaDur("metinDalga"); document.getElementById("metinBar").style.width = "100%"; }
+  });
 }
 
-function metinDur(){ window.speechSynthesis.cancel(); dalgaDur("metinDalga"); }
+function metinDur(){ SES.dur(); dalgaDur("metinDalga"); }
 
 function metinHizSec(h,btn){
   metinHiz=h;
@@ -476,7 +535,6 @@ function dalgaDur(id){document.getElementById(id).classList.add("dur");}
 hikayeGridOlustur();
 metinSec(0, document.querySelector(".card .hiz-btn"));
 document.getElementById("metinKutu").textContent = metinler[0].icerik;
-turkSesiAl();
 </script>
 </body>
 </html>
