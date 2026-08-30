@@ -1,1095 +1,1262 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kart Çevirmece - Çok Kategorili</title>
 
-<title>Kart Çevirmece Deluxe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg1: #121a3d;
+      --bg2: #293a78;
+      --accent: #ffd166;
+      --accent2: #7bdff2;
+      --card1: #7558dd;
+      --card2: #43309c;
+      --front1: #263b7a;
+      --front2: #172758;
+      --green1: #22764f;
+      --green2: #134332;
+      --panel: rgba(255,255,255,.11);
+      --border: rgba(255,255,255,.18);
+      --soft-text: rgba(255,255,255,.72);
+    }
 
-<style>
-:root {
-  --bg-1: #10172f;
-  --bg-2: #1d2855;
-  --panel: rgba(255,255,255,.11);
-  --panel-border: rgba(255,255,255,.16);
-  --primary: #ffd166;
-  --secondary: #7bdff2;
-  --pink: #ff7aa2;
-  --green: #73d69a;
-  --text-soft: rgba(255,255,255,.68);
-  --card-back-1: #6c63ff;
-  --card-back-2: #4338a8;
-  --card-front-1: #25366d;
-  --card-front-2: #172447;
-}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: white;
+      font-family: "Nunito", sans-serif;
+      background:
+        radial-gradient(circle at 12% 13%, rgba(123,223,242,.22), transparent 28%),
+        radial-gradient(circle at 88% 8%, rgba(255,120,160,.18), transparent 30%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      transition: background .45s ease;
+    }
 
-body {
-  min-height: 100vh;
-  color: white;
-  font-family: 'Nunito', sans-serif;
-  background:
-    radial-gradient(circle at 10% 10%, rgba(123,223,242,.18), transparent 28%),
-    radial-gradient(circle at 90% 20%, rgba(255,122,162,.15), transparent 30%),
-    linear-gradient(135deg, var(--bg-1), var(--bg-2));
-  overflow-x: hidden;
-}
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: .13;
+      background-image: radial-gradient(circle, white 1px, transparent 1px);
+      background-size: 34px 34px;
+    }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  opacity: .14;
-  background-image:
-    radial-gradient(circle, #fff 1px, transparent 1px);
-  background-size: 34px 34px;
-}
+    button {
+      font-family: inherit;
+    }
 
-button {
-  font-family: inherit;
-}
+    .app {
+      position: relative;
+      z-index: 1;
+      width: min(1220px, 100%);
+      margin: auto;
+      padding: 24px 16px 45px;
+    }
 
-.app {
-  width: min(1180px, 100%);
-  margin: auto;
-  padding: 24px 18px 42px;
-  position: relative;
-  z-index: 1;
-}
+    .header {
+      margin-bottom: 20px;
+      text-align: center;
+    }
 
-.header {
-  text-align: center;
-  margin-bottom: 20px;
-}
+    .logo {
+      color: var(--accent);
+      font-family: "Fredoka", sans-serif;
+      font-size: clamp(2rem, 6vw, 3.6rem);
+      text-shadow: 0 5px 0 rgba(0,0,0,.17);
+    }
 
-.logo {
-  display: inline-block;
-  font-family: 'Fredoka', sans-serif;
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  color: var(--primary);
-  text-shadow: 0 5px 0 rgba(0,0,0,.15);
-  letter-spacing: .5px;
-}
+    .subtitle {
+      margin-top: 6px;
+      color: var(--soft-text);
+      font-size: 14px;
+      font-weight: 800;
+    }
 
-.subtitle {
-  margin-top: 4px;
-  color: var(--text-soft);
-  font-size: 14px;
-  font-weight: 800;
-}
+    .settings {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-bottom: 17px;
+    }
 
-.toolbar {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 14px;
-  margin-bottom: 18px;
-}
+    .panel {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: var(--panel);
+      box-shadow: 0 16px 42px rgba(0,0,0,.14);
+      backdrop-filter: blur(12px);
+    }
 
-.panel {
-  border: 1px solid var(--panel-border);
-  background: var(--panel);
-  border-radius: 22px;
-  padding: 15px;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 18px 45px rgba(0,0,0,.13);
-}
+    .panel-title {
+      margin-bottom: 10px;
+      color: var(--soft-text);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
 
-.panel-title {
-  font-size: 12px;
-  color: var(--text-soft);
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 10px;
-}
+    .button-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
 
-.category-list,
-.size-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
+    .choice-btn {
+      padding: 8px 12px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 999px;
+      color: white;
+      background: rgba(255,255,255,.08);
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: .2s ease;
+    }
 
-.choice {
-  border: 1px solid rgba(255,255,255,.18);
-  color: white;
-  background: rgba(255,255,255,.09);
-  border-radius: 999px;
-  padding: 9px 14px;
-  font-size: 13px;
-  font-weight: 900;
-  cursor: pointer;
-  transition: .2s ease;
-}
+    .choice-btn:hover {
+      background: rgba(255,255,255,.18);
+      transform: translateY(-2px);
+    }
 
-.choice:hover {
-  transform: translateY(-2px);
-  background: rgba(255,255,255,.18);
-}
+    .choice-btn.active {
+      border-color: var(--accent);
+      color: #162046;
+      background: var(--accent);
+      box-shadow: 0 4px 0 rgba(0,0,0,.13);
+    }
 
-.choice.active {
-  color: #172447;
-  background: var(--primary);
-  border-color: var(--primary);
-  box-shadow: 0 5px 0 rgba(0,0,0,.12);
-}
+    .rule-text {
+      color: var(--soft-text);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.6;
+    }
 
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin-bottom: 18px;
-}
+    .rule-text b {
+      color: var(--accent);
+    }
 
-.stat {
-  min-width: 0;
-  padding: 12px 8px;
-  text-align: center;
-  border-radius: 18px;
-  background: var(--panel);
-  border: 1px solid var(--panel-border);
-  backdrop-filter: blur(10px);
-}
+    .scoreboard {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 11px;
+      margin-bottom: 16px;
+    }
 
-.stat-icon {
-  font-size: 18px;
-}
+    .player-card {
+      padding: 14px 10px;
+      border: 2px solid transparent;
+      border-radius: 20px;
+      text-align: center;
+      background: var(--panel);
+      transition: .25s ease;
+    }
 
-.stat-number {
-  margin-top: 2px;
-  color: var(--primary);
-  font-family: 'Fredoka', sans-serif;
-  font-size: 25px;
-}
+    .player-card.active-player {
+      border-color: var(--accent);
+      background: rgba(255,209,102,.16);
+      box-shadow: 0 0 22px rgba(255,209,102,.2);
+      transform: translateY(-2px);
+    }
 
-.stat-label {
-  color: var(--text-soft);
-  font-size: 10px;
-  font-weight: 900;
-  text-transform: uppercase;
-}
+    .player-card.hidden {
+      display: none;
+    }
 
-.game-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 15px;
-}
+    .player-name {
+      color: var(--soft-text);
+      font-size: 12px;
+      font-weight: 900;
+    }
 
-.timer {
-  color: var(--primary);
-  font-family: 'Fredoka', sans-serif;
-  font-size: clamp(1.6rem, 4vw, 2.2rem);
-}
+    .player-score {
+      color: var(--accent);
+      font-family: "Fredoka", sans-serif;
+      font-size: 36px;
+      line-height: 1.1;
+    }
 
-.status {
-  color: var(--text-soft);
-  font-size: 13px;
-  font-weight: 800;
-  text-align: right;
-}
+    .player-detail {
+      color: rgba(255,255,255,.56);
+      font-size: 10px;
+      font-weight: 800;
+    }
 
-.restart-button {
-  border: 0;
-  border-radius: 999px;
-  color: #172447;
-  background: var(--secondary);
-  padding: 10px 17px;
-  font-size: 13px;
-  font-weight: 900;
-  cursor: pointer;
-  transition: .2s ease;
-}
+    .game-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
 
-.restart-button:hover {
-  transform: translateY(-2px) scale(1.03);
-  filter: brightness(1.08);
-}
+    .timer {
+      color: var(--accent);
+      font-family: "Fredoka", sans-serif;
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      white-space: nowrap;
+    }
 
-.grid {
-  width: min(100%, 1040px);
-  margin: auto;
-  display: grid;
-  gap: clamp(7px, 1.2vw, 13px);
-}
+    .status {
+      flex: 1;
+      color: var(--soft-text);
+      font-size: 13px;
+      font-weight: 800;
+      text-align: center;
+    }
 
-.card {
-  aspect-ratio: 1;
-  min-width: 0;
-  cursor: pointer;
-  perspective: 900px;
-  user-select: none;
-}
+    .restart-btn {
+      padding: 10px 15px;
+      border: 0;
+      border-radius: 999px;
+      color: #14234e;
+      background: var(--accent2);
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: .2s ease;
+    }
 
-.card-inner {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform .55s cubic-bezier(.2,.75,.25,1);
-}
+    .restart-btn:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+    }
 
-.card.flipped .card-inner,
-.card.matched .card-inner {
-  transform: rotateY(180deg);
-}
+    .grid {
+      display: grid;
+      width: min(100%, 1060px);
+      margin: auto;
+      gap: clamp(7px, 1.1vw, 13px);
+    }
 
-.card-face {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: clamp(10px, 1.5vw, 18px);
-  backface-visibility: hidden;
-  overflow: hidden;
-}
+    .card {
+      min-width: 0;
+      aspect-ratio: 1;
+      cursor: pointer;
+      perspective: 900px;
+      user-select: none;
+    }
 
-.card-back {
-  border: 2px solid rgba(255,255,255,.23);
-  background:
-    linear-gradient(135deg, rgba(255,255,255,.15) 25%, transparent 25%) 0 0 / 17px 17px,
-    linear-gradient(315deg, rgba(255,255,255,.1) 25%, transparent 25%) 0 0 / 17px 17px,
-    linear-gradient(135deg, var(--card-back-1), var(--card-back-2));
-  box-shadow:
-    inset 0 0 0 4px rgba(255,255,255,.06),
-    0 8px 15px rgba(0,0,0,.17);
-  font-size: clamp(20px, 4vw, 42px);
-}
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform .52s cubic-bezier(.2,.75,.25,1);
+    }
 
-.card-back::after {
-  content: "✦";
-  color: rgba(255,255,255,.75);
-  text-shadow: 0 0 14px rgba(255,255,255,.7);
-}
+    .card.flipped .card-inner,
+    .card.matched .card-inner {
+      transform: rotateY(180deg);
+    }
 
-.card-front {
-  transform: rotateY(180deg);
-  flex-direction: column;
-  gap: 4px;
-  border: 2px solid rgba(123,223,242,.3);
-  background: linear-gradient(145deg, var(--card-front-1), var(--card-front-2));
-  box-shadow:
-    inset 0 0 0 4px rgba(255,255,255,.04),
-    0 8px 15px rgba(0,0,0,.18);
-}
+    .card-face {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: clamp(10px, 1.5vw, 18px);
+      backface-visibility: hidden;
+    }
 
-.card-front .emoji {
-  font-size: clamp(22px, 4vw, 48px);
-  line-height: 1;
-}
+    .card-back {
+      border: 2px solid rgba(255,255,255,.23);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.13) 25%, transparent 25%) 0 0 / 16px 16px,
+        linear-gradient(315deg, rgba(255,255,255,.10) 25%, transparent 25%) 0 0 / 16px 16px,
+        linear-gradient(135deg, var(--card1), var(--card2));
+      box-shadow:
+        inset 0 0 0 4px rgba(255,255,255,.05),
+        0 8px 15px rgba(0,0,0,.17);
+    }
 
-.card-front .label {
-  max-width: 95%;
-  overflow: hidden;
-  color: rgba(255,255,255,.8);
-  font-size: clamp(8px, 1.3vw, 12px);
-  font-weight: 900;
-  text-align: center;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+    .card-back::after {
+      content: "✦";
+      color: rgba(255,255,255,.82);
+      font-size: clamp(22px, 4vw, 42px);
+      text-shadow: 0 0 14px white;
+    }
 
-.card.matched .card-front {
-  border-color: var(--green);
-  background:
-    radial-gradient(circle at 50% 0%, rgba(255,255,255,.16), transparent 45%),
-    linear-gradient(145deg, #22734d, #164b3b);
-  animation: matchedPulse .55s ease;
-}
+    .card-front {
+      flex-direction: column;
+      gap: 4px;
+      border: 2px solid rgba(123,223,242,.3);
+      background: linear-gradient(145deg, var(--front1), var(--front2));
+      box-shadow:
+        inset 0 0 0 4px rgba(255,255,255,.04),
+        0 8px 15px rgba(0,0,0,.18);
+      transform: rotateY(180deg);
+    }
 
-@keyframes matchedPulse {
-  0% { transform: rotateY(180deg) scale(.88); }
-  70% { transform: rotateY(180deg) scale(1.05); }
-  100% { transform: rotateY(180deg) scale(1); }
-}
+    .emoji {
+      font-size: clamp(22px, 4vw, 49px);
+      line-height: 1;
+    }
 
-.win-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background: rgba(5,10,28,.84);
-  backdrop-filter: blur(9px);
-}
+    .label {
+      max-width: 94%;
+      overflow: hidden;
+      color: rgba(255,255,255,.8);
+      font-size: clamp(8px, 1.15vw, 12px);
+      font-weight: 900;
+      text-align: center;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
-.win-overlay.show {
-  display: flex;
-}
+    .card.matched .card-front {
+      border-color: #76e5a1;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,.18), transparent 45%),
+        linear-gradient(145deg, var(--green1), var(--green2));
+      animation: match-pulse .5s ease;
+    }
 
-.win-box {
-  width: min(420px, 100%);
-  padding: 35px 26px;
-  text-align: center;
-  border: 2px solid var(--primary);
-  border-radius: 28px;
-  background: linear-gradient(145deg, #202e62, #121c40);
-  box-shadow: 0 25px 80px rgba(0,0,0,.4);
-  animation: popIn .45s ease;
-}
+    @keyframes match-pulse {
+      0% { transform: rotateY(180deg) scale(.86); }
+      70% { transform: rotateY(180deg) scale(1.06); }
+      100% { transform: rotateY(180deg) scale(1); }
+    }
 
-@keyframes popIn {
-  from { opacity: 0; transform: scale(.75) translateY(20px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
-}
+    .win-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(5,10,28,.86);
+      backdrop-filter: blur(9px);
+    }
 
-.win-emoji {
-  font-size: 65px;
-  margin-bottom: 8px;
-}
+    .win-overlay.show {
+      display: flex;
+    }
 
-.win-title {
-  color: var(--primary);
-  font-family: 'Fredoka', sans-serif;
-  font-size: 31px;
-}
+    .win-box {
+      width: min(430px, 100%);
+      padding: 34px 26px;
+      border: 2px solid var(--accent);
+      border-radius: 28px;
+      text-align: center;
+      background: linear-gradient(145deg, #273b78, #111c40);
+      box-shadow: 0 25px 80px rgba(0,0,0,.42);
+      animation: popup .4s ease;
+    }
 
-.win-stats {
-  margin: 9px 0 22px;
-  color: var(--text-soft);
-  font-size: 15px;
-  font-weight: 800;
-  line-height: 1.6;
-}
+    @keyframes popup {
+      from {
+        opacity: 0;
+        transform: scale(.75) translateY(20px);
+      }
 
-.win-button {
-  border: 0;
-  border-radius: 999px;
-  color: #172447;
-  background: var(--primary);
-  padding: 13px 27px;
-  font-family: 'Fredoka', sans-serif;
-  font-size: 18px;
-  cursor: pointer;
-}
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
 
-.confetti {
-  position: fixed;
-  top: -20px;
-  z-index: 100;
-  width: 10px;
-  height: 15px;
-  pointer-events: none;
-  animation: confettiFall 2.8s linear forwards;
-}
+    .win-emoji {
+      font-size: 64px;
+    }
 
-@keyframes confettiFall {
-  to {
-    transform: translateY(110vh) rotate(720deg);
-    opacity: 0;
-  }
-}
+    .win-title {
+      margin-top: 7px;
+      color: var(--accent);
+      font-family: "Fredoka", sans-serif;
+      font-size: 29px;
+    }
 
-@media (min-width: 720px) {
-  .toolbar {
-    grid-template-columns: 1fr 1fr;
-  }
-}
+    .win-text {
+      margin: 10px 0 22px;
+      color: var(--soft-text);
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.65;
+    }
 
-@media (max-width: 560px) {
-  .app {
-    padding: 17px 10px 30px;
-  }
+    .win-btn {
+      padding: 13px 28px;
+      border: 0;
+      border-radius: 999px;
+      color: #172447;
+      background: var(--accent);
+      font-family: "Fredoka", sans-serif;
+      font-size: 17px;
+      cursor: pointer;
+    }
 
-  .stats-row {
-    gap: 6px;
-  }
+    .confetti {
+      position: fixed;
+      top: -20px;
+      z-index: 100;
+      width: 10px;
+      height: 15px;
+      pointer-events: none;
+      animation: fall 2.8s linear forwards;
+    }
 
-  .stat {
-    padding: 9px 3px;
-    border-radius: 14px;
-  }
+    @keyframes fall {
+      to {
+        opacity: 0;
+        transform: translateY(110vh) rotate(720deg);
+      }
+    }
 
-  .stat-number {
-    font-size: 21px;
-  }
+    @media (min-width: 800px) {
+      .settings {
+        grid-template-columns: 1.45fr 1fr;
+      }
+    }
 
-  .stat-label {
-    font-size: 8px;
-  }
+    @media (max-width: 560px) {
+      .app {
+        padding: 17px 10px 35px;
+      }
 
-  .game-top {
-    align-items: flex-start;
-    flex-direction: column;
-  }
+      .choice-btn {
+        padding: 8px 10px;
+        font-size: 11px;
+      }
 
-  .status {
-    text-align: left;
-  }
+      .game-info {
+        flex-wrap: wrap;
+      }
 
-  .restart-button {
-    width: 100%;
-  }
+      .status {
+        order: 3;
+        flex-basis: 100%;
+        text-align: left;
+      }
 
-  .choice {
-    padding: 8px 10px;
-    font-size: 11px;
-  }
-}
-</style>
+      .restart-btn {
+        margin-left: auto;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<main class="app">
-
-  <header class="header">
-    <div class="logo">🃏 Kart Çevirmece</div>
-    <p class="subtitle">Kartları çevir, eşleşmeleri bul ve hafızanı geliştir!</p>
-  </header>
-
-  <section class="toolbar">
-
-    <div class="panel">
-      <div class="panel-title">Kategori</div>
-      <div class="category-list" id="categoryList"></div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-title">Kart sayısı</div>
-      <div class="size-list" id="sizeList"></div>
-    </div>
-
-  </section>
-
-  <section class="stats-row">
-    <div class="stat">
-      <div class="stat-icon">🎯</div>
-      <div class="stat-number" id="moveNum">0</div>
-      <div class="stat-label">Hamle</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-icon">✅</div>
-      <div class="stat-number" id="matchNum">0</div>
-      <div class="stat-label">Eşleşme</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-icon">🏆</div>
-      <div class="stat-number" id="bestNum">—</div>
-      <div class="stat-label">En iyi</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-icon">🃏</div>
-      <div class="stat-number" id="cardNum">12</div>
-      <div class="stat-label">Kart</div>
-    </div>
-  </section>
-
-  <div class="game-top">
-    <div class="timer" id="timer">⏱ 00:00</div>
-
-    <div class="status" id="status">
-      Bir karta tıklayarak oyunu başlat.
-    </div>
-
-    <button class="restart-button" id="restartButton">
-      🔄 Yeni Oyun
-    </button>
-  </div>
-
-  <section class="grid" id="grid"></section>
-
-</main>
-
-<div class="win-overlay" id="winOverlay">
-  <div class="win-box">
-    <div class="win-emoji">🎉</div>
-    <div class="win-title">Harika İş Çıkardın!</div>
-    <div class="win-stats" id="winStats"></div>
-    <button class="win-button" id="winButton">🔄 Tekrar Oyna</button>
-  </div>
-</div>
-
-<script>
-/* --------------------------------------------------
-   OYUN VERİLERİ
--------------------------------------------------- */
-
-const themes = {
-  hayvan: {
-    title: "Hayvanlar",
-    icon: "🐾",
-    cards: [
-      ["🐶", "Köpek"], ["🐱", "Kedi"], ["🦊", "Tilki"], ["🐻", "Ayı"],
-      ["🐼", "Panda"], ["🐨", "Koala"], ["🐯", "Kaplan"], ["🦁", "Aslan"],
-      ["🐸", "Kurbağa"], ["🐵", "Maymun"], ["🐰", "Tavşan"], ["🐹", "Hamster"],
-      ["🦒", "Zürafa"], ["🐘", "Fil"], ["🦓", "Zebra"], ["🦏", "Gergedan"],
-      ["🐧", "Penguen"], ["🦉", "Baykuş"], ["🦜", "Papağan"], ["🦋", "Kelebek"],
-      ["🐝", "Arı"], ["🐬", "Yunus"], ["🐙", "Ahtapot"], ["🦀", "Yengeç"]
-    ]
-  },
-
-  meyve: {
-    title: "Meyveler",
-    icon: "🍎",
-    cards: [
-      ["🍎", "Elma"], ["🍐", "Armut"], ["🍊", "Portakal"], ["🍋", "Limon"],
-      ["🍌", "Muz"], ["🍉", "Karpuz"], ["🍇", "Üzüm"], ["🍓", "Çilek"],
-      ["🍒", "Kiraz"], ["🍑", "Şeftali"], ["🍍", "Ananas"], ["🥝", "Kivi"],
-      ["🥭", "Mango"], ["🫐", "Yaban Mersini"], ["🥥", "Hindistan Cevizi"], ["🍈", "Kavun"],
-      ["🍏", "Yeşil Elma"], ["🍅", "Domates"], ["🥕", "Havuç"], ["🌽", "Mısır"],
-      ["🥑", "Avokado"], ["🍆", "Patlıcan"], ["🥒", "Salatalık"], ["🫑", "Biber"]
-    ]
-  },
-
-  meslek: {
-    title: "Meslekler",
-    icon: "👷",
-    cards: [
-      ["👨‍⚕️", "Doktor"], ["👩‍🏫", "Öğretmen"], ["👨‍🚒", "İtfaiyeci"], ["👮", "Polis"],
-      ["👨‍🍳", "Aşçı"], ["👨‍✈️", "Pilot"], ["👷", "İnşaatçı"], ["👨‍🌾", "Çiftçi"],
-      ["👨‍💻", "Yazılımcı"], ["🎨", "Ressam"], ["🎵", "Müzisyen"], ["⚽", "Futbolcu"],
-      ["🔧", "Tamirci"], ["📷", "Fotoğrafçı"], ["🚢", "Kaptan"], ["🌿", "Bahçıvan"],
-      ["🧑‍🚀", "Astronot"], ["🕵️", "Dedektif"], ["🧑‍🔬", "Bilim İnsanı"], ["🧑‍🎤", "Şarkıcı"],
-      ["🧑‍⚖️", "Hakim"], ["💼", "Yönetici"], ["✍️", "Yazar"], ["🧑‍🎨", "Tasarımcı"]
-    ]
-  },
-
-  sayi: {
-    title: "Sayılar",
-    icon: "🔢",
-    cards: [
-      ["1️⃣", "Bir"], ["2️⃣", "İki"], ["3️⃣", "Üç"], ["4️⃣", "Dört"],
-      ["5️⃣", "Beş"], ["6️⃣", "Altı"], ["7️⃣", "Yedi"], ["8️⃣", "Sekiz"],
-      ["9️⃣", "Dokuz"], ["🔟", "On"], ["💯", "Yüz"], ["➕", "Toplama"],
-      ["➖", "Çıkarma"], ["✖️", "Çarpma"], ["➗", "Bölme"], ["🟰", "Eşittir"],
-      ["🔺", "Üçgen"], ["⬛", "Kare"], ["⚪", "Daire"], ["⭐", "Yıldız"],
-      ["½", "Yarım"], ["¼", "Çeyrek"], ["∞", "Sonsuz"], ["📊", "Grafik"]
-    ]
-  },
-
-  turkce: {
-    title: "Türkçe",
-    icon: "📖",
-    cards: [
-      ["📖", "Kitap"], ["✏️", "Kalem"], ["📝", "Defter"], ["🏫", "Okul"],
-      ["🎒", "Çanta"], ["📏", "Cetvel"], ["✂️", "Makas"], ["🖊️", "Tükenmez"],
-      ["📚", "Ders"], ["🔤", "Harf"], ["💬", "Cümle"], ["⭐", "Yıldız"],
-      ["❤️", "Kalp"], ["🌟", "Parlak"], ["🎯", "Hedef"], ["🏆", "Şampiyon"],
-      ["🔠", "Büyük Harf"], ["🔡", "Küçük Harf"], ["❓", "Soru"], ["❗", "Ünlem"],
-      ["🗣️", "Konuşma"], ["📰", "Haber"], ["🧠", "Anlam"], ["🖋️", "Yazı"]
-    ]
-  },
-
-  uzay: {
-    title: "Uzay",
-    icon: "🚀",
-    cards: [
-      ["🚀", "Roket"], ["🌍", "Dünya"], ["🌕", "Ay"], ["☀️", "Güneş"],
-      ["🪐", "Satürn"], ["🌌", "Galaksi"], ["⭐", "Yıldız"], ["🌠", "Kayan Yıldız"],
-      ["👨‍🚀", "Astronot"], ["👽", "Uzaylı"], ["🛰️", "Uydu"], ["🔭", "Teleskop"],
-      ["🌑", "Yeni Ay"], ["🌙", "Hilal"], ["☄️", "Kuyruklu Yıldız"], ["🌞", "Güneş"],
-      ["🌏", "Gezegen"], ["🛸", "UFO"], ["🌌", "Evren"], ["💫", "Parıltı"],
-      ["🧑‍🚀", "Uzay Kaşifi"], ["🪨", "Asteroit"], ["🔴", "Mars"], ["🔵", "Neptün"]
-    ]
-  },
-
-  deniz: {
-    title: "Deniz Dünyası",
-    icon: "🌊",
-    cards: [
-      ["🐬", "Yunus"], ["🐳", "Balina"], ["🦈", "Köpek Balığı"], ["🐙", "Ahtapot"],
-      ["🦀", "Yengeç"], ["🦞", "Istakoz"], ["🐚", "Deniz Kabuğu"], ["🐠", "Balık"],
-      ["🐡", "Balon Balığı"], ["🪼", "Denizanası"], ["🦑", "Kalamar"], ["🌊", "Dalga"],
-      ["⚓", "Çapa"], ["⛵", "Yelkenli"], ["🚢", "Gemi"], ["🏝️", "Ada"],
-      ["🏖️", "Sahil"], ["🤿", "Dalış"], ["🧜‍♀️", "Denizkızı"], ["🪸", "Mercan"],
-      ["🦪", "İstiridye"], ["🌴", "Palmiye"], ["☀️", "Güneş"], ["🏄", "Sörf"]
-    ]
-  },
-
-  dinozor: {
-    title: "Dinozorlar",
-    icon: "🦖",
-    cards: [
-      ["🦖", "T-Rex"], ["🦕", "Uzun Boyun"], ["🥚", "Dinozor Yumurtası"], ["🌋", "Yanardağ"],
-      ["🦴", "Fosil"], ["🌿", "Yaprak"], ["🌴", "Palmiye"], ["🪨", "Kaya"],
-      ["🔥", "Lav"], ["☄️", "Meteor"], ["🌎", "Dünya"], ["⛰️", "Dağ"],
-      ["🦎", "Kertenkele"], ["🐊", "Timsah"], ["🐍", "Yılan"], ["🪵", "Kütük"],
-      ["🔍", "Araştırma"], ["⛏️", "Kazı"], ["🏜️", "Çöl"], ["🌱", "Bitki"],
-      ["🦶", "Ayak İzi"], ["📚", "Tarih"], ["🧪", "Bilim"], ["🧑‍🔬", "Paleontolog"]
-    ]
-  },
-
-  yiyecek: {
-    title: "Yiyecekler",
-    icon: "🍕",
-    cards: [
-      ["🍕", "Pizza"], ["🍔", "Hamburger"], ["🌭", "Sosisli"], ["🍟", "Patates"],
-      ["🌮", "Taco"], ["🍣", "Suşi"], ["🍜", "Çorba"], ["🍝", "Makarna"],
-      ["🍩", "Donut"], ["🍪", "Kurabiye"], ["🎂", "Pasta"], ["🍰", "Kek"],
-      ["🍫", "Çikolata"], ["🍿", "Patlamış Mısır"], ["🍦", "Dondurma"], ["🍭", "Lolipop"],
-      ["🥪", "Sandviç"], ["🥗", "Salata"], ["🍳", "Yumurta"], ["🧀", "Peynir"],
-      ["🥨", "Krakır"], ["🍞", "Ekmek"], ["🥞", "Pankek"], ["🍯", "Bal"]
-    ]
-  },
-
-  ulasim: {
-    title: "Ulaşım",
-    icon: "🚗",
-    cards: [
-      ["🚗", "Araba"], ["🚕", "Taksi"], ["🚌", "Otobüs"], ["🚓", "Polis Arabası"],
-      ["🚑", "Ambulans"], ["🚒", "İtfaiye"], ["🚲", "Bisiklet"], ["🛴", "Scooter"],
-      ["🏍️", "Motosiklet"], ["🚂", "Tren"], ["🚆", "Hızlı Tren"], ["🚇", "Metro"],
-      ["✈️", "Uçak"], ["🚁", "Helikopter"], ["🚀", "Roket"], ["🚢", "Gemi"],
-      ["⛵", "Yelkenli"], ["🛶", "Kano"], ["🚜", "Traktör"], ["🚚", "Kamyon"],
-      ["🚐", "Minibüs"], ["🚲", "Bisiklet"], ["🛵", "Motor"], ["🚠", "Teleferik"]
-    ]
-  },
-
-  spor: {
-    title: "Spor",
-    icon: "🏅",
-    cards: [
-      ["⚽", "Futbol"], ["🏀", "Basketbol"], ["🏈", "Amerikan Futbolu"], ["⚾", "Beyzbol"],
-      ["🎾", "Tenis"], ["🏐", "Voleybol"], ["🏓", "Masa Tenisi"], ["🏸", "Badminton"],
-      ["🥊", "Boks"], ["🥋", "Dövüş"], ["🏹", "Okçuluk"], ["⛳", "Golf"],
-      ["🏊", "Yüzme"], ["🚴", "Bisiklet"], ["🏃", "Koşu"], ["🤸", "Jimnastik"],
-      ["⛷️", "Kayak"], ["🏂", "Snowboard"], ["🏄", "Sörf"], ["🛹", "Kaykay"],
-      ["🏆", "Kupa"], ["🥇", "Altın Madalya"], ["🎯", "Hedef"], ["🏅", "Madalya"]
-    ]
-  },
-
-  doga: {
-    title: "Doğa",
-    icon: "🌿",
-    cards: [
-      ["🌳", "Ağaç"], ["🌲", "Çam Ağacı"], ["🌴", "Palmiye"], ["🌵", "Kaktüs"],
-      ["🌻", "Ayçiçeği"], ["🌹", "Gül"], ["🌷", "Lale"], ["🌺", "Çiçek"],
-      ["🍀", "Yonca"], ["🍁", "Sonbahar Yaprağı"], ["🌱", "Filiz"], ["🍄", "Mantar"],
-      ["☀️", "Güneş"], ["🌙", "Ay"], ["⭐", "Yıldız"], ["☁️", "Bulut"],
-      ["🌧️", "Yağmur"], ["❄️", "Kar"], ["🌈", "Gökkuşağı"], ["⚡", "Şimşek"],
-      ["🔥", "Ateş"], ["💧", "Su"], ["🏔️", "Dağ"], ["🌊", "Dalga"]
-    ]
-  }
-};
-
-/* --------------------------------------------------
-   OYUN DURUMU
--------------------------------------------------- */
-
-let currentTheme = "hayvan";
-let cardCount = 12;
-
-let flipped = [];
-let matched = 0;
-let moves = 0;
-let seconds = 0;
-
-let timer = null;
-let gameStarted = false;
-let canFlip = true;
-
-const grid = document.getElementById("grid");
-const timerElement = document.getElementById("timer");
-const moveElement = document.getElementById("moveNum");
-const matchElement = document.getElementById("matchNum");
-const bestElement = document.getElementById("bestNum");
-const cardElement = document.getElementById("cardNum");
-const statusElement = document.getElementById("status");
-const winOverlay = document.getElementById("winOverlay");
-const winStats = document.getElementById("winStats");
-
-/* --------------------------------------------------
-   SESLER
--------------------------------------------------- */
-
-let audioContext = null;
-
-function getAudioContext() {
-  if (!audioContext) {
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  }
-  return audioContext;
-}
-
-function playTone(frequencies, duration = .12, type = "sine") {
-  try {
-    const ctx = getAudioContext();
-    const now = ctx.currentTime;
-
-    frequencies.forEach((frequency, index) => {
-      const oscillator = ctx.createOscillator();
-      const gain = ctx.createGain();
-
-      oscillator.type = type;
-      oscillator.frequency.value = frequency;
-
-      oscillator.connect(gain);
-      gain.connect(ctx.destination);
-
-      const start = now + index * duration;
-
-      gain.gain.setValueAtTime(.18, start);
-      gain.gain.exponentialRampToValueAtTime(.001, start + duration);
-
-      oscillator.start(start);
-      oscillator.stop(start + duration);
-    });
-  } catch (error) {
-    // Tarayıcı ses desteği yoksa oyun çalışmaya devam eder.
-  }
-}
-
-/* --------------------------------------------------
-   ARAYÜZÜ OLUŞTUR
--------------------------------------------------- */
-
-function createCategoryButtons() {
-  const categoryList = document.getElementById("categoryList");
-
-  Object.entries(themes).forEach(([key, theme]) => {
-    const button = document.createElement("button");
-
-    button.className = "choice";
-    button.dataset.theme = key;
-    button.textContent = `${theme.icon} ${theme.title}`;
-
-    button.addEventListener("click", () => {
-      currentTheme = key;
-
-      document.querySelectorAll("[data-theme]").forEach(item => {
-        item.classList.remove("active");
-      });
-
-      button.classList.add("active");
-      restartGame();
-    });
-
-    categoryList.appendChild(button);
-  });
-}
-
-function createSizeButtons() {
-  const sizeList = document.getElementById("sizeList");
-  const sizes = [8, 12, 16, 24, 32, 48];
-
-  sizes.forEach(size => {
-    const button = document.createElement("button");
-
-    button.className = "choice";
-    button.dataset.size = size;
-    button.textContent = `${size} Kart`;
-
-    button.addEventListener("click", () => {
-      cardCount = size;
-
-      document.querySelectorAll("[data-size]").forEach(item => {
-        item.classList.remove("active");
-      });
-
-      button.classList.add("active");
-      restartGame();
-    });
-
-    sizeList.appendChild(button);
-  });
-}
-
-/* --------------------------------------------------
-   YARDIMCI FONKSİYONLAR
--------------------------------------------------- */
-
-function shuffle(array) {
-  const result = [...array];
-
-  for (let i = result.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [result[i], result[j]] = [result[j], result[i]];
-  }
-
-  return result;
-}
-
-function formatTime(totalSeconds) {
-  const minutes = Math.floor(totalSeconds / 60);
-  const secondsPart = totalSeconds % 60;
-
-  return `${String(minutes).padStart(2, "0")}:${String(secondsPart).padStart(2, "0")}`;
-}
-
-function getBestKey() {
-  return `kart-cevirmce-best-${currentTheme}-${cardCount}`;
-}
-
-function getBestScore() {
-  return localStorage.getItem(getBestKey()) || null;
-}
-
-function updateBestScore() {
-  const best = getBestScore();
-  bestElement.textContent = best ? `${best}` : "—";
-}
-
-function updateTimer() {
-  timerElement.textContent = `⏱ ${formatTime(seconds)}`;
-}
-
-function setGridColumns() {
-  let columns;
-
-  if (cardCount <= 16) {
-    columns = 4;
-  } else if (cardCount === 24) {
-    columns = 6;
-  } else {
-    columns = 8;
-  }
-
-  grid.style.gridTemplateColumns = `repeat(${columns}, minmax(0, 1fr))`;
-
-  if (window.innerWidth < 600) {
-    if (cardCount <= 16) columns = 4;
-    else columns = 6;
-
-    grid.style.gridTemplateColumns = `repeat(${columns}, minmax(0, 1fr))`;
-  }
-}
-
-function startTimer() {
-  if (gameStarted) return;
-
-  gameStarted = true;
-  statusElement.textContent = "Eşleşmeleri bulmaya çalış!";
-
-  timer = setInterval(() => {
-    seconds++;
-    updateTimer();
-  }, 1000);
-}
-
-function stopTimer() {
-  clearInterval(timer);
-  timer = null;
-}
-
-/* --------------------------------------------------
-   OYUNU BAŞLAT
--------------------------------------------------- */
-
-function restartGame() {
-  stopTimer();
-
-  flipped = [];
-  matched = 0;
-  moves = 0;
-  seconds = 0;
-  gameStarted = false;
-  canFlip = true;
-
-  moveElement.textContent = "0";
-  matchElement.textContent = "0";
-  cardElement.textContent = cardCount;
-  statusElement.textContent = "Bir karta tıklayarak oyunu başlat.";
-  updateTimer();
-  updateBestScore();
-
-  winOverlay.classList.remove("show");
-
-  const pairCount = cardCount / 2;
-  const selectedCards = themes[currentTheme].cards.slice(0, pairCount);
-
-  const deck = [];
-
-  selectedCards.forEach((item, index) => {
-    deck.push({
-      id: index,
-      emoji: item[0],
-      label: item[1]
-    });
-
-    deck.push({
-      id: index,
-      emoji: item[0],
-      label: item[1]
-    });
-  });
-
-  const shuffledDeck = shuffle(deck);
-
-  grid.innerHTML = "";
-  setGridColumns();
-
-  shuffledDeck.forEach((item, index) => {
-    const card = document.createElement("div");
-
-    card.className = "card";
-    card.dataset.index = index;
-    card.dataset.pairId = item.id;
-
-    card.innerHTML = `
-      <div class="card-inner">
-        <div class="card-face card-back"></div>
-
-        <div class="card-face card-front">
-          <span class="emoji">${item.emoji}</span>
-          <span class="label">${item.label}</span>
-        </div>
+  <main class="app">
+
+    <header class="header">
+      <h1 class="logo">🃏 Kart Çevirmece</h1>
+      <p class="subtitle">Tek oyunculu veya iki oyunculu hafıza oyunu!</p>
+    </header>
+
+    <section class="settings">
+      <div class="panel">
+        <div class="panel-title">Oyun modu</div>
+        <div class="button-list" id="modeButtons"></div>
+
+        <div class="panel-title" style="margin-top:16px;">Kategoriler</div>
+        <div class="button-list" id="themeButtons"></div>
       </div>
-    `;
 
-    card.addEventListener("click", () => flipCard(card));
+      <div class="panel">
+        <div class="panel-title">Kart sayısı</div>
+        <div class="button-list" id="sizeButtons"></div>
 
-    grid.appendChild(card);
-  });
-}
+        <div class="panel-title" style="margin-top:16px;">2 oyunculu kural</div>
+        <p class="rule-text">
+          Eşleşme bulan oyuncu <b>1 puan</b> kazanır ve tekrar kart açar.
+          Kartlar eşleşmezse sıra diğer oyuncuya geçer.
+        </p>
+      </div>
+    </section>
 
-/* --------------------------------------------------
-   KART ÇEVİRME
--------------------------------------------------- */
+    <section class="scoreboard">
+      <div class="player-card active-player" id="player1Box">
+        <div class="player-name" id="player1Name">👤 Sen</div>
+        <div class="player-score" id="player1Score">0</div>
+        <div class="player-detail">Eşleşme puanı</div>
+      </div>
 
-function flipCard(card) {
-  if (!canFlip) return;
-  if (card.classList.contains("flipped")) return;
-  if (card.classList.contains("matched")) return;
-  if (flipped.length >= 2) return;
+      <div class="player-card hidden" id="player2Box">
+        <div class="player-name">👤 Oyuncu 2</div>
+        <div class="player-score" id="player2Score">0</div>
+        <div class="player-detail">Eşleşme puanı</div>
+      </div>
+    </section>
 
-  startTimer();
-  playTone([440], .08);
+    <section class="game-info">
+      <div class="timer" id="timer">⏱ 00:00</div>
+      <div class="status" id="status">Bir karta tıklayarak oyunu başlat.</div>
+      <button class="restart-btn" id="restartBtn">🔄 Yeni Oyun</button>
+    </section>
 
-  card.classList.add("flipped");
+    <section class="grid" id="grid"></section>
+  </main>
 
-  flipped.push(card);
+  <div class="win-overlay" id="winOverlay">
+    <div class="win-box">
+      <div class="win-emoji" id="winEmoji">🎉</div>
+      <div class="win-title" id="winTitle">Tebrikler!</div>
+      <div class="win-text" id="winText"></div>
+      <button class="win-btn" id="playAgainBtn">🔄 Tekrar Oyna</button>
+    </div>
+  </div>
 
-  if (flipped.length !== 2) return;
+  <script>
+    const themes = {
+      hayvan: {
+        name: "Hayvanlar",
+        icon: "🐾",
+        colors: ["#172352", "#35579b", "#ffcf5c", "#7253d7", "#3d2990"],
+        cards: [
+          ["🐶","Köpek"], ["🐱","Kedi"], ["🦊","Tilki"], ["🐻","Ayı"],
+          ["🐼","Panda"], ["🐨","Koala"], ["🐯","Kaplan"], ["🦁","Aslan"],
+          ["🐸","Kurbağa"], ["🐵","Maymun"], ["🐰","Tavşan"], ["🐹","Hamster"],
+          ["🦒","Zürafa"], ["🐘","Fil"], ["🦓","Zebra"], ["🐧","Penguen"],
+          ["🦉","Baykuş"], ["🦜","Papağan"], ["🦋","Kelebek"], ["🐝","Arı"],
+          ["🐬","Yunus"], ["🐙","Ahtapot"], ["🦀","Yengeç"], ["🐢","Kaplumbağa"]
+        ]
+      },
 
-  moves++;
-  moveElement.textContent = moves;
-  canFlip = false;
+      meyve: {
+        name: "Meyveler",
+        icon: "🍎",
+        colors: ["#4c1429", "#9d304d", "#ffd166", "#e05277", "#881d41"],
+        cards: [
+          ["🍎","Elma"], ["🍐","Armut"], ["🍊","Portakal"], ["🍋","Limon"],
+          ["🍌","Muz"], ["🍉","Karpuz"], ["🍇","Üzüm"], ["🍓","Çilek"],
+          ["🍒","Kiraz"], ["🍑","Şeftali"], ["🍍","Ananas"], ["🥝","Kivi"],
+          ["🥭","Mango"], ["🫐","Yaban Mersini"], ["🥥","Hindistan Cevizi"], ["🍈","Kavun"],
+          ["🥑","Avokado"], ["🥕","Havuç"], ["🌽","Mısır"], ["🍅","Domates"],
+          ["🥒","Salatalık"], ["🫑","Biber"], ["🍆","Patlıcan"], ["🥔","Patates"]
+        ]
+      },
 
-  const firstCard = flipped[0];
-  const secondCard = flipped[1];
+      meslek: {
+        name: "Meslekler",
+        icon: "👷",
+        colors: ["#20394a", "#45799b", "#ffe176", "#3e6d91", "#234863"],
+        cards: [
+          ["👨‍⚕️","Doktor"], ["👩‍🏫","Öğretmen"], ["👨‍🚒","İtfaiyeci"], ["👮","Polis"],
+          ["👨‍🍳","Aşçı"], ["👨‍✈️","Pilot"], ["👷","İnşaatçı"], ["👨‍🌾","Çiftçi"],
+          ["👨‍💻","Yazılımcı"], ["🎨","Ressam"], ["🎵","Müzisyen"], ["⚽","Futbolcu"],
+          ["🔧","Tamirci"], ["📷","Fotoğrafçı"], ["🚢","Kaptan"], ["🌿","Bahçıvan"],
+          ["🧑‍🚀","Astronot"], ["🕵️","Dedektif"], ["🧑‍🔬","Bilim İnsanı"], ["🧑‍🎤","Şarkıcı"],
+          ["🧑‍⚖️","Hakim"], ["💼","Yönetici"], ["✍️","Yazar"], ["🧑‍🎨","Tasarımcı"]
+        ]
+      },
 
-  const isMatch =
-    firstCard.dataset.pairId === secondCard.dataset.pairId;
+      sayilar: {
+        name: "Sayılar",
+        icon: "🔢",
+        colors: ["#302255", "#664c9c", "#ffe374", "#7855c4", "#493182"],
+        cards: [
+          ["1️⃣","Bir"], ["2️⃣","İki"], ["3️⃣","Üç"], ["4️⃣","Dört"],
+          ["5️⃣","Beş"], ["6️⃣","Altı"], ["7️⃣","Yedi"], ["8️⃣","Sekiz"],
+          ["9️⃣","Dokuz"], ["🔟","On"], ["💯","Yüz"], ["➕","Toplama"],
+          ["➖","Çıkarma"], ["✖️","Çarpma"], ["➗","Bölme"], ["🟰","Eşittir"],
+          ["🔺","Üçgen"], ["⬛","Kare"], ["⚪","Daire"], ["⭐","Yıldız"],
+          ["½","Yarım"], ["¼","Çeyrek"], ["∞","Sonsuz"], ["📊","Grafik"]
+        ]
+      },
 
-  if (isMatch) {
-    playTone([659, 784, 1047], .11);
+      turkce: {
+        name: "Türkçe",
+        icon: "📖",
+        colors: ["#472f1c", "#97663b", "#ffe278", "#bc7941", "#7c4826"],
+        cards: [
+          ["📖","Kitap"], ["✏️","Kalem"], ["📝","Defter"], ["🏫","Okul"],
+          ["🎒","Çanta"], ["📏","Cetvel"], ["✂️","Makas"], ["🖊️","Tükenmez"],
+          ["📚","Ders"], ["🔤","Harf"], ["💬","Cümle"], ["⭐","Yıldız"],
+          ["❤️","Kalp"], ["🌟","Parlak"], ["🎯","Hedef"], ["🏆","Şampiyon"],
+          ["🔠","Büyük Harf"], ["🔡","Küçük Harf"], ["❓","Soru"], ["❗","Ünlem"],
+          ["🗣️","Konuşma"], ["📰","Haber"], ["🧠","Anlam"], ["🖋️","Yazı"]
+        ]
+      },
 
-    setTimeout(() => {
-      firstCard.classList.add("matched");
-      secondCard.classList.add("matched");
+      uzay: {
+        name: "Uzay",
+        icon: "🚀",
+        colors: ["#0d102d", "#29236d", "#b6a4ff", "#5645c7", "#23186a"],
+        cards: [
+          ["🚀","Roket"], ["🌍","Dünya"], ["🌕","Ay"], ["☀️","Güneş"],
+          ["🪐","Satürn"], ["🌌","Galaksi"], ["⭐","Yıldız"], ["🌠","Kayan Yıldız"],
+          ["👨‍🚀","Astronot"], ["👽","Uzaylı"], ["🛰️","Uydu"], ["🔭","Teleskop"],
+          ["🌑","Yeni Ay"], ["🌙","Hilal"], ["☄️","Kuyruklu Yıldız"], ["🛸","UFO"],
+          ["💫","Parıltı"], ["🪨","Asteroit"], ["🔴","Mars"], ["🔵","Neptün"],
+          ["🌏","Gezegen"], ["🌞","Güneş"], ["🧑‍🚀","Uzay Kaşifi"], ["🔬","Bilim"]
+        ]
+      },
 
-      matched++;
-      matchElement.textContent = matched;
-      flipped = [];
-      canFlip = true;
+      deniz: {
+        name: "Deniz Dünyası",
+        icon: "🌊",
+        colors: ["#092f46", "#116c92", "#75e6ff", "#0c8fc5", "#065579"],
+        cards: [
+          ["🐬","Yunus"], ["🐳","Balina"], ["🦈","Köpek Balığı"], ["🐙","Ahtapot"],
+          ["🦀","Yengeç"], ["🦞","Istakoz"], ["🐚","Deniz Kabuğu"], ["🐠","Balık"],
+          ["🐡","Balon Balığı"], ["🪼","Denizanası"], ["🦑","Kalamar"], ["🌊","Dalga"],
+          ["⚓","Çapa"], ["⛵","Yelkenli"], ["🚢","Gemi"], ["🏝️","Ada"],
+          ["🏖️","Sahil"], ["🤿","Dalış"], ["🧜‍♀️","Denizkızı"], ["🪸","Mercan"],
+          ["🦪","İstiridye"], ["🌴","Palmiye"], ["🏄","Sörf"], ["🐢","Kaplumbağa"]
+        ]
+      },
 
-      if (matched === cardCount / 2) {
-        finishGame();
+      dinozor: {
+        name: "Dinozorlar",
+        icon: "🦖",
+        colors: ["#26422a", "#587f38", "#ffe278", "#55792f", "#2f5c28"],
+        cards: [
+          ["🦖","T-Rex"], ["🦕","Uzun Boyun"], ["🥚","Dinozor Yumurtası"], ["🌋","Yanardağ"],
+          ["🦴","Fosil"], ["🌿","Yaprak"], ["🌴","Palmiye"], ["🪨","Kaya"],
+          ["🔥","Lav"], ["☄️","Meteor"], ["🌎","Dünya"], ["⛰️","Dağ"],
+          ["🦎","Kertenkele"], ["🐊","Timsah"], ["🐍","Yılan"], ["🪵","Kütük"],
+          ["🔍","Araştırma"], ["⛏️","Kazı"], ["🏜️","Çöl"], ["🌱","Bitki"],
+          ["🦶","Ayak İzi"], ["📚","Tarih"], ["🧪","Bilim"], ["🧑‍🔬","Paleontolog"]
+        ]
+      },
+
+      yiyecek: {
+        name: "Yiyecekler",
+        icon: "🍕",
+        colors: ["#4e1b2d", "#9d3d54", "#ffe170", "#d65a5d", "#8d2a45"],
+        cards: [
+          ["🍕","Pizza"], ["🍔","Hamburger"], ["🌭","Sosisli"], ["🍟","Patates"],
+          ["🌮","Taco"], ["🍣","Suşi"], ["🍜","Çorba"], ["🍝","Makarna"],
+          ["🍩","Donut"], ["🍪","Kurabiye"], ["🎂","Pasta"], ["🍰","Kek"],
+          ["🍫","Çikolata"], ["🍿","Patlamış Mısır"], ["🍦","Dondurma"], ["🍭","Lolipop"],
+          ["🥪","Sandviç"], ["🥗","Salata"], ["🍳","Yumurta"], ["🧀","Peynir"],
+          ["🥨","Krakır"], ["🍞","Ekmek"], ["🥞","Pankek"], ["🍯","Bal"]
+        ]
+      },
+
+      ulasim: {
+        name: "Ulaşım",
+        icon: "🚗",
+        colors: ["#212641", "#4d5f99", "#ffdc6d", "#3c55bd", "#263777"],
+        cards: [
+          ["🚗","Araba"], ["🚕","Taksi"], ["🚌","Otobüs"], ["🚓","Polis Arabası"],
+          ["🚑","Ambulans"], ["🚒","İtfaiye"], ["🚲","Bisiklet"], ["🛴","Scooter"],
+          ["🏍️","Motosiklet"], ["🚂","Tren"], ["🚆","Hızlı Tren"], ["🚇","Metro"],
+          ["✈️","Uçak"], ["🚁","Helikopter"], ["🚀","Roket"], ["🚢","Gemi"],
+          ["⛵","Yelkenli"], ["🛶","Kano"], ["🚜","Traktör"], ["🚚","Kamyon"],
+          ["🚐","Minibüs"], ["🛵","Motor"], ["🚠","Teleferik"], ["🛻","Pikap"]
+        ]
+      },
+
+      spor: {
+        name: "Spor",
+        icon: "🏅",
+        colors: ["#183d2e", "#3a8b65", "#ffe07a", "#248b62", "#155b40"],
+        cards: [
+          ["⚽","Futbol"], ["🏀","Basketbol"], ["🏈","Amerikan Futbolu"], ["⚾","Beyzbol"],
+          ["🎾","Tenis"], ["🏐","Voleybol"], ["🏓","Masa Tenisi"], ["🏸","Badminton"],
+          ["🥊","Boks"], ["🥋","Dövüş"], ["🏹","Okçuluk"], ["⛳","Golf"],
+          ["🏊","Yüzme"], ["🚴","Bisiklet"], ["🏃","Koşu"], ["🤸","Jimnastik"],
+          ["⛷️","Kayak"], ["🏂","Snowboard"], ["🏄","Sörf"], ["🛹","Kaykay"],
+          ["🏆","Kupa"], ["🥇","Altın Madalya"], ["🎯","Hedef"], ["🏅","Madalya"]
+        ]
+      },
+
+      doga: {
+        name: "Doğa",
+        icon: "🌿",
+        colors: ["#173d2c", "#39875b", "#ffe27a", "#237146", "#165032"],
+        cards: [
+          ["🌳","Ağaç"], ["🌲","Çam"], ["🌴","Palmiye"], ["🌵","Kaktüs"],
+          ["🌻","Ayçiçeği"], ["🌹","Gül"], ["🌷","Lale"], ["🌺","Çiçek"],
+          ["🍀","Yonca"], ["🍁","Yaprak"], ["🌱","Filiz"], ["🍄","Mantar"],
+          ["☀️","Güneş"], ["🌙","Ay"], ["⭐","Yıldız"], ["☁️","Bulut"],
+          ["🌧️","Yağmur"], ["❄️","Kar"], ["🌈","Gökkuşağı"], ["⚡","Şimşek"],
+          ["🔥","Ateş"], ["💧","Su"], ["🏔️","Dağ"], ["🌊","Dalga"]
+        ]
+      },
+
+      muzik: {
+        name: "Müzik",
+        icon: "🎵",
+        colors: ["#351c4c", "#744185", "#ffdb70", "#9d4d9b", "#5b2e76"],
+        cards: [
+          ["🎵","Nota"], ["🎶","Melodi"], ["🎤","Mikrofon"], ["🎧","Kulaklık"],
+          ["🎸","Gitar"], ["🎹","Piyano"], ["🥁","Davul"], ["🎺","Trompet"],
+          ["🎻","Keman"], ["🪈","Flüt"], ["📻","Radyo"], ["💿","Disk"],
+          ["📀","CD"], ["🕺","Dans"], ["💃","Dansçı"], ["🎼","Nota Kağıdı"],
+          ["🔊","Ses"], ["🔇","Sessiz"], ["🎙️","Stüdyo"], ["📱","Müzik Uygulaması"],
+          ["🌟","Sahne"], ["👏","Alkış"], ["🎟️","Bilet"], ["🎬","Gösteri"]
+        ]
+      },
+
+      teknoloji: {
+        name: "Teknoloji",
+        icon: "💻",
+        colors: ["#172f4b", "#276c92", "#79e2ff", "#237baa", "#154d72"],
+        cards: [
+          ["💻","Bilgisayar"], ["⌨️","Klavye"], ["🖱️","Fare"], ["🖥️","Ekran"],
+          ["📱","Telefon"], ["⌚","Akıllı Saat"], ["🎧","Kulaklık"], ["📷","Kamera"],
+          ["🖨️","Yazıcı"], ["💾","Disket"], ["💿","CD"], ["🔋","Pil"],
+          ["🔌","Fiş"], ["💡","Ampul"], ["📡","Anten"], ["🛰️","Uydu"],
+          ["🤖","Robot"], ["👾","Oyun Karakteri"], ["🕹️","Oyun Kumandası"], ["🎮","Konsol"],
+          ["🔐","Şifre"], ["🌐","İnternet"], ["📧","E-posta"], ["🧠","Yapay Zeka"]
+        ]
+      },
+
+      okul: {
+        name: "Okul",
+        icon: "🏫",
+        colors: ["#483517", "#936e2f", "#ffe37a", "#b68335", "#725222"],
+        cards: [
+          ["🏫","Okul"], ["📚","Kitaplar"], ["📖","Kitap"], ["✏️","Kalem"],
+          ["🖊️","Tükenmez"], ["📝","Defter"], ["📏","Cetvel"], ["✂️","Makas"],
+          ["🎒","Çanta"], ["🧮","Hesap"], ["🔬","Mikroskop"], ["🧪","Deney"],
+          ["🌍","Dünya Küresi"], ["🗺️","Harita"], ["📐","Geometri"], ["🔤","Alfabe"],
+          ["🧠","Bilgi"], ["👩‍🏫","Öğretmen"], ["🧑‍🎓","Öğrenci"], ["🖍️","Boya"],
+          ["📌","Ataç"], ["📎","Kağıt Ataçı"], ["🗓️","Takvim"], ["⏰","Ders Saati"]
+        ]
+      },
+
+      hava: {
+        name: "Hava Durumu",
+        icon: "🌤️",
+        colors: ["#164158", "#438da8", "#ffe174", "#419abc", "#286f8d"],
+        cards: [
+          ["☀️","Güneşli"], ["🌤️","Parçalı Bulutlu"], ["☁️","Bulutlu"], ["🌧️","Yağmurlu"],
+          ["⛈️","Fırtınalı"], ["🌩️","Şimşekli"], ["🌨️","Karlı"], ["❄️","Kar"],
+          ["🌈","Gökkuşağı"], ["💨","Rüzgar"], ["🌪️","Kasırga"], ["🌫️","Sis"],
+          ["🌡️","Sıcaklık"], ["🧊","Buz"], ["🔥","Sıcak"], ["💧","Nem"],
+          ["🌙","Gece"], ["🌞","Sıcak Güneş"], ["🌝","Dolunay"], ["☔","Şemsiye"],
+          ["🧥","Mont"], ["🧣","Atkı"], ["🧤","Eldiven"], ["🥾","Bot"]
+        ]
+      },
+
+      masal: {
+        name: "Masallar",
+        icon: "🧚",
+        colors: ["#3b1d50", "#78469b", "#ffdd7b", "#a65ac1", "#5a2d7a"],
+        cards: [
+          ["🧚","Peri"], ["🧙","Büyücü"], ["🧙‍♀️","Cadı"], ["🧝","Elf"],
+          ["🧜‍♀️","Denizkızı"], ["👑","Taç"], ["🏰","Şato"], ["🐉","Ejderha"],
+          ["🦄","Tek Boynuzlu At"], ["🪄","Sihirli Değnek"], ["🔮","Kristal Küre"], ["📜","Parşömen"],
+          ["🗝️","Anahtar"], ["🛡️","Kalkan"], ["⚔️","Kılıç"], ["🧞","Cin"],
+          ["🌙","Büyülü Gece"], ["⭐","Sihirli Yıldız"], ["🍎","Sihirli Elma"], ["👠","Cam Ayakkabı"],
+          ["🎃","Balkabağı"], ["🐸","Prens Kurbağa"], ["🌹","Büyülü Gül"], ["🧚‍♀️","Peri Kızı"]
+        ]
+      },
+
+      tatil: {
+        name: "Tatiller",
+        icon: "🏖️",
+        colors: ["#164356", "#2186a4", "#ffe274", "#28a7bd", "#176a87"],
+        cards: [
+          ["🏖️","Plaj"], ["🏝️","Ada"], ["🌴","Palmiye"], ["☀️","Güneş"],
+          ["🕶️","Gözlük"], ["🩴","Terlik"], ["🩱","Mayo"], ["🩳","Şort"],
+          ["🧳","Valiz"], ["🎒","Sırt Çantası"], ["✈️","Uçak"], ["🚗","Araba"],
+          ["🗺️","Harita"], ["📸","Fotoğraf"], ["⛺","Kamp"], ["🏕️","Çadır"],
+          ["🚤","Tekne"], ["⛵","Yelkenli"], ["🏄","Sörf"], ["🤿","Dalış"],
+          ["🍦","Dondurma"], ["🥥","Hindistan Cevizi"], ["🌊","Deniz"], ["🌅","Gün Batımı"]
+        ]
+      },
+
+      oyunlar: {
+        name: "Oyunlar",
+        icon: "🎮",
+        colors: ["#251d55", "#514799", "#ffe177", "#6455c7", "#372e7f"],
+        cards: [
+          ["🎮","Oyun Konsolu"], ["🕹️","Joystick"], ["👾","Uzay Oyunu"], ["🎲","Zar"],
+          ["♟️","Satranç"], ["🧩","Yapboz"], ["🃏","Kart"], ["🎯","Hedef"],
+          ["🏆","Kupa"], ["🥇","Altın"], ["🏅","Madalya"], ["🎰","Oyun Makinesi"],
+          ["🧸","Oyuncak"], ["🪀","Yo-Yo"], ["🪁","Uçurtma"], ["⚽","Futbol"],
+          ["🏀","Basketbol"], ["🚂","Oyuncak Tren"], ["🧱","Blok"], ["🎪","Sirk"],
+          ["🎨","Boyama"], ["🤖","Robot"], ["👑","Kazanan"], ["⭐","Yıldız"]
+        ]
+      },
+
+      ev: {
+        name: "Ev Eşyaları",
+        icon: "🏠",
+        colors: ["#403025", "#866349", "#ffe17a", "#a67655", "#694932"],
+        cards: [
+          ["🏠","Ev"], ["🛋️","Koltuk"], ["🛏️","Yatak"], ["🪑","Sandalye"],
+          ["🚪","Kapı"], ["🪟","Pencere"], ["🛁","Küvet"], ["🚿","Duş"],
+          ["🧹","Süpürge"], ["🪣","Kova"], ["🧺","Sepet"], ["🧼","Sabun"],
+          ["🪥","Diş Fırçası"], ["🧻","Kağıt"], ["🍽️","Tabak"], ["🥄","Kaşık"],
+          ["🍴","Çatal Bıçak"], ["🥛","Bardak"], ["🫖","Çaydanlık"], ["🧊","Buzdolabı"],
+          ["🧯","Yangın Söndürücü"], ["💡","Lamba"], ["🕰️","Saat"], ["🖼️","Tablo"]
+        ]
       }
-    }, 500);
+    };
 
-  } else {
-    playTone([280, 210], .13, "triangle");
+    let gameMode = "single";
+    let currentTheme = "hayvan";
+    let cardCount = 12;
 
-    setTimeout(() => {
-      firstCard.classList.remove("flipped");
-      secondCard.classList.remove("flipped");
+    let flippedCards = [];
+    let matchedPairs = 0;
+    let player1Score = 0;
+    let player2Score = 0;
+    let activePlayer = 1;
 
-      flipped = [];
+    let seconds = 0;
+    let timerStarted = false;
+    let timerInterval = null;
+    let canFlip = true;
+
+    const grid = document.getElementById("grid");
+    const timer = document.getElementById("timer");
+    const status = document.getElementById("status");
+
+    const player1Box = document.getElementById("player1Box");
+    const player2Box = document.getElementById("player2Box");
+    const player1Name = document.getElementById("player1Name");
+    const player1ScoreElement = document.getElementById("player1Score");
+    const player2ScoreElement = document.getElementById("player2Score");
+
+    const winOverlay = document.getElementById("winOverlay");
+    const winEmoji = document.getElementById("winEmoji");
+    const winTitle = document.getElementById("winTitle");
+    const winText = document.getElementById("winText");
+
+    let audioContext = null;
+
+    function getAudioContext() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+
+      return audioContext;
+    }
+
+    function playSound(notes, duration = 0.12, type = "sine", volume = 0.18) {
+      try {
+        const context = getAudioContext();
+        const now = context.currentTime;
+
+        notes.forEach((note, index) => {
+          const oscillator = context.createOscillator();
+          const gain = context.createGain();
+
+          oscillator.type = type;
+          oscillator.frequency.value = note;
+
+          oscillator.connect(gain);
+          gain.connect(context.destination);
+
+          const start = now + index * duration;
+
+          gain.gain.setValueAtTime(volume, start);
+          gain.gain.exponentialRampToValueAtTime(0.001, start + duration);
+
+          oscillator.start(start);
+          oscillator.stop(start + duration);
+        });
+      } catch (error) {}
+    }
+
+    function createButtons() {
+      const modeButtons = document.getElementById("modeButtons");
+      const themeButtons = document.getElementById("themeButtons");
+      const sizeButtons = document.getElementById("sizeButtons");
+
+      const modes = [
+        { id: "single", label: "👤 Tek Oyuncu" },
+        { id: "two", label: "👥 2 Oyuncu" }
+      ];
+
+      modes.forEach(mode => {
+        const button = document.createElement("button");
+
+        button.className = "choice-btn";
+        button.dataset.mode = mode.id;
+        button.textContent = mode.label;
+
+        button.addEventListener("click", () => {
+          gameMode = mode.id;
+
+          document.querySelectorAll("[data-mode]").forEach(item => {
+            item.classList.remove("active");
+          });
+
+          button.classList.add("active");
+          updateModeUI();
+          restartGame();
+        });
+
+        modeButtons.appendChild(button);
+      });
+
+      Object.entries(themes).forEach(([key, theme]) => {
+        const button = document.createElement("button");
+
+        button.className = "choice-btn";
+        button.dataset.theme = key;
+        button.textContent = `${theme.icon} ${theme.name}`;
+
+        button.addEventListener("click", () => {
+          currentTheme = key;
+
+          document.querySelectorAll("[data-theme]").forEach(item => {
+            item.classList.remove("active");
+          });
+
+          button.classList.add("active");
+          applyThemeColors();
+          restartGame();
+        });
+
+        themeButtons.appendChild(button);
+      });
+
+      [8, 12, 16, 24, 32, 48].forEach(size => {
+        const button = document.createElement("button");
+
+        button.className = "choice-btn";
+        button.dataset.size = size;
+        button.textContent = `${size} Kart`;
+
+        button.addEventListener("click", () => {
+          cardCount = size;
+
+          document.querySelectorAll("[data-size]").forEach(item => {
+            item.classList.remove("active");
+          });
+
+          button.classList.add("active");
+          restartGame();
+        });
+
+        sizeButtons.appendChild(button);
+      });
+    }
+
+    function applyThemeColors() {
+      const colors = themes[currentTheme].colors;
+
+      document.documentElement.style.setProperty("--bg1", colors[0]);
+      document.documentElement.style.setProperty("--bg2", colors[1]);
+      document.documentElement.style.setProperty("--accent", colors[2]);
+      document.documentElement.style.setProperty("--card1", colors[3]);
+      document.documentElement.style.setProperty("--card2", colors[4]);
+    }
+
+    function updateModeUI() {
+      const twoPlayers = gameMode === "two";
+
+      player2Box.classList.toggle("hidden", !twoPlayers);
+      player1Name.textContent = twoPlayers ? "👤 Oyuncu 1" : "👤 Sen";
+    }
+
+    function shuffle(array) {
+      const result = [...array];
+
+      for (let i = result.length - 1; i > 0; i--) {
+        const randomIndex = Math.floor(Math.random() * (i + 1));
+        [result[i], result[randomIndex]] = [result[randomIndex], result[i]];
+      }
+
+      return result;
+    }
+
+    function formatTime(totalSeconds) {
+      const minutes = Math.floor(totalSeconds / 60);
+      const secs = totalSeconds % 60;
+
+      return `${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+    }
+
+    function updateTimer() {
+      timer.textContent = `⏱ ${formatTime(seconds)}`;
+    }
+
+    function startTimer() {
+      if (timerStarted) return;
+
+      timerStarted = true;
+
+      timerInterval = setInterval(() => {
+        seconds++;
+        updateTimer();
+      }, 1000);
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+
+    function updateScores() {
+      player1ScoreElement.textContent = player1Score;
+      player2ScoreElement.textContent = player2Score;
+    }
+
+    function updateActivePlayerUI() {
+      if (gameMode === "single") {
+        player1Box.classList.add("active-player");
+        player2Box.classList.remove("active-player");
+        return;
+      }
+
+      player1Box.classList.toggle("active-player", activePlayer === 1);
+      player2Box.classList.toggle("active-player", activePlayer === 2);
+      status.textContent = `Sıra: Oyuncu ${activePlayer}`;
+    }
+
+    function setGridColumns() {
+      let columns = 4;
+
+      if (cardCount === 24) columns = 6;
+      if (cardCount >= 32) columns = 8;
+
+      if (window.innerWidth < 600 && cardCount >= 24) {
+        columns = 6;
+      }
+
+      grid.style.gridTemplateColumns = `repeat(${columns}, minmax(0, 1fr))`;
+    }
+
+    function restartGame() {
+      stopTimer();
+
+      flippedCards = [];
+      matchedPairs = 0;
+      player1Score = 0;
+      player2Score = 0;
+      activePlayer = 1;
+
+      seconds = 0;
+      timerStarted = false;
       canFlip = true;
-    }, 850);
-  }
-}
 
-/* --------------------------------------------------
-   OYUNU TAMAMLA
--------------------------------------------------- */
+      updateTimer();
+      updateScores();
+      updateModeUI();
+      updateActivePlayerUI();
 
-function finishGame() {
-  stopTimer();
+      winOverlay.classList.remove("show");
 
-  const oldBest = getBestScore();
+      if (gameMode === "single") {
+        status.textContent = "Bir karta tıklayarak oyunu başlat.";
+      }
 
-  if (!oldBest || moves < Number(oldBest)) {
-    localStorage.setItem(getBestKey(), moves);
-    bestElement.textContent = moves;
-  }
+      const pairCount = cardCount / 2;
+      const selectedCards = themes[currentTheme].cards.slice(0, pairCount);
+      const deck = [];
 
-  statusElement.textContent = "Tüm kartları eşleştirdin!";
-  playTone([523, 659, 784, 1047], .13);
+      selectedCards.forEach((item, index) => {
+        deck.push({
+          pairId: index,
+          emoji: item[0],
+          label: item[1]
+        });
 
-  setTimeout(() => {
-    const bestText =
-      !oldBest || moves < Number(oldBest)
-        ? "Yeni en iyi skor! 🏆"
-        : `En iyi skorun: ${oldBest} hamle`;
+        deck.push({
+          pairId: index,
+          emoji: item[0],
+          label: item[1]
+        });
+      });
 
-    winStats.innerHTML = `
-      <strong>${themes[currentTheme].title}</strong> kategorisini tamamladın.<br>
-      ${moves} hamle • ${formatTime(seconds)} süre<br>
-      <span style="color:#ffd166">${bestText}</span>
-    `;
+      grid.innerHTML = "";
+      setGridColumns();
 
-    winOverlay.classList.add("show");
-    createConfetti();
-  }, 550);
-}
+      shuffle(deck).forEach(cardData => {
+        const card = document.createElement("div");
 
-function createConfetti() {
-  const colors = [
-    "#ffd166",
-    "#7bdff2",
-    "#ff7aa2",
-    "#73d69a",
-    "#9b8cff",
-    "#ffffff"
-  ];
+        card.className = "card";
+        card.dataset.pairId = cardData.pairId;
 
-  for (let i = 0; i < 70; i++) {
-    const piece = document.createElement("div");
+        card.innerHTML = `
+          <div class="card-inner">
+            <div class="card-face card-back"></div>
 
-    piece.className = "confetti";
-    piece.style.left = `${Math.random() * 100}vw`;
-    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-    piece.style.animationDelay = `${Math.random() * .8}s`;
-    piece.style.animationDuration = `${2 + Math.random() * 1.7}s`;
-    piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+            <div class="card-face card-front">
+              <span class="emoji">${cardData.emoji}</span>
+              <span class="label">${cardData.label}</span>
+            </div>
+          </div>
+        `;
 
-    document.body.appendChild(piece);
+        card.addEventListener("click", () => flipCard(card));
+        grid.appendChild(card);
+      });
+    }
 
-    setTimeout(() => {
-      piece.remove();
-    }, 4500);
-  }
-}
+    function flipCard(card) {
+      if (!canFlip) return;
+      if (card.classList.contains("flipped")) return;
+      if (card.classList.contains("matched")) return;
+      if (flippedCards.length >= 2) return;
 
-/* --------------------------------------------------
-   BUTONLAR
--------------------------------------------------- */
+      startTimer();
 
-document.getElementById("restartButton").addEventListener("click", restartGame);
-document.getElementById("winButton").addEventListener("click", restartGame);
+      if (gameMode === "single") {
+        status.textContent = "Eşleşen kartları bul!";
+      }
 
-window.addEventListener("resize", setGridColumns);
+      playSound([440], 0.07, "sine", 0.13);
 
-/* --------------------------------------------------
-   İLK AÇILIŞ
--------------------------------------------------- */
+      card.classList.add("flipped");
+      flippedCards.push(card);
 
-createCategoryButtons();
-createSizeButtons();
+      if (flippedCards.length !== 2) return;
 
-document.querySelector('[data-theme="hayvan"]').classList.add("active");
-document.querySelector('[data-size="12"]').classList.add("active");
+      canFlip = false;
 
-restartGame();
-</script>
+      const firstCard = flippedCards[0];
+      const secondCard = flippedCards[1];
 
+      if (firstCard.dataset.pairId === secondCard.dataset.pairId) {
+        handleMatch(firstCard, secondCard);
+      } else {
+        handleMismatch(firstCard, secondCard);
+      }
+    }
+
+    function handleMatch(firstCard, secondCard) {
+      playSound([659, 784, 1047], 0.1, "sine", 0.22);
+
+      setTimeout(() => {
+        firstCard.classList.add("matched");
+        secondCard.classList.add("matched");
+
+        matchedPairs++;
+
+        if (gameMode === "two") {
+          if (activePlayer === 1) {
+            player1Score++;
+          } else {
+            player2Score++;
+          }
+
+          updateScores();
+          status.textContent = `Oyuncu ${activePlayer} eşleşme buldu! Sıra yine onda.`;
+        } else {
+          player1Score++;
+          updateScores();
+          status.textContent = "Harika! Eşleşme buldun.";
+        }
+
+        flippedCards = [];
+        canFlip = true;
+
+        if (matchedPairs === cardCount / 2) {
+          finishGame();
+        }
+      }, 450);
+    }
+
+    function handleMismatch(firstCard, secondCard) {
+      playSound([280, 200], 0.14, "triangle", 0.15);
+
+      setTimeout(() => {
+        firstCard.classList.remove("flipped");
+        secondCard.classList.remove("flipped");
+
+        flippedCards = [];
+        canFlip = true;
+
+        if (gameMode === "two") {
+          activePlayer = activePlayer === 1 ? 2 : 1;
+          updateActivePlayerUI();
+        } else {
+          status.textContent = "Eşleşmedi, tekrar dene.";
+        }
+      }, 850);
+    }
+
+    function finishGame() {
+      stopTimer();
+      canFlip = false;
+
+      let emoji = "🎉";
+      let title = "";
+      let text = "";
+
+      if (gameMode === "single") {
+        title = "Tebrikler!";
+        text = `
+          <b>${themes[currentTheme].name}</b> kategorisini tamamladın.<br>
+          ${player1Score} eşleşme • ${formatTime(seconds)} süre
+        `;
+      } else if (player1Score > player2Score) {
+        emoji = "🥇";
+        title = "Oyuncu 1 Kazandı!";
+        text = `
+          Oyuncu 1: <b style="color:var(--accent)">${player1Score} puan</b><br>
+          Oyuncu 2: <b>${player2Score} puan</b><br>
+          Süre: ${formatTime(seconds)}
+        `;
+      } else if (player2Score > player1Score) {
+        emoji = "🥇";
+        title = "Oyuncu 2 Kazandı!";
+        text = `
+          Oyuncu 1: <b>${player1Score} puan</b><br>
+          Oyuncu 2: <b style="color:var(--accent)">${player2Score} puan</b><br>
+          Süre: ${formatTime(seconds)}
+        `;
+      } else {
+        emoji = "🤝";
+        title = "Berabere!";
+        text = `
+          İki oyuncu da <b style="color:var(--accent)">${player1Score} puan</b> aldı.<br>
+          Süre: ${formatTime(seconds)}
+        `;
+      }
+
+      playSound([523, 659, 784, 1047], 0.12, "sine", 0.25);
+
+      setTimeout(() => {
+        winEmoji.textContent = emoji;
+        winTitle.textContent = title;
+        winText.innerHTML = text;
+        winOverlay.classList.add("show");
+        createConfetti();
+      }, 500);
+    }
+
+    function createConfetti() {
+      const colors = ["#ffd166", "#7bdff2", "#ff7aa2", "#72e3a0", "#a892ff", "#ffffff"];
+
+      for (let i = 0; i < 70; i++) {
+        const piece = document.createElement("div");
+
+        piece.className = "confetti";
+        piece.style.left = `${Math.random() * 100}vw`;
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.animationDelay = `${Math.random() * .8}s`;
+        piece.style.animationDuration = `${2 + Math.random() * 1.5}s`;
+
+        document.body.appendChild(piece);
+
+        setTimeout(() => piece.remove(), 4300);
+      }
+    }
+
+    document.getElementById("restartBtn").addEventListener("click", restartGame);
+    document.getElementById("playAgainBtn").addEventListener("click", restartGame);
+
+    window.addEventListener("resize", setGridColumns);
+
+    createButtons();
+    applyThemeColors();
+
+    document.querySelector('[data-mode="single"]').classList.add("active");
+    document.querySelector('[data-theme="hayvan"]').classList.add("active");
+    document.querySelector('[data-size="12"]').classList.add("active");
+
+    updateModeUI();
+    restartGame();
+  </script>
 </body>
 </html>
