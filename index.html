@@ -93,9 +93,30 @@ nav a:hover{color:var(--coral);}
   background:linear-gradient(120deg,#0E1D33 0%,#16345C 55%,#2B547F 100%);}
 .hero-inner{position:relative;z-index:2;width:min(1120px,92%);margin:0 auto;text-align:center;}
 .hero-logo-wrap{
-  position:relative;width:clamp(128px,20vw,182px);margin:0 auto 6px;
+  position:relative;width:clamp(132px,20vw,188px);margin:0 auto 6px;
   display:grid;place-items:center;
 }
+/* robotun gözleri — konumlar logoya göre ayarlı */
+.robot-goz{
+  position:absolute;z-index:2;left:var(--gx);top:var(--gy);
+  width:15%;aspect-ratio:1;transform:translate(-50%,-50%);
+  border-radius:50%;pointer-events:none;mix-blend-mode:screen;filter:blur(2px);
+  background:radial-gradient(circle,
+    rgba(255,255,255,.95) 0%, rgba(120,240,255,.85) 22%,
+    rgba(40,190,235,.42) 48%, transparent 74%);
+  animation:gozYanip 3.4s ease-in-out infinite;
+}
+.robot-goz.sol{--gx:31%; --gy:23.7%;}
+.robot-goz.sag{--gx:58%; --gy:22.4%;}
+@keyframes gozYanip{
+  0%,100%{opacity:.20;transform:translate(-50%,-50%) scale(.86);}
+  6%     {opacity:1;  transform:translate(-50%,-50%) scale(1.14);}
+  13%    {opacity:.28;transform:translate(-50%,-50%) scale(.9);}
+  21%    {opacity:.92;transform:translate(-50%,-50%) scale(1.08);}
+  34%    {opacity:.22;transform:translate(-50%,-50%) scale(.88);}
+  62%    {opacity:.55;transform:translate(-50%,-50%) scale(1);}
+}
+@media (prefers-reduced-motion:reduce){ .robot-goz{animation:none;opacity:.55;} }
 .hero-logo-wrap::before{                       /* robotun arkasında yumuşak ışık */
   content:'';position:absolute;inset:-24%;z-index:0;
   background:radial-gradient(circle at 50% 48%,
@@ -110,9 +131,9 @@ nav a:hover{color:var(--coral);}
 /* ---- SPEKTRUM KELİME LOGOSU ---- */
 .wordmark{
   position:relative;display:inline-block;margin:2px auto 6px;
-  font-size:clamp(2.05rem,6.6vw,3.7rem);font-weight:800;
-  letter-spacing:.055em;line-height:1.08;white-space:nowrap;
-  filter:drop-shadow(0 8px 20px rgba(0,0,0,.45));
+  font-size:clamp(1.35rem,3.6vw,2.05rem);font-weight:800;
+  letter-spacing:.10em;line-height:1.1;white-space:nowrap;
+  filter:drop-shadow(0 6px 14px rgba(0,0,0,.4));
 }
 .wordmark .wm-base{
   background:linear-gradient(100deg,
@@ -133,7 +154,7 @@ nav a:hover{color:var(--coral);}
   animation:isikGec 5.2s ease-in-out infinite;
 }
 .wordmark-alt{
-  display:block;margin:0 auto 16px;width:min(320px,72%);height:2px;border-radius:2px;
+  display:block;margin:0 auto 16px;width:min(230px,60%);height:2px;border-radius:2px;
   background:linear-gradient(90deg,transparent,#C08A2E 22%,#E9EEF4 50%,#C08A2E 78%,transparent);
   opacity:.75;
 }
@@ -164,9 +185,9 @@ nav a:hover{color:var(--coral);}
   display:inline-block;padding:7px 16px;border-radius:50px;color:var(--gold-soft);border:1px solid rgba(232,200,124,.4);background:transparent;
   font-size:.7rem;letter-spacing:1.5px;font-weight:800;
 }
-.hero h1{margin:14px auto 0;max-width:720px;font-size:clamp(1.35rem,3.2vw,2.15rem);line-height:1.22;font-weight:800;}
+.hero h1{margin:18px auto 0;max-width:790px;font-size:clamp(1.9rem,4.6vw,3.15rem);line-height:1.13;font-weight:800;}
 .hero h1 span{color:var(--gold-soft);}
-.hero p{max-width:600px;margin:0 auto;color:#C6D3E2;line-height:1.65;}
+.hero p{max-width:640px;margin:0 auto;color:#C6D3E2;line-height:1.7;font-size:clamp(.95rem,1.5vw,1.08rem);}
 .hero-buttons{display:flex;flex-wrap:wrap;gap:11px;margin-top:24px;justify-content:center;}
 .button{
   display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 20px;
@@ -451,7 +472,7 @@ footer{padding:32px 0;color:#d6cadf;background:var(--purple-dark);}
   .info-grid{grid-template-columns:repeat(2,1fr);}
 }
 @media (max-width:600px){
-  .wordmark{letter-spacing:.03em;font-size:clamp(1.7rem,8.4vw,2.4rem);}
+  .wordmark{letter-spacing:.06em;font-size:clamp(1.15rem,5vw,1.6rem);}
   section{padding:48px 0;}
   .hero{padding:54px 0;}
   .about-content{padding:26px;}
@@ -549,6 +570,8 @@ footer{padding:32px 0;color:#d6cadf;background:var(--purple-dark);}
     <div class="hero-inner">
       <div class="hero-logo-wrap">
         <img src="logo-hero.png" alt="" class="hero-logo" onerror="this.src='logo.png'">
+        <span class="robot-goz sol" aria-hidden="true"></span>
+        <span class="robot-goz sag" aria-hidden="true"></span>
       </div>
       <div class="wordmark">
         <span class="wm-base">Dijital Öğretmen</span>
