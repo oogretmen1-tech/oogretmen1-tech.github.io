@@ -1,994 +1,2187 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bayrak Yarışı - Ülkeleri Tahmin Et!</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>Kozmik Bayrak Protokolü</title>
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #333;
-        }
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+    :root {
+      --dark: #020617;
+      --dark-blue: #07152f;
+      --panel: rgba(5, 19, 47, 0.88);
+      --cyan: #22d3ee;
+      --cyan-light: #a5f3fc;
+      --blue: #2563eb;
+      --purple: #a855f7;
+      --pink: #ec4899;
+      --green: #22c55e;
+      --red: #ef4444;
+      --yellow: #facc15;
+      --white: #f8fafc;
+      --muted: #94a3b8;
+    }
 
-        .main-menu {
-            background: white;
-            border-radius: 20px;
-            padding: 50px;
-            text-align: center;
-            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
-        }
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--white);
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(
+          circle at 50% 35%,
+          rgba(37, 99, 235, 0.28),
+          transparent 32%
+        ),
+        radial-gradient(
+          circle at 10% 20%,
+          rgba(168, 85, 247, 0.18),
+          transparent 25%
+        ),
+        radial-gradient(
+          circle at 90% 80%,
+          rgba(34, 211, 238, 0.14),
+          transparent 30%
+        ),
+        linear-gradient(
+          145deg,
+          #020617,
+          #07152f,
+          #020617
+        );
+    }
 
-        h1 {
-            font-size: 3em;
-            color: #667eea;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
+    button {
+      font: inherit;
+    }
 
-        .subtitle {
-            font-size: 1.3em;
-            color: #666;
-            margin-bottom: 40px;
-        }
+    /* ================================
+       UZAY ARKA PLANI
+    ================================= */
 
-        .mode-selection {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 30px;
-        }
+    .stars {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      opacity: 0.55;
+      pointer-events: none;
+      background-image:
+        radial-gradient(
+          circle,
+          white 1px,
+          transparent 1.5px
+        ),
+        radial-gradient(
+          circle,
+          #67e8f9 1px,
+          transparent 1.5px
+        );
+      background-size: 90px 90px, 150px 150px;
+      background-position: 0 0, 45px 60px;
+      animation: starsMove 70s linear infinite;
+    }
 
-        .mode-card {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            padding: 40px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            color: white;
-            border: 4px solid transparent;
-        }
+    @keyframes starsMove {
+      from {
+        transform: translate(0, 0);
+      }
 
-        .mode-card:hover {
-            transform: translateY(-10px) scale(1.05);
-            box-shadow: 0 15px 40px rgba(245, 87, 108, 0.5);
-            border-color: #fff;
-        }
+      to {
+        transform: translate(250px, 500px);
+      }
+    }
 
-        .mode-card h2 {
-            font-size: 2.5em;
-            margin-bottom: 15px;
-        }
+    /* ================================
+       ORTAK SINIFLAR
+    ================================= */
 
-        .mode-card p {
-            font-size: 1.2em;
-            line-height: 1.6;
-        }
+    .hidden {
+      display: none !important;
+    }
 
-        .game-screen {
-            display: none;
-        }
+    .screen {
+      min-height: 100vh;
+      padding: 24px;
+    }
 
-        .game-header {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-        }
+    .glass {
+      border: 1px solid rgba(103, 232, 249, 0.28);
+      border-radius: 24px;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(12, 35, 74, 0.88),
+          rgba(2, 10, 27, 0.9)
+        );
+      box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.45),
+        inset 0 0 32px rgba(34, 211, 238, 0.05);
+      backdrop-filter: blur(16px);
+    }
 
-        .game-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
+    .main-button {
+      padding: 16px 30px;
+      border: 1px solid rgba(165, 243, 252, 0.8);
+      border-radius: 999px;
+      cursor: pointer;
+      color: #031722;
+      font-size: 1rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: linear-gradient(
+        90deg,
+        var(--cyan),
+        #67e8f9
+      );
+      box-shadow: 0 0 30px rgba(34, 211, 238, 0.4);
+      transition: 0.25s ease;
+    }
 
-        .info-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px 30px;
-            border-radius: 15px;
-            font-size: 1.3em;
-            font-weight: bold;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-        }
+    .main-button:hover {
+      transform: translateY(-4px) scale(1.03);
+      box-shadow: 0 0 45px rgba(34, 211, 238, 0.7);
+    }
 
-        .timer {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            font-size: 2em;
-            min-width: 150px;
-            text-align: center;
-        }
+    .secondary-button {
+      padding: 15px 24px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      border-radius: 999px;
+      cursor: pointer;
+      color: white;
+      font-weight: 800;
+      background: rgba(30, 41, 59, 0.8);
+      transition: 0.25s ease;
+    }
 
-        .score {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
+    .secondary-button:hover {
+      transform: translateY(-3px);
+      border-color: white;
+    }
 
-        .game-area {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-        }
+    /* ================================
+       ANA MENÜ
+    ================================= */
 
-        .two-player-layout {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
+    #menuScreen {
+      display: grid;
+      place-items: center;
+    }
 
-        .player-section {
-            border: 4px solid #667eea;
-            border-radius: 20px;
-            padding: 30px;
-            transition: all 0.3s;
-        }
+    .menu-card {
+      width: min(820px, 100%);
+      padding: 52px 36px;
+      text-align: center;
+    }
 
-        .player-section.active {
-            border-color: #f5576c;
-            background: #fff5f8;
-            box-shadow: 0 0 30px rgba(245, 87, 108, 0.3);
-        }
+    .system-code {
+      display: block;
+      margin-bottom: 17px;
+      color: var(--cyan);
+      font-size: 0.75rem;
+      font-weight: 900;
+      letter-spacing: 4px;
+    }
 
-        .player-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+    .menu-card h1 {
+      margin-bottom: 20px;
+      color: var(--cyan-light);
+      font-size: clamp(2.3rem, 7vw, 4.6rem);
+      line-height: 1;
+      text-transform: uppercase;
+      text-shadow: 0 0 25px rgba(34, 211, 238, 0.42);
+    }
 
-        .player-name {
-            font-size: 2em;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 10px;
-        }
+    .menu-card p {
+      max-width: 620px;
+      margin: 0 auto 32px;
+      color: #cbd5e1;
+      font-size: 1.05rem;
+      line-height: 1.75;
+    }
 
-        .player-score {
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #f5576c;
-        }
+    .mode-title {
+      margin-bottom: 14px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
 
-        .flag-container {
-            text-align: center;
-            margin: 30px 0;
-        }
+    .mode-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      max-width: 580px;
+      margin: 0 auto 28px;
+    }
 
-        .flag {
-            width: 400px;
-            height: 270px;
-            border: 5px solid #333;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            object-fit: cover;
-            margin: 0 auto;
-            display: block;
-            background: white;
-        }
+    .mode-button {
+      padding: 22px 15px;
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      border-radius: 16px;
+      cursor: pointer;
+      color: #cbd5e1;
+      font-size: 1rem;
+      font-weight: bold;
+      background: rgba(15, 23, 42, 0.6);
+      transition: 0.25s ease;
+    }
 
-        .question-number {
-            font-size: 1.5em;
-            color: #666;
-            margin-bottom: 20px;
-            text-align: center;
-        }
+    .mode-button span {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 2rem;
+    }
 
-        .options {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-top: 30px;
-        }
+    .mode-button.active {
+      border-color: var(--cyan);
+      color: white;
+      background: rgba(34, 211, 238, 0.14);
+      box-shadow: 0 0 24px rgba(34, 211, 238, 0.18);
+    }
 
-        .option-btn {
-            padding: 20px;
-            font-size: 1.2em;
-            font-weight: bold;
-            border: 3px solid #667eea;
-            background: white;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            color: #333;
-        }
+    .menu-features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 30px;
+    }
 
-        .option-btn:hover {
-            background: #667eea;
-            color: white;
-            transform: scale(1.05);
-        }
+    .feature {
+      padding: 15px 10px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 14px;
+      color: #cbd5e1;
+      background: rgba(15, 23, 42, 0.45);
+    }
 
-        .option-btn.correct {
-            background: #4CAF50;
-            color: white;
-            border-color: #4CAF50;
-            animation: correctPulse 0.5s;
-        }
+    .feature strong {
+      display: block;
+      margin-top: 7px;
+      color: white;
+      font-size: 0.88rem;
+    }
 
-        .option-btn.wrong {
-            background: #f44336;
-            color: white;
-            border-color: #f44336;
-            animation: wrongShake 0.5s;
-        }
+    /* ================================
+       OYUN BAŞLIĞI
+    ================================= */
 
-        .option-btn:disabled {
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
+    #gameScreen {
+      width: min(1500px, 100%);
+      margin: auto;
+    }
 
-        @keyframes correctPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
+    .game-header {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 18px;
+      padding: 15px 20px;
+      margin-bottom: 16px;
+    }
 
-        @keyframes wrongShake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
+    .summary {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-        .result-screen {
-            display: none;
-            text-align: center;
-        }
+    .summary.right {
+      justify-content: flex-end;
+      text-align: right;
+    }
 
-        .result-title {
-            font-size: 3em;
-            color: #667eea;
-            margin-bottom: 20px;
-        }
+    .avatar {
+      display: grid;
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+      place-items: center;
+      border: 1px solid var(--cyan);
+      border-radius: 14px;
+      font-size: 1.5rem;
+    }
 
-        .final-score {
-            font-size: 4em;
-            font-weight: bold;
-            color: #f5576c;
-            margin: 20px 0;
-        }
+    .summary.right .avatar {
+      border-color: var(--pink);
+    }
 
-        .result-details {
-            background: #f0f0f0;
-            padding: 30px;
-            border-radius: 15px;
-            margin: 20px 0;
-            font-size: 1.3em;
-        }
+    .summary label {
+      display: block;
+      color: var(--muted);
+      font-size: 0.68rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
 
-        .result-detail {
-            margin: 15px 0;
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            border-bottom: 2px solid #ddd;
-        }
+    .summary strong {
+      color: var(--cyan);
+      font-size: 1.5rem;
+    }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 20px 50px;
-            font-size: 1.5em;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-            margin: 10px;
-        }
+    .summary.right strong {
+      color: #f9a8d4;
+    }
 
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
-        }
+    .mission {
+      text-align: center;
+    }
 
-        .back-btn {
-            background: #666;
-            padding: 15px 30px;
-            font-size: 1.2em;
-        }
+    .mission small {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--cyan);
+      font-size: 0.65rem;
+      font-weight: bold;
+      letter-spacing: 3px;
+    }
 
-        .progress-bar {
-            width: 100%;
-            height: 30px;
-            background: #e0e0e0;
-            border-radius: 15px;
-            overflow: hidden;
-            margin: 20px 0;
-        }
+    .mission h2 {
+      font-size: clamp(0.8rem, 2vw, 1.35rem);
+      letter-spacing: 1px;
+    }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #4CAF50 0%, #8BC34A 100%);
-            transition: width 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
+    /* ================================
+       OYUN DÜZENİ
+    ================================= */
 
-        .difficulty-selector {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin: 30px 0;
-        }
+    .game-layout {
+      display: grid;
+      grid-template-columns:
+        minmax(240px, 0.8fr)
+        minmax(400px, 1.35fr)
+        minmax(240px, 0.8fr);
+      gap: 16px;
+    }
 
-        .difficulty-btn {
-            padding: 15px 30px;
-            font-size: 1.2em;
-            border: 3px solid #667eea;
-            background: white;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
+    .player-panel,
+    .world-panel {
+      min-height: 610px;
+      padding: 21px;
+    }
 
-        .difficulty-btn.selected {
-            background: #667eea;
-            color: white;
-        }
+    .player-panel {
+      transition: 0.3s ease;
+    }
 
-        .streak-indicator {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #ff9800;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 15px;
-            font-size: 1.5em;
-            font-weight: bold;
-            box-shadow: 0 5px 20px rgba(255, 152, 0, 0.4);
-            display: none;
-        }
+    .player-panel.active {
+      opacity: 1;
+      transform: translateY(-4px);
+    }
 
-        @media (max-width: 768px) {
-            .flag {
-                width: 100%;
-                max-width: 350px;
-                height: auto;
-            }
+    .player-panel.inactive {
+      opacity: 0.48;
+      filter: saturate(0.55);
+    }
 
-            .two-player-layout {
-                grid-template-columns: 1fr;
-            }
+    #playerOne.active {
+      border-color: var(--cyan);
+      box-shadow:
+        0 0 35px rgba(34, 211, 238, 0.25),
+        inset 0 0 30px rgba(34, 211, 238, 0.06);
+    }
 
-            .options {
-                grid-template-columns: 1fr;
-            }
+    #playerTwo.active {
+      border-color: var(--pink);
+      box-shadow:
+        0 0 35px rgba(236, 72, 153, 0.25),
+        inset 0 0 30px rgba(236, 72, 153, 0.06);
+    }
 
-            h1 {
-                font-size: 2em;
-            }
-        }
-    </style>
+    .player-title {
+      padding-bottom: 18px;
+      margin-bottom: 19px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+      text-align: center;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 6px 11px;
+      margin-bottom: 8px;
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 0.65rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    #playerOne.active .status {
+      color: #03202b;
+      background: var(--cyan);
+    }
+
+    #playerTwo.active .status {
+      color: white;
+      background: var(--pink);
+    }
+
+    .player-title h3 {
+      font-size: 1.3rem;
+    }
+
+    .score {
+      margin-top: 7px;
+      color: var(--cyan);
+      font-size: 3rem;
+      font-weight: 900;
+    }
+
+    #playerTwo .score {
+      color: #f9a8d4;
+    }
+
+    .options {
+      display: grid;
+      gap: 13px;
+    }
+
+    .answer {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      min-height: 63px;
+      padding: 12px;
+      gap: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.32);
+      border-radius: 14px;
+      cursor: pointer;
+      color: white;
+      text-align: left;
+      font-size: 0.96rem;
+      font-weight: 800;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(15, 35, 65, 0.95),
+          rgba(8, 18, 40, 0.95)
+        );
+      transition: 0.2s ease;
+    }
+
+    .answer:hover:not(:disabled) {
+      transform: translateX(5px);
+    }
+
+    #playerOne .answer:hover:not(:disabled) {
+      border-color: var(--cyan);
+      box-shadow: 0 0 18px rgba(34, 211, 238, 0.2);
+    }
+
+    #playerTwo .answer:hover:not(:disabled) {
+      border-color: var(--pink);
+      box-shadow: 0 0 18px rgba(236, 72, 153, 0.2);
+    }
+
+    .answer:disabled {
+      cursor: not-allowed;
+    }
+
+    .letter {
+      display: grid;
+      width: 33px;
+      height: 33px;
+      flex-shrink: 0;
+      place-items: center;
+      border-radius: 9px;
+      color: var(--cyan-light);
+      font-weight: 900;
+      background: rgba(34, 211, 238, 0.13);
+    }
+
+    #playerTwo .letter {
+      color: #f9a8d4;
+      background: rgba(236, 72, 153, 0.13);
+    }
+
+    .answer.correct {
+      border-color: var(--green) !important;
+      background: rgba(34, 197, 94, 0.45);
+      box-shadow: 0 0 22px rgba(34, 197, 94, 0.3);
+    }
+
+    .answer.wrong {
+      border-color: var(--red) !important;
+      background: rgba(239, 68, 68, 0.45);
+      box-shadow: 0 0 22px rgba(239, 68, 68, 0.3);
+    }
+
+    /* ================================
+       DÜNYA VE HOLOGRAM
+    ================================= */
+
+    .world-panel {
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .world-panel::before {
+      position: absolute;
+      inset: 0;
+      content: "";
+      pointer-events: none;
+      opacity: 0.2;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          transparent 0,
+          transparent 5px,
+          rgba(34, 211, 238, 0.08) 6px
+        );
+    }
+
+    .world-info {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 0.68rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    #turnText {
+      position: relative;
+      z-index: 5;
+      min-height: 24px;
+      margin-top: 14px;
+      color: var(--cyan-light);
+      font-size: 0.88rem;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+    }
+
+    .planet-system {
+      position: relative;
+      z-index: 4;
+      width: 320px;
+      height: 320px;
+      margin: 4px auto 0;
+      display: grid;
+      place-items: center;
+    }
+
+    .orbit {
+      position: absolute;
+      border: 1px solid rgba(34, 211, 238, 0.38);
+      border-radius: 50%;
+    }
+
+    .orbit.one {
+      width: 300px;
+      height: 170px;
+      animation: orbitOne 8s linear infinite;
+    }
+
+    .orbit.two {
+      width: 190px;
+      height: 295px;
+      border-color: rgba(168, 85, 247, 0.4);
+      animation: orbitTwo 10s linear infinite;
+    }
+
+    @keyframes orbitOne {
+      from {
+        transform: rotate(-20deg);
+      }
+
+      to {
+        transform: rotate(340deg);
+      }
+    }
+
+    @keyframes orbitTwo {
+      from {
+        transform: rotate(30deg);
+      }
+
+      to {
+        transform: rotate(-330deg);
+      }
+    }
+
+    .earth-glow {
+      position: absolute;
+      width: 210px;
+      height: 210px;
+      border-radius: 50%;
+      background: rgba(34, 211, 238, 0.25);
+      filter: blur(25px);
+      animation: glowPulse 2.2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glowPulse {
+      from {
+        opacity: 0.4;
+        transform: scale(0.88);
+      }
+
+      to {
+        opacity: 0.9;
+        transform: scale(1.13);
+      }
+    }
+
+    .earth {
+      position: relative;
+      z-index: 3;
+      width: 192px;
+      height: 192px;
+      overflow: hidden;
+      border: 2px solid var(--cyan-light);
+      border-radius: 50%;
+      background:
+        radial-gradient(
+          circle at 32% 24%,
+          #67e8f9,
+          #0284c7 32%,
+          #075985 62%,
+          #06142e 100%
+        );
+      box-shadow:
+        0 0 24px var(--cyan),
+        0 0 70px rgba(37, 99, 235, 0.5),
+        inset -25px -18px 35px rgba(0, 0, 0, 0.58);
+    }
+
+    .earth-map {
+      position: absolute;
+      inset: -10%;
+      opacity: 0.9;
+      animation: earthSpin 12s linear infinite;
+    }
+
+    @keyframes earthSpin {
+      from {
+        transform: translateX(-18px);
+      }
+
+      to {
+        transform: translateX(18px);
+      }
+    }
+
+    .continent {
+      position: absolute;
+      border-radius: 48% 52% 42% 58%;
+      background: #22c55e;
+      filter: drop-shadow(0 0 5px rgba(134, 239, 172, 0.5));
+      opacity: 0.82;
+    }
+
+    .continent.one {
+      width: 68px;
+      height: 48px;
+      top: 26px;
+      left: 44px;
+      transform: rotate(-20deg);
+    }
+
+    .continent.two {
+      width: 40px;
+      height: 72px;
+      top: 68px;
+      left: 95px;
+      transform: rotate(18deg);
+    }
+
+    .continent.three {
+      width: 74px;
+      height: 44px;
+      top: 35px;
+      right: 12px;
+      transform: rotate(12deg);
+    }
+
+    .continent.four {
+      width: 50px;
+      height: 66px;
+      bottom: 14px;
+      right: 42px;
+      transform: rotate(-24deg);
+    }
+
+    .continent.five {
+      width: 28px;
+      height: 32px;
+      bottom: 28px;
+      left: 30px;
+    }
+
+    .earth-shade {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      pointer-events: none;
+      background:
+        linear-gradient(
+          105deg,
+          rgba(255, 255, 255, 0.26),
+          transparent 30%,
+          transparent 65%,
+          rgba(0, 0, 0, 0.5)
+        );
+    }
+
+    .country-marker {
+      position: absolute;
+      z-index: 6;
+      width: 14px;
+      height: 14px;
+      display: none;
+      border: 3px solid white;
+      border-radius: 50%;
+      background: var(--yellow);
+      box-shadow:
+        0 0 10px var(--yellow),
+        0 0 25px #f97316,
+        0 0 45px #facc15;
+      animation: markerPulse 0.7s ease-in-out infinite alternate;
+    }
+
+    @keyframes markerPulse {
+      from {
+        transform: scale(0.8);
+      }
+
+      to {
+        transform: scale(1.45);
+      }
+    }
+
+    .scan-line {
+      position: absolute;
+      z-index: 7;
+      left: 62px;
+      width: 195px;
+      height: 3px;
+      opacity: 0;
+      background: var(--cyan-light);
+      box-shadow:
+        0 0 10px var(--cyan),
+        0 0 35px var(--cyan);
+    }
+
+    .scanning .scan-line {
+      opacity: 1;
+      animation: scanning 1.15s ease-in-out infinite alternate;
+    }
+
+    .scanning .earth {
+      animation: earthScan 0.45s ease-in-out infinite alternate;
+    }
+
+    @keyframes scanning {
+      from {
+        top: 62px;
+      }
+
+      to {
+        top: 254px;
+      }
+    }
+
+    @keyframes earthScan {
+      from {
+        transform: scale(0.96);
+        filter: brightness(1);
+      }
+
+      to {
+        transform: scale(1.06);
+        filter: brightness(1.45);
+      }
+    }
+
+    /* Dünya ile bayrak arasındaki ışın */
+
+    .beam {
+      position: absolute;
+      z-index: 2;
+      bottom: 125px;
+      left: 50%;
+      width: 110px;
+      height: 250px;
+      opacity: 0;
+      transform: translateX(-50%);
+      transform-origin: bottom;
+      clip-path: polygon(
+        42% 100%,
+        58% 100%,
+        100% 0,
+        0 0
+      );
+      background:
+        linear-gradient(
+          to top,
+          rgba(34, 211, 238, 0.75),
+          rgba(34, 211, 238, 0.05)
+        );
+      filter: blur(2px);
+      transition: opacity 0.4s ease;
+    }
+
+    .beam.active {
+      opacity: 1;
+      animation: beamPulse 1.3s ease-in-out infinite alternate;
+    }
+
+    @keyframes beamPulse {
+      from {
+        filter: blur(2px) brightness(0.85);
+      }
+
+      to {
+        filter: blur(5px) brightness(1.5);
+      }
+    }
+
+    /* Bayrak hologramı */
+
+    .flag-box {
+      position: relative;
+      z-index: 10;
+      width: min(330px, 100%);
+      margin: -62px auto 0;
+      padding: 12px;
+      border: 1px solid rgba(103, 232, 249, 0.9);
+      border-radius: 17px;
+      opacity: 0;
+      transform:
+        translateY(105px)
+        scale(0.12);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(34, 211, 238, 0.16),
+          rgba(2, 10, 27, 0.94)
+        );
+      box-shadow:
+        0 0 24px rgba(34, 211, 238, 0.42),
+        inset 0 0 20px rgba(34, 211, 238, 0.1);
+      transition:
+        opacity 0.25s ease,
+        transform 0.75s cubic-bezier(0.2, 0.8, 0.25, 1.2);
+    }
+
+    .flag-box.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      animation: hologramFloat 2.6s ease-in-out infinite 0.7s;
+    }
+
+    @keyframes hologramFloat {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-7px);
+      }
+    }
+
+    .flag-emoji {
+      display: grid;
+      width: 100%;
+      height: 145px;
+      place-items: center;
+      overflow: hidden;
+      border-radius: 10px;
+      font-size: 6.7rem;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.98),
+          rgba(203, 213, 225, 0.9)
+        );
+    }
+
+    .flag-scan {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      height: 3px;
+      background: rgba(165, 243, 252, 0.95);
+      box-shadow: 0 0 15px var(--cyan);
+      animation: flagScan 1.8s linear infinite;
+    }
+
+    @keyframes flagScan {
+      from {
+        transform: translateY(0);
+      }
+
+      to {
+        transform: translateY(140px);
+      }
+    }
+
+    .flag-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 9px;
+      color: var(--cyan-light);
+      font-size: 0.6rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    #feedback {
+      position: relative;
+      z-index: 10;
+      min-height: 24px;
+      margin-top: 14px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    #feedback.success {
+      color: #86efac;
+      text-shadow: 0 0 16px rgba(34, 197, 94, 0.5);
+    }
+
+    #feedback.error {
+      color: #fca5a5;
+      text-shadow: 0 0 16px rgba(239, 68, 68, 0.5);
+    }
+
+    /* ================================
+       SONUÇ EKRANI
+    ================================= */
+
+    #resultScreen {
+      display: grid;
+      place-items: center;
+    }
+
+    .result-card {
+      width: min(650px, 100%);
+      padding: 46px 32px;
+      text-align: center;
+    }
+
+    .trophy {
+      margin-bottom: 12px;
+      font-size: 5rem;
+      filter: drop-shadow(0 0 20px rgba(250, 204, 21, 0.5));
+    }
+
+    .result-card small {
+      color: var(--cyan);
+      font-weight: bold;
+      letter-spacing: 3px;
+    }
+
+    .result-card h2 {
+      margin: 14px 0 28px;
+      font-size: clamp(2rem, 7vw, 3.6rem);
+    }
+
+    .final-scores {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .final-score {
+      padding: 20px;
+      border-radius: 15px;
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.75);
+    }
+
+    .final-score strong {
+      display: block;
+      margin-top: 7px;
+      color: var(--cyan);
+      font-size: 2.8rem;
+    }
+
+    .final-score:last-child strong {
+      color: #f9a8d4;
+    }
+
+    #statistics {
+      margin-bottom: 24px;
+      padding: 16px;
+      border-radius: 14px;
+      color: #cbd5e1;
+      line-height: 1.8;
+      background: rgba(2, 6, 23, 0.55);
+    }
+
+    .result-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* ================================
+       MOBİL
+    ================================= */
+
+    @media (max-width: 1050px) {
+      .game-layout {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .world-panel {
+        grid-column: 1 / -1;
+        grid-row: 1;
+      }
+
+      .player-panel {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .screen {
+        padding: 12px;
+      }
+
+      .mode-buttons,
+      .menu-features,
+      .final-scores {
+        grid-template-columns: 1fr;
+      }
+
+      .game-header {
+        grid-template-columns: 1fr 1fr;
+        gap: 11px;
+        padding: 13px;
+      }
+
+      .mission {
+        grid-column: 1 / -1;
+        grid-row: 1;
+      }
+
+      .game-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .world-panel {
+        grid-column: auto;
+        grid-row: auto;
+        order: 1;
+      }
+
+      .player-panel {
+        order: 2;
+      }
+
+      #playerTwo {
+        order: 3;
+      }
+
+      .player-panel.inactive {
+        display: none;
+      }
+
+      .planet-system {
+        transform: scale(0.9);
+        margin-top: -10px;
+      }
+
+      .flag-box {
+        margin-top: -80px;
+      }
+
+      .beam {
+        bottom: 145px;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .avatar {
+        display: none;
+      }
+
+      .summary strong {
+        font-size: 1.15rem;
+      }
+
+      .planet-system {
+        transform: scale(0.78);
+        margin-top: -35px;
+      }
+
+      .world-panel {
+        min-height: 520px;
+      }
+
+      .flag-box {
+        margin-top: -105px;
+      }
+
+      .beam {
+        bottom: 125px;
+        height: 215px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <!-- Ana Menü -->
-        <div id="main-menu" class="main-menu">
-            <h1>🏁 Bayrak Yarışı 🏁</h1>
-            <p class="subtitle">Dünyadan 195 ülke bayrağını tahmin et!</p>
-            
-            <div class="mode-selection">
-                <div class="mode-card" onclick="startGame('single')">
-                    <h2>⏱️</h2>
-                    <h3>Tekli Oyun</h3>
-                    <p>Süreye karşı yarış! 60 saniyede kaç bayrağı doğru tahmin edebilirsin?</p>
-                </div>
-                
-                <div class="mode-card" onclick="startGame('versus')">
-                    <h2>⚔️</h2>
-                    <h3>İkili Oyun</h3>
-                    <p>Arkadaşınla yarış! İlk 10 puanı alan kazanır!</p>
-                </div>
-            </div>
+  <div class="stars"></div>
+
+  <!-- ANA MENÜ -->
+  <section id="menuScreen" class="screen">
+    <div class="menu-card glass">
+      <span class="system-code">
+        GALAKTİK EĞİTİM SİSTEMİ // 01
+      </span>
+
+      <h1>Kozmik Bayrak Protokolü</h1>
+
+      <p>
+        Dünya üzerinde işaretlenen ülkenin bayrağını hologramdan
+        tanı. Tek oyunculu modda kendi rekorunu yap, iki oyunculu
+        modda ise rakibinden önce 10 puana ulaş.
+      </p>
+
+      <div class="mode-title">OYUN MODUNU SEÇ</div>
+
+      <div class="mode-buttons">
+        <button
+          id="singleModeButton"
+          class="mode-button active"
+          type="button"
+        >
+          <span>👨‍🚀</span>
+          TEK OYUNCULU
+        </button>
+
+        <button
+          id="twoModeButton"
+          class="mode-button"
+          type="button"
+        >
+          <span>👨‍🚀 🧑‍🚀</span>
+          İKİ OYUNCULU
+        </button>
+      </div>
+
+      <div class="menu-features">
+        <div class="feature">
+          🌍
+          <strong>Konum İşaretli Dünya</strong>
         </div>
 
-        <!-- Oyun Ekranı -->
-        <div id="game-screen" class="game-screen">
-            <div class="game-header">
-                <div class="game-info">
-                    <button class="btn-primary back-btn" onclick="backToMenu()">◀ Geri</button>
-                    <div class="info-box timer" id="timer">60</div>
-                    <div class="info-box score" id="score">Skor: 0</div>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progress">0%</div>
-                </div>
-            </div>
-
-            <div class="game-area">
-                <!-- Tekli Oyun İçeriği -->
-                <div id="single-game">
-                    <div class="question-number" id="question-num">Soru 1</div>
-                    <div class="flag-container">
-                        <img class="flag" id="flag-img" src="" alt="Bayrak">
-                    </div>
-                    <div class="options" id="options"></div>
-                </div>
-
-                <!-- İkili Oyun İçeriği -->
-                <div id="versus-game" style="display: none;">
-                    <div class="question-number" id="versus-question-num">Soru 1</div>
-                    <div class="flag-container">
-                        <img class="flag" id="versus-flag-img" src="" alt="Bayrak">
-                    </div>
-                    
-                    <div class="two-player-layout">
-                        <div class="player-section active" id="player1-section">
-                            <div class="player-header">
-                                <div class="player-name">👤 Oyuncu 1</div>
-                                <div class="player-score" id="player1-score">0</div>
-                            </div>
-                            <div class="options" id="player1-options"></div>
-                        </div>
-
-                        <div class="player-section" id="player2-section">
-                            <div class="player-header">
-                                <div class="player-name">👤 Oyuncu 2</div>
-                                <div class="player-score" id="player2-score">0</div>
-                            </div>
-                            <div class="options" id="player2-options"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="feature">
+          ✨
+          <strong>Bayrak Hologramı</strong>
         </div>
 
-        <!-- Sonuç Ekranı -->
-        <div id="result-screen" class="main-menu result-screen">
-            <div class="result-title" id="result-title">🏆 Tebrikler! 🏆</div>
-            <div class="final-score" id="final-score">0 Puan</div>
-            <div class="result-details" id="result-details"></div>
-            <button class="btn-primary" onclick="backToMenu()">🏠 Ana Menü</button>
-            <button class="btn-primary" onclick="restartGame()">🔄 Tekrar Oyna</button>
+        <div class="feature">
+          🏆
+          <strong>10 Puanda Zafer</strong>
         </div>
+      </div>
+
+      <button
+        id="startButton"
+        class="main-button"
+        type="button"
+      >
+        Görevi Başlat
+      </button>
     </div>
+  </section>
 
-    <div class="streak-indicator" id="streak">🔥 Seri: 0</div>
+  <!-- OYUN -->
+  <section id="gameScreen" class="screen hidden">
+    <header class="game-header glass">
+      <div class="summary">
+        <div class="avatar">👨‍🚀</div>
 
-    <script>
-        // 195 Ülke Bayrağı Verisi
-        const countries = [
-            // Avrupa
-            { name: 'Türkiye', code: 'tr', region: 'Avrupa' },
-            { name: 'Almanya', code: 'de', region: 'Avrupa' },
-            { name: 'Fransa', code: 'fr', region: 'Avrupa' },
-            { name: 'İngiltere', code: 'gb', region: 'Avrupa' },
-            { name: 'İtalya', code: 'it', region: 'Avrupa' },
-            { name: 'İspanya', code: 'es', region: 'Avrupa' },
-            { name: 'Hollanda', code: 'nl', region: 'Avrupa' },
-            { name: 'Belçika', code: 'be', region: 'Avrupa' },
-            { name: 'Portekiz', code: 'pt', region: 'Avrupa' },
-            { name: 'Yunanistan', code: 'gr', region: 'Avrupa' },
-            { name: 'İsviçre', code: 'ch', region: 'Avrupa' },
-            { name: 'Avusturya', code: 'at', region: 'Avrupa' },
-            { name: 'Polonya', code: 'pl', region: 'Avrupa' },
-            { name: 'Çek Cumhuriyeti', code: 'cz', region: 'Avrupa' },
-            { name: 'Romanya', code: 'ro', region: 'Avrupa' },
-            { name: 'Macaristan', code: 'hu', region: 'Avrupa' },
-            { name: 'Bulgaristan', code: 'bg', region: 'Avrupa' },
-            { name: 'İsveç', code: 'se', region: 'Avrupa' },
-            { name: 'Norveç', code: 'no', region: 'Avrupa' },
-            { name: 'Danimarka', code: 'dk', region: 'Avrupa' },
-            { name: 'Finlandiya', code: 'fi', region: 'Avrupa' },
-            { name: 'İrlanda', code: 'ie', region: 'Avrupa' },
-            { name: 'Ukrayna', code: 'ua', region: 'Avrupa' },
-            { name: 'Rusya', code: 'ru', region: 'Avrupa' },
-            { name: 'Sırbistan', code: 'rs', region: 'Avrupa' },
-            { name: 'Hırvatistan', code: 'hr', region: 'Avrupa' },
-            { name: 'Slovakya', code: 'sk', region: 'Avrupa' },
-            { name: 'Slovenya', code: 'si', region: 'Avrupa' },
-            { name: 'Arnavutluk', code: 'al', region: 'Avrupa' },
-            { name: 'Bosna Hersek', code: 'ba', region: 'Avrupa' },
-            { name: 'Karadağ', code: 'me', region: 'Avrupa' },
-            { name: 'Makedonya', code: 'mk', region: 'Avrupa' },
-            { name: 'İzlanda', code: 'is', region: 'Avrupa' },
-            { name: 'Estonya', code: 'ee', region: 'Avrupa' },
-            { name: 'Letonya', code: 'lv', region: 'Avrupa' },
-            { name: 'Litvanya', code: 'lt', region: 'Avrupa' },
-            { name: 'Lüksemburg', code: 'lu', region: 'Avrupa' },
-            { name: 'Malta', code: 'mt', region: 'Avrupa' },
-            { name: 'Kıbrıs', code: 'cy', region: 'Avrupa' },
-            { name: 'Moldova', code: 'md', region: 'Avrupa' },
-            { name: 'Belarus', code: 'by', region: 'Avrupa' },
-            
-            // Asya
-            { name: 'Çin', code: 'cn', region: 'Asya' },
-            { name: 'Japonya', code: 'jp', region: 'Asya' },
-            { name: 'Güney Kore', code: 'kr', region: 'Asya' },
-            { name: 'Hindistan', code: 'in', region: 'Asya' },
-            { name: 'Pakistan', code: 'pk', region: 'Asya' },
-            { name: 'Bangladeş', code: 'bd', region: 'Asya' },
-            { name: 'Endonezya', code: 'id', region: 'Asya' },
-            { name: 'Tayland', code: 'th', region: 'Asya' },
-            { name: 'Vietnam', code: 'vn', region: 'Asya' },
-            { name: 'Filipinler', code: 'ph', region: 'Asya' },
-            { name: 'Malezya', code: 'my', region: 'Asya' },
-            { name: 'Singapur', code: 'sg', region: 'Asya' },
-            { name: 'Myanmar', code: 'mm', region: 'Asya' },
-            { name: 'Kamboçya', code: 'kh', region: 'Asya' },
-            { name: 'Laos', code: 'la', region: 'Asya' },
-            { name: 'Nepal', code: 'np', region: 'Asya' },
-            { name: 'Sri Lanka', code: 'lk', region: 'Asya' },
-            { name: 'Afganistan', code: 'af', region: 'Asya' },
-            { name: 'İran', code: 'ir', region: 'Asya' },
-            { name: 'Irak', code: 'iq', region: 'Asya' },
-            { name: 'Suudi Arabistan', code: 'sa', region: 'Asya' },
-            { name: 'İsrail', code: 'il', region: 'Asya' },
-            { name: 'Ürdün', code: 'jo', region: 'Asya' },
-            { name: 'Lübnan', code: 'lb', region: 'Asya' },
-            { name: 'Suriye', code: 'sy', region: 'Asya' },
-            { name: 'Yemen', code: 'ye', region: 'Asya' },
-            { name: 'Umman', code: 'om', region: 'Asya' },
-            { name: 'Kuveyt', code: 'kw', region: 'Asya' },
-            { name: 'Katar', code: 'qa', region: 'Asya' },
-            { name: 'Bahreyn', code: 'bh', region: 'Asya' },
-            { name: 'BAE', code: 'ae', region: 'Asya' },
-            { name: 'Ermenistan', code: 'am', region: 'Asya' },
-            { name: 'Azerbaycan', code: 'az', region: 'Asya' },
-            { name: 'Gürcistan', code: 'ge', region: 'Asya' },
-            { name: 'Kazakistan', code: 'kz', region: 'Asya' },
-            { name: 'Özbekistan', code: 'uz', region: 'Asya' },
-            { name: 'Türkmenistan', code: 'tm', region: 'Asya' },
-            { name: 'Kırgızistan', code: 'kg', region: 'Asya' },
-            { name: 'Tacikistan', code: 'tj', region: 'Asya' },
-            { name: 'Moğolistan', code: 'mn', region: 'Asya' },
-            { name: 'Kuzey Kore', code: 'kp', region: 'Asya' },
-            { name: 'Brunei', code: 'bn', region: 'Asya' },
-            { name: 'Doğu Timor', code: 'tl', region: 'Asya' },
-            { name: 'Maldivler', code: 'mv', region: 'Asya' },
-            
-            // Afrika
-            { name: 'Mısır', code: 'eg', region: 'Afrika' },
-            { name: 'Güney Afrika', code: 'za', region: 'Afrika' },
-            { name: 'Nijerya', code: 'ng', region: 'Afrika' },
-            { name: 'Kenya', code: 'ke', region: 'Afrika' },
-            { name: 'Etiyopya', code: 'et', region: 'Afrika' },
-            { name: 'Tanzanya', code: 'tz', region: 'Afrika' },
-            { name: 'Uganda', code: 'ug', region: 'Afrika' },
-            { name: 'Cezayir', code: 'dz', region: 'Afrika' },
-            { name: 'Fas', code: 'ma', region: 'Afrika' },
-            { name: 'Tunus', code: 'tn', region: 'Afrika' },
-            { name: 'Libya', code: 'ly', region: 'Afrika' },
-            { name: 'Sudan', code: 'sd', region: 'Afrika' },
-            { name: 'Somali', code: 'so', region: 'Afrika' },
-            { name: 'Gana', code: 'gh', region: 'Afrika' },
-            { name: 'Fildişi Sahili', code: 'ci', region: 'Afrika' },
-            { name: 'Kamerun', code: 'cm', region: 'Afrika' },
-            { name: 'Angola', code: 'ao', region: 'Afrika' },
-            { name: 'Mozambik', code: 'mz', region: 'Afrika' },
-            { name: 'Zambiya', code: 'zm', region: 'Afrika' },
-            { name: 'Zimbabve', code: 'zw', region: 'Afrika' },
-            { name: 'Botsvana', code: 'bw', region: 'Afrika' },
-            { name: 'Namibya', code: 'na', region: 'Afrika' },
-            { name: 'Senegal', code: 'sn', region: 'Afrika' },
-            { name: 'Mali', code: 'ml', region: 'Afrika' },
-            { name: 'Burkina Faso', code: 'bf', region: 'Afrika' },
-            { name: 'Nijer', code: 'ne', region: 'Afrika' },
-            { name: 'Çad', code: 'td', region: 'Afrika' },
-            { name: 'Benin', code: 'bj', region: 'Afrika' },
-            { name: 'Togo', code: 'tg', region: 'Afrika' },
-            { name: 'Sierra Leone', code: 'sl', region: 'Afrika' },
-            { name: 'Liberya', code: 'lr', region: 'Afrika' },
-            { name: 'Gine', code: 'gn', region: 'Afrika' },
-            { name: 'Madagaskar', code: 'mg', region: 'Afrika' },
-            { name: 'Kongo', code: 'cg', region: 'Afrika' },
-            { name: 'Kongo Dem. Cum.', code: 'cd', region: 'Afrika' },
-            { name: 'Gabon', code: 'ga', region: 'Afrika' },
-            { name: 'Ruanda', code: 'rw', region: 'Afrika' },
-            { name: 'Burundi', code: 'bi', region: 'Afrika' },
-            { name: 'Malavi', code: 'mw', region: 'Afrika' },
-            { name: 'Eritre', code: 'er', region: 'Afrika' },
-            { name: 'Mauritius', code: 'mu', region: 'Afrika' },
-            { name: 'Seyşeller', code: 'sc', region: 'Afrika' },
-            { name: 'Gambiya', code: 'gm', region: 'Afrika' },
-            { name: 'Gine-Bissau', code: 'gw', region: 'Afrika' },
-            { name: 'Ekvator Ginesi', code: 'gq', region: 'Afrika' },
-            { name: 'Orta Afrika Cum.', code: 'cf', region: 'Afrika' },
-            { name: 'Güney Sudan', code: 'ss', region: 'Afrika' },
-            { name: 'Lesotho', code: 'ls', region: 'Afrika' },
-            { name: 'Svaziland', code: 'sz', region: 'Afrika' },
-            { name: 'Cibuti', code: 'dj', region: 'Afrika' },
-            { name: 'Komor', code: 'km', region: 'Afrika' },
-            
-            // Amerika
-            { name: 'ABD', code: 'us', region: 'Amerika' },
-            { name: 'Kanada', code: 'ca', region: 'Amerika' },
-            { name: 'Meksika', code: 'mx', region: 'Amerika' },
-            { name: 'Brezilya', code: 'br', region: 'Amerika' },
-            { name: 'Arjantin', code: 'ar', region: 'Amerika' },
-            { name: 'Şili', code: 'cl', region: 'Amerika' },
-            { name: 'Kolombiya', code: 'co', region: 'Amerika' },
-            { name: 'Peru', code: 'pe', region: 'Amerika' },
-            { name: 'Venezuela', code: 've', region: 'Amerika' },
-            { name: 'Ekvador', code: 'ec', region: 'Amerika' },
-            { name: 'Bolivya', code: 'bo', region: 'Amerika' },
-            { name: 'Paraguay', code: 'py', region: 'Amerika' },
-            { name: 'Uruguay', code: 'uy', region: 'Amerika' },
-            { name: 'Guyana', code: 'gy', region: 'Amerika' },
-            { name: 'Surinam', code: 'sr', region: 'Amerika' },
-            { name: 'Küba', code: 'cu', region: 'Amerika' },
-            { name: 'Jamaika', code: 'jm', region: 'Amerika' },
-            { name: 'Haiti', code: 'ht', region: 'Amerika' },
-            { name: 'Dominik Cumhuriyeti', code: 'do', region: 'Amerika' },
-            { name: 'Panama', code: 'pa', region: 'Amerika' },
-            { name: 'Kosta Rika', code: 'cr', region: 'Amerika' },
-            { name: 'Guatemala', code: 'gt', region: 'Amerika' },
-            { name: 'Honduras', code: 'hn', region: 'Amerika' },
-            { name: 'El Salvador', code: 'sv', region: 'Amerika' },
-            { name: 'Nikaragua', code: 'ni', region: 'Amerika' },
-            { name: 'Belize', code: 'bz', region: 'Amerika' },
-            { name: 'Trinidad ve Tobago', code: 'tt', region: 'Amerika' },
-            { name: 'Barbados', code: 'bb', region: 'Amerika' },
-            { name: 'Bahamas', code: 'bs', region: 'Amerika' },
-            { name: 'Grenada', code: 'gd', region: 'Amerika' },
-            { name: 'Saint Lucia', code: 'lc', region: 'Amerika' },
-            { name: 'Saint Vincent', code: 'vc', region: 'Amerika' },
-            { name: 'Dominika', code: 'dm', region: 'Amerika' },
-            { name: 'Antigua ve Barbuda', code: 'ag', region: 'Amerika' },
-            { name: 'Saint Kitts ve Nevis', code: 'kn', region: 'Amerika' },
-            
-            // Okyanusya
-            { name: 'Avustralya', code: 'au', region: 'Okyanusya' },
-            { name: 'Yeni Zelanda', code: 'nz', region: 'Okyanusya' },
-            { name: 'Papua Yeni Gine', code: 'pg', region: 'Okyanusya' },
-            { name: 'Fiji', code: 'fj', region: 'Okyanusya' },
-            { name: 'Samoa', code: 'ws', region: 'Okyanusya' },
-            { name: 'Solomon Adaları', code: 'sb', region: 'Okyanusya' },
-            { name: 'Vanuatu', code: 'vu', region: 'Okyanusya' },
-            { name: 'Tonga', code: 'to', region: 'Okyanusya' },
-            { name: 'Mikronezya', code: 'fm', region: 'Okyanusya' },
-            { name: 'Kiribati', code: 'ki', region: 'Okyanusya' },
-            { name: 'Marshall Adaları', code: 'mh', region: 'Okyanusya' },
-            { name: 'Palau', code: 'pw', region: 'Okyanusya' },
-            { name: 'Nauru', code: 'nr', region: 'Okyanusya' },
-            { name: 'Tuvalu', code: 'tv', region: 'Okyanusya' }
+        <div>
+          <label>OYUNCU 1</label>
+          <strong id="topScore1">0 PUAN</strong>
+        </div>
+      </div>
+
+      <div class="mission">
+        <small>DÜNYA YÖRÜNGE İSTASYONU</small>
+        <h2>BAYRAK TANIMLAMA PROTOKOLÜ</h2>
+      </div>
+
+      <div id="topPlayer2" class="summary right">
+        <div>
+          <label>OYUNCU 2</label>
+          <strong id="topScore2">0 PUAN</strong>
+        </div>
+
+        <div class="avatar">🧑‍🚀</div>
+      </div>
+    </header>
+
+    <div class="game-layout">
+      <!-- OYUNCU 1 -->
+      <section
+        id="playerOne"
+        class="player-panel glass active"
+      >
+        <div class="player-title">
+          <span id="status1" class="status">
+            AKTİF PİLOT
+          </span>
+
+          <h3>👨‍🚀 Oyuncu 1</h3>
+
+          <div id="score1" class="score">0</div>
+        </div>
+
+        <div id="options1" class="options"></div>
+      </section>
+
+      <!-- DÜNYA -->
+      <section class="world-panel glass">
+        <div class="world-info">
+          <span id="questionNumber">
+            GÖREV // 001
+          </span>
+
+          <span>HEDEF // 10 PUAN</span>
+        </div>
+
+        <div id="turnText">
+          SİSTEM HAZIRLANIYOR...
+        </div>
+
+        <div
+          id="planetSystem"
+          class="planet-system"
+        >
+          <div class="orbit one"></div>
+          <div class="orbit two"></div>
+          <div class="earth-glow"></div>
+
+          <div class="earth">
+            <div class="earth-map">
+              <div class="continent one"></div>
+              <div class="continent two"></div>
+              <div class="continent three"></div>
+              <div class="continent four"></div>
+              <div class="continent five"></div>
+            </div>
+
+            <div id="countryMarker" class="country-marker"></div>
+            <div class="earth-shade"></div>
+          </div>
+
+          <div class="scan-line"></div>
+        </div>
+
+        <div id="beam" class="beam"></div>
+
+        <div id="flagBox" class="flag-box">
+          <div id="flagEmoji" class="flag-emoji">
+            🇹🇷
+          </div>
+
+          <div class="flag-scan"></div>
+
+          <div class="flag-footer">
+            <span>HOLOGRAM AKTİF</span>
+            <span id="flagCode">KOD // --</span>
+          </div>
+        </div>
+
+        <div id="feedback"></div>
+      </section>
+
+      <!-- OYUNCU 2 -->
+      <section
+        id="playerTwo"
+        class="player-panel glass inactive"
+      >
+        <div class="player-title">
+          <span id="status2" class="status">
+            BEKLEMEDE
+          </span>
+
+          <h3>🧑‍🚀 Oyuncu 2</h3>
+
+          <div id="score2" class="score">0</div>
+        </div>
+
+        <div id="options2" class="options"></div>
+      </section>
+    </div>
+  </section>
+
+  <!-- SONUÇ -->
+  <section id="resultScreen" class="screen hidden">
+    <div class="result-card glass">
+      <div class="trophy">🏆</div>
+
+      <small>GÖREV TAMAMLANDI</small>
+
+      <h2 id="winnerText">
+        Oyuncu 1 Kazandı!
+      </h2>
+
+      <div class="final-scores">
+        <div class="final-score">
+          Oyuncu 1
+          <strong id="finalScore1">0</strong>
+        </div>
+
+        <div id="finalPlayer2Box" class="final-score">
+          Oyuncu 2
+          <strong id="finalScore2">0</strong>
+        </div>
+      </div>
+
+      <div id="statistics"></div>
+
+      <div class="result-buttons">
+        <button
+          id="restartButton"
+          class="main-button"
+          type="button"
+        >
+          Tekrar Oyna
+        </button>
+
+        <button
+          id="menuButton"
+          class="secondary-button"
+          type="button"
+        >
+          Ana Menü
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    "use strict";
+
+    /*
+      x ve y değerleri Dünya küresi üzerindeki yaklaşık
+      görsel konumu belirtir. Bu nedenle seçilen ülkenin
+      konumunda parlak sarı hologram işareti görünür.
+    */
+    const countries = [
+      {
+        name: "Türkiye",
+        code: "tr",
+        x: 60,
+        y: 48
+      },
+      {
+        name: "Almanya",
+        code: "de",
+        x: 51,
+        y: 35
+      },
+      {
+        name: "Fransa",
+        code: "fr",
+        x: 43,
+        y: 42
+      },
+      {
+        name: "İtalya",
+        code: "it",
+        x: 51,
+        y: 46
+      },
+      {
+        name: "İspanya",
+        code: "es",
+        x: 35,
+        y: 47
+      },
+      {
+        name: "Portekiz",
+        code: "pt",
+        x: 29,
+        y: 49
+      },
+      {
+        name: "Birleşik Krallık",
+        code: "gb",
+        x: 39,
+        y: 30
+      },
+      {
+        name: "Hollanda",
+        code: "nl",
+        x: 46,
+        y: 34
+      },
+      {
+        name: "Yunanistan",
+        code: "gr",
+        x: 56,
+        y: 51
+      },
+      {
+        name: "İsveç",
+        code: "se",
+        x: 54,
+        y: 23
+      },
+      {
+        name: "Norveç",
+        code: "no",
+        x: 45,
+        y: 20
+      },
+      {
+        name: "Polonya",
+        code: "pl",
+        x: 56,
+        y: 37
+      },
+      {
+        name: "Rusya",
+        code: "ru",
+        x: 71,
+        y: 29
+      },
+      {
+        name: "Ukrayna",
+        code: "ua",
+        x: 61,
+        y: 40
+      },
+      {
+        name: "Mısır",
+        code: "eg",
+        x: 57,
+        y: 61
+      },
+      {
+        name: "Fas",
+        code: "ma",
+        x: 36,
+        y: 62
+      },
+      {
+        name: "Güney Afrika",
+        code: "za",
+        x: 56,
+        y: 81
+      },
+      {
+        name: "Nijerya",
+        code: "ng",
+        x: 44,
+        y: 67
+      },
+      {
+        name: "Kenya",
+        code: "ke",
+        x: 59,
+        y: 71
+      },
+      {
+        name: "Amerika Birleşik Devletleri",
+        code: "us",
+        x: 17,
+        y: 42
+      },
+      {
+        name: "Kanada",
+        code: "ca",
+        x: 17,
+        y: 27
+      },
+      {
+        name: "Meksika",
+        code: "mx",
+        x: 18,
+        y: 57
+      },
+      {
+        name: "Brezilya",
+        code: "br",
+        x: 31,
+        y: 72
+      },
+      {
+        name: "Arjantin",
+        code: "ar",
+        x: 27,
+        y: 84
+      },
+      {
+        name: "Japonya",
+        code: "jp",
+        x: 84,
+        y: 45
+      },
+      {
+        name: "Çin",
+        code: "cn",
+        x: 76,
+        y: 49
+      },
+      {
+        name: "Güney Kore",
+        code: "kr",
+        x: 81,
+        y: 45
+      },
+      {
+        name: "Hindistan",
+        code: "in",
+        x: 68,
+        y: 58
+      },
+      {
+        name: "Avustralya",
+        code: "au",
+        x: 79,
+        y: 80
+      },
+      {
+        name: "Yeni Zelanda",
+        code: "nz",
+        x: 91,
+        y: 85
+      }
+    ];
+
+    const state = {
+      mode: "single",
+      score1: 0,
+      score2: 0,
+      currentPlayer: 1,
+      question: 0,
+      currentCountry: null,
+      options: [],
+      used: [],
+      acceptingAnswer: false,
+      gameActive: false,
+      correctAnswers: 0,
+      wrongAnswers: 0,
+      scanTimer: null,
+      nextTimer: null
+    };
+
+    const targetScore = 10;
+
+    const $ = function (id) {
+      return document.getElementById(id);
+    };
+
+    function shuffle(array) {
+      const copy = [...array];
+
+      for (let i = copy.length - 1; i > 0; i--) {
+        const randomIndex =
+          Math.floor(Math.random() * (i + 1));
+
+        const temporary = copy[i];
+        copy[i] = copy[randomIndex];
+        copy[randomIndex] = temporary;
+      }
+
+      return copy;
+    }
+
+    function flagEmoji(countryCode) {
+      return countryCode
+        .toUpperCase()
+        .split("")
+        .map(function (letter) {
+          return String.fromCodePoint(
+            127397 + letter.charCodeAt(0)
+          );
+        })
+        .join("");
+    }
+
+    function clearTimers() {
+      clearTimeout(state.scanTimer);
+      clearTimeout(state.nextTimer);
+    }
+
+    function chooseCountry() {
+      let availableCountries = countries.filter(
+        function (country) {
+          return !state.used.includes(country.code);
+        }
+      );
+
+      if (availableCountries.length === 0) {
+        state.used = [];
+        availableCountries = countries;
+      }
+
+      const country =
+        availableCountries[
+          Math.floor(
+            Math.random() * availableCountries.length
+          )
         ];
 
-        let gameMode = '';
-        let currentQuestion = 0;
-        let score = 0;
-        let timer = 60;
-        let timerInterval;
-        let correctAnswer = '';
-        let usedCountries = [];
-        let totalQuestions = 0;
-        let correctAnswers = 0;
-        let wrongAnswers = 0;
-        let streak = 0;
-        let maxStreak = 0;
-        
-        // İkili oyun için
-        let player1Score = 0;
-        let player2Score = 0;
-        let currentPlayer = 1;
+      state.used.push(country.code);
 
-        function startGame(mode) {
-            gameMode = mode;
-            document.getElementById('main-menu').style.display = 'none';
-            document.getElementById('game-screen').style.display = 'block';
-            
-            // Reset
-            currentQuestion = 0;
-            score = 0;
-            player1Score = 0;
-            player2Score = 0;
-            currentPlayer = 1;
-            usedCountries = [];
-            correctAnswers = 0;
-            wrongAnswers = 0;
-            totalQuestions = 0;
-            streak = 0;
-            maxStreak = 0;
-            
-            if (mode === 'single') {
-                timer = 60;
-                document.getElementById('single-game').style.display = 'block';
-                document.getElementById('versus-game').style.display = 'none';
-                document.getElementById('timer').style.display = 'block';
-                startTimer();
-                loadQuestion();
-            } else {
-                document.getElementById('single-game').style.display = 'none';
-                document.getElementById('versus-game').style.display = 'block';
-                document.getElementById('timer').style.display = 'none';
-                document.getElementById('score').textContent = 'İlk 10 puana ulaşan kazanır!';
-                loadVersusQuestion();
+      return country;
+    }
+
+    function chooseOptions(correctCountry) {
+      const wrongCountries = shuffle(
+        countries.filter(function (country) {
+          return country.code !== correctCountry.code;
+        })
+      ).slice(0, 3);
+
+      return shuffle([
+        correctCountry,
+        ...wrongCountries
+      ]);
+    }
+
+    /* ================================
+       MOD SEÇİMİ
+    ================================= */
+
+    function selectMode(mode) {
+      state.mode = mode;
+
+      $("singleModeButton").classList.toggle(
+        "active",
+        mode === "single"
+      );
+
+      $("twoModeButton").classList.toggle(
+        "active",
+        mode === "two"
+      );
+    }
+
+    $("singleModeButton").addEventListener(
+      "click",
+      function () {
+        selectMode("single");
+      }
+    );
+
+    $("twoModeButton").addEventListener(
+      "click",
+      function () {
+        selectMode("two");
+      }
+    );
+
+    /* ================================
+       OYUNU BAŞLAT
+    ================================= */
+
+    function startGame() {
+      clearTimers();
+
+      state.score1 = 0;
+      state.score2 = 0;
+      state.currentPlayer = 1;
+      state.question = 0;
+      state.currentCountry = null;
+      state.options = [];
+      state.used = [];
+      state.acceptingAnswer = false;
+      state.gameActive = true;
+      state.correctAnswers = 0;
+      state.wrongAnswers = 0;
+
+      $("menuScreen").classList.add("hidden");
+      $("resultScreen").classList.add("hidden");
+      $("gameScreen").classList.remove("hidden");
+
+      if (state.mode === "single") {
+        $("playerTwo").classList.add("hidden");
+        $("topPlayer2").classList.add("hidden");
+      } else {
+        $("playerTwo").classList.remove("hidden");
+        $("topPlayer2").classList.remove("hidden");
+      }
+
+      updateScores();
+      updatePlayerDisplay();
+      loadQuestion();
+    }
+
+    /* ================================
+       YENİ SORU
+    ================================= */
+
+    function loadQuestion() {
+      if (!state.gameActive) {
+        return;
+      }
+
+      clearTimers();
+
+      state.acceptingAnswer = false;
+      state.question++;
+      state.currentCountry = chooseCountry();
+
+      state.options = chooseOptions(
+        state.currentCountry
+      );
+
+      $("questionNumber").textContent =
+        "GÖREV // " +
+        String(state.question).padStart(3, "0");
+
+      $("feedback").textContent = "";
+      $("feedback").className = "";
+
+      $("turnText").textContent =
+        "ÜLKE KONUMU TARANIYOR...";
+
+      $("flagBox").classList.remove("visible");
+      $("beam").classList.remove("active");
+      $("planetSystem").classList.add("scanning");
+
+      $("countryMarker").style.display = "none";
+
+      $("options1").innerHTML = "";
+      $("options2").innerHTML = "";
+
+      state.scanTimer = setTimeout(
+        revealCountry,
+        1250
+      );
+    }
+
+    function revealCountry() {
+      if (!state.gameActive) {
+        return;
+      }
+
+      const country = state.currentCountry;
+      const marker = $("countryMarker");
+
+      $("planetSystem").classList.remove("scanning");
+
+      marker.style.left = country.x + "%";
+      marker.style.top = country.y + "%";
+      marker.style.display = "block";
+
+      $("flagEmoji").textContent =
+        flagEmoji(country.code);
+
+      $("flagCode").textContent =
+        "KONUM // " + country.code.toUpperCase();
+
+      $("beam").classList.add("active");
+      $("flagBox").classList.add("visible");
+
+      if (state.mode === "single") {
+        $("turnText").textContent =
+          "PİLOT // BAYRAĞI TANIMLA";
+      } else {
+        $("turnText").textContent =
+          "OYUNCU " +
+          state.currentPlayer +
+          " // BAYRAĞI TANIMLA";
+      }
+
+      renderOptions();
+
+      state.acceptingAnswer = true;
+      updateButtonStatus();
+    }
+
+    /* ================================
+       ŞIKLAR
+    ================================= */
+
+    function renderOptions() {
+      const letters = ["A", "B", "C", "D"];
+
+      $("options1").innerHTML = "";
+      $("options2").innerHTML = "";
+
+      state.options.forEach(function (
+        country,
+        index
+      ) {
+        const firstButton = createAnswerButton(
+          country,
+          letters[index],
+          1
+        );
+
+        $("options1").appendChild(firstButton);
+
+        if (state.mode === "two") {
+          const secondButton = createAnswerButton(
+            country,
+            letters[index],
+            2
+          );
+
+          $("options2").appendChild(secondButton);
+        }
+      });
+    }
+
+    function createAnswerButton(
+      country,
+      letter,
+      playerNumber
+    ) {
+      const button = document.createElement("button");
+
+      button.type = "button";
+      button.className = "answer";
+      button.dataset.countryCode = country.code;
+
+      button.innerHTML = `
+        <span class="letter">${letter}</span>
+        <span>${country.name}</span>
+      `;
+
+      /*
+        Önemli: Butona doğrudan click olayı ekleniyor.
+        Bu nedenle şıklar tıklanabilir durumdadır.
+      */
+      button.addEventListener(
+        "click",
+        function () {
+          checkAnswer(
+            playerNumber,
+            country,
+            button
+          );
+        }
+      );
+
+      return button;
+    }
+
+    function updateButtonStatus() {
+      const buttons1 =
+        $("options1").querySelectorAll(".answer");
+
+      const buttons2 =
+        $("options2").querySelectorAll(".answer");
+
+      buttons1.forEach(function (button) {
+        button.disabled =
+          !state.acceptingAnswer ||
+          (
+            state.mode === "two" &&
+            state.currentPlayer !== 1
+          );
+      });
+
+      buttons2.forEach(function (button) {
+        button.disabled =
+          !state.acceptingAnswer ||
+          state.currentPlayer !== 2;
+      });
+    }
+
+    /* ================================
+       CEVAP KONTROLÜ
+    ================================= */
+
+    function checkAnswer(
+      playerNumber,
+      selectedCountry,
+      selectedButton
+    ) {
+      if (
+        !state.gameActive ||
+        !state.acceptingAnswer
+      ) {
+        return;
+      }
+
+      if (
+        state.mode === "two" &&
+        playerNumber !== state.currentPlayer
+      ) {
+        return;
+      }
+
+      state.acceptingAnswer = false;
+
+      document
+        .querySelectorAll(".answer")
+        .forEach(function (button) {
+          button.disabled = true;
+        });
+
+      const correct =
+        selectedCountry.code ===
+        state.currentCountry.code;
+
+      if (correct) {
+        selectedButton.classList.add("correct");
+
+        if (playerNumber === 1) {
+          state.score1++;
+        } else {
+          state.score2++;
+        }
+
+        state.correctAnswers++;
+
+        $("feedback").textContent =
+          "✓ DOĞRU CEVAP // " +
+          state.currentCountry.name.toUpperCase();
+
+        $("feedback").className = "success";
+
+        $("turnText").textContent =
+          "KONUM BAŞARIYLA TANIMLANDI";
+
+        updateScores();
+
+        if (
+          state.score1 >= targetScore ||
+          state.score2 >= targetScore
+        ) {
+          state.nextTimer = setTimeout(
+            endGame,
+            1400
+          );
+
+          return;
+        }
+      } else {
+        selectedButton.classList.add("wrong");
+
+        state.wrongAnswers++;
+
+        document
+          .querySelectorAll(".answer")
+          .forEach(function (button) {
+            if (
+              button.dataset.countryCode ===
+              state.currentCountry.code
+            ) {
+              button.classList.add("correct");
             }
+          });
+
+        $("feedback").textContent =
+          "✕ HATALI CEVAP // DOĞRU: " +
+          state.currentCountry.name.toUpperCase();
+
+        $("feedback").className = "error";
+
+        $("turnText").textContent =
+          "SİSTEM UYARISI // YANLIŞ TANIMLAMA";
+      }
+
+      state.nextTimer = setTimeout(function () {
+        if (state.mode === "two") {
+          state.currentPlayer =
+            state.currentPlayer === 1 ? 2 : 1;
         }
 
-        function startTimer() {
-            timerInterval = setInterval(() => {
-                timer--;
-                document.getElementById('timer').textContent = timer + 's';
-                
-                if (timer <= 10) {
-                    document.getElementById('timer').style.background = 'linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%)';
-                }
-                
-                if (timer <= 0) {
-                    clearInterval(timerInterval);
-                    endGame();
-                }
-            }, 1000);
+        updatePlayerDisplay();
+        loadQuestion();
+      }, 1800);
+    }
+
+    /* ================================
+       OYUNCU VE SKOR GÖSTERİMİ
+    ================================= */
+
+    function updateScores() {
+      $("score1").textContent = state.score1;
+      $("score2").textContent = state.score2;
+
+      $("topScore1").textContent =
+        state.score1 + " PUAN";
+
+      $("topScore2").textContent =
+        state.score2 + " PUAN";
+    }
+
+    function updatePlayerDisplay() {
+      if (state.mode === "single") {
+        $("playerOne").classList.add("active");
+        $("playerOne").classList.remove("inactive");
+
+        $("status1").textContent =
+          "AKTİF PİLOT";
+
+        return;
+      }
+
+      const playerOneActive =
+        state.currentPlayer === 1;
+
+      $("playerOne").classList.toggle(
+        "active",
+        playerOneActive
+      );
+
+      $("playerOne").classList.toggle(
+        "inactive",
+        !playerOneActive
+      );
+
+      $("playerTwo").classList.toggle(
+        "active",
+        !playerOneActive
+      );
+
+      $("playerTwo").classList.toggle(
+        "inactive",
+        playerOneActive
+      );
+
+      $("status1").textContent =
+        playerOneActive
+          ? "AKTİF PİLOT"
+          : "BEKLEMEDE";
+
+      $("status2").textContent =
+        !playerOneActive
+          ? "AKTİF PİLOT"
+          : "BEKLEMEDE";
+    }
+
+    /* ================================
+       SONUÇ EKRANI
+    ================================= */
+
+    function endGame() {
+      state.gameActive = false;
+      state.acceptingAnswer = false;
+
+      clearTimers();
+
+      let winnerText = "";
+
+      if (state.mode === "single") {
+        winnerText = "Görev Tamamlandı!";
+        $("finalPlayer2Box").classList.add("hidden");
+      } else {
+        const winner =
+          state.score1 >= targetScore
+            ? "Oyuncu 1"
+            : "Oyuncu 2";
+
+        winnerText = winner + " Kazandı!";
+        $("finalPlayer2Box").classList.remove("hidden");
+      }
+
+      $("winnerText").textContent = winnerText;
+      $("finalScore1").textContent = state.score1;
+      $("finalScore2").textContent = state.score2;
+
+      const total =
+        state.correctAnswers +
+        state.wrongAnswers;
+
+      const accuracy =
+        total > 0
+          ? Math.round(
+              (state.correctAnswers / total) * 100
+            )
+          : 0;
+
+      $("statistics").innerHTML = `
+        Toplam görev: <b>${state.question}</b><br>
+        Doğru cevap: <b>${state.correctAnswers}</b><br>
+        Yanlış cevap: <b>${state.wrongAnswers}</b><br>
+        Başarı oranı: <b>${accuracy}%</b>
+      `;
+
+      $("gameScreen").classList.add("hidden");
+      $("resultScreen").classList.remove("hidden");
+    }
+
+    function goToMenu() {
+      clearTimers();
+
+      state.gameActive = false;
+      state.acceptingAnswer = false;
+
+      $("gameScreen").classList.add("hidden");
+      $("resultScreen").classList.add("hidden");
+      $("menuScreen").classList.remove("hidden");
+    }
+
+    /* ================================
+       BUTON OLAYLARI
+    ================================= */
+
+    $("startButton").addEventListener(
+      "click",
+      startGame
+    );
+
+    $("restartButton").addEventListener(
+      "click",
+      startGame
+    );
+
+    $("menuButton").addEventListener(
+      "click",
+      goToMenu
+    );
+
+    /*
+      Klavyeden A, B, C, D tuşları da çalışır.
+    */
+    document.addEventListener(
+      "keydown",
+      function (event) {
+        if (
+          !state.gameActive ||
+          !state.acceptingAnswer
+        ) {
+          return;
         }
 
-        function getRandomCountries(count) {
-            const available = countries.filter(c => !usedCountries.includes(c.code));
-            
-            if (available.length < count) {
-                usedCountries = [];
-                return getRandomCountries(count);
-            }
-            
-            const shuffled = available.sort(() => Math.random() - 0.5);
-            return shuffled.slice(0, count);
+        const keys = ["a", "b", "c", "d"];
+
+        const index = keys.indexOf(
+          event.key.toLowerCase()
+        );
+
+        if (index === -1) {
+          return;
         }
 
-        function loadQuestion() {
-            currentQuestion++;
-            totalQuestions++;
-            
-            const selected = getRandomCountries(4);
-            correctAnswer = selected[0];
-            usedCountries.push(correctAnswer.code);
-            
-            const shuffled = selected.sort(() => Math.random() - 0.5);
-            
-            document.getElementById('question-num').textContent = `Soru ${currentQuestion}`;
-            document.getElementById('flag-img').src = `https://flagcdn.com/w640/${correctAnswer.code}.png`;
-            
-            const optionsContainer = document.getElementById('options');
-            optionsContainer.innerHTML = '';
-            
-            shuffled.forEach(country => {
-                const btn = document.createElement('button');
-                btn.className = 'option-btn';
-                btn.textContent = country.name;
-                btn.onclick = () => checkAnswer(country, btn);
-                optionsContainer.appendChild(btn);
-            });
-            
-            updateProgress();
-        }
+        const player =
+          state.mode === "single"
+            ? 1
+            : state.currentPlayer;
 
-        function loadVersusQuestion() {
-            currentQuestion++;
-            totalQuestions++;
-            
-            const selected = getRandomCountries(4);
-            correctAnswer = selected[0];
-            usedCountries.push(correctAnswer.code);
-            
-            const shuffled = selected.sort(() => Math.random() - 0.5);
-            
-            document.getElementById('versus-question-num').textContent = `Soru ${currentQuestion}`;
-            document.getElementById('versus-flag-img').src = `https://flagcdn.com/w640/${correctAnswer.code}.png`;
-            
-            // Her iki oyuncu için de aynı seçenekleri göster
-            ['player1', 'player2'].forEach(player => {
-                const optionsContainer = document.getElementById(`${player}-options`);
-                optionsContainer.innerHTML = '';
-                
-                shuffled.forEach(country => {
-                    const btn = document.createElement('button');
-                    btn.className = 'option-btn';
-                    btn.textContent = country.name;
-                    btn.onclick = () => checkVersusAnswer(player, country, btn);
-                    optionsContainer.appendChild(btn);
-                });
-            });
-            
-            updateProgress();
-        }
+        const buttons = document.querySelectorAll(
+          "#options" + player + " .answer"
+        );
 
-        function checkAnswer(country, btn) {
-            const allBtns = document.querySelectorAll('#options .option-btn');
-            allBtns.forEach(b => b.disabled = true);
-            
-            if (country.code === correctAnswer.code) {
-                btn.classList.add('correct');
-                score += 10;
-                correctAnswers++;
-                streak++;
-                maxStreak = Math.max(maxStreak, streak);
-                
-                if (streak >= 3) {
-                    document.getElementById('streak').textContent = `🔥 Seri: ${streak}`;
-                    document.getElementById('streak').style.display = 'block';
-                    setTimeout(() => {
-                        document.getElementById('streak').style.display = 'none';
-                    }, 2000);
-                }
-            } else {
-                btn.classList.add('wrong');
-                wrongAnswers++;
-                streak = 0;
-                
-                // Doğru cevabı göster
-                allBtns.forEach(b => {
-                    if (b.textContent === correctAnswer.name) {
-                        b.classList.add('correct');
-                    }
-                });
-            }
-            
-            document.getElementById('score').textContent = `Skor: ${score}`;
-            
-            setTimeout(() => {
-                if (timer > 0) {
-                    loadQuestion();
-                }
-            }, 1500);
+        if (buttons[index]) {
+          buttons[index].click();
         }
-
-        function checkVersusAnswer(player, country, btn) {
-            const playerNum = player === 'player1' ? 1 : 2;
-            
-            // Sadece aktif oyuncu cevap verebilir
-            if (playerNum !== currentPlayer) return;
-            
-            const allBtns = document.querySelectorAll(`#${player}-options .option-btn`);
-            allBtns.forEach(b => b.disabled = true);
-            
-            if (country.code === correctAnswer.code) {
-                btn.classList.add('correct');
-                
-                if (player === 'player1') {
-                    player1Score++;
-                    document.getElementById('player1-score').textContent = player1Score;
-                } else {
-                    player2Score++;
-                    document.getElementById('player2-score').textContent = player2Score;
-                }
-                
-                correctAnswers++;
-                score += 10;
-            } else {
-                btn.classList.add('wrong');
-                wrongAnswers++;
-                
-                // Doğru cevabı göster
-                allBtns.forEach(b => {
-                    if (b.textContent === correctAnswer.name) {
-                        b.classList.add('correct');
-                    }
-                });
-            }
-            
-            // Oyuncu değiştir
-            setTimeout(() => {
-                if (player1Score >= 10 || player2Score >= 10) {
-                    endVersusGame();
-                } else {
-                    currentPlayer = currentPlayer === 1 ? 2 : 1;
-                    updateActivePlayer();
-                    loadVersusQuestion();
-                }
-            }, 1500);
-        }
-
-        function updateActivePlayer() {
-            if (currentPlayer === 1) {
-                document.getElementById('player1-section').classList.add('active');
-                document.getElementById('player2-section').classList.remove('active');
-            } else {
-                document.getElementById('player1-section').classList.remove('active');
-                document.getElementById('player2-section').classList.add('active');
-            }
-        }
-
-        function updateProgress() {
-            const progress = (correctAnswers / totalQuestions) * 100;
-            const progressBar = document.getElementById('progress');
-            progressBar.style.width = progress + '%';
-            progressBar.textContent = Math.round(progress) + '%';
-        }
-
-        function endGame() {
-            clearInterval(timerInterval);
-            document.getElementById('game-screen').style.display = 'none';
-            document.getElementById('result-screen').style.display = 'block';
-            
-            const accuracy = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
-            
-            document.getElementById('result-title').textContent = score >= 100 ? '🏆 Muhteşem! 🏆' : score >= 50 ? '👏 İyi İş! 👏' : '💪 Tekrar Dene! 💪';
-            document.getElementById('final-score').textContent = score + ' Puan';
-            
-            document.getElementById('result-details').innerHTML = `
-                <div class="result-detail">
-                    <span>📊 Toplam Soru:</span>
-                    <span>${totalQuestions}</span>
-                </div>
-                <div class="result-detail">
-                    <span>✅ Doğru Cevap:</span>
-                    <span>${correctAnswers}</span>
-                </div>
-                <div class="result-detail">
-                    <span>❌ Yanlış Cevap:</span>
-                    <span>${wrongAnswers}</span>
-                </div>
-                <div class="result-detail">
-                    <span>🎯 Doğruluk Oranı:</span>
-                    <span>${accuracy}%</span>
-                </div>
-                <div class="result-detail">
-                    <span>🔥 En Uzun Seri:</span>
-                    <span>${maxStreak}</span>
-                </div>
-                <div class="result-detail">
-                    <span>⏱️ Süre:</span>
-                    <span>${60 - timer} saniye</span>
-                </div>
-            `;
-        }
-
-        function endVersusGame() {
-            document.getElementById('game-screen').style.display = 'none';
-            document.getElementById('result-screen').style.display = 'block';
-            
-            const winner = player1Score >= 10 ? 1 : 2;
-            const accuracy = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
-            
-            document.getElementById('result-title').textContent = `🏆 Oyuncu ${winner} Kazandı! 🏆`;
-            document.getElementById('final-score').textContent = `${player1Score} - ${player2Score}`;
-            
-            document.getElementById('result-details').innerHTML = `
-                <div class="result-detail">
-                    <span>👤 Oyuncu 1 Skoru:</span>
-                    <span>${player1Score}</span>
-                </div>
-                <div class="result-detail">
-                    <span>👤 Oyuncu 2 Skoru:</span>
-                    <span>${player2Score}</span>
-                </div>
-                <div class="result-detail">
-                    <span>📊 Toplam Soru:</span>
-                    <span>${totalQuestions}</span>
-                </div>
-                <div class="result-detail">
-                    <span>✅ Doğru Cevap:</span>
-                    <span>${correctAnswers}</span>
-                </div>
-                <div class="result-detail">
-                    <span>❌ Yanlış Cevap:</span>
-                    <span>${wrongAnswers}</span>
-                </div>
-                <div class="result-detail">
-                    <span>🎯 Doğruluk Oranı:</span>
-                    <span>${accuracy}%</span>
-                </div>
-            `;
-        }
-
-        function backToMenu() {
-            clearInterval(timerInterval);
-            document.getElementById('main-menu').style.display = 'block';
-            document.getElementById('game-screen').style.display = 'none';
-            document.getElementById('result-screen').style.display = 'none';
-        }
-
-        function restartGame() {
-            document.getElementById('result-screen').style.display = 'none';
-            startGame(gameMode);
-        }
-    </script>
+      }
+    );
+  </script>
 </body>
 </html>
