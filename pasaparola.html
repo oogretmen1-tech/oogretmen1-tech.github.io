@@ -1,934 +1,1683 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pasaparola — Bilgi Yarışması</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neo Pasaparola</title>
 
-  :root{
-    --bg-1: #ffb24a;
-    --bg-2: #f0790f;
-    --bg-3: #b94e07;
-    --blue: #1f72b3;
-    --blue-light: #3a93d6;
-    --blue-dark: #103f63;
-    --panel: var(--blue-dark);
-    --panel-light: var(--blue);
-    --gold: #ffcb3d;
-    --gold-soft: #ffe49a;
-    --ink: #ffffff;
-    --navy-text: #123a5e;
-    --muted: #cfe7f7;
-    --ok: #2ecc71;
-    --bad: #e74c3c;
-    --pas: #ffb400;
-  }
+  <style>
+    @import url(
+      "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Orbitron:wght@600;700;800;900&display=swap"
+    );
 
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    background: radial-gradient(ellipse at 50% 0%, var(--bg-1) 0%, var(--bg-2) 55%, var(--bg-3) 100%);
-    color: var(--ink);
-    font-family: 'Inter', sans-serif;
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding: 28px 16px 60px;
-  }
-
-  .titlebar{ text-align:center; margin-bottom: 18px; }
-  .titlebar h1{
-    font-family:'Playfair Display', serif;
-    font-weight:900;
-    font-size: clamp(2.2rem, 5vw, 3.4rem);
-    letter-spacing: 0.04em;
-    margin:0;
-    color: #ffffff;
-    text-shadow: 0 3px 0 var(--blue-dark), 0 8px 18px rgba(0,0,0,0.35);
-  }
-  .titlebar p{ color: #ffe9cc; font-size: 0.95rem; margin: 6px 0 0; letter-spacing: 0.02em; font-weight:600; text-shadow: 0 1px 4px rgba(0,0,0,0.25); }
-
-  .scoreboard{ display:flex; gap: 14px; align-items:center; justify-content:center; flex-wrap:wrap; margin-bottom: 22px; }
-  .pill{
-    background: linear-gradient(180deg, var(--blue-light), var(--blue-dark));
-    border: 2px solid #0b3253;
-    box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 5px 12px rgba(0,0,0,0.3);
-    border-radius: 14px;
-    padding: 9px 18px;
-    font-family:'Space Mono', monospace;
-    font-size: 1rem;
-    display:flex; flex-direction:column; align-items:center; gap:2px;
-  }
-  .pill .label{ color: var(--gold-soft); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; font-weight:700;}
-  .pill .value{ color: #ffffff; font-weight:700; font-size:1.4rem;}
-  .pill.clock .value{ color:#fff; }
-  .pill.clock.low .value{ color: #ffd0c8; }
-
-  .controls{ display:flex; gap:10px; margin-bottom: 26px; flex-wrap:wrap; justify-content:center; }
-  button.cta{
-    font-family:'Inter', sans-serif;
-    font-weight:600;
-    font-size:0.95rem;
-    padding: 10px 22px;
-    border-radius: 10px;
-    border: none;
-    cursor:pointer;
-    transition: transform 0.12s ease, box-shadow 0.12s ease;
-  }
-  button.cta:focus-visible{ outline: 3px solid var(--gold-soft); outline-offset:2px;}
-  button.cta:active{ transform: translateY(1px); }
-  .cta.primary{ background: linear-gradient(180deg, #ffe49a, var(--gold)); color: var(--navy-text); box-shadow: inset 0 -3px 0 rgba(0,0,0,0.15), 0 5px 14px rgba(0,0,0,0.3); font-weight:700; }
-  .cta.ghost{ background: linear-gradient(180deg, var(--blue-light), var(--blue-dark)); color:#fff; border: 2px solid #0b3253; box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2); }
-  .cta.skip{ background: linear-gradient(180deg, #ffc34d, var(--pas)); color: var(--navy-text); border: 2px solid #b97800; font-weight:700; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.15);}
-  .cta:disabled{ opacity:0.4; cursor:not-allowed; }
-
-  .wheel{
-    position: relative;
-    width: min(92vw, 520px);
-    height: min(92vw, 520px);
-    margin: 0 auto 30px;
-  }
-  .wheel-progress{
-    position:absolute;
-    inset: 7%;
-    border-radius: 50%;
-    background: conic-gradient(var(--blue-light) calc(var(--wpct,100)*1%), rgba(255,255,255,0.55) 0);
-    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 10px), #000 calc(100% - 10px));
-            mask: radial-gradient(farthest-side, transparent calc(100% - 10px), #000 calc(100% - 10px));
-    transition: background 0.9s linear;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
-  }
-  .hub{
-    position:absolute;
-    top:50%; left:50%;
-    transform: translate(-50%,-50%);
-    width: 33%; height: 33%;
-    border-radius:50%;
-    background: #ffffff;
-    display:flex; align-items:center; justify-content:center;
-    z-index:2;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.25), inset 0 0 0 6px #eaf3fb;
-    animation: hubPulse 2.4s ease-in-out infinite;
-  }
-  @keyframes hubPulse{
-    0%, 100% { box-shadow: 0 6px 18px rgba(0,0,0,0.25), inset 0 0 0 6px #eaf3fb, 0 0 0 0 rgba(255,255,255,0.4); }
-    50% { box-shadow: 0 6px 18px rgba(0,0,0,0.25), inset 0 0 0 6px #eaf3fb, 0 0 0 10px rgba(255,255,255,0); }
-  }
-  .hub-ring{ display:none; }
-  .hub-letter{
-    position:relative; z-index:2;
-    font-family:'Playfair Display', serif;
-    font-weight:900;
-    font-size: clamp(2.1rem, 7vw, 3.1rem);
-    color: var(--navy-text);
-  }
-  .tile{
-    position:absolute;
-    width: clamp(28px, 6.6vw, 42px);
-    height: clamp(28px, 6.6vw, 42px);
-    border-radius:50%;
-    background: var(--blue);
-    border: 2px solid #ffffff;
-    display:flex; align-items:center; justify-content:center;
-    font-family:'Space Mono', monospace;
-    font-weight:700;
-    font-size: clamp(0.75rem, 2vw, 0.95rem);
-    color: #ffffff;
-    transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
-  }
-  .tile.active{ background: #ffffff; color: var(--navy-text); box-shadow: 0 0 0 3px var(--bad), 0 6px 14px rgba(0,0,0,0.35); }
-  .tile.correct{ background: var(--ok); color:#fff; border-color: #fff; }
-  .tile.wrong{ background: var(--bad); color:#fff; border-color: #fff; }
-  .tile.skipped::after{
-    content:''; position:absolute; bottom:1px; right:1px;
-    width:6px; height:6px; border-radius:50%; background: var(--pas);
-  }
-
-  .qpanel{
-    width:100%;
-    max-width: 640px;
-    background: linear-gradient(160deg, var(--panel-light), var(--panel));
-    border: 3px solid #ffffff;
-    box-shadow: 0 10px 28px rgba(0,0,0,0.25);
-    border-radius: 18px;
-    padding: 22px 24px;
-    margin-bottom: 24px;
-    min-height: 190px;
-    display:flex;
-    flex-direction:column;
-    gap:16px;
-  }
-  .qpanel .soru-label{
-    text-transform:uppercase;
-    letter-spacing:0.14em;
-    font-size:0.78rem;
-    font-weight:700;
-    color: var(--gold-soft);
-  }
-  .qpanel .qrow{ display:flex; gap:14px; align-items:flex-start; }
-  .qpanel .letterbadge{
-    font-family:'Playfair Display', serif;
-    font-weight:900;
-    font-size:1.6rem;
-    color: var(--navy-text);
-    width:42px; height:42px;
-    border-radius:50%;
-    background: #ffffff;
-    display:flex; align-items:center; justify-content:center;
-    flex-shrink:0;
-    position:relative;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
-  }
-  .answer-boxes{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .abox{
-    width: clamp(34px, 9vw, 46px);
-    height: clamp(34px, 9vw, 46px);
-    border-radius:8px;
-    background: var(--blue);
-    border: 2px solid #ffffff;
-    display:flex; align-items:center; justify-content:center;
-    font-family:'Space Mono', monospace;
-    font-weight:700;
-    font-size: clamp(1rem, 4vw, 1.3rem);
-    color:#fff;
-    text-transform:uppercase;
-  }
-  .abox.filled{ background:#ffffff; color: var(--navy-text); }
-  .abox.next{ box-shadow: 0 0 0 3px var(--gold); }
-  .agap{ width: 14px; }
-  .question-box{
-    background: #ffffff;
-    border: 3px solid var(--blue);
-    border-radius: 14px;
-    padding: 18px 20px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.18);
-  }
-  .question-box .qtext{
-    font-size: clamp(1.2rem, 4vw, 1.5rem);
-    font-weight:700;
-    line-height:1.5;
-    color: var(--navy-text);
-    text-align:center;
-    margin:0;
-  }
-  .qpanel .answer-row{ display:flex; gap:10px; }
-  @media (max-width: 480px){
-    .qpanel{ padding: 16px 16px; }
-    .qpanel .answer-row{ flex-direction: column; }
-    .qpanel .cta.skip{ width: 100%; padding: 12px 22px; }
-    .wheel{ width: min(72vw, 280px); height: min(72vw, 280px); margin: 0 auto 18px; }
-  }
-  .qpanel input[type=text]{
-    flex:1;
-    background: #ffffff;
-    border: 2px solid var(--blue-dark);
-    border-radius:10px;
-    padding: 12px 14px;
-    color: var(--navy-text);
-    font-family:'Space Mono', monospace;
-    font-size:1.05rem;
-    font-weight:600;
-  }
-  .qpanel input[type=text]::placeholder{ color: #6b8aa3; }
-  .qpanel input[type=text]:focus{ outline:3px solid var(--gold); }
-  .timebar-wrap{
-    height:8px; width:100%;
-    background: rgba(255,255,255,0.35);
-    border-radius:4px;
-    overflow:hidden;
-  }
-  .timebar{
-    height:100%;
-    background: var(--ok);
-    width:100%;
-    transition: width 1s linear;
-  }
-  .timebar.low{ background: var(--bad); }
-  .feedback{ font-weight:700; font-size:1.05rem; min-height:1.4em; }
-  .feedback.ok{ color: var(--gold-soft); }
-  .feedback.bad{ color: #ffd9d2; }
-  .feedback.skip{ color: var(--gold-soft); }
-  .placeholder-text{ color: #ffe9cc; text-align:center; padding: 30px 10px; font-size:1rem; font-weight:600; }
-
-  .endscreen{
-    width:100%; max-width: 640px;
-    background: linear-gradient(160deg, var(--blue-light), var(--blue-dark));
-    border: 3px solid #ffffff;
-    border-radius: 18px;
-    padding: 28px 30px;
-    text-align:center;
-    box-shadow: 0 10px 28px rgba(0,0,0,0.25);
-  }
-  .endscreen h2{ font-family:'Playfair Display', serif; color: #ffffff; margin-top:0; text-shadow: 0 2px 0 var(--blue-dark); }
-  .endscreen p{ color: var(--gold-soft); font-weight:600; }
-  .recap{ text-align:left; margin-top:18px; max-height: 260px; overflow-y:auto; font-family:'Space Mono', monospace; font-size:0.88rem; background:rgba(255,255,255,0.92); border-radius:10px; padding:8px 14px; }
-  .recap-row{ display:flex; gap:10px; padding:6px 0; border-bottom:1px solid rgba(0,0,0,0.08); }
-  .recap-row .l{ width:22px; color: var(--blue-dark); font-weight:700; }
-  .recap-row.ok .l{ color: #1c9c54; }
-  .recap-row.bad .l{ color: #c0392b; }
-  .recap-row .ans{ color: var(--navy-text); }
-
-  footer{ margin-top: 30px; color: #ffe9cc; font-size: 0.8rem; text-align:center; font-weight:600; }
-
-  @media (prefers-reduced-motion: reduce){ .tile, button.cta, .timebar{ transition:none; } .hub{ animation:none; } }
-</style>
-</head>
-<body>
-
-  <div class="titlebar">
-    <h1>PASAPAROLA</h1>
-    <p>A'dan Z'ye otomatik bilgi yarışması · Türkçe + Genel Kültür</p>
-  </div>
-
-  <div class="scoreboard">
-    <div class="pill"><span class="label">Doğru</span><span class="value" id="okCount">0</span></div>
-    <div class="pill"><span class="label">Yanlış</span><span class="value" id="badCount">0</span></div>
-    <div class="pill"><span class="label">Pas</span><span class="value" id="pasCount">0</span></div>
-    <div class="pill clock" id="clockPill"><span class="label">Toplam Süre</span><span class="value" id="clock">03:00</span></div>
-  </div>
-
-  <div class="controls">
-    <button class="cta primary" id="startBtn">Oyunu Başlat</button>
-    <button class="cta ghost" id="restartBtn" disabled>Yeniden Başlat</button>
-    <button class="cta ghost" id="soundBtn">🔊 Ses</button>
-  </div>
-
-  <div class="qpanel" id="qpanel">
-    <div class="placeholder-text" id="placeholderText">Başlamak için "Oyunu Başlat"a basın. Harfler otomatik olarak A'dan Z'ye sırayla gelecek; cevap vermezseniz harf kendini pas geçip sıranın sonuna dönecek.</div>
-  </div>
-
-  <div class="wheel" id="wheel">
-    <div class="wheel-progress" id="wheelProgress"></div>
-    <div class="hub">
-      <div class="hub-ring" id="hubRing"></div>
-      <div class="hub-letter" id="hubLetter">A</div>
-    </div>
-  </div>
-
-  <div class="endscreen" id="endscreen" style="display:none;">
-    <h2 id="endTitle">Yarışma Bitti!</h2>
-    <p id="endSummary"></p>
-    <div class="recap" id="recap"></div>
-    <div class="controls" style="margin-top:18px;">
-      <button class="cta primary" id="endRestartBtn">Tekrar Oyna</button>
-    </div>
-  </div>
-
-  <footer>Sınıfta, öğretmenler odasında ya da evde — herkes oynayabilir.</footer>
-
-<script>
-// ---- Soru bankası: her harf için 2 alternatif, oyun başında rastgele biri seçilir ----
-const BANK = {
-  "A": [
-    ["Yunan mitolojisinde aşk ve güzellik tanrıçası kimdir?","afrodit"],
-    ["Osmanlı ordusunda hafif süvari sınıfına ne ad verilirdi?","akıncı"],
-    ["Güney Amerika'da, dünyanın en büyük yağmur ormanına adını veren nehir?","amazon"],
-    ["Kalpten çıkan, vücuda kan taşıyan en büyük ana atardamar?","aort"],
-    ["Eski Yunan'da felsefe ve bilimin merkezi sayılan, Sokrates'in yaşadığı şehir devleti?","atina"]
-  ],
-  "B": [
-    ["Evrenin bir patlamayla oluştuğunu öne süren teoriye ne ad verilir?","büyük patlama"],
-    ["Osmanlı'da sadrazama verilen diğer bir unvan?","başvezir"],
-    ["Roma İmparatorluğu'nun doğuda bölünmesiyle kurulan, başkenti İstanbul olan devlet?","bizans imparatorluğu"],
-    ["Sağırlığına rağmen besteler yapmaya devam eden ünlü Alman besteci?","beethoven"],
-    ["Vücudumuzda oksijeni hücrelere taşıyan kırmızı kan hücrelerine ne ad verilir?","alyuvar"]
-  ],
-  "C": [
-    ["Atatürk'ün 1923'te ilan ettiği yönetim biçimi?","cumhuriyet"],
-    ["Dostoyevski'nin ünlü romanı 'Suç ve ...' adlı eserinin ikinci kelimesi?","ceza"],
-    ["Moğol İmparatorluğu'nu kuran hükümdar?","cengiz han"],
-    ["Pencerelerde, şişelerde kullanılan saydam madde?","cam"],
-    ["Bilgisayarda merkezi işlem birimine İngilizce kısaltmayla ne ad verilir?","cpu"]
-  ],
-  "Ç": [
-    ["Dünyanın nüfus bakımından en kalabalık ülkesi?","çin"],
-    ["1986'da nükleer reaktör felaketinin yaşandığı Ukrayna'daki şehir?","çernobil"],
-    ["Reşat Nuri Güntekin'in, köy öğretmeni Feride'yi konu alan ünlü romanı?","çalıkuşu"],
-    ["Ayağımızı sıcak tutan, örme giysi?","çorap"],
-    ["Yaylı çalgılar ailesinden, viyolonselin başka bir adı?","çello"]
-  ],
-  "D": [
-    ["Türk edebiyatının en eski destansı hikâye kitabı?","dede korkut"],
-    ["Bilgisayarlarda eskiden veri saklamak için kullanılan, dönen manyetik plakalı taşınabilir depolama birimi?","disket"],
-    ["Egemenliğin halka ait olduğu, halkın kendi kendini yönettiği yönetim biçimi?","demokrasi"],
-    ["Sayısal/elektronik teknolojiye günümüzde verilen genel ad?","dijital"]
-  ],
-  "E": [
-    ["Dünyanın en yüksek dağı?","everest"],
-    ["Üretim, tüketim ve kaynakların dağıtımını inceleyen bilim dalı?","ekonomi"],
-    ["Charles Darwin'in türlerin doğal seçilimle zamanla değiştiğini öne sürdüğü teori?","evrim teorisi"],
-    ["İnternet üzerinden mesaj ve dosya göndermeyi sağlayan, 'elektronik posta'nın kısaltılmış adı?","e-posta"]
-  ],
-  "F": [
-    ["Bitkilerin güneş ışığını kullanarak besin ürettiği sürece ne ad verilir?","fotosentez"],
-    ["Rönesans'ın doğduğu, Medici ailesinin hüküm sürdüğü İtalyan şehri?","floransa"],
-    ["1789'da Bastille'in basılmasıyla başlayan, Fransa'da krallığı deviren büyük ayaklanma?","fransız ihtilali"],
-    ["Mark Zuckerberg'in kurduğu, dünyanın en büyük sosyal medya platformlarından biri?","facebook"]
-  ],
-  "G": [
-    ["Güneş ve etrafında dönen gezegenlerden oluşan sisteme ne ad verilir?","güneş sistemi"],
-    ["Hindistan'ın bağımsızlığı için pasif direniş yöntemini benimseyen lider?","gandi"],
-    ["Einstein'ın, uzay ve zamanın birbirine bağlı olduğunu öne sürdüğü teori?","görelilik teorisi"],
-    ["Danimarka'ya bağlı, dünyanın en büyük adası?","grönland"]
-  ],
-  "H": [
-    ["Başkenti Hattuşa olan, Anadolu'da kurulan antik uygarlık?","hitit"],
-    ["Eski Mısır'da kullanılan resim yazısı sistemine ne ad verilir?","hiyeroglif"],
-    ["Antik Yunan'da 'tarihin babası' olarak anılan tarihçi?","herodot"],
-    ["Bir bilgisayarın ekran, klavye, işlemci gibi fiziksel parçalarına İngilizce ne ad verilir?","hardware"]
-  ],
-  "I": [
-    ["Karanlığı aydınlatan, gözle görülebilen elektromanyetik dalga?","ışık"],
-    ["Büyük akarsulara verilen genel ad?","ırmak"],
-    ["Demir bakımından zengin, Popeye'a güç kazandıran koyu yeşil yapraklı sebze?","ıspanak"],
-    ["Soğuk havalarda ortamı sıcak tutmak için kullanılan cihaz?","ısıtıcı"]
-  ],
-  "İ": [
-    ["Hem Avrupa hem Asya kıtasında yer alan, Osmanlı'ya başkentlik yapmış şehir?","istanbul"],
-    ["Mustafa Kemal önderliğinde 1919-1923 arasında yürütülen bağımsızlık savaşı?","istiklal savaşı"],
-    ["Atatürk'ün gerçekleştirdiği siyasi, sosyal ve kültürel yenilik hareketlerine genel olarak ne ad verilir?","inkılaplar"],
-    ["Bir ülkenin, ordusu tarafından başka bir ülke veya bölgeye girilip ele geçirilmesine ne ad verilir?","işgal"]
-  ],
-  "J": [
-    ["Latin Amerika ormanlarında yaşayan, benekli postuyla bilinen büyük kedigil?","jaguar"],
-    ["Başkenti Tokyo olan, 'Doğan Güneşin Ülkesi' olarak bilinen ada ülkesi?","japonya"]
-  ],
-  "K": [
-    ["Peri bacalarıyla ünlü, Nevşehir çevresindeki tarihi bölge?","kapadokya"],
-    ["Kanunlarını düzenlediği için Avrupa'da 'Muhteşem' lakabıyla bilinen Osmanlı padişahı?","kanuni"],
-    ["İnternette kullanıcıların şifre ve kişisel bilgilerini çalmaya yönelik sahtekarlık yöntemine ne ad verilir?","kimlik avı"],
-    ["Bilgi gizlemek ve şifrelemek için kullanılan bilim dalına ne ad verilir?","kriptografi"],
-    ["Izgarada pişirilen kıyma veya etten yapılan, Türk mutfağının dünyaca tanınan yemeği?","kebap"]
-  ],
-  "L": [
-    ["Atatürk'ün 1928'de Arap alfabesinin yerine kabul ettirdiği yazı sistemi?","latin alfabesi"],
-    ["İstanbul'un sembolü sayılan, Hollanda ile özdeşleşen çiçek?","lale"],
-    ["Mona Lisa tablosunu yapan, hem sanatçı hem mucit olan İtalyan usta?","leonardo da vinci"],
-    ["Eski Mısır, Yunan ve Roma izlerini taşıyan, Akdeniz'in doğusundaki bölgeye verilen genel ad?","levant"]
-  ],
-  "M": [
-    ["Türkiye Cumhuriyeti'nin kurucusu?","mustafa kemal atatürk"],
-    ["Eski Mısır'da ölülerin bozulmadan saklanması için yapılan özel işleme ne ad verilir?","mumya"],
-    ["Güneş Sistemi'nde Dünya'dan sonra gelen, 'Kızıl Gezegen' olarak bilinen gezegen?","mars"],
-    ["İnternette hızla yayılan, genelde komik görsel veya videolara günümüzde ne ad verilir?","meme"]
-  ],
-  "N": [
-    ["Mısır'dan geçen, dünyanın en uzun nehri sayılan akarsu?","nil"],
-    ["Yerçekimi kanununu keşfeden İngiliz bilim adamı?","newton"],
-    ["II. Dünya Savaşı'nda Almanya'da Hitler liderliğindeki ideoloji/parti?","nazizm"],
-    ["19. yüzyıl başında Fransa'yı yöneten, Waterloo Savaşı'nda yenilen general ve imparator?","napolyon"]
-  ],
-  "O": [
-    ["1299-1922 yılları arasında hüküm süren Türk devleti?","osmanlı imparatorluğu"],
-    ["Antik Yunan'da tanrılara adanan, dört yılda bir düzenlenen spor müsabakaları?","olimpiyat oyunları"],
-    ["Shakespeare'in kıskançlık temalı, bir Venedik generalini konu alan trajedisi?","othello"],
-    ["ChatGPT'yi geliştiren, yapay zekâ alanında öne çıkan günümüz şirketi?","openai"]
-  ],
-  "Ö": [
-    ["Sınıfta ders veren, eğitim veren kişi?","öğretmen"],
-    ["Tuzluluğu nedeniyle batmadan yüzülebilen, İsrail-Ürdün arasındaki göl?","ölü deniz"],
-    ["Bir topluluğa yol gösteren, liderlik eden kişiye ne ad verilir?","önder"]
-  ],
-  "P": [
-    ["Alışverişte kullandığımız, değer ölçüsü olan şey?","para"],
-    ["Dünyanın en büyük okyanusu?","pasifik"],
-    ["Eski Mısır'da firavunların gömüldüğü, dev üçgen şeklindeki taş anıt mezar?","piramit"],
-    ["Sokrates'in öğrencisi, 'İdealar Kuramı' ile tanınan antik Yunan filozofu?","platon"]
-  ],
-  "R": [
-    ["14-16. yüzyıllarda İtalya'da başlayan, sanat ve bilimde 'yeniden doğuş' hareketi?","rönesans"],
-    ["Marie Curie'nin keşfettiği, ışın yayan kimyasal elementlerden biri?","radyum"],
-    ["1917'de Çarlık Rusyası'nı deviren Bolşevik ayaklanması?","rus devrimi"],
-    ["İnsan davranışlarını taklit eden, yapay zekâ ile çalışan mekanik/dijital sistemlere ne ad verilir?","robot"]
-  ],
-  "S": [
-    ["Dünyanın en büyük çölü?","sahra"],
-    ["Malazgirt Savaşı'nı kazanarak Anadolu'nun kapılarını açan Türk devleti?","selçuklu"],
-    ["1991'de dağılan, Soğuk Savaş döneminde ABD'nin rakibi olan devlet?","sovyetler birliği"],
-    ["Elon Musk'ın kurduğu, uzay roketleri üreten şirket?","spacex"]
-  ],
-  "Ş": [
-    ["Ahmet Haşim, Necip Fazıl gibi şairlerin yazdığı edebi tür?","şiir"],
-    ["Balıklıgöl ve Göbeklitepe ile bilinen, 'Peygamberler Şehri' olarak anılan ilimiz?","şanlıurfa"],
-    ["Mimar Sinan'ın çıraklık dönemi eseri sayılan, İstanbul'daki cami?","şehzade camii"]
-  ],
-  "T": [
-    ["Atatürk'ün kurduğu cumhuriyetin adı?","türkiye"],
-    ["Homeros'un İlyada destanına konu olan, Çanakkale'deki antik kent?","truva"],
-    ["Osmanlı'da 1839'da ilan edilen, batılılaşma sürecini başlatan ferman?","tanzimat fermanı"],
-    ["Kısa videolarla popülerleşen, günümüzün en çok kullanılan sosyal medya uygulamalarından biri?","tiktok"]
-  ],
-  "U": [
-    ["Gezegenlerin, yıldızların bulunduğu sonsuz boşluk?","uzay"],
-    ["Birleşmiş Milletler'in eğitim, bilim ve kültür örgütü?","unesco"],
-    ["Birleşmiş Milletler'in çocuklara yardım amacıyla kurduğu örgüt?","unicef"]
-  ],
-  "Ü": [
-    ["Bağlarda yetişen, şarap ve pekmez yapılan meyve?","üzüm"],
-    ["Ortadoğu'da, başkenti Amman olan ülke?","ürdün"],
-    ["Kapadokya bölgesinde, peri bacalarıyla ünlü Nevşehir ilçesi?","ürgüp"]
-  ],
-  "V": [
-    ["İnsanın doğup büyüdüğü, bağlı olduğu toprağa ne ad verilir?","vatan"],
-    ["Türkiye'nin en büyük gölü?","van gölü"],
-    ["Leonardo da Vinci'nin insan vücudu oranlarını gösteren ünlü çizimi?","vitruvius adamı"],
-    ["Bilgisayarlara zarar vermek amacıyla yazılan, kendini çoğaltabilen zararlı yazılımlara ne ad verilir?","virüs"]
-  ],
-  "Y": [
-    ["Gece gökyüzünde ışık saçan gök cismi?","yıldız"],
-    ["Antik Olimpiyatların doğduğu, başkenti Atina olan ülke?","yunanistan"],
-    ["Bilgisayarların insan gibi öğrenip karar vermesini sağlamaya çalışan, günümüzün en popüler teknoloji alanı?","yapay zeka"],
-    ["YouTube, Twitch gibi platformlarda canlı yayın yapan içerik üreticilerine ne ad verilir?","yayıncı"]
-  ],
-  "Z": [
-    ["Akdeniz'de yetişen, yağı çıkarılan siyah/yeşil meyve?","zeytin"],
-    ["Yunan mitolojisinde tanrıların babası, gök tanrısı?","zeus"],
-    ["Hayvanları, türlerini ve yaşam biçimlerini inceleyen bilim dalı?","zooloji"]
-  ],
-};
-
-const LETTERS = Object.keys(BANK);
-const GAME_SECONDS = 300;
-const PER_LETTER_SECONDS = 45;
-
-// ---- Ses efektleri (harici dosya gerekmez, Web Audio API ile üretilir) ----
-let audioCtx = null;
-let soundEnabled = true;
-function ensureAudio(){
-  if(!soundEnabled) return;
-  if(!audioCtx){
-    const AC = window.AudioContext || window.webkitAudioContext;
-    if(AC) audioCtx = new AC();
-  }
-  if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-}
-function beep(freq, duration, type, vol, delay){
-  if(!soundEnabled || !audioCtx) return;
-  const startAt = audioCtx.currentTime + (delay || 0);
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  osc.type = type || 'sine';
-  osc.frequency.value = freq;
-  gain.gain.value = vol != null ? vol : 0.18;
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
-  osc.start(startAt);
-  gain.gain.exponentialRampToValueAtTime(0.001, startAt + duration);
-  osc.stop(startAt + duration);
-}
-function playCorrectSound(){ beep(660,0.12,'sine',0.2,0); beep(880,0.16,'sine',0.2,0.11); }
-function playWrongSound(){ beep(200,0.32,'sawtooth',0.16,0); }
-function playPasSound(){ beep(340,0.16,'triangle',0.14,0); }
-function playTickSound(){ beep(1000,0.045,'square',0.05,0); }
-function playStartSound(){ beep(523,0.1,'sine',0.18,0); beep(659,0.1,'sine',0.18,0.1); beep(784,0.14,'sine',0.18,0.2); }
-
-let state = {};
-const lastUsedIndex = {}; // letter -> index of question used last game, to avoid immediate repeats
-
-function pickQuestion(letter){
-  const options = BANK[letter];
-  if(options.length === 1) return 0;
-  let idx;
-  do{
-    idx = Math.floor(Math.random()*options.length);
-  } while(idx === lastUsedIndex[letter]);
-  lastUsedIndex[letter] = idx;
-  return idx;
-}
-
-function normalize(s){
-  return s.toLocaleLowerCase('tr-TR').trim().replace(/\s+/g,' ').replace(/[.,!?'"]/g,'');
-}
-
-// Sonundaki yaygın Türkçe çoğul/iyelik/hâl eklerini atar (kıyaslama için)
-function stripSuffix(word){
-  return word.replace(/(leri|ları|lerin|ların|lerden|lardan|lere|lara|lerde|larda|leriyle|larıyla|leri|ları|ler|lar|nin|nın|nun|nün|in|ın|un|ün|si|sı|su|sü|i|ı|u|ü|e|a)$/u, '');
-}
-
-function levenshtein(a, b){
-  const m = a.length, n = b.length;
-  if(m === 0) return n;
-  if(n === 0) return m;
-  const dp = Array.from({length: m+1}, () => new Array(n+1).fill(0));
-  for(let i=0;i<=m;i++) dp[i][0] = i;
-  for(let j=0;j<=n;j++) dp[0][j] = j;
-  for(let i=1;i<=m;i++){
-    for(let j=1;j<=n;j++){
-      dp[i][j] = a[i-1] === b[j-1]
-        ? dp[i-1][j-1]
-        : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
+    :root {
+      --space: #07172f;
+      --space2: #0c2e58;
+      --blue: #29caff;
+      --blue2: #a9efff;
+      --orange: #e86b25;
+      --orange2: #ffb16d;
+      --gold: #ffd45a;
+      --green: #31e08a;
+      --red: #ff5268;
+      --text: #f6fbff;
+      --muted: #abc1d5;
     }
-  }
-  return dp[m][n];
-}
 
-function isAnswerCorrect(rawUser, rawCorrect){
-  const user = normalize(rawUser);
-  const correct = normalize(rawCorrect);
-  if(!user) return false;
-  if(user === correct) return true;
-  // çoklu kelimelik cevaplarda anahtar kelimeyi yazmak da kabul edilsin
-  if((correct.includes(user) && user.length >= 3) || (user.includes(correct) && correct.length >= 3)) return true;
-  // çoğul/iyelik eki farkını tolere et: "ağaç" / "ağaçlar" gibi
-  if(stripSuffix(user) === stripSuffix(correct) && stripSuffix(correct).length >= 3) return true;
-  // küçük yazım hatalarına tolerans (Levenshtein mesafesi)
-  const dist = levenshtein(user, correct);
-  const tolerance = Math.max(1, Math.floor(Math.max(user.length, correct.length) * 0.25));
-  if(dist <= tolerance) return true;
-  return false;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-function buildBoard(){
-  const wheel = document.getElementById('wheel');
-  // remove old tiles, keep .hub
-  wheel.querySelectorAll('.tile').forEach(t => t.remove());
-  LETTERS.forEach(letter => {
-    const tile = document.createElement('div');
-    tile.className = 'tile';
-    tile.dataset.letter = letter;
-    tile.textContent = letter;
-    wheel.appendChild(tile);
-  });
-  positionTiles();
-}
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
 
-function positionTiles(){
-  const wheel = document.getElementById('wheel');
-  const size = wheel.offsetWidth;
-  if(!size) return;
-  const tileSize = Math.max(28, Math.min(42, size*0.08));
-  const radius = size/2 - tileSize/2 - size*0.04;
-  const center = size/2;
-  const total = LETTERS.length;
-  LETTERS.forEach((letter,i) => {
-    const tile = wheel.querySelector(`.tile[data-letter="${letter}"]`);
-    if(!tile) return;
-    const angle = (i/total) * 2*Math.PI - Math.PI/2;
-    const x = center + radius*Math.cos(angle);
-    const y = center + radius*Math.sin(angle);
-    tile.style.left = x + 'px';
-    tile.style.top = y + 'px';
-    tile.style.transform = 'translate(-50%,-50%)';
-  });
-}
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+      background:
+        radial-gradient(
+          circle at 50% -15%,
+          rgba(39, 202, 255, .38),
+          transparent 38%
+        ),
+        radial-gradient(
+          circle at 85% 80%,
+          rgba(232, 107, 37, .25),
+          transparent 34%
+        ),
+        linear-gradient(
+          145deg,
+          #020611,
+          var(--space),
+          #030812
+        );
+    }
 
-window.addEventListener('resize', () => { positionTiles(); });
+    body::before {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      content: "";
+      opacity: .32;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle, #fff 1px, transparent 1.5px),
+        radial-gradient(circle, var(--blue2) 1px, transparent 1.5px);
+      background-size: 92px 92px, 145px 145px;
+      background-position: 0 0, 45px 70px;
+      animation: stars 75s linear infinite;
+    }
 
-function newGameState(){
-  const questions = {};
-  LETTERS.forEach(letter => {
-    const options = BANK[letter];
-    questions[letter] = options[pickQuestion(letter)];
-  });
-  return {
-    questions,
-    status: {}, // letter -> 'correct' | 'wrong' | 'skipped' (skipped = still pending, just deprioritized)
-    queue: [...LETTERS], // pending order, front = current
-    globalTimeLeft: GAME_SECONDS,
-    globalHandle: null,
-    letterTimeLeft: PER_LETTER_SECONDS,
-    letterHandle: null,
-    started: false,
-    finished: false,
-    locked: false, // true while showing feedback, blocks input
-    ok: 0, bad: 0, pas: 0
-  };
-}
+    @keyframes stars {
+      from {
+        transform: translateY(0);
+      }
 
-function renderTileState(letter){
-  const tile = document.querySelector(`.tile[data-letter="${letter}"]`);
-  if(!tile) return;
-  tile.classList.remove('active','correct','wrong','skipped');
-  const st = state.status[letter];
-  if(letter === state.queue[0] && !state.finished) tile.classList.add('active');
-  if(st === 'correct'){ tile.classList.add('correct'); }
-  if(st === 'wrong'){ tile.classList.add('wrong'); }
-  if(st === 'skipped'){ tile.classList.add('skipped'); }
-}
+      to {
+        transform: translateY(420px);
+      }
+    }
 
-function renderAllTiles(){
-  LETTERS.forEach(renderTileState);
-  const hubLetter = document.getElementById('hubLetter');
-  if(hubLetter && state.finished){ hubLetter.textContent = '✓'; }
-}
+    button,
+    input {
+      font: inherit;
+    }
 
-function updateScoreboard(){
-  document.getElementById('okCount').textContent = state.ok;
-  document.getElementById('badCount').textContent = state.bad;
-  document.getElementById('pasCount').textContent = state.pas;
-}
+    button {
+      cursor: pointer;
+    }
 
-function formatClock(sec){
-  const m = String(Math.floor(sec/60)).padStart(2,'0');
-  const s = String(sec%60).padStart(2,'0');
-  return `${m}:${s}`;
-}
+    button:disabled {
+      cursor: not-allowed;
+      opacity: .45;
+    }
 
-function tickGlobalClock(){
-  state.globalTimeLeft--;
-  document.getElementById('clock').textContent = formatClock(Math.max(state.globalTimeLeft,0));
-  document.getElementById('clockPill').classList.toggle('low', state.globalTimeLeft <= 20);
-  if(state.globalTimeLeft <= 0){ endGame('time'); }
-}
+    .app {
+      width: min(920px, 100%);
+      margin: 0 auto;
+      padding: 24px 12px 55px;
+    }
 
-function tickLetterClock(){
-  state.letterTimeLeft--;
-  if(state.letterTimeLeft <= 5 && state.letterTimeLeft > 0) playTickSound();
-  updateLetterTimerUI();
-  if(state.letterTimeLeft <= 0){
-    autoPassCurrentLetter();
-  }
-}
+    .glass {
+      border: 1px solid rgba(41, 202, 255, .32);
+      border-radius: 20px;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(10, 48, 89, .94),
+          rgba(3, 13, 31, .97)
+        );
+      box-shadow:
+        0 20px 55px rgba(0, 0, 0, .5),
+        inset 0 0 30px rgba(41, 202, 255, .06);
+      backdrop-filter: blur(14px);
+    }
 
-function timerColor(pct){
-  if(pct > 50) return 'var(--ok)';
-  if(pct > 20) return 'var(--pas)';
-  return 'var(--bad)';
-}
+    .title {
+      margin-bottom: 20px;
+      text-align: center;
+    }
 
-function updateLetterTimerUI(){
-  const bar = document.getElementById('timebar');
-  const pct = Math.max(0, (state.letterTimeLeft / PER_LETTER_SECONDS) * 100);
-  const color = timerColor(pct);
-  if(bar){
-    bar.style.width = pct + '%';
-    bar.style.background = color;
-    bar.classList.toggle('low', state.letterTimeLeft <= 4);
-  }
-  const wheelProgress = document.getElementById('wheelProgress');
-  if(wheelProgress){
-    wheelProgress.style.setProperty('--wpct', pct);
-    wheelProgress.style.background = `conic-gradient(${color} calc(${pct}*1%), rgba(255,255,255,0.55) 0)`;
-  }
-  const hubLetter = document.getElementById('hubLetter');
-  if(hubLetter && !state.finished){
-    hubLetter.textContent = Math.max(0, state.letterTimeLeft);
-    hubLetter.style.color = state.letterTimeLeft <= 4 ? 'var(--bad)' : 'var(--navy-text)';
-  }
-}
+    .title small {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--orange2);
+      font-family: "Orbitron", sans-serif;
+      font-size: .65rem;
+      font-weight: 800;
+      letter-spacing: 3px;
+    }
 
-function currentLetter(){ return state.queue[0]; }
+    .title h1 {
+      margin: 0;
+      color: var(--blue2);
+      font-family: "Orbitron", sans-serif;
+      font-size: clamp(1.8rem, 8vw, 3.8rem);
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-shadow:
+        0 0 14px rgba(41, 202, 255, .8),
+        0 0 35px rgba(41, 202, 255, .3);
+    }
 
-function renderQuestionPanel(){
-  const panel = document.getElementById('qpanel');
-  const letter = currentLetter();
-  if(!letter || state.finished){
-    panel.innerHTML = `<div class="placeholder-text">Oyun bitti.</div>`;
-    return;
-  }
-  const [q] = state.questions[letter];
-  panel.innerHTML = `
-    <div class="soru-label">Soru — ${letter} Harfi</div>
-    <div class="answer-boxes" id="answerBoxes"></div>
-    <div class="question-box"><p class="qtext">${q}</p></div>
-    <div class="answer-row">
-      <input type="text" id="answerInput" placeholder="Cevabınızı yazıp Enter'a basın..." autocomplete="off" />
-      <button class="cta skip" id="passBtn">PAS</button>
-    </div>
-    <div class="timebar-wrap"><div class="timebar" id="timebar"></div></div>
-    <div class="feedback" id="feedback"></div>
-  `;
-  renderAnswerBoxes('');
-  const input = document.getElementById('answerInput');
-  input.focus();
-  input.addEventListener('keydown', (e) => { if(e.key === 'Enter') checkAnswer(); });
-  input.addEventListener('input', () => {
-    renderAnswerBoxes(input.value);
-    if(state.locked) return;
-    const val = input.value;
-    if(!val.trim()) return;
-    if(isAnswerCorrect(val, state.questions[letter][1])) checkAnswer();
-  });
-  document.getElementById('passBtn').addEventListener('click', () => manualPassCurrentLetter());
-  updateLetterTimerUI();
-}
+    .title p {
+      margin: 10px 0 0;
+      color: #c9ddec;
+      font-size: .9rem;
+    }
 
-// Cevabın harf sayısına göre kutucuklar oluşturur ve yazılanı kutucuklara yansıtır
-function renderAnswerBoxes(typedValue){
-  const box = document.getElementById('answerBoxes');
-  const letter = currentLetter();
-  if(!box || !letter) return;
-  const answer = state.questions[letter][1];
-  const template = Array.from(answer);
-  const typedChars = Array.from(normalize(typedValue)).filter(c => c !== ' ');
-  const slots = template.map(ch => ch === ' ' ? {gap:true} : {gap:false, filled:null});
-  let ti = 0;
-  for(const ch of typedChars){
-    while(ti < slots.length && slots[ti].gap) ti++;
-    if(ti >= slots.length) break;
-    slots[ti].filled = ch;
-    ti++;
-  }
-  let firstEmptyMarked = false;
-  box.innerHTML = slots.map(slot => {
-    if(slot.gap) return '<div class="agap"></div>';
-    const isNext = !slot.filled && !firstEmptyMarked;
-    if(isNext) firstEmptyMarked = true;
-    const cls = 'abox' + (slot.filled ? ' filled' : '') + (isNext ? ' next' : '');
-    return `<div class="${cls}">${slot.filled ? slot.filled.toLocaleUpperCase('tr-TR') : ''}</div>`;
-  }).join('');
-}
+    .scoreboard {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 17px;
+    }
 
-function startLetterTimer(){
-  clearInterval(state.letterHandle);
-  state.letterTimeLeft = PER_LETTER_SECONDS;
-  state.letterHandle = setInterval(tickLetterClock, 1000);
-}
+    .score {
+      padding: 12px 7px;
+      border: 1px solid rgba(171, 193, 213, .25);
+      border-radius: 13px;
+      text-align: center;
+      background: rgba(1, 12, 29, .78);
+    }
 
-function advanceQueue(resolvedStatus){
-  // resolvedStatus: 'correct' | 'wrong' -> remove from queue entirely
-  // 'skipped' -> move to back of queue (still pending)
-  const letter = state.queue.shift();
-  state.status[letter] = resolvedStatus;
-  if(resolvedStatus === 'skipped'){
-    state.queue.push(letter);
-  }
-  renderAllTiles();
-  if(state.queue.length === 0){
-    endGame('complete');
-    return;
-  }
-  renderQuestionPanel();
-  startLetterTimer();
-}
+    .score label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-family: "Orbitron", sans-serif;
+      font-size: .58rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
 
-function checkAnswer(){
-  if(state.locked || state.finished) return;
-  const letter = currentLetter();
-  const input = document.getElementById('answerInput');
-  const userVal = normalize(input.value);
-  const correctVal = normalize(state.questions[letter][1]);
-  const feedback = document.getElementById('feedback');
-  if(!userVal){
-    feedback.textContent = 'Bir cevap yazın ya da PAS geçin.';
-    feedback.className = 'feedback bad';
-    return;
-  }
-  state.locked = true;
-  clearInterval(state.letterHandle);
-  const isCorrect = isAnswerCorrect(input.value, state.questions[letter][1]);
-  if(isCorrect){
-    state.ok++;
-    feedback.textContent = 'Doğru! 🎉';
-    feedback.className = 'feedback ok';
-    playCorrectSound();
-  } else {
-    state.bad++;
-    feedback.textContent = `Yanlış. Doğru cevap: ${state.questions[letter][1]}`;
-    feedback.className = 'feedback bad';
-    playWrongSound();
-  }
-  updateScoreboard();
-  input.disabled = true;
-  document.getElementById('passBtn').disabled = true;
-  setTimeout(() => {
-    state.locked = false;
-    advanceQueue(isCorrect ? 'correct' : 'wrong');
-  }, 1300);
-}
+    .score strong {
+      color: var(--blue2);
+      font-family: "Orbitron", sans-serif;
+      font-size: 1.35rem;
+    }
 
-function manualPassCurrentLetter(){
-  if(state.locked || state.finished) return;
-  state.locked = true;
-  clearInterval(state.letterHandle);
-  state.pas++;
-  updateScoreboard();
-  playPasSound();
-  const feedback = document.getElementById('feedback');
-  feedback.textContent = 'Pas geçildi, sıranın sonuna alındı.';
-  feedback.className = 'feedback skip';
-  const input = document.getElementById('answerInput');
-  if(input) input.disabled = true;
-  document.getElementById('passBtn').disabled = true;
-  setTimeout(() => {
-    state.locked = false;
-    advanceQueue('skipped');
-  }, 800);
-}
+    .score.correct strong {
+      color: var(--green);
+    }
 
-function autoPassCurrentLetter(){
-  if(state.locked || state.finished) return;
-  state.locked = true;
-  clearInterval(state.letterHandle);
-  state.pas++;
-  updateScoreboard();
-  playPasSound();
-  const feedback = document.getElementById('feedback');
-  if(feedback){
-    feedback.textContent = 'Süre doldu, harf kendini pas geçti.';
-    feedback.className = 'feedback skip';
-  }
-  const input = document.getElementById('answerInput');
-  if(input) input.disabled = true;
-  const passBtn = document.getElementById('passBtn');
-  if(passBtn) passBtn.disabled = true;
-  setTimeout(() => {
-    state.locked = false;
-    advanceQueue('skipped');
-  }, 700);
-}
+    .score.wrong strong {
+      color: var(--red);
+    }
 
-function startGame(){
-  ensureAudio();
-  playStartSound();
-  state = newGameState();
-  state.started = true;
-  document.getElementById('clock').textContent = formatClock(GAME_SECONDS);
-  document.getElementById('clockPill').classList.remove('low');
-  document.getElementById('startBtn').disabled = true;
-  document.getElementById('restartBtn').disabled = false;
-  document.getElementById('endscreen').style.display = 'none';
-  document.getElementById('qpanel').style.display = 'flex';
-  document.getElementById('wheel').style.display = 'block';
-  buildBoard();
-  renderAllTiles();
-  updateScoreboard();
-  renderQuestionPanel();
-  startLetterTimer();
-  state.globalHandle = setInterval(tickGlobalClock, 1000);
-}
+    .score.pass strong {
+      color: var(--gold);
+    }
 
-function endGame(reason){
-  if(state.finished) return;
-  state.finished = true;
-  clearInterval(state.globalHandle);
-  clearInterval(state.letterHandle);
-  document.getElementById('qpanel').style.display = 'none';
-  document.getElementById('wheel').style.display = 'none';
-  document.getElementById('endscreen').style.display = 'block';
-  const title = reason === 'time' ? 'Süre Bitti!' : 'Tüm Harfler Tamamlandı!';
-  document.getElementById('endTitle').textContent = title;
-  document.getElementById('endSummary').textContent =
-    `${state.ok} doğru, ${state.bad} yanlış, ${state.pas} pas geçiş. Toplam puan: ${state.ok}`;
-  const recap = document.getElementById('recap');
-  recap.innerHTML = '';
-  LETTERS.forEach(letter => {
-    const st = state.status[letter] || 'skipped';
-    const row = document.createElement('div');
-    row.className = 'recap-row ' + (st === 'correct' ? 'ok' : 'bad');
-    const statusLabel = st === 'correct' ? '✓' : st === 'wrong' ? '✗' : '— (cevapsız)';
-    row.innerHTML = `<div class="l">${letter}</div><div>${statusLabel}</div><div class="ans">${state.questions[letter][1]}</div>`;
-    recap.appendChild(row);
-  });
-}
+    #totalTime.low {
+      color: var(--red);
+      animation: warning .8s infinite alternate;
+    }
 
-document.getElementById('startBtn').addEventListener('click', startGame);
-document.getElementById('restartBtn').addEventListener('click', () => {
-  clearInterval(state.globalHandle);
-  clearInterval(state.letterHandle);
-  startGame();
-});
-document.getElementById('endRestartBtn').addEventListener('click', startGame);
-document.getElementById('soundBtn').addEventListener('click', () => {
-  soundEnabled = !soundEnabled;
-  document.getElementById('soundBtn').textContent = soundEnabled ? '🔊 Ses' : '🔇 Sessiz';
-  if(soundEnabled) ensureAudio();
-});
+    @keyframes warning {
+      from {
+        text-shadow: 0 0 4px var(--red);
+      }
 
-buildBoard();
-</script>
+      to {
+        text-shadow: 0 0 18px var(--red);
+      }
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 19px;
+    }
+
+    .btn {
+      padding: 12px 17px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      font-family: "Orbitron", sans-serif;
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      transition: .2s ease;
+    }
+
+    .btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+    }
+
+    .btn.primary {
+      border-color: var(--blue2);
+      color: #03192c;
+      background: linear-gradient(
+        135deg,
+        var(--blue),
+        var(--blue2)
+      );
+      box-shadow: 0 0 22px rgba(41, 202, 255, .3);
+    }
+
+    .btn.secondary {
+      border-color: rgba(232, 107, 37, .7);
+      color: white;
+      background: linear-gradient(
+        135deg,
+        var(--orange),
+        #642811
+      );
+    }
+
+    .btn.pass {
+      border-color: rgba(255, 212, 90, .8);
+      color: #281d00;
+      background: linear-gradient(
+        135deg,
+        #ffe997,
+        var(--gold)
+      );
+    }
+
+    .wheel-area {
+      width: 100%;
+      min-height: 530px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: visible;
+      padding: 25px 4px;
+    }
+
+    .wheel {
+      position: relative;
+      width: min(91vw, 490px);
+      aspect-ratio: 1 / 1;
+      margin: 0 auto;
+      overflow: visible;
+    }
+
+    .center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: 5;
+      width: 30%;
+      aspect-ratio: 1 / 1;
+      display: grid;
+      place-items: center;
+      border: 5px solid var(--orange2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      background:
+        radial-gradient(
+          circle at 35% 25%,
+          #fff,
+          #ffc68f 35%,
+          #b6531d 70%,
+          #14294e
+        );
+      box-shadow:
+        0 0 25px var(--orange),
+        0 0 55px rgba(232, 107, 37, .5),
+        inset 0 0 18px white;
+    }
+
+    .center::after {
+      position: absolute;
+      inset: -14px;
+      border: 1px solid rgba(255, 177, 109, .8);
+      border-radius: 50%;
+      content: "";
+      animation: pulse 1.8s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulse {
+      from {
+        transform: scale(.92);
+        opacity: .3;
+      }
+
+      to {
+        transform: scale(1.1);
+        opacity: 1;
+      }
+    }
+
+    #centerText {
+      color: #351506;
+      font-family: "Orbitron", sans-serif;
+      font-size: clamp(1.7rem, 8vw, 3.7rem);
+      font-weight: 900;
+      text-shadow: 0 1px 0 white;
+    }
+
+    .letter {
+      position: absolute;
+      z-index: 4;
+      display: grid;
+      width: clamp(29px, 6.7vw, 41px);
+      height: clamp(29px, 6.7vw, 41px);
+      place-items: center;
+      border: 2px solid var(--orange2);
+      border-radius: 50%;
+      color: white;
+      font-family: "Orbitron", sans-serif;
+      font-size: clamp(.6rem, 2vw, .78rem);
+      font-weight: 900;
+      background: linear-gradient(
+        145deg,
+        #287db1,
+        #0b315e
+      );
+      box-shadow:
+        0 4px 12px rgba(0, 0, 0, .5),
+        0 0 7px rgba(232, 107, 37, .35);
+      transition: .25s ease;
+    }
+
+    .letter.active {
+      z-index: 8;
+      color: #3d1907;
+      background: #ffe4c4;
+      box-shadow:
+        0 0 0 4px var(--gold),
+        0 0 25px var(--gold);
+      transform: translate(-50%, -50%) scale(1.2) !important;
+    }
+
+    .letter.correct {
+      color: white;
+      background: var(--green);
+      border-color: #c7ffe1;
+      box-shadow: 0 0 16px rgba(49, 224, 138, .8);
+    }
+
+    .letter.wrong {
+      color: white;
+      background: var(--red);
+      border-color: #ffd2d8;
+      box-shadow: 0 0 16px rgba(255, 82, 104, .8);
+    }
+
+    .letter.skipped {
+      color: var(--gold);
+      border-color: var(--gold);
+      background: #56391e;
+    }
+
+    .question-area {
+      width: min(730px, 100%);
+      padding: 23px;
+      margin: 0 auto;
+    }
+
+    .waiting {
+      min-height: 180px;
+      display: grid;
+      place-items: center;
+      color: #c9ddec;
+      text-align: center;
+      line-height: 1.7;
+    }
+
+    .question-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 17px;
+    }
+
+    .question-head small {
+      color: var(--orange2);
+      font-family: "Orbitron", sans-serif;
+      font-size: .64rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .question-letter {
+      width: 45px;
+      height: 45px;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--orange2);
+      border-radius: 50%;
+      color: #351506;
+      font-family: "Orbitron", sans-serif;
+      font-size: 1.35rem;
+      font-weight: 900;
+      background: var(--orange2);
+      box-shadow: 0 0 17px rgba(232, 107, 37, .6);
+    }
+
+    .question-text {
+      min-height: 105px;
+      padding: 19px;
+      border: 1px solid rgba(255, 177, 109, .55);
+      border-radius: 14px;
+      color: #effaff;
+      font-size: clamp(1rem, 3vw, 1.25rem);
+      font-weight: 700;
+      line-height: 1.6;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(17, 77, 126, .65),
+          rgba(5, 17, 38, .95)
+        );
+    }
+
+    .answer-boxes {
+      min-height: 48px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 19px 0;
+    }
+
+    .answer-cell {
+      width: 37px;
+      height: 41px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(169, 239, 255, .7);
+      border-radius: 8px;
+      color: var(--blue2);
+      font-family: "Orbitron", sans-serif;
+      font-size: .9rem;
+      font-weight: 900;
+      background: rgba(5, 38, 75, .9);
+    }
+
+    .answer-cell.filled {
+      color: #06213b;
+      background: white;
+    }
+
+    .answer-gap {
+      width: 11px;
+    }
+
+    .answer-row {
+      display: flex;
+      gap: 9px;
+    }
+
+    #answerInput {
+      width: 100%;
+      min-width: 0;
+      padding: 13px 14px;
+      border: 2px solid rgba(41, 202, 255, .65);
+      border-radius: 10px;
+      outline: none;
+      color: white;
+      font-family: "Orbitron", sans-serif;
+      font-size: .87rem;
+      background: rgba(1, 10, 26, .9);
+    }
+
+    #answerInput:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(255, 212, 90, .18);
+    }
+
+    #answerInput::placeholder {
+      color: #7894ad;
+    }
+
+    .timer-info {
+      display: flex;
+      justify-content: space-between;
+      margin: 17px 0 7px;
+      color: var(--muted);
+      font-family: "Orbitron", sans-serif;
+      font-size: .63rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .timer-info strong {
+      color: var(--orange2);
+    }
+
+    .timer-track {
+      height: 9px;
+      overflow: hidden;
+      border-radius: 99px;
+      background: rgba(0, 0, 0, .55);
+    }
+
+    #timerBar {
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--green);
+      transition: width 1s linear, background .2s;
+    }
+
+    .feedback {
+      min-height: 27px;
+      margin-top: 14px;
+      font-weight: 800;
+      line-height: 1.5;
+    }
+
+    .feedback.correct {
+      color: var(--green);
+    }
+
+    .feedback.wrong {
+      color: #ffadb7;
+    }
+
+    .feedback.pass {
+      color: #ffe38b;
+    }
+
+    .end-screen {
+      display: none;
+      width: min(700px, 100%);
+      padding: 27px;
+      margin: 22px auto 0;
+      text-align: center;
+    }
+
+    .end-screen h2 {
+      margin: 0 0 10px;
+      color: var(--orange2);
+      font-family: "Orbitron", sans-serif;
+    }
+
+    .end-screen p {
+      color: #d4e3ef;
+      line-height: 1.7;
+    }
+
+    .recap {
+      max-height: 280px;
+      overflow-y: auto;
+      margin: 20px 0;
+      padding: 9px 14px;
+      border-radius: 12px;
+      text-align: left;
+      background: rgba(0, 7, 22, .78);
+    }
+
+    .recap-row {
+      display: grid;
+      grid-template-columns: 30px 80px 1fr;
+      gap: 8px;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(155, 184, 212, .15);
+      color: #cfe2f4;
+      font-size: .83rem;
+    }
+
+    .recap-row strong {
+      color: var(--orange2);
+      font-family: "Orbitron", sans-serif;
+    }
+
+    .recap-row.ok span {
+      color: var(--green);
+    }
+
+    .recap-row.bad span {
+      color: #ff9eaa;
+    }
+
+    footer {
+      margin-top: 25px;
+      color: #87a6c3;
+      font-size: .75rem;
+      text-align: center;
+    }
+
+    @media (max-width: 560px) {
+      .scoreboard {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .wheel-area {
+        min-height: 395px;
+        padding: 17px 0;
+      }
+
+      .wheel {
+        width: min(93vw, 395px);
+      }
+
+      .question-area {
+        padding: 17px;
+      }
+
+      .answer-row {
+        flex-wrap: wrap;
+      }
+
+      .answer-row .btn {
+        width: 100%;
+      }
+
+      .answer-cell {
+        width: 31px;
+        height: 36px;
+      }
+
+      .recap-row {
+        grid-template-columns: 24px 63px 1fr;
+        font-size: .75rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app">
+    <header class="title">
+      <small>4. SINIF BİLGİ YARIŞMASI</small>
+      <h1>NEO PASAPAROLA</h1>
+      <p>
+        Her harfte soru havuzundan rastgele bir soru seçilir.
+      </p>
+    </header>
+
+    <section class="scoreboard">
+      <div class="score correct">
+        <label>DOĞRU</label>
+        <strong id="correctCount">0</strong>
+      </div>
+
+      <div class="score wrong">
+        <label>YANLIŞ</label>
+        <strong id="wrongCount">0</strong>
+      </div>
+
+      <div class="score pass">
+        <label>PAS</label>
+        <strong id="passCount">0</strong>
+      </div>
+
+      <div class="score">
+        <label>TOPLAM SÜRE</label>
+        <strong id="totalTime">03:00</strong>
+      </div>
+    </section>
+
+    <section class="controls">
+      <button
+        id="startButton"
+        class="btn primary"
+        type="button"
+      >
+        OYUNU BAŞLAT
+      </button>
+
+      <button
+        id="restartButton"
+        class="btn secondary"
+        type="button"
+        disabled
+      >
+        YENİDEN BAŞLAT
+      </button>
+
+      <button
+        id="soundButton"
+        class="btn secondary"
+        type="button"
+      >
+        🔊 SES AÇIK
+      </button>
+    </section>
+
+    <section class="wheel-area glass">
+      <div id="wheel" class="wheel">
+        <div class="center">
+          <div id="centerText">4</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="questionArea" class="question-area glass">
+      <div class="waiting">
+        <div>
+          <b>OYUN SİSTEMİ HAZIR</b>
+          <br><br>
+          Başlamak için
+          <b>OYUNU BAŞLAT</b>
+          düğmesine bas.
+        </div>
+      </div>
+    </section>
+
+    <section id="endScreen" class="end-screen glass">
+      <h2 id="endTitle">OYUN BİTTİ</h2>
+      <p id="endSummary"></p>
+      <div id="recap" class="recap"></div>
+
+      <button
+        id="endRestartButton"
+        class="btn primary"
+        type="button"
+      >
+        TEKRAR OYNA
+      </button>
+    </section>
+
+    <footer>
+      Neo Pasaparola · Eğlenerek öğren
+    </footer>
+  </main>
+
+  <script>
+    "use strict";
+
+    /*
+      Her cevabın ilk harfi, bulunduğu harfle aynıdır.
+      Ğ ve J kullanılmamıştır.
+    */
+    const questionBank = {
+      A: [
+        ["Türkiye'nin başkenti hangi şehirdir?", "ankara"],
+        ["Gece gökyüzünde görülen Dünya'nın doğal uydusu?", "ay"],
+        ["Soluk alıp vermemize yardımcı olan organlardan biri?", "akciğer"],
+        ["Kökleriyle toprağa bağlı olarak büyüyen canlı?", "ağaç"]
+      ],
+
+      B: [
+        ["Suda yaşayan çok büyük bir memeli hayvan?", "balina"],
+        ["Suyun donmasıyla oluşan katı madde?", "buz"],
+        ["Gökyüzünde görülen beyaz veya gri su topluluğu?", "bulut"],
+        ["İki tekerlekli bir ulaşım aracı?", "bisiklet"]
+      ],
+
+      C: [
+        ["Türkiye'nin yönetim biçimi nedir?", "cumhuriyet"],
+        ["Sert kabuklu, içi yenilen bir yemiş?", "ceviz"],
+        ["Pencerelerde kullanılan saydam madde?", "cam"],
+        ["Yer kaplayan ve ağırlığı olan varlık?", "cisim"]
+      ],
+
+      Ç: [
+        ["Küçük, kırmızı ve yaz mevsiminde yetişen meyve?", "çilek"],
+        ["Kumlarla kaplı, yağışın çok az olduğu geniş bölge?", "çöl"],
+        ["Çivi çakmak için kullanılan araç?", "çekiç"],
+        ["Renkli yaprakları olan, saksıda da yetişebilen bitki?", "çiçek"]
+      ],
+
+      D: [
+        ["Üzerinde yaşadığımız gezegen?", "dünya"],
+        ["Üzerine yazı yazdığımız, sayfalardan oluşan araç?", "defter"],
+        ["İçinden su akan doğal su yolu?", "dere"],
+        ["Uzakta bulunan cisimleri yakından görmeye yarayan araç?", "dürbün"]
+      ],
+
+      E: [
+        ["Kırmızı veya yeşil renkte yetişen yuvarlak meyve?", "elma"],
+        ["Dünya'yı kuzey ve güney yarım kürelere ayıran hayali çizgi?", "ekvator"],
+        ["İş yapabilme gücüne ne denir?", "enerji"],
+        ["Anlamları aynı veya birbirine çok yakın olan kelimeler?", "eş anlamlı"]
+      ],
+
+      F: [
+        ["İki takım arasında oynanan, ayakla top sürülen spor?", "futbol"],
+        ["Uzun hortumlu, büyük kara hayvanı?", "fil"],
+        ["Karanlık bir yeri aydınlatmaya yarayan araç?", "fener"],
+        ["Geçmişte yaşamış canlıların taşlaşmış kalıntısı?", "fosil"]
+      ],
+
+      G: [
+        ["Dünyamıza ısı ve ışık veren yıldız?", "güneş"],
+        ["Bir cismin ışık almayan bölümünde oluşan karanlık?", "gölge"],
+        ["Çevresi karalarla kaplı büyük su birikintisi?", "göl"],
+        ["Yağmurdan sonra gökyüzünde görülebilen renkli yay?", "gökkuşağı"]
+      ],
+
+      H: [
+        ["Ülkeleri, şehirleri ve yönleri gösteren çizim?", "harita"],
+        ["Soluduğumuz gazların oluşturduğu tabaka?", "hava"],
+        ["Hastaların tedavi edildiği sağlık kuruluşu?", "hastane"],
+        ["Taştan, ağaçtan veya başka maddeden yapılmış sanat eseri?", "heykel"]
+      ],
+
+      I: [
+        ["Denize veya göle dökülen büyük su akıntısı?", "ırmak"],
+        ["Yeşil yapraklı bir sebze?", "ıspanak"],
+        ["Bir maddenin sıcaklık derecesiyle ilgili durum?", "ısı"],
+        ["Dudakları kullanarak çıkarılan kısa ses?", "ıslık"]
+      ],
+
+      İ: [
+        ["Türkiye'nin en kalabalık şehri?", "istanbul"],
+        ["Kâğıt veya kumaş dikmeye yarayan sivri araç?", "iğne"],
+        ["İnce ve uzun biçimli, dikişte de kullanılan araç?", "ip"],
+        ["Şehirden küçük, yönetim birimi olan yerleşim yeri?", "ilçe"]
+      ],
+
+      K: [
+        ["Okuyarak bilgi edinmemizi sağlayan sayfalı eser?", "kitap"],
+        ["Miyavlayan evcil hayvan?", "kedi"],
+        ["Dört eşit kenarı ve dört köşesi olan şekil?", "kare"],
+        ["Sıcaklığın çok düşük olduğu mevsim?", "kış"]
+      ],
+
+      L: [
+        ["İstanbul ile özdeşleşen güzel bir çiçek?", "lale"],
+        ["Sarı renkli, ekşi bir meyve?", "limon"],
+        ["Uzun bacaklı, göç eden beyaz kuş?", "leylek"],
+        ["Ellerimizi yıkadığımız bölüm?", "lavabo"]
+      ],
+
+      M: [
+        ["İlkbahar, yaz, sonbahar ve kışın genel adı?", "mevsim"],
+        ["Üzerinde yemek yediğimiz veya ders çalıştığımız eşya?", "masa"],
+        ["Bazı metalleri çeken madde?", "mıknatıs"],
+        ["Denizlerde bulunan, sert yapılı canlı?", "mercan"]
+      ],
+
+      N: [
+        ["Kırmızı taneli ve sert kabuklu meyve?", "nar"],
+        ["İçinden su akan doğal akarsu?", "nehir"],
+        ["Geometride küçük yuvarlak işaretle gösterilen şekil?", "nokta"],
+        ["Yılın dördüncü ayı?", "nisan"]
+      ],
+
+      O: [
+        ["Öğrencilerin ders gördüğü eğitim yeri?", "okul"],
+        ["Çok sayıda ağacın bulunduğu geniş alan?", "orman"],
+        ["Dünyadaki büyük tuzlu su kütlelerinden biri?", "okyanus"],
+        ["İnsan taşımada kullanılan büyük kara taşıtı?", "otobüs"]
+      ],
+
+      Ö: [
+        ["Sınıfta ders anlatan kişi?", "öğretmen"],
+        ["Vaklayarak ses çıkaran evcil veya yabani kuş?", "ördek"],
+        ["Başarı karşılığında verilen şey?", "ödül"],
+        ["Bir nesnenin uzunluğunu veya miktarını belirleme işi?", "ölçü"]
+      ],
+
+      P: [
+        ["Yön bulmamıza yardımcı olan araç?", "pusula"],
+        ["Çocukların oyun oynadığı yeşil alan?", "park"],
+        ["Soğuk bölgelerde yaşayan siyah-beyaz kuş?", "penguen"],
+        ["Mısır gibi bazı eski yapılarda kullanılan geometrik biçim?", "piramit"]
+      ],
+
+      R: [
+        ["İnsanlara yardımcı olmak için tasarlanmış makine?", "robot"],
+        ["Kâğıt üzerine yapılan çizim veya boyama çalışması?", "resim"],
+        ["Havanın hareket etmesiyle oluşan doğa olayı?", "rüzgar"],
+        ["Bir yüzeyin veya cismin görünüş özelliği?", "renk"]
+      ],
+
+      S: [
+        ["Taşların hareket ettirilmesiyle oynanan düşünme oyunu?", "satranç"],
+        ["Canlıların içmesi için gerekli sıvı?", "su"],
+        ["Fındık ve meşe palamudu yiyebilen küçük hayvan?", "sincap"],
+        ["Zamanı gösteren araç?", "saat"]
+      ],
+
+      Ş: [
+        ["Çaya veya bazı tatlılara konulan beyaz yiyecek?", "şeker"],
+        ["Yağmurdan korunmak için kullanılan araç?", "şemsiye"],
+        ["İnsanların yaşadığı büyük yerleşim yeri?", "şehir"],
+        ["Başımıza takarak kullandığımız giysi?", "şapka"]
+      ],
+
+      T: [
+        ["Ülkemizin adı?", "türkiye"],
+        ["Günleri ve ayları gösteren araç?", "takvim"],
+        ["Uzun kulaklı, havuç yemeyi seven hayvan?", "tavşan"],
+        ["Bitkilerin çoğalmasını sağlayan küçük yapı?", "tohum"]
+      ],
+
+      U: [
+        ["İçine hava doldurularak uçurulan oyuncak?", "uçurtma"],
+        ["Dünyamızın dışında bulunan sonsuz boşluk?", "uzay"],
+        ["Bir ülkenin vatandaşlarının oluşturduğu topluluk?", "ulus"],
+        ["Buğdayın öğütülmesiyle elde edilen beyaz madde?", "un"]
+      ],
+
+      Ü: [
+        ["Salkım hâlinde yetişen küçük meyve?", "üzüm"],
+        ["Cümlenin sonunda kullanılan noktalama işaretlerinden biri?", "ünlem"],
+        ["Ders kitabındaki konu bölümlerinden her biri?", "ünite"],
+        ["Bir iş karşılığında alınan para?", "ücret"]
+      ],
+
+      V: [
+        ["İnsanın doğup büyüdüğü ülke veya toprak?", "vatan"],
+        ["Suda ilerleyen büyük ulaşım aracı?", "vapur"],
+        ["Vücudun sağlıklı çalışmasına yardımcı olan besin maddesi?", "vitamin"],
+        ["Dağlardan püskürebilen sıcak ve akışkan madde?", "volkan"]
+      ],
+
+      Y: [
+        ["Gece gökyüzünde ışık saçan gök cismi?", "yıldız"],
+        ["Bulutlardan düşen su damlaları?", "yağmur"],
+        ["Rüzgârla hareket eden deniz taşıtı?", "yelken"],
+        ["Sütten yapılan beyaz besin?", "yoğurt"]
+      ],
+
+      Z: [
+        ["Uzun boyunlu, sarı benekli hayvan?", "zürafa"],
+        ["Sofralarda kullanılan küçük, yeşil veya siyah meyve?", "zeytin"],
+        ["Saatlerde veya kapılarda ses çıkarabilen araç?", "zil"],
+        ["Olayların gerçekleştiği ve ölçtüğümüz kavram?", "zaman"]
+      ]
+    };
+
+    const letters = Object.keys(questionBank);
+
+    const state = {
+      queue: [],
+      questions: {},
+      statuses: {},
+      correct: 0,
+      wrong: 0,
+      pass: 0,
+      totalSeconds: 180,
+      letterSeconds: 35,
+      locked: false,
+      finished: false,
+      totalTimer: null,
+      letterTimer: null
+    };
+
+    let soundOn = true;
+    let audioContext = null;
+
+    function el(id) {
+      return document.getElementById(id);
+    }
+
+    function normalize(text) {
+      return text
+        .toLocaleLowerCase("tr-TR")
+        .trim()
+        .replace(/[.,!?;:'"`]/g, "")
+        .replace(/\s+/g, " ");
+    }
+
+    function formatTime(seconds) {
+      const min = String(
+        Math.floor(seconds / 60)
+      ).padStart(2, "0");
+
+      const sec = String(
+        seconds % 60
+      ).padStart(2, "0");
+
+      return min + ":" + sec;
+    }
+
+    function randomQuestion(letter) {
+      const pool = questionBank[letter];
+
+      return pool[
+        Math.floor(Math.random() * pool.length)
+      ];
+    }
+
+    function buildWheel() {
+      const wheel = el("wheel");
+
+      wheel
+        .querySelectorAll(".letter")
+        .forEach(function (node) {
+          node.remove();
+        });
+
+      letters.forEach(function (letter) {
+        const node = document.createElement("div");
+
+        node.className = "letter";
+        node.dataset.letter = letter;
+        node.textContent = letter;
+
+        wheel.appendChild(node);
+      });
+
+      positionLetters();
+    }
+
+    function positionLetters() {
+      const wheel = el("wheel");
+      const size = wheel.offsetWidth;
+
+      if (!size) {
+        return;
+      }
+
+      const center = size / 2;
+      const radius = size / 2 - 29;
+
+      letters.forEach(function (letter, index) {
+        const node = document.querySelector(
+          '[data-letter="' + letter + '"]'
+        );
+
+        const angle =
+          index / letters.length * Math.PI * 2 -
+          Math.PI / 2;
+
+        node.style.left =
+          center + radius * Math.cos(angle) + "px";
+
+        node.style.top =
+          center + radius * Math.sin(angle) + "px";
+
+        node.style.transform =
+          "translate(-50%, -50%)";
+      });
+    }
+
+    function updateWheel() {
+      letters.forEach(function (letter) {
+        const node = document.querySelector(
+          '[data-letter="' + letter + '"]'
+        );
+
+        node.className = "letter";
+
+        if (
+          letter === state.queue[0] &&
+          !state.finished
+        ) {
+          node.classList.add("active");
+        }
+
+        if (state.statuses[letter]) {
+          node.classList.add(
+            state.statuses[letter]
+          );
+        }
+      });
+
+      el("centerText").textContent =
+        state.queue[0] || "4";
+    }
+
+    function updateScore() {
+      el("correctCount").textContent = state.correct;
+      el("wrongCount").textContent = state.wrong;
+      el("passCount").textContent = state.pass;
+      el("totalTime").textContent =
+        formatTime(Math.max(0, state.totalSeconds));
+
+      el("totalTime").classList.toggle(
+        "low",
+        state.totalSeconds <= 20
+      );
+    }
+
+    function updateTimer() {
+      const percentage =
+        state.letterSeconds / 35 * 100;
+
+      let color = "var(--green)";
+
+      if (percentage <= 45) {
+        color = "var(--gold)";
+      }
+
+      if (percentage <= 20) {
+        color = "var(--red)";
+      }
+
+      if (el("timerBar")) {
+        el("timerBar").style.width =
+          percentage + "%";
+
+        el("timerBar").style.background =
+          color;
+      }
+
+      if (el("letterTimer")) {
+        el("letterTimer").textContent =
+          state.letterSeconds + " SN";
+      }
+    }
+
+    function drawAnswerBoxes(value) {
+      const area = el("answerBoxes");
+      const letter = state.queue[0];
+
+      if (!area || !letter) {
+        return;
+      }
+
+      const answer = state.questions[letter][1];
+      const typed = normalize(value)
+        .replace(/\s/g, "")
+        .split("");
+
+      let index = 0;
+      area.innerHTML = "";
+
+      Array.from(answer).forEach(function (character) {
+        if (character === " ") {
+          const gap = document.createElement("span");
+          gap.className = "answer-gap";
+          area.appendChild(gap);
+          return;
+        }
+
+        const cell = document.createElement("span");
+        cell.className = "answer-cell";
+
+        if (typed[index]) {
+          cell.textContent =
+            typed[index].toLocaleUpperCase("tr-TR");
+
+          cell.classList.add("filled");
+        }
+
+        index++;
+        area.appendChild(cell);
+      });
+    }
+
+    function showQuestion() {
+      const letter = state.queue[0];
+
+      if (!letter || state.finished) {
+        return;
+      }
+
+      el("questionArea").innerHTML = `
+        <div class="question-head">
+          <small>AKTİF HARF // ${letter}</small>
+          <div class="question-letter">${letter}</div>
+        </div>
+
+        <div class="question-text">
+          ${state.questions[letter][0]}
+        </div>
+
+        <div id="answerBoxes" class="answer-boxes"></div>
+
+        <div class="answer-row">
+          <input
+            id="answerInput"
+            type="text"
+            autocomplete="off"
+            placeholder="Cevabını yaz..."
+          >
+
+          <button
+            id="checkButton"
+            class="btn primary"
+            type="button"
+          >
+            KONTROL ET
+          </button>
+        </div>
+
+        <div class="controls"
+          style="justify-content:flex-start;margin:12px 0 0;">
+          <button
+            id="passButton"
+            class="btn pass"
+            type="button"
+          >
+            PAS GEÇ
+          </button>
+        </div>
+
+        <div class="timer-info">
+          <span>HARF SÜRESİ</span>
+          <strong id="letterTimer">35 SN</strong>
+        </div>
+
+        <div class="timer-track">
+          <div id="timerBar"></div>
+        </div>
+
+        <div id="feedback" class="feedback"></div>
+      `;
+
+      const input = el("answerInput");
+
+      drawAnswerBoxes("");
+
+      input.addEventListener("input", function () {
+        drawAnswerBoxes(input.value);
+      });
+
+      input.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+          submitAnswer();
+        }
+      });
+
+      el("checkButton").addEventListener(
+        "click",
+        submitAnswer
+      );
+
+      el("passButton").addEventListener(
+        "click",
+        passQuestion
+      );
+
+      updateTimer();
+
+      setTimeout(function () {
+        input.focus();
+      }, 50);
+    }
+
+    function disableQuestion() {
+      if (el("answerInput")) {
+        el("answerInput").disabled = true;
+      }
+
+      if (el("checkButton")) {
+        el("checkButton").disabled = true;
+      }
+
+      if (el("passButton")) {
+        el("passButton").disabled = true;
+      }
+    }
+
+    function submitAnswer() {
+      if (
+        state.locked ||
+        state.finished ||
+        !state.queue.length
+      ) {
+        return;
+      }
+
+      const input = el("answerInput");
+      const typed = normalize(input.value);
+
+      if (!typed) {
+        el("feedback").textContent =
+          "Önce bir cevap yazmalısın.";
+
+        el("feedback").className =
+          "feedback wrong";
+
+        return;
+      }
+
+      state.locked = true;
+      clearInterval(state.letterTimer);
+
+      const letter = state.queue.shift();
+      const correctAnswer =
+        normalize(state.questions[letter][1]);
+
+      disableQuestion();
+
+      if (typed === correctAnswer) {
+        state.correct++;
+        state.statuses[letter] = "correct";
+
+        el("feedback").textContent =
+          "✓ DOĞRU! Harf tamamlandı.";
+
+        el("feedback").className =
+          "feedback correct";
+
+        playCorrect();
+      } else {
+        state.wrong++;
+        state.statuses[letter] = "wrong";
+
+        el("feedback").textContent =
+          "✕ Yanlış. Doğru cevap: " +
+          state.questions[letter][1]
+            .toLocaleUpperCase("tr-TR");
+
+        el("feedback").className =
+          "feedback wrong";
+
+        playWrong();
+      }
+
+      updateScore();
+      updateWheel();
+
+      setTimeout(function () {
+        nextQuestion();
+      }, 1300);
+    }
+
+    function nextQuestion() {
+      if (state.queue.length === 0) {
+        finishGame("complete");
+        return;
+      }
+
+      state.locked = false;
+      showQuestion();
+      updateWheel();
+      startLetterTimer();
+    }
+
+    function passQuestion() {
+      if (
+        state.locked ||
+        state.finished ||
+        !state.queue.length
+      ) {
+        return;
+      }
+
+      state.locked = true;
+      clearInterval(state.letterTimer);
+
+      const letter = state.queue.shift();
+
+      state.queue.push(letter);
+      state.pass++;
+      state.statuses[letter] = "skipped";
+
+      disableQuestion();
+
+      el("feedback").textContent =
+        "↻ Soru pas geçildi.";
+
+      el("feedback").className =
+        "feedback pass";
+
+      playPass();
+      updateScore();
+      updateWheel();
+
+      setTimeout(function () {
+        state.locked = false;
+        showQuestion();
+        startLetterTimer();
+      }, 800);
+    }
+
+    function autoPass() {
+      if (
+        state.locked ||
+        state.finished ||
+        !state.queue.length
+      ) {
+        return;
+      }
+
+      state.locked = true;
+
+      const letter = state.queue.shift();
+
+      state.queue.push(letter);
+      state.pass++;
+      state.statuses[letter] = "skipped";
+
+      disableQuestion();
+
+      el("feedback").textContent =
+        "⌛ Süre doldu. Soru pas geçildi.";
+
+      el("feedback").className =
+        "feedback pass";
+
+      playPass();
+      updateScore();
+      updateWheel();
+
+      setTimeout(function () {
+        state.locked = false;
+        showQuestion();
+        startLetterTimer();
+      }, 800);
+    }
+
+    function startLetterTimer() {
+      clearInterval(state.letterTimer);
+
+      state.letterSeconds = 35;
+      updateTimer();
+
+      state.letterTimer = setInterval(function () {
+        if (state.locked || state.finished) {
+          return;
+        }
+
+        state.letterSeconds--;
+        updateTimer();
+
+        if (state.letterSeconds <= 0) {
+          clearInterval(state.letterTimer);
+          autoPass();
+        }
+      }, 1000);
+    }
+
+    function startTotalTimer() {
+      clearInterval(state.totalTimer);
+
+      state.totalTimer = setInterval(function () {
+        if (state.finished) {
+          return;
+        }
+
+        state.totalSeconds--;
+        updateScore();
+
+        if (state.totalSeconds <= 0) {
+          finishGame("time");
+        }
+      }, 1000);
+    }
+
+    function createGame() {
+      clearInterval(state.totalTimer);
+      clearInterval(state.letterTimer);
+
+      state.queue = [...letters];
+      state.questions = {};
+      state.statuses = {};
+      state.correct = 0;
+      state.wrong = 0;
+      state.pass = 0;
+      state.totalSeconds = 180;
+      state.letterSeconds = 35;
+      state.locked = false;
+      state.finished = false;
+
+      letters.forEach(function (letter) {
+        /*
+          Her harfin dört soruluk havuzundan
+          yalnızca biri rastgele seçilir.
+        */
+        state.questions[letter] =
+          randomQuestion(letter);
+      });
+
+      el("startButton").disabled = true;
+      el("restartButton").disabled = false;
+      el("endScreen").style.display = "none";
+      el("questionArea").style.display = "block";
+      document.querySelector(".wheel-area").style.display =
+        "flex";
+
+      buildWheel();
+      updateScore();
+      updateWheel();
+      showQuestion();
+      startLetterTimer();
+      startTotalTimer();
+    }
+
+    function finishGame(reason) {
+      if (state.finished) {
+        return;
+      }
+
+      state.finished = true;
+
+      clearInterval(state.totalTimer);
+      clearInterval(state.letterTimer);
+
+      document.querySelector(".wheel-area").style.display =
+        "none";
+
+      el("questionArea").style.display = "none";
+      el("endScreen").style.display = "block";
+      el("startButton").disabled = false;
+      el("restartButton").disabled = false;
+
+      el("endTitle").textContent =
+        reason === "time"
+          ? "SÜRE DOLDU"
+          : "OYUN TAMAMLANDI";
+
+      el("endSummary").textContent =
+        "Doğru: " +
+        state.correct +
+        " · Yanlış: " +
+        state.wrong +
+        " · Pas: " +
+        state.pass;
+
+      el("recap").innerHTML = "";
+
+      letters.forEach(function (letter) {
+        const row = document.createElement("div");
+        const status =
+          state.statuses[letter] || "skipped";
+
+        let result = "PAS";
+
+        if (status === "correct") {
+          result = "DOĞRU";
+        }
+
+        if (status === "wrong") {
+          result = "YANLIŞ";
+        }
+
+        row.className =
+          "recap-row " +
+          (status === "correct" ? "ok" : "bad");
+
+        row.innerHTML = `
+          <strong>${letter}</strong>
+          <span>${result}</span>
+          <div>${state.questions[letter][1]}</div>
+        `;
+
+        el("recap").appendChild(row);
+      });
+    }
+
+    function prepareAudio() {
+      const AudioClass =
+        window.AudioContext ||
+        window.webkitAudioContext;
+
+      if (!AudioClass) {
+        return;
+      }
+
+      if (!audioContext) {
+        audioContext = new AudioClass();
+      }
+
+      if (audioContext.state === "suspended") {
+        audioContext.resume();
+      }
+    }
+
+    function playTone(
+      frequency,
+      duration,
+      type = "sine",
+      volume = .12,
+      delay = 0
+    ) {
+      if (!soundOn || !audioContext) {
+        return;
+      }
+
+      const start =
+        audioContext.currentTime + delay;
+
+      const oscillator =
+        audioContext.createOscillator();
+
+      const gain =
+        audioContext.createGain();
+
+      oscillator.type = type;
+      oscillator.frequency.setValueAtTime(
+        frequency,
+        start
+      );
+
+      gain.gain.setValueAtTime(volume, start);
+      gain.gain.exponentialRampToValueAtTime(
+        .001,
+        start + duration
+      );
+
+      oscillator.connect(gain);
+      gain.connect(audioContext.destination);
+
+      oscillator.start(start);
+      oscillator.stop(start + duration);
+    }
+
+    function playCorrect() {
+      playTone(520, .1, "sine", .16, 0);
+      playTone(700, .1, "sine", .16, .1);
+      playTone(900, .18, "triangle", .15, .2);
+    }
+
+    function playWrong() {
+      playTone(180, .2, "sawtooth", .12, 0);
+      playTone(120, .28, "sawtooth", .1, .12);
+    }
+
+    function playPass() {
+      playTone(430, .1, "triangle", .12, 0);
+      playTone(290, .18, "triangle", .1, .12);
+    }
+
+    el("startButton").addEventListener(
+      "click",
+      function () {
+        prepareAudio();
+        createGame();
+      }
+    );
+
+    el("restartButton").addEventListener(
+      "click",
+      function () {
+        prepareAudio();
+        createGame();
+      }
+    );
+
+    el("endRestartButton").addEventListener(
+      "click",
+      function () {
+        prepareAudio();
+        createGame();
+      }
+    );
+
+    el("soundButton").addEventListener(
+      "click",
+      function () {
+        soundOn = !soundOn;
+
+        el("soundButton").textContent =
+          soundOn
+            ? "🔊 SES AÇIK"
+            : "🔇 SES KAPALI";
+
+        if (soundOn) {
+          prepareAudio();
+          playTone(650, .08, "sine", .12);
+        }
+      }
+    );
+
+    window.addEventListener(
+      "resize",
+      positionLetters
+    );
+
+    buildWheel();
+  </script>
 </body>
 </html>
