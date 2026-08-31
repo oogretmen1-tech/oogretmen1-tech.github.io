@@ -3,538 +3,1552 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dinleme Köşesi – 2. Sınıf</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<title>Dinleme Laboratuvarı | 2. Sınıf</title>
+
 <style>
-:root{--sari:#FFD93D;--kirmizi:#FF6B6B;--mavi:#4ECDC4;--yesil:#6BCB77;--mor:#C77DFF;--turuncu:#FF9F43;--bg:#FFFBF0;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:"Nunito",sans-serif;background:var(--bg);}
-header{background:linear-gradient(160deg,#4ECDC4,#C77DFF,#FF6B6B);padding:28px 16px 18px;text-align:center;}
-header h1{font-family:"Fredoka One",cursive;font-size:clamp(2rem,6vw,3rem);color:#fff;text-shadow:3px 4px 0 rgba(0,0,0,.15);}
-header p{color:rgba(255,255,255,.92);font-weight:700;font-size:1rem;margin-top:5px;}
-nav{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;padding:12px 10px;background:#fff;border-bottom:3px solid #f0e8d8;position:sticky;top:0;z-index:100;box-shadow:0 3px 12px rgba(0,0,0,.08);}
-nav button{font-family:"Fredoka One",cursive;font-size:.82rem;padding:8px 13px;border:3px solid transparent;border-radius:50px;cursor:pointer;transition:all .2s;background:#f5f0e8;color:#7a5c3a;}
-nav button.active,nav button:hover{background:var(--mavi);color:#fff;border-color:#3ab8b0;transform:translateY(-2px);}
-.section{display:none;padding:24px 14px 50px;max-width:860px;margin:0 auto;}
-.section.active{display:block;animation:pop .35s ease;}
-@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.card{background:#fff;border-radius:24px;padding:24px;margin-bottom:20px;box-shadow:0 5px 24px rgba(0,0,0,.07);border:2px solid #f0e8d8;}
-.card-title{font-family:"Fredoka One",cursive;font-size:1.4rem;margin-bottom:14px;}
-.info{border-radius:14px;padding:14px 18px;margin:10px 0;font-size:1rem;font-weight:700;line-height:1.65;}
-.info-mavi{background:#e8fafa;border-left:5px solid var(--mavi);color:#0e7490;}
-.info-yesil{background:#f0fdf4;border-left:5px solid var(--yesil);color:#166534;}
-.info-turuncu{background:#fff7ed;border-left:5px solid var(--turuncu);color:#9a3412;}
+:root{
+  --bg:#06091a;
+  --bg2:#0b1231;
+  --panel:rgba(15,24,58,.78);
+  --panel2:rgba(21,34,78,.92);
+  --line:rgba(111,190,255,.22);
 
-/* OKUMA ALANI */
-.metin-kutu{background:#f8f9fa;border-radius:16px;padding:20px;margin:14px 0;font-size:1.1rem;font-weight:700;line-height:2;color:#2c3e50;border:2px solid #dee2e6;min-height:100px;}
-.metin-kutu.okunuyor{background:#e8fafa;border-color:var(--mavi);}
-.metin-kutu .kelime{cursor:pointer;padding:2px 4px;border-radius:4px;transition:background .2s;}
-.metin-kutu .kelime:hover{background:rgba(78,205,196,.2);}
-.metin-kutu .kelime.aktif{background:var(--sari);border-radius:6px;}
+  --cyan:#42e8ff;
+  --blue:#4f7cff;
+  --purple:#a76cff;
+  --pink:#ff71c8;
+  --yellow:#ffe66d;
+  --green:#65f5a8;
+  --red:#ff6d84;
 
-/* OYNAT BUTONU */
-.oynat-btn{display:flex;align-items:center;justify-content:center;gap:10px;font-family:"Fredoka One",cursive;font-size:1.2rem;padding:14px 32px;border:none;border-radius:50px;cursor:pointer;transition:all .2s;margin:10px 4px;box-shadow:0 4px 14px rgba(0,0,0,.15);}
-.oynat-btn:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,.2);}
-.btn-oynat{background:linear-gradient(135deg,#4ECDC4,#2ab8af);color:#fff;}
-.btn-dur{background:linear-gradient(135deg,#FF6B6B,#e05555);color:#fff;}
-.btn-hiz{background:linear-gradient(135deg,#FF9F43,#e8892a);color:#fff;font-size:.95rem;padding:10px 20px;}
-.btn-ses{background:linear-gradient(135deg,#6BCB77,#55b863);color:#fff;font-size:.95rem;padding:10px 20px;}
-.ctrl{text-align:center;margin:14px 0;}
-.hiz-secim{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:10px 0;}
-.hiz-btn{font-family:"Fredoka One",cursive;font-size:.85rem;padding:8px 18px;border:3px solid var(--mavi);border-radius:50px;background:#fff;color:var(--mavi);cursor:pointer;transition:all .2s;}
-.hiz-btn.secili{background:var(--mavi);color:#fff;}
-.hiz-btn:hover{background:var(--mavi);color:#fff;}
+  --text:#edf7ff;
+  --soft:#aebfdf;
+  --dark:#07101e;
+}
 
-/* HİKAYE KARTLARI */
-.hikaye-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin:14px 0;}
-.hikaye-kart{border-radius:18px;padding:18px;border:3px solid;cursor:pointer;transition:all .2s;background:#fff;}
-.hikaye-kart:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(0,0,0,.12);}
-.hikaye-kart.secili{box-shadow:0 0 0 4px var(--sari);}
-.hikaye-kart .hk-emoji{font-size:2.5rem;margin-bottom:8px;}
-.hikaye-kart h4{font-family:"Fredoka One",cursive;font-size:1rem;margin-bottom:4px;}
-.hikaye-kart p{font-size:.78rem;font-weight:700;opacity:.75;}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
-/* SAYI OYUNU */
-.sayi-input{font-family:"Fredoka One",cursive;font-size:2rem;width:140px;text-align:center;border:4px solid var(--mavi);border-radius:16px;padding:10px;outline:none;color:var(--mavi);}
-.sayi-sonuc{font-family:"Fredoka One",cursive;font-size:1.4rem;color:var(--yesil);margin:10px 0;min-height:40px;text-align:center;}
+html{
+  scroll-behavior:smooth;
+}
 
-/* İLERLEME */
-.ilerleme{width:100%;height:8px;background:#dee2e6;border-radius:4px;margin:10px 0;overflow:hidden;}
-.ilerleme-bar{height:100%;background:linear-gradient(90deg,var(--mavi),var(--mor));border-radius:4px;transition:width .3s;width:0%;}
+body{
+  min-height:100vh;
+  color:var(--text);
+  font-family:Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(66,232,255,.15), transparent 25%),
+    radial-gradient(circle at 90% 15%, rgba(167,108,255,.17), transparent 28%),
+    radial-gradient(circle at 50% 95%, rgba(255,113,200,.10), transparent 30%),
+    linear-gradient(135deg, #050816, #0b1231 45%, #080d24);
+  overflow-x:hidden;
+}
 
-/* SES DALGASI ANİMASYONU */
-.ses-dalgasi{display:flex;align-items:center;gap:3px;justify-content:center;height:30px;margin:8px 0;}
-.dalga{width:4px;border-radius:2px;background:var(--mavi);animation:dalga 1s ease-in-out infinite;}
-.dalga:nth-child(1){animation-delay:0s;height:8px;}
-.dalga:nth-child(2){animation-delay:.1s;height:16px;}
-.dalga:nth-child(3){animation-delay:.2s;height:24px;}
-.dalga:nth-child(4){animation-delay:.3s;height:16px;}
-.dalga:nth-child(5){animation-delay:.4s;height:8px;}
-.dalga:nth-child(6){animation-delay:.5s;height:20px;}
-.dalga:nth-child(7){animation-delay:.6s;height:12px;}
-@keyframes dalga{0%,100%{transform:scaleY(1)}50%{transform:scaleY(2)}}
-.ses-dalgasi.dur .dalga{animation:none;height:4px;}
+/* ARKA PLANDAKİ TEKNOLOJİK GRID */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-2;
+  opacity:.32;
+  background-image:
+    linear-gradient(rgba(66,232,255,.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(66,232,255,.11) 1px, transparent 1px);
+  background-size:42px 42px;
+  mask-image:linear-gradient(to bottom, black, transparent 78%);
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  width:520px;
+  height:520px;
+  border:1px solid rgba(66,232,255,.13);
+  border-radius:50%;
+  right:-220px;
+  top:100px;
+  box-shadow:
+    0 0 0 35px rgba(66,232,255,.025),
+    0 0 0 70px rgba(167,108,255,.02),
+    0 0 90px rgba(66,232,255,.18);
+  pointer-events:none;
+  z-index:-1;
+  animation:orbit 15s linear infinite;
+}
+
+@keyframes orbit{
+  from{transform:rotate(0deg);}
+  to{transform:rotate(360deg);}
+}
+
+/* ÜST BÖLÜM */
+header{
+  position:relative;
+  overflow:hidden;
+  padding:50px 18px 35px;
+  text-align:center;
+  border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg, rgba(8,16,47,.9), rgba(7,11,29,.4));
+}
+
+.star{
+  position:absolute;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 0 14px #fff, 0 0 22px var(--cyan);
+  animation:twinkle 2.5s infinite alternate;
+}
+
+.star:nth-child(1){width:4px;height:4px;top:20%;left:10%;}
+.star:nth-child(2){width:6px;height:6px;top:68%;left:17%;animation-delay:.8s;}
+.star:nth-child(3){width:4px;height:4px;top:28%;right:13%;animation-delay:1.3s;}
+.star:nth-child(4){width:7px;height:7px;top:75%;right:20%;animation-delay:.4s;}
+.star:nth-child(5){width:4px;height:4px;top:12%;left:42%;animation-delay:1.6s;}
+
+@keyframes twinkle{
+  from{opacity:.25;transform:scale(.7);}
+  to{opacity:1;transform:scale(1.4);}
+}
+
+.logo-chip{
+  width:78px;
+  height:78px;
+  margin:0 auto 16px;
+  display:grid;
+  place-items:center;
+  font-size:2.3rem;
+  border-radius:24px;
+  background:
+    linear-gradient(135deg, rgba(66,232,255,.28), rgba(167,108,255,.22)),
+    rgba(9,19,49,.85);
+  border:1px solid rgba(66,232,255,.7);
+  box-shadow:
+    0 0 0 6px rgba(66,232,255,.06),
+    0 0 30px rgba(66,232,255,.38),
+    inset 0 0 18px rgba(255,255,255,.12);
+  animation:float 3s ease-in-out infinite;
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-8px);}
+}
+
+header h1{
+  font-size:clamp(2rem,6vw,4rem);
+  letter-spacing:1px;
+  text-transform:uppercase;
+  text-shadow:0 0 16px rgba(66,232,255,.85);
+}
+
+header h1 span{
+  color:var(--cyan);
+}
+
+header p{
+  max-width:650px;
+  margin:13px auto 0;
+  color:var(--soft);
+  line-height:1.6;
+  font-size:1rem;
+}
+
+.status{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-top:17px;
+  padding:8px 14px;
+  border:1px solid rgba(101,245,168,.35);
+  border-radius:100px;
+  color:var(--green);
+  font-size:.82rem;
+  font-weight:bold;
+  background:rgba(101,245,168,.06);
+}
+
+.status-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 12px var(--green);
+  animation:pulse 1.4s infinite;
+}
+
+@keyframes pulse{
+  50%{opacity:.35;transform:scale(.65);}
+}
+
+/* MENÜ */
+nav{
+  position:sticky;
+  top:0;
+  z-index:50;
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:9px;
+  padding:13px;
+  backdrop-filter:blur(14px);
+  background:rgba(5,8,22,.78);
+  border-bottom:1px solid var(--line);
+}
+
+.tab-btn,
+.small-btn,
+.play-btn,
+.choice-btn{
+  border:none;
+  color:var(--text);
+  cursor:pointer;
+  font-weight:bold;
+  transition:.22s ease;
+  font-family:inherit;
+}
+
+.tab-btn{
+  padding:10px 17px;
+  border-radius:12px;
+  color:var(--soft);
+  background:rgba(255,255,255,.045);
+  border:1px solid transparent;
+}
+
+.tab-btn:hover,
+.tab-btn.active{
+  color:white;
+  border-color:rgba(66,232,255,.68);
+  background:linear-gradient(135deg, rgba(66,232,255,.17), rgba(79,124,255,.20));
+  box-shadow:0 0 18px rgba(66,232,255,.17);
+  transform:translateY(-2px);
+}
+
+/* GENEL YAPI */
+main{
+  width:min(1120px, calc(100% - 28px));
+  margin:30px auto 70px;
+}
+
+.section{
+  display:none;
+  animation:show .35s ease;
+}
+
+.section.active{
+  display:block;
+}
+
+@keyframes show{
+  from{opacity:0;transform:translateY(12px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+.grid-2{
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:18px;
+}
+
+.panel{
+  position:relative;
+  overflow:hidden;
+  margin-bottom:18px;
+  padding:22px;
+  border-radius:22px;
+  border:1px solid var(--line);
+  background:linear-gradient(145deg, rgba(22,34,80,.88), rgba(8,14,39,.88));
+  box-shadow:0 18px 45px rgba(0,0,0,.25);
+}
+
+.panel::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:2px;
+  background:linear-gradient(90deg, transparent, var(--cyan), var(--purple), transparent);
+  opacity:.8;
+}
+
+.panel-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:10px;
+  color:var(--cyan);
+  font-size:1.2rem;
+  font-weight:800;
+  letter-spacing:.3px;
+}
+
+.panel-description{
+  margin-bottom:18px;
+  color:var(--soft);
+  line-height:1.6;
+  font-size:.95rem;
+}
+
+/* HİKÂYE KARTLARI */
+.story-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(210px, 1fr));
+  gap:13px;
+}
+
+.story-card{
+  position:relative;
+  overflow:hidden;
+  min-height:180px;
+  padding:18px;
+  text-align:left;
+  cursor:pointer;
+  border-radius:17px;
+  color:var(--text);
+  border:1px solid rgba(255,255,255,.10);
+  background:linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.025));
+  transition:.25s ease;
+}
+
+.story-card::after{
+  content:"";
+  position:absolute;
+  width:120px;
+  height:120px;
+  right:-44px;
+  bottom:-55px;
+  border-radius:50%;
+  background:var(--card-color);
+  opacity:.14;
+  filter:blur(5px);
+}
+
+.story-card:hover,
+.story-card.selected{
+  transform:translateY(-5px);
+  border-color:var(--card-color);
+  box-shadow:0 10px 28px color-mix(in srgb, var(--card-color) 25%, transparent);
+}
+
+.story-card.selected{
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--card-color) 40%, transparent),
+    0 12px 30px rgba(0,0,0,.3);
+}
+
+.story-icon{
+  width:48px;
+  height:48px;
+  display:grid;
+  place-items:center;
+  margin-bottom:14px;
+  border-radius:15px;
+  font-size:1.7rem;
+  background:color-mix(in srgb, var(--card-color) 18%, transparent);
+  border:1px solid color-mix(in srgb, var(--card-color) 60%, transparent);
+}
+
+.story-card h3{
+  margin-bottom:7px;
+  font-size:1rem;
+}
+
+.story-card p{
+  color:var(--soft);
+  font-size:.82rem;
+  line-height:1.5;
+}
+
+/* OYNATICI */
+.now-playing{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:14px;
+  padding:13px;
+  border-radius:14px;
+  background:rgba(66,232,255,.07);
+  border:1px solid rgba(66,232,255,.15);
+}
+
+.now-playing strong{
+  display:block;
+  font-size:1rem;
+}
+
+.now-playing small{
+  display:block;
+  margin-top:4px;
+  color:var(--soft);
+}
+
+.reader{
+  min-height:260px;
+  max-height:440px;
+  overflow:auto;
+  padding:19px;
+  color:#dfeeff;
+  line-height:2;
+  font-size:1.04rem;
+  border-radius:16px;
+  border:1px solid rgba(66,232,255,.18);
+  background:rgba(2,7,22,.55);
+}
+
+.reader.reading{
+  border-color:rgba(66,232,255,.75);
+  box-shadow:inset 0 0 25px rgba(66,232,255,.08);
+}
+
+.reader::-webkit-scrollbar{
+  width:8px;
+}
+
+.reader::-webkit-scrollbar-thumb{
+  border-radius:10px;
+  background:rgba(66,232,255,.35);
+}
+
+.progress-wrap{
+  margin:16px 0;
+}
+
+.progress-label{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:8px;
+  color:var(--soft);
+  font-size:.8rem;
+}
+
+.progress{
+  height:9px;
+  overflow:hidden;
+  border-radius:20px;
+  background:rgba(255,255,255,.08);
+}
+
+.progress-bar{
+  width:0%;
+  height:100%;
+  border-radius:20px;
+  background:linear-gradient(90deg, var(--cyan), var(--blue), var(--purple));
+  box-shadow:0 0 15px var(--cyan);
+  transition:width .25s ease;
+}
+
+.controls{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.play-btn{
+  padding:13px 20px;
+  border-radius:13px;
+  background:linear-gradient(135deg, var(--cyan), var(--blue));
+  box-shadow:0 8px 20px rgba(66,232,255,.22);
+}
+
+.play-btn.stop{
+  background:linear-gradient(135deg, var(--pink), var(--red));
+  box-shadow:0 8px 20px rgba(255,109,132,.18);
+}
+
+.play-btn:hover,
+.small-btn:hover,
+.choice-btn:hover{
+  transform:translateY(-3px);
+  filter:brightness(1.1);
+}
+
+.speed-row,
+.text-list{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:15px 0;
+}
+
+.small-btn,
+.choice-btn{
+  padding:9px 12px;
+  border-radius:11px;
+  color:var(--soft);
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.06);
+}
+
+.small-btn.active,
+.choice-btn.active{
+  color:var(--cyan);
+  border-color:rgba(66,232,255,.7);
+  background:rgba(66,232,255,.12);
+}
+
+/* SES DALGASI */
+.wave{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  height:32px;
+}
+
+.wave i{
+  width:4px;
+  height:6px;
+  border-radius:10px;
+  background:var(--cyan);
+  box-shadow:0 0 8px var(--cyan);
+}
+
+.wave.playing i{
+  animation:wave 1s ease-in-out infinite;
+}
+
+.wave.playing i:nth-child(1){animation-delay:.05s;}
+.wave.playing i:nth-child(2){animation-delay:.15s;}
+.wave.playing i:nth-child(3){animation-delay:.25s;}
+.wave.playing i:nth-child(4){animation-delay:.35s;}
+.wave.playing i:nth-child(5){animation-delay:.45s;}
+.wave.playing i:nth-child(6){animation-delay:.55s;}
+.wave.playing i:nth-child(7){animation-delay:.65s;}
+
+@keyframes wave{
+  0%,100%{height:6px;}
+  50%{height:29px;}
+}
+
+/* SAYILAR */
+.number-input{
+  width:min(100%, 330px);
+  padding:16px;
+  outline:none;
+  text-align:center;
+  color:var(--cyan);
+  font-size:1.7rem;
+  font-weight:bold;
+  border-radius:15px;
+  border:1px solid rgba(66,232,255,.5);
+  background:rgba(4,10,30,.8);
+  box-shadow:inset 0 0 18px rgba(66,232,255,.06);
+}
+
+.number-output{
+  min-height:62px;
+  display:grid;
+  place-items:center;
+  margin:17px 0;
+  padding:15px;
+  text-align:center;
+  color:var(--yellow);
+  font-size:1.35rem;
+  font-weight:bold;
+  border-radius:14px;
+  border:1px solid rgba(255,230,109,.25);
+  background:rgba(255,230,109,.06);
+}
+
+.example-row{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:13px;
+}
+
+.example{
+  min-width:52px;
+  padding:9px;
+  cursor:pointer;
+  color:var(--cyan);
+  border-radius:10px;
+  border:1px solid rgba(66,232,255,.24);
+  background:rgba(66,232,255,.07);
+}
+
+.example:hover{
+  background:rgba(66,232,255,.17);
+}
+
+.question-box{
+  min-height:55px;
+  display:grid;
+  place-items:center;
+  margin:15px 0;
+  color:var(--yellow);
+  font-size:1.1rem;
+  font-weight:bold;
+}
+
+.answers{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:10px;
+}
+
+.answer{
+  padding:14px;
+  cursor:pointer;
+  color:var(--text);
+  font-size:1.1rem;
+  font-weight:bold;
+  border-radius:13px;
+  border:1px solid rgba(255,255,255,.13);
+  background:rgba(255,255,255,.05);
+}
+
+.answer:hover{
+  border-color:var(--purple);
+  background:rgba(167,108,255,.12);
+}
+
+.feedback{
+  min-height:30px;
+  margin-top:15px;
+  text-align:center;
+  font-weight:bold;
+}
+
+.good{color:var(--green);}
+.bad{color:var(--red);}
+
+.notice{
+  position:fixed;
+  left:50%;
+  bottom:20px;
+  z-index:100;
+  max-width:min(92vw, 500px);
+  padding:12px 17px;
+  color:white;
+  text-align:center;
+  border-radius:12px;
+  background:rgba(17,31,73,.95);
+  border:1px solid rgba(66,232,255,.55);
+  box-shadow:0 10px 30px rgba(0,0,0,.4);
+  transform:translateX(-50%) translateY(120px);
+  transition:.35s ease;
+}
+
+.notice.show{
+  transform:translateX(-50%) translateY(0);
+}
+
+footer{
+  padding:30px 15px 40px;
+  color:#7586aa;
+  text-align:center;
+  font-size:.83rem;
+}
+
+@media(max-width:760px){
+  .grid-2{grid-template-columns:1fr;}
+  .panel{padding:17px;}
+  .reader{font-size:1rem;}
+  .answers{grid-template-columns:1fr;}
+  header{padding-top:35px;}
+}
 </style>
 </head>
+
 <body>
+
 <header>
-  <h1>🎧 Dinleme Köşesi</h1>
-  <p>2. Sınıf · Taylıca İlkokulu · Sesli Okuma</p>
+  <span class="star"></span>
+  <span class="star"></span>
+  <span class="star"></span>
+  <span class="star"></span>
+  <span class="star"></span>
+
+  <div class="logo-chip">🎧</div>
+  <h1>Dinleme <span>Laboratuvarı</span></h1>
+  <p>
+    2. sınıf öğrencileri için sesli hikâyeler, okuma metinleri
+    ve sayıların okunuşunu keşfetme alanı.
+  </p>
+
+  <div class="status">
+    <span class="status-dot"></span>
+    SES SİSTEMİ HAZIR
+  </div>
 </header>
+
 <nav>
-  <button class="active" onclick="goster('hikaye',this)">📖 Hikayeler</button>
-  <button onclick="goster('metin',this)">📝 Okuma Metinleri</button>
-  <button onclick="goster('sayi',this)">🔢 Sayıların Okunuşu</button>
+  <button class="tab-btn active" onclick="showSection('stories', this)">📚 Hikâye Arşivi</button>
+  <button class="tab-btn" onclick="showSection('texts', this)">📝 Okuma Alanı</button>
+  <button class="tab-btn" onclick="showSection('numbers', this)">🔢 Sayı Laboratuvarı</button>
 </nav>
 
-<!-- 1. HİKAYELER -->
-<div id="hikaye" class="section active">
-  <div class="card">
-    <div class="card-title" style="color:var(--mavi)">📖 Hikaye Seç ve Dinle!</div>
-    <div class="info info-mavi">Bir hikaye seç, sonra ▶ Dinle butonuna bas!</div>
-    <div class="hikaye-grid" id="hikayeGrid"></div>
-  </div>
-  <div class="card" id="hikayeOynatici" style="display:none">
-    <div class="card-title" id="hikayeBaslik" style="color:var(--mor)"></div>
-    <div class="ses-dalgasi dur" id="sesDalgasi">
-      <div class="dalga"></div><div class="dalga"></div><div class="dalga"></div>
-      <div class="dalga"></div><div class="dalga"></div><div class="dalga"></div><div class="dalga"></div>
-    </div>
-    <div class="metin-kutu" id="hikayeMetin"></div>
-    <div class="ilerleme"><div class="ilerleme-bar" id="hikayeBar"></div></div>
-    <div class="hiz-secim">
-      <div style="font-family:'Fredoka One',cursive;font-size:.9rem;color:#555;align-self:center;">Hız:</div>
-      <button class="hiz-btn" onclick="hizSec(0.7,this)">🐢 Yavaş</button>
-      <button class="hiz-btn secili" onclick="hizSec(1,this)">🚶 Normal</button>
-      <button class="hiz-btn" onclick="hizSec(1.3,this)">🏃 Hızlı</button>
-    </div>
-    <div class="ctrl">
-      <button class="oynat-btn btn-oynat" id="oynatBtn" onclick="hikayeOynat()">▶ Dinle</button>
-      <button class="oynat-btn btn-dur" onclick="hikayeDur()">⏹ Durdur</button>
-    </div>
-  </div>
-</div>
+<main>
 
-<!-- 2. OKUMA METİNLERİ -->
-<div id="metin" class="section">
-  <div class="card">
-    <div class="card-title" style="color:var(--turuncu)">📝 Okuma Metinleri</div>
-    <div class="info info-turuncu">Metni seç, dinle ve takip et! Her kelimeye tıklayarak da seslendirebilirsin.</div>
-  </div>
-  <div class="card">
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
-      <button class="hiz-btn secili" onclick="metinSec(0,this)">🌸 İlkbahar</button>
-      <button class="hiz-btn" onclick="metinSec(1,this)">🏫 Okul</button>
-      <button class="hiz-btn" onclick="metinSec(2,this)">🐾 Hayvanlar</button>
-      <button class="hiz-btn" onclick="metinSec(3,this)">👨‍👩‍👧 Aile</button>
-    </div>
-    <div class="ses-dalgasi dur" id="metinDalga">
-      <div class="dalga"></div><div class="dalga"></div><div class="dalga"></div>
-      <div class="dalga"></div><div class="dalga"></div><div class="dalga"></div><div class="dalga"></div>
-    </div>
-    <div class="metin-kutu" id="metinKutu"></div>
-    <div class="ilerleme"><div class="ilerleme-bar" id="metinBar"></div></div>
-    <div class="hiz-secim">
-      <div style="font-family:'Fredoka One',cursive;font-size:.9rem;color:#555;align-self:center;">Hız:</div>
-      <button class="hiz-btn" onclick="metinHizSec(0.6,this)">🐢 Yavaş</button>
-      <button class="hiz-btn secili" onclick="metinHizSec(0.9,this)">🚶 Normal</button>
-      <button class="hiz-btn" onclick="metinHizSec(1.2,this)">🏃 Hızlı</button>
-    </div>
-    <div class="ctrl">
-      <button class="oynat-btn btn-oynat" onclick="metinOynat()">▶ Dinle</button>
-      <button class="oynat-btn btn-dur" onclick="metinDur()">⏹ Durdur</button>
-    </div>
-  </div>
-</div>
+  <!-- HİKÂYELER -->
+  <section id="stories" class="section active">
+    <div class="panel">
+      <div class="panel-title">◈ Hikâye Arşivi</div>
+      <p class="panel-description">
+        Bir hikâye seç. Ardından dinleme hızını belirle ve sesli okumayı başlat.
+        Sistem, uzun metinleri bölerek daha kararlı biçimde seslendirir.
+      </p>
 
-<!-- 3. SAYI OKUNUŞU -->
-<div id="sayi" class="section">
-  <div class="card">
-    <div class="card-title" style="color:var(--yesil)">🔢 Sayıların Okunuşu</div>
-    <div class="info info-yesil">Bir sayı yaz, nasıl okunduğunu öğren ve dinle!</div>
-    <div class="ctrl" style="margin:20px 0;">
-      <input class="sayi-input" type="number" id="sayiInput" min="0" max="1000000" placeholder="0" oninput="sayiGoster()">
+      <div id="storyGrid" class="story-grid"></div>
     </div>
-    <div class="sayi-sonuc" id="sayiSonuc">Bir sayı yaz!</div>
-    <div class="ctrl">
-      <button class="oynat-btn btn-oynat" onclick="sayiOku()">🔊 Sesli Oku</button>
+
+    <div class="panel">
+      <div class="now-playing">
+        <div>
+          <strong id="storyTitle">Hikâye seçiliyor...</strong>
+          <small>Sesli hikâye oynatıcısı</small>
+        </div>
+
+        <div class="wave" id="storyWave">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+      </div>
+
+      <div id="storyReader" class="reader"></div>
+
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span>Dinleme ilerlemesi</span>
+          <span id="storyPercent">0%</span>
+        </div>
+        <div class="progress">
+          <div id="storyProgress" class="progress-bar"></div>
+        </div>
+      </div>
+
+      <div class="speed-row" id="storySpeed">
+        <button class="small-btn" onclick="setStorySpeed(.7, this)">🐢 Yavaş</button>
+        <button class="small-btn active" onclick="setStorySpeed(1, this)">🚶 Normal</button>
+        <button class="small-btn" onclick="setStorySpeed(1.25, this)">🚀 Hızlı</button>
+      </div>
+
+      <div class="controls">
+        <button class="play-btn" onclick="playStory()">▶ Hikâyeyi Dinle</button>
+        <button class="play-btn stop" onclick="stopAll()">■ Durdur</button>
+      </div>
     </div>
-    <div class="info info-mavi" style="margin-top:14px;">💡 Örnekler:</div>
-    <div style="display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;">
-      <button class="hiz-btn" onclick="ornekSayi(15)">15</button>
-      <button class="hiz-btn" onclick="ornekSayi(47)">47</button>
-      <button class="hiz-btn" onclick="ornekSayi(100)">100</button>
-      <button class="hiz-btn" onclick="ornekSayi(253)">253</button>
-      <button class="hiz-btn" onclick="ornekSayi(1000)">1000</button>
-      <button class="hiz-btn" onclick="ornekSayi(5280)">5280</button>
+  </section>
+
+  <!-- OKUMA METİNLERİ -->
+  <section id="texts" class="section">
+    <div class="panel">
+      <div class="panel-title">◈ Okuma Alanı</div>
+      <p class="panel-description">
+        Kısa metinlerden birini seç, dinle ve ekrandan takip et.
+      </p>
+
+      <div id="textButtons" class="text-list"></div>
     </div>
-  </div>
-  <div class="card">
-    <div class="card-title" style="color:var(--mor)">🎮 Tahmin Oyunu</div>
-    <div class="info info-mavi">Sesi dinle, hangi sayı olduğunu bul!</div>
-    <div class="ctrl" style="margin:16px 0;">
-      <button class="oynat-btn btn-oynat" onclick="tahminSoru()">🔊 Dinle</button>
+
+    <div class="panel">
+      <div class="now-playing">
+        <div>
+          <strong id="textTitle">Okuma metni</strong>
+          <small>Takip ederek dinleme modu</small>
+        </div>
+
+        <div class="wave" id="textWave">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+      </div>
+
+      <div id="textReader" class="reader"></div>
+
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span>Okuma ilerlemesi</span>
+          <span id="textPercent">0%</span>
+        </div>
+        <div class="progress">
+          <div id="textProgress" class="progress-bar"></div>
+        </div>
+      </div>
+
+      <div class="speed-row" id="textSpeed">
+        <button class="small-btn" onclick="setTextSpeed(.7, this)">🐢 Yavaş</button>
+        <button class="small-btn active" onclick="setTextSpeed(.95, this)">🚶 Normal</button>
+        <button class="small-btn" onclick="setTextSpeed(1.2, this)">🚀 Hızlı</button>
+      </div>
+
+      <div class="controls">
+        <button class="play-btn" onclick="playText()">▶ Metni Dinle</button>
+        <button class="play-btn stop" onclick="stopAll()">■ Durdur</button>
+      </div>
     </div>
-    <div id="tahminSoru" style="font-family:'Fredoka One',cursive;font-size:1.1rem;text-align:center;color:var(--mor);min-height:32px;"></div>
-    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:10px 0;" id="tahminSecenekler"></div>
-    <div id="tahminFb" style="font-family:'Fredoka One',cursive;font-size:1.1rem;text-align:center;min-height:28px;margin-top:8px;"></div>
-    <div class="ctrl"><button class="hiz-btn" onclick="tahminSoru()">▶ Yeni Soru</button></div>
-  </div>
-</div>
+  </section>
+
+  <!-- SAYILAR -->
+  <section id="numbers" class="section">
+    <div class="grid-2">
+
+      <div class="panel">
+        <div class="panel-title">◈ Sayı Okuma Modülü</div>
+        <p class="panel-description">
+          0 ile 1.000.000 arasında bir sayı gir. Sayının yazıyla okunuşunu gör ve dinle.
+        </p>
+
+        <div style="text-align:center;">
+          <input
+            id="numberInput"
+            class="number-input"
+            type="number"
+            min="0"
+            max="1000000"
+            placeholder="Bir sayı yaz"
+            oninput="showNumber()"
+          >
+        </div>
+
+        <div id="numberOutput" class="number-output">Bir sayı yazmanı bekliyorum.</div>
+
+        <div class="controls">
+          <button class="play-btn" onclick="readNumber()">🔊 Sesli Oku</button>
+        </div>
+
+        <div class="example-row">
+          <button class="example" onclick="exampleNumber(15)">15</button>
+          <button class="example" onclick="exampleNumber(47)">47</button>
+          <button class="example" onclick="exampleNumber(100)">100</button>
+          <button class="example" onclick="exampleNumber(253)">253</button>
+          <button class="example" onclick="exampleNumber(1000)">1000</button>
+          <button class="example" onclick="exampleNumber(5280)">5280</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">◈ Sesli Tahmin Oyunu</div>
+        <p class="panel-description">
+          Sayıyı dinle. Sonra doğru cevabı seç.
+        </p>
+
+        <div class="controls">
+          <button class="play-btn" onclick="newQuestion()">🔊 Soruyu Dinle</button>
+        </div>
+
+        <div id="questionBox" class="question-box">
+          Yeni soru için “Soruyu Dinle” butonuna bas.
+        </div>
+
+        <div id="answerBox" class="answers"></div>
+        <div id="feedback" class="feedback"></div>
+
+        <div class="controls" style="margin-top:15px;">
+          <button class="small-btn" onclick="newQuestion()">↻ Yeni Soru</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<div id="notice" class="notice"></div>
+
+<footer>
+  Dinleme Laboratuvarı · 2. Sınıf Sesli Okuma Uygulaması
+</footer>
 
 <script>
-// BÖLÜM GEÇİŞİ
-function goster(id,btn){
-  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
-  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+/* ======================================================
+   BÖLÜM GEÇİŞLERİ
+====================================================== */
+function showSection(id, button){
+  document.querySelectorAll(".section").forEach(section => {
+    section.classList.remove("active");
+  });
+
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.classList.remove("active");
+  });
+
   document.getElementById(id).classList.add("active");
-  btn.classList.add("active");
-  if(window.SES) SES.dur();
+  button.classList.add("active");
+  stopAll();
 }
 
-// ===== SES MOTORU (Chrome kesilme + sessizlik düzeltmeleri) =====
-(function(){
-  var destek = ('speechSynthesis' in window);
-  var trSes=null, yuklendi=false, kuyruk=[], indeks=0, toplam=0, okunan=0;
-  var opts={}, canliMi=false, nabiz=null, uyarildi=false;
+/* ======================================================
+   BİLDİRİM
+====================================================== */
+let noticeTimer;
 
-  function sesleriTara(){
-    if(!destek) return;
-    var l = speechSynthesis.getVoices();
-    if(!l.length) return;
-    yuklendi = true; trSes = null;
-    for(var i=0;i<l.length;i++){
-      var d=(l[i].lang||'').toLowerCase().replace('_','-');
-      if(d==='tr' || d.indexOf('tr-')===0){ trSes=l[i]; break; }
-    }
-    if(!trSes){
-      for(var j=0;j<l.length;j++){
-        if((l[j].name||'').toLowerCase().indexOf('turk')>-1){ trSes=l[j]; break; }
-      }
-    }
-  }
-  if(destek){
-    sesleriTara();
-    speechSynthesis.onvoiceschanged = sesleriTara;
-    setTimeout(sesleriTara,500); setTimeout(sesleriTara,1500);
-  }
+function showNotice(message){
+  const notice = document.getElementById("notice");
+  notice.textContent = message;
+  notice.classList.add("show");
 
-  function uyari(mesaj){
-    var k=document.getElementById('sesUyariKutu');
-    if(!k){
-      k=document.createElement('div'); k.id='sesUyariKutu';
-      k.style.cssText='position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:9999;'+
-        'background:#16345C;color:#fff;font-family:inherit;font-size:14px;font-weight:700;padding:12px 18px;'+
-        'border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.3);max-width:90%;text-align:center;cursor:pointer';
-      k.onclick=function(){ k.remove(); };
-      document.body.appendChild(k);
-    }
-    k.textContent=mesaj;
-    clearTimeout(k._t); k._t=setTimeout(function(){ if(k.parentNode) k.remove(); },6000);
-  }
+  clearTimeout(noticeTimer);
+  noticeTimer = setTimeout(() => {
+    notice.classList.remove("show");
+  }, 4500);
+}
 
-  // Chrome uzun metinlerde ~15 sn sonra susuyor: metni cümlelere bölüyoruz
-  function parcala(metin){
-    var cumleler = String(metin).replace(/\s+/g,' ').trim().match(/[^.!?…:;]+[.!?…:;]*/g) || [String(metin)];
-    var out=[], tmp='';
-    cumleler.forEach(function(c){
-      c=c.trim(); if(!c) return;
-      if((tmp+' '+c).trim().length > 160){
-        if(tmp) out.push(tmp.trim());
-        while(c.length > 160){
-          var kes=c.lastIndexOf(' ',160); if(kes<40) kes=160;
-          out.push(c.slice(0,kes).trim()); c=c.slice(kes);
-        }
-        tmp=c;
-      } else { tmp=(tmp+' '+c).trim(); }
+/* ======================================================
+   GELİŞMİŞ SES MOTORU
+   Uzun metinleri parçalara ayırır.
+====================================================== */
+const VoiceEngine = {
+  supported: "speechSynthesis" in window,
+  voice: null,
+  queue: [],
+  index: 0,
+  totalLength: 0,
+  readLength: 0,
+  active: false,
+  settings: {},
+  heartbeat: null,
+
+  findTurkishVoice(){
+    if(!this.supported) return;
+
+    const voices = speechSynthesis.getVoices();
+
+    this.voice = voices.find(voice => {
+      const lang = (voice.lang || "").toLowerCase();
+      return lang === "tr-tr" || lang.startsWith("tr");
     });
-    if(tmp) out.push(tmp.trim());
-    return out;
-  }
 
-  function nabizBaslat(){
-    nabizDur();
-    nabiz=setInterval(function(){
-      if(canliMi && speechSynthesis.speaking && !speechSynthesis.paused){
-        speechSynthesis.pause(); speechSynthesis.resume();
+    if(!this.voice){
+      this.voice = voices.find(voice =>
+        (voice.name || "").toLowerCase().includes("turk")
+      );
+    }
+  },
+
+  splitText(text){
+    const sentences =
+      String(text)
+        .replace(/\s+/g, " ")
+        .trim()
+        .match(/[^.!?…:;]+[.!?…:;]*/g) || [text];
+
+    const chunks = [];
+    let current = "";
+
+    sentences.forEach(sentence => {
+      sentence = sentence.trim();
+      if(!sentence) return;
+
+      if((current + " " + sentence).trim().length > 180){
+        if(current) chunks.push(current.trim());
+
+        while(sentence.length > 180){
+          let cut = sentence.lastIndexOf(" ", 180);
+          if(cut < 60) cut = 180;
+
+          chunks.push(sentence.slice(0, cut).trim());
+          sentence = sentence.slice(cut).trim();
+        }
+
+        current = sentence;
+      }else{
+        current = (current + " " + sentence).trim();
       }
-    },9000);
-  }
-  function nabizDur(){ if(nabiz){ clearInterval(nabiz); nabiz=null; } }
+    });
 
-  function sonraki(){
-    if(!canliMi) return;
-    if(indeks>=kuyruk.length){ canliMi=false; nabizDur(); if(opts.bitti) opts.bitti(); return; }
-    var parca=kuyruk[indeks];
-    var u=new SpeechSynthesisUtterance(parca);
-    u.lang='tr-TR'; u.rate=opts.hiz||1; u.pitch=opts.tiz||1; u.volume=1;
-    if(trSes) u.voice=trSes;
-    u.onend=function(){
-      okunan+=parca.length; indeks++;
-      if(opts.ilerleme) opts.ilerleme(toplam ? Math.min(100, okunan/toplam*100) : 100);
-      sonraki();
+    if(current) chunks.push(current);
+    return chunks;
+  },
+
+  startHeartbeat(){
+    this.stopHeartbeat();
+
+    this.heartbeat = setInterval(() => {
+      if(
+        this.active &&
+        speechSynthesis.speaking &&
+        !speechSynthesis.paused
+      ){
+        speechSynthesis.pause();
+        speechSynthesis.resume();
+      }
+    }, 8500);
+  },
+
+  stopHeartbeat(){
+    if(this.heartbeat){
+      clearInterval(this.heartbeat);
+      this.heartbeat = null;
+    }
+  },
+
+  speakNext(){
+    if(!this.active) return;
+
+    if(this.index >= this.queue.length){
+      this.active = false;
+      this.stopHeartbeat();
+
+      if(this.settings.onEnd) this.settings.onEnd();
+      return;
+    }
+
+    const part = this.queue[this.index];
+    const speech = new SpeechSynthesisUtterance(part);
+
+    speech.lang = "tr-TR";
+    speech.rate = this.settings.rate || 1;
+    speech.pitch = this.settings.pitch || 1.05;
+    speech.volume = 1;
+
+    if(this.voice){
+      speech.voice = this.voice;
+    }
+
+    speech.onend = () => {
+      this.readLength += part.length;
+      this.index++;
+
+      if(this.settings.onProgress){
+        const percent = Math.min(
+          100,
+          Math.round((this.readLength / this.totalLength) * 100)
+        );
+
+        this.settings.onProgress(percent);
+      }
+
+      this.speakNext();
     };
-    u.onerror=function(){ indeks++; sonraki(); };
-    speechSynthesis.speak(u);
+
+    speech.onerror = () => {
+      this.index++;
+      this.speakNext();
+    };
+
+    speechSynthesis.speak(speech);
+  },
+
+  speak(text, settings = {}){
+    if(!this.supported){
+      showNotice("Bu tarayıcı sesli okumayı desteklemiyor. Chrome veya Edge deneyebilirsin.");
+      return;
+    }
+
+    this.findTurkishVoice();
+    this.stop();
+
+    this.settings = settings;
+    this.queue = this.splitText(text);
+    this.index = 0;
+    this.readLength = 0;
+    this.totalLength = this.queue.reduce((total, part) => total + part.length, 0);
+    this.active = true;
+
+    this.startHeartbeat();
+
+    setTimeout(() => {
+      this.speakNext();
+    }, 180);
+  },
+
+  stop(){
+    this.active = false;
+    this.stopHeartbeat();
+
+    if(this.supported){
+      speechSynthesis.cancel();
+    }
   }
+};
 
-  window.SES={
-    destekVar: destek,
-    turkceVar: function(){ return !!trSes; },
-    oku: function(metin, ayar){
-      ayar=ayar||{};
-      if(!destek){ uyari('Bu tarayıcı sesli okumayı desteklemiyor. Chrome veya Edge deneyin.'); return; }
-      sesleriTara();
-      if(yuklendi && !trSes && !uyarildi){
-        uyarildi=true;
-        uyari('Cihazınızda Türkçe ses paketi yok. Okuma mevcut sesle yapılacak.');
-      }
-      this.dur();
-      opts=ayar; kuyruk=parcala(metin); indeks=0; okunan=0;
-      toplam=kuyruk.reduce(function(a,b){ return a+b.length; },0);
-      canliMi=true; nabizBaslat();
-      setTimeout(sonraki,180); // cancel() ile speak() çakışmasını önler
+if(VoiceEngine.supported){
+  VoiceEngine.findTurkishVoice();
+  speechSynthesis.onvoiceschanged = () => VoiceEngine.findTurkishVoice();
+}
+
+/* ======================================================
+   HİKÂYELER
+====================================================== */
+const stories = [
+  {
+    icon:"🐢",
+    title:"Kaplumbağa ile Tavşan",
+    color:"#ffb74d",
+    short:"Sabır, düzen ve azim üzerine bir orman hikâyesi.",
+    text:`Bir zamanlar yemyeşil ağaçlarla dolu büyük bir ormanda hızlı mı hızlı bir tavşan yaşarmış. Tavşan koşmayı çok sever, ormandaki diğer hayvanlara ne kadar hızlı olduğunu anlatırmış. Özellikle yavaş yürüyen kaplumbağayı görünce kendini tutamaz, onunla alay edermiş.
+
+Bir gün tavşan, kaplumbağaya bakıp gülmüş. Sen bir yere varana kadar mevsimler değişir, demiş. Kaplumbağa bu sözlere kızmamış. Sakin bir sesle, Herkesin farklı bir yeteneği vardır. İstersen bunu bir yarışla görelim, demiş.
+
+Tavşan bu teklife çok şaşırmış. Sonra yüksek sesle gülmeye başlamış. Ormandaki hayvanlar da yarış haberini duyunca merakla toplanmış. Baykuş başlangıç çizgisinin yanına geçmiş. Yarışın bitiş noktası, ormanın öteki ucundaki büyük çınar ağacıymış.
+
+Baykuş kanatlarını açıp, Hazır, başla, demiş. Tavşan bir ok gibi fırlamış. Kaplumbağa ise küçük ama kararlı adımlarla yürümeye başlamış. Tavşan kısa süre içinde çok uzaklaşmış. Arasına bakınca kaplumbağanın hâlâ başlangıca yakın olduğunu görmüş.
+
+Tavşan, Bu yarış zaten benim, diye düşünmüş. Büyük bir ağacın gölgesine uzanmış. Kaplumbağa gelene kadar biraz dinleneyim, demiş. Serin rüzgâr tavşanı öyle rahatlatmış ki kısa süre sonra derin bir uykuya dalmış.
+
+Kaplumbağa ise hiç durmamış. Taşlı yollardan geçmiş, küçük dereyi dikkatle aşmış, yorulduğunda bile kendine, Bir adım daha, demiş. Güneş yavaş yavaş gökyüzünde ilerlerken kaplumbağa bitiş çizgisine yaklaşmış.
+
+Ormandaki hayvanlar heyecanla kaplumbağayı izlemiş. Kaplumbağa sonunda büyük çınar ağacına ulaşmış ve yarışı kazanmış. Alkış sesleri tavşanı uyandırmış. Tavşan hızla ayağa kalkıp koşmuş ama artık çok geçmiş.
+
+Tavşan kaplumbağanın yanına gelmiş ve yaptığı hatayı anlamış. Kaplumbağadan özür dilemiş. Kaplumbağa da gülümseyerek onu affetmiş. O günden sonra tavşan hızlı olmanın her zaman başarı getirmediğini öğrenmiş. Bu hikâye bize sabırla, düzenli ve azimli çalışanların hedeflerine ulaşabileceğini anlatır.`
+  },
+
+  {
+    icon:"🦁",
+    title:"Aslan ve Küçük Fare",
+    color:"#ff6d84",
+    short:"Küçük bir yardımın ne kadar büyük olabileceğini anlatır.",
+    text:`Sıcak bir yaz günüydü. Ormanın kralı olan büyük aslan, gölgeli bir ağacın altında uyuyordu. Aslanın güçlü nefesi duyuluyor, yelesi hafif rüzgârda sallanıyordu. O sırada küçük bir fare çalılıkların arasında oynarken yolunu kaybetti.
+
+Fare, farkında olmadan aslanın kuyruğunun üzerinden geçti. Aslan birden gözlerini açtı. Büyük pençesiyle fareyi yakaladı. Fare çok korkmuştu. Aslanın pençesi onun küçücük bedeninden çok daha büyüktü.
+
+Fare titreyerek, Lütfen beni bırak. Belki bir gün ben de sana yardım ederim, dedi. Aslan bu sözleri duyunca şaşırdı. Küçücük bir farenin kendisine nasıl yardım edebileceğini düşündü ve gülmeye başladı.
+
+Fakat aslanın kalbi iyiydi. Fareyi incitmek istemedi. Pençesini açtı ve fareyi serbest bıraktı. Fare hızla çalılıkların arasına kaçtı. Giderken, İyiliğini unutmayacağım, diye seslendi.
+
+Günler geçti. Bir sabah aslan ormanda dolaşırken avcıların kurduğu büyük bir ağa yakalandı. Ağ çok sağlamdı. Aslan ne kadar uğraşsa da kurtulamıyordu. Kükremesi bütün ormanda yankılandı.
+
+Küçük fare bu sesi duydu. Sesin aslana ait olduğunu hemen anladı. Hiç düşünmeden sesin geldiği yere doğru koştu. Aslanı ağın içinde görünce çok üzüldü. Sonra keskin dişleriyle ağın iplerini kemirmeye başladı.
+
+Fare saatlerce çalıştı. Bir ipi kopardı, sonra başka bir ipi daha kemirdi. Sonunda ağda büyük bir delik açıldı. Aslan bu delikten çıkmayı başardı. Özgür kalınca fareye teşekkür etti.
+
+Aslan, Sen çok küçük olabilirsin ama yaptığın yardım çok büyük, dedi. Fare de gülümseyerek, Herkesin yapabileceği bir şey vardır, diye cevap verdi. O günden sonra aslan ile fare iyi arkadaş oldular. Bu hikâye bize hiç kimseyi küçümsemememiz gerektiğini öğretir.`
+  },
+
+  {
+    icon:"🌱",
+    title:"Tohumun Yolculuğu",
+    color:"#65f5a8",
+    short:"Cesaret, büyümek ve umut etmek üzerine bir doğa hikâyesi.",
+    text:`Bir sonbahar günü küçük bir tohum, rüzgârın yardımıyla uzak bir bahçeye uçmuş. Yumuşacık toprağın üzerine düşmüş. Bir süre sonra yağmur yağmış ve tohum toprağın içine doğru itilmiş.
+
+Toprağın altı karanlık, sessiz ve soğukmuş. Küçük tohum ilk gün çok korkmuş. Gökyüzünü, güneşi ve rüzgârı özlemiş. Kendi kendine, Burada nasıl büyüyeceğim, diye sormuş.
+
+Bir süre sonra toprağın içinden geçen yağmur damlaları tohumu beslemeye başlamış. Yukarıdan gelen güneşin sıcaklığı da toprağı ısıtmış. Tohum, içinde küçük bir güç olduğunu fark etmiş.
+
+Önce incecik köklerini aşağı doğru uzatmış. Kökleri toprağa sıkıca tutunmuş. Sonra minik bir filizini yukarı doğru göndermiş. Bu yolculuk hiç kolay değilmiş. Filiz, taşlara rastlamış, sert toprak parçalarının arasından geçmeye çalışmış.
+
+Ama küçük tohum pes etmemiş. Her gün biraz daha büyümüş. Bir sabah toprağın üstüne çıkmayı başarmış. Güneş ışığı yüzüne değince çok sevinmiş. Bahçedeki kuşlar onu selamlamış, kelebekler etrafında uçmuş.
+
+Günler haftalara, haftalar aylara dönüşmüş. Küçük filiz, güçlü bir bitki olmuş. Dallarında yeşil yapraklar açmış. Sonra rengârenk çiçekler vermiş. Bahçeye gelen herkes onun güzelliğine hayran kalmış.
+
+Bir gün yanına yeni bir tohum düşmüş. Yeni tohum karanlıktan korkuyormuş. Büyük çiçek ona, Korkman normal. Ama içinde büyümek için gereken güç var. Sabırla bekle ve çaba göstermeyi unutma, demiş.
+
+Küçük tohum bu sözleri duyunca rahatlamış. Böylece bahçede yeni bir yolculuk başlamış. Bu hikâye bize zorlukların bazen büyümemiz için gerekli olduğunu anlatır.`
+  },
+
+  {
+    icon:"🌙",
+    title:"Yıldızların Mesajı",
+    color:"#b287ff",
+    short:"Merak etmenin ve öğrenmenin önemini anlatan bir gece hikâyesi.",
+    text:`Ali, geceleri balkona çıkıp gökyüzünü izlemeyi çok severmiş. Özellikle yıldızlı gecelerde gökyüzü ona dev bir masal kitabı gibi görünürmüş. Her yıldızın ayrı bir hikâyesi olduğunu düşünürmüş.
+
+Bir gece gökyüzü çok açıktı. Ay ince bir gülümseme gibi parlıyor, yıldızlar ise sayısız ışık noktası gibi göz kırpıyordu. Ali annesinin yanına gidip, Anne, yıldızlar neden parlıyor, diye sordu.
+
+Annesi Ali'nin yanına oturdu. Gökyüzüne bakarak, Yıldızlar çok uzakta bulunan büyük ışık toplarıdır. Bazıları Güneş'ten bile daha büyüktür, dedi. Ali buna çok şaşırdı. Eğer çok büyüklerse neden bu kadar küçük görünüyorlar, diye sordu.
+
+Annesi, Çünkü onlar bizden çok ama çok uzaktadır. Uzakta olan şeyler gözümüze küçük görünür, diye açıkladı. Ali bir süre sessizce düşündü. Demek ki gökyüzü düşündüğümden daha büyük, dedi.
+
+Ertesi gün Ali okulun kütüphanesine gitti. Uzay, gezegenler ve yıldızlar hakkında kitaplar buldu. Öğretmenine sorular sordu. Güneş sistemini, Dünya'nın hareketlerini ve gezegenlerin isimlerini öğrendi.
+
+Ali her öğrendiği yeni bilgiyle daha da meraklanıyordu. Akşam olduğunda yeniden balkona çıktı. Bu kez yıldızlara yalnızca bakmıyordu. Onlar hakkında biraz bilgi sahibi olduğu için kendini daha yakın hissediyordu.
+
+Ali, Bir gün teleskopla gökyüzünü incelemek istiyorum, dedi. Annesi gülümseyerek, Merak eden insanlar öğrenir. Öğrenen insanlar ise hayallerine bir adım daha yaklaşır, dedi.
+
+O geceden sonra Ali her gün yeni bir soru sormaya karar verdi. Çünkü artık biliyordu ki öğrenmenin ilk adımı merak etmektir.`
+  }
+];
+
+let activeStory = 0;
+let storySpeed = 1;
+
+function createStoryCards(){
+  const grid = document.getElementById("storyGrid");
+  grid.innerHTML = "";
+
+  stories.forEach((story, index) => {
+    const card = document.createElement("button");
+    card.className = "story-card" + (index === 0 ? " selected" : "");
+    card.style.setProperty("--card-color", story.color);
+
+    card.innerHTML = `
+      <div class="story-icon">${story.icon}</div>
+      <h3>${story.title}</h3>
+      <p>${story.short}</p>
+    `;
+
+    card.onclick = () => selectStory(index);
+    grid.appendChild(card);
+  });
+}
+
+function selectStory(index){
+  stopAll();
+  activeStory = index;
+
+  document.querySelectorAll(".story-card").forEach((card, i) => {
+    card.classList.toggle("selected", i === index);
+  });
+
+  const story = stories[index];
+
+  document.getElementById("storyTitle").textContent = story.icon + " " + story.title;
+  document.getElementById("storyReader").textContent = story.text;
+  document.getElementById("storyProgress").style.width = "0%";
+  document.getElementById("storyPercent").textContent = "0%";
+}
+
+function setStorySpeed(speed, button){
+  storySpeed = speed;
+
+  document.querySelectorAll("#storySpeed .small-btn").forEach(btn => {
+    btn.classList.remove("active");
+  });
+
+  button.classList.add("active");
+}
+
+function playStory(){
+  const story = stories[activeStory];
+  const reader = document.getElementById("storyReader");
+  const wave = document.getElementById("storyWave");
+
+  reader.classList.add("reading");
+  wave.classList.add("playing");
+
+  VoiceEngine.speak(story.text, {
+    rate: storySpeed,
+    pitch: 1.08,
+
+    onProgress(percent){
+      document.getElementById("storyProgress").style.width = percent + "%";
+      document.getElementById("storyPercent").textContent = percent + "%";
     },
-    dur: function(){ canliMi=false; nabizDur(); if(destek) speechSynthesis.cancel(); }
-  };
 
-  window.addEventListener('beforeunload', function(){ if(destek) speechSynthesis.cancel(); });
-})();
-
-function sesliOku(metin, hiz, bitti){
-  SES.oku(metin, { hiz: hiz || 1, tiz: 1.05, bitti: bitti });
-}
-
-// =====================
-// HİKAYELER
-// =====================
-const hikayeler = [
-  {
-    emoji:"🐢",baslik:"Kaplumbağa ile Tavşan",renk:"#FF9F43",arka:"#fff7ed",
-    metin:"Bir zamanlar hızlı bir tavşan ile yavaş bir kaplumbağa varmış. Tavşan her zaman kaplumbağayla alay edermiş. Bir gün kaplumbağa tavşana koşu yarışı teklif etmiş. Tavşan gülerek kabul etmiş. Yarış başlamış. Tavşan çok hızlı koşmuş. Kaplumbağa yavaş ama kararlı ilerlemiş. Tavşan yorulunca ağacın altında uyumuş. Kaplumbağa durmadan yürümüş ve birinci olmuş. Tavşan uyandığında kaplumbağanın kazandığını görmüş. Bu yarıştan şunu öğrendik: Azimle çalışan kazanır."
-  },
-  {
-    emoji:"🦁",baslik:"Aslan ve Fare",renk:"#FF6B6B",arka:"#fff1f1",
-    metin:"Bir gün küçük bir fare uyuyan aslanın üzerinden geçmiş. Aslan uyanmış ve fareyi yakalamış. Fare yalvarmış: Ben de bir gün sana yardım ederim demiş. Aslan gülerek fareyi bırakmış. Günler sonra aslan avcıların ağına düşmüş. Fare koşarak gelmiş ve ağı dişleriyle kemirmiş. Aslan kurtulmuş. Küçük arkadaşlıklar da büyük işler başarabilir."
-  },
-  {
-    emoji:"🌱",baslik:"Tohumun Yolculuğu",renk:"#6BCB77",arka:"#f0fdf4",
-    metin:"Küçük bir tohum toprağa düşmüş. Toprak karanlık ve soğukmuş. Tohum korkmuş. Ama yağmur yağmış, güneş ışımış. Tohum yavaş yavaş büyümeye başlamış. Önce kök salpmış, sonra filiz çıkarmış. Sonunda güzel bir çiçek olmuş. Zorluklardan korkmadan büyümek gerekir. Her tohum içinde büyük bir ağaç saklar."
-  },
-  {
-    emoji:"🐝",baslik:"Arının Merakı",renk:"#FFD93D",arka:"#fffbe6",
-    metin:"Küçük arı Bina, her gün çiçekten çiçeğe uçar, bal yapardı. Bir gün merak etti: Ben neden bal yapıyorum? Büyükannesi anlattı: Balımız hem bize hem insanlara şifa verir. Bina çok mutlu oldu. Çalışmak ne güzel bir şeymiş dedi. O günden sonra daha istekli çalıştı. Çalışmanın bir anlamı olunca daha kolay olur."
-  },
-  {
-    emoji:"🌙",baslik:"Yıldızların Sırrı",renk:"#C77DFF",arka:"#faf5ff",
-    metin:"Küçük Ali her gece yıldızlara bakardı. Annesine sordu: Yıldızlar neden parlıyor? Annesi güldü: Yıldızlar milyonlarca yıl önce doğmuş büyük ışık toplarıdır. Bazıları güneşimizden çok büyüktür. Ama çok uzakta olduklarından küçük görünürler. Ali şaşırdı. Evren ne büyük, biz ne küçüğüz dedi. Merak etmek öğrenmenin ilk adımıdır."
-  },
-  {
-    emoji:"🏔️",baslik:"Dağ ile Nehir",renk:"#4ECDC4",arka:"#e8fafa",
-    metin:"Dağ, her şeyin üzerinden gururla bakardı. Nehir ise alçakgönüllüce akardı. Dağ dedi ki: Ben çok büyüğüm, herkes beni görür. Nehir dedi ki: Ben ise herkese su taşırım. Yıllar geçti. Dağ hep yerinde durdu. Nehir ise ovalar, köyler, şehirler geçerek denize ulaştı ve dünyayı gördü. Alçakgönüllülük insanı uzağa taşır."
-  },
-];
-
-let aktifHikaye = 0;
-let hikayeHiz = 1;
-
-function hikayeGridOlustur(){
-  const grid = document.getElementById("hikayeGrid");
-  hikayeler.forEach((h,i)=>{
-    const k = document.createElement("div");
-    k.className = "hikaye-kart" + (i===0?" secili":"");
-    k.style.cssText = "border-color:"+h.renk+";background:"+h.arka+";";
-    k.innerHTML = "<div class='hk-emoji'>"+h.emoji+"</div><h4 style='color:"+h.renk+"'>"+h.baslik+"</h4><p>Dinlemek için tıkla</p>";
-    k.onclick = ()=>hikayeAc(i, k);
-    grid.appendChild(k);
-  });
-  hikayeAc(0, grid.children[0]);
-}
-
-function hikayeAc(i, el){
-  document.querySelectorAll(".hikaye-kart").forEach(k=>k.classList.remove("secili"));
-  el.classList.add("secili");
-  aktifHikaye = i;
-  const h = hikayeler[i];
-  document.getElementById("hikayeOynatici").style.display = "block";
-  document.getElementById("hikayeBaslik").textContent = h.emoji + " " + h.baslik;
-  document.getElementById("hikayeMetin").textContent = h.metin;
-  document.getElementById("hikayeBar").style.width = "0%";
-  SES.dur();
-  dalgaDur("sesDalgasi");
-}
-
-function hikayeOynat(){
-  const h = hikayeler[aktifHikaye];
-  dalgaBaslat("sesDalgasi");
-  SES.oku(h.metin, {
-    hiz: hikayeHiz,
-    tiz: 1.1,
-    ilerleme: y => { document.getElementById("hikayeBar").style.width = y + "%"; },
-    bitti: () => { dalgaDur("sesDalgasi"); document.getElementById("hikayeBar").style.width = "100%"; }
-  });
-}
-
-function hikayeDur(){
-  SES.dur();
-  dalgaDur("sesDalgasi");
-}
-
-function hizSec(h, btn){
-  hikayeHiz = h;
-  document.querySelectorAll(".hiz-secim .hiz-btn").forEach(b=>b.classList.remove("secili"));
-  btn.classList.add("secili");
-}
-
-// =====================
-// OKUMA METİNLERİ
-// =====================
-const metinler = [
-  {
-    baslik:"🌸 İlkbahar Geldi",
-    icerik:"İlkbahar gelince her yer rengarenk olur. Çiçekler açar, kuşlar şakır. Hava ısınır, güneş daha uzun süre parlar. Çocuklar dışarı çıkar, bahçelerde oynar. Ağaçlarda tomurcuklar belirir. Doğa yeniden uyanır. İlkbahar, umut mevsimidir."
-  },
-  {
-    baslik:"🏫 Okulumu Seviyorum",
-    icerik:"Okuluma her sabah istekle gidiyorum. Sınıfımda yirmi arkadaşım var. Öğretmenimiz bize pek çok şey öğretiyor. Okuma, yazma, matematik öğreniyoruz. Teneffüste oyun oynuyoruz. Akşam eve döndüğümde öğrendiklerimi ailemle paylaşıyorum. Okul, bilginin kapısıdır."
-  },
-  {
-    baslik:"🐾 Hayvanları Seviyorum",
-    icerik:"Hayvanlar bizim dostlarımızdır. Köpekler sadık, kediler bağımsızdır. Kuşlar özgürce uçar. Balıklar sularda yüzer. Her hayvanın kendine özgü bir yaşamı vardır. Hayvanları korumak hepimizin görevidir. Onları sevin, zarar vermeyin."
-  },
-  {
-    baslik:"👨‍👩‍👧 Ailem",
-    icerik:"Ailem benim için çok önemlidir. Annem beni sever ve korur. Babam bana çok şey öğretir. Kardeşlerimle birlikte oyun oynarız. Büyükannem masallar anlatır. Büyükbabam bahçede çalışır. Aile, sıcacık bir yuvadır. Aileyi sevmek ve saymak gerekir."
-  },
-];
-let aktifMetin = 0;
-let metinHiz = 0.9;
-
-function metinSec(i, el){
-  aktifMetin = i;
-  document.querySelectorAll(".card .hiz-btn").forEach(b=>{
-    if(["🌸 İlkbahar","🏫 Okul","🐾 Hayvanlar","👨‍👩‍👧 Aile"].some(t=>b.textContent.includes(t.split(" ")[1] || t.split(" ")[0]))){
-      b.classList.remove("secili");
+    onEnd(){
+      reader.classList.remove("reading");
+      wave.classList.remove("playing");
+      document.getElementById("storyProgress").style.width = "100%";
+      document.getElementById("storyPercent").textContent = "100%";
     }
   });
-  el.classList.add("secili");
-  document.getElementById("metinKutu").textContent = metinler[i].icerik;
-  document.getElementById("metinBar").style.width = "0%";
-  SES.dur();
-  dalgaDur("metinDalga");
 }
 
-function metinOynat(){
-  const m = metinler[aktifMetin];
-  dalgaBaslat("metinDalga");
-  SES.oku(m.icerik, {
-    hiz: metinHiz,
-    tiz: 1.0,
-    ilerleme: y => { document.getElementById("metinBar").style.width = y + "%"; },
-    bitti: () => { dalgaDur("metinDalga"); document.getElementById("metinBar").style.width = "100%"; }
+/* ======================================================
+   OKUMA METİNLERİ
+====================================================== */
+const texts = [
+  {
+    title:"🌸 İlkbahar Geldi",
+    text:`İlkbahar gelince doğa yeniden canlanır. Hava yavaş yavaş ısınır, günler uzar ve güneş daha fazla görünmeye başlar. Ağaçların dallarında küçük tomurcuklar belirir. Bir süre sonra bu tomurcuklar rengârenk çiçeklere dönüşür.
+
+Kuşlar sabah erken saatlerde şarkı söylemeye başlar. Arılar çiçeklerin arasında dolaşır. Kelebekler bahçelerde uçuşur. Çocuklar dışarıda oyun oynar, parklarda koşar ve temiz havanın tadını çıkarır.
+
+İlkbahar bize yenilenmeyi hatırlatır. Yağmur yağdığında toprak suya kavuşur. Güneş açtığında her yer daha parlak görünür. Doğayı korumak, çiçekleri koparmamak ve hayvanlara zarar vermemek hepimizin görevidir.`
+  },
+  {
+    title:"🏫 Okulumu Seviyorum",
+    text:`Her sabah okuluma giderken yeni şeyler öğrenmenin heyecanını duyarım. Okulumda öğretmenlerim ve arkadaşlarım vardır. Sınıfımıza girdiğimde arkadaşlarıma günaydın derim. Öğretmenimiz de bizi gülümseyerek karşılar.
+
+Derslerde okuma, yazma ve matematik öğreniriz. Bazen deneyler yapar, bazen hikâyeler dinleriz. Teneffüslerde bahçeye çıkar, arkadaşlarımızla oyun oynarız. Birlikte oynamak, paylaşmayı ve kurallara uymayı öğretir.
+
+Okul yalnızca ders öğrendiğimiz bir yer değildir. Aynı zamanda arkadaşlık kurduğumuz, sorumluluk almayı öğrendiğimiz ve kendimizi geliştirdiğimiz bir yerdir. Bu yüzden okulumu severim ve her gün elimden gelenin en iyisini yapmaya çalışırım.`
+  },
+  {
+    title:"🐾 Hayvan Dostlarımız",
+    text:`Hayvanlar dünyamızın önemli canlılarıdır. Her hayvanın kendine özgü bir yaşam biçimi vardır. Kuşlar gökyüzünde uçar, balıklar sularda yüzer, kediler sessizce dolaşır ve köpekler sahiplerine sevgiyle yaklaşır.
+
+Hayvanlar da tıpkı insanlar gibi temiz suya, yiyeceğe ve güvenli bir yere ihtiyaç duyar. Sokakta yaşayan hayvanlara zarar vermemeli, onları korkutmamalıyız. Elimizden gelirse önlerine bir kap su koyabiliriz.
+
+Doğadaki her canlı birbiriyle bağlantılıdır. Arılar çiçeklerin çoğalmasına yardım eder. Kuşlar bazı tohumları uzak yerlere taşır. Bu nedenle hayvanları korumak, aslında doğayı ve geleceğimizi korumaktır.`
+  },
+  {
+    title:"👨‍👩‍👧 Ailem",
+    text:`Ailem benim için çok değerlidir. Ailemle birlikteyken kendimi güvende ve mutlu hissederim. Annem ve babam bana sevgi gösterir, zorlandığımda yardım eder. Ben de onlara saygılı davranmaya çalışırım.
+
+Kardeşlerim varsa onlarla oyun oynar, bazen küçük tartışmalar yaşasak bile kısa süre sonra barışırız. Büyüklerimiz bize geçmişten hikâyeler anlatır. Onların deneyimlerini dinlemek çok önemlidir.
+
+Aile olmak, yalnızca aynı evde yaşamak değildir. Birbirini dinlemek, paylaşmak, desteklemek ve sevmektir. Evde küçük sorumluluklar almak da ailemize yardım etmenin güzel bir yoludur.`
+  }
+];
+
+let activeText = 0;
+let textSpeed = .95;
+
+function createTextButtons(){
+  const area = document.getElementById("textButtons");
+  area.innerHTML = "";
+
+  texts.forEach((item, index) => {
+    const button = document.createElement("button");
+    button.className = "choice-btn" + (index === 0 ? " active" : "");
+    button.textContent = item.title;
+    button.onclick = () => selectText(index);
+
+    area.appendChild(button);
   });
 }
 
-function metinDur(){ SES.dur(); dalgaDur("metinDalga"); }
+function selectText(index){
+  stopAll();
+  activeText = index;
 
-function metinHizSec(h,btn){
-  metinHiz=h;
-  // sadece metin bolumundeki hiz butonlari
-  btn.parentElement.querySelectorAll(".hiz-btn").forEach(b=>b.classList.remove("secili"));
-  btn.classList.add("secili");
+  document.querySelectorAll("#textButtons .choice-btn").forEach((btn, i) => {
+    btn.classList.toggle("active", i === index);
+  });
+
+  document.getElementById("textTitle").textContent = texts[index].title;
+  document.getElementById("textReader").textContent = texts[index].text;
+  document.getElementById("textProgress").style.width = "0%";
+  document.getElementById("textPercent").textContent = "0%";
 }
 
-// =====================
-// SAYI OKUNUŞU
-// =====================
-function sayiyiYaz(n){
-  if(n===0) return "sıfır";
-  const birler=["","bir","iki","üç","dört","beş","altı","yedi","sekiz","dokuz"];
-  const onlar=["","on","yirmi","otuz","kırk","elli","altmış","yetmiş","seksen","doksan"];
-  let sonuc="";
-  if(n<0){sonuc="eksi ";n=Math.abs(n);}
-  if(n>=1000000){sonuc+=sayiyiYaz(Math.floor(n/1000000))+" milyon ";n%=1000000;}
-  if(n>=1000){
-    const b=Math.floor(n/1000);
-    sonuc+=(b===1?"":"bir"===birler[b]?"":sayiyiYaz(b)+" ")+"bin ";
-    if(b===1) sonuc="bin ";
-    n%=1000;
-  }
-  if(n>=100){
-    const y=Math.floor(n/100);
-    sonuc+=(y===1?"yüz":birler[y]+" yüz ")+" ";
-    n%=100;
-  }
-  if(n>=10){sonuc+=onlar[Math.floor(n/10)]+" ";n%=10;}
-  if(n>0){sonuc+=birler[n];}
-  return sonuc.trim();
+function setTextSpeed(speed, button){
+  textSpeed = speed;
+
+  document.querySelectorAll("#textSpeed .small-btn").forEach(btn => {
+    btn.classList.remove("active");
+  });
+
+  button.classList.add("active");
 }
 
-function sayiGoster(){
-  const val=parseInt(document.getElementById("sayiInput").value);
-  if(isNaN(val)){document.getElementById("sayiSonuc").textContent="Geçerli bir sayı gir!";return;}
-  if(val<0||val>1000000){document.getElementById("sayiSonuc").textContent="0 ile 1.000.000 arası gir!";return;}
-  document.getElementById("sayiSonuc").textContent=sayiyiYaz(val);
-}
+function playText(){
+  const item = texts[activeText];
+  const reader = document.getElementById("textReader");
+  const wave = document.getElementById("textWave");
 
-function sayiOku(){
-  const val=parseInt(document.getElementById("sayiInput").value);
-  if(isNaN(val)){sesliOku("Lütfen bir sayı gir!");return;}
-  sesliOku(sayiyiYaz(val));
-}
+  reader.classList.add("reading");
+  wave.classList.add("playing");
 
-function ornekSayi(n){
-  document.getElementById("sayiInput").value=n;
-  sayiGoster();
-  setTimeout(()=>sayiOku(),300);
-}
+  VoiceEngine.speak(item.text, {
+    rate: textSpeed,
+    pitch: 1.03,
 
-// TAHMİN OYUNU
-let tahminCevap=0;
-function tahminSoru(){
-  const sayilar=[5,12,23,47,68,100,125,250,500,999];
-  tahminCevap=sayilar[Math.floor(Math.random()*sayilar.length)];
-  document.getElementById("tahminSoru").textContent="🔊 Hangi sayı?";
-  document.getElementById("tahminFb").textContent="";
-  sesliOku(sayiyiYaz(tahminCevap));
-  // 4 seçenek
-  let secenekler=[tahminCevap];
-  while(secenekler.length<4){
-    const r=sayilar[Math.floor(Math.random()*sayilar.length)];
-    if(!secenekler.includes(r)) secenekler.push(r);
-  }
-  secenekler.sort(()=>Math.random()-.5);
-  const div=document.getElementById("tahminSecenekler");div.innerHTML="";
-  secenekler.forEach(s=>{
-    const b=document.createElement("button");
-    b.className="hiz-btn";b.style.fontSize="1.1rem";b.textContent=s;
-    b.onclick=()=>tahminCevapla(s,b);
-    div.appendChild(b);
+    onProgress(percent){
+      document.getElementById("textProgress").style.width = percent + "%";
+      document.getElementById("textPercent").textContent = percent + "%";
+    },
+
+    onEnd(){
+      reader.classList.remove("reading");
+      wave.classList.remove("playing");
+      document.getElementById("textProgress").style.width = "100%";
+      document.getElementById("textPercent").textContent = "100%";
+    }
   });
 }
 
-function tahminCevapla(secilen,btn){
-  const fb=document.getElementById("tahminFb");
-  document.querySelectorAll("#tahminSecenekler .hiz-btn").forEach(b=>b.disabled=true);
-  if(secilen===tahminCevap){
-    btn.style.background="var(--yesil)";btn.style.color="#fff";
-    fb.innerHTML="<span style='color:var(--yesil)'>✅ Doğru! "+tahminCevap+" = "+sayiyiYaz(tahminCevap)+"</span>";
-    sesliOku("Aferin! Doğru!");
-  } else {
-    btn.style.background="var(--kirmizi)";btn.style.color="#fff";
-    fb.innerHTML="<span style='color:var(--kirmizi)'>❌ Doğrusu: "+tahminCevap+" = "+sayiyiYaz(tahminCevap)+"</span>";
-    sesliOku("Doğrusu "+sayiyiYaz(tahminCevap));
+/* ======================================================
+   SAYILARIN OKUNUŞU
+====================================================== */
+function numberToTurkish(number){
+  number = Number(number);
+
+  if(number === 0) return "sıfır";
+  if(number < 0) return "eksi " + numberToTurkish(Math.abs(number));
+  if(number > 1000000) return "sayı sınırın dışında";
+
+  const ones = ["", "bir", "iki", "üç", "dört", "beş", "altı", "yedi", "sekiz", "dokuz"];
+  const tens = ["", "on", "yirmi", "otuz", "kırk", "elli", "altmış", "yetmiş", "seksen", "doksan"];
+
+  let result = "";
+
+  if(number === 1000000) return "bir milyon";
+
+  if(number >= 1000){
+    const thousands = Math.floor(number / 1000);
+
+    if(thousands === 1){
+      result += "bin ";
+    }else{
+      result += numberToTurkish(thousands) + " bin ";
+    }
+
+    number %= 1000;
+  }
+
+  if(number >= 100){
+    const hundreds = Math.floor(number / 100);
+
+    if(hundreds === 1){
+      result += "yüz ";
+    }else{
+      result += ones[hundreds] + " yüz ";
+    }
+
+    number %= 100;
+  }
+
+  if(number >= 10){
+    result += tens[Math.floor(number / 10)] + " ";
+    number %= 10;
+  }
+
+  if(number > 0){
+    result += ones[number];
+  }
+
+  return result.trim();
+}
+
+function showNumber(){
+  const value = document.getElementById("numberInput").value;
+  const output = document.getElementById("numberOutput");
+
+  if(value === ""){
+    output.textContent = "Bir sayı yazmanı bekliyorum.";
+    return;
+  }
+
+  const number = Number(value);
+
+  if(number < 0 || number > 1000000){
+    output.textContent = "Lütfen 0 ile 1.000.000 arasında bir sayı gir.";
+    return;
+  }
+
+  output.textContent = numberToTurkish(number);
+}
+
+function readNumber(){
+  const value = document.getElementById("numberInput").value;
+
+  if(value === ""){
+    VoiceEngine.speak("Lütfen önce bir sayı gir.", {rate:1});
+    return;
+  }
+
+  const number = Number(value);
+
+  if(number < 0 || number > 1000000){
+    VoiceEngine.speak("Lütfen sıfır ile bir milyon arasında bir sayı gir.", {rate:1});
+    return;
+  }
+
+  VoiceEngine.speak(numberToTurkish(number), {
+    rate:.9,
+    pitch:1.05
+  });
+}
+
+function exampleNumber(number){
+  document.getElementById("numberInput").value = number;
+  showNumber();
+
+  setTimeout(() => {
+    readNumber();
+  }, 200);
+}
+
+/* ======================================================
+   TAHMİN OYUNU
+====================================================== */
+let correctAnswer = 0;
+
+function newQuestion(){
+  const possibleNumbers = [5, 12, 23, 47, 68, 100, 125, 250, 500, 999];
+  correctAnswer = possibleNumbers[Math.floor(Math.random() * possibleNumbers.length)];
+
+  document.getElementById("questionBox").textContent = "🔊 Dinle ve doğru sayıyı seç.";
+  document.getElementById("feedback").textContent = "";
+
+  VoiceEngine.speak(numberToTurkish(correctAnswer), {
+    rate:.85,
+    pitch:1.08
+  });
+
+  const choices = [correctAnswer];
+
+  while(choices.length < 4){
+    const random = possibleNumbers[Math.floor(Math.random() * possibleNumbers.length)];
+
+    if(!choices.includes(random)){
+      choices.push(random);
+    }
+  }
+
+  choices.sort(() => Math.random() - .5);
+
+  const answerBox = document.getElementById("answerBox");
+  answerBox.innerHTML = "";
+
+  choices.forEach(choice => {
+    const button = document.createElement("button");
+    button.className = "answer";
+    button.textContent = choice;
+    button.onclick = () => checkAnswer(choice, button);
+
+    answerBox.appendChild(button);
+  });
+}
+
+function checkAnswer(answer, button){
+  const buttons = document.querySelectorAll(".answer");
+  buttons.forEach(btn => btn.disabled = true);
+
+  const feedback = document.getElementById("feedback");
+
+  if(answer === correctAnswer){
+    button.style.background = "rgba(101,245,168,.22)";
+    button.style.borderColor = "#65f5a8";
+
+    feedback.innerHTML = `<span class="good">✅ Harika! Doğru cevap: ${correctAnswer}</span>`;
+
+    VoiceEngine.speak("Aferin, doğru cevap.", {
+      rate:1,
+      pitch:1.1
+    });
+  }else{
+    button.style.background = "rgba(255,109,132,.22)";
+    button.style.borderColor = "#ff6d84";
+
+    buttons.forEach(btn => {
+      if(Number(btn.textContent) === correctAnswer){
+        btn.style.background = "rgba(101,245,168,.22)";
+        btn.style.borderColor = "#65f5a8";
+      }
+    });
+
+    feedback.innerHTML = `
+      <span class="bad">
+        ❌ Doğru cevap: ${correctAnswer} — ${numberToTurkish(correctAnswer)}
+      </span>
+    `;
+
+    VoiceEngine.speak(
+      "Doğru cevap " + numberToTurkish(correctAnswer),
+      {rate:.95, pitch:1.05}
+    );
   }
 }
 
-// DALGA ANİMASYONU
-function dalgaBaslat(id){document.getElementById(id).classList.remove("dur");}
-function dalgaDur(id){document.getElementById(id).classList.add("dur");}
+/* ======================================================
+   DURDURMA
+====================================================== */
+function stopAll(){
+  VoiceEngine.stop();
 
-// BAŞLANGIÇ
-hikayeGridOlustur();
-metinSec(0, document.querySelector(".card .hiz-btn"));
-document.getElementById("metinKutu").textContent = metinler[0].icerik;
+  document.querySelectorAll(".wave").forEach(wave => {
+    wave.classList.remove("playing");
+  });
+
+  document.querySelectorAll(".reader").forEach(reader => {
+    reader.classList.remove("reading");
+  });
+}
+
+/* ======================================================
+   BAŞLANGIÇ
+====================================================== */
+createStoryCards();
+createTextButtons();
+
+selectStory(0);
+selectText(0);
 </script>
+
 </body>
 </html>
