@@ -59,16 +59,7 @@ header{
   overflow:hidden;transform:rotate(-5deg);
   box-shadow:inset 0 0 14px rgba(140,196,255,.22);
 }
-.logo-mark img{
-  width:84%;height:84%;object-fit:contain;
-  -webkit-mask-image:radial-gradient(closest-side,#000 64%,rgba(0,0,0,.5) 90%,transparent 100%);
-  mask-image:radial-gradient(closest-side,#000 64%,rgba(0,0,0,.5) 90%,transparent 100%);
-}
-.logo-mark::after{
-  content:'';position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(150deg,rgba(60,110,170,.24),rgba(14,29,51,.40));
-  mix-blend-mode:multiply;
-}
+.logo-mark img{width:84%;height:84%;object-fit:contain;}
 nav{display:flex;gap:20px;}
 nav a{color:#645b6b;font-size:.87rem;font-weight:700;}
 nav a:hover{color:var(--coral);}
@@ -102,27 +93,61 @@ nav a:hover{color:var(--coral);}
   background:linear-gradient(120deg,#0E1D33 0%,#16345C 55%,#2B547F 100%);}
 .hero-inner{position:relative;z-index:2;width:min(1120px,92%);margin:0 auto;text-align:center;}
 .hero-logo-wrap{
-  position:relative;width:clamp(132px,21vw,190px);margin:0 auto 14px;
-  display:grid;place-items:center;isolation:isolate;
+  position:relative;width:clamp(128px,20vw,182px);margin:0 auto 6px;
+  display:grid;place-items:center;
 }
-.hero-logo-wrap::before{                       /* arkada mavi hâle */
-  content:'';position:absolute;inset:-22%;z-index:0;
-  background:radial-gradient(circle at 50% 46%,
-             rgba(140,196,255,.34) 0%, rgba(43,84,127,.20) 52%, transparent 74%);
-  filter:blur(8px);
+.hero-logo-wrap::before{                       /* robotun arkasında yumuşak ışık */
+  content:'';position:absolute;inset:-24%;z-index:0;
+  background:radial-gradient(circle at 50% 48%,
+             rgba(140,196,255,.26) 0%, rgba(43,84,127,.14) 54%, transparent 76%);
+  filter:blur(10px);
 }
 .hero-logo{
-  position:relative;z-index:1;width:100%;height:auto;display:block;border-radius:26px;
-  filter:drop-shadow(0 16px 30px rgba(0,0,0,.42)) saturate(1.06);
-  -webkit-mask-image:radial-gradient(closest-side,#000 60%,rgba(0,0,0,.5) 86%,transparent 100%);
-  mask-image:radial-gradient(closest-side,#000 60%,rgba(0,0,0,.5) 86%,transparent 100%);
+  position:relative;z-index:1;width:100%;height:auto;display:block;
+  filter:drop-shadow(0 16px 28px rgba(0,0,0,.42));
 }
-.hero-logo-wrap::after{                        /* beyazı laciverte çeken hologram tonu */
-  content:'';position:absolute;inset:0;z-index:2;border-radius:26px;pointer-events:none;
-  background:linear-gradient(155deg, rgba(60,110,170,.26), rgba(14,29,51,.44));
-  mix-blend-mode:multiply;
-  -webkit-mask-image:radial-gradient(closest-side,#000 54%,rgba(0,0,0,.28) 86%,transparent 100%);
-  mask-image:radial-gradient(closest-side,#000 54%,rgba(0,0,0,.28) 86%,transparent 100%);
+
+/* ---- SPEKTRUM KELİME LOGOSU ---- */
+.wordmark{
+  position:relative;display:inline-block;margin:2px auto 6px;
+  font-size:clamp(2.05rem,6.6vw,3.7rem);font-weight:800;
+  letter-spacing:.055em;line-height:1.08;white-space:nowrap;
+  filter:drop-shadow(0 8px 20px rgba(0,0,0,.45));
+}
+.wordmark .wm-base{
+  background:linear-gradient(100deg,
+    #C08A2E 0%, #F3D98C 14%, #FFF6DC 26%, #C9D6E4 40%,
+    #8FA6BE 52%, #E8C87C 66%, #FFE9A8 80%, #C08A2E 100%);
+  background-size:230% 100%;
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;-webkit-text-fill-color:transparent;
+  animation:spektrumKay 11s linear infinite;
+}
+.wordmark .wm-parlak{                          /* üstünden geçen ışık */
+  position:absolute;left:0;top:0;pointer-events:none;
+  background:linear-gradient(105deg,
+    rgba(255,255,255,0) 38%, rgba(255,255,255,.92) 50%, rgba(255,255,255,0) 62%);
+  background-size:260% 100%;background-repeat:no-repeat;
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;-webkit-text-fill-color:transparent;
+  animation:isikGec 5.2s ease-in-out infinite;
+}
+.wordmark-alt{
+  display:block;margin:0 auto 16px;width:min(320px,72%);height:2px;border-radius:2px;
+  background:linear-gradient(90deg,transparent,#C08A2E 22%,#E9EEF4 50%,#C08A2E 78%,transparent);
+  opacity:.75;
+}
+@keyframes spektrumKay{
+  0%{background-position:0% 50%;}
+  100%{background-position:230% 50%;}
+}
+@keyframes isikGec{
+  0%,12%{background-position:-60% 0;}
+  55%,100%{background-position:210% 0;}
+}
+@media (prefers-reduced-motion:reduce){
+  .wordmark .wm-base,.wordmark .wm-parlak{animation:none;}
+  .wordmark .wm-parlak{opacity:0;}
 }
 .hero-rule{width:66px;height:3px;background:var(--coral);margin:20px auto 16px;border-radius:2px;}
 .hero-strip{position:relative;z-index:2;width:min(1120px,92%);margin:40px auto 0;
@@ -139,7 +164,7 @@ nav a:hover{color:var(--coral);}
   display:inline-block;padding:7px 16px;border-radius:50px;color:var(--gold-soft);border:1px solid rgba(232,200,124,.4);background:transparent;
   font-size:.7rem;letter-spacing:1.5px;font-weight:800;
 }
-.hero h1{margin:16px auto 0;max-width:760px;font-size:clamp(1.8rem,4.2vw,3rem);line-height:1.14;font-weight:800;}
+.hero h1{margin:14px auto 0;max-width:720px;font-size:clamp(1.35rem,3.2vw,2.15rem);line-height:1.22;font-weight:800;}
 .hero h1 span{color:var(--gold-soft);}
 .hero p{max-width:600px;margin:0 auto;color:#C6D3E2;line-height:1.65;}
 .hero-buttons{display:flex;flex-wrap:wrap;gap:11px;margin-top:24px;justify-content:center;}
@@ -297,16 +322,7 @@ section{padding:64px 0;}
   backdrop-filter:blur(5px);transform:rotate(-4deg);overflow:hidden;
   box-shadow:0 12px 26px rgba(0,0,0,.26), inset 0 0 26px rgba(140,196,255,.20);
 }
-.avatar::after{
-  content:'';position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(155deg,rgba(60,110,170,.22),rgba(14,29,51,.38));
-  mix-blend-mode:multiply;
-}
-.avatar img{
-  width:84%;height:84%;object-fit:contain;transform:rotate(4deg);
-  -webkit-mask-image:radial-gradient(closest-side,#000 62%,rgba(0,0,0,.5) 88%,transparent 100%);
-  mask-image:radial-gradient(closest-side,#000 62%,rgba(0,0,0,.5) 88%,transparent 100%);
-}
+.avatar img{width:84%;height:84%;object-fit:contain;transform:rotate(4deg);}
 .about-side h3{font-size:1.2rem;font-weight:800;}
 .about-side p{color:#fff1ed;font-size:.8rem;}
 .about-content{padding:35px;}
@@ -435,6 +451,7 @@ footer{padding:32px 0;color:#d6cadf;background:var(--purple-dark);}
   .info-grid{grid-template-columns:repeat(2,1fr);}
 }
 @media (max-width:600px){
+  .wordmark{letter-spacing:.03em;font-size:clamp(1.7rem,8.4vw,2.4rem);}
   section{padding:48px 0;}
   .hero{padding:54px 0;}
   .about-content{padding:26px;}
@@ -531,8 +548,13 @@ footer{padding:32px 0;color:#d6cadf;background:var(--purple-dark);}
     <div class="shape shape-two"></div>
     <div class="hero-inner">
       <div class="hero-logo-wrap">
-        <img src="logo-hero.png" alt="Dijital Öğretmen" class="hero-logo" onerror="this.src='logo.png'">
+        <img src="logo-hero.png" alt="" class="hero-logo" onerror="this.src='logo.png'">
       </div>
+      <div class="wordmark">
+        <span class="wm-base">Dijital Öğretmen</span>
+        <span class="wm-parlak" aria-hidden="true">Dijital Öğretmen</span>
+      </div>
+      <span class="wordmark-alt"></span>
       <span class="hero-label">TÜRKİYE YÜZYILI MAARİF MODELİ</span>
       <h1>İlkokul 1–4. sınıflar için <span>ders materyalleri, etkinlikler ve öğretmen evrakları</span></h1>
       <div class="hero-rule"></div>
