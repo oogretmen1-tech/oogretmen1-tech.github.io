@@ -54,10 +54,21 @@ header{
 .navbar{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:18px;}
 .logo{display:flex;align-items:center;gap:10px;color:var(--purple-dark);font-size:1.12rem;font-weight:800;white-space:nowrap;}
 .logo-mark{
-  width:40px;height:40px;display:grid;place-items:center;border-radius:13px;
-  background:var(--purple);overflow:hidden;transform:rotate(-5deg);
+  position:relative;width:40px;height:40px;display:grid;place-items:center;border-radius:13px;
+  background:linear-gradient(150deg,#2B547F,#16345C 60%,#0E1D33);
+  overflow:hidden;transform:rotate(-5deg);
+  box-shadow:inset 0 0 14px rgba(140,196,255,.22);
 }
-.logo-mark img{width:82%;height:82%;object-fit:contain;}
+.logo-mark img{
+  width:84%;height:84%;object-fit:contain;
+  -webkit-mask-image:radial-gradient(closest-side,#000 64%,rgba(0,0,0,.5) 90%,transparent 100%);
+  mask-image:radial-gradient(closest-side,#000 64%,rgba(0,0,0,.5) 90%,transparent 100%);
+}
+.logo-mark::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(150deg,rgba(60,110,170,.24),rgba(14,29,51,.40));
+  mix-blend-mode:multiply;
+}
 nav{display:flex;gap:20px;}
 nav a{color:#645b6b;font-size:.87rem;font-weight:700;}
 nav a:hover{color:var(--coral);}
@@ -90,8 +101,29 @@ nav a:hover{color:var(--coral);}
 .hero{position:relative;overflow:hidden;padding:60px 0 0;color:#fff;
   background:linear-gradient(120deg,#0E1D33 0%,#16345C 55%,#2B547F 100%);}
 .hero-inner{position:relative;z-index:2;width:min(1120px,92%);margin:0 auto;text-align:center;}
-.hero-logo{width:clamp(120px,20vw,175px);height:auto;display:block;margin:0 auto 14px;
-  filter:drop-shadow(0 14px 26px rgba(0,0,0,.45));}
+.hero-logo-wrap{
+  position:relative;width:clamp(132px,21vw,190px);margin:0 auto 14px;
+  display:grid;place-items:center;isolation:isolate;
+}
+.hero-logo-wrap::before{                       /* arkada mavi hâle */
+  content:'';position:absolute;inset:-22%;z-index:0;
+  background:radial-gradient(circle at 50% 46%,
+             rgba(140,196,255,.34) 0%, rgba(43,84,127,.20) 52%, transparent 74%);
+  filter:blur(8px);
+}
+.hero-logo{
+  position:relative;z-index:1;width:100%;height:auto;display:block;border-radius:26px;
+  filter:drop-shadow(0 16px 30px rgba(0,0,0,.42)) saturate(1.06);
+  -webkit-mask-image:radial-gradient(closest-side,#000 60%,rgba(0,0,0,.5) 86%,transparent 100%);
+  mask-image:radial-gradient(closest-side,#000 60%,rgba(0,0,0,.5) 86%,transparent 100%);
+}
+.hero-logo-wrap::after{                        /* beyazı laciverte çeken hologram tonu */
+  content:'';position:absolute;inset:0;z-index:2;border-radius:26px;pointer-events:none;
+  background:linear-gradient(155deg, rgba(60,110,170,.26), rgba(14,29,51,.44));
+  mix-blend-mode:multiply;
+  -webkit-mask-image:radial-gradient(closest-side,#000 54%,rgba(0,0,0,.28) 86%,transparent 100%);
+  mask-image:radial-gradient(closest-side,#000 54%,rgba(0,0,0,.28) 86%,transparent 100%);
+}
 .hero-rule{width:66px;height:3px;background:var(--coral);margin:20px auto 16px;border-radius:2px;}
 .hero-strip{position:relative;z-index:2;width:min(1120px,92%);margin:40px auto 0;
   display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border-top:1px solid rgba(255,255,255,.16);}
@@ -232,6 +264,26 @@ section{padding:64px 0;}
 .g3{background:linear-gradient(145deg,#C77DFF,#8B5CF6);}
 .g4{background:linear-gradient(145deg,#5FA0FF,#2563EB);}
 
+/* futbol oyunu kartı */
+.g-futbol{
+  position:relative;overflow:hidden;
+  background:linear-gradient(145deg,#27A65C 0%,#128047 55%,#0A5730 100%);
+}
+.g-futbol::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 18px,transparent 18px 36px);
+}
+.g-futbol::after{
+  content:'';position:absolute;right:-46px;top:50%;transform:translateY(-50%);
+  width:132px;height:132px;border:3px solid rgba(255,255,255,.30);border-radius:50%;
+}
+.g-futbol>*{position:relative;z-index:1;}
+.g-rozet{
+  display:inline-block;margin-bottom:8px;padding:3px 10px;border-radius:50px;
+  background:#FFD23F;color:#3A2A00;font-size:.6rem;font-weight:800;letter-spacing:1.2px;
+}
+.g-futbol .bayraklar{margin-top:9px;font-size:.9rem;letter-spacing:2px;opacity:.95;}
+
 /* ===== HAKKIMDA ===== */
 .about-card{overflow:hidden;display:grid;grid-template-columns:.8fr 1.2fr;border-radius:22px;background:#fff;box-shadow:var(--shadow);}
 .about-side{
@@ -239,10 +291,22 @@ section{padding:64px 0;}
   color:#fff;text-align:center;background:linear-gradient(160deg,#0E1D33,#2B547F);
 }
 .avatar{
-  width:118px;height:118px;display:grid;place-items:center;margin-bottom:15px;
-  border:5px solid rgba(255,255,255,.45);border-radius:30px;background:#fff;transform:rotate(-4deg);overflow:hidden;
+  position:relative;width:118px;height:118px;display:grid;place-items:center;margin-bottom:15px;
+  border:1px solid rgba(255,255,255,.30);border-radius:30px;
+  background:linear-gradient(155deg,rgba(255,255,255,.16),rgba(255,255,255,.05));
+  backdrop-filter:blur(5px);transform:rotate(-4deg);overflow:hidden;
+  box-shadow:0 12px 26px rgba(0,0,0,.26), inset 0 0 26px rgba(140,196,255,.20);
 }
-.avatar img{width:82%;height:82%;object-fit:contain;transform:rotate(4deg);}
+.avatar::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(155deg,rgba(60,110,170,.22),rgba(14,29,51,.38));
+  mix-blend-mode:multiply;
+}
+.avatar img{
+  width:84%;height:84%;object-fit:contain;transform:rotate(4deg);
+  -webkit-mask-image:radial-gradient(closest-side,#000 62%,rgba(0,0,0,.5) 88%,transparent 100%);
+  mask-image:radial-gradient(closest-side,#000 62%,rgba(0,0,0,.5) 88%,transparent 100%);
+}
 .about-side h3{font-size:1.2rem;font-weight:800;}
 .about-side p{color:#fff1ed;font-size:.8rem;}
 .about-content{padding:35px;}
@@ -321,11 +385,11 @@ section{padding:64px 0;}
 .tema-or .card-icon{background:#ddf3ec;}
 .tema-bi .card-icon{background:#ece8f2;}
 .oyun-turkce .card{border-left:4px solid var(--yellow);}
-.oyun-matematik .card{border-left:4px solid var(--matematik);}
+.oyun-spor .card{border-left:4px solid #128047;}
 .oyun-genel .card{border-left:4px solid var(--coral);}
 .oyun-quiz .card{border-left:4px solid var(--deger);}
 .oyun-turkce .card-icon{background:var(--yellow);}
-.oyun-matematik .card-icon{background:var(--matematik);}
+.oyun-spor .card-icon{background:#128047;}
 .oyun-genel .card-icon{background:var(--coral);}
 .oyun-quiz .card-icon{background:var(--deger);}
 
@@ -466,7 +530,9 @@ footer{padding:32px 0;color:#d6cadf;background:var(--purple-dark);}
     <div class="shape shape-one"></div>
     <div class="shape shape-two"></div>
     <div class="hero-inner">
-      <img src="logo-hero.png" alt="Dijital Öğretmen" class="hero-logo" onerror="this.src='logo.png'">
+      <div class="hero-logo-wrap">
+        <img src="logo-hero.png" alt="Dijital Öğretmen" class="hero-logo" onerror="this.src='logo.png'">
+      </div>
       <span class="hero-label">TÜRKİYE YÜZYILI MAARİF MODELİ</span>
       <h1>İlkokul 1–4. sınıflar için <span>ders materyalleri, etkinlikler ve öğretmen evrakları</span></h1>
       <div class="hero-rule"></div>
@@ -718,10 +784,12 @@ footer{padding:32px 0;color:#d6cadf;background:var(--purple-dark);}
       <h2 class="section-title">Eğitici oyunlar</h2>
       <p class="section-description">Öğrenirken eğlenmek için: derse göre ayrılmış oyunlar ve sınıf içi yarışmalar.</p>
       <div class="games-grid">
-        <a href="#" onclick="showPage('oyun','oyun-matematik');return false;" class="game-card g1">
-          <span class="gicon">🔢</span>
-          <h4>Matematik Oyunları</h4>
-          <p>Toplama, çıkarma, çarpma alıştırmaları</p>
+        <a href="gol-krali-2026.html" class="game-card g-futbol">
+          <span class="g-rozet">YENİ</span>
+          <span class="gicon">⚽</span>
+          <h4>Gol Kralı 2026</h4>
+          <p>Dokunmatik futbol · tek ve iki kişilik</p>
+          <div class="bayraklar">🇹🇷 🇪🇸 🇧🇷 🇦🇷 🇫🇷 🇮🇹</div>
         </a>
         <a href="#" onclick="showPage('oyun','oyun-turkce');return false;" class="game-card g2">
           <span class="gicon">📝</span>
@@ -1214,7 +1282,12 @@ footer{padding:32px 0;color:#d6cadf;background:var(--purple-dark);}
 
   <div id="page-oyun" class="page-section">
     <button class="back-btn" onclick="showHome()">← Ana Sayfa</button>
-    <div class="cat-hero oyun"><img class="cat-hero-cover" src="oyun-zamani.png" alt="" onerror="this.style.display='none'"><div><h2>Eğitici Oyunlar</h2><p>Türkçe, matematik, genel kültür ve sınıf içi yarışmalar</p></div></div>
+    <div class="cat-hero oyun"><img class="cat-hero-cover" src="oyun-zamani.png" alt="" onerror="this.style.display='none'"><div><h2>Eğitici Oyunlar</h2><p>Türkçe, spor, genel kültür ve sınıf içi yarışmalar</p></div></div>
+
+    <div class="alt-baslik" id="oyun-spor" style="background:#dcf1e5;color:#0b5c32;">⚽ SPOR OYUNLARI</div>
+    <div class="cards tema-o oyun-spor">
+      <a href="gol-krali-2026.html" class="card"><div class="card-icon">⚽</div><div class="card-body"><h3>Gol Kralı 2026</h3><p>Dokunmatik futbol · 12 ülke · tek ve iki kişilik</p></div></a>
+    </div>
 
     <div class="alt-baslik" id="oyun-turkce" style="background:#fdf0d3;color:#8a6100;">📝 TÜRKÇE OYUNLARI</div>
     <div class="cards tema-o oyun-turkce">
@@ -1224,11 +1297,6 @@ footer{padding:32px 0;color:#d6cadf;background:var(--purple-dark);}
       <a href="dinleme-kosesi.html" class="card"><div class="card-icon">🎧</div><div class="card-body"><h3>Dinleme Köşesi</h3><p>Hikaye Dinle, Sayı Oku</p></div></a>
       <a href="pasaparola.html" class="card"><div class="card-icon">🔠</div><div class="card-body"><h3>Pasaparola</h3><p>Harf harf bilgi yarışması</p></div></a>
       <a href="lingo-turkiye.html" class="card"><div class="card-icon">🔤</div><div class="card-body"><h3>Lingo Türkiye</h3><p>Zamanlı kelime tahmin oyunu</p></div></a>
-    </div>
-
-    <div class="alt-baslik" id="oyun-matematik" style="background:#e0eef6;color:#2c6488;">🔢 MATEMATİK OYUNLARI</div>
-    <div class="cards tema-o oyun-matematik">
-      <div class="card yakinda"><div class="card-icon">🔢</div><div class="card-body"><h3>Matematik Oyunları</h3><span class="yakinda-badge">Yakında</span></div></div>
     </div>
 
     <div class="alt-baslik" id="oyun-genel" style="background:#ffe7e2;color:#b1453a;">🧩 BULMACALAR · GENEL KÜLTÜR</div>
