@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Macera Adası</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #12324a;
+      --deep-sea: #006e9c;
+      --sea: #10a9ca;
+      --foam: #dcf8fa;
+      --sand: #fff0c5;
+      --coral: #ff725e;
+      --leaf: #319c69;
+      --yazi-tipi: "Andika", "Segoe UI", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      width: 100%;
+      min-height: 100vh;
+      font-family: var(--yazi-tipi);
+      color: var(--ink);
+      overflow-x: hidden;
+      background: linear-gradient(rgb(85, 215, 232), rgb(5, 125, 169));
+    }
+
+    .adventure-shell {
+      width: 100%;
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      background-color: #0d9fbd;
+      background-image:
+        radial-gradient(circle at 15% 20%, rgba(255,255,255,.25) 0 2px, transparent 3px),
+        radial-gradient(circle at 86% 36%, rgba(255,255,255,.2) 0 3px, transparent 4px),
+        linear-gradient(180deg, #55d7e8 0%, #159fc1 53%, #057da9 100%);
+      background-size: 39px 39px, 55px 55px, auto;
+    }
+
+    .adventure-shell::before,
+    .adventure-shell::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      border-radius: 999px;
+      opacity: .28;
+      filter: blur(2px);
+    }
+
+    .adventure-shell::before {
+      width: 420px;
+      height: 420px;
+      left: -180px;
+      top: 10%;
+      background: #c8f5ed;
+    }
+
+    .adventure-shell::after {
+      width: 310px;
+      height: 310px;
+      right: -130px;
+      bottom: -70px;
+      background: #ffd66d;
+    }
+
+    .wave-line {
+      position: absolute;
+      height: 28px;
+      width: 115%;
+      left: -7%;
+      border-top: 4px solid rgba(255,255,255,.28);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wave-one { top: 29%; transform: rotate(-4deg); }
+    .wave-two { bottom: 19%; transform: rotate(5deg); }
+
+    .game-layout {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 28px 24px 36px;
+    }
+
+    .brand-title {
+      text-shadow: 0 3px 0 rgba(255,255,255,.22);
+    }
+
+    .header-panel {
+      background: rgba(255,255,255,.91);
+      border: 3px solid rgba(255,255,255,.65);
+      box-shadow: 0 15px 0 rgba(2,85,113,.18);
+      backdrop-filter: blur(8px);
+    }
+
+    .progress-track {
+      height: 14px;
+      background: #d8edf0;
+      border-radius: 99px;
+      overflow: hidden;
+      box-shadow: inset 0 2px 3px rgba(13,84,103,.13);
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #ffd45d, #ff8a55);
+      transition: width .45s ease;
+    }
+
+    .map-board {
+      position: relative;
+      min-height: 340px;
+      border: 3px solid rgba(255,255,255,.6);
+      overflow: hidden;
+      background: linear-gradient(135deg, #159fc1, #0a87b2);
+      box-shadow: 0 14px 0 rgba(2,85,113,.18);
+    }
+
+    .map-board::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(-20deg, transparent 0 32px, rgba(255,255,255,.055) 33px 35px);
+      pointer-events: none;
+    }
+
+    .route {
+      position: absolute;
+      z-index: 1;
+      left: 13%;
+      right: 13%;
+      top: 51%;
+      border-top: 5px dashed rgba(255,255,255,.9);
+      transform: rotate(-4deg);
+      filter: drop-shadow(0 2px 1px rgba(0,80,105,.28));
+    }
+
+    .island-route {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      min-height: 340px;
+      align-items: center;
+      padding: 32px 26px;
+    }
+
+    .island-stop {
+      position: relative;
+      min-height: 175px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+
+    .island-stop:nth-child(2) { transform: translateY(-48px); }
+    .island-stop:nth-child(3) { transform: translateY(18px); }
+    .island-stop:nth-child(4) { transform: translateY(-30px); }
+
+    .island-button {
+      width: min(100%, 168px);
+      min-height: 150px;
+      padding: 13px 10px 15px;
+      color: #12324a;
+      background: linear-gradient(180deg, #fbf1c4 0%, #e4c665 42%, #5aa660 44%, #1e7a56 100%);
+      border: 5px solid #fff8d8;
+      border-radius: 48% 52% 43% 57% / 43% 42% 58% 57%;
+      box-shadow: 0 9px 0 rgba(0,77,92,.3), inset 0 7px rgba(255,255,255,.38);
+      transition: transform .25s ease, filter .25s ease, opacity .25s ease;
+      cursor: pointer;
+    }
+
+    .island-button:hover:not(:disabled) { transform: translateY(-7px) rotate(-2deg); }
+    .island-button:focus-visible, .answer-input:focus-visible, .submit-button:focus-visible, .restart-button:focus-visible {
+      outline: 4px solid #163d56;
+      outline-offset: 4px;
+    }
+
+    .island-button:disabled { cursor: not-allowed; }
+
+    .island-button.locked {
+      filter: grayscale(.7);
+      opacity: .66;
+    }
+
+    .island-button.active {
+      outline: 6px solid #ffdf54;
+      outline-offset: 3px;
+      animation: islandGlow 1.8s infinite ease-in-out;
+    }
+
+    .island-button.done {
+      background: linear-gradient(180deg, #fbf1c4 0%, #e4c665 42%, #71c978 44%, #257c54 100%);
+    }
+
+    .final-island {
+      background:
+        linear-gradient(180deg, #fff1bf 0%, #eec761 38%, #74b962 40%, #1c7654 100%);
+      border-radius: 42% 58% 46% 54% / 54% 42% 58% 46%;
+      transform: scale(1.13);
+    }
+
+    .island-icon {
+      display: inline-flex;
+      width: 43px;
+      height: 43px;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      background: rgba(13,86,87,.72);
+      border: 2px solid rgba(255,255,255,.55);
+      border-radius: 50%;
+      margin-bottom: 7px;
+    }
+
+    .question-card {
+      position: relative;
+      overflow: hidden;
+      background: #fffdf5;
+      border: 4px solid white;
+      box-shadow: 0 15px 0 rgba(1,72,95,.2);
+    }
+
+    .question-card::before {
+      content: "✦";
+      position: absolute;
+      top: -18px;
+      right: 23px;
+      font-size: 120px;
+      color: rgba(255,200,75,.22);
+      transform: rotate(13deg);
+    }
+
+    .answer-input {
+      border: 3px solid #b5dce0;
+      color: #12324a;
+      font-size: 1.45rem;
+      font-weight: 700;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .answer-input:focus {
+      border-color: #16a8c6;
+      box-shadow: 0 0 0 4px rgba(22,168,198,.18);
+    }
+
+    .submit-button, .restart-button {
+      transition: transform .2s ease, filter .2s ease;
+      box-shadow: 0 5px 0 rgba(167,55,37,.5);
+      cursor: pointer;
+    }
+
+    .submit-button:hover, .restart-button:hover { transform: translateY(-2px); filter: brightness(1.05); }
+    .submit-button:active, .restart-button:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(167,55,37,.5); }
+
+    .feedback {
+      min-height: 52px;
+      transition: opacity .2s ease;
+    }
+
+    .celebration {
+      display: none;
+    }
+
+    .celebration.show {
+      display: block;
+      animation: riseIn .5s ease both;
+    }
+
+    .confetti {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .confetti span {
+      position: absolute;
+      width: 11px;
+      height: 18px;
+      border-radius: 3px;
+      animation: confettiFall 2.8s infinite linear;
+    }
+
+    .confetti span:nth-child(1) { left: 10%; background:#ff725e; animation-delay:-.2s; }
+    .confetti span:nth-child(2) { left: 26%; background:#ffd45d; animation-delay:-1.1s; }
+    .confetti span:nth-child(3) { left: 48%; background:#56d5e1; animation-delay:-.7s; }
+    .confetti span:nth-child(4) { left: 68%; background:#319c69; animation-delay:-1.7s; }
+    .confetti span:nth-child(5) { left: 88%; background:#ff9d51; animation-delay:-2.3s; }
+
+    @keyframes islandGlow {
+      50% { filter: brightness(1.1); box-shadow: 0 9px 0 rgba(0,77,92,.3), 0 0 0 8px rgba(255,223,84,.28); }
+    }
+
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(18px) scale(.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes confettiFall {
+      from { top: -24px; transform: rotate(0); }
+      to { top: 105%; transform: rotate(480deg); }
+    }
+
+    @media (max-width: 720px) {
+      .game-layout { padding: 18px 14px 28px; }
+      .map-board { min-height: 270px; }
+      .island-route { min-height: 270px; gap: 6px; padding: 18px 8px; }
+      .island-stop { min-height: 130px; }
+      .island-stop:nth-child(2) { transform: translateY(-31px); }
+      .island-stop:nth-child(3) { transform: translateY(17px); }
+      .island-stop:nth-child(4) { transform: translateY(-20px); }
+      .island-button { min-height: 115px; border-width: 3px; padding: 8px 3px; }
+      .island-icon { width: 33px; height: 33px; margin-bottom: 3px; }
+      .island-button span { font-size: .72rem; }
+      .route { border-top-width: 3px; }
+      .final-island { transform: scale(1.02); }
+    }
+  </style>
+ </head>
+ <body>
+  <div class="adventure-shell">
+   <div class="wave-line wave-one"></div>
+   <div class="wave-line wave-two"></div>
+   <header class="game-layout pb-3">
+    <div class="header-panel rounded-[28px] px-5 py-5 sm:px-7 sm:py-6">
+     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+       <div class="flex items-center gap-3">
+        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#ffcf55] text-[#16445a] shadow-md"><i data-lucide="ship-wheel" width="27" height="27"></i>
+        </div>
+        <div>
+         <h1 class="brand-title m-0 text-[#12324a] font-extrabold leading-none" style="font-size: 32px;">Macera Adası</h1>
+         <p class="mt-2 mb-0 text-[#39707d] font-medium">İşlemleri çöz, adaları keşfet, hazineye ulaş!</p>
+        </div>
+       </div>
+      </div>
+      <div class="w-full sm:w-64">
+       <div class="mb-2 flex items-center justify-between"><span class="text-sm font-bold text-[#28606f]">Macera ilerlemen</span> <span id="progress-text" class="text-sm font-extrabold text-[#12324a]" aria-live="polite">0 / 16</span>
+       </div>
+       <div class="progress-track" aria-label="Oyun ilerlemesi">
+        <div id="progress-fill" class="progress-fill"></div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </header>
+   <main class="game-layout pt-3">
+    <section class="map-board rounded-[32px]" aria-labelledby="map-heading">
+     <h2 id="map-heading" class="sr-only">Macera adaları haritası</h2>
+     <div class="route"></div>
+     <div class="island-route">
+      <div class="island-stop"><button id="island-0" type="button" class="island-button active" aria-label="Toplama Koyu, aktif ada"> <span class="island-icon"><i data-lucide="waves" width="21" height="21"></i></span> <span class="block font-extrabold">Toplama Koyu</span> <span class="mt-1 block text-xs font-bold text-[#eaf9ee]" id="island-status-0">0 / 5</span> </button>
+      </div>
+      <div class="island-stop"><button id="island-1" type="button" class="island-button locked" disabled aria-label="Çıkarma Sahili, kilitli ada"> <span class="island-icon"><i data-lucide="palmtree" width="21" height="21"></i></span> <span class="block font-extrabold">Çıkarma Sahili</span> <span class="mt-1 block text-xs font-bold text-[#eaf9ee]" id="island-status-1">🔒</span> </button>
+      </div>
+      <div class="island-stop"><button id="island-2" type="button" class="island-button locked" disabled aria-label="Çarpma Burnu, kilitli ada"> <span class="island-icon"><i data-lucide="compass" width="21" height="21"></i></span> <span class="block font-extrabold">Çarpma Burnu</span> <span class="mt-1 block text-xs font-bold text-[#eaf9ee]" id="island-status-2">🔒</span> </button>
+      </div>
+      <div class="island-stop"><button id="island-3" type="button" class="island-button final-island locked" disabled aria-label="Hazine Adası, kilitli final adası"> <span class="island-icon"><i data-lucide="trophy" width="21" height="21"></i></span> <span class="block font-extrabold">Hazine Adası</span> <span class="mt-1 block text-xs font-bold text-[#eaf9ee]" id="island-status-3">🔒</span> </button>
+      </div>
+     </div>
+    </section>
+    <section class="mt-6 grid gap-6 lg:grid-cols-[1.45fr_.55fr]" aria-label="Matematik görevi">
+     <article class="question-card rounded-[30px] p-5 sm:p-8">
+      <div class="relative z-10">
+       <div class="mb-5 flex items-center gap-3">
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#dff7e7] text-[#207d54]"><i data-lucide="sparkles" width="25" height="25"></i>
+        </div>
+        <div>
+         <p class="m-0 text-sm font-extrabold uppercase tracking-[.13em] text-[#27835c]">Bugünün görevi</p>
+         <h2 id="active-island-title" class="m-0 mt-1 font-bold text-[#12324a] text-xl sm:text-2xl">Toplama Koyu</h2>
+        </div>
+       </div>
+       <p id="question-counter" class="mb-1 text-sm font-bold text-[#54808a]" aria-live="polite">Soru 1 / 5</p>
+       <div id="math-question" class="my-3 text-5xl font-extrabold tracking-tight text-[#12324a] sm:text-6xl" aria-live="polite">
+        8 + 7 = ?
+       </div>
+       <p id="question-hint" class="mb-6 text-[#47727c]">Cevabını yaz ve rotana devam et!</p>
+       <form id="answer-form" class="flex flex-col gap-3 sm:flex-row sm:items-stretch"><label for="answer-input" class="sr-only">Cevabın</label> <input id="answer-input" class="answer-input w-full rounded-2xl bg-white px-5 py-3.5 sm:max-w-[210px]" type="number" inputmode="numeric" autocomplete="off" required> <button id="submit-answer" class="submit-button rounded-2xl bg-[#ff725e] px-6 py-3.5 font-extrabold text-white" type="submit">Cevabı Kontrol Et</button>
+       </form>
+       <div id="feedback" class="feedback mt-5 rounded-2xl px-4 py-3 font-bold" aria-live="polite"></div>
+      </div>
+     </article>
+     <aside class="relative overflow-hidden rounded-[30px] bg-[#fff0c5] p-5 shadow-[0_12px_0_rgba(2,85,113,.18)] sm:p-6">
+      <div class="relative z-10">
+       <p class="mb-2 text-sm font-extrabold uppercase tracking-[.13em] text-[#986719]">Hedefin</p>
+       <h2 class="mb-4 font-bold text-[#12324a]" style="font-size: 24px;">Büyük Hazine Seni Bekliyor</h2>
+       <div class="rounded-2xl border-4 border-white p-6 text-center" style="background: linear-gradient(180deg, #55d7e8, #1e7a56); box-shadow: 0 10px 0 rgba(1,72,95,.18);">
+         <div style="font-size: 62px; line-height: 1;">🏝️</div>
+         <div class="mt-2 font-extrabold text-white">Hazine Adası</div>
+       </div>
+       <p class="mb-0 mt-4 text-[#5f593d] leading-relaxed">Her doğru işlem seni büyük adadaki gizemli hazineye biraz daha yaklaştırır.</p>
+      </div>
+     </aside>
+    </section>
+    <section id="celebration" class="celebration relative mt-6" aria-live="polite">
+     <div class="confetti" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span>
+     </div>
+     <div class="rounded-[30px] bg-[#fffdf5] px-6 py-8 text-center shadow-[0_14px_0_rgba(2,85,113,.2)] sm:px-10">
+      <div class="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-[#ffd45d] text-[#7a4a12]"><i data-lucide="crown" width="36" height="36"></i>
+      </div>
+      <h2 class="brand-title mb-2 font-extrabold text-[#12324a]" style="font-size: 24px;">Hazineyi Buldun!</h2>
+      <p class="mx-auto mb-6 max-w-xl text-[#47727c]">Tüm adaları geçtin ve final sorusunu da doğru çözdün. Sen gerçek bir Matematik Kâşifisin!</p><button id="restart-button" class="restart-button rounded-2xl bg-[#ff725e] px-7 py-3.5 font-extrabold text-white" type="button">Yeni Maceraya Başla</button>
+     </div>
+    </section>
+   </main>
+   <footer class="game-layout pt-0">
+    <p class="mb-0 text-center text-sm font-medium text-white/90">Pusulan doğru cevapları gösteriyor. Haydi, keşfe devam!</p>
+   </footer>
+  </div>
+
+  <script>
+    const islands = [
+      { name: "Toplama Koyu", type: "add", completed: 0 },
+      { name: "Çıkarma Sahili", type: "subtract", completed: 0 },
+      { name: "Çarpma Burnu", type: "multiply", completed: 0 },
+      { name: "Hazine Adası", type: "final", completed: 0 }
+    ];
+
+    let currentIsland = 0;
+    let currentQuestion = null;
+    let gameComplete = false;
+
+    const questionEl = document.getElementById("math-question");
+    const counterEl = document.getElementById("question-counter");
+    const hintEl = document.getElementById("question-hint");
+    const answerInput = document.getElementById("answer-input");
+    const feedbackEl = document.getElementById("feedback");
+    const formEl = document.getElementById("answer-form");
+    const activeTitleEl = document.getElementById("active-island-title");
+    const progressTextEl = document.getElementById("progress-text");
+    const progressFillEl = document.getElementById("progress-fill");
+    const celebrationEl = document.getElementById("celebration");
+
+    function randomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function createQuestion(type) {
+      let first, second, operator, answer;
+
+      if (type === "add") {
+        first = randomInt(4, 35);
+        second = randomInt(3, 30);
+        operator = "+";
+        answer = first + second;
+      } else if (type === "subtract") {
+        first = randomInt(18, 60);
+        second = randomInt(4, first - 2);
+        operator = "−";
+        answer = first - second;
+      } else if (type === "multiply") {
+        first = randomInt(2, 9);
+        second = randomInt(2, 10);
+        operator = "×";
+        answer = first * second;
+      } else {
+        first = randomInt(6, 12);
+        second = randomInt(4, 9);
+        operator = "×";
+        answer = first * second;
+      }
+
+      return { first, second, operator, answer };
+    }
+
+    function totalCompleted() {
+      return islands.reduce((sum, island) => sum + island.completed, 0);
+    }
+
+    function updateProgress() {
+      const total = totalCompleted();
+      progressTextEl.textContent = total + " / 16";
+      progressFillEl.style.width = (total / 16 * 100) + "%";
+    }
+
+    function updateMap() {
+      islands.forEach((island, index) => {
+        const button = document.getElementById("island-" + index);
+        const status = document.getElementById("island-status-" + index);
+        const needed = index === 3 ? 1 : 5;
+        button.classList.toggle("active", index === currentIsland && !gameComplete);
+        button.classList.toggle("done", island.completed >= needed);
+        button.classList.toggle("locked", index > currentIsland && island.completed < needed);
+        button.disabled = index > currentIsland || gameComplete;
+
+        if (island.completed >= needed) {
+          status.textContent = "✓ Tamamlandı";
+          button.setAttribute("aria-label", island.name + ", tamamlandı");
+        } else if (index > currentIsland) {
+          status.textContent = "🔒";
+          button.setAttribute("aria-label", island.name + ", kilitli ada");
+        } else {
+          status.textContent = island.completed + " / " + needed;
+          button.setAttribute("aria-label", island.name + ", aktif ada");
+        }
+      });
+    }
+
+    function loadQuestion() {
+      const island = islands[currentIsland];
+      const needed = currentIsland === 3 ? 1 : 5;
+      currentQuestion = createQuestion(island.type);
+
+      activeTitleEl.textContent = island.name;
+      counterEl.textContent = currentIsland === 3
+        ? "Final sorusu"
+        : "Soru " + (island.completed + 1) + " / " + needed;
+      questionEl.textContent = currentQuestion.first + " " + currentQuestion.operator + " " + currentQuestion.second + " = ?";
+      hintEl.textContent = currentIsland === 3
+        ? "Bu son işlem! Hazineye ulaşmak için dikkatlice çöz."
+        : "Cevabını yaz ve rotana devam et!";
+      feedbackEl.textContent = "";
+      feedbackEl.style.background = "transparent";
+      feedbackEl.style.color = "#12324a";
+      answerInput.value = "";
+      answerInput.focus();
+    }
+
+    function moveToNextIsland() {
+      if (currentIsland < 3) {
+        currentIsland += 1;
+        updateMap();
+        loadQuestion();
+      }
+    }
+
+    function celebrate() {
+      gameComplete = true;
+      formEl.classList.add("hidden");
+      hintEl.textContent = "Hazine senin! Yeni bir macera için tekrar başlayabilirsin.";
+      celebrationEl.classList.add("show");
+      updateMap();
+    }
+
+    formEl.addEventListener("submit", function(event) {
+      event.preventDefault();
+      if (gameComplete) return;
+
+      const response = Number(answerInput.value);
+      if (answerInput.value.trim() === "") {
+        feedbackEl.textContent = "Önce bir cevap yazmalısın.";
+        feedbackEl.style.background = "#fff0c5";
+        feedbackEl.style.color = "#875719";
+        answerInput.focus();
+        return;
+      }
+
+      if (response === currentQuestion.answer) {
+        islands[currentIsland].completed += 1;
+        const needed = currentIsland === 3 ? 1 : 5;
+        updateProgress();
+        updateMap();
+
+        if (islands[currentIsland].completed >= needed) {
+          if (currentIsland === 3) {
+            feedbackEl.textContent = "Muhteşem! Final işlemi de doğru!";
+            feedbackEl.style.background = "#ddf6e5";
+            feedbackEl.style.color = "#187044";
+            setTimeout(celebrate, 450);
+          } else {
+            feedbackEl.textContent = "Harika! Yeni ada artık açık.";
+            feedbackEl.style.background = "#ddf6e5";
+            feedbackEl.style.color = "#187044";
+            setTimeout(moveToNextIsland, 500);
+          }
+        } else {
+          feedbackEl.textContent = "Doğru cevap! Bir sonraki soruya geçiyorsun.";
+          feedbackEl.style.background = "#ddf6e5";
+          feedbackEl.style.color = "#187044";
+          setTimeout(loadQuestion, 450);
+        }
+      } else {
+        feedbackEl.textContent = "Henüz değil. İşlemi bir kez daha dikkatlice dene!";
+        feedbackEl.style.background = "#ffe3dc";
+        feedbackEl.style.color = "#a33e30";
+        answerInput.select();
+      }
+    });
+
+    document.getElementById("restart-button").addEventListener("click", function() {
+      islands.forEach(island => island.completed = 0);
+      currentIsland = 0;
+      gameComplete = false;
+      celebrationEl.classList.remove("show");
+      formEl.classList.remove("hidden");
+      updateProgress();
+      updateMap();
+      loadQuestion();
+    });
+
+    document.querySelectorAll(".island-button").forEach((button, index) => {
+      button.addEventListener("click", function() {
+        if (index === currentIsland && !gameComplete) {
+          answerInput.focus();
+        }
+      });
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+      if (window.lucide) { lucide.createIcons(); }
+      updateProgress();
+      updateMap();
+      loadQuestion();
+    });
+  </script>
+
+</body>
+</html>

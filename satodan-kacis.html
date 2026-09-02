@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Şatodan Kaçış: İşlem Avcıları</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --karanlik-sato: #1a1025;
+      --mor: #5946d9;
+      --koyu: #292052;
+      --sari: #ffd34e;
+      --turuncu: #ff9850;
+      --yesil: #20bd83;
+      --kirmizi: #ed5b69;
+      --ahsap: #5c3a21;
+      --ahsap-koyu: #3e2615;
+      --metin: #f8f6ff;
+      --yazi-tipi: "Andika", "Segoe UI", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--yazi-tipi);
+      color: var(--metin);
+      background: radial-gradient(circle at center, #3b2858 0%, var(--karanlik-sato) 100%);
+      overflow-x: hidden;
+    }
+
+    .app { width: min(950px, 94%); margin: 25px auto; }
+
+    .screen {
+      display: none;
+      min-height: 670px;
+      overflow: hidden;
+      position: relative;
+      border: 4px solid #5a4b81;
+      border-radius: 20px;
+      background: rgba(26, 16, 37, 0.85);
+      box-shadow: 0 0 40px rgba(0,0,0,0.8);
+      backdrop-filter: blur(5px);
+    }
+
+    .screen.active { display: flex; flex-direction: column; }
+
+    .screen.shake { animation: sarsinti 0.4s ease-in-out; }
+
+    /* KAPAK */
+    .cover {
+      align-items: center; justify-content: center; text-align: center; padding: 35px 20px;
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="%23292052"/><path d="M0 50 L50 0 L100 50 L100 100 L0 100 Z" fill="%231a1025" opacity="0.5"/></svg>');
+    }
+
+    .castle-icon { font-size: 110px; filter: drop-shadow(0 0 20px var(--sari)); animation: nefes 3s infinite alternate; }
+
+    @keyframes nefes { to { transform: scale(1.05); } }
+
+    h1 { color: var(--sari); font-size: clamp(32px, 6vw, 55px); text-shadow: 2px 2px 0px #000; margin: 15px 0; }
+
+    .subtitle { font-size: 20px; max-width: 600px; margin: 10px auto 28px; line-height: 1.5; color: #d8d0ff; }
+
+    button { border: 0; cursor: pointer; font: inherit; font-weight: bold; transition: .2s; }
+    button:hover:not(:disabled) { transform: translateY(-3px) scale(1.02); filter: brightness(1.1); }
+
+    .main-button { padding: 18px 35px; border-radius: 12px; color: white; background: linear-gradient(135deg, var(--turuncu), #e34c26); box-shadow: 0 6px 0 #9c2a0e; font-size: 22px; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* OYUN ÜST KISMI */
+    .game-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; background: rgba(0,0,0,0.6); border-bottom: 2px solid #5a4b81; }
+    .game-header h2 { margin: 0; color: var(--sari); font-size: 24px; }
+    .stats { display: flex; gap: 15px; }
+    .stat-box { padding: 8px 15px; border-radius: 10px; background: rgba(255,255,255,0.1); font-size: 18px; font-weight: bold; }
+
+    .content { flex: 1; padding: 25px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+    .mission { width: 100%; max-width: 750px; text-align: center; }
+
+    .target { display: inline-block; padding: 15px 35px; border-radius: 15px; color: #000; background: linear-gradient(135deg, var(--sari), #ffb300); box-shadow: 0 0 20px rgba(255,211,78,0.4), inset 0 0 10px rgba(255,255,255,0.5); font-size: 34px; margin-bottom: 30px; font-weight: bold; }
+
+    /* KAPI TASARIMLARI */
+    .doors { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; margin: 0 auto; }
+
+    .door-wrapper { position: relative; perspective: 1000px; }
+
+    .door { width: 100%; padding: 40px 10px; background: linear-gradient(to bottom, var(--ahsap) 0%, var(--ahsap-koyu) 100%); border: 4px solid #2a160b; border-radius: 20px 20px 0 0; color: white; font-size: 30px; position: relative; display: flex; flex-direction: column; align-items: center; box-shadow: inset 0 0 20px rgba(0,0,0,0.7), 0 10px 15px rgba(0,0,0,0.5); transition: 0.3s; }
+
+    .door::before { content: '🕳️'; font-size: 25px; margin-bottom: 10px; }
+    .door::after { content: ''; position: absolute; right: 15px; top: 50%; width: 12px; height: 12px; background: gold; border-radius: 50%; box-shadow: 0 0 5px #000; }
+
+    .door:hover:not(:disabled) { border-color: var(--sari); box-shadow: 0 0 15px var(--sari); }
+
+    .door.correct { background: var(--yesil); border-color: #fff; box-shadow: 0 0 30px var(--yesil); }
+    .door.correct::before { content: '🗝️'; font-size: 45px; }
+    .door.correct span { display: none; }
+
+    .door.wrong { background: #222; border-color: var(--kirmizi); box-shadow: inset 0 0 50px var(--kirmizi); }
+    .door.wrong::before { content: '💣'; font-size: 60px; animation: bomb-pulse 0.5s infinite alternate; }
+    .door.wrong span { display: none; }
+
+    .door-wrapper.shake { animation: sarsinti 0.4s ease-in-out; }
+
+    @keyframes sarsinti {
+      0% { transform: translate(1px, 1px) rotate(0deg); }
+      10% { transform: translate(-1px, -2px) rotate(-1deg); }
+      20% { transform: translate(-3px, 0px) rotate(1deg); }
+      30% { transform: translate(3px, 2px) rotate(0deg); }
+      40% { transform: translate(1px, -1px) rotate(1deg); }
+      50% { transform: translate(-1px, 2px) rotate(-1deg); }
+      60% { transform: translate(-3px, 1px) rotate(0deg); }
+      70% { transform: translate(3px, 1px) rotate(-1deg); }
+      80% { transform: translate(-1px, -1px) rotate(1deg); }
+      90% { transform: translate(1px, 2px) rotate(0deg); }
+      100% { transform: translate(1px, -2px) rotate(-1deg); }
+    }
+
+    @keyframes bomb-pulse { to { transform: scale(1.2); } }
+
+    .feedback { min-height: 40px; margin: 25px 0; font-size: 22px; font-weight: bold; text-shadow: 1px 1px 2px #000; }
+    .good { color: var(--yesil); }
+    .bad { color: var(--kirmizi); }
+
+    .next-button { display: none; margin: 0 auto; padding: 15px 30px; border-radius: 12px; color: white; background: var(--yesil); box-shadow: 0 5px 0 #11915e; font-size: 20px; }
+
+    /* SONUÇ EKRANI */
+    .result { align-items: center; justify-content: center; text-align: center; }
+    .result-icon { font-size: 100px; margin-bottom: 20px; }
+
+    @media (max-width: 620px) {
+      .game-header { flex-direction: column; gap: 10px; align-items: flex-start; }
+      .target { font-size: 26px; padding: 12px 22px; }
+      .door { font-size: 24px; padding: 28px 6px; }
+      .doors { gap: 12px; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app">
+
+    <!-- KAPAK EKRANI -->
+    <section id="coverScreen" class="screen cover active">
+      <div class="castle-icon">🏰</div>
+      <h1>Gizemli Şato</h1>
+      <p class="subtitle">
+        Hedef sayıya ulaşan doğru kapıyı bul ve şatodan kaç! Yanlış kapıyı açarsan bombayı patlatırsın. Sadece 3 canın var, dikkatli ol! 💣
+      </p>
+      <button class="main-button" onclick="startGame()">Maceraya Atıl 🗝️</button>
+    </section>
+
+    <!-- OYUN EKRANI -->
+    <section id="gameScreen" class="screen">
+      <header class="game-header">
+        <h2>🏰 Şato Zindanları</h2>
+        <div class="stats">
+          <div class="stat-box" id="lives">❤️ ❤️ ❤️</div>
+          <div class="stat-box">Oda: <span id="roomNumber">1 / 8</span></div>
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="mission">
+          <h3 style="color: #d8d0ff; margin-bottom: 5px;">Hangi kapının arkasında tuzak yok?</h3>
+          <div id="target" class="target">Hedef: 12</div>
+
+          <div id="doors" class="doors"></div>
+
+          <div id="feedback" class="feedback"></div>
+
+          <button id="nextButton" class="next-button" onclick="nextQuestion()">Sonraki Odaya Geç ➜</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SONUÇ EKRANI -->
+    <section id="resultScreen" class="screen result">
+      <div id="resultIcon" class="result-icon"></div>
+      <h1 id="resultTitle"></h1>
+      <p id="resultMessage" class="subtitle" style="color: white;"></p>
+      <button class="main-button" onclick="restartGame()" style="margin-top: 20px;">Tekrar Oyna 🔄</button>
+    </section>
+
+  </main>
+
+  <script>
+    const missions = [
+      { target: 12, choices: ["5 + 6", "3 × 4", "18 - 5", "7 + 4"], correct: "3 × 4" },
+      { target: 15, choices: ["9 + 6", "4 × 4", "20 - 6", "8 + 5"], correct: "9 + 6" },
+      { target: 18, choices: ["7 + 9", "3 × 6", "20 - 3", "4 × 4"], correct: "3 × 6" },
+      { target: 14, choices: ["8 + 6", "5 × 3", "19 - 4", "7 + 8"], correct: "8 + 6" },
+      { target: 20, choices: ["4 × 5", "18 + 3", "25 - 4", "6 + 13"], correct: "4 × 5" },
+      { target: 16, choices: ["9 + 9", "3 × 5", "20 - 4", "8 + 9"], correct: "20 - 4" },
+      { target: 21, choices: ["7 × 3", "15 + 5", "25 - 3", "6 + 14"], correct: "7 × 3" },
+      { target: 24, choices: ["6 × 4", "20 + 5", "30 - 5", "8 + 8"], correct: "6 × 4" }
+    ];
+
+    let currentMission = 0;
+    let lives = 3;
+    let answered = false;
+
+    function startGame() {
+      currentMission = 0;
+      lives = 3;
+      document.getElementById("coverScreen").classList.remove("active");
+      document.getElementById("resultScreen").classList.remove("active");
+      document.getElementById("gameScreen").classList.add("active");
+      updateLivesDisplay();
+      showMission();
+    }
+
+    function updateLivesDisplay() {
+      document.getElementById("lives").textContent = "❤️ ".repeat(lives) + "🖤 ".repeat(3 - lives);
+    }
+
+    function showMission() {
+      answered = false;
+      const mission = missions[currentMission];
+
+      document.getElementById("roomNumber").textContent = `${currentMission + 1} / ${missions.length}`;
+      document.getElementById("target").textContent = `Güvenli Hedef: ${mission.target}`;
+
+      const doorsArea = document.getElementById("doors");
+      doorsArea.innerHTML = "";
+
+      mission.choices.forEach(choice => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "door-wrapper";
+
+        const button = document.createElement("button");
+        button.className = "door";
+        button.dataset.choice = choice;
+
+        const span = document.createElement("span");
+        span.textContent = choice;
+        button.appendChild(span);
+
+        button.onclick = () => checkAnswer(button, wrapper, choice);
+
+        wrapper.appendChild(button);
+        doorsArea.appendChild(wrapper);
+      });
+
+      const feedback = document.getElementById("feedback");
+      feedback.textContent = "";
+      feedback.className = "feedback";
+      document.getElementById("nextButton").style.display = "none";
+    }
+
+    function checkAnswer(button, wrapper, selectedChoice) {
+      if (answered) return;
+      answered = true;
+
+      const mission = missions[currentMission];
+      const feedback = document.getElementById("feedback");
+      const allDoors = document.querySelectorAll(".door");
+
+      allDoors.forEach(doorBtn => doorBtn.disabled = true);
+
+      if (selectedChoice === mission.correct) {
+        button.classList.add("correct");
+        feedback.textContent = "Kilit açıldı! Bu oda güvenli. 🗝️✨";
+        feedback.className = "feedback good";
+        document.getElementById("nextButton").style.display = "block";
+      } else {
+        button.classList.add("wrong");
+        wrapper.classList.add("shake");
+
+        const gameScreen = document.getElementById("gameScreen");
+        gameScreen.classList.add("shake");
+        setTimeout(() => gameScreen.classList.remove("shake"), 400);
+
+        lives--;
+        updateLivesDisplay();
+
+        feedback.textContent = `Bomba! Doğru kapı: ${mission.correct} 💥`;
+        feedback.className = "feedback bad";
+
+        // Doğru kapıyı öğrenciye göster
+        allDoors.forEach(doorBtn => {
+          if (doorBtn.dataset.choice === mission.correct) {
+            doorBtn.classList.add("correct");
+          }
+        });
+
+        setTimeout(() => {
+          if (lives > 0) {
+            document.getElementById("nextButton").style.display = "block";
+          } else {
+            finishGame(false);
+          }
+        }, 1500);
+      }
+    }
+
+    function nextQuestion() {
+      currentMission++;
+      if (currentMission >= missions.length) {
+        finishGame(true);
+      } else {
+        showMission();
+      }
+    }
+
+    function finishGame(isVictory) {
+      document.getElementById("gameScreen").classList.remove("active");
+      document.getElementById("resultScreen").classList.add("active");
+
+      const icon = document.getElementById("resultIcon");
+      const title = document.getElementById("resultTitle");
+      const message = document.getElementById("resultMessage");
+
+      if (isVictory) {
+        icon.textContent = "👑";
+        title.textContent = "Şatodan Kaçtın!";
+        title.style.color = "var(--yesil)";
+        message.textContent = `Muazzam bir işlem yeteneği! Kalan canın: ${lives}`;
+      } else {
+        icon.textContent = "☠️";
+        title.textContent = "Şatoda Mahsur Kaldın!";
+        title.style.color = "var(--kirmizi)";
+        message.textContent = "Tüm canlarını kaybettin. Bombalara dikkat ederek tekrar dene!";
+      }
+    }
+
+    function restartGame() {
+      startGame();
+    }
+  </script>
+</body>
+</html>

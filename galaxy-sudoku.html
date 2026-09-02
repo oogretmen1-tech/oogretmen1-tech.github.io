@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galaxy Sudoku</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ana: #00e5ff;
+      --ana-rgb: 0, 229, 255;
+      --zıt: #ffd447;
+      --pembe: #ff4fd8;
+      --mor: #a855f7;
+      --yesil: #55f5a0;
+      --kırmızı: #ff5277;
+
+      --arka: #050817;
+      --panel: rgba(11, 21, 53, 0.92);
+      --yazı: #f4fbff;
+      --soluk: #aab9dd;
+      --yazı-tipi: "Andika", "Segoe UI", Arial, Helvetica, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--yazı);
+      font-family: var(--yazı-tipi);
+      background:
+        radial-gradient(circle at 15% 15%, rgba(168, 85, 247, .28), transparent 25%),
+        radial-gradient(circle at 85% 20%, rgba(0, 229, 255, .2), transparent 25%),
+        radial-gradient(circle at 50% 90%, rgba(255, 79, 216, .15), transparent 27%),
+        var(--arka);
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .yıldızlar {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .yıldız {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 0 8px white;
+      animation: parılda 2s infinite alternate;
+    }
+
+    @keyframes parılda {
+      from {
+        opacity: .2;
+        transform: scale(.7);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1.5);
+      }
+    }
+
+    .uygulama {
+      width: min(1250px, 95%);
+      margin: auto;
+      padding: 22px 0 40px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 18px 22px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(var(--ana-rgb), .45);
+      border-radius: 20px;
+      background: var(--panel);
+      box-shadow: 0 0 25px rgba(var(--ana-rgb), .15);
+      backdrop-filter: blur(12px);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .logo-icon {
+      display: grid;
+      place-items: center;
+      width: 52px;
+      height: 52px;
+      border: 2px solid var(--ana);
+      border-radius: 50%;
+      color: var(--ana);
+      font-size: 27px;
+      box-shadow: 0 0 18px rgba(var(--ana-rgb), .8);
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--ana);
+      font-size: clamp(1.45rem, 4vw, 2.2rem);
+      letter-spacing: 2px;
+      text-shadow: 0 0 14px rgba(var(--ana-rgb), .8);
+    }
+
+    .alt-başlık {
+      margin: 4px 0 0;
+      color: var(--soluk);
+      font-size: .75rem;
+      letter-spacing: 2px;
+    }
+
+    .üst-butonlar,
+    .alt-butonlar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .neon-buton {
+      padding: 10px 13px;
+      border: 1px solid rgba(var(--ana-rgb), .65);
+      border-radius: 10px;
+      color: var(--yazı);
+      background: rgba(var(--ana-rgb), .1);
+      font-weight: bold;
+      transition: .2s;
+    }
+
+    .neon-buton:hover {
+      transform: translateY(-2px);
+      background: rgba(var(--ana-rgb), .25);
+      box-shadow: 0 0 15px rgba(var(--ana-rgb), .45);
+    }
+
+    .neon-buton.pembe {
+      border-color: var(--pembe);
+      background: rgba(255, 79, 216, .1);
+    }
+
+    .ana-alan {
+      display: grid;
+      grid-template-columns: minmax(300px, 760px) minmax(245px, 1fr);
+      align-items: start;
+      gap: 20px;
+    }
+
+    .oyun-paneli,
+    .yan-panel {
+      padding: 20px;
+      border: 1px solid rgba(var(--ana-rgb), .4);
+      border-radius: 20px;
+      background: var(--panel);
+      box-shadow: 0 0 28px rgba(0, 0, 0, .25);
+      backdrop-filter: blur(12px);
+    }
+
+    .bilgi-kartları {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 17px;
+    }
+
+    .bilgi-kartı {
+      padding: 12px 8px;
+      border: 1px solid rgba(var(--ana-rgb), .25);
+      border-radius: 12px;
+      background: rgba(25, 43, 91, .8);
+      text-align: center;
+    }
+
+    .bilgi-kartı small {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--soluk);
+      font-size: .7rem;
+      letter-spacing: 1px;
+    }
+
+    .bilgi-kartı strong {
+      color: var(--ana);
+      font-size: 1.1rem;
+    }
+
+    /* Sudoku tahtası */
+    .sudoku {
+      display: grid;
+      grid-template-columns: repeat(9, 1fr);
+      width: min(100%, 690px);
+      aspect-ratio: 1;
+      gap: 2px;
+      margin: auto;
+      overflow: hidden;
+      border: 5px solid var(--zıt);
+      border-radius: 12px;
+      background: var(--zıt);
+      box-shadow:
+        0 0 12px var(--zıt),
+        0 0 28px rgba(255, 212, 71, .6),
+        0 0 45px rgba(255, 79, 216, .25);
+    }
+
+    .hücre {
+      position: relative;
+      min-width: 0;
+      border: 0;
+      color: white;
+      font-size: clamp(1rem, 3.8vw, 2rem);
+      font-weight: 900;
+      text-shadow: 0 0 8px rgba(255, 255, 255, .55);
+      transition: .16s;
+    }
+
+    /*
+      Her 3x3 alan farklı renkte.
+      Bu renkler koyu tutulduğu için sayı ve neon çizgiler net görünür.
+    */
+    .alan-1 {
+      background: #24164d;
+    }
+
+    .alan-2 {
+      background: #12395b;
+    }
+
+    .alan-3 {
+      background: #154d4d;
+    }
+
+    .alan-4 {
+      background: #49233f;
+    }
+
+    .alan-5 {
+      background: #263c68;
+    }
+
+    .alan-6 {
+      background: #3d315f;
+    }
+
+    .alan-7 {
+      background: #164d3e;
+    }
+
+    .alan-8 {
+      background: #4d3b23;
+    }
+
+    .alan-9 {
+      background: #293d4c;
+    }
+
+    .hücre.sabit {
+      color: var(--zıt);
+      text-shadow:
+        0 0 6px var(--zıt),
+        0 0 13px #ff9d00;
+      cursor: default;
+    }
+
+    .hücre:not(.sabit):hover {
+      transform: scale(.96);
+      background: #53698d;
+      box-shadow: inset 0 0 17px rgba(255, 255, 255, .3);
+    }
+
+    .hücre.seçili {
+      z-index: 3;
+      color: white;
+      background: #ef7d35 !important;
+      outline: 3px solid #fff176;
+      box-shadow:
+        0 0 12px #fff176,
+        0 0 25px #ff7a00,
+        inset 0 0 15px rgba(255, 255, 255, .4);
+    }
+
+    .hücre.vurgulu {
+      background: #526184;
+    }
+
+    .hücre.aynı-sayı {
+      background: #a83783 !important;
+      box-shadow: inset 0 0 15px rgba(255, 126, 226, .45);
+    }
+
+    .hücre.hatalı {
+      background: #a52c4b !important;
+      animation: salla .35s ease-in-out;
+    }
+
+    .hücre.ipucu {
+      color: var(--yesil);
+      background: #176b54 !important;
+      text-shadow: 0 0 12px var(--yesil);
+    }
+
+    @keyframes salla {
+      0%, 100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-5px);
+      }
+
+      75% {
+        transform: translateX(5px);
+      }
+    }
+
+    /* Kalın, zıt renkli 3x3 bölge çizgileri */
+    .hücre:nth-child(3n) {
+      border-right: 4px solid var(--zıt);
+    }
+
+    .hücre:nth-child(9n) {
+      border-right: 0;
+    }
+
+    .hücre:nth-child(n + 19):nth-child(-n + 27),
+    .hücre:nth-child(n + 46):nth-child(-n + 54) {
+      border-bottom: 4px solid var(--zıt);
+    }
+
+    .notlar {
+      position: absolute;
+      inset: 4px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      align-items: center;
+      justify-items: center;
+      color: #d6e3ff;
+      font-size: clamp(.38rem, 1.25vw, .7rem);
+      pointer-events: none;
+    }
+
+    .sayı-paneli {
+      display: grid;
+      grid-template-columns: repeat(9, 1fr);
+      gap: 7px;
+      width: min(100%, 690px);
+      margin: 18px auto 15px;
+    }
+
+    .sayı-buton {
+      aspect-ratio: 1;
+      border: 1px solid rgba(var(--ana-rgb), .6);
+      border-radius: 10px;
+      color: var(--ana);
+      background: #152c5a;
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      font-weight: 900;
+      transition: .16s;
+    }
+
+    .sayı-buton:hover {
+      transform: scale(1.07);
+      color: white;
+      background: rgba(var(--ana-rgb), .3);
+      box-shadow: 0 0 15px rgba(var(--ana-rgb), .5);
+    }
+
+    .sayı-buton.tükendi {
+      opacity: .3;
+    }
+
+    #durum {
+      min-height: 28px;
+      margin: 17px 0 0;
+      color: var(--soluk);
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .yan-panel h2 {
+      margin: 0 0 11px;
+      color: var(--ana);
+      font-size: 1.05rem;
+      letter-spacing: 1px;
+    }
+
+    .görev {
+      padding: 14px;
+      margin-bottom: 19px;
+      border-left: 3px solid var(--pembe);
+      border-radius: 0 10px 10px 0;
+      color: var(--soluk);
+      background: rgba(255, 79, 216, .1);
+      line-height: 1.5;
+    }
+
+    .kontrol {
+      display: grid;
+      gap: 9px;
+      margin-bottom: 18px;
+    }
+
+    .kontrol-satırı {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(28, 49, 99, .7);
+    }
+
+    .soluk {
+      color: var(--soluk);
+      font-size: .86rem;
+    }
+
+    .aktif {
+      color: var(--ana);
+      font-weight: bold;
+    }
+
+    .yan-panel p {
+      color: var(--soluk);
+      line-height: 1.55;
+      font-size: .9rem;
+    }
+
+    /* Pencereler */
+    .modal-arka {
+      position: fixed;
+      z-index: 10;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+      background: rgba(0, 0, 0, .75);
+      backdrop-filter: blur(8px);
+    }
+
+    .modal-arka.açık {
+      display: flex;
+    }
+
+    .modal {
+      width: min(550px, 100%);
+      max-height: 88vh;
+      overflow-y: auto;
+      padding: 22px;
+      border: 1px solid rgba(var(--ana-rgb), .6);
+      border-radius: 19px;
+      background: #0c173b;
+      box-shadow: 0 0 40px rgba(var(--ana-rgb), .3);
+    }
+
+    .modal-üst {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 17px;
+    }
+
+    .modal h2 {
+      margin: 0;
+      color: var(--ana);
+    }
+
+    .kapat {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--pembe);
+      border-radius: 50%;
+      color: var(--pembe);
+      background: rgba(255, 79, 216, .1);
+      font-size: 22px;
+    }
+
+    .ayar-grubu {
+      margin: 18px 0;
+    }
+
+    .ayar-grubu label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--soluk);
+      font-weight: bold;
+    }
+
+    select {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid rgba(var(--ana-rgb), .5);
+      border-radius: 9px;
+      color: white;
+      background: #142556;
+      font: inherit;
+    }
+
+    .renkler {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .renk-buton {
+      width: 43px;
+      height: 43px;
+      border: 3px solid transparent;
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .4);
+    }
+
+    .renk-buton.seçili-tema {
+      border-color: white;
+      transform: scale(1.15);
+    }
+
+    .istatistikler {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .istatistik-kartı {
+      padding: 16px;
+      border: 1px solid rgba(var(--ana-rgb), .3);
+      border-radius: 12px;
+      background: rgba(var(--ana-rgb), .1);
+    }
+
+    .istatistik-kartı span {
+      display: block;
+      color: var(--soluk);
+      font-size: .8rem;
+    }
+
+    .istatistik-kartı strong {
+      display: block;
+      margin-top: 6px;
+      color: var(--ana);
+      font-size: 1.5rem;
+    }
+
+    .modal li {
+      margin-bottom: 10px;
+      color: var(--soluk);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 900px) {
+      .ana-alan {
+        grid-template-columns: 1fr;
+      }
+
+      .yan-panel {
+        display: none;
+      }
+    }
+
+    @media (max-width: 620px) {
+      header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .üst-butonlar {
+        width: 100%;
+      }
+
+      .neon-buton {
+        flex: 1;
+        padding: 9px 6px;
+        font-size: .76rem;
+      }
+
+      .oyun-paneli {
+        padding: 12px;
+      }
+
+      .sudoku {
+        gap: 1px;
+        border-width: 4px;
+      }
+
+      .hücre:nth-child(3n) {
+        border-right-width: 3px;
+      }
+
+      .hücre:nth-child(n + 19):nth-child(-n + 27),
+      .hücre:nth-child(n + 46):nth-child(-n + 54) {
+        border-bottom-width: 3px;
+      }
+
+      .sayı-paneli {
+        gap: 4px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="yıldızlar" id="yıldızlar"></div>
+
+  <div class="uygulama">
+    <header>
+      <div class="logo">
+        <div class="logo-icon">✦</div>
+        <div>
+          <h1>GALAXY SUDOKU</h1>
+          <p class="alt-başlık">UZAY İSTASYONU • SAYI GÖREVİ</p>
+        </div>
+      </div>
+
+      <div class="üst-butonlar">
+        <button class="neon-buton" id="yeniOyunBtn">◈ Yeni Oyun</button>
+        <button class="neon-buton" id="ayarBtn">⚙ Ayarlar</button>
+        <button class="neon-buton" id="istatistikBtn">◉ İstatistik</button>
+        <button class="neon-buton pembe" id="yardımBtn">? Yardım</button>
+      </div>
+    </header>
+
+    <main class="ana-alan">
+      <section class="oyun-paneli">
+        <div class="bilgi-kartları">
+          <div class="bilgi-kartı">
+            <small>SEVİYE</small>
+            <strong id="seviye">KOLAY</strong>
+          </div>
+
+          <div class="bilgi-kartı">
+            <small>SÜRE</small>
+            <strong id="süre">00:00</strong>
+          </div>
+
+          <div class="bilgi-kartı">
+            <small>PUAN</small>
+            <strong id="puan">0</strong>
+          </div>
+        </div>
+
+        <div class="sudoku" id="sudoku"></div>
+
+        <div class="sayı-paneli" id="sayıPaneli"></div>
+
+        <div class="alt-butonlar">
+          <button class="neon-buton" id="notBtn">✎ Not Modu: Kapalı</button>
+          <button class="neon-buton" id="ipucuBtn">✦ İpucu</button>
+          <button class="neon-buton pembe" id="silBtn">⌫ Sil</button>
+          <button class="neon-buton" id="kontrolBtn">✓ Kontrol Et</button>
+        </div>
+
+        <p id="durum">Boş bir hücre seç ve göreve başla.</p>
+      </section>
+
+      <aside class="yan-panel">
+        <h2>GÖREV BİLGİSİ</h2>
+
+        <div class="görev">
+          Her satırda, sütunda ve renkli 3×3 bölgede
+          <strong>1’den 9’a kadar</strong> sayılar yalnızca bir kez bulunmalıdır.
+        </div>
+
+        <h2>KONTROL PANELİ</h2>
+
+        <div class="kontrol">
+          <div class="kontrol-satırı">
+            <span class="soluk">Seçili hücre</span>
+            <span class="aktif" id="seçiliBilgi">Yok</span>
+          </div>
+
+          <div class="kontrol-satırı">
+            <span class="soluk">Boş hücre</span>
+            <span class="aktif" id="boşBilgi">0</span>
+          </div>
+
+          <div class="kontrol-satırı">
+            <span class="soluk">Hata</span>
+            <span class="aktif" id="hataBilgi">0</span>
+          </div>
+
+          <div class="kontrol-satırı">
+            <span class="soluk">İpucu hakkı</span>
+            <span class="aktif" id="ipucuBilgi">3</span>
+          </div>
+        </div>
+
+        <h2>KISAYOLLAR</h2>
+        <p>
+          Klavyeden <strong>1-9</strong> tuşlarına basarak sayı yazabilirsin.
+          <br><br>
+          <strong>Delete</strong> veya <strong>Backspace</strong> ile silebilirsin.
+          <br><br>
+          <strong>N</strong> tuşu not modunu açar ve kapatır.
+        </p>
+      </aside>
+    </main>
+  </div>
+
+  <!-- Ayarlar penceresi -->
+  <div class="modal-arka" id="ayarModal">
+    <section class="modal">
+      <div class="modal-üst">
+        <h2>⚙ Ayarlar</h2>
+        <button class="kapat" data-kapat="ayarModal">×</button>
+      </div>
+
+      <div class="ayar-grubu">
+        <label for="zorluk">Zorluk seviyesi</label>
+
+        <select id="zorluk">
+          <option value="kolay">Kolay — Çok sayıda ipucu</option>
+          <option value="orta">Orta — Dengeli</option>
+          <option value="zor">Zor — Az sayıda ipucu</option>
+        </select>
+      </div>
+
+      <div class="ayar-grubu">
+        <label>Renk teması</label>
+
+        <div class="renkler">
+          <button class="renk-buton seçili-tema"
+                  data-tema="mavi"
+                  style="background:#00e5ff"></button>
+
+          <button class="renk-buton"
+                  data-tema="mor"
+                  style="background:#a855f7"></button>
+
+          <button class="renk-buton"
+                  data-tema="yeşil"
+                  style="background:#55f5a0"></button>
+
+          <button class="renk-buton"
+                  data-tema="turuncu"
+                  style="background:#ff9d3d"></button>
+
+          <button class="renk-buton"
+                  data-tema="pembe"
+                  style="background:#ff4fd8"></button>
+        </div>
+      </div>
+
+      <button class="neon-buton" id="ayarlarıUygula" style="width:100%">
+        Ayarları Uygula ve Yeni Oyun Başlat
+      </button>
+    </section>
+  </div>
+
+  <!-- İstatistik penceresi -->
+  <div class="modal-arka" id="istatistikModal">
+    <section class="modal">
+      <div class="modal-üst">
+        <h2>◉ İstatistikler</h2>
+        <button class="kapat" data-kapat="istatistikModal">×</button>
+      </div>
+
+      <div class="istatistikler">
+        <div class="istatistik-kartı">
+          <span>Tamamlanan oyun</span>
+          <strong id="tamamlanan">0</strong>
+        </div>
+
+        <div class="istatistik-kartı">
+          <span>Toplam puan</span>
+          <strong id="toplamPuan">0</strong>
+        </div>
+
+        <div class="istatistik-kartı">
+          <span>En iyi süre</span>
+          <strong id="enİyiSüre">--:--</strong>
+        </div>
+
+        <div class="istatistik-kartı">
+          <span>Kullanılan ipucu</span>
+          <strong id="toplamİpucu">0</strong>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Yardım penceresi -->
+  <div class="modal-arka" id="yardımModal">
+    <section class="modal">
+      <div class="modal-üst">
+        <h2>? Nasıl Oynanır?</h2>
+        <button class="kapat" data-kapat="yardımModal">×</button>
+      </div>
+
+      <ul>
+        <li>Önce boş bir hücreye tıkla.</li>
+        <li>Sonra aşağıdaki 1-9 düğmelerinden birine bas.</li>
+        <li>Aynı sayı bir satırda tekrar kullanılamaz.</li>
+        <li>Aynı sayı bir sütunda tekrar kullanılamaz.</li>
+        <li>Aynı sayı bir 3×3 bölgede tekrar kullanılamaz.</li>
+        <li>Not modu ile hücrelere küçük aday sayılar ekleyebilirsin.</li>
+        <li>İpucu düğmesi seçili hücreye doğru sayıyı yerleştirir.</li>
+        <li>Kontrol Et düğmesi hatalı sayıları kırmızı gösterir.</li>
+      </ul>
+    </section>
+  </div>
+
+  <script>
+    const sudoku = document.getElementById("sudoku");
+    const sayıPaneli = document.getElementById("sayıPaneli");
+    const durum = document.getElementById("durum");
+
+    let çözüm = [];
+    let tahta = [];
+    let sabitler = [];
+    let notlar = [];
+    let seçili = null;
+
+    let notModu = false;
+    let zorluk = "kolay";
+    let puan = 0;
+    let hata = 0;
+    let ipucu = 3;
+    let saniye = 0;
+    let zamanlayıcı;
+    let oyunBitti = false;
+
+    const temalar = {
+      mavi: {
+        ana: "#00e5ff",
+        rgb: "0, 229, 255",
+        zıt: "#ffd447"
+      },
+
+      mor: {
+        ana: "#bd7aff",
+        rgb: "189, 122, 255",
+        zıt: "#55f5a0"
+      },
+
+      yeşil: {
+        ana: "#55f5a0",
+        rgb: "85, 245, 160",
+        zıt: "#ff4fd8"
+      },
+
+      turuncu: {
+        ana: "#ff9d3d",
+        rgb: "255, 157, 61",
+        zıt: "#55e7ff"
+      },
+
+      pembe: {
+        ana: "#ff4fd8",
+        rgb: "255, 79, 216",
+        zıt: "#55f5a0"
+      }
+    };
+
+    const varsayılanİstatistik = {
+      tamamlanan: 0,
+      toplamPuan: 0,
+      enİyiSüre: null,
+      toplamİpucu: 0
+    };
+
+    let istatistik = { ...varsayılanİstatistik };
+
+    try {
+      const kayıt = localStorage.getItem("galaxySudokuİstatistik");
+
+      if (kayıt) {
+        istatistik = { ...varsayılanİstatistik, ...JSON.parse(kayıt) };
+      }
+    } catch (hataDurumu) {
+      istatistik = { ...varsayılanİstatistik };
+    }
+
+    function karıştır(dizi) {
+      const yeni = [...dizi];
+
+      for (let i = yeni.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [yeni[i], yeni[j]] = [yeni[j], yeni[i]];
+      }
+
+      return yeni;
+    }
+
+    /*
+      Her yeni oyunda geçerli ve farklı bir 9x9 sudoku çözümü üretir.
+    */
+    function çözümÜret() {
+      const sayılar = karıştır([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+      const grupSırası = karıştır([0, 1, 2]);
+      const sütunGrupSırası = karıştır([0, 1, 2]);
+
+      const satırlar = [];
+      const sütunlar = [];
+
+      grupSırası.forEach(grup => {
+        karıştır([0, 1, 2]).forEach(sıra => {
+          satırlar.push(grup * 3 + sıra);
+        });
+      });
+
+      sütunGrupSırası.forEach(grup => {
+        karıştır([0, 1, 2]).forEach(sıra => {
+          sütunlar.push(grup * 3 + sıra);
+        });
+      });
+
+      function desen(satır, sütun) {
+        return (satır * 3 + Math.floor(satır / 3) + sütun) % 9;
+      }
+
+      return satırlar.map(satır =>
+        sütunlar.map(sütun => sayılar[desen(satır, sütun)])
+      );
+    }
+
+    function yeniTahta() {
+      çözüm = çözümÜret();
+      tahta = çözüm.map(satır => [...satır]);
+
+      const boşSayısı = {
+        kolay: 38,
+        orta: 48,
+        zor: 55
+      }[zorluk];
+
+      const silinecekler = karıştır([...Array(81).keys()])
+        .slice(0, boşSayısı);
+
+      sabitler = Array(81).fill(true);
+      notlar = Array.from({ length: 81 }, () => []);
+
+      silinecekler.forEach(index => {
+        const satır = Math.floor(index / 9);
+        const sütun = index % 9;
+
+        tahta[satır][sütun] = 0;
+        sabitler[index] = false;
+      });
+    }
+
+    function alanNumarası(satır, sütun) {
+      return Math.floor(satır / 3) * 3 + Math.floor(sütun / 3) + 1;
+    }
+
+    function tahtaÇiz() {
+      sudoku.innerHTML = "";
+
+      for (let index = 0; index < 81; index++) {
+        const satır = Math.floor(index / 9);
+        const sütun = index % 9;
+        const değer = tahta[satır][sütun];
+
+        const hücre = document.createElement("button");
+        hücre.className = "hücre";
+        hücre.classList.add(`alan-${alanNumarası(satır, sütun)}`);
+
+        hücre.setAttribute(
+          "aria-label",
+          `${satır + 1}. satır ${sütun + 1}. sütun`
+        );
+
+        if (sabitler[index]) {
+          hücre.classList.add("sabit");
+          hücre.disabled = true;
+        } else {
+          hücre.addEventListener("click", () => hücreSeç(index));
+        }
+
+        if (seçili === index) {
+          hücre.classList.add("seçili");
+        }
+
+        if (seçili !== null) {
+          const seçiliSatır = Math.floor(seçili / 9);
+          const seçiliSütun = seçili % 9;
+
+          const aynıSatır = satır === seçiliSatır;
+          const aynıSütun = sütun === seçiliSütun;
+          const aynıAlan =
+            alanNumarası(satır, sütun) ===
+            alanNumarası(seçiliSatır, seçiliSütun);
+
+          if ((aynıSatır || aynıSütun || aynıAlan) && index !== seçili) {
+            hücre.classList.add("vurgulu");
+          }
+
+          const seçiliDeğer = tahta[seçiliSatır][seçiliSütun];
+
+          if (
+            seçiliDeğer !== 0 &&
+            değer === seçiliDeğer &&
+            index !== seçili
+          ) {
+            hücre.classList.add("aynı-sayı");
+          }
+        }
+
+        if (değer !== 0) {
+          hücre.textContent = değer;
+        } else if (notlar[index].length > 0) {
+          const notAlanı = document.createElement("div");
+          notAlanı.className = "notlar";
+
+          for (let sayı = 1; sayı <= 9; sayı++) {
+            const küçükSayı = document.createElement("span");
+            küçükSayı.textContent =
+              notlar[index].includes(sayı) ? sayı : "";
+            notAlanı.appendChild(küçükSayı);
+          }
+
+          hücre.appendChild(notAlanı);
+        }
+
+        sudoku.appendChild(hücre);
+      }
+
+      sayıButonlarınıÇiz();
+      bilgileriGüncelle();
+    }
+
+    function sayıButonlarınıÇiz() {
+      sayıPaneli.innerHTML = "";
+
+      for (let sayı = 1; sayı <= 9; sayı++) {
+        const buton = document.createElement("button");
+        buton.className = "sayı-buton";
+        buton.textContent = sayı;
+
+        const kullanım = tahta.flat().filter(değer => değer === sayı).length;
+
+        if (kullanım === 9) {
+          buton.classList.add("tükendi");
+        }
+
+        buton.addEventListener("click", () => sayıGir(sayı));
+        sayıPaneli.appendChild(buton);
+      }
+    }
+
+    function hücreSeç(index) {
+      if (oyunBitti) return;
+
+      seçili = index;
+      durum.textContent = notModu
+        ? "Not modu açık. Küçük bir aday sayı seç."
+        : "1-9 arasından bir sayı seç.";
+
+      tahtaÇiz();
+    }
+
+    function sayıGir(sayı) {
+      if (oyunBitti) return;
+
+      if (seçili === null) {
+        durum.textContent = "Önce boş bir hücre seçmelisin.";
+        return;
+      }
+
+      if (sabitler[seçili]) return;
+
+      const satır = Math.floor(seçili / 9);
+      const sütun = seçili % 9;
+
+      if (notModu) {
+        if (tahta[satır][sütun] !== 0) {
+          durum.textContent = "Dolu hücreye not yazılamaz.";
+          return;
+        }
+
+        const mevcut = notlar[seçili].indexOf(sayı);
+
+        if (mevcut === -1) {
+          notlar[seçili].push(sayı);
+          notlar[seçili].sort((a, b) => a - b);
+        } else {
+          notlar[seçili].splice(mevcut, 1);
+        }
+
+        durum.textContent = "Not güncellendi.";
+        tahtaÇiz();
+        return;
+      }
+
+      tahta[satır][sütun] = sayı;
+      notlar[seçili] = [];
+
+      if (sayı === çözüm[satır][sütun]) {
+        puan += 10;
+        durum.textContent = "Doğru sayı! +10 puan.";
+      } else {
+        hata++;
+        puan = Math.max(0, puan - 3);
+        durum.textContent = "Bu sayı doğru değil. Tekrar dene.";
+      }
+
+      tahtaÇiz();
+
+      if (sayı !== çözüm[satır][sütun]) {
+        sudoku.children[seçili].classList.add("hatalı");
+      }
+
+      tamamlandıMı();
+    }
+
+    function sil() {
+      if (
+        seçili === null ||
+        sabitler[seçili] ||
+        oyunBitti
+      ) {
+        durum.textContent = "Silmek için boş bir hücre seç.";
+        return;
+      }
+
+      const satır = Math.floor(seçili / 9);
+      const sütun = seçili % 9;
+
+      tahta[satır][sütun] = 0;
+      notlar[seçili] = [];
+
+      durum.textContent = "Hücre temizlendi.";
+      tahtaÇiz();
+    }
+
+    function kontrolEt() {
+      let yanlışVar = false;
+
+      for (let index = 0; index < 81; index++) {
+        const satır = Math.floor(index / 9);
+        const sütun = index % 9;
+
+        if (
+          tahta[satır][sütun] !== 0 &&
+          tahta[satır][sütun] !== çözüm[satır][sütun]
+        ) {
+          sudoku.children[index].classList.add("hatalı");
+          yanlışVar = true;
+        }
+      }
+
+      durum.textContent = yanlışVar
+        ? "Kırmızı hücrelerde yanlış sayılar var."
+        : "Şu ana kadar hata yok. Çok iyi gidiyorsun!";
+    }
+
+    function ipucuVer() {
+      if (ipucu <= 0) {
+        durum.textContent = "İpucu hakkın kalmadı.";
+        return;
+      }
+
+      let hedef = seçili;
+
+      if (hedef === null || sabitler[hedef]) {
+        hedef = tahta.flat()
+          .map((değer, index) => değer === 0 ? index : null)
+          .find(index => index !== null);
+      }
+
+      if (hedef === undefined) return;
+
+      const satır = Math.floor(hedef / 9);
+      const sütun = hedef % 9;
+
+      tahta[satır][sütun] = çözüm[satır][sütun];
+      notlar[hedef] = [];
+      seçili = hedef;
+
+      ipucu--;
+      puan = Math.max(0, puan - 5);
+      istatistik.toplamİpucu++;
+
+      kaydet();
+      tahtaÇiz();
+      sudoku.children[hedef].classList.add("ipucu");
+
+      durum.textContent = "İpucu kullanıldı. Doğru sayı yeşil renkte.";
+      tamamlandıMı();
+    }
+
+    function tamamlandıMı() {
+      const tamamlandı = tahta.every((satır, satırIndex) =>
+        satır.every((değer, sütunIndex) =>
+          değer === çözüm[satırIndex][sütunIndex]
+        )
+      );
+
+      if (!tamamlandı) return;
+
+      oyunBitti = true;
+      clearInterval(zamanlayıcı);
+
+      const bonus = Math.max(20, 150 - saniye);
+      puan += bonus;
+
+      istatistik.tamamlanan++;
+      istatistik.toplamPuan += puan;
+
+      if (
+        istatistik.enİyiSüre === null ||
+        saniye < istatistik.enİyiSüre
+      ) {
+        istatistik.enİyiSüre = saniye;
+      }
+
+      kaydet();
+      tahtaÇiz();
+
+      durum.textContent =
+        `🎉 Görev tamamlandı! +${bonus} bonus puan kazandın.`;
+    }
+
+    function bilgileriGüncelle() {
+      document.getElementById("seviye").textContent =
+        zorluk.toUpperCase();
+
+      document.getElementById("süre").textContent =
+        süreFormatla(saniye);
+
+      document.getElementById("puan").textContent = puan;
+      document.getElementById("hataBilgi").textContent = hata;
+      document.getElementById("ipucuBilgi").textContent = ipucu;
+
+      const boş = tahta.flat().filter(değer => değer === 0).length;
+      document.getElementById("boşBilgi").textContent = boş;
+
+      if (seçili === null) {
+        document.getElementById("seçiliBilgi").textContent = "Yok";
+      } else {
+        document.getElementById("seçiliBilgi").textContent =
+          `${Math.floor(seçili / 9) + 1}:${(seçili % 9) + 1}`;
+      }
+
+      document.getElementById("notBtn").textContent =
+        `✎ Not Modu: ${notModu ? "Açık" : "Kapalı"}`;
+    }
+
+    function süreFormatla(toplam) {
+      const dakika = String(Math.floor(toplam / 60)).padStart(2, "0");
+      const saniye = String(toplam % 60).padStart(2, "0");
+      return `${dakika}:${saniye}`;
+    }
+
+    function zamanBaşlat() {
+      clearInterval(zamanlayıcı);
+      saniye = 0;
+
+      zamanlayıcı = setInterval(() => {
+        if (!oyunBitti) {
+          saniye++;
+          document.getElementById("süre").textContent =
+            süreFormatla(saniye);
+        }
+      }, 1000);
+    }
+
+    function yeniOyunBaşlat() {
+      oyunBitti = false;
+      seçili = null;
+      notModu = false;
+      puan = 0;
+      hata = 0;
+      ipucu = 3;
+
+      yeniTahta();
+      zamanBaşlat();
+      tahtaÇiz();
+
+      durum.textContent =
+        "Yeni uzay görevi hazır. Boş bir hücre seç.";
+    }
+
+    function temaDeğiştir(temaAdı) {
+      const tema = temalar[temaAdı];
+      const kök = document.documentElement;
+
+      kök.style.setProperty("--ana", tema.ana);
+      kök.style.setProperty("--ana-rgb", tema.rgb);
+      kök.style.setProperty("--zıt", tema.zıt);
+
+      document.querySelectorAll(".renk-buton").forEach(buton => {
+        buton.classList.toggle(
+          "seçili-tema",
+          buton.dataset.tema === temaAdı
+        );
+      });
+    }
+
+    function kaydet() {
+      try {
+        localStorage.setItem(
+          "galaxySudokuİstatistik",
+          JSON.stringify(istatistik)
+        );
+      } catch (hataDurumu) {
+        /* Kayıt yapılamazsa oyun yine de çalışmaya devam eder. */
+      }
+    }
+
+    function pencereAç(id) {
+      document.getElementById(id).classList.add("açık");
+    }
+
+    function pencereKapat(id) {
+      document.getElementById(id).classList.remove("açık");
+    }
+
+    function yıldızlarıOluştur() {
+      const alan = document.getElementById("yıldızlar");
+
+      for (let i = 0; i < 120; i++) {
+        const yıldız = document.createElement("span");
+        yıldız.className = "yıldız";
+        yıldız.style.left = `${Math.random() * 100}%`;
+        yıldız.style.top = `${Math.random() * 100}%`;
+        yıldız.style.animationDelay = `${Math.random() * 3}s`;
+        alan.appendChild(yıldız);
+      }
+    }
+
+    document.getElementById("yeniOyunBtn")
+      .addEventListener("click", yeniOyunBaşlat);
+
+    document.getElementById("silBtn")
+      .addEventListener("click", sil);
+
+    document.getElementById("ipucuBtn")
+      .addEventListener("click", ipucuVer);
+
+    document.getElementById("kontrolBtn")
+      .addEventListener("click", kontrolEt);
+
+    document.getElementById("notBtn")
+      .addEventListener("click", () => {
+        notModu = !notModu;
+        bilgileriGüncelle();
+
+        durum.textContent = notModu
+          ? "Not modu açıldı."
+          : "Not modu kapatıldı.";
+      });
+
+    document.getElementById("ayarBtn")
+      .addEventListener("click", () => {
+        document.getElementById("zorluk").value = zorluk;
+        pencereAç("ayarModal");
+      });
+
+    document.getElementById("istatistikBtn")
+      .addEventListener("click", () => {
+        document.getElementById("tamamlanan").textContent =
+          istatistik.tamamlanan;
+
+        document.getElementById("toplamPuan").textContent =
+          istatistik.toplamPuan;
+
+        document.getElementById("toplamİpucu").textContent =
+          istatistik.toplamİpucu;
+
+        document.getElementById("enİyiSüre").textContent =
+          istatistik.enİyiSüre === null
+            ? "--:--"
+            : süreFormatla(istatistik.enİyiSüre);
+
+        pencereAç("istatistikModal");
+      });
+
+    document.getElementById("yardımBtn")
+      .addEventListener("click", () => {
+        pencereAç("yardımModal");
+      });
+
+    document.getElementById("ayarlarıUygula")
+      .addEventListener("click", () => {
+        zorluk = document.getElementById("zorluk").value;
+        pencereKapat("ayarModal");
+        yeniOyunBaşlat();
+      });
+
+    document.querySelectorAll(".renk-buton").forEach(buton => {
+      buton.addEventListener("click", () => {
+        temaDeğiştir(buton.dataset.tema);
+      });
+    });
+
+    document.querySelectorAll(".kapat").forEach(buton => {
+      buton.addEventListener("click", () => {
+        pencereKapat(buton.dataset.kapat);
+      });
+    });
+
+    document.querySelectorAll(".modal-arka").forEach(modal => {
+      modal.addEventListener("click", event => {
+        if (event.target === modal) {
+          modal.classList.remove("açık");
+        }
+      });
+    });
+
+    document.addEventListener("keydown", event => {
+      if (document.querySelector(".modal-arka.açık")) {
+        if (event.key === "Escape") {
+          document.querySelectorAll(".modal-arka.açık")
+            .forEach(modal => modal.classList.remove("açık"));
+        }
+
+        return;
+      }
+
+      if (event.key >= "1" && event.key <= "9") {
+        sayıGir(Number(event.key));
+      }
+
+      if (event.key === "Delete" || event.key === "Backspace") {
+        sil();
+      }
+
+      if (event.key.toLowerCase() === "n") {
+        notModu = !notModu;
+        bilgileriGüncelle();
+      }
+    });
+
+    yıldızlarıOluştur();
+    yeniOyunBaşlat();
+  </script>
+</body>
+</html>
