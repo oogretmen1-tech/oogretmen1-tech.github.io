@@ -1,406 +1,787 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English Practice AI Bot</title>
+    <title>English Practice AI</title>
+
     <style>
+        :root {
+            --primary: #5b67f1;
+            --primary-dark: #4651d5;
+            --background: #ffffff;
+            --surface: #f5f7ff;
+            --surface-2: #eef1ff;
+            --text: #202438;
+            --muted: #70758a;
+            --border: #e1e5f2;
+            --user-message: #5b67f1;
+            --bot-message: #ffffff;
+            --shadow: 0 18px 50px rgba(56, 66, 120, .16);
+        }
+
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            background: var(--background);
+            color: var(--text);
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            padding: 24px;
+            transition: .3s ease;
+        }
+
+        body.dark {
+            --background: #171a2a;
+            --surface: #20243a;
+            --surface-2: #2a2f49;
+            --text: #f4f5ff;
+            --muted: #aeb3ca;
+            --border: #393e5c;
+            --bot-message: #252a42;
+            --shadow: 0 18px 50px rgba(0, 0, 0, .35);
+        }
+
+        body.purple {
+            --primary: #9b59d0;
+            --primary-dark: #8144b4;
+            --background: #fbf8ff;
+            --surface: #f7efff;
+            --surface-2: #efe2ff;
+            --user-message: #9b59d0;
+            --border: #ead8fa;
+        }
+
+        .app {
+            width: min(100%, 850px);
+            margin: auto;
+        }
+
+        .topbar {
             display: flex;
-            justify-content: center;
             align-items: center;
-            padding: 20px;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 18px;
         }
 
-        .back-home {
-            position: fixed;
-            top: 16px;
-            left: 16px;
-            background: #fff;
-            color: #667eea;
-            padding: 8px 16px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 14px;
-            box-shadow: 0 4px 12px rgba(0,0,0,.18);
-            z-index: 10;
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            max-width: 600px;
-            width: 100%;
-            padding: 30px;
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            border-radius: 16px;
+            background: var(--primary);
+            color: white;
+            font-size: 25px;
+            box-shadow: 0 8px 20px rgba(91, 103, 241, .25);
         }
 
         h1 {
-            color: #667eea;
-            text-align: center;
-            margin-bottom: 10px;
+            font-size: clamp(22px, 4vw, 32px);
+            line-height: 1.1;
         }
 
         .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
+            color: var(--muted);
+            margin-top: 5px;
             font-size: 14px;
         }
 
+        .settings-button {
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            border-radius: 12px;
+            padding: 11px 14px;
+            cursor: pointer;
+            font-size: 19px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 22px;
+            box-shadow: var(--shadow);
+        }
+
         .chat-box {
-            height: 400px;
+            height: 500px;
             overflow-y: auto;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-            background: #f9f9f9;
+            padding: 8px 4px 8px 4px;
+            scroll-behavior: smooth;
+        }
+
+        .welcome {
+            text-align: center;
+            color: var(--muted);
+            padding: 38px 20px;
+        }
+
+        .welcome-icon {
+            font-size: 55px;
+            margin-bottom: 12px;
+        }
+
+        .message-row {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            margin: 18px 0;
+        }
+
+        .message-row.user {
+            flex-direction: row-reverse;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            flex: 0 0 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            font-size: 22px;
+        }
+
+        .message-content {
+            max-width: min(75%, 590px);
         }
 
         .message {
-            margin-bottom: 15px;
-            padding: 10px 15px;
-            border-radius: 15px;
-            max-width: 80%;
-            word-wrap: break-word;
-            animation: slideIn 0.3s ease;
+            padding: 13px 16px;
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            background: var(--bot-message);
+            line-height: 1.5;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .04);
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .user-message {
-            background: #667eea;
+        .user .message {
+            background: var(--user-message);
             color: white;
-            margin-left: auto;
-            text-align: right;
+            border-color: transparent;
         }
 
-        .bot-message {
-            background: #e8e8e8;
-            color: #333;
+        .language-label {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .6px;
+            opacity: .7;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .translation {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid currentColor;
+            opacity: .78;
+            font-size: 14px;
+        }
+
+        .translation strong {
+            display: block;
+            font-size: 11px;
+            letter-spacing: .5px;
+            margin-bottom: 3px;
+        }
+
+        .typing {
+            color: var(--muted);
+            font-size: 13px;
+            padding-left: 54px;
+            display: none;
+        }
+
+        .typing.show {
+            display: block;
         }
 
         .controls {
             display: flex;
             gap: 10px;
-            margin-bottom: 15px;
+            margin-top: 18px;
         }
 
         button {
-            flex: 1;
-            padding: 15px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: bold;
+            font-family: inherit;
         }
 
-        #micBtn {
-            background: #667eea;
+        .main-button,
+        .stop-button {
+            border: 0;
+            border-radius: 14px;
+            padding: 15px 18px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 15px;
+            transition: .2s ease;
+        }
+
+        .main-button {
+            flex: 1;
+            background: var(--primary);
             color: white;
         }
 
-        #micBtn:hover {
-            background: #5568d3;
-            transform: translateY(-2px);
+        .main-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
         }
 
-        #micBtn:disabled {
-            background: #ccc;
+        .main-button.listening {
+            background: #e64c61;
+            animation: pulse 1.3s infinite;
+        }
+
+        .main-button:disabled {
+            opacity: .55;
             cursor: not-allowed;
-            transform: none;
         }
 
-        #micBtn.listening {
-            background: #ef4444;
-            animation: pulse 1.5s infinite;
+        .stop-button {
+            background: #e64c61;
+            color: white;
+            display: none;
+        }
+
+        .status {
+            background: var(--surface-2);
+            color: var(--muted);
+            text-align: center;
+            border-radius: 12px;
+            padding: 11px;
+            margin-top: 12px;
+            font-size: 13px;
+        }
+
+        .status.active {
+            color: #16834c;
+            background: #dcfce9;
+        }
+
+        .status.error {
+            color: #c6283d;
+            background: #ffe3e8;
+        }
+
+        .settings-panel {
+            display: none;
+            margin-top: 18px;
+            padding: 18px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: var(--surface-2);
+        }
+
+        .settings-panel.open {
+            display: block;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .field label {
+            display: block;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        select {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 11px;
+            background: var(--background);
+            color: var(--text);
+            outline: none;
+        }
+
+        .note {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.5;
+            margin-top: 14px;
         }
 
         @keyframes pulse {
             0%, 100% {
-                opacity: 1;
+                box-shadow: 0 0 0 0 rgba(230, 76, 97, .35);
             }
+
             50% {
-                opacity: 0.7;
+                box-shadow: 0 0 0 12px rgba(230, 76, 97, 0);
             }
         }
 
-        #stopBtn {
-            background: #ef4444;
-            color: white;
-        }
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
 
-        #stopBtn:hover {
-            background: #dc2626;
-        }
+            .card {
+                padding: 14px;
+                border-radius: 18px;
+            }
 
-        .status {
-            text-align: center;
-            padding: 10px;
-            border-radius: 8px;
-            background: #f0f0f0;
-            color: #666;
-            font-size: 14px;
-        }
+            .chat-box {
+                height: 55vh;
+            }
 
-        .status.active {
-            background: #dcfce7;
-            color: #16a34a;
-        }
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
 
-        .status.error {
-            background: #fee2e2;
-            color: #dc2626;
-        }
+            .message-content {
+                max-width: 78%;
+            }
 
-        .settings {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f5f5f5;
-            border-radius: 10px;
-        }
-
-        .settings label {
-            display: block;
-            margin-bottom: 5px;
-            color: #666;
-            font-size: 14px;
-        }
-
-        .settings select {
-            width: 100%;
-            padding: 8px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
+            .topbar {
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
+
 <body>
-    <a class="back-home" href="index.html">← Dijital Öğretmen</a>
-    <div class="container">
-        <h1>🎙️ English Practice Bot</h1>
-        <p class="subtitle">Speak in English and the AI will respond!</p>
-
-        <div class="chat-box" id="chatBox">
-            <div class="message bot-message">
-                👋 Hello! I'm your English practice partner. Click the microphone button and start speaking in English. I'll listen and respond to help you practice!
+    <main class="app">
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-icon">🎙️</div>
+                <div>
+                    <h1>English Practice AI</h1>
+                    <p class="subtitle">Speak English, read English and Turkish together.</p>
+                </div>
             </div>
-        </div>
 
-        <div class="controls">
-            <button id="micBtn">🎤 Start Speaking</button>
-            <button id="stopBtn" style="display:none;">⏹️ Stop</button>
-        </div>
+            <button class="settings-button" id="settingsButton" title="Settings">
+                ⚙️
+            </button>
+        </header>
 
-        <div class="status" id="status">Ready to listen</div>
+        <section class="card">
+            <div class="chat-box" id="chatBox">
+                <div class="welcome" id="welcome">
+                    <div class="welcome-icon">👋</div>
+                    <h2>Hello!</h2>
+                    <p>Click the microphone and start speaking English.</p>
+                </div>
+            </div>
 
-        <div class="settings">
-            <label for="voiceSelect">AI Voice:</label>
-            <select id="voiceSelect"></select>
-        </div>
-    </div>
+            <div class="typing" id="typing">
+                🤖 Preparing the Turkish translation...
+            </div>
+
+            <div class="controls">
+                <button class="main-button" id="micButton">
+                    🎤 Start Speaking
+                </button>
+
+                <button class="stop-button" id="stopButton">
+                    ⏹ Stop
+                </button>
+            </div>
+
+            <div class="status" id="status">
+                Ready to listen
+            </div>
+
+            <div class="settings-panel" id="settingsPanel">
+                <div class="settings-grid">
+                    <div class="field">
+                        <label for="themeSelect">Theme</label>
+                        <select id="themeSelect">
+                            <option value="light">White / Light</option>
+                            <option value="dark">Dark</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="userIcon">Your icon</label>
+                        <select id="userIcon">
+                            <option value="🧑‍🎓">🧑‍🎓 Student</option>
+                            <option value="👤">👤 Person</option>
+                            <option value="🗣️">🗣️ Speaker</option>
+                            <option value="🙂">🙂 Smiley</option>
+                            <option value="👩">👩 Woman</option>
+                            <option value="👨">👨 Man</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="botIcon">Robot icon</label>
+                        <select id="botIcon">
+                            <option value="🤖">🤖 Robot</option>
+                            <option value="🧠">🧠 AI Brain</option>
+                            <option value="👩‍🏫">👩‍🏫 Teacher</option>
+                            <option value="👨‍🏫">👨‍🏫 Teacher</option>
+                            <option value="🦾">🦾 Android</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="voiceSelect">AI voice</label>
+                        <select id="voiceSelect">
+                            <option>Loading voices...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <p class="note">
+                    Erkek sesleri tarayıcı ve işletim sistemine göre değişir.
+                    Listede “Male”, “David”, “Mark”, “George”, “Daniel” veya benzeri bir ses varsa onu seçebilirsin.
+                    Bazı tarayıcılar sesin cinsiyet bilgisini paylaşmaz.
+                </p>
+            </div>
+        </section>
+    </main>
 
     <script>
-        const chatBox = document.getElementById('chatBox');
-        const micBtn = document.getElementById('micBtn');
-        const stopBtn = document.getElementById('stopBtn');
-        const status = document.getElementById('status');
-        const voiceSelect = document.getElementById('voiceSelect');
+        const chatBox = document.getElementById("chatBox");
+        const welcome = document.getElementById("welcome");
+        const micButton = document.getElementById("micButton");
+        const stopButton = document.getElementById("stopButton");
+        const statusBox = document.getElementById("status");
+        const typing = document.getElementById("typing");
 
-        // Speech Recognition (Dinleme)
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        
-        if (!SpeechRecognition) {
-            status.textContent = '❌ Your browser does not support speech recognition. Please use Chrome or Edge.';
-            status.className = 'status error';
-            micBtn.disabled = true;
-        }
+        const settingsButton = document.getElementById("settingsButton");
+        const settingsPanel = document.getElementById("settingsPanel");
+        const themeSelect = document.getElementById("themeSelect");
+        const userIconSelect = document.getElementById("userIcon");
+        const botIconSelect = document.getElementById("botIcon");
+        const voiceSelect = document.getElementById("voiceSelect");
 
-        const recognition = new SpeechRecognition();
-        recognition.lang = 'en-US';
-        recognition.continuous = false;
-        recognition.interimResults = false;
-
-        // Speech Synthesis (Konuşma)
-        const synth = window.speechSynthesis;
         let voices = [];
+        let isListening = false;
+
+        const SpeechRecognition =
+            window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        const synth = window.speechSynthesis;
+
+        settingsButton.addEventListener("click", () => {
+            settingsPanel.classList.toggle("open");
+        });
+
+        themeSelect.addEventListener("change", () => {
+            document.body.classList.remove("dark", "purple");
+
+            if (themeSelect.value === "dark") {
+                document.body.classList.add("dark");
+            }
+
+            if (themeSelect.value === "purple") {
+                document.body.classList.add("purple");
+            }
+        });
 
         function loadVoices() {
-            voices = synth.getVoices().filter(voice => voice.lang.startsWith('en'));
-            voiceSelect.innerHTML = '';
+            voices = synth.getVoices()
+                .filter(voice => voice.lang.toLowerCase().startsWith("en"))
+                .sort((a, b) => {
+                    const maleNames = [
+                        "male", "david", "mark", "george",
+                        "daniel", "alex", "james", "guy"
+                    ];
+
+                    const aIsMale = maleNames.some(name =>
+                        a.name.toLowerCase().includes(name)
+                    );
+
+                    const bIsMale = maleNames.some(name =>
+                        b.name.toLowerCase().includes(name)
+                    );
+
+                    return Number(bIsMale) - Number(aIsMale);
+                });
+
+            voiceSelect.innerHTML = "";
+
+            if (!voices.length) {
+                const option = document.createElement("option");
+                option.textContent = "English voice not found";
+                voiceSelect.appendChild(option);
+                return;
+            }
+
             voices.forEach((voice, index) => {
-                const option = document.createElement('option');
+                const option = document.createElement("option");
                 option.value = index;
-                option.textContent = `${voice.name} (${voice.lang})`;
+                option.textContent = `${voice.name} — ${voice.lang}`;
                 voiceSelect.appendChild(option);
             });
         }
 
-        // Sesler yüklendiğinde
-        if (synth.onvoiceschanged !== undefined) {
-            synth.onvoiceschanged = loadVoices;
-        }
         loadVoices();
 
-        function addMessage(text, isUser) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
-            messageDiv.textContent = (isUser ? '🗣️ You: ' : '🤖 AI: ') + text;
-            chatBox.appendChild(messageDiv);
+        if ("onvoiceschanged" in synth) {
+            synth.onvoiceschanged = loadVoices;
+        }
+
+        function setStatus(text, type = "") {
+            statusBox.textContent = text;
+            statusBox.className = "status";
+
+            if (type) {
+                statusBox.classList.add(type);
+            }
+        }
+
+        function addMessage(englishText, turkishText, isUser) {
+            welcome.style.display = "none";
+
+            const row = document.createElement("div");
+            row.className = `message-row ${isUser ? "user" : "bot"}`;
+
+            const avatar = document.createElement("div");
+            avatar.className = "avatar";
+            avatar.textContent = isUser
+                ? userIconSelect.value
+                : botIconSelect.value;
+
+            const content = document.createElement("div");
+            content.className = "message-content";
+
+            const message = document.createElement("div");
+            message.className = "message";
+
+            const englishLabel = document.createElement("div");
+            englishLabel.className = "language-label";
+            englishLabel.textContent = isUser ? "English · You" : "English · AI";
+
+            const english = document.createElement("div");
+            english.textContent = englishText;
+
+            const translation = document.createElement("div");
+            translation.className = "translation";
+
+            const turkishLabel = document.createElement("strong");
+            turkishLabel.textContent = "Türkçe çeviri";
+
+            const turkish = document.createElement("span");
+            turkish.textContent = turkishText || "Çeviri hazırlanıyor...";
+
+            translation.appendChild(turkishLabel);
+            translation.appendChild(turkish);
+
+            message.appendChild(englishLabel);
+            message.appendChild(english);
+            message.appendChild(translation);
+
+            content.appendChild(message);
+            row.appendChild(avatar);
+            row.appendChild(content);
+            chatBox.appendChild(row);
+
             chatBox.scrollTop = chatBox.scrollHeight;
+
+            return turkish;
+        }
+
+        async function translateToTurkish(text) {
+            try {
+                const url =
+                    "https://api.mymemory.translated.net/get" +
+                    "?q=" + encodeURIComponent(text) +
+                    "&langpair=en|tr";
+
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (
+                    data &&
+                    data.responseData &&
+                    data.responseData.translatedText
+                ) {
+                    return data.responseData.translatedText;
+                }
+
+                return "Çeviri alınamadı.";
+            } catch (error) {
+                return "Çeviri servisine ulaşılamadı.";
+            }
         }
 
         function speak(text) {
+            if (!synth) return;
+
+            synth.cancel();
+
             const utterance = new SpeechSynthesisUtterance(text);
             const selectedVoice = voices[voiceSelect.value];
+
             if (selectedVoice) {
                 utterance.voice = selectedVoice;
+                utterance.lang = selectedVoice.lang;
+            } else {
+                utterance.lang = "en-US";
             }
+
             utterance.rate = 0.9;
-            utterance.pitch = 1;
+            utterance.pitch = 0.9;
+            utterance.volume = 1;
 
             utterance.onstart = () => {
-                status.textContent = '🔊 AI is speaking...';
-                status.className = 'status active';
+                setStatus("🔊 AI is speaking...", "active");
             };
 
             utterance.onend = () => {
-                status.textContent = 'Ready to listen';
-                status.className = 'status';
+                setStatus("Ready to listen");
             };
 
             synth.speak(utterance);
         }
 
-        function generateResponse(userText) {
-            const lowerText = userText.toLowerCase();
-            
-            // Basit AI cevapları
-            const responses = {
-                greetings: [
-                    "Hello! How are you doing today?",
-                    "Hi there! Nice to meet you!",
-                    "Hey! How can I help you practice English today?"
-                ],
-                howAreYou: [
-                    "I'm doing great, thank you for asking! How about you?",
-                    "I'm wonderful! Thanks for asking. What would you like to talk about?",
-                    "I'm doing well! How are you feeling today?"
-                ],
-                name: [
-                    "I'm your English practice AI assistant. You can call me Practice Bot!",
-                    "My name is Practice Bot, and I'm here to help you improve your English!"
-                ],
-                help: [
-                    "Just speak naturally about any topic! You can tell me about your day, ask questions, or practice conversations.",
-                    "I'm here to help you practice English. Talk about anything - hobbies, weather, travel, or ask me questions!"
-                ],
-                weather: [
-                    "I can't check the actual weather, but we can practice talking about it! What's the weather like where you are?",
-                    "Weather is a great topic! Do you prefer sunny days or rainy days?"
-                ],
-                goodbye: [
-                    "Goodbye! Great practice session today!",
-                    "See you later! Keep practicing!",
-                    "Bye! You did a great job today!"
-                ]
-            };
+        function generateResponse(text) {
+            const lower = text.toLowerCase();
 
-            // Anahtar kelime kontrolü
-            if (lowerText.match(/hello|hi|hey/)) {
-                return responses.greetings[Math.floor(Math.random() * responses.greetings.length)];
-            } else if (lowerText.match(/how are you|how're you/)) {
-                return responses.howAreYou[Math.floor(Math.random() * responses.howAreYou.length)];
-            } else if (lowerText.match(/your name|who are you|what's your name/)) {
-                return responses.name[Math.floor(Math.random() * responses.name.length)];
-            } else if (lowerText.match(/help|what can|how do/)) {
-                return responses.help[Math.floor(Math.random() * responses.help.length)];
-            } else if (lowerText.match(/weather|sunny|rainy|cold|hot/)) {
-                return responses.weather[Math.floor(Math.random() * responses.weather.length)];
-            } else if (lowerText.match(/bye|goodbye|see you/)) {
-                return responses.goodbye[Math.floor(Math.random() * responses.goodbye.length)];
-            } else {
-                // Genel cevaplar
-                const general = [
-                    "That's interesting! Can you tell me more about that?",
-                    "I see! What else would you like to talk about?",
-                    "Great! How does that make you feel?",
-                    "Interesting point! Could you explain that further?",
-                    "I understand. What do you think about it?",
-                    "That's a good topic! What's your opinion on it?"
-                ];
-                return general[Math.floor(Math.random() * general.length)];
+            if (/hello|hi|hey/.test(lower)) {
+                return "Hello! How are you doing today?";
             }
+
+            if (/how are you|how're you/.test(lower)) {
+                return "I'm doing great, thank you! How about you?";
+            }
+
+            if (/your name|who are you|what's your name/.test(lower)) {
+                return "I'm your English practice partner. You can call me Practice Bot.";
+            }
+
+            if (/help|what can you do|how do i/.test(lower)) {
+                return "You can talk to me about your day, hobbies, travel, food, or any topic you like.";
+            }
+
+            if (/weather|sunny|rainy|cold|hot/.test(lower)) {
+                return "The weather is a great topic. What is the weather like where you are?";
+            }
+
+            if (/bye|goodbye|see you/.test(lower)) {
+                return "Goodbye! You did a great job practicing English today.";
+            }
+
+            return "That is interesting! Can you tell me more about it?";
         }
 
-        micBtn.addEventListener('click', () => {
-            recognition.start();
-            micBtn.classList.add('listening');
-            micBtn.textContent = '🎤 Listening...';
-            micBtn.disabled = true;
-            stopBtn.style.display = 'block';
-            status.textContent = '🎤 Listening... Speak now!';
-            status.className = 'status active';
-        });
+        async function processSpeech(englishText) {
+            const userTranslationElement =
+                addMessage(englishText, "", true);
 
-        stopBtn.addEventListener('click', () => {
-            recognition.stop();
-            synth.cancel();
-        });
+            typing.classList.add("show");
 
-        recognition.onresult = (event) => {
-            const transcript = event.results[0][0].transcript;
-            addMessage(transcript, true);
-            
-            const response = generateResponse(transcript);
-            addMessage(response, false);
-            
-            setTimeout(() => {
-                speak(response);
-            }, 500);
-        };
+            const userTurkish = await translateToTurkish(englishText);
+            userTranslationElement.textContent = userTurkish;
 
-        recognition.onerror = (event) => {
-            status.textContent = '❌ Error: ' + event.error;
-            status.className = 'status error';
-            micBtn.classList.remove('listening');
-            micBtn.textContent = '🎤 Start Speaking';
-            micBtn.disabled = false;
-            stopBtn.style.display = 'none';
-        };
+            const response = generateResponse(englishText);
+            const botTranslationElement =
+                addMessage(response, "", false);
 
-        recognition.onend = () => {
-            micBtn.classList.remove('listening');
-            micBtn.textContent = '🎤 Start Speaking';
-            micBtn.disabled = false;
-            stopBtn.style.display = 'none';
-            if (status.textContent.includes('Listening')) {
-                status.textContent = 'Ready to listen';
-                status.className = 'status';
+            const botTurkish = await translateToTurkish(response);
+            botTranslationElement.textContent = botTurkish;
+
+            typing.classList.remove("show");
+            speak(response);
+        }
+
+        if (!SpeechRecognition) {
+            setStatus(
+                "❌ Speech recognition is not supported. Please use Google Chrome or Microsoft Edge.",
+                "error"
+            );
+            micButton.disabled = true;
+        } else {
+            const recognition = new SpeechRecognition();
+
+            recognition.lang = "en-US";
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            micButton.addEventListener("click", () => {
+                if (isListening) return;
+
+                try {
+                    recognition.start();
+                    isListening = true;
+
+                    micButton.classList.add("listening");
+                    micButton.textContent = "🎤 Listening...";
+                    micButton.disabled = true;
+                    stopButton.style.display = "block";
+
+                    setStatus("🎤 Speak in English now...", "active");
+                } catch (error) {
+                    setStatus("Microphone could not be started.", "error");
+                }
+            });
+
+            stopButton.addEventListener("click", () => {
+                recognition.stop();
+                synth.cancel();
+                setStatus("Ready to listen");
+            });
+
+            recognition.onresult = event => {
+                const transcript =
+                    event.results[0][0].transcript.trim();
+
+                if (transcript) {
+                    processSpeech(transcript);
+                }
+            };
+
+            recognition.onerror = event => {
+                isListening = false;
+
+                let message = "Speech recognition error: " + event.error;
+
+                if (event.error === "not-allowed") {
+                    message = "❌ Microphone permission was denied.";
+                }
+
+                if (event.error === "no-speech") {
+                    message = "I could not hear anything. Please try again.";
+                }
+
+                setStatus(message, "error");
+                resetMicrophone();
+            };
+
+            recognition.onend = () => {
+                isListening = false;
+                resetMicrophone();
+
+                if (statusBox.textContent.includes("Listening")) {
+                    setStatus("Ready to listen");
+                }
+            };
+
+            function resetMicrophone() {
+                micButton.classList.remove("listening");
+                micButton.textContent = "🎤 Start Speaking";
+                micButton.disabled = false;
+                stopButton.style.display = "none";
             }
-        };
+        }
     </script>
 </body>
 </html>
