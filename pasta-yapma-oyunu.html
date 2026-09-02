@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pasta Yapma Oyunu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --yazi-tipi: "Andika", "Segoe UI", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--yazi-tipi);
+      background: linear-gradient(135deg, #ffe2ef, #fff3c4);
+      color: #603242;
+      text-align: center;
+    }
+
+    header {
+      background: #ed72a5;
+      color: white;
+      padding: 22px 10px;
+      box-shadow: 0 3px 10px #bd8b9e;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 30px;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 18px;
+    }
+
+    .asama {
+      display: none;
+      background: rgba(255, 255, 255, 0.96);
+      padding: 22px;
+      border-radius: 24px;
+      box-shadow: 0 5px 15px #d4aaba;
+    }
+
+    .asama.aktif {
+      display: block;
+    }
+
+    h2 {
+      color: #d4437c;
+    }
+
+    button {
+      background: #e4528a;
+      color: white;
+      border: none;
+      border-radius: 14px;
+      padding: 13px 20px;
+      margin: 8px;
+      font-family: inherit;
+      font-size: 17px;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    button:hover {
+      background: #bd326d;
+    }
+
+    button:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+
+    .liste {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .kart {
+      min-height: 105px;
+      padding: 12px 5px;
+      border: 3px solid #ffd0e1;
+      border-radius: 18px;
+      background: white;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.2s;
+      touch-action: manipulation;
+    }
+
+    .kart:hover {
+      transform: scale(1.04);
+    }
+
+    .kart.secilen {
+      background: #ffc0d9;
+      border-color: #d93877;
+      transform: scale(1.05);
+    }
+
+    .emoji {
+      display: block;
+      font-size: 38px;
+      margin-bottom: 6px;
+    }
+
+    .uyari {
+      min-height: 25px;
+      color: #c52222;
+      font-weight: bold;
+    }
+
+    .mutfak {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 35px;
+      margin: 25px 0;
+    }
+
+    .kase {
+      width: 240px;
+      height: 150px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #c9f1ff;
+      border: 9px solid #69a9ca;
+      border-radius: 25px 25px 85px 85px;
+      font-size: 65px;
+    }
+
+    .kase.hareketli {
+      animation: karistir 0.25s;
+    }
+
+    @keyframes karistir {
+      0% { transform: rotate(-8deg); }
+      50% { transform: rotate(8deg); }
+      100% { transform: rotate(0); }
+    }
+
+    .tabak {
+      position: relative;
+      width: 350px;
+      height: 300px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      background: radial-gradient(
+        ellipse,
+        white 52%,
+        #c7e6ef 55%,
+        #85c7d8 64%,
+        white 67%
+      );
+      box-shadow: 0 5px 10px #999;
+    }
+
+    .pasta {
+      position: relative;
+      width: 220px;
+      height: 145px;
+      background: #d99a5e;
+      border: 8px solid #ad6b39;
+      border-radius: 48% 48% 25px 25px;
+      box-shadow: inset 0 -18px 0 rgba(115, 58, 20, 0.2);
+      user-select: none;
+      touch-action: none;
+    }
+
+    #suruklenenPasta {
+      cursor: grab;
+    }
+
+    #suruklenenPasta.tutuluyor {
+      opacity: 0.7;
+      cursor: grabbing;
+    }
+
+    .firin {
+      width: 285px;
+      height: 240px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #555;
+      border: 12px solid #303030;
+      border-radius: 18px;
+      color: white;
+      font-size: 65px;
+    }
+
+    .firin.acik {
+      background: #a94938;
+    }
+
+    .firin p {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .progress-kutu {
+      width: 90%;
+      height: 24px;
+      margin: 18px auto;
+      overflow: hidden;
+      border-radius: 20px;
+      background: #eee;
+    }
+
+    .progress {
+      width: 0%;
+      height: 100%;
+      background: #ee6a9e;
+      transition: width 0.25s;
+    }
+
+    .krema {
+      position: absolute;
+      inset: 5px;
+      border-radius: 45% 45% 25px 25px;
+      opacity: 0.95;
+      pointer-events: none;
+    }
+
+    .renkler {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 15px;
+    }
+
+    .renk {
+      width: 42px;
+      height: 42px;
+      border: 4px solid white;
+      border-radius: 50%;
+      box-shadow: 0 0 0 2px #888;
+      cursor: pointer;
+    }
+
+    .renk.aktif {
+      box-shadow: 0 0 0 4px #222;
+    }
+
+    .sus {
+      position: absolute;
+      z-index: 5;
+      transform: translate(-50%, -50%);
+      font-size: 28px;
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🎂 Pasta Yapma Oyunu 🎂</h1>
+  <p>Seç, karıştır, fırına götür ve süsle!</p>
+</header>
+
+<main>
+
+  <!-- 1. AŞAMA -->
+  <section id="asama1" class="asama aktif">
+    <h2>1. Malzemeleri Seç</h2>
+    <p>Temel malzemelerin hepsini seçmelisin.</p>
+
+    <div class="liste" id="malzemeListesi">
+
+      <div class="kart gerekli" data-ad="Yumurta">
+        <span class="emoji">🥚</span>Yumurta
+      </div>
+
+      <div class="kart gerekli" data-ad="Un">
+        <span class="emoji">🌾</span>Un
+      </div>
+
+      <div class="kart gerekli" data-ad="Seker">
+        <span class="emoji">🍚</span>Şeker
+      </div>
+
+      <div class="kart gerekli" data-ad="Sut">
+        <span class="emoji">🥛</span>Süt
+      </div>
+
+      <div class="kart gerekli" data-ad="Tereyagi">
+        <span class="emoji">🧈</span>Tereyağı
+      </div>
+
+      <div class="kart gerekli" data-ad="Kabartma tozu">
+        <span class="emoji">🧂</span>Kabartma tozu
+      </div>
+
+      <div class="kart" data-ad="Kakao">
+        <span class="emoji">🍫</span>Kakao
+      </div>
+
+      <div class="kart" data-ad="Vanilya">
+        <span class="emoji">🌼</span>Vanilya
+      </div>
+
+      <div class="kart" data-ad="Yogurt">
+        <span class="emoji">🥣</span>Yoğurt
+      </div>
+
+      <div class="kart" data-ad="Bal">
+        <span class="emoji">🍯</span>Bal
+      </div>
+
+      <div class="kart" data-ad="Muz">
+        <span class="emoji">🍌</span>Muz püresi
+      </div>
+
+      <div class="kart" data-ad="Cilek">
+        <span class="emoji">🍓</span>Çilek püresi
+      </div>
+
+      <div class="kart" data-ad="Hindistan cevizi">
+        <span class="emoji">🥥</span>Hindistan cevizi
+      </div>
+
+      <div class="kart" data-ad="Limon kabugu">
+        <span class="emoji">🍋</span>Limon kabuğu
+      </div>
+
+      <div class="kart" data-ad="Krema">
+        <span class="emoji">🥣</span>Krema
+      </div>
+
+    </div>
+
+    <p id="secilenMalzemeler">Henüz malzeme seçilmedi.</p>
+    <p id="malzemeUyarisi" class="uyari"></p>
+
+    <button onclick="malzemeleriKontrolEt()">
+      Malzemeleri Karıştır ➜
+    </button>
+  </section>
+
+  <!-- 2. AŞAMA -->
+  <section id="asama2" class="asama">
+    <h2>2. Malzemeleri Karıştır</h2>
+    <p>Karıştır düğmesine birkaç kez bas.</p>
+
+    <div class="mutfak">
+      <div id="kase" class="kase">🥣</div>
+    </div>
+
+    <p id="karistirmaYazisi">0 / 8 kez karıştırıldı.</p>
+
+    <button id="karistirBtn" onclick="karistir()">
+      🥄 Karıştır
+    </button>
+
+    <br>
+
+    <button id="firinAsamasiBtn" onclick="firinAsamasinaGit()" disabled>
+      Fırın Aşamasına Geç ➜
+    </button>
+  </section>
+
+  <!-- 3. AŞAMA -->
+  <section id="asama3" class="asama">
+    <h2>3. Pastayı Fırına Götür</h2>
+    <p>Pastayı tutup fırının üzerine sürükle ve bırak.</p>
+
+    <div class="mutfak">
+
+      <div id="tasimaTabagi" class="tabak">
+        <div id="suruklenenPasta" class="pasta"></div>
+      </div>
+
+      <div id="firin" class="firin">
+        🔥
+        <p>Pastayı buraya bırak</p>
+      </div>
+
+    </div>
+
+    <p id="firinYazisi">Pasta fırına götürülmeyi bekliyor.</p>
+
+    <div class="progress-kutu">
+      <div id="pisirmeCubugu" class="progress"></div>
+    </div>
+
+    <button id="firindanCikarBtn" onclick="firindanCikar()" disabled>
+      Fırından Çıkar ➜
+    </button>
+  </section>
+
+  <!-- 4. AŞAMA -->
+  <section id="asama4" class="asama">
+    <h2>4. Pastayı Süsle</h2>
+
+    <div class="mutfak">
+      <div class="tabak">
+        <div id="suslenecekPasta" class="pasta"></div>
+      </div>
+    </div>
+
+    <h3>🥣 Krema Sür</h3>
+    <p>
+      Bir renk seç, “Kremayı Sür” düğmesine bas,
+      sonra pastanın üzerine dokun.
+    </p>
+
+    <div class="renkler">
+      <div class="renk aktif" data-renk="#fff5fb" style="background:#fff5fb"></div>
+      <div class="renk" data-renk="#ff9fbd" style="background:#ff9fbd"></div>
+      <div class="renk" data-renk="#b68cff" style="background:#b68cff"></div>
+      <div class="renk" data-renk="#75caff" style="background:#75caff"></div>
+      <div class="renk" data-renk="#ffd45e" style="background:#ffd45e"></div>
+      <div class="renk" data-renk="#8cdd96" style="background:#8cdd96"></div>
+    </div>
+
+    <button onclick="kremaModunuAc()">Kremayı Sür 🥣</button>
+
+    <h3>🍓 Süsleme Malzemeleri</h3>
+
+    <div class="liste">
+      <div class="kart susleme" data-simge="🍓">
+        <span class="emoji">🍓</span>Çilek
+      </div>
+
+      <div class="kart susleme" data-simge="🍌">
+        <span class="emoji">🍌</span>Muz
+      </div>
+
+      <div class="kart susleme" data-simge="🍒">
+        <span class="emoji">🍒</span>Kiraz
+      </div>
+
+      <div class="kart susleme" data-simge="🫐">
+        <span class="emoji">🫐</span>Yaban mersini
+      </div>
+
+      <div class="kart susleme" data-simge="🍫">
+        <span class="emoji">🍫</span>Çikolata
+      </div>
+
+      <div class="kart susleme" data-simge="🍬">
+        <span class="emoji">🍬</span>Şekerleme
+      </div>
+
+      <div class="kart susleme" data-simge="🌈">
+        <span class="emoji">🌈</span>Renkli şeker
+      </div>
+
+      <div class="kart susleme" data-simge="🥜">
+        <span class="emoji">🥜</span>Fındık
+      </div>
+
+      <div class="kart susleme" data-simge="🥥">
+        <span class="emoji">🥥</span>Hindistan cevizi
+      </div>
+
+      <div class="kart susleme" data-simge="🌸">
+        <span class="emoji">🌸</span>Şeker çiçeği
+      </div>
+
+      <div class="kart susleme" data-simge="✨">
+        <span class="emoji">✨</span>Parıltı
+      </div>
+    </div>
+
+    <p id="suslemeYazisi">
+      Önce kremayı sürebilir veya bir süsleme seçebilirsin.
+    </p>
+
+    <button onclick="oyunuBitir()">Pastayı Tamamla 🎉</button>
+  </section>
+
+  <!-- 5. AŞAMA -->
+  <section id="asama5" class="asama">
+    <h2>🎉 Pastan Hazır! 🎉</h2>
+
+    <div class="mutfak">
+      <div class="tabak">
+        <div id="sonPasta" class="pasta"></div>
+      </div>
+    </div>
+
+    <p>Pastanı kendin yaptın. Afiyet olsun! 🍰</p>
+    <button onclick="location.reload()">Yeniden Oyna 🔄</button>
+  </section>
+
+</main>
+
+<script>
+  let secilenMalzemeler = [];
+  let karistirmaSayisi = 0;
+  let pastaFirinda = false;
+  let kremaModu = false;
+  let kremaRengi = "#fff5fb";
+
+  const gerekliMalzemeler = [
+    "Yumurta",
+    "Un",
+    "Seker",
+    "Sut",
+    "Tereyagi",
+    "Kabartma tozu"
+  ];
+
+  function asamaGoster(numara) {
+    document.querySelectorAll(".asama").forEach(asama => {
+      asama.classList.remove("aktif");
+    });
+
+    document.getElementById("asama" + numara).classList.add("aktif");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // Malzeme seçme
+  document.querySelectorAll("#malzemeListesi .kart").forEach(kart => {
+    kart.addEventListener("click", () => {
+      const ad = kart.dataset.ad;
+
+      if (kart.classList.contains("secilen")) {
+        kart.classList.remove("secilen");
+        secilenMalzemeler =
+          secilenMalzemeler.filter(malzeme => malzeme !== ad);
+      } else {
+        kart.classList.add("secilen");
+        secilenMalzemeler.push(ad);
+      }
+
+      document.getElementById("secilenMalzemeler").textContent =
+        secilenMalzemeler.length > 0
+          ? "Seçilenler: " + secilenMalzemeler.join(", ")
+          : "Henüz malzeme seçilmedi.";
+
+      document.getElementById("malzemeUyarisi").textContent = "";
+    });
+  });
+
+  function malzemeleriKontrolEt() {
+    const eksikMalzemeler = gerekliMalzemeler.filter(
+      malzeme => !secilenMalzemeler.includes(malzeme)
+    );
+
+    if (eksikMalzemeler.length > 0) {
+      document.getElementById("malzemeUyarisi").textContent =
+        "Şu malzemeler eksik: " +
+        eksikMalzemeler.join(", ") +
+        ". Lütfen hepsini seç.";
+      return;
+    }
+
+    asamaGoster(2);
+  }
+
+  // Gerçek karıştırma adımı
+  function karistir() {
+    if (karistirmaSayisi >= 8) return;
+
+    karistirmaSayisi++;
+
+    const kase = document.getElementById("kase");
+    kase.classList.remove("hareketli");
+
+    setTimeout(() => {
+      kase.classList.add("hareketli");
+    }, 10);
+
+    document.getElementById("karistirmaYazisi").textContent =
+      karistirmaSayisi + " / 8 kez karıştırıldı.";
+
+    if (karistirmaSayisi === 8) {
+      document.getElementById("karistirmaYazisi").textContent =
+        "Karışım hazır! Pastayı fırına götürebilirsin. ✅";
+
+      document.getElementById("karistirBtn").disabled = true;
+      document.getElementById("firinAsamasiBtn").disabled = false;
+    }
+  }
+
+  function firinAsamasinaGit() {
+    if (karistirmaSayisi < 8) {
+      alert("Önce karışımı 8 kez karıştırmalısın.");
+      return;
+    }
+
+    asamaGoster(3);
+  }
+
+  // Pastayı sürükleme
+  const suruklenenPasta = document.getElementById("suruklenenPasta");
+  const firin = document.getElementById("firin");
+
+  let surukleniyor = false;
+
+  suruklenenPasta.addEventListener("pointerdown", event => {
+    if (pastaFirinda) return;
+
+    surukleniyor = true;
+    suruklenenPasta.classList.add("tutuluyor");
+    suruklenenPasta.setPointerCapture(event.pointerId);
+  });
+
+  suruklenenPasta.addEventListener("pointermove", event => {
+    if (!surukleniyor) return;
+
+    const tabak = document.getElementById("tasimaTabagi");
+    const alan = tabak.getBoundingClientRect();
+
+    const x = event.clientX - alan.left - suruklenenPasta.offsetWidth / 2;
+    const y = event.clientY - alan.top - suruklenenPasta.offsetHeight / 2;
+
+    suruklenenPasta.style.position = "absolute";
+    suruklenenPasta.style.left = x + "px";
+    suruklenenPasta.style.top = y + "px";
+    suruklenenPasta.style.transform = "none";
+  });
+
+  suruklenenPasta.addEventListener("pointerup", event => {
+    if (!surukleniyor) return;
+
+    surukleniyor = false;
+    suruklenenPasta.classList.remove("tutuluyor");
+
+    const pastaAlan = suruklenenPasta.getBoundingClientRect();
+    const firinAlan = firin.getBoundingClientRect();
+
+    const ortaX = pastaAlan.left + pastaAlan.width / 2;
+    const ortaY = pastaAlan.top + pastaAlan.height / 2;
+
+    const firininIcinde =
+      ortaX > firinAlan.left &&
+      ortaX < firinAlan.right &&
+      ortaY > firinAlan.top &&
+      ortaY < firinAlan.bottom;
+
+    if (firininIcinde) {
+      pastayiFirinaKoy();
+    } else {
+      suruklenenPasta.style.left = "50%";
+      suruklenenPasta.style.top = "50%";
+      suruklenenPasta.style.transform = "translate(-50%, -50%)";
+    }
+  });
+
+  function pastayiFirinaKoy() {
+    pastaFirinda = true;
+
+    suruklenenPasta.style.display = "none";
+    firin.classList.add("acik");
+
+    document.getElementById("firinYazisi").textContent =
+      "Pasta fırında pişiyor... 🔥";
+
+    let ilerleme = 0;
+    const cubuk = document.getElementById("pisirmeCubugu");
+
+    const zamanlayici = setInterval(() => {
+      ilerleme += 10;
+      cubuk.style.width = ilerleme + "%";
+
+      if (ilerleme >= 100) {
+        clearInterval(zamanlayici);
+
+        document.getElementById("firinYazisi").textContent =
+          "Pasta pişti! Fırından çıkarabilirsin. ✅";
+
+        document.getElementById("firindanCikarBtn").disabled = false;
+      }
+    }, 300);
+  }
+
+  // Pasta piştikten sonra fırından çıkarılır
+  function firindanCikar() {
+    if (!pastaFirinda) return;
+
+    pastaFirinda = false;
+    firin.classList.remove("acik");
+
+    suruklenenPasta.style.display = "block";
+    suruklenenPasta.style.position = "relative";
+    suruklenenPasta.style.left = "auto";
+    suruklenenPasta.style.top = "auto";
+    suruklenenPasta.style.transform = "none";
+
+    document.getElementById("firinYazisi").textContent =
+      "Pasta fırından çıkarıldı. Süsleme aşamasına geçebilirsin.";
+
+    asamaGoster(4);
+  }
+
+  // Krema renklerini seçme
+  document.querySelectorAll(".renk").forEach(renk => {
+    renk.addEventListener("click", () => {
+      document.querySelectorAll(".renk").forEach(r => {
+        r.classList.remove("aktif");
+      });
+
+      renk.classList.add("aktif");
+      kremaRengi = renk.dataset.renk;
+
+      document.getElementById("suslemeYazisi").textContent =
+        "Krema rengi seçildi. Şimdi 'Kremayı Sür' düğmesine bas.";
+    });
+  });
+
+  function kremaModunuAc() {
+    kremaModu = true;
+
+    document.getElementById("suslemeYazisi").textContent =
+      "Krema sürme modu açık. Şimdi pastanın üzerine dokun.";
+  }
+
+  // Pastaya krema sürme
+  document.getElementById("suslenecekPasta").addEventListener("click", event => {
+    if (!kremaModu) return;
+
+    const pasta = document.getElementById("suslenecekPasta");
+    let krema = pasta.querySelector(".krema");
+
+    if (!krema) {
+      krema = document.createElement("div");
+      krema.className = "krema";
+      pasta.appendChild(krema);
+    }
+
+    krema.style.background = kremaRengi;
+    kremaModu = false;
+
+    document.getElementById("suslemeYazisi").textContent =
+      "Krema pastaya sürüldü! Şimdi süsleme ekleyebilirsin. ✨";
+  });
+
+  // Süsleme ekleme
+  document.querySelectorAll(".susleme").forEach(kart => {
+    kart.addEventListener("click", () => {
+      const pasta = document.getElementById("suslenecekPasta");
+      const sus = document.createElement("span");
+
+      sus.className = "sus";
+      sus.textContent = kart.dataset.simge;
+
+      const x = 10 + Math.random() * 80;
+      const y = 12 + Math.random() * 70;
+
+      sus.style.left = x + "%";
+      sus.style.top = y + "%";
+
+      pasta.appendChild(sus);
+      suslemeyiSuruklenebilirYap(sus);
+
+      document.getElementById("suslemeYazisi").textContent =
+        "Süsleme eklendi. İstersen süslemeyi sürükleyerek yerini değiştirebilirsin.";
+    });
+  });
+
+  function suslemeyiSuruklenebilirYap(sus) {
+    let hareket = false;
+
+    sus.addEventListener("pointerdown", event => {
+      hareket = true;
+      sus.setPointerCapture(event.pointerId);
+    });
+
+    sus.addEventListener("pointermove", event => {
+      if (!hareket) return;
+
+      const pasta = document.getElementById("suslenecekPasta");
+      const alan = pasta.getBoundingClientRect();
+
+      let x = ((event.clientX - alan.left) / alan.width) * 100;
+      let y = ((event.clientY - alan.top) / alan.height) * 100;
+
+      x = Math.max(7, Math.min(93, x));
+      y = Math.max(8, Math.min(90, y));
+
+      sus.style.left = x + "%";
+      sus.style.top = y + "%";
+    });
+
+    sus.addEventListener("pointerup", () => {
+      hareket = false;
+    });
+  }
+
+  function oyunuBitir() {
+    const pasta = document.getElementById("suslenecekPasta");
+    const sonuc = document.getElementById("sonPasta");
+
+    sonuc.innerHTML = pasta.innerHTML;
+    sonuc.style.background = pasta.style.background;
+
+    asamaGoster(5);
+  }
+</script>
+
+</body>
+</html>
