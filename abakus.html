@@ -312,6 +312,55 @@
         container.appendChild(bead);
       }
 
+      // Parmakla / fareyle sola-sağa sürükleyerek boncuk kaydırma
+      let suruklemeAktif = false;
+
+      function konumdanSayiBul(event) {
+        const kutu = container.getBoundingClientRect();
+        const step = kutu.width / totalBeads;
+        const x = event.clientX - kutu.left;
+
+        let sayi = Math.round(x / step);
+
+        if (sayi < 0) sayi = 0;
+        if (sayi > totalBeads) sayi = totalBeads;
+
+        return sayi;
+      }
+
+      function sayiyiUygula(sayi, containerId2) {
+        if (isTens) {
+          tensCount = sayi;
+          updateBeadPositions('tensBeads', tensCount);
+        } else {
+          onesCount = sayi;
+          updateBeadPositions('onesBeads', onesCount);
+        }
+        updateCurrentValue();
+      }
+
+      container.addEventListener('pointerdown', function (event) {
+        suruklemeAktif = true;
+        container.setPointerCapture(event.pointerId);
+        sayiyiUygula(konumdanSayiBul(event));
+      });
+
+      container.addEventListener('pointermove', function (event) {
+        if (!suruklemeAktif) return;
+        sayiyiUygula(konumdanSayiBul(event));
+      });
+
+      container.addEventListener('pointerup', function (event) {
+        suruklemeAktif = false;
+        if (container.hasPointerCapture(event.pointerId)) {
+          container.releasePointerCapture(event.pointerId);
+        }
+      });
+
+      container.addEventListener('pointercancel', function () {
+        suruklemeAktif = false;
+      });
+
       updateBeadPositions(containerId, 0);
     }
 
@@ -336,8 +385,14 @@
         Boncuk genişliği çubuğa göre hesaplanır.
         Böylece 10 boncuk her ekranda yan yana sığar, üst üste binmez.
       */
-      const step = containerWidth / totalBeads;
-      const beadWidth = Math.max(12, step - 4);
+      /*
+        Ortada belirgin bir boşluk kalsın diye önce ayırma payı ayrılır,
+        kalan yer 10 boncuğa bölünür. Böylece sola çekilen boncuklarla
+        sağda bekleyenler arasında net bir mesafe olur.
+      */
+      const ayirmaPayi = Math.max(34, containerWidth * 0.16);
+      const step = Math.min((containerWidth - ayirmaPayi) / totalBeads, 42);
+      const beadWidth = Math.max(12, step - 5);
 
       beads.forEach(function (bead, index) {
         bead.style.width = beadWidth + 'px';
