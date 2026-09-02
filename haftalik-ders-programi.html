@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Haftalık Ders Programı</title>
+
+    <!-- Andika yazı tipi -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+        :root {
+            --ana-renk: #493657;
+            --ikinci-renk: #765285;
+            --vurgu-renk: #d5896f;
+            --acik-vurgu: #f2c6a0;
+            --arka-plan: #f8f2ed;
+            --kart-rengi: #fffdfb;
+            --metin: #3e3540;
+            --soluk-metin: #806f7d;
+            --kenarlik: #e6d8d0;
+            --basari: #809b72;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top right, #f4d7c7 0, transparent 28%),
+                radial-gradient(circle at bottom left, #dce8d4 0, transparent 25%),
+                var(--arka-plan);
+
+            color: var(--metin);
+            font-family: "Andika", Arial, sans-serif;
+        }
+
+        .sayfa {
+            width: 100%;
+            max-width: 1450px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        .ust-baslik {
+            position: relative;
+            overflow: hidden;
+            padding: 38px;
+            border-radius: 28px 8px 28px 8px;
+            color: white;
+            background: linear-gradient(120deg, #493657, #684969);
+            box-shadow: 0 18px 40px rgba(73, 54, 87, 0.20);
+        }
+
+        .ust-baslik::before {
+            content: "";
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            right: -90px;
+            top: -150px;
+            border-radius: 50%;
+            background: var(--vurgu-renk);
+            opacity: 0.8;
+        }
+
+        .ust-baslik::after {
+            content: "";
+            position: absolute;
+            width: 170px;
+            height: 170px;
+            right: 180px;
+            bottom: -120px;
+            border-radius: 50%;
+            background: var(--acik-vurgu);
+            opacity: 0.35;
+        }
+
+        .ust-icerik {
+            position: relative;
+            z-index: 1;
+        }
+
+        .ust-etiket {
+            display: inline-block;
+            margin-bottom: 12px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            color: var(--ana-renk);
+            background: var(--acik-vurgu);
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(28px, 5vw, 44px);
+            letter-spacing: 0.4px;
+        }
+
+        .alt-baslik {
+            margin: 10px 0 0;
+            color: #f2dfe2;
+            font-size: 16px;
+        }
+
+        .bilgi-alani {
+            display: grid;
+            grid-template-columns: 2fr 2fr 1fr 1fr;
+            gap: 16px;
+            margin: 24px 0;
+            padding: 22px;
+            border: 1px solid var(--kenarlik);
+            border-radius: 20px;
+            background: rgba(255, 253, 251, 0.9);
+            box-shadow: 0 12px 30px rgba(73, 54, 87, 0.08);
+        }
+
+        .form-alani {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        label {
+            color: var(--ana-renk);
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            width: 100%;
+            min-height: 46px;
+            padding: 10px 13px;
+            border: 1px solid var(--kenarlik);
+            border-radius: 11px;
+            outline: none;
+            color: var(--metin);
+            background: #fffefa;
+            font-family: "Andika", Arial, sans-serif;
+            font-size: 14px;
+            transition: 0.2s ease;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--vurgu-renk);
+            box-shadow: 0 0 0 4px rgba(213, 137, 111, 0.14);
+        }
+
+        .program-ust {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 15px;
+            margin: 28px 0 14px;
+        }
+
+        .program-ust h2 {
+            margin: 0;
+            color: var(--ana-renk);
+            font-size: 28px;
+        }
+
+        .yardim-yazisi {
+            color: var(--soluk-metin);
+            font-size: 14px;
+        }
+
+        .tablo-karti {
+            overflow: hidden;
+            border: 1px solid var(--kenarlik);
+            border-radius: 20px;
+            background: var(--kart-rengi);
+            box-shadow: 0 15px 32px rgba(73, 54, 87, 0.10);
+        }
+
+        .tablo-kaydirma {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 950px;
+            border-collapse: collapse;
+        }
+
+        th {
+            padding: 17px 12px;
+            border-right: 1px solid rgba(255, 255, 255, 0.25);
+            color: white;
+            background: var(--ana-renk);
+            text-align: center;
+            font-size: 15px;
+        }
+
+        th:first-child { width: 155px; text-align: left; background: #35283f; }
+        th:nth-child(2) { background: #584065; }
+        th:nth-child(3) { background: #67486d; }
+        th:nth-child(4) { background: #76516e; }
+        th:nth-child(5) { background: #895c6f; }
+        th:nth-child(6) { background: #9c6a70; }
+        th:nth-child(7) { background: #ae7970; }
+
+        td {
+            height: 90px;
+            padding: 9px;
+            border-right: 1px solid var(--kenarlik);
+            border-bottom: 1px solid var(--kenarlik);
+            background: #fffdfb;
+            vertical-align: middle;
+        }
+
+        tbody tr:nth-child(even) td { background: #fcf5f0; }
+        tbody tr:hover td { background: #fff0e6; }
+
+        td:first-child {
+            padding: 15px;
+            color: var(--ana-renk);
+            background: #f3e6dc !important;
+            font-weight: bold;
+        }
+
+        .gun-ismi { font-size: 16px; }
+
+        .ders-kutusu {
+            width: 100%;
+            height: 100%;
+            min-height: 67px;
+            padding: 8px;
+            border: 1px dashed #d9b8aa;
+            border-radius: 11px;
+            color: var(--ana-renk);
+            background: #fffaf6;
+            font-family: "Andika", Arial, sans-serif;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .ders-kutusu:hover {
+            border-color: var(--vurgu-renk);
+            background: #fff0e6;
+        }
+
+        .ders-kutusu:focus {
+            border: 2px solid var(--vurgu-renk);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(213, 137, 111, 0.13);
+        }
+
+        .butonlar {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        button {
+            min-height: 46px;
+            padding: 11px 22px;
+            border: none;
+            border-radius: 11px;
+            color: white;
+            font-family: "Andika", Arial, sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+        }
+
+        .kaydet { background: var(--basari); }
+        .yazdir { background: var(--ikinci-renk); }
+        .temizle { background: var(--vurgu-renk); }
+
+        .mesaj {
+            min-height: 25px;
+            margin-top: 14px;
+            color: #66845d;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .alt-not {
+            margin-top: 20px;
+            color: var(--soluk-metin);
+            text-align: center;
+            font-size: 13px;
+        }
+
+        @media (max-width: 900px) {
+            .bilgi-alani { grid-template-columns: 1fr 1fr; }
+            .program-ust { align-items: flex-start; flex-direction: column; }
+        }
+
+        @media (max-width: 550px) {
+            .sayfa { padding: 13px; }
+            .ust-baslik { padding: 28px 22px; }
+            .bilgi-alani { grid-template-columns: 1fr; padding: 17px; }
+        }
+
+        @media print {
+            body { background: white; }
+            .sayfa { max-width: none; padding: 0; }
+
+            .ust-baslik {
+                padding: 15px;
+                border: 1px solid #555;
+                color: black;
+                background: white;
+                box-shadow: none;
+            }
+
+            .ust-baslik::before,
+            .ust-baslik::after,
+            .ust-etiket,
+            .alt-baslik,
+            .bilgi-alani,
+            .butonlar,
+            .mesaj,
+            .alt-not,
+            .yardim-yazisi { display: none; }
+
+            h1, .program-ust h2 { color: black; }
+            .tablo-karti { border: 1px solid #555; box-shadow: none; }
+            table { min-width: 0; font-size: 11px; }
+
+            th {
+                border: 1px solid #555;
+                color: black !important;
+                background: #eeeeee !important;
+            }
+
+            td { height: 65px; border: 1px solid #777; }
+
+            .ders-kutusu {
+                min-height: 45px;
+                padding: 2px;
+                border: none;
+                background: transparent;
+                appearance: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="sayfa">
+
+        <header class="ust-baslik">
+            <div class="ust-icerik">
+                <div class="ust-etiket">HAFTALIK PLANLAMA</div>
+                <h1>Haftalık Ders Programı</h1>
+                <p class="alt-baslik">
+                    Derslerinizi kolayca seçin ve haftalık programınızı oluşturun.
+                </p>
+            </div>
+        </header>
+
+        <section class="bilgi-alani">
+            <div class="form-alani">
+                <label for="okulAdi">Okulun Adı</label>
+                <input type="text" id="okulAdi" placeholder="Okul adını yazınız">
+            </div>
+
+            <div class="form-alani">
+                <label for="ogretmenAdi">Öğretmenin Adı</label>
+                <input type="text" id="ogretmenAdi" placeholder="Öğretmen adını yazınız">
+            </div>
+
+            <div class="form-alani">
+                <label for="sinif">Sınıf</label>
+                <select id="sinif">
+                    <option value="1">1. Sınıf</option>
+                    <option value="2">2. Sınıf</option>
+                    <option value="3">3. Sınıf</option>
+                    <option value="4">4. Sınıf</option>
+                </select>
+            </div>
+
+            <div class="form-alani">
+                <label for="sube">Şube</label>
+                <input type="text" id="sube" placeholder="Örn: A">
+            </div>
+        </section>
+
+        <section>
+            <div class="program-ust">
+                <h2>Ders Programı</h2>
+                <div class="yardim-yazisi">
+                    Her kutuya tıklayarak ders seçebilirsiniz.
+                </div>
+            </div>
+
+            <div class="tablo-karti">
+                <div class="tablo-kaydirma">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Gün</th>
+                                <th>1. Ders</th>
+                                <th>2. Ders</th>
+                                <th>3. Ders</th>
+                                <th>4. Ders</th>
+                                <th>5. Ders</th>
+                                <th>6. Ders</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="programTablosu"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <div class="butonlar">
+            <button class="kaydet" onclick="programiKaydet()">Programı Kaydet</button>
+            <button class="yazdir" onclick="window.print()">Yazdır</button>
+            <button class="temizle" onclick="programiTemizle()">Temizle</button>
+        </div>
+
+        <div class="mesaj" id="mesaj"></div>
+
+        <div class="alt-not">
+            Program bilgileri bu cihazın tarayıcısında saklanır.
+        </div>
+
+    </main>
+
+    <script>
+        const dersler = {
+            1: [
+                "Türkçe", "Matematik", "Hayat Bilgisi",
+                "Beden Eğitimi ve Oyun", "Görsel Sanatlar",
+                "Müzik", "Serbest Etkinlikler"
+            ],
+
+            2: [
+                "Türkçe", "Matematik", "Hayat Bilgisi", "Yabancı Dil",
+                "Beden Eğitimi ve Oyun", "Görsel Sanatlar",
+                "Müzik", "Serbest Etkinlikler"
+            ],
+
+            3: [
+                "Türkçe", "Matematik", "Hayat Bilgisi", "Fen Bilimleri",
+                "Yabancı Dil", "Beden Eğitimi ve Oyun", "Görsel Sanatlar",
+                "Müzik", "Serbest Etkinlikler"
+            ],
+
+            4: [
+                "Türkçe", "Matematik", "Fen Bilimleri", "Sosyal Bilgiler",
+                "Yabancı Dil", "Din Kültürü ve Ahlak Bilgisi",
+                "Beden Eğitimi ve Oyun", "Görsel Sanatlar",
+                "Müzik", "Serbest Etkinlikler"
+            ]
+        };
+
+        const gunler = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma"];
+
+        const sinif = document.getElementById("sinif");
+        const okulAdi = document.getElementById("okulAdi");
+        const ogretmenAdi = document.getElementById("ogretmenAdi");
+        const sube = document.getElementById("sube");
+        const programTablosu = document.getElementById("programTablosu");
+        const mesaj = document.getElementById("mesaj");
+
+        function programiOlustur() {
+            const secilenSinif = sinif.value;
+            const sinifaAitDersler = dersler[secilenSinif];
+
+            programTablosu.innerHTML = "";
+
+            gunler.forEach(function (gun) {
+                const satir = document.createElement("tr");
+
+                let satirIcerigi = `
+                    <td><span class="gun-ismi">${gun}</span></td>
+                `;
+
+                for (let dersSirasi = 1; dersSirasi <= 6; dersSirasi++) {
+                    const dersSecenekleri = sinifaAitDersler
+                        .map(function (ders) {
+                            return `<option value="${ders}">${ders}</option>`;
+                        })
+                        .join("");
+
+                    satirIcerigi += `
+                        <td>
+                            <select class="ders-kutusu"
+                                    data-gun="${gun}"
+                                    data-ders-sirasi="${dersSirasi}">
+                                <option value="">Ders seçiniz</option>
+                                ${dersSecenekleri}
+                            </select>
+                        </td>
+                    `;
+                }
+
+                satir.innerHTML = satirIcerigi;
+                programTablosu.appendChild(satir);
+            });
+
+            kayitliProgramiGetir();
+        }
+
+        function kayitAnahtari() {
+            return "dersProgrami_" + sinif.value;
+        }
+
+        function programiKaydet() {
+            const program = {
+                okulAdi: okulAdi.value,
+                ogretmenAdi: ogretmenAdi.value,
+                sube: sube.value,
+                dersler: []
+            };
+
+            document.querySelectorAll(".ders-kutusu").forEach(function (kutu) {
+                program.dersler.push({
+                    gun: kutu.dataset.gun,
+                    dersSirasi: kutu.dataset.dersSirasi,
+                    ders: kutu.value
+                });
+            });
+
+            localStorage.setItem(kayitAnahtari(), JSON.stringify(program));
+
+            mesajGoster("Program başarıyla kaydedildi.");
+        }
+
+        function kayitliProgramiGetir() {
+            const kayit = localStorage.getItem(kayitAnahtari());
+
+            if (!kayit) {
+                okulAdi.value = "";
+                ogretmenAdi.value = "";
+                sube.value = "";
+                return;
+            }
+
+            const program = JSON.parse(kayit);
+
+            okulAdi.value = program.okulAdi || "";
+            ogretmenAdi.value = program.ogretmenAdi || "";
+            sube.value = program.sube || "";
+
+            program.dersler.forEach(function (kayitliDers) {
+                const kutu = document.querySelector(
+                    `.ders-kutusu[data-gun="${kayitliDers.gun}"][data-ders-sirasi="${kayitliDers.dersSirasi}"]`
+                );
+
+                if (kutu) {
+                    kutu.value = kayitliDers.ders || "";
+                }
+            });
+        }
+
+        function programiTemizle() {
+            const onay = confirm("Bu sınıfa ait haftalık program tamamen silinsin mi?");
+
+            if (!onay) return;
+
+            localStorage.removeItem(kayitAnahtari());
+
+            okulAdi.value = "";
+            ogretmenAdi.value = "";
+            sube.value = "";
+
+            programiOlustur();
+
+            mesajGoster("Program temizlendi.");
+        }
+
+        function mesajGoster(yazi) {
+            mesaj.textContent = yazi;
+
+            setTimeout(function () {
+                mesaj.textContent = "";
+            }, 3000);
+        }
+
+        sinif.addEventListener("change", programiOlustur);
+
+        programiOlustur();
+    </script>
+
+</body>
+
+</html>

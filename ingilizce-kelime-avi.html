@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>İngilizce Kelime Avı: Uzay Operasyonu 🛸</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --space-bg: #070913;
+      --panel-bg: rgba(14, 20, 43, 0.75);
+      --panel-border: rgba(0, 240, 255, 0.3);
+      --neon-cyan: #00f0ff;
+      --neon-purple: #9d4edd;
+      --neon-pink: #ff2a85;
+      --neon-yellow: #ffe600;
+      --neon-green: #00ff87;
+      --text-main: #f0f5ff;
+      --text-muted: #8a99ad;
+      --glass-blur: blur(20px);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Andika", sans-serif;
+      user-select: none;
+    }
+
+    body {
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      color: var(--text-main);
+      background-color: var(--space-bg);
+      background-image:
+        radial-gradient(circle at 15% 20%, rgba(157, 78, 221, 0.25) 0%, transparent 40%),
+        radial-gradient(circle at 85% 75%, rgba(0, 240, 255, 0.2) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(255, 42, 133, 0.12) 0%, transparent 60%);
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.18;
+      background-image:
+        linear-gradient(var(--neon-cyan) 1px, transparent 1px),
+        linear-gradient(90deg, var(--neon-cyan) 1px, transparent 1px);
+      background-size: 50px 50px;
+      mask-image: radial-gradient(circle at center, black 30%, transparent 80%);
+    }
+
+    .planet {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .planet-1 {
+      width: 240px;
+      height: 240px;
+      top: -60px;
+      left: -60px;
+      background: radial-gradient(circle at 30% 30%, #9d4edd, #240046);
+      box-shadow: 0 0 60px rgba(157, 78, 221, 0.4);
+      opacity: 0.6;
+      animation: float 20s infinite ease-in-out alternate;
+    }
+
+    .planet-2 {
+      width: 140px;
+      height: 140px;
+      bottom: 5%;
+      right: -30px;
+      background: radial-gradient(circle at 30% 30%, #00f0ff, #03045e);
+      box-shadow: 0 0 40px rgba(0, 240, 255, 0.4);
+      opacity: 0.5;
+      animation: float 15s infinite ease-in-out alternate-reverse;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(35px) rotate(15deg); }
+    }
+
+    #doodles {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .doodle {
+      position: absolute;
+      bottom: -60px;
+      color: rgba(0, 240, 255, 0.35);
+      font-weight: 700;
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+      animation: rise linear infinite;
+      white-space: nowrap;
+    }
+
+    @keyframes rise {
+      0% { transform: translateY(0) rotate(-10deg); opacity: 0; }
+      15%, 85% { opacity: 0.7; }
+      100% { transform: translateY(-115vh) rotate(15deg); opacity: 0; }
+    }
+
+    .app {
+      position: relative;
+      z-index: 3;
+      width: 100%;
+      max-width: 680px;
+      overflow: hidden;
+      padding: 36px 30px 26px;
+      border: 1px solid var(--panel-border);
+      border-radius: 32px;
+      background: var(--panel-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.8),
+        inset 0 0 20px rgba(0, 240, 255, 0.15),
+        0 0 30px rgba(157, 78, 221, 0.2);
+    }
+
+    .app::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 15%;
+      right: 15%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-pink), transparent);
+      box-shadow: 0 0 15px var(--neon-cyan);
+    }
+
+    header {
+      position: relative;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    header h1 {
+      font-size: clamp(2.2rem, 7vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: 1px;
+      line-height: 1.1;
+      color: #fff;
+      text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-purple);
+      background: linear-gradient(180deg, #ffffff 30%, var(--neon-cyan));
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    header p {
+      margin-top: 6px;
+      color: var(--neon-cyan);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      opacity: 0.9;
+    }
+
+    .high-score {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 14px;
+      padding: 6px 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 230, 0, 0.4);
+      color: var(--neon-yellow);
+      background: rgba(255, 230, 0, 0.08);
+      box-shadow: 0 0 15px rgba(255, 230, 0, 0.15);
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .screen {
+      display: none;
+      animation: appear 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+
+    .screen.active { display: block; }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(20px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .title {
+      margin-bottom: 6px;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .description {
+      margin-bottom: 22px;
+      color: var(--text-muted);
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    button { font-family: "Andika", sans-serif; }
+
+    .btn {
+      position: relative;
+      overflow: hidden;
+      min-height: 56px;
+      padding: 14px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 18px;
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      font-size: 1.05rem;
+      font-weight: 700;
+      transition: all 0.25s ease;
+      backdrop-filter: blur(5px);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      border-color: var(--neon-cyan);
+      color: #fff;
+      background: rgba(0, 240, 255, 0.15);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+    }
+
+    .btn:active { transform: translateY(1px); }
+
+    .btn.primary {
+      border-color: rgba(157, 78, 221, 0.5);
+      background: linear-gradient(135deg, rgba(157, 78, 221, 0.3), rgba(60, 9, 108, 0.5));
+      box-shadow: 0 0 15px rgba(157, 78, 221, 0.3);
+    }
+
+    .btn.primary:hover {
+      border-color: var(--neon-purple);
+      background: linear-gradient(135deg, rgba(157, 78, 221, 0.6), rgba(90, 24, 154, 0.7));
+      box-shadow: 0 0 25px rgba(157, 78, 221, 0.6);
+    }
+
+    .btn.success {
+      border-color: rgba(0, 255, 135, 0.5);
+      background: linear-gradient(135deg, rgba(0, 255, 135, 0.2), rgba(0, 114, 0, 0.4));
+      color: #fff;
+    }
+
+    .btn.success:hover {
+      border-color: var(--neon-green);
+      background: linear-gradient(135deg, rgba(0, 255, 135, 0.4), rgba(0, 150, 80, 0.6));
+      box-shadow: 0 0 25px rgba(0, 255, 135, 0.5);
+    }
+
+    .wide { width: 100%; margin-top: 16px; }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding: 12px 18px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.3);
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .stats span {
+      color: var(--neon-cyan);
+      font-size: 1.1rem;
+      text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+    }
+
+    .progress-track {
+      height: 8px;
+      margin-bottom: 22px;
+      overflow: hidden;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .progress {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
+      box-shadow: 0 0 12px var(--neon-cyan);
+      transition: width 0.4s ease;
+    }
+
+    .question {
+      position: relative;
+      margin-bottom: 22px;
+      padding: 28px 20px;
+      text-align: center;
+      border-radius: 24px;
+      border: 1px solid var(--neon-cyan);
+      background: rgba(9, 14, 33, 0.7);
+      box-shadow:
+        inset 0 0 20px rgba(0, 240, 255, 0.15),
+        0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .question::before {
+      content: "HUD // SEARCHING";
+      position: absolute;
+      top: 10px;
+      left: 16px;
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      color: var(--neon-cyan);
+      opacity: 0.5;
+    }
+
+    .question-sub {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 5px;
+    }
+
+    .word {
+      margin-top: 8px;
+      font-size: clamp(2.2rem, 9vw, 3.4rem);
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 1.5px;
+      text-shadow: 0 0 15px var(--neon-cyan), 0 0 30px rgba(0, 240, 255, 0.3);
+    }
+
+    .hint-btn {
+      margin-top: 16px;
+      padding: 8px 16px;
+      border: 1px dashed var(--neon-yellow);
+      border-radius: 12px;
+      color: var(--neon-yellow);
+      background: rgba(255, 230, 0, 0.08);
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 700;
+      transition: 0.2s;
+    }
+
+    .hint-btn:hover {
+      background: rgba(255, 230, 0, 0.2);
+      box-shadow: 0 0 15px rgba(255, 230, 0, 0.3);
+      transform: scale(1.03);
+    }
+
+    .hint-box {
+      display: none;
+      margin-top: 14px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--neon-yellow);
+      color: #fff;
+      background: rgba(255, 230, 0, 0.15);
+      font-weight: 700;
+      font-size: 0.95rem;
+      animation: appear 0.3s ease;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .option {
+      min-height: 62px;
+      padding: 12px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      color: var(--text-main);
+      background: rgba(18, 26, 56, 0.6);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      font-size: 1.05rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .option:hover:not(:disabled) {
+      transform: translateY(-3px);
+      border-color: var(--neon-cyan);
+      background: rgba(0, 240, 255, 0.12);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+    }
+
+    .option:disabled { cursor: default; }
+
+    .option.correct {
+      color: #fff;
+      border-color: var(--neon-green);
+      background: rgba(0, 255, 135, 0.25);
+      box-shadow: 0 0 25px rgba(0, 255, 135, 0.5);
+      animation: pulse 0.4s ease;
+    }
+
+    .option.wrong {
+      color: #fff;
+      border-color: var(--neon-pink);
+      background: rgba(255, 42, 133, 0.25);
+      box-shadow: 0 0 25px rgba(255, 42, 133, 0.5);
+    }
+
+    @keyframes pulse { 50% { transform: scale(1.03); } }
+
+    .feedback {
+      display: none;
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 14px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1rem;
+      animation: appear 0.3s ease;
+    }
+
+    .feedback.show { display: block; }
+
+    .feedback.correct {
+      color: var(--neon-green);
+      border: 1px solid var(--neon-green);
+      background: rgba(0, 255, 135, 0.1);
+      box-shadow: 0 0 15px rgba(0, 255, 135, 0.2);
+    }
+
+    .feedback.wrong {
+      color: var(--neon-pink);
+      border: 1px solid var(--neon-pink);
+      background: rgba(255, 42, 133, 0.1);
+      box-shadow: 0 0 15px rgba(255, 42, 133, 0.2);
+    }
+
+    .score-circle {
+      display: flex;
+      width: 150px;
+      height: 150px;
+      margin: 20px auto;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      border-radius: 50%;
+      border: 2px solid var(--neon-cyan);
+      color: #fff;
+      background: radial-gradient(circle, rgba(157, 78, 221, 0.4), rgba(7, 9, 19, 0.8));
+      box-shadow: 0 0 30px rgba(0, 240, 255, 0.4);
+    }
+
+    .score-number {
+      font-size: 3.2rem;
+      font-weight: 700;
+      line-height: 1;
+      color: #fff;
+      text-shadow: 0 0 15px var(--neon-cyan);
+    }
+
+    .score-label {
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      color: var(--neon-cyan);
+      margin-top: 4px;
+    }
+
+    .result-stats {
+      margin-bottom: 22px;
+      padding: 14px 20px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+      font-size: 0.95rem;
+    }
+
+    .result-row:last-child { border-bottom: 0; }
+
+    .new-record {
+      display: none;
+      margin-bottom: 14px;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid var(--neon-yellow);
+      color: var(--neon-yellow);
+      background: rgba(255, 230, 0, 0.15);
+      text-align: center;
+      font-weight: 700;
+      box-shadow: 0 0 15px rgba(255, 230, 0, 0.3);
+    }
+
+    .imza {
+      margin-top: 22px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 560px) {
+      body { padding: 12px; }
+      .app { padding: 24px 18px; border-radius: 24px; }
+      .button-grid, .options { grid-template-columns: 1fr; }
+      .stats { padding: 10px; font-size: 0.85rem; }
+      .stats span { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="planet planet-1"></div>
+  <div class="planet planet-2"></div>
+  <div id="doodles"></div>
+
+  <main class="app">
+    <header>
+      <h1>KELİME AVI 🚀</h1>
+      <p>SPACE EXPEDITION • MISSION CONTROL</p>
+      <div class="high-score">🏆 En Yüksek Skor: <span id="highScore">0</span></div>
+    </header>
+
+    <section id="gradeScreen" class="screen active">
+      <h2 class="title">Görev Seviyesi Seç 👨‍🚀</h2>
+      <p class="description">Uzay yolculuğun için uygun zorluğu belirle!</p>
+
+      <div class="button-grid">
+        <button class="btn primary" onclick="selectGrade(2)">2. Sınıf 🌟</button>
+        <button class="btn primary" onclick="selectGrade(3)">3. Sınıf 🚀</button>
+        <button class="btn primary" onclick="selectGrade(4)">4. Sınıf 👑</button>
+      </div>
+    </section>
+
+    <section id="topicScreen" class="screen">
+      <h2 class="title">Hedef Sektör Seç 🎯</h2>
+      <p class="description">Bir konu seç veya tüm uzay haritasını tara.</p>
+
+      <div id="topicButtons" class="button-grid"></div>
+      <button class="btn wide" onclick="showScreen('gradeScreen')">⬅️ Seviye Değiştir</button>
+    </section>
+
+    <section id="gameScreen" class="screen">
+      <div class="stats">
+        <div>📍 Soru: <span id="questionNumber">1/10</span></div>
+        <div>⭐ Puan: <span id="score">0</span></div>
+        <div>✅ Doğru: <span id="correctCount">0</span></div>
+      </div>
+
+      <div class="progress-track">
+        <div id="progress" class="progress"></div>
+      </div>
+
+      <div class="question">
+        <div id="questionSub" class="question-sub">Bu kelimenin Türkçe karşılığı nedir?</div>
+        <div id="word" class="word">WORD</div>
+
+        <button id="hintButton" class="hint-btn" onclick="showHint()">
+          💡 İpucu Taraması Yap (-5 Puan)
+        </button>
+
+        <div id="hintBox" class="hint-box"></div>
+      </div>
+
+      <div id="options" class="options"></div>
+      <div id="feedback" class="feedback"></div>
+
+      <button id="nextButton" class="btn success wide" style="display:none" onclick="nextQuestion()">
+        Sonraki Hedef ➡️
+      </button>
+    </section>
+
+    <section id="resultScreen" class="screen">
+      <h2 class="title">Görev Tamamlandı! 🎉</h2>
+      <p class="description">Harika bir uzay operasyonuydu!</p>
+
+      <div id="newRecord" class="new-record">🏆 YENİ REKOR İMZALANDI!</div>
+
+      <div class="score-circle">
+        <span id="resultScore" class="score-number">0</span>
+        <span class="score-label">TOPLAM PUAN</span>
+      </div>
+
+      <div class="result-stats">
+        <div class="result-row"><span>Toplam Hedef:</span><b id="resultTotal">0</b></div>
+        <div class="result-row"><span>Başarılı Atış (Doğru):</span><b id="resultCorrect" style="color:var(--neon-green)">0</b></div>
+        <div class="result-row"><span>Iskalanan (Yanlış):</span><b id="resultWrong" style="color:var(--neon-pink)">0</b></div>
+        <div class="result-row"><span>Görev Başarısı:</span><b id="resultPercent" style="color:var(--neon-cyan)">%0</b></div>
+      </div>
+
+      <div class="button-grid">
+        <button class="btn success" onclick="restartGame()">Yeniden Başlat 🔄</button>
+        <button class="btn primary" onclick="showScreen('gradeScreen')">Yeni Görev 🏫</button>
+      </div>
+    </section>
+
+    <div class="imza">Hazırlayan: Hasan Tutuş</div>
+  </main>
+
+  <script>
+    const database = {
+      2: {
+        "Renkler": [
+          ["red", "Kırmızı", "Kırmızı bir elmanın rengi."],
+          ["blue", "Mavi", "Gökyüzünün ve denizin rengi."],
+          ["yellow", "Sarı", "Güneşin ve muzun rengi."],
+          ["green", "Yeşil", "Ağaçların ve çimenlerin rengi."],
+          ["pink", "Pembe", "Şeker gibi tatlı bir renk."],
+          ["black", "Siyah", "Uzayın ve gecenin rengi."],
+          ["white", "Beyaz", "Karın ve sütün rengi."]
+        ],
+        "Sayılar": [
+          ["one", "Bir", "En küçük sayma sayısı."],
+          ["two", "İki", "1'den sonra gelen sayı."],
+          ["three", "Üç", "Üçgenin köşe sayısı."],
+          ["four", "Dört", "Karenin kenar sayısı."],
+          ["five", "Beş", "Bir elimizdeki parmak sayısı."],
+          ["six", "Altı", "5'ten bir fazla."],
+          ["seven", "Yedi", "Haftanın gün sayısı."],
+          ["eight", "Sekiz", "Ahtapotun bacak sayısı."],
+          ["nine", "Dokuz", "10'dan bir eksik."],
+          ["ten", "On", "İki elimizdeki toplam parmak sayısı."]
+        ],
+        "Hayvanlar": [
+          ["cat", "Kedi", "Miyav diyen sevimli dostumuz."],
+          ["dog", "Köpek", "Hav hav diyen sadık dostumuz."],
+          ["bird", "Kuş", "Kanatları vardır ve gökyüzünde uçar."],
+          ["fish", "Balık", "Suda yüzen pullu canlı."],
+          ["rabbit", "Tavşan", "Havuç yemeyi sever."],
+          ["lion", "Aslan", "Ormanların kralı."],
+          ["monkey", "Maymun", "Muz yemeyi ve tırmanmayı sever."]
+        ],
+        "Okul Eşyaları": [
+          ["book", "Kitap", "Sayfalarını çevirip okuruz."],
+          ["pencil", "Kalem", "Yazı yazmak için kullanılır."],
+          ["bag", "Çanta", "Kitaplarımızı içine koyarız."],
+          ["ruler", "Cetvel", "Düz çizgi çizmek için kullanılır."],
+          ["desk", "Sıra", "Sınıfta üzerine kitap koyarız."],
+          ["chair", "Sandalye", "Üzerine oturduğumuz eşya."]
+        ],
+        "Meyveler": [
+          ["apple", "Elma", "Kırmızı veya yeşil bir meyve."],
+          ["banana", "Muz", "Sarı ve uzun bir meyve."],
+          ["orange", "Portakal", "C vitamini deposu bir meyve."],
+          ["pear", "Armut", "Yeşil veya sarı renkli tatlı meyve."],
+          ["grape", "Üzüm", "Salkım salkım yetişen meyve."]
+        ]
+      },
+
+      3: {
+        "Aile": [
+          ["mother", "Anne", "Bizi çok seven kadın ebeveynimiz."],
+          ["father", "Baba", "Ailemizin erkek ebeveyni."],
+          ["sister", "Kız Kardeş", "Ailenin kız çocuğu olan kardeşi."],
+          ["brother", "Erkek Kardeş", "Ailenin erkek çocuğu olan kardeşi."],
+          ["grandmother", "Büyükanne / Nene", "Annemizin veya babamızın annesi."],
+          ["grandfather", "Büyükbaba / Dede", "Annemizin veya babamızın babası."]
+        ],
+        "Vücudumuz": [
+          ["head", "Baş / Kafa", "Saçlarımızın olduğu bölüm."],
+          ["hand", "El", "Nesneleri tutmamızı sağlar."],
+          ["arm", "Kol", "Omuz ile el arasındaki bölüm."],
+          ["leg", "Bacak", "Yürümemizi ve koşmamızı sağlar."],
+          ["eye", "Göz", "Görmemizi sağlayan organ."],
+          ["ear", "Kulak", "Sesleri duymamızı sağlar."],
+          ["nose", "Burun", "Koku almamızı sağlar."],
+          ["mouth", "Ağız", "Yemek yememizi ve konuşmamızı sağlar."]
+        ],
+        "Giysiler": [
+          ["shirt", "Gömlek", "Düğmeli üst giysisi."],
+          ["trousers", "Pantolon", "Bacaklara giyilen giysi."],
+          ["dress", "Elbise", "Tek parça şık kıyafet."],
+          ["skirt", "Etek", "Belden aşağı giyilen giysi."],
+          ["shoes", "Ayakkabı", "Ayağımıza giydiğimiz eşya."],
+          ["hat", "Şapka", "Başımızı güneşten korur."],
+          ["coat", "Mont / Kaban", "Soğuktan korunmak için giyilir."]
+        ],
+        "Hava Durumu": [
+          ["sunny", "Güneşli", "Gökyüzünde parlak bir güneş var."],
+          ["rainy", "Yağmurlu", "Şemsiyeni yanına al."],
+          ["cloudy", "Bulutlu", "Güneş bulutların arkasında."],
+          ["windy", "Rüzgarlı", "Uçurtma uçurmak için güzel bir gün."],
+          ["snowy", "Karlı", "Kardan adam yapma zamanı."]
+        ]
+      },
+
+      4: {
+        "Meslekler": [
+          ["teacher", "Öğretmen", "Okulda öğrencilere ders verir."],
+          ["doctor", "Doktor", "Hastalandığımızda bizi tedavi eder."],
+          ["nurse", "Hemşire", "Doktora yardım eder."],
+          ["farmer", "Çiftçi", "Tarlada ürün yetiştirir."],
+          ["pilot", "Pilot", "Uçak ve uzay aracı kullanır."]
+        ],
+        "Hobiler": [
+          ["read a book", "Kitap okumak", "Yeni hikâyeler keşfetme hobisi."],
+          ["play football", "Futbol oynamak", "Topu kaleye atma oyunu."],
+          ["swim", "Yüzmek", "Havuzda veya denizde yapılan spor."],
+          ["draw", "Resim çizmek", "Kağıda çizim yapma etkinliği."]
+        ],
+        "Basit Cümleler": [
+          ["I am happy.", "Ben mutluyum.", "Yüzünde gülücükler açtığını anlatır."],
+          ["This is my book.", "Bu benim kitabım.", "Sahiplik bildiren bir cümle."],
+          ["I like apples.", "Ben elmaları severim.", "Sevdiğin bir meyveyi anlatır."],
+          ["It is sunny.", "Hava güneşli.", "Hava durumunu anlatır."]
+        ]
+      }
+    };
+
+    let currentGrade = 2;
+    let currentTopic = "";
+    let questions = [];
+    let questionIndex = 0;
+    let score = 0;
+    let correct = 0;
+    let wrong = 0;
+    let hintUsed = false;
+    let audioContext;
+
+    const $ = id => document.getElementById(id);
+
+    window.addEventListener("load", () => {
+      updateHighScore();
+      createDoodles();
+    });
+
+    function showScreen(id) {
+      document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+      });
+      $(id).classList.add("active");
+    }
+
+    function selectGrade(grade) {
+      currentGrade = grade;
+      const topicButtons = $("topicButtons");
+      topicButtons.innerHTML = "";
+
+      const randomButton = document.createElement("button");
+      randomButton.className = "btn primary";
+      randomButton.innerHTML = "✨ Karışık Sektörler";
+      randomButton.onclick = () => startGame("Karışık");
+      topicButtons.appendChild(randomButton);
+
+      Object.keys(database[grade]).forEach(topic => {
+        const button = document.createElement("button");
+        button.className = "btn";
+        button.innerText = topic;
+        button.onclick = () => startGame(topic);
+        topicButtons.appendChild(button);
+      });
+
+      showScreen("topicScreen");
+    }
+
+    function startGame(topic) {
+      currentTopic = topic;
+      questionIndex = 0;
+      score = 0;
+      correct = 0;
+      wrong = 0;
+
+      let list = [];
+
+      if (topic === "Karışık") {
+        Object.values(database[currentGrade]).forEach(topicList => {
+          list.push(...topicList);
+        });
+      } else {
+        list = [...database[currentGrade][topic]];
+      }
+
+      questions = shuffle(list).slice(0, 10);
+      updateStats();
+      showScreen("gameScreen");
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      if (questionIndex >= questions.length) {
+        endGame();
+        return;
+      }
+
+      hintUsed = false;
+
+      const question = questions[questionIndex];
+      $("word").innerText = question[0];
+
+      $("questionSub").innerText =
+        currentGrade === 4 && question[0].includes(".")
+          ? "Bu cümlenin Türkçe karşılığı nedir?"
+          : "Bu kelimenin Türkçe karşılığı nedir?";
+
+      $("hintButton").style.display = "inline-block";
+      $("hintBox").style.display = "none";
+      $("feedback").className = "feedback";
+      $("feedback").innerText = "";
+      $("nextButton").style.display = "none";
+
+      let wrongAnswers = [];
+
+      Object.values(database[currentGrade]).forEach(topicList => {
+        topicList.forEach(item => {
+          if (item[1] !== question[1] && !wrongAnswers.includes(item[1])) {
+            wrongAnswers.push(item[1]);
+          }
+        });
+      });
+
+      let options = shuffle([question[1], ...shuffle(wrongAnswers).slice(0, 3)]);
+
+      const optionsContainer = $("options");
+      optionsContainer.innerHTML = "";
+
+      options.forEach(optionText => {
+        const button = document.createElement("button");
+        button.className = "option";
+        button.innerText = optionText;
+        button.onclick = () => checkAnswer(button, optionText, question[1]);
+        optionsContainer.appendChild(button);
+      });
+
+      $("questionNumber").innerText = `${questionIndex + 1}/${questions.length}`;
+      updateProgress();
+    }
+
+    function showHint() {
+      if (hintUsed) return;
+
+      const question = questions[questionIndex];
+      score = Math.max(0, score - 5);
+      hintUsed = true;
+
+      $("hintBox").innerText = `💡 Tarama Sonucu: ${question[2]}`;
+      $("hintBox").style.display = "block";
+      $("hintButton").style.display = "none";
+
+      updateStats();
+    }
+
+    function checkAnswer(selectedButton, selectedAnswer, correctAnswer) {
+      const buttons = document.querySelectorAll(".option");
+      buttons.forEach(button => button.disabled = true);
+
+      $("hintButton").style.display = "none";
+
+      if (selectedAnswer === correctAnswer) {
+        selectedButton.classList.add("correct");
+        playCorrectSound();
+
+        score += 15;
+        correct++;
+
+        $("feedback").innerText = "Hedef İsabeti! Doğru Cevap 🎉 (+15 Puan)";
+        $("feedback").className = "feedback correct show";
+      } else {
+        selectedButton.classList.add("wrong");
+        wrong++;
+
+        buttons.forEach(button => {
+          if (button.innerText === correctAnswer) {
+            button.classList.add("correct");
+          }
+        });
+
+        playWrongSound();
+
+        $("feedback").innerText = `Sinyal Karıştı! Doğru Cevap: "${correctAnswer}" olmalıydı. 🌟`;
+        $("feedback").className = "feedback wrong show";
+      }
+
+      updateStats();
+      $("nextButton").style.display = "block";
+    }
+
+    function nextQuestion() {
+      questionIndex++;
+      loadQuestion();
+    }
+
+    function updateStats() {
+      $("score").innerText = score;
+      $("correctCount").innerText = correct;
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const total = questions.length || 1;
+      const percent = ((questionIndex + 1) / total) * 100;
+      $("progress").style.width = `${Math.min(percent, 100)}%`;
+    }
+
+    function endGame() {
+      showScreen("resultScreen");
+
+      const total = questions.length;
+      const percent = total ? Math.round((correct / total) * 100) : 0;
+
+      $("resultScore").innerText = score;
+      $("resultTotal").innerText = total;
+      $("resultCorrect").innerText = correct;
+      $("resultWrong").innerText = wrong;
+      $("resultPercent").innerText = `%${percent}`;
+
+      const oldHighScore = Number(localStorage.getItem("wordGameHighScore") || 0);
+
+      if (score > oldHighScore) {
+        localStorage.setItem("wordGameHighScore", score);
+        $("newRecord").style.display = "block";
+        updateHighScore();
+      } else {
+        $("newRecord").style.display = "none";
+      }
+
+      playFanfareSound();
+
+      if (percent >= 50 && typeof confetti === "function") {
+        confetti({
+          particleCount: 180,
+          spread: 100,
+          origin: { y: 0.6 },
+          colors: ["#00f0ff", "#9d4edd", "#ff2a85", "#ffe600"]
+        });
+      }
+    }
+
+    function restartGame() {
+      startGame(currentTopic);
+    }
+
+    function updateHighScore() {
+      $("highScore").innerText = localStorage.getItem("wordGameHighScore") || 0;
+    }
+
+    function shuffle(array) {
+      const copy = [...array];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const randomIndex = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[randomIndex]] = [copy[randomIndex], copy[i]];
+      }
+      return copy;
+    }
+
+    function createDoodles() {
+      const doodleLayer = $("doodles");
+
+      const objects = [
+        "SPACE", "STAR", "GALAXY", "ORBIT", "PLANET",
+        "ROCKET", "ALIEN", "COMET", "MOON", "ASTEROID",
+        "✦", "✧", "★", "🛸", "🚀", "🪐", "🛰️", "👾", "✨"
+      ];
+
+      objects.forEach((text) => {
+        const doodle = document.createElement("span");
+        doodle.className = "doodle";
+        doodle.innerText = text;
+
+        doodle.style.left = `${Math.random() * 95}%`;
+        doodle.style.fontSize =
+          text.length <= 2 || /[^\w]/.test(text)
+            ? `${1.2 + Math.random() * 1.2}rem`
+            : `${0.7 + Math.random() * 0.5}rem`;
+
+        doodle.style.animationDuration = `${14 + Math.random() * 16}s`;
+        doodle.style.animationDelay = `${-Math.random() * 20}s`;
+
+        doodleLayer.appendChild(doodle);
+      });
+    }
+
+    function initAudio() {
+      if (!audioContext) {
+        const AudioClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioClass) audioContext = new AudioClass();
+      }
+      if (audioContext && audioContext.state === "suspended") {
+        audioContext.resume();
+      }
+    }
+
+    function tone(frequency, duration, type = "sine", delay = 0) {
+      initAudio();
+      if (!audioContext) return;
+
+      const now = audioContext.currentTime + delay;
+      const oscillator = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+
+      oscillator.type = type;
+      oscillator.frequency.setValueAtTime(frequency, now);
+
+      gain.gain.setValueAtTime(0.15, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + duration);
+
+      oscillator.connect(gain);
+      gain.connect(audioContext.destination);
+
+      oscillator.start(now);
+      oscillator.stop(now + duration);
+    }
+
+    function playCorrectSound() {
+      tone(523.25, 0.15, "sine");
+      tone(659.25, 0.25, "sine", 0.08);
+      tone(783.99, 0.35, "sine", 0.16);
+    }
+
+    function playWrongSound() {
+      tone(220, 0.2, "sawtooth");
+      tone(180, 0.3, "sawtooth", 0.1);
+    }
+
+    function playFanfareSound() {
+      [261.63, 329.63, 392.00, 523.25, 659.25].forEach((note, index) => {
+        tone(note, index === 4 ? 0.5 : 0.15, "triangle", index * 0.1);
+      });
+    }
+  </script>
+</body>
+</html>

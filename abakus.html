@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abaküs ile Sayı Oluşturma 🧮</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --wood-outer: #7d4420;
+      --wood-inner: #a35f2c;
+      --wood-dark: #4a260f;
+      --tens-color: #e63946;
+      --ones-color: #1d6fd0;
+      --page-bg: linear-gradient(160deg, #ffe9c9 0%, #ffd9d0 45%, #d8ecff 100%);
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Andika', Arial, sans-serif;
+      user-select: none;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--page-bg);
+    }
+
+    .game-card {
+      width: min(820px, 98%);
+      padding: 26px 24px 20px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.94);
+      border: 6px solid #ffffff;
+      border-radius: 32px;
+      box-shadow: 0 22px 45px rgba(74, 38, 15, 0.18);
+    }
+
+    h1 {
+      margin: 0 0 4px;
+      color: #56300f;
+      font-size: clamp(1.7rem, 4vw, 2.6rem);
+      text-shadow: 2px 2px 0 #fff;
+    }
+
+    .subtitle {
+      margin-bottom: 18px;
+      color: #7c6a5c;
+      font-size: 1rem;
+    }
+
+    /* Göstergeler */
+    .dashboard {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .info-box {
+      flex: 1;
+      min-width: 150px;
+      max-width: 240px;
+      padding: 12px 18px;
+      border-radius: 20px;
+      color: white;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    .target-box { background: linear-gradient(135deg, #f2704f, #d84a2f); }
+    .current-box { background: linear-gradient(135deg, #23b47f, #0d8a5f); }
+
+    .box-title { font-size: .95rem; font-weight: 700; opacity: .92; }
+    .box-value { font-size: 2.7rem; font-weight: 700; line-height: 1.1; }
+
+    /* Ahşap abaküs */
+    .abacus-frame {
+      position: relative;
+      margin: 14px 0;
+      padding: 18px 14px;
+      border: 14px solid var(--wood-outer);
+      border-radius: 26px;
+      background:
+        repeating-linear-gradient(90deg,
+          rgba(255, 255, 255, .05) 0 6px,
+          rgba(0, 0, 0, .05) 6px 12px),
+        var(--wood-inner);
+      box-shadow:
+        inset 0 0 18px rgba(0, 0, 0, .5),
+        0 12px 26px rgba(0, 0, 0, .3);
+    }
+
+    .abacus-frame::before {
+      content: '';
+      position: absolute;
+      top: -14px; left: -14px; right: -14px; bottom: -14px;
+      border: 2px solid var(--wood-dark);
+      border-radius: 26px;
+      pointer-events: none;
+    }
+
+    .wire-row {
+      position: relative;
+      display: flex;
+      align-items: center;
+      margin: 22px 0;
+    }
+
+    .wire-label {
+      width: 92px;
+      text-align: left;
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 700;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, .85);
+    }
+
+    .wire-container {
+      position: relative;
+      flex: 1;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      padding: 0 5px;
+      border-radius: 25px;
+      background: rgba(0, 0, 0, .18);
+      box-shadow: inset 0 3px 7px rgba(0, 0, 0, .35);
+    }
+
+    .wire-line {
+      position: absolute;
+      left: 0; right: 0; top: 50%;
+      height: 6px;
+      transform: translateY(-50%);
+      background: linear-gradient(180deg, #e6e8ea, #6d7a86, #e6e8ea);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, .4);
+      z-index: 1;
+    }
+
+    .bead-group {
+      position: absolute;
+      width: calc(100% - 10px);
+      height: 100%;
+      z-index: 2;
+    }
+
+    .bead {
+      position: absolute;
+      top: 50%;
+      height: 44px;
+      margin-top: -22px;
+      border-radius: 13px;
+      cursor: pointer;
+      transition: left .35s cubic-bezier(.25, 1, .5, 1);
+      box-shadow:
+        inset 3px 3px 6px rgba(255, 255, 255, .55),
+        inset -3px -3px 6px rgba(0, 0, 0, .4),
+        3px 5px 8px rgba(0, 0, 0, .3);
+    }
+
+    .bead.tens-bead {
+      background: radial-gradient(circle at 30% 28%, #ff8a8a, var(--tens-color), #8c1220);
+    }
+
+    .bead.ones-bead {
+      background: radial-gradient(circle at 30% 28%, #7cb8ff, var(--ones-color), #0b3f80);
+    }
+
+    /* Okuma satırı */
+    .okuma {
+      margin: 4px 0 2px;
+      color: #56300f;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 50px;
+      color: white;
+      font-family: inherit;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 0 rgba(0, 0, 0, .15);
+      transition: all .15s ease;
+    }
+
+    .btn:active { transform: translateY(3px); box-shadow: 0 3px 0 rgba(0, 0, 0, .15); }
+    .btn-check { background: #23b47f; }
+    .btn-reset { background: #f0a12a; }
+    .btn-new { background: #3b82f6; }
+
+    .message {
+      min-height: 30px;
+      margin-top: 14px;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .score-board {
+      margin-top: 8px;
+      color: #56300f;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .imza {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed #e2d3c4;
+      color: #9c8977;
+      font-size: .9rem;
+    }
+
+    @media (max-width: 600px) {
+      .bead { height: 38px; margin-top: -19px; }
+      .wire-label { width: 66px; font-size: .95rem; }
+      .abacus-frame { padding: 10px 8px; border-width: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="game-card">
+    <h1>🧮 Geleneksel Abaküs</h1>
+    <div class="subtitle">Boncukları sola kaydırarak istenen sayıyı oluştur.</div>
+
+    <div class="dashboard">
+      <div class="info-box target-box">
+        <div class="box-title">Hedef Sayı</div>
+        <div class="box-value" id="targetNum">43</div>
+      </div>
+      <div class="info-box current-box">
+        <div class="box-title">Senin Sayın</div>
+        <div class="box-value" id="currentNum">0</div>
+      </div>
+    </div>
+
+    <div class="abacus-frame">
+      <div class="wire-row">
+        <div class="wire-label">🔴 Onlar</div>
+        <div class="wire-container" id="tensContainer">
+          <div class="wire-line"></div>
+          <div class="bead-group" id="tensBeads"></div>
+        </div>
+      </div>
+
+      <div class="wire-row">
+        <div class="wire-label">🔵 Birler</div>
+        <div class="wire-container" id="onesContainer">
+          <div class="wire-line"></div>
+          <div class="bead-group" id="onesBeads"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="okuma" id="okumaText">0 onluk + 0 birlik = 0</div>
+
+    <div class="controls">
+      <button class="btn btn-check" onclick="checkAnswer()">✅ Kontrol Et</button>
+      <button class="btn btn-reset" onclick="resetAbacus()">🔄 Sıfırla</button>
+      <button class="btn btn-new" onclick="newQuestion()">⭐ Yeni Soru</button>
+    </div>
+
+    <div class="message" id="messageText"></div>
+    <div class="score-board">Toplam Puan: <span id="scoreText">0</span> 🏆</div>
+
+    <div class="imza">Hazırlayan: Hasan Tutuş</div>
+  </div>
+
+  <script>
+    let target = 43;
+    let tensCount = 0;
+    let onesCount = 0;
+    let score = 0;
+
+    const totalBeads = 10;
+
+    function initBeads(containerId, isTens) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+
+      for (let i = 0; i < totalBeads; i++) {
+        const bead = document.createElement('div');
+        bead.className = 'bead ' + (isTens ? 'tens-bead' : 'ones-bead');
+        bead.dataset.index = i;
+
+        bead.addEventListener('click', function () {
+          handleBeadClick(i + 1, isTens);
+        });
+
+        container.appendChild(bead);
+      }
+
+      updateBeadPositions(containerId, 0);
+    }
+
+    function handleBeadClick(count, isTens) {
+      if (isTens) {
+        tensCount = (tensCount === count) ? count - 1 : count;
+        updateBeadPositions('tensBeads', tensCount);
+      } else {
+        onesCount = (onesCount === count) ? count - 1 : count;
+        updateBeadPositions('onesBeads', onesCount);
+      }
+
+      updateCurrentValue();
+    }
+
+    function updateBeadPositions(containerId, activeCount) {
+      const container = document.getElementById(containerId);
+      const beads = container.querySelectorAll('.bead');
+      const containerWidth = container.offsetWidth || 300;
+
+      /*
+        Boncuk genişliği çubuğa göre hesaplanır.
+        Böylece 10 boncuk her ekranda yan yana sığar, üst üste binmez.
+      */
+      const step = containerWidth / totalBeads;
+      const beadWidth = Math.max(12, step - 4);
+
+      beads.forEach(function (bead, index) {
+        bead.style.width = beadWidth + 'px';
+        bead.style.borderRadius = Math.max(5, beadWidth * 0.35) + 'px';
+
+        if (index < activeCount) {
+          bead.style.left = (index * step) + 'px';
+        } else {
+          const rightIndex = totalBeads - 1 - index;
+          bead.style.left = (containerWidth - beadWidth - rightIndex * step) + 'px';
+        }
+      });
+    }
+
+    function updateCurrentValue() {
+      const val = (tensCount * 10) + onesCount;
+      document.getElementById('currentNum').textContent = val;
+      document.getElementById('okumaText').textContent =
+        tensCount + ' onluk + ' + onesCount + ' birlik = ' + val;
+    }
+
+    function checkAnswer() {
+      const val = (tensCount * 10) + onesCount;
+      const msg = document.getElementById('messageText');
+
+      if (val === target) {
+        msg.style.color = '#0d8a5f';
+        msg.textContent = '🎉 Tebrikler! Doğru yaptın.';
+        score += 10;
+        document.getElementById('scoreText').textContent = score;
+      } else {
+        msg.style.color = '#d84a2f';
+        msg.textContent = 'Henüz olmadı. Senin sayın ' + val + ', istenen sayı ' + target + '.';
+      }
+    }
+
+    function resetAbacus() {
+      tensCount = 0;
+      onesCount = 0;
+      updateBeadPositions('tensBeads', 0);
+      updateBeadPositions('onesBeads', 0);
+      updateCurrentValue();
+      document.getElementById('messageText').textContent = '';
+    }
+
+    function newQuestion() {
+      target = Math.floor(Math.random() * 90) + 10;
+      document.getElementById('targetNum').textContent = target;
+      resetAbacus();
+    }
+
+    window.addEventListener('resize', function () {
+      updateBeadPositions('tensBeads', tensCount);
+      updateBeadPositions('onesBeads', onesCount);
+    });
+
+    window.addEventListener('load', function () {
+      updateBeadPositions('tensBeads', tensCount);
+      updateBeadPositions('onesBeads', onesCount);
+    });
+
+    initBeads('tensBeads', true);
+    initBeads('onesBeads', false);
+    newQuestion();
+  </script>
+</body>
+</html>
