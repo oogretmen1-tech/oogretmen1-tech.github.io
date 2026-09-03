@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Masa Hokeyi</title>
+<title>Masa Hokeyi | Dijital Öğretmen - Hasan Tutuş</title>
 <link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -84,25 +84,17 @@ canvas{
   padding:8px 18px;border-radius:15px;cursor:pointer;font-weight:bold;font-family:inherit;font-size:.9rem;
 }
 .small-btn:active{transform:scale(.97);}
-
-/* ---------- TAM EKRAN: saha bütün ekranı kaplar ---------- */
-body.fs{justify-content:flex-start;}
-body.fs .game-wrapper{padding:0;gap:0;height:100vh;width:100vw;justify-content:center;}
-body.fs .scoreboard{display:none;}                 /* skor sahanın içine çizilir */
-body.fs .canvas-holder{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;}
-body.fs canvas{border:none;border-radius:0;box-shadow:none;}
-body.fs .overlay{border-radius:0;}
-body.fs .controls{
-  position:fixed;top:calc(env(safe-area-inset-top,0px) + 6px);right:6px;
-  gap:6px;z-index:20;flex-wrap:nowrap;
+.imza{
+  text-align:center;font-size:.82rem;color:#cbd5e1;letter-spacing:.5px;margin:6px 0 2px;
 }
-body.fs .small-btn{padding:5px 11px;font-size:.78rem;opacity:.72;background:rgba(0,0,0,.35);}
+.imza b{color:#fff;text-shadow:0 0 10px var(--p2);}
 </style>
 </head>
 <body>
 
 <div id="menu" class="menu-container">
   <h1>🏒 Masa Hokeyi</h1>
+  <div class="imza" style="margin-bottom:14px;">Dijital Öğretmen · <b>Hasan Tutuş</b></div>
 
   <div class="setting-box">
     <div class="setting-title">Oyun modu</div>
@@ -155,6 +147,8 @@ body.fs .small-btn{padding:5px 11px;font-size:.78rem;opacity:.72;background:rgba
     <button class="small-btn" onclick="togglePause()" id="pauseBtn">⏸ Duraklat</button>
     <button class="small-btn" onclick="quitGame()">← Menü</button>
   </div>
+
+  <div class="imza">Dijital Öğretmen · <b>Hasan Tutuş</b></div>
 </div>
 
 <script>
@@ -163,9 +157,11 @@ let gameMode = 1;
 let aiDifficulty = 'medium';
 let targetGoals = 5;
 
-/* ================= Saha (artık dinamik) ================= */
-let W = 400, H = 650;                    // mantıksal ölçüler (W ekrana göre değişir)
-let GOAL_W = 150, GOAL_L = 125, GOAL_R = 275;
+/* ================= Saha ================= */
+const W = 400, H = 650;                 // mantıksal ölçüler
+const GOAL_W = 150;
+const GOAL_L = (W - GOAL_W) / 2;
+const GOAL_R = GOAL_L + GOAL_W;
 const MAX_SPEED = 15;
 
 const canvas = document.getElementById('board');
@@ -177,109 +173,53 @@ const p2 = {x:W/2, y:80,   px:W/2, py:80,   vx:0, vy:0, r:26, color:'#00ffcc'};
 
 let scoreP1 = 0, scoreP2 = 0;
 let isRunning = false, isPaused = false, gameOver = false;
-let goalPause = 0;
+let goalPause = 0;        // gol sonrası kısa bekleme (frame)
 let flash = {side:null, t:0};
 let hintTimer = 0;
-let isFsMode = false;          // tam ekran (gerçek veya sahte)
-
-/* --- sıkışma (köşe) takibi --- */
-let stallTick = 0, stallCount = 0, rescueMsg = 0;
-const lastPuckPos = {x:0, y:0};
 
 /* ================= Ölçekleme / Tam ekran ================= */
-function computeField(availW, availH){
-  const oldW = W;
-  H = 650;
-  let ratio = availW / availH;
-  ratio = Math.max(0.42, Math.min(1.35, ratio));   // aşırı ince/geniş ekranlarda saha bozulmasın
-  W = Math.round(H * ratio);
-
-  GOAL_W = Math.round(Math.min(W * 0.42, 195));
-  GOAL_L = (W - GOAL_W) / 2;
-  GOAL_R = GOAL_L + GOAL_W;
-
-  // Saha genişliği değiştiyse mevcut konumları oranla taşı
-  if(oldW !== W){
-    const sx = W / oldW;
-    puck.x *= sx; p1.x *= sx; p1.px *= sx; p2.x *= sx; p2.px *= sx;
-    puck.x = Math.max(puck.r, Math.min(W - puck.r, puck.x));
-    p1.x   = Math.max(p1.r,   Math.min(W - p1.r,   p1.x));
-    p2.x   = Math.max(p2.r,   Math.min(W - p2.r,   p2.x));
-    lastPuckPos.x *= sx;
-  }
-}
-
 function resizeCanvas(){
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  let availW, availH;
-
-  if(isFsMode){
-    availW = window.innerWidth;
-    availH = window.innerHeight;
-  }else{
-    availW = Math.min(window.innerWidth - 16, 470);
-    availH = Math.max(240, window.innerHeight - 150);   // skor + butonlar için pay
-  }
-
-  computeField(availW, availH);
-
+  const chrome = document.fullscreenElement ? 110 : 150;   // skor + butonlar için pay
+  const availH = Math.max(240, window.innerHeight - chrome);
+  const availW = Math.min(window.innerWidth - 16, 470);
   const scale = Math.min(availW / W, availH / H);
-  const cssW = W * scale, cssH = H * scale;
 
-  canvas.style.width  = cssW + 'px';
-  canvas.style.height = cssH + 'px';
-  canvas.width  = Math.round(cssW * dpr);
-  canvas.height = Math.round(cssH * dpr);
-  ctx.setTransform(scale*dpr, 0, 0, scale*dpr, 0, 0);
+  canvas.style.width  = (W * scale) + 'px';
+  canvas.style.height = (H * scale) + 'px';
+  canvas.width  = Math.round(W * scale * dpr);
+  canvas.height = Math.round(H * scale * dpr);
+  ctx.setTransform(scale*dpr, 0, 0, scale*dpr, 0, 0);   // mantıksal koordinatlarda çizim
   if(!isRunning) draw();
 }
 window.addEventListener('resize', resizeCanvas);
-window.addEventListener('orientationchange', ()=>setTimeout(resizeCanvas,250));
+window.addEventListener('orientationchange', ()=>setTimeout(resizeCanvas,200));
+document.addEventListener('fullscreenchange', ()=>{ setTimeout(resizeCanvas,100); updateFsLabel(); });
+document.addEventListener('webkitfullscreenchange', ()=>{ setTimeout(resizeCanvas,100); updateFsLabel(); });
 
-function syncFsState(){
-  const realFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
-  if(!pseudoFs) isFsMode = realFs;
-  document.body.classList.toggle('fs', isFsMode);
-  updateFsLabel();
-  setTimeout(resizeCanvas, 60);
-}
-document.addEventListener('fullscreenchange', syncFsState);
-document.addEventListener('webkitfullscreenchange', syncFsState);
-
-let pseudoFs = false;   // Fullscreen API'yi desteklemeyen tarayıcılar (iPhone Safari) için
 function toggleFullscreen(){
   const el = document.documentElement;
-  const realFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
-
-  if(!isFsMode){
+  const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+  if(!isFs){
     const req = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
     if(req){
-      pseudoFs = false;
-      isFsMode = true;
-      document.body.classList.add('fs');
       req.call(el).then(()=>{
-        if(screen.orientation && screen.orientation.lock) screen.orientation.lock('portrait').catch(()=>{});
-      }).catch(()=>{ pseudoFs = true; });   // izin verilmezse sahte tam ekranda kal
+        if(screen.orientation && screen.orientation.lock){
+          screen.orientation.lock('portrait').catch(()=>{});
+        }
+      }).catch(()=>{});
     }else{
-      pseudoFs = true; isFsMode = true;
-      document.body.classList.add('fs');
-      window.scrollTo(0,1);
+      alert('Bu tarayıcı tam ekranı desteklemiyor.');
     }
   }else{
-    if(realFs){
-      const exit = document.exitFullscreen || document.webkitExitFullscreen;
-      if(exit) exit.call(document).catch(()=>{});
-    }
-    pseudoFs = false;
-    isFsMode = false;
-    document.body.classList.remove('fs');
+    const exit = document.exitFullscreen || document.webkitExitFullscreen;
+    if(exit) exit.call(document).catch(()=>{});
   }
-  updateFsLabel();
-  setTimeout(resizeCanvas, 120);
-  setTimeout(resizeCanvas, 400);   // adres çubuğu kapanınca ölçü tazelensin
+  setTimeout(resizeCanvas,150);
 }
 function updateFsLabel(){
-  document.getElementById('fsBtn').textContent = isFsMode ? '⤢ Küçült' : '⛶ Tam ekran';
+  const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+  document.getElementById('fsBtn').textContent = isFs ? '⤢ Tam ekrandan çık' : '⛶ Tam ekran';
 }
 
 /* ================= Ses ================= */
@@ -351,8 +291,6 @@ function resetPositions(dir){
   p2.x = W/2; p2.y = 80;   p2.px = p2.x; p2.py = p2.y; p2.vx = 0; p2.vy = 0;
   goalPause = 45;
   puck._dir = dir || (Math.random() > .5 ? 1 : -1);
-  stallTick = 0; stallCount = 0;
-  lastPuckPos.x = puck.x; lastPuckPos.y = puck.y;
 }
 
 /* ================= Kontroller ================= */
@@ -410,12 +348,10 @@ function gameLoop(){
     }else{
       updateAI();
       updatePhysics();
-      checkStall();
     }
     updateMalletVelocity();
     if(flash.t > 0) flash.t--;
     if(hintTimer > 0) hintTimer--;
-    if(rescueMsg > 0) rescueMsg--;
   }
   draw();
   requestAnimationFrame(gameLoop);
@@ -428,59 +364,6 @@ function updateMalletVelocity(){
   p2.px = p2.x; p2.py = p2.y;
 }
 
-/* ================= Sıkışma çözümü ================= */
-function checkStall(){
-  if(goalPause > 0) return;
-  stallTick++;
-  if(stallTick < 45) return;              // ~0,75 saniyede bir bak
-  stallTick = 0;
-
-  const moved = Math.hypot(puck.x - lastPuckPos.x, puck.y - lastPuckPos.y);
-  lastPuckPos.x = puck.x; lastPuckPos.y = puck.y;
-
-  if(moved < 42){                          // disk neredeyse hiç yol almadı
-    stallCount++;
-    if(stallCount >= 4){ centerServe(); stallCount = 0; }   // ~3 sn → ortadan servis
-    else if(stallCount >= 2){ nudgePuck(); }                // ~1,5 sn → merkeze doğru itme
-  }else{
-    stallCount = 0;
-  }
-}
-
-function pushOutOfMallets(){
-  [p1,p2].forEach(p=>{
-    const dx = puck.x - p.x, dy = puck.y - p.y;
-    const d = Math.hypot(dx,dy);
-    const min = puck.r + p.r + 1;
-    if(d < min){
-      const nx = d ? dx/d : 0, ny = d ? dy/d : (p === p2 ? 1 : -1);
-      puck.x = p.x + nx*min;
-      puck.y = p.y + ny*min;
-      puck.x = Math.max(puck.r, Math.min(W-puck.r, puck.x));
-      puck.y = Math.max(puck.r, Math.min(H-puck.r, puck.y));
-    }
-  });
-}
-
-function nudgePuck(){
-  pushOutOfMallets();
-  const dx = W/2 - puck.x, dy = H/2 - puck.y;
-  const d = Math.hypot(dx,dy) || 1;
-  const power = 7;
-  puck.vx = (dx/d)*power + (Math.random()-0.5)*2;
-  puck.vy = (dy/d)*power + (Math.random()-0.5)*2;
-  rescueMsg = 45;
-  playSound(520,'sine',0.12,0.12);
-}
-
-function centerServe(){
-  puck.x = W/2; puck.y = H/2; puck.vx = 0; puck.vy = 0;
-  puck._dir = Math.random() > .5 ? 1 : -1;
-  goalPause = 30;
-  rescueMsg = 70;
-  playSound(700,'triangle',0.18,0.15);
-}
-
 /* ================= Yapay zekâ ================= */
 function updateAI(){
   if(gameMode !== 1) return;
@@ -488,22 +371,12 @@ function updateAI(){
   if(aiDifficulty === 'medium'){ maxStep = 5.0; aggression = 0.75; }
   if(aiDifficulty === 'hard'){   maxStep = 7.5; aggression = 0.95; }
 
-  const slow = Math.hypot(puck.vx, puck.vy) < 2;
   let tx, ty;
-
   if(puck.y < H/2){
-    if(slow && (puck.y < p2.r + puck.r + 6 || puck.x < 55 || puck.x > W-55)){
-      // Disk duvara/köşeye yapışmış: arkasına geçip sahanın ortasına doğru it
-      const cx = W/2 - puck.x, cy = (H*0.40) - puck.y;
-      const d = Math.hypot(cx,cy) || 1;
-      tx = puck.x - (cx/d) * (puck.r + p2.r) * 0.95;
-      ty = puck.y - (cy/d) * (puck.r + p2.r) * 0.95;
-    }else{
-      // Disk kendi sahasında: vurmaya git
-      tx = puck.x;
-      ty = Math.min(puck.y + puck.r + p2.r*0.6, H/2 - p2.r);
-      tx = p2.x + (tx - p2.x) * aggression;
-    }
+    // Disk kendi sahasında: vurmaya git
+    tx = puck.x;
+    ty = Math.min(puck.y + puck.r + p2.r*0.6, H/2 - p2.r);
+    tx = p2.x + (tx - p2.x) * aggression;
   }else{
     // Savunma pozisyonu: kaleyi kapat
     tx = W/2 + (puck.x - W/2) * 0.45;
@@ -520,9 +393,11 @@ function updateAI(){
 
 /* ================= Fizik ================= */
 function updatePhysics(){
+  // Hız sınırı
   const sp = Math.hypot(puck.vx, puck.vy);
   if(sp > MAX_SPEED){ puck.vx = puck.vx/sp*MAX_SPEED; puck.vy = puck.vy/sp*MAX_SPEED; }
 
+  // Duvardan geçmeyi (tünelleme) önlemek için küçük adımlar
   const steps = Math.max(1, Math.ceil(sp / (puck.r * 0.6)));
   for(let i=0;i<steps;i++){
     puck.x += puck.vx / steps;
@@ -538,15 +413,15 @@ function updatePhysics(){
       if(puck.y - puck.r <= 0){ puck.y = puck.r; puck.vy = Math.abs(puck.vy)*0.92; wallSound(); }
       else if(puck.y + puck.r >= H){ puck.y = H - puck.r; puck.vy = -Math.abs(puck.vy)*0.92; wallSound(); }
     }else{
-      // Gol: diskin merkezi çizgiyi geçtiğinde sayılır (kale ağzında asılı kalmaz)
-      if(puck.y < 0){ goal(1); return; }
-      if(puck.y > H){ goal(2); return; }
+      if(puck.y + puck.r < 0){ goal(1); return; }        // üst kaleye girdi → 1. oyuncu
+      if(puck.y - puck.r > H){ goal(2); return; }        // alt kaleye girdi → 2. oyuncu
     }
 
     hitMallet(p1);
     hitMallet(p2);
   }
 
+  // Sürtünme
   puck.vx *= 0.996;
   puck.vy *= 0.996;
   if(Math.abs(puck.vx) < 0.02) puck.vx = 0;
@@ -569,9 +444,11 @@ function hitMallet(p){
 
   const nx = dx/dist, ny = dy/dist;
 
+  // Diski tokacın dışına it
   puck.x = p.x + nx * minDist;
   puck.y = p.y + ny * minDist;
 
+  // Göreli hız üzerinden sekme
   const rvx = puck.vx - p.vx, rvy = puck.vy - p.vy;
   const vn = rvx*nx + rvy*ny;
   if(vn < 0){
@@ -579,9 +456,11 @@ function hitMallet(p){
     puck.vx += j * nx;
     puck.vy += j * ny;
   }
+  // Tokacın kendi hızını aktar (sert vuruş yapılabilsin)
   puck.vx += p.vx * 0.75;
   puck.vy += p.vy * 0.75;
 
+  // Diskin tokacın içinde takılıp kalmaması için minimum çıkış hızı
   let s = Math.hypot(puck.vx, puck.vy);
   if(s < 3.5){
     puck.vx = nx * 3.5;
@@ -590,52 +469,7 @@ function hitMallet(p){
   }
   if(s > MAX_SPEED){ puck.vx = puck.vx/s*MAX_SPEED; puck.vy = puck.vy/s*MAX_SPEED; }
 
-  relieveWallPin(p);   // disk tokaç ile duvar arasında kilitlenmesin
-
   playSound(420 + Math.min(s*25, 300), 'square', 0.08, 0.15);
-}
-
-/* Disk duvara/köşeye bastırılıyorsa duvar boyunca kaçır */
-function relieveWallPin(p){
-  const minDist = puck.r + p.r;
-  const inGoalX = puck.x > GOAL_L && puck.x < GOAL_R;
-  let vWall = false, hWall = false;
-
-  if(puck.x < puck.r){ puck.x = puck.r; vWall = true; }
-  else if(puck.x > W - puck.r){ puck.x = W - puck.r; vWall = true; }
-  if(!inGoalX){
-    if(puck.y < puck.r){ puck.y = puck.r; hWall = true; }
-    else if(puck.y > H - puck.r){ puck.y = H - puck.r; hWall = true; }
-  }
-  if(!vWall && !hWall) return;
-
-  const dx = puck.x - p.x, dy = puck.y - p.y;
-  if(Math.hypot(dx, dy) >= minDist - 0.5) return;   // sıkışma yok
-
-  if(vWall && hWall){
-    // Köşe: doğrudan sahanın ortasına doğru fırlat
-    const cx = W/2 - puck.x, cy = H/2 - puck.y;
-    const d = Math.hypot(cx,cy) || 1;
-    puck.x = p.x + (cx/d)*minDist;
-    puck.y = p.y + (cy/d)*minDist;
-    puck.vx = (cx/d)*6.5;
-    puck.vy = (cy/d)*6.5;
-  }else if(vWall){
-    const dir = dy >= 0 ? 1 : -1;                     // yan duvar boyunca yukarı/aşağı
-    const need = Math.sqrt(Math.max(minDist*minDist - dx*dx, 1));
-    puck.y = p.y + dir*need;
-    puck.vy = dir * Math.max(Math.abs(puck.vy), 5);
-  }else{
-    const dir = dx >= 0 ? 1 : -1;                     // dip duvar boyunca sağa/sola
-    const need = Math.sqrt(Math.max(minDist*minDist - dy*dy, 1));
-    puck.x = p.x + dir*need;
-    puck.vx = dir * Math.max(Math.abs(puck.vx), 5);
-  }
-
-  puck.x = Math.max(puck.r, Math.min(W - puck.r, puck.x));
-  if(!(puck.x > GOAL_L && puck.x < GOAL_R)){
-    puck.y = Math.max(puck.r, Math.min(H - puck.r, puck.y));
-  }
 }
 
 function goal(scorer){
@@ -649,6 +483,7 @@ function goal(scorer){
   if(scoreP1 >= targetGoals || scoreP2 >= targetGoals){
     endGame();
   }else{
+    // Gol yiyen oyuncuya servis
     resetPositions(scorer === 1 ? 1 : -1);
   }
 }
@@ -671,34 +506,41 @@ function updateScoreUI(){
 function draw(){
   ctx.clearRect(0,0,W,H);
 
+  // --- Oyuncu alanları (net ayrım) ---
+  // Üst alan (Oyuncu 2 / Bilgisayar)
   const gTop = ctx.createLinearGradient(0,0,0,H/2);
   gTop.addColorStop(0,'rgba(0,255,204,0.20)');
   gTop.addColorStop(1,'rgba(0,255,204,0.03)');
   ctx.fillStyle = gTop;
   ctx.fillRect(0,0,W,H/2);
 
+  // Alt alan (Oyuncu 1)
   const gBot = ctx.createLinearGradient(0,H,0,H/2);
   gBot.addColorStop(0,'rgba(255,46,136,0.22)');
   gBot.addColorStop(1,'rgba(255,46,136,0.03)');
   ctx.fillStyle = gBot;
   ctx.fillRect(0,H/2,W,H/2);
 
+  // Alan kenarlıkları
   ctx.lineWidth = 3;
   ctx.strokeStyle = 'rgba(0,255,204,0.55)';
   ctx.strokeRect(3,3,W-6,H/2-6);
   ctx.strokeStyle = 'rgba(255,46,136,0.55)';
   ctx.strokeRect(3,H/2+3,W-6,H/2-6);
 
+  // Orta çizgi
   ctx.setLineDash([12,10]);
   ctx.lineWidth = 3;
   ctx.strokeStyle = 'rgba(255,255,255,0.55)';
   ctx.beginPath(); ctx.moveTo(0,H/2); ctx.lineTo(W,H/2); ctx.stroke();
   ctx.setLineDash([]);
 
+  // Orta daire
   ctx.strokeStyle = 'rgba(255,255,255,0.25)';
   ctx.lineWidth = 2;
   ctx.beginPath(); ctx.arc(W/2,H/2,52,0,Math.PI*2); ctx.stroke();
 
+  // Alan isimleri
   ctx.font = 'bold 15px Andika, sans-serif';
   ctx.textAlign = 'center';
   ctx.fillStyle = 'rgba(0,255,204,0.7)';
@@ -706,20 +548,11 @@ function draw(){
   ctx.fillStyle = 'rgba(255,46,136,0.7)';
   ctx.fillText('1. oyuncu alanı', W/2, H/2 + 34);
 
+  // Kale ağızları
   drawGoal(true);
   drawGoal(false);
 
-  // Tam ekranda skor sahanın içinde
-  if(isFsMode){
-    ctx.textAlign = 'left';
-    ctx.font = 'bold 40px Andika, sans-serif';
-    ctx.fillStyle = 'rgba(0,255,204,0.45)';
-    ctx.fillText(scoreP2, 16, H/2 - 24);
-    ctx.fillStyle = 'rgba(255,46,136,0.45)';
-    ctx.fillText(scoreP1, 16, H/2 + 60);
-    ctx.textAlign = 'center';
-  }
-
+  // Gol parlaması
   if(flash.t > 0){
     const a = flash.t / 30;
     ctx.fillStyle = flash.side === 'top' ? `rgba(255,46,136,${a*0.35})` : `rgba(0,255,204,${a*0.35})`;
@@ -729,9 +562,11 @@ function draw(){
     ctx.fillText('GOL!', W/2, H/2 + 16);
   }
 
+  // Tokaçlar
   drawMallet(p2);
   drawMallet(p1);
 
+  // Disk
   ctx.save();
   ctx.shadowBlur = 18; ctx.shadowColor = '#ffffff';
   ctx.beginPath(); ctx.arc(puck.x, puck.y, puck.r, 0, Math.PI*2);
@@ -739,18 +574,14 @@ function draw(){
   ctx.lineWidth = 3; ctx.strokeStyle = '#ff3b3b'; ctx.stroke();
   ctx.restore();
 
-  if(rescueMsg > 0 && !gameOver){
-    ctx.fillStyle = `rgba(255,255,255,${Math.min(rescueMsg/30,1)*0.8})`;
-    ctx.font = 'bold 16px Andika, sans-serif';
-    ctx.fillText('Disk serbest bırakıldı 🔄', W/2, H/2 - 70);
-  }
-
+  // Başlangıç ipucu
   if(hintTimer > 0 && !gameOver){
     ctx.fillStyle = `rgba(255,255,255,${Math.min(hintTimer/60,1)*0.85})`;
     ctx.font = 'bold 15px Andika, sans-serif';
     ctx.fillText('Alt alanda parmağını kaydır', W/2, H - 24);
   }
 
+  // Duraklatma
   if(isPaused && !gameOver){
     ctx.fillStyle = 'rgba(7,10,18,0.75)';
     ctx.fillRect(0,0,W,H);
@@ -772,6 +603,7 @@ function drawGoal(top){
   ctx.stroke();
   ctx.restore();
 
+  // Kale alanı yayı
   ctx.strokeStyle = 'rgba(255,255,255,0.22)';
   ctx.lineWidth = 2;
   ctx.beginPath();
@@ -786,6 +618,7 @@ function drawMallet(p){
   ctx.fillStyle = p.color; ctx.fill();
   ctx.lineWidth = 3; ctx.strokeStyle = '#fff'; ctx.stroke();
   ctx.restore();
+  // İç halka
   ctx.beginPath(); ctx.arc(p.x, p.y, p.r*0.45, 0, Math.PI*2);
   ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 2; ctx.stroke();
 }
