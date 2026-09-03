@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Zıpzıp'ın Nilüfer Yolu — Ritmik Sayma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --su-derin:#0d4f57;
+    --su:#137b83;
+    --su-acik:#2ea3a5;
+    --nilufer:#5cbf5a;
+    --nilufer-koyu:#3d8f42;
+    --kum:#f6d68a;
+    --kum-koyu:#e0b45e;
+    --mercan:#ff6a4d;
+    --krem:#fff7e8;
+    --murekkep:#12332f;
+    --golge:rgba(6,48,52,.28);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+
+  body{
+    font-family:'Andika','Segoe UI',sans-serif;
+    background:var(--su-derin);
+    color:var(--murekkep);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:10px;
+    overflow-x:hidden;
+  }
+
+  .sahne{
+    width:100%;
+    max-width:820px;
+    background:var(--krem);
+    border-radius:26px;
+    border:5px solid var(--murekkep);
+    box-shadow:0 14px 0 var(--golge);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ---------- BAŞLANGIÇ EKRANI ---------- */
+  #girisEkrani{padding:26px 20px 30px;text-align:center;}
+
+  .kurbaga-buyuk{font-size:82px;line-height:1;display:block;margin-bottom:6px;}
+
+  .baslik{
+    font-size:34px;
+    font-weight:700;
+    color:var(--su-derin);
+    letter-spacing:-.5px;
+    line-height:1.1;
+  }
+
+  .hikaye{
+    font-size:19px;
+    line-height:1.5;
+    max-width:38ch;
+    margin:12px auto 22px;
+    color:#3a5a57;
+  }
+
+  .secim-basligi{
+    font-size:21px;
+    font-weight:700;
+    margin-bottom:14px;
+    color:var(--murekkep);
+  }
+
+  .sayi-izgara{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    max-width:420px;
+    margin:0 auto;
+  }
+
+  .sayi-tus{
+    font-family:inherit;
+    font-size:30px;
+    font-weight:700;
+    color:var(--krem);
+    background:var(--su);
+    border:4px solid var(--murekkep);
+    border-radius:18px;
+    padding:14px 0 12px;
+    cursor:pointer;
+    box-shadow:0 6px 0 var(--su-derin);
+    transition:transform .08s, box-shadow .08s;
+  }
+  .sayi-tus small{display:block;font-size:13px;font-weight:400;opacity:.85;margin-top:2px;}
+  .sayi-tus:active{transform:translateY(5px);box-shadow:0 1px 0 var(--su-derin);}
+  .sayi-tus:focus-visible{outline:4px solid var(--mercan);outline-offset:3px;}
+
+  .rastgele-tus{
+    grid-column:1 / -1;
+    background:var(--mercan);
+    box-shadow:0 6px 0 #c33f26;
+    font-size:22px;
+    padding:12px 0;
+  }
+  .rastgele-tus:active{box-shadow:0 1px 0 #c33f26;}
+
+  /* ---------- OYUN EKRANI ---------- */
+  #oyunEkrani{display:none;flex-direction:column;}
+
+  .ust-serit{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    background:var(--murekkep);
+    color:var(--krem);
+    padding:10px 14px;
+    font-size:17px;
+  }
+  .rozet{
+    background:var(--kum);
+    color:var(--murekkep);
+    font-weight:700;
+    border-radius:999px;
+    padding:5px 14px;
+    font-size:18px;
+  }
+  .ust-sag{display:flex;align-items:center;gap:10px;}
+  .mini-tus{
+    font-family:inherit;
+    font-size:19px;
+    background:transparent;
+    border:3px solid var(--krem);
+    color:var(--krem);
+    border-radius:12px;
+    padding:3px 10px;
+    cursor:pointer;
+  }
+  .mini-tus:focus-visible{outline:3px solid var(--kum);outline-offset:2px;}
+
+  /* --- gölet --- */
+  .golet{
+    position:relative;
+    background:linear-gradient(180deg,#8fd9de 0%,var(--su-acik) 34%,var(--su) 100%);
+    padding:0;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scrollbar-width:none;
+    border-bottom:5px solid var(--murekkep);
+  }
+  .golet::-webkit-scrollbar{display:none;}
+
+  .yol{
+    position:relative;
+    display:flex;
+    align-items:flex-end;
+    gap:20px;
+    padding:74px 16px 22px;
+    width:max-content;
+    min-width:100%;
+  }
+
+  .kiyi{
+    flex:0 0 auto;
+    width:76px;
+    height:96px;
+    border-radius:16px 16px 10px 10px;
+    background:linear-gradient(180deg,var(--kum) 0%,var(--kum-koyu) 100%);
+    border:4px solid var(--murekkep);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:40px;
+  }
+  .kiyi.hedef{width:92px;}
+  #hedefPasta{transition:transform .3s;}
+  .hedef-ulasildi #hedefPasta{transform:scale(1.35) rotate(-6deg);}
+
+  .nilufer{
+    flex:0 0 auto;
+    width:78px;
+    height:78px;
+    border-radius:50%;
+    background:radial-gradient(circle at 34% 30%,#7ddc78,var(--nilufer) 55%,var(--nilufer-koyu));
+    border:4px solid var(--murekkep);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:27px;
+    font-weight:700;
+    color:#0f3d16;
+    position:relative;
+    box-shadow:0 6px 0 rgba(9,60,30,.35);
+  }
+  .nilufer::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:6px;
+    width:3px;
+    height:30%;
+    background:rgba(15,61,22,.35);
+    transform-origin:bottom;
+    transform:rotate(28deg);
+    border-radius:3px;
+  }
+  .nilufer.kapali{
+    background:radial-gradient(circle at 34% 30%,#a9dcd8,#63b7b6 60%,#3f9092);
+    color:rgba(10,50,52,.55);
+    font-size:30px;
+  }
+  .nilufer.aktif{
+    animation:nabiz 1.1s ease-in-out infinite;
+    border-color:var(--mercan);
+  }
+  @keyframes nabiz{50%{transform:translateY(-5px);}}
+
+  #kurbaga{
+    position:absolute;
+    bottom:66px;
+    left:0;
+    font-size:46px;
+    line-height:1;
+    transition:left .55s cubic-bezier(.5,-0.35,.5,1.35);
+    pointer-events:none;
+    z-index:3;
+    filter:drop-shadow(0 4px 3px rgba(0,60,60,.4));
+  }
+  #kurbaga.zipla{animation:zipla .55s ease-in-out;}
+  @keyframes zipla{50%{transform:translateY(-44px) scale(1.12);}}
+
+  /* --- soru alanı --- */
+  .soru-alani{padding:16px 16px 22px;background:var(--krem);}
+
+  .dizi{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:8px;
+    font-size:29px;
+    font-weight:700;
+    color:var(--su-derin);
+    margin-bottom:6px;
+    min-height:44px;
+  }
+  .dizi .ok{color:var(--kum-koyu);font-size:24px;}
+  .dizi .bos{
+    color:var(--mercan);
+    background:#ffe6df;
+    border:3px dashed var(--mercan);
+    border-radius:12px;
+    padding:0 14px;
+  }
+
+  .yonerge{
+    text-align:center;
+    font-size:18px;
+    color:#4a6a67;
+    margin-bottom:14px;
+    min-height:26px;
+  }
+  .yonerge.dogru{color:var(--nilufer-koyu);font-weight:700;}
+  .yonerge.yanlis{color:var(--mercan);font-weight:700;}
+
+  .secenekler{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    max-width:520px;
+    margin:0 auto;
+  }
+
+  .secenek{
+    font-family:inherit;
+    font-size:34px;
+    font-weight:700;
+    color:var(--murekkep);
+    background:var(--kum);
+    border:4px solid var(--murekkep);
+    border-radius:18px;
+    padding:16px 0 14px;
+    cursor:pointer;
+    box-shadow:0 6px 0 var(--kum-koyu);
+    transition:transform .08s, box-shadow .08s;
+  }
+  .secenek:active{transform:translateY(5px);box-shadow:0 1px 0 var(--kum-koyu);}
+  .secenek:focus-visible{outline:4px solid var(--su);outline-offset:3px;}
+  .secenek.dogru-cevap{background:var(--nilufer);box-shadow:0 6px 0 var(--nilufer-koyu);color:#0b3512;}
+  .secenek.yanlis-cevap{background:#ffc9bd;box-shadow:0 6px 0 #d4715c;animation:salla .4s;}
+  @keyframes salla{25%{transform:translateX(-8px);}75%{transform:translateX(8px);}}
+
+  .ipucu-kutu{
+    max-width:520px;
+    margin:14px auto 0;
+    background:#e8f6f2;
+    border:3px dashed var(--su);
+    border-radius:16px;
+    padding:12px;
+    text-align:center;
+    font-size:20px;
+    color:var(--su-derin);
+    display:none;
+  }
+  .ipucu-kutu.acik{display:block;}
+  .puanlar{display:flex;justify-content:center;gap:5px;flex-wrap:wrap;margin-top:8px;}
+  .puanlar span{width:16px;height:16px;border-radius:50%;background:var(--su-acik);border:2px solid var(--su-derin);}
+
+  .alt-tuslar{display:flex;justify-content:center;gap:10px;margin-top:16px;}
+  .yardim-tus{
+    font-family:inherit;
+    font-size:17px;
+    background:var(--krem);
+    color:var(--su-derin);
+    border:3px solid var(--su);
+    border-radius:14px;
+    padding:8px 16px;
+    cursor:pointer;
+  }
+  .yardim-tus:focus-visible{outline:3px solid var(--mercan);outline-offset:2px;}
+
+  /* ---------- BİTİŞ EKRANI ---------- */
+  #bitisEkrani{display:none;padding:28px 20px 32px;text-align:center;}
+  .kutlama{font-size:76px;line-height:1;}
+  .bitis-baslik{font-size:31px;font-weight:700;color:var(--nilufer-koyu);margin:6px 0 4px;}
+  .yildizlar{font-size:30px;letter-spacing:3px;margin:8px 0 4px;}
+  .sonuc-yazi{font-size:19px;color:#3a5a57;margin-bottom:16px;}
+  .tam-dizi{
+    display:flex;flex-wrap:wrap;justify-content:center;gap:8px;
+    max-width:520px;margin:0 auto 22px;
+  }
+  .tam-dizi b{
+    background:var(--su);color:var(--krem);
+    border:3px solid var(--murekkep);border-radius:12px;
+    padding:6px 12px;font-size:22px;
+  }
+
+  @media (max-width:520px){
+    .baslik{font-size:27px;}
+    .hikaye{font-size:17px;}
+    .sayi-tus{font-size:26px;}
+    .secenek{font-size:30px;}
+    .dizi{font-size:25px;}
+    .nilufer{width:68px;height:68px;font-size:24px;}
+    .yol{gap:16px;padding-top:66px;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important;transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="sahne">
+
+  <!-- ================= GİRİŞ ================= -->
+  <section id="girisEkrani">
+    <span class="kurbaga-buyuk">🐸</span>
+    <h1 class="baslik">Zıpzıp'ın Nilüfer Yolu</h1>
+    <p class="hikaye">Zıpzıp'ın doğum günü pastası göletin karşı kıyısında. Nilüferlerin üstünde doğru sayılar yazıyor. Sayıları bul, Zıpzıp zıplasın!</p>
+
+    <h2 class="secim-basligi">Kaçar kaçar sayalım?</h2>
+    <div class="sayi-izgara" id="sayiIzgara"></div>
+  </section>
+
+  <!-- ================= OYUN ================= -->
+  <section id="oyunEkrani">
+    <div class="ust-serit">
+      <span class="rozet" id="adimRozeti">2'şer</span>
+      <div class="ust-sag">
+        <span id="ilerleme">0 / 10</span>
+        <button class="mini-tus" id="sesTus" aria-label="Sesi aç kapat">🔊</button>
+        <button class="mini-tus" id="cikTus">Çık</button>
+      </div>
+    </div>
+
+    <div class="golet" id="golet">
+      <div class="yol" id="yol">
+        <div class="kiyi">🌾</div>
+        <!-- nilüferler JS ile eklenir -->
+        <div class="kiyi hedef"><span id="hedefPasta">🎂</span></div>
+        <div id="kurbaga">🐸</div>
+      </div>
+    </div>
+
+    <div class="soru-alani">
+      <div class="dizi" id="dizi"></div>
+      <p class="yonerge" id="yonerge">Doğru sayıya dokun.</p>
+      <div class="secenekler" id="secenekler"></div>
+
+      <div class="ipucu-kutu" id="ipucuKutu">
+        <div id="ipucuYazi"></div>
+        <div class="puanlar" id="ipucuPuanlar"></div>
+      </div>
+
+      <div class="alt-tuslar">
+        <button class="yardim-tus" id="ipucuTus">💡 İpucu</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= BİTİŞ ================= -->
+  <section id="bitisEkrani">
+    <div class="kutlama">🎉🐸🎂</div>
+    <h2 class="bitis-baslik">Zıpzıp pastasına ulaştı!</h2>
+    <div class="yildizlar" id="yildizlar"></div>
+    <p class="sonuc-yazi" id="sonucYazi"></p>
+    <div class="tam-dizi" id="tamDizi"></div>
+    <div class="sayi-izgara" style="max-width:360px;">
+      <button class="sayi-tus rastgele-tus" id="tekrarTus">Aynı sayıyla tekrar oyna</button>
+      <button class="sayi-tus rastgele-tus" id="yeniSayiTus" style="background:var(--su);box-shadow:0 6px 0 var(--su-derin);">Başka sayı seç</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  const ADIM_SAYISI = 10;
+  const durum = { adim:2, sira:0, dizi:[], yildiz:0, ilkDeneme:true, sesAcik:true, bitti:false };
+
+  const el = id => document.getElementById(id);
+  const girisEkrani = el('girisEkrani'), oyunEkrani = el('oyunEkrani'), bitisEkrani = el('bitisEkrani');
+  const yol = el('yol'), golet = el('golet'), kurbaga = el('kurbaga');
+  const diziEl = el('dizi'), secenekEl = el('secenekler'), yonergeEl = el('yonerge');
+  const ipucuKutu = el('ipucuKutu'), ipucuYazi = el('ipucuYazi'), ipucuPuanlar = el('ipucuPuanlar');
+
+  /* ---------- ses ---------- */
+  let ac = null;
+  function ton(frekans, sure, tip){
+    if(!durum.sesAcik) return;
+    try{
+      ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+      const o = ac.createOscillator(), g = ac.createGain();
+      o.type = tip || 'sine';
+      o.frequency.value = frekans;
+      g.gain.setValueAtTime(.14, ac.currentTime);
+      g.gain.exponentialRampToValueAtTime(.001, ac.currentTime + sure);
+      o.connect(g); g.connect(ac.destination);
+      o.start(); o.stop(ac.currentTime + sure);
+    }catch(e){}
+  }
+  const sesDogru = () => { ton(660,.12); setTimeout(()=>ton(880,.18),110); };
+  const sesYanlis = () => ton(180,.3,'triangle');
+  const sesZafer = () => [523,659,784,1046].forEach((f,i)=>setTimeout(()=>ton(f,.24),i*140));
+
+  function soyle(metin){
+    if(!durum.sesAcik || !('speechSynthesis' in window)) return;
+    try{
+      speechSynthesis.cancel();
+      const s = new SpeechSynthesisUtterance(metin);
+      s.lang = 'tr-TR'; s.rate = .95;
+      speechSynthesis.speak(s);
+    }catch(e){}
+  }
+
+  /* ---------- giriş ekranı ---------- */
+  const izgara = el('sayiIzgara');
+  for(let n=2; n<=10; n++){
+    const b = document.createElement('button');
+    b.className = 'sayi-tus';
+    b.innerHTML = n + "<small>" + n + "'şer</small>";
+    b.addEventListener('click', () => oyunuBaslat(n));
+    izgara.appendChild(b);
+  }
+  const rastgeleTus = document.createElement('button');
+  rastgeleTus.className = 'sayi-tus rastgele-tus';
+  rastgeleTus.textContent = '🎲 Rastgele seç';
+  rastgeleTus.addEventListener('click', () => oyunuBaslat(2 + Math.floor(Math.random()*9)));
+  izgara.appendChild(rastgeleTus);
+
+  /* ---------- oyun kurulumu ---------- */
+  function oyunuBaslat(adim){
+    durum.adim = adim;
+    durum.sira = 0;
+    durum.yildiz = 0;
+    durum.ilkDeneme = true;
+    durum.bitti = false;
+    durum.dizi = [];
+    for(let i=1; i<=ADIM_SAYISI; i++) durum.dizi.push(adim*i);
+
+    girisEkrani.style.display = 'none';
+    bitisEkrani.style.display = 'none';
+    oyunEkrani.style.display = 'flex';
+    yol.classList.remove('hedef-ulasildi');
+    el('adimRozeti').textContent = adim + "'şer";
+
+    yolKur();
+    soruKur();
+  }
+
+  function yolKur(){
+    yol.querySelectorAll('.nilufer').forEach(n => n.remove());
+    const hedef = yol.querySelector('.kiyi.hedef');
+    durum.dizi.forEach((sayi, i) => {
+      const p = document.createElement('div');
+      p.className = 'nilufer kapali';
+      p.dataset.sira = i;
+      p.textContent = '?';
+      p.title = (i+1) + '. nilüfer';
+      yol.insertBefore(p, hedef);
+    });
+    setTimeout(kurbagaYerlestir, 40);
+  }
+
+  function nilufer(i){ return yol.querySelectorAll('.nilufer')[i]; }
+
+  function kurbagaYerlestir(ziplasin){
+    let hedefEl;
+    if(durum.sira === 0 && !durum.bitti) hedefEl = yol.querySelector('.kiyi');
+    else if(durum.bitti) hedefEl = yol.querySelector('.kiyi.hedef');
+    else hedefEl = nilufer(durum.sira - 1);
+    if(!hedefEl) return;
+    const merkez = hedefEl.offsetLeft + hedefEl.offsetWidth/2 - kurbaga.offsetWidth/2;
+    kurbaga.style.left = merkez + 'px';
+    if(ziplasin){
+      kurbaga.classList.remove('zipla');
+      void kurbaga.offsetWidth;
+      kurbaga.classList.add('zipla');
+    }
+    golet.scrollTo({ left: Math.max(0, merkez - golet.clientWidth/2 + 40), behavior:'smooth' });
+  }
+
+  /* ---------- soru ---------- */
+  function soruKur(){
+    const i = durum.sira;
+    const dogru = durum.dizi[i];
+    durum.ilkDeneme = true;
+    el('ilerleme').textContent = i + ' / ' + ADIM_SAYISI;
+    ipucuKutu.classList.remove('acik');
+
+    // dizi gösterimi
+    diziEl.innerHTML = '';
+    const basla = Math.max(0, i-3);
+    if(i === 0){
+      const s = document.createElement('span');
+      s.textContent = '0';
+      diziEl.appendChild(s);
+      okEkle();
+    }
+    for(let j = basla; j < i; j++){
+      const s = document.createElement('span');
+      s.textContent = durum.dizi[j];
+      diziEl.appendChild(s);
+      okEkle();
+    }
+    const bos = document.createElement('span');
+    bos.className = 'bos';
+    bos.textContent = '?';
+    diziEl.appendChild(bos);
+
+    yonergeEl.className = 'yonerge';
+    yonergeEl.textContent = durum.adim + "'şer sayıyoruz. Sıradaki sayı hangisi?";
+
+    // seçenekler
+    secenekEl.innerHTML = '';
+    secenekleriUret(dogru).forEach(deger => {
+      const b = document.createElement('button');
+      b.className = 'secenek';
+      b.textContent = deger;
+      b.addEventListener('click', () => cevapVer(b, deger, dogru));
+      secenekEl.appendChild(b);
+    });
+
+    nilufer(i).classList.add('aktif');
+  }
+
+  function okEkle(){
+    const o = document.createElement('span');
+    o.className = 'ok';
+    o.textContent = '→';
+    diziEl.appendChild(o);
+  }
+
+  function secenekleriUret(dogru){
+    const a = durum.adim;
+    const adaylar = [dogru+a, dogru-a, dogru+1, dogru-1, dogru+2, dogru+2*a, dogru-2];
+    const set = new Set();
+    adaylar.sort(() => Math.random()-.5);
+    for(const c of adaylar){
+      if(c > 0 && c !== dogru) set.add(c);
+      if(set.size === 2) break;
+    }
+    const liste = [dogru, ...set];
+    return liste.sort(() => Math.random()-.5);
+  }
+
+  function cevapVer(buton, deger, dogru){
+    if(deger === dogru){
+      buton.classList.add('dogru-cevap');
+      secenekEl.querySelectorAll('.secenek').forEach(b => b.disabled = true);
+      sesDogru();
+      if(durum.ilkDeneme) durum.yildiz++;
+
+      const pad = nilufer(durum.sira);
+      pad.classList.remove('kapali','aktif');
+      pad.textContent = dogru;
+
+      yonergeEl.className = 'yonerge dogru';
+      yonergeEl.textContent = 'Doğru! Zıpzıp ' + dogru + " nilüferine atladı.";
+      soyle(String(dogru));
+
+      durum.sira++;
+      setTimeout(() => {
+        if(durum.sira >= ADIM_SAYISI){ durum.bitti = true; kurbagaYerlestir(true); setTimeout(oyunuBitir, 700); }
+        else { kurbagaYerlestir(true); setTimeout(soruKur, 480); }
+      }, 620);
+    } else {
+      buton.classList.add('yanlis-cevap');
+      buton.disabled = true;
+      sesYanlis();
+      durum.ilkDeneme = false;
+      yonergeEl.className = 'yonerge yanlis';
+      const onceki = durum.sira === 0 ? 0 : durum.dizi[durum.sira-1];
+      yonergeEl.textContent = 'Tekrar dene: ' + onceki + " sayısına " + durum.adim + ' ekle.';
+    }
+  }
+
+  /* ---------- ipucu ---------- */
+  el('ipucuTus').addEventListener('click', () => {
+    const onceki = durum.sira === 0 ? 0 : durum.dizi[durum.sira-1];
+    ipucuYazi.textContent = onceki + ' + ' + durum.adim + ' = ?';
+    ipucuPuanlar.innerHTML = '';
+    for(let k=0; k<durum.adim; k++) ipucuPuanlar.appendChild(document.createElement('span'));
+    ipucuKutu.classList.toggle('acik');
+  });
+
+  /* ---------- bitiş ---------- */
+  function oyunuBitir(){
+    yol.classList.add('hedef-ulasildi');
+    sesZafer();
+    oyunEkrani.style.display = 'none';
+    bitisEkrani.style.display = 'block';
+
+    const y = durum.yildiz;
+    el('yildizlar').textContent = '⭐'.repeat(Math.max(1, Math.round(y/2))) + '☆'.repeat(5 - Math.max(1, Math.round(y/2)));
+    el('sonucYazi').textContent = '10 nilüferin ' + y + ' tanesini ilk denemede geçtin. ' + durum.adim + "'şer ritmik sayma tamam!";
+
+    const kutu = el('tamDizi');
+    kutu.innerHTML = '';
+    durum.dizi.forEach(s => { const b = document.createElement('b'); b.textContent = s; kutu.appendChild(b); });
+    soyle(durum.adim + "'şer sayma tamamlandı. Tebrikler!");
+  }
+
+  el('tekrarTus').addEventListener('click', () => oyunuBaslat(durum.adim));
+  el('yeniSayiTus').addEventListener('click', () => {
+    bitisEkrani.style.display = 'none';
+    girisEkrani.style.display = 'block';
+  });
+  el('cikTus').addEventListener('click', () => {
+    oyunEkrani.style.display = 'none';
+    girisEkrani.style.display = 'block';
+  });
+  el('sesTus').addEventListener('click', e => {
+    durum.sesAcik = !durum.sesAcik;
+    e.currentTarget.textContent = durum.sesAcik ? '🔊' : '🔇';
+    if(!durum.sesAcik && 'speechSynthesis' in window) speechSynthesis.cancel();
+  });
+
+  window.addEventListener('resize', () => { if(oyunEkrani.style.display === 'flex') kurbagaYerlestir(false); });
+})();
+</script>
+</body>
+</html>

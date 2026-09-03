@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spin &amp; Speak — İngilizce Çark Oyunu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --deniz:#0e3550;
+  --deniz2:#17567c;
+  --sari:#ffc93c;
+  --sari-koyu:#e0a800;
+  --kart:#fffdf6;
+  --dogru:#27ae60;
+  --yanlis:#e05252;
+  --metin:#12303f;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{
+  margin:0;
+  font-family:'Andika','Segoe UI',sans-serif;
+  color:#fff;
+  background:radial-gradient(circle at 50% 8%, var(--deniz2) 0%, var(--deniz) 62%, #082238 100%);
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;
+  padding:14px 12px 30px;
+  overflow-x:hidden;
+}
+header{text-align:center;margin-bottom:6px}
+h1{
+  font-size:clamp(26px,6vw,42px);
+  margin:0;
+  letter-spacing:.5px;
+  text-shadow:0 4px 0 rgba(0,0,0,.25);
+}
+.alt-baslik{margin:4px 0 0;font-size:clamp(13px,3.2vw,17px);color:#bfe0f2}
+
+/* Skor tablosu */
+.skor{
+  display:flex;gap:10px;margin:12px 0 4px;flex-wrap:wrap;justify-content:center;
+}
+.skor div{
+  background:rgba(255,255,255,.12);
+  border:2px solid rgba(255,255,255,.2);
+  border-radius:16px;
+  padding:7px 16px;
+  font-size:clamp(14px,3.4vw,18px);
+  font-weight:700;
+}
+.skor .yildiz{background:var(--sari);color:var(--metin);border-color:var(--sari-koyu)}
+
+/* Çark */
+.cark-alan{position:relative;width:min(88vw,460px);aspect-ratio:1/1;margin:14px 0 6px}
+canvas{width:100%;height:100%;display:block;filter:drop-shadow(0 12px 22px rgba(0,0,0,.45))}
+.ok{
+  position:absolute;top:-6px;left:50%;transform:translateX(-50%);
+  width:0;height:0;
+  border-left:18px solid transparent;
+  border-right:18px solid transparent;
+  border-top:38px solid var(--sari);
+  filter:drop-shadow(0 3px 3px rgba(0,0,0,.4));
+  z-index:5;
+}
+.gobek{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:27%;height:27%;border-radius:50%;
+  background:var(--sari);
+  border:6px solid #fff;
+  color:var(--metin);
+  font-family:inherit;font-weight:700;
+  font-size:clamp(14px,3.4vw,20px);
+  line-height:1.1;
+  cursor:pointer;
+  box-shadow:0 6px 0 var(--sari-koyu);
+  z-index:6;
+  transition:transform .12s;
+}
+.gobek:active{transform:translate(-50%,-50%) scale(.94)}
+.gobek:disabled{background:#c9d6de;box-shadow:0 6px 0 #9aa8b0;cursor:default}
+.gobek:focus-visible{outline:4px solid #fff;outline-offset:4px}
+
+.alt-butonlar{display:flex;gap:10px;margin-top:10px}
+.mini{
+  background:rgba(255,255,255,.14);color:#fff;border:2px solid rgba(255,255,255,.28);
+  font-family:inherit;font-size:15px;font-weight:700;border-radius:14px;padding:9px 18px;cursor:pointer;
+}
+.mini:active{background:rgba(255,255,255,.26)}
+
+/* Soru kartı */
+.perde{
+  position:fixed;inset:0;background:rgba(4,20,32,.78);
+  display:none;align-items:center;justify-content:center;padding:14px;z-index:50;
+}
+.perde.acik{display:flex}
+.kart{
+  background:var(--kart);color:var(--metin);
+  width:min(560px,100%);max-height:94vh;overflow:auto;
+  border-radius:26px;padding:20px 18px 18px;text-align:center;
+  box-shadow:0 18px 40px rgba(0,0,0,.5);
+  animation:gir .28s cubic-bezier(.2,1.3,.5,1);
+}
+@keyframes gir{from{transform:scale(.8) translateY(20px);opacity:0}to{transform:none;opacity:1}}
+.konu{
+  display:inline-block;background:var(--deniz2);color:#fff;
+  border-radius:999px;padding:6px 18px;font-weight:700;font-size:16px;
+}
+.soru{font-size:clamp(20px,5vw,27px);font-weight:700;margin:14px 0 4px;line-height:1.3}
+.soru-tr{font-size:clamp(14px,3.6vw,17px);color:#5d7383;margin:0 0 6px}
+.dinle{
+  background:none;border:2px solid #cfe0ea;border-radius:999px;
+  font-family:inherit;font-size:15px;padding:6px 16px;cursor:pointer;color:var(--metin);margin-bottom:10px;
+}
+.secenekler{display:grid;gap:10px}
+.secenek{
+  font-family:inherit;font-size:clamp(17px,4.4vw,22px);font-weight:700;
+  background:#eef6fb;color:var(--metin);
+  border:3px solid #cfe2ee;border-radius:18px;
+  padding:13px 12px;cursor:pointer;text-align:center;
+  transition:transform .1s, background .15s;
+}
+.secenek:active{transform:scale(.98)}
+.secenek:focus-visible{outline:3px solid var(--deniz2);outline-offset:2px}
+.secenek.dogru{background:var(--dogru);border-color:#1e8b4c;color:#fff}
+.secenek.yanlis{background:var(--yanlis);border-color:#b53c3c;color:#fff}
+.secenek:disabled{cursor:default}
+.geri-bildirim{font-size:clamp(17px,4.4vw,21px);font-weight:700;margin:14px 0 4px;min-height:28px}
+.devam{
+  display:none;background:var(--sari);color:var(--metin);border:none;
+  font-family:inherit;font-weight:700;font-size:19px;
+  border-radius:16px;padding:12px 34px;cursor:pointer;box-shadow:0 5px 0 var(--sari-koyu);
+}
+.devam:active{transform:translateY(3px);box-shadow:0 2px 0 var(--sari-koyu)}
+
+/* Konfeti */
+.konfeti{position:fixed;inset:0;pointer-events:none;z-index:60;overflow:hidden}
+.parca{position:absolute;width:11px;height:16px;border-radius:2px;animation:dus linear forwards}
+@keyframes dus{to{transform:translateY(105vh) rotate(720deg);opacity:.9}}
+@media (prefers-reduced-motion: reduce){.parca{display:none}.kart{animation:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Spin &amp; Speak 🎡</h1>
+  <p class="alt-baslik">Çarkı çevir, konunu öğren, sorunu yanıtla. <span style="opacity:.6">(sürüm 2)</span></p>
+</header>
+
+<div class="skor">
+  <div class="yildiz">⭐ <span id="puan">0</span> puan</div>
+  <div>✅ <span id="dogruSayi">0</span></div>
+  <div>❌ <span id="yanlisSayi">0</span></div>
+</div>
+
+<div class="cark-alan">
+  <div class="ok"></div>
+  <canvas id="cark"></canvas>
+  <button class="gobek" id="cevirBtn">ÇEVİR</button>
+</div>
+
+<div class="alt-butonlar">
+  <button class="mini" id="sesBtn">🔊 Ses açık</button>
+  <button class="mini" id="sifirlaBtn">↺ Baştan başla</button>
+</div>
+
+<div class="perde" id="perde">
+  <div class="kart">
+    <span class="konu" id="konuAdi">Colors</span>
+    <p class="soru" id="soruMetni"></p>
+    <p class="soru-tr" id="soruTr"></p>
+    <button class="dinle" id="dinleBtn">🔈 İngilizcesini dinle</button>
+    <div class="secenekler" id="secenekler"></div>
+    <p class="geri-bildirim" id="geriBildirim"></p>
+    <button class="devam" id="devamBtn">Çarka dön</button>
+  </div>
+</div>
+
+<div class="konfeti" id="konfeti"></div>
+
+<script>
+/* ---------------- KONULAR VE SORULAR ---------------- */
+const konular = [
+  { ad:"Colors",  tr:"Renkler",   ikon:"🎨", renk:"#ef6f6c", sorular:[
+    {s:"Which one is RED?", t:"Hangisi kırmızı?", c:["🍎 Apple","🌿 Leaf","🌊 Sea"], d:0},
+    {s:"What colour is the sun?", t:"Güneş ne renk?", c:["Yellow","Blue","Black"], d:0},
+    {s:"What colour is the grass?", t:"Çimen ne renk?", c:["Green","Purple","Orange"], d:0},
+    {s:"How do we say 'mavi' in English?", t:"'Mavi' İngilizcede nasıl söylenir?", c:["Blue","Brown","White"], d:0}
+  ]},
+  { ad:"Animals", tr:"Hayvanlar", ikon:"🐶", renk:"#4aa3df", sorular:[
+    {s:"Which animal says 'Meow'?", t:"Hangi hayvan 'Miyav' der?", c:["🐱 Cat","🐶 Dog","🐦 Bird"], d:0},
+    {s:"How do we say 'kelebek' in English?", t:"'Kelebek' İngilizcede ne demek?", c:["Butterfly","Elephant","Monkey"], d:0},
+    {s:"Which animal can fly?", t:"Hangi hayvan uçabilir?", c:["🦅 Bird","🐟 Fish","🐢 Turtle"], d:0},
+    {s:"Which animal is the biggest?", t:"Hangi hayvan en büyük?", c:["🐘 Elephant","🐭 Mouse","🐜 Ant"], d:0}
+  ]},
+  { ad:"Numbers", tr:"Sayılar",   ikon:"🔢", renk:"#2ecc9b", sorular:[
+    {s:"What comes after SEVEN?", t:"Yediden sonra hangi sayı gelir?", c:["Eight","Ten","Five"], d:0},
+    {s:"Three plus two is ...", t:"Üç artı iki kaç eder?", c:["Five","Seven","Four"], d:0},
+    {s:"How many apples? 🍏🍏🍏🍏", t:"Kaç tane elma var?", c:["Four","Six","Two"], d:0},
+    {s:"How do we say 'on' in English?", t:"'On' sayısı İngilizcede nasıl söylenir?", c:["Ten","Nine","Twelve"], d:0}
+  ]},
+  { ad:"Fruits",  tr:"Meyveler",  ikon:"🍎", renk:"#f08cae", sorular:[
+    {s:"Which one is a banana?", t:"Hangisi muz?", c:["🍌","🍓","🍉"], d:0},
+    {s:"What colour is a strawberry?", t:"Çilek ne renktir?", c:["Red","Blue","Green"], d:0},
+    {s:"How do we say 'karpuz' in English?", t:"'Karpuz' İngilizcede ne demek?", c:["Watermelon","Cherry","Lemon"], d:0},
+    {s:"It is yellow and sour. What is it?", t:"Sarı ve ekşidir. Nedir?", c:["🍋 Lemon","🍇 Grapes","🍑 Peach"], d:0}
+  ]},
+  { ad:"Family",  tr:"Aile",      ikon:"👪", renk:"#9b8cf0", sorular:[
+    {s:"Your mother's mother is your ...", t:"Annenin annesi senin neyin olur?", c:["Grandmother","Sister","Aunt"], d:0},
+    {s:"How do we say 'erkek kardeş' in English?", t:"'Erkek kardeş' İngilizcede ne demek?", c:["Brother","Father","Cousin"], d:0},
+    {s:"Who is 'Father'?", t:"'Father' kimdir?", c:["👨 Baba","👩 Anne","👵 Babaanne"], d:0},
+    {s:"How do we say 'anne' in English?", t:"'Anne' İngilizcede ne demek?", c:["Mother","Sister","Daughter"], d:0}
+  ]},
+  { ad:"Body",    tr:"Vücudumuz", ikon:"👋", renk:"#f5a94e", sorular:[
+    {s:"How many eyes do you have?", t:"Kaç gözün var?", c:["Two","One","Four"], d:0},
+    {s:"How do we say 'burun' in English?", t:"'Burun' İngilizcede ne demek?", c:["Nose","Ear","Hand"], d:0},
+    {s:"We hear with our ...", t:"Neyimizle duyarız?", c:["👂 Ears","👀 Eyes","👃 Nose"], d:0},
+    {s:"We write with our ...", t:"Neyimizle yazarız?", c:["✋ Hand","🦶 Foot","👂 Ear"], d:0}
+  ]},
+  { ad:"Toys",    tr:"Oyuncaklar",ikon:"🧸", renk:"#5ec4d6", sorular:[
+    {s:"How do we say 'oyuncak ayı' in English?", t:"'Oyuncak ayı' İngilizcede ne demek?", c:["Teddy bear","Ball","Kite"], d:0},
+    {s:"Which toy is round?", t:"Hangi oyuncak yuvarlaktır?", c:["⚽ Ball","🪁 Kite","🧸 Teddy bear"], d:0},
+    {s:"How do we say 'uçurtma' in English?", t:"'Uçurtma' İngilizcede ne demek?", c:["Kite","Car","Doll"], d:0},
+    {s:"Which one is a puzzle?", t:"Hangisi yapboz?", c:["🧩","🚗","🪀"], d:0}
+  ]},
+  { ad:"Food",    tr:"Yiyecekler",ikon:"🍕", renk:"#e8a33d", sorular:[
+    {s:"How do we say 'ekmek' in English?", t:"'Ekmek' İngilizcede ne demek?", c:["Bread","Milk","Cheese"], d:0},
+    {s:"Which one do we drink?", t:"Hangisini içeriz?", c:["🥛 Milk","🍞 Bread","🧀 Cheese"], d:0},
+    {s:"How do we say 'peynir' in English?", t:"'Peynir' İngilizcede ne demek?", c:["Cheese","Butter","Honey"], d:0},
+    {s:"What do we eat for breakfast?", t:"Kahvaltıda ne yeriz?", c:["🥚 Egg","👟 Shoe","📕 Book"], d:0}
+  ]},
+  { ad:"School",  tr:"Okul",      ikon:"🎒", renk:"#6c8ae4", sorular:[
+    {s:"How do we say 'kalem' in English?", t:"'Kalem' İngilizcede ne demek?", c:["Pencil","Book","Bag"], d:0},
+    {s:"What do we read?", t:"Neyi okuruz?", c:["📖 Book","✏️ Pencil","✂️ Scissors"], d:0},
+    {s:"How do we say 'silgi' in English?", t:"'Silgi' İngilizcede ne demek?", c:["Eraser","Ruler","Desk"], d:0},
+    {s:"Where do we learn?", t:"Nerede öğreniriz?", c:["🏫 School","🏥 Hospital","🏪 Shop"], d:0}
+  ]},
+  { ad:"Weather", tr:"Hava Durumu",ikon:"☀️", renk:"#48b3c9", sorular:[
+    {s:"How do we say 'yağmurlu' in English?", t:"'Yağmurlu' İngilizcede ne demek?", c:["Rainy","Sunny","Snowy"], d:0},
+    {s:"It is white and cold. What is it?", t:"Beyaz ve soğuktur. Nedir?", c:["❄️ Snow","🔥 Fire","🌈 Rainbow"], d:0},
+    {s:"What do we use when it rains?", t:"Yağmur yağınca ne kullanırız?", c:["☂️ Umbrella","🕶️ Sunglasses","🧢 Cap"], d:0},
+    {s:"How do we say 'rüzgârlı' in English?", t:"'Rüzgârlı' İngilizcede ne demek?", c:["Windy","Cloudy","Hot"], d:0}
+  ]},
+  { ad:"Actions", tr:"Hareketler",ikon:"🏃", renk:"#7ec24c", sorular:[
+    {s:"How do we say 'zıpla' in English?", t:"'Zıpla' İngilizcede ne demek?", c:["Jump","Sit","Sleep"], d:0},
+    {s:"Which word means 'koş'?", t:"Hangi kelime 'koş' demek?", c:["Run","Walk","Stop"], d:0},
+    {s:"What do we do at night?", t:"Geceleyin ne yaparız?", c:["😴 Sleep","🏃 Run","🎨 Paint"], d:0},
+    {s:"How do we say 'oku' in English?", t:"'Oku' İngilizcede ne demek?", c:["Read","Write","Sing"], d:0}
+  ]},
+  { ad:"Clothes", tr:"Kıyafetler",ikon:"👕", renk:"#d97fc4", sorular:[
+    {s:"How do we say 'ayakkabı' in English?", t:"'Ayakkabı' İngilizcede ne demek?", c:["Shoes","Socks","Hat"], d:0},
+    {s:"What do we wear on our head?", t:"Başımıza ne giyeriz?", c:["🧢 Hat","🧤 Gloves","👞 Shoes"], d:0},
+    {s:"How do we say 'ceket' in English?", t:"'Ceket' İngilizcede ne demek?", c:["Jacket","Skirt","Dress"], d:0},
+    {s:"Which one is a t-shirt?", t:"Hangisi tişört?", c:["👕","👖","🧦"], d:0}
+  ]}
+];
+
+/* ---------------- SES MOTORU (Web Audio) ---------------- */
+let actx=null, sesAcik=true, gurultuTampon=null;
+function ses(){
+  if(!sesAcik) return null;
+  if(!actx) actx = new (window.AudioContext||window.webkitAudioContext)();
+  if(actx.state==="suspended") actx.resume();
+  return actx;
+}
+function nota(frek,sure,tip="sine",vol=.18,gecikme=0){
+  const a=ses(); if(!a) return;
+  const t=a.currentTime+gecikme;
+  const o=a.createOscillator(), g=a.createGain();
+  o.type=tip; o.frequency.setValueAtTime(frek,t);
+  g.gain.setValueAtTime(0,t);
+  g.gain.linearRampToValueAtTime(vol,t+0.012);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+sure);
+  o.connect(g); g.connect(a.destination);
+  o.start(t); o.stop(t+sure+0.02);
+}
+function tik(){
+  const a=ses(); if(!a) return;
+  const t=a.currentTime;
+  const o=a.createOscillator(), g=a.createGain();
+  o.type="square"; o.frequency.setValueAtTime(1500,t);
+  g.gain.setValueAtTime(.09,t);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+0.035);
+  o.connect(g); g.connect(a.destination);
+  o.start(t); o.stop(t+0.05);
+}
+function gurultu(a){
+  if(gurultuTampon) return gurultuTampon;
+  const uzunluk=a.sampleRate*2;
+  const tampon=a.createBuffer(1,uzunluk,a.sampleRate);
+  const veri=tampon.getChannelData(0);
+  for(let i=0;i<uzunluk;i++) veri[i]=Math.random()*2-1;
+  gurultuTampon=tampon; return tampon;
+}
+function cizirti(sure){ /* çark dönerken duyulan hışırtı */
+  const a=ses(); if(!a) return;
+  const t=a.currentTime;
+  const k=a.createBufferSource(); k.buffer=gurultu(a); k.loop=true;
+  const f=a.createBiquadFilter(); f.type="bandpass"; f.Q.value=1.2;
+  f.frequency.setValueAtTime(1400,t);
+  f.frequency.exponentialRampToValueAtTime(220,t+sure);
+  const g=a.createGain();
+  g.gain.setValueAtTime(0,t);
+  g.gain.linearRampToValueAtTime(.075,t+0.25);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+sure);
+  k.connect(f); f.connect(g); g.connect(a.destination);
+  k.start(t); k.stop(t+sure+0.1);
+}
+function sesDogru(){ [523,659,784,1047].forEach((f,i)=>nota(f,.35,"triangle",.2,i*0.09)); }
+function sesYanlis(){ nota(311,.28,"sawtooth",.14,0); nota(233,.4,"sawtooth",.14,0.16); }
+function sesFanfar(){ [523,523,659,784,1047,1319].forEach((f,i)=>nota(f,.4,"square",.13,i*0.11)); }
+function sesDurdu(){ nota(880,.16,"triangle",.16,0); nota(1175,.22,"triangle",.16,0.12); }
+
+/* ---------------- ÇARK ÇİZİMİ ---------------- */
+const tuval=document.getElementById("cark");
+const ctx=tuval.getContext("2d");
+const adet=konular.length;
+const dilimAci=360/adet;
+let aci=0, donuyor=false;
+
+function tuvalBoyutla(){
+  const kutu=tuval.getBoundingClientRect();
+  const dpr=window.devicePixelRatio||1;
+  tuval.width=kutu.width*dpr; tuval.height=kutu.height*dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ciz();
+}
+function ciz(){
+  const g=tuval.width/(window.devicePixelRatio||1);
+  const m=g/2, r=m-6;
+  ctx.clearRect(0,0,g,g);
+
+  ctx.save(); ctx.translate(m,m); ctx.rotate(aci*Math.PI/180);
+  for(let i=0;i<adet;i++){
+    const b=(i*dilimAci-90)*Math.PI/180, s=((i+1)*dilimAci-90)*Math.PI/180;
+    ctx.beginPath(); ctx.moveTo(0,0); ctx.arc(0,0,r,b,s); ctx.closePath();
+    ctx.fillStyle=konular[i].renk; ctx.fill();
+    ctx.lineWidth=3; ctx.strokeStyle="rgba(255,255,255,.9)"; ctx.stroke();
+
+    // Yazı, dilimin orta ekseni boyunca (dıştan içe) yazılır
+    ctx.save();
+    ctx.rotate(b+(s-b)/2);
+    ctx.textBaseline="middle";
+    ctx.fillStyle="#12303f";
+    ctx.shadowColor="rgba(255,255,255,.45)"; ctx.shadowBlur=2;
+
+    let boyut=Math.round(r*0.105);
+    const sinir=r*0.46;
+    ctx.font=`bold ${boyut}px 'Andika', sans-serif`;
+    while(ctx.measureText(konular[i].ad).width>sinir && boyut>10){
+      boyut--; ctx.font=`bold ${boyut}px 'Andika', sans-serif`;
+    }
+    ctx.textAlign="right";
+    ctx.fillText(konular[i].ad, r-14, 0);
+
+    ctx.textAlign="center";
+    ctx.shadowBlur=0;
+    ctx.font=`${Math.round(r*0.115)}px 'Andika','Segoe UI Emoji','Noto Color Emoji',sans-serif`;
+    ctx.fillText(konular[i].ikon, r*0.37, 0);
+    ctx.restore();
+  }
+  ctx.restore();
+
+  // dış çember
+  ctx.beginPath(); ctx.arc(m,m,r,0,Math.PI*2);
+  ctx.lineWidth=8; ctx.strokeStyle="#ffffff"; ctx.stroke();
+}
+window.addEventListener("resize",tuvalBoyutla);
+
+/* ---------------- ÇEVİRME ---------------- */
+const cevirBtn=document.getElementById("cevirBtn");
+function kazanan(){
+  const n=((-aci)%360+360)%360;      // ok yukarıda: 0° konumu
+  return Math.floor(n/dilimAci)%adet;
+}
+function cevir(){
+  if(donuyor) return;
+  donuyor=true; cevirBtn.disabled=true;
+  const sure=4200;
+  const hedef=aci+1440+Math.random()*360;
+  const baslangic=aci;
+  let t0=null, sonDilim=kazanan();
+  cizirti(sure/1000);
+
+  function adim(zaman){
+    if(!t0) t0=zaman;
+    const p=Math.min((zaman-t0)/sure,1);
+    const yumusak=1-Math.pow(1-p,3);
+    aci=baslangic+(hedef-baslangic)*yumusak;
+    ciz();
+    const d=kazanan();
+    if(d!==sonDilim){ sonDilim=d; tik(); }
+    if(p<1) requestAnimationFrame(adim);
+    else { donuyor=false; aci%=360; sesDurdu(); setTimeout(()=>soruAc(kazanan()),450); }
+  }
+  requestAnimationFrame(adim);
+}
+cevirBtn.addEventListener("click",cevir);
+
+/* ---------------- SORU KARTI ---------------- */
+const perde=document.getElementById("perde");
+const konuAdi=document.getElementById("konuAdi");
+const soruMetni=document.getElementById("soruMetni");
+const soruTr=document.getElementById("soruTr");
+const seceneklerEl=document.getElementById("secenekler");
+const geriBildirim=document.getElementById("geriBildirim");
+const devamBtn=document.getElementById("devamBtn");
+const dinleBtn=document.getElementById("dinleBtn");
+let puan=0,dogruSayi=0,yanlisSayi=0,aktifSoru=null,sorulmus={};
+
+function soruAc(indeks){
+  const konu=konular[indeks];
+  sorulmus[indeks]=sorulmus[indeks]||[];
+  if(sorulmus[indeks].length>=konu.sorular.length) sorulmus[indeks]=[];
+  let s;
+  do{ s=Math.floor(Math.random()*konu.sorular.length); }while(sorulmus[indeks].includes(s));
+  sorulmus[indeks].push(s);
+
+  const ham=konu.sorular[s];
+  // şıkları karıştır
+  const siralı=ham.c.map((m,i)=>({m,dogru:i===ham.d}));
+  for(let i=siralı.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [siralı[i],siralı[j]]=[siralı[j],siralı[i]]; }
+  aktifSoru={metin:ham.s, secenekler:siralı, konu:konu};
+
+  konuAdi.textContent=`${konu.ikon} ${konu.ad} — ${konu.tr}`;
+  konuAdi.style.background=konu.renk;
+  soruMetni.textContent=ham.s;
+  soruTr.textContent=ham.t;
+  geriBildirim.textContent="";
+  devamBtn.style.display="none";
+
+  seceneklerEl.innerHTML="";
+  siralı.forEach(o=>{
+    const b=document.createElement("button");
+    b.className="secenek"; b.textContent=o.m;
+    b.addEventListener("click",()=>cevapla(b,o.dogru));
+    seceneklerEl.appendChild(b);
+  });
+
+  perde.classList.add("acik");
+  konus(ham.s);
+  seceneklerEl.firstChild.focus();
+}
+
+function cevapla(dugme,dogruMu){
+  [...seceneklerEl.children].forEach(b=>b.disabled=true);
+  if(dogruMu){
+    dugme.classList.add("dogru");
+    puan+=10; dogruSayi++;
+    geriBildirim.textContent="Well done! Doğru cevap 🎉";
+    geriBildirim.style.color="var(--dogru)";
+    sesDogru(); konfetiAt();
+    if(dogruSayi%5===0) setTimeout(sesFanfar,600);
+  }else{
+    dugme.classList.add("yanlis");
+    yanlisSayi++;
+    [...seceneklerEl.children].forEach(b=>{
+      const o=aktifSoru.secenekler[[...seceneklerEl.children].indexOf(b)];
+      if(o.dogru) b.classList.add("dogru");
+    });
+    geriBildirim.textContent="Try again! Doğrusu yeşil olan 💡";
+    geriBildirim.style.color="var(--yanlis)";
+    sesYanlis();
+  }
+  document.getElementById("puan").textContent=puan;
+  document.getElementById("dogruSayi").textContent=dogruSayi;
+  document.getElementById("yanlisSayi").textContent=yanlisSayi;
+  devamBtn.style.display="inline-block";
+  devamBtn.focus();
+}
+
+devamBtn.addEventListener("click",()=>{
+  perde.classList.remove("acik");
+  cevirBtn.disabled=false;
+  cevirBtn.focus();
+});
+dinleBtn.addEventListener("click",()=>{ if(aktifSoru) konus(aktifSoru.metin); });
+
+function konus(metin){
+  if(!sesAcik||!("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(metin.replace(/[🍎🌿🌊🐱🐶🐦🦅🐟🐢🐘🐭🐜🍌🍓🍉🍋🍇🍑👨👩👵👂👀👃✋🦶⚽🪁🧸🧩🚗🪀🥛🍞🧀🥚👟📕📖✏️✂️🏫🏥🏪❄️🔥🌈☂️🕶️🧢😴🏃🎨👕👖🧦🧤👞🍏]/gu,""));
+  u.lang="en-US"; u.rate=0.85;
+  window.speechSynthesis.speak(u);
+}
+
+/* ---------------- KONFETİ ---------------- */
+const konfetiEl=document.getElementById("konfeti");
+function konfetiAt(){
+  const renkler=["#ffc93c","#2ecc9b","#4aa3df","#f08cae","#ef6f6c","#9b8cf0"];
+  for(let i=0;i<34;i++){
+    const p=document.createElement("div");
+    p.className="parca";
+    p.style.left=Math.random()*100+"vw";
+    p.style.top="-20px";
+    p.style.background=renkler[Math.floor(Math.random()*renkler.length)];
+    p.style.animationDuration=(1.6+Math.random()*1.4)+"s";
+    p.style.animationDelay=(Math.random()*0.3)+"s";
+    konfetiEl.appendChild(p);
+    setTimeout(()=>p.remove(),3400);
+  }
+}
+
+/* ---------------- ALT BUTONLAR ---------------- */
+const sesBtn=document.getElementById("sesBtn");
+sesBtn.addEventListener("click",()=>{
+  sesAcik=!sesAcik;
+  sesBtn.textContent=sesAcik?"🔊 Ses açık":"🔇 Ses kapalı";
+  if(!sesAcik&&"speechSynthesis" in window) window.speechSynthesis.cancel();
+});
+document.getElementById("sifirlaBtn").addEventListener("click",()=>{
+  puan=0;dogruSayi=0;yanlisSayi=0;sorulmus={};
+  document.getElementById("puan").textContent=0;
+  document.getElementById("dogruSayi").textContent=0;
+  document.getElementById("yanlisSayi").textContent=0;
+});
+
+document.addEventListener("keydown",e=>{
+  if(e.code==="Space"&&!perde.classList.contains("acik")){ e.preventDefault(); cevir(); }
+  if(e.key==="Escape"&&perde.classList.contains("acik")) devamBtn.click();
+});
+
+/* Başlangıç: yazı tipi yüklendikten sonra çiz */
+if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(tuvalBoyutla); }
+tuvalBoyutla();
+</script>
+</body>
+</html>

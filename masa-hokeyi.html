@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Masa Hokeyi</title>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0f19;
+  --p1:#ff2e88;
+  --p2:#00ffcc;
+}
+*{box-sizing:border-box;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  margin:0;padding:0;
+  background:var(--bg);
+  color:#fff;
+  font-family:'Andika','Segoe UI',Roboto,sans-serif;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:100vh;overflow:hidden;
+  touch-action:none;
+}
+
+/* ---------- Menü ---------- */
+.menu-container{
+  background:rgba(255,255,255,.05);
+  backdrop-filter:blur(10px);
+  padding:24px;border-radius:20px;
+  border:1px solid rgba(255,255,255,.1);
+  box-shadow:0 0 30px rgba(0,255,204,.2);
+  text-align:center;max-width:430px;width:92%;
+  max-height:96vh;overflow-y:auto;
+}
+h1{font-size:2rem;margin:0 0 18px;text-shadow:0 0 15px var(--p2);}
+.setting-box{margin-bottom:18px;text-align:left;}
+.setting-title{font-size:.95rem;color:#cbd5e1;margin-bottom:8px;font-weight:bold;}
+.btn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:10px;}
+.btn-option{
+  background:rgba(255,255,255,.08);border:2px solid transparent;color:#fff;
+  padding:10px;border-radius:10px;cursor:pointer;font-weight:bold;font-size:.9rem;
+  transition:all .2s;font-family:inherit;
+}
+.btn-option.selected{border-color:var(--p2);background:rgba(0,255,204,.2);box-shadow:0 0 12px var(--p2);}
+.btn-option:focus-visible{outline:3px solid #fff;outline-offset:2px;}
+.start-btn{
+  background:linear-gradient(45deg,var(--p1),var(--p2));border:none;color:#000;
+  font-size:1.2rem;font-weight:bold;padding:14px;border-radius:30px;cursor:pointer;
+  width:100%;margin-top:6px;box-shadow:0 0 20px var(--p2);transition:transform .2s;
+  font-family:inherit;
+}
+.start-btn:active{transform:scale(.98);}
+
+/* ---------- Oyun ---------- */
+.game-wrapper{display:none;flex-direction:column;align-items:center;width:100%;height:100%;justify-content:center;gap:8px;padding:6px;}
+.scoreboard{
+  display:flex;justify-content:space-between;align-items:center;
+  width:100%;max-width:460px;padding:8px 16px;
+  background:rgba(255,255,255,.05);border-radius:12px;
+  font-size:1rem;font-weight:bold;
+}
+.tag{padding:4px 10px;border-radius:8px;font-size:.85rem;}
+.tag.t1{color:var(--p1);border:1.5px solid var(--p1);}
+.tag.t2{color:var(--p2);border:1.5px solid var(--p2);}
+.score{font-size:1.7rem;}
+.score.s1{color:var(--p1);text-shadow:0 0 10px var(--p1);}
+.score.s2{color:var(--p2);text-shadow:0 0 10px var(--p2);}
+.canvas-holder{position:relative;line-height:0;}
+canvas{
+  background:#070a12;border:3px solid rgba(255,255,255,.75);border-radius:18px;
+  box-shadow:0 0 25px rgba(255,255,255,.15);display:block;touch-action:none;
+}
+.overlay{
+  position:absolute;inset:0;display:none;flex-direction:column;
+  align-items:center;justify-content:center;gap:14px;
+  background:rgba(7,10,18,.88);border-radius:18px;text-align:center;padding:20px;
+}
+.overlay h2{margin:0;font-size:1.6rem;}
+.overlay .start-btn{width:auto;padding:12px 26px;font-size:1rem;}
+.controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+.small-btn{
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.6);color:#fff;
+  padding:8px 18px;border-radius:15px;cursor:pointer;font-weight:bold;font-family:inherit;font-size:.9rem;
+}
+.small-btn:active{transform:scale(.97);}
+</style>
+</head>
+<body>
+
+<div id="menu" class="menu-container">
+  <h1>🏒 Masa Hokeyi</h1>
+
+  <div class="setting-box">
+    <div class="setting-title">Oyun modu</div>
+    <div class="btn-grid" id="modeGrid">
+      <button class="btn-option selected" data-mode="1">🤖 1 Kişilik</button>
+      <button class="btn-option" data-mode="2">👥 2 Kişilik</button>
+    </div>
+  </div>
+
+  <div class="setting-box" id="aiDifficultyBox">
+    <div class="setting-title">Bilgisayarın zorluğu</div>
+    <div class="btn-grid" id="diffGrid">
+      <button class="btn-option" data-diff="easy">Kolay</button>
+      <button class="btn-option selected" data-diff="medium">Orta</button>
+      <button class="btn-option" data-diff="hard">Zor</button>
+    </div>
+  </div>
+
+  <div class="setting-box">
+    <div class="setting-title">Kazanan gol sayısı</div>
+    <div class="btn-grid" id="goalGrid">
+      <button class="btn-option" data-goals="3">3 Gol</button>
+      <button class="btn-option selected" data-goals="5">5 Gol</button>
+      <button class="btn-option" data-goals="7">7 Gol</button>
+      <button class="btn-option" data-goals="10">10 Gol</button>
+    </div>
+  </div>
+
+  <button class="start-btn" onclick="initGame()">Oyuna başla 🚀</button>
+</div>
+
+<div id="gameWrapper" class="game-wrapper">
+  <div class="scoreboard">
+    <div class="tag t1" id="nameP1">Oyuncu 1</div>
+    <div><span class="score s1" id="scoreP1">0</span> : <span class="score s2" id="scoreP2">0</span></div>
+    <div class="tag t2" id="nameP2">Oyuncu 2</div>
+  </div>
+
+  <div class="canvas-holder">
+    <canvas id="board"></canvas>
+    <div class="overlay" id="overlay">
+      <h2 id="overlayText">Bitti</h2>
+      <button class="start-btn" onclick="restartGame()">Tekrar oyna 🔄</button>
+      <button class="small-btn" onclick="quitGame()">Menüye dön</button>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="small-btn" onclick="toggleFullscreen()" id="fsBtn">⛶ Tam ekran</button>
+    <button class="small-btn" onclick="togglePause()" id="pauseBtn">⏸ Duraklat</button>
+    <button class="small-btn" onclick="quitGame()">← Menü</button>
+  </div>
+</div>
+
+<script>
+/* ================= Ayarlar ================= */
+let gameMode = 1;
+let aiDifficulty = 'medium';
+let targetGoals = 5;
+
+/* ================= Saha ================= */
+const W = 400, H = 650;                 // mantıksal ölçüler
+const GOAL_W = 150;
+const GOAL_L = (W - GOAL_W) / 2;
+const GOAL_R = GOAL_L + GOAL_W;
+const MAX_SPEED = 15;
+
+const canvas = document.getElementById('board');
+const ctx = canvas.getContext('2d');
+
+const puck = {x:W/2, y:H/2, vx:0, vy:0, r:14};
+const p1 = {x:W/2, y:H-80, px:W/2, py:H-80, vx:0, vy:0, r:26, color:'#ff2e88'};
+const p2 = {x:W/2, y:80,   px:W/2, py:80,   vx:0, vy:0, r:26, color:'#00ffcc'};
+
+let scoreP1 = 0, scoreP2 = 0;
+let isRunning = false, isPaused = false, gameOver = false;
+let goalPause = 0;        // gol sonrası kısa bekleme (frame)
+let flash = {side:null, t:0};
+let hintTimer = 0;
+
+/* ================= Ölçekleme / Tam ekran ================= */
+function resizeCanvas(){
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const chrome = document.fullscreenElement ? 110 : 150;   // skor + butonlar için pay
+  const availH = Math.max(240, window.innerHeight - chrome);
+  const availW = Math.min(window.innerWidth - 16, 470);
+  const scale = Math.min(availW / W, availH / H);
+
+  canvas.style.width  = (W * scale) + 'px';
+  canvas.style.height = (H * scale) + 'px';
+  canvas.width  = Math.round(W * scale * dpr);
+  canvas.height = Math.round(H * scale * dpr);
+  ctx.setTransform(scale*dpr, 0, 0, scale*dpr, 0, 0);   // mantıksal koordinatlarda çizim
+  if(!isRunning) draw();
+}
+window.addEventListener('resize', resizeCanvas);
+window.addEventListener('orientationchange', ()=>setTimeout(resizeCanvas,200));
+document.addEventListener('fullscreenchange', ()=>{ setTimeout(resizeCanvas,100); updateFsLabel(); });
+document.addEventListener('webkitfullscreenchange', ()=>{ setTimeout(resizeCanvas,100); updateFsLabel(); });
+
+function toggleFullscreen(){
+  const el = document.documentElement;
+  const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+  if(!isFs){
+    const req = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+    if(req){
+      req.call(el).then(()=>{
+        if(screen.orientation && screen.orientation.lock){
+          screen.orientation.lock('portrait').catch(()=>{});
+        }
+      }).catch(()=>{});
+    }else{
+      alert('Bu tarayıcı tam ekranı desteklemiyor.');
+    }
+  }else{
+    const exit = document.exitFullscreen || document.webkitExitFullscreen;
+    if(exit) exit.call(document).catch(()=>{});
+  }
+  setTimeout(resizeCanvas,150);
+}
+function updateFsLabel(){
+  const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+  document.getElementById('fsBtn').textContent = isFs ? '⤢ Tam ekrandan çık' : '⛶ Tam ekran';
+}
+
+/* ================= Ses ================= */
+let audioCtx = null;
+function playSound(freq, type, duration, vol){
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type; osc.frequency.value = freq;
+    gain.gain.value = vol || 0.18;
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start();
+    gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+    osc.stop(audioCtx.currentTime + duration);
+  }catch(e){}
+}
+
+/* ================= Menü ================= */
+document.querySelectorAll('#modeGrid .btn-option').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('#modeGrid .btn-option').forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+    gameMode = parseInt(btn.dataset.mode);
+    document.getElementById('aiDifficultyBox').style.display = gameMode===1 ? 'block' : 'none';
+  };
+});
+document.querySelectorAll('#diffGrid .btn-option').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('#diffGrid .btn-option').forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+    aiDifficulty = btn.dataset.diff;
+  };
+});
+document.querySelectorAll('#goalGrid .btn-option').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('#goalGrid .btn-option').forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+    targetGoals = parseInt(btn.dataset.goals);
+  };
+});
+
+/* ================= Oyun kurulumu ================= */
+function initGame(){
+  document.getElementById('menu').style.display = 'none';
+  document.getElementById('gameWrapper').style.display = 'flex';
+  document.getElementById('overlay').style.display = 'none';
+  document.getElementById('nameP2').textContent = gameMode===1 ? 'Bilgisayar' : 'Oyuncu 2';
+  playSound(600,'sine',0.1);
+  resizeCanvas();
+  restartGame();
+}
+
+function restartGame(){
+  document.getElementById('overlay').style.display = 'none';
+  scoreP1 = 0; scoreP2 = 0;
+  gameOver = false; isPaused = false;
+  document.getElementById('pauseBtn').textContent = '⏸ Duraklat';
+  updateScoreUI();
+  resetPositions(Math.random() > .5 ? 1 : -1);
+  hintTimer = 150;
+  if(!isRunning){ isRunning = true; requestAnimationFrame(gameLoop); }
+}
+
+function resetPositions(dir){
+  puck.x = W/2; puck.y = H/2; puck.vx = 0; puck.vy = 0;
+  p1.x = W/2; p1.y = H-80; p1.px = p1.x; p1.py = p1.y; p1.vx = 0; p1.vy = 0;
+  p2.x = W/2; p2.y = 80;   p2.px = p2.x; p2.py = p2.y; p2.vx = 0; p2.vy = 0;
+  goalPause = 45;
+  puck._dir = dir || (Math.random() > .5 ? 1 : -1);
+}
+
+/* ================= Kontroller ================= */
+function pointerPos(t){
+  const rect = canvas.getBoundingClientRect();
+  return {
+    x: (t.clientX - rect.left) * (W / rect.width),
+    y: (t.clientY - rect.top)  * (H / rect.height)
+  };
+}
+function handleMove(e){
+  if(!isRunning || isPaused || gameOver) return;
+  e.preventDefault();
+  const list = e.touches ? e.touches : [e];
+  for(let i=0;i<list.length;i++){
+    const pos = pointerPos(list[i]);
+    if(pos.y > H/2){
+      p1.x = Math.max(p1.r, Math.min(W-p1.r, pos.x));
+      p1.y = Math.max(H/2 + p1.r, Math.min(H-p1.r, pos.y));
+    }else if(gameMode === 2){
+      p2.x = Math.max(p2.r, Math.min(W-p2.r, pos.x));
+      p2.y = Math.max(p2.r, Math.min(H/2 - p2.r, pos.y));
+    }
+  }
+  hintTimer = 0;
+}
+canvas.addEventListener('mousemove', handleMove);
+canvas.addEventListener('touchmove', handleMove, {passive:false});
+canvas.addEventListener('touchstart', handleMove, {passive:false});
+canvas.addEventListener('pointerdown', ()=>{ if(audioCtx && audioCtx.state==='suspended') audioCtx.resume(); });
+
+function togglePause(){
+  if(gameOver) return;
+  isPaused = !isPaused;
+  document.getElementById('pauseBtn').textContent = isPaused ? '▶ Devam et' : '⏸ Duraklat';
+}
+document.addEventListener('visibilitychange', ()=>{
+  if(document.hidden && isRunning && !gameOver){
+    isPaused = true;
+    document.getElementById('pauseBtn').textContent = '▶ Devam et';
+  }
+});
+
+/* ================= Döngü ================= */
+function gameLoop(){
+  if(!isRunning) return;
+  if(!isPaused && !gameOver){
+    if(goalPause > 0){
+      goalPause--;
+      if(goalPause === 0){
+        const d = puck._dir || 1;
+        puck.vx = (Math.random()-0.5)*3;
+        puck.vy = d * 5;
+      }
+    }else{
+      updateAI();
+      updatePhysics();
+    }
+    updateMalletVelocity();
+    if(flash.t > 0) flash.t--;
+    if(hintTimer > 0) hintTimer--;
+  }
+  draw();
+  requestAnimationFrame(gameLoop);
+}
+
+function updateMalletVelocity(){
+  p1.vx = p1.x - p1.px; p1.vy = p1.y - p1.py;
+  p2.vx = p2.x - p2.px; p2.vy = p2.y - p2.py;
+  p1.px = p1.x; p1.py = p1.y;
+  p2.px = p2.x; p2.py = p2.y;
+}
+
+/* ================= Yapay zekâ ================= */
+function updateAI(){
+  if(gameMode !== 1) return;
+  let maxStep = 3.2, aggression = 0.55;
+  if(aiDifficulty === 'medium'){ maxStep = 5.0; aggression = 0.75; }
+  if(aiDifficulty === 'hard'){   maxStep = 7.5; aggression = 0.95; }
+
+  let tx, ty;
+  if(puck.y < H/2){
+    // Disk kendi sahasında: vurmaya git
+    tx = puck.x;
+    ty = Math.min(puck.y + puck.r + p2.r*0.6, H/2 - p2.r);
+    tx = p2.x + (tx - p2.x) * aggression;
+  }else{
+    // Savunma pozisyonu: kaleyi kapat
+    tx = W/2 + (puck.x - W/2) * 0.45;
+    ty = 80;
+  }
+  const dx = tx - p2.x, dy = ty - p2.y;
+  const d = Math.hypot(dx, dy) || 1;
+  const step = Math.min(maxStep, d);
+  p2.x += (dx/d) * step;
+  p2.y += (dy/d) * step;
+  p2.x = Math.max(p2.r, Math.min(W-p2.r, p2.x));
+  p2.y = Math.max(p2.r, Math.min(H/2 - p2.r, p2.y));
+}
+
+/* ================= Fizik ================= */
+function updatePhysics(){
+  // Hız sınırı
+  const sp = Math.hypot(puck.vx, puck.vy);
+  if(sp > MAX_SPEED){ puck.vx = puck.vx/sp*MAX_SPEED; puck.vy = puck.vy/sp*MAX_SPEED; }
+
+  // Duvardan geçmeyi (tünelleme) önlemek için küçük adımlar
+  const steps = Math.max(1, Math.ceil(sp / (puck.r * 0.6)));
+  for(let i=0;i<steps;i++){
+    puck.x += puck.vx / steps;
+    puck.y += puck.vy / steps;
+
+    // Yan duvarlar
+    if(puck.x - puck.r <= 0){ puck.x = puck.r; puck.vx = Math.abs(puck.vx)*0.92; wallSound(); }
+    else if(puck.x + puck.r >= W){ puck.x = W - puck.r; puck.vx = -Math.abs(puck.vx)*0.92; wallSound(); }
+
+    const inGoalX = puck.x > GOAL_L && puck.x < GOAL_R;
+
+    if(!inGoalX){
+      if(puck.y - puck.r <= 0){ puck.y = puck.r; puck.vy = Math.abs(puck.vy)*0.92; wallSound(); }
+      else if(puck.y + puck.r >= H){ puck.y = H - puck.r; puck.vy = -Math.abs(puck.vy)*0.92; wallSound(); }
+    }else{
+      if(puck.y + puck.r < 0){ goal(1); return; }        // üst kaleye girdi → 1. oyuncu
+      if(puck.y - puck.r > H){ goal(2); return; }        // alt kaleye girdi → 2. oyuncu
+    }
+
+    hitMallet(p1);
+    hitMallet(p2);
+  }
+
+  // Sürtünme
+  puck.vx *= 0.996;
+  puck.vy *= 0.996;
+  if(Math.abs(puck.vx) < 0.02) puck.vx = 0;
+  if(Math.abs(puck.vy) < 0.02) puck.vy = 0;
+}
+
+let wallSoundCooldown = 0;
+function wallSound(){
+  if(wallSoundCooldown > 0) return;
+  wallSoundCooldown = 6;
+  playSound(300,'sine',0.05,0.12);
+  setTimeout(()=>{ wallSoundCooldown = 0; }, 90);
+}
+
+function hitMallet(p){
+  const dx = puck.x - p.x, dy = puck.y - p.y;
+  const dist = Math.hypot(dx, dy);
+  const minDist = puck.r + p.r;
+  if(dist >= minDist || dist === 0) return;
+
+  const nx = dx/dist, ny = dy/dist;
+
+  // Diski tokacın dışına it
+  puck.x = p.x + nx * minDist;
+  puck.y = p.y + ny * minDist;
+
+  // Göreli hız üzerinden sekme
+  const rvx = puck.vx - p.vx, rvy = puck.vy - p.vy;
+  const vn = rvx*nx + rvy*ny;
+  if(vn < 0){
+    const j = -(1 + 0.92) * vn;
+    puck.vx += j * nx;
+    puck.vy += j * ny;
+  }
+  // Tokacın kendi hızını aktar (sert vuruş yapılabilsin)
+  puck.vx += p.vx * 0.75;
+  puck.vy += p.vy * 0.75;
+
+  // Diskin tokacın içinde takılıp kalmaması için minimum çıkış hızı
+  let s = Math.hypot(puck.vx, puck.vy);
+  if(s < 3.5){
+    puck.vx = nx * 3.5;
+    puck.vy = ny * 3.5;
+    s = 3.5;
+  }
+  if(s > MAX_SPEED){ puck.vx = puck.vx/s*MAX_SPEED; puck.vy = puck.vy/s*MAX_SPEED; }
+
+  playSound(420 + Math.min(s*25, 300), 'square', 0.08, 0.15);
+}
+
+function goal(scorer){
+  if(scorer === 1){ scoreP1++; flash.side = 'top'; }
+  else { scoreP2++; flash.side = 'bottom'; }
+  flash.t = 30;
+  playSound(880,'triangle',0.35,0.2);
+  setTimeout(()=>playSound(1180,'triangle',0.3,0.2), 130);
+  updateScoreUI();
+
+  if(scoreP1 >= targetGoals || scoreP2 >= targetGoals){
+    endGame();
+  }else{
+    // Gol yiyen oyuncuya servis
+    resetPositions(scorer === 1 ? 1 : -1);
+  }
+}
+
+function endGame(){
+  gameOver = true;
+  let txt;
+  if(scoreP1 >= targetGoals) txt = '🏆 1. oyuncu kazandı!';
+  else txt = gameMode === 1 ? '🤖 Bilgisayar kazandı!' : '🏆 2. oyuncu kazandı!';
+  document.getElementById('overlayText').textContent = `${txt}  (${scoreP1} - ${scoreP2})`;
+  document.getElementById('overlay').style.display = 'flex';
+}
+
+function updateScoreUI(){
+  document.getElementById('scoreP1').textContent = scoreP1;
+  document.getElementById('scoreP2').textContent = scoreP2;
+}
+
+/* ================= Çizim ================= */
+function draw(){
+  ctx.clearRect(0,0,W,H);
+
+  // --- Oyuncu alanları (net ayrım) ---
+  // Üst alan (Oyuncu 2 / Bilgisayar)
+  const gTop = ctx.createLinearGradient(0,0,0,H/2);
+  gTop.addColorStop(0,'rgba(0,255,204,0.20)');
+  gTop.addColorStop(1,'rgba(0,255,204,0.03)');
+  ctx.fillStyle = gTop;
+  ctx.fillRect(0,0,W,H/2);
+
+  // Alt alan (Oyuncu 1)
+  const gBot = ctx.createLinearGradient(0,H,0,H/2);
+  gBot.addColorStop(0,'rgba(255,46,136,0.22)');
+  gBot.addColorStop(1,'rgba(255,46,136,0.03)');
+  ctx.fillStyle = gBot;
+  ctx.fillRect(0,H/2,W,H/2);
+
+  // Alan kenarlıkları
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = 'rgba(0,255,204,0.55)';
+  ctx.strokeRect(3,3,W-6,H/2-6);
+  ctx.strokeStyle = 'rgba(255,46,136,0.55)';
+  ctx.strokeRect(3,H/2+3,W-6,H/2-6);
+
+  // Orta çizgi
+  ctx.setLineDash([12,10]);
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = 'rgba(255,255,255,0.55)';
+  ctx.beginPath(); ctx.moveTo(0,H/2); ctx.lineTo(W,H/2); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Orta daire
+  ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(W/2,H/2,52,0,Math.PI*2); ctx.stroke();
+
+  // Alan isimleri
+  ctx.font = 'bold 15px Andika, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(0,255,204,0.7)';
+  ctx.fillText(gameMode === 1 ? 'Bilgisayar alanı' : '2. oyuncu alanı', W/2, H/2 - 22);
+  ctx.fillStyle = 'rgba(255,46,136,0.7)';
+  ctx.fillText('1. oyuncu alanı', W/2, H/2 + 34);
+
+  // Kale ağızları
+  drawGoal(true);
+  drawGoal(false);
+
+  // Gol parlaması
+  if(flash.t > 0){
+    const a = flash.t / 30;
+    ctx.fillStyle = flash.side === 'top' ? `rgba(255,46,136,${a*0.35})` : `rgba(0,255,204,${a*0.35})`;
+    ctx.fillRect(0,0,W,H);
+    ctx.fillStyle = `rgba(255,255,255,${a})`;
+    ctx.font = 'bold 46px Andika, sans-serif';
+    ctx.fillText('GOL!', W/2, H/2 + 16);
+  }
+
+  // Tokaçlar
+  drawMallet(p2);
+  drawMallet(p1);
+
+  // Disk
+  ctx.save();
+  ctx.shadowBlur = 18; ctx.shadowColor = '#ffffff';
+  ctx.beginPath(); ctx.arc(puck.x, puck.y, puck.r, 0, Math.PI*2);
+  ctx.fillStyle = '#ffffff'; ctx.fill();
+  ctx.lineWidth = 3; ctx.strokeStyle = '#ff3b3b'; ctx.stroke();
+  ctx.restore();
+
+  // Başlangıç ipucu
+  if(hintTimer > 0 && !gameOver){
+    ctx.fillStyle = `rgba(255,255,255,${Math.min(hintTimer/60,1)*0.85})`;
+    ctx.font = 'bold 15px Andika, sans-serif';
+    ctx.fillText('Alt alanda parmağını kaydır', W/2, H - 24);
+  }
+
+  // Duraklatma
+  if(isPaused && !gameOver){
+    ctx.fillStyle = 'rgba(7,10,18,0.75)';
+    ctx.fillRect(0,0,W,H);
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 30px Andika, sans-serif';
+    ctx.fillText('Duraklatıldı', W/2, H/2);
+  }
+}
+
+function drawGoal(top){
+  const y = top ? 0 : H;
+  const color = top ? '#00ffcc' : '#ff2e88';
+  ctx.save();
+  ctx.shadowBlur = 20; ctx.shadowColor = color;
+  ctx.strokeStyle = color; ctx.lineWidth = 8;
+  ctx.beginPath();
+  ctx.moveTo(GOAL_L, top ? y+4 : y-4);
+  ctx.lineTo(GOAL_R, top ? y+4 : y-4);
+  ctx.stroke();
+  ctx.restore();
+
+  // Kale alanı yayı
+  ctx.strokeStyle = 'rgba(255,255,255,0.22)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(W/2, y, GOAL_W*0.62, top ? 0 : Math.PI, top ? Math.PI : Math.PI*2);
+  ctx.stroke();
+}
+
+function drawMallet(p){
+  ctx.save();
+  ctx.shadowBlur = 22; ctx.shadowColor = p.color;
+  ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+  ctx.fillStyle = p.color; ctx.fill();
+  ctx.lineWidth = 3; ctx.strokeStyle = '#fff'; ctx.stroke();
+  ctx.restore();
+  // İç halka
+  ctx.beginPath(); ctx.arc(p.x, p.y, p.r*0.45, 0, Math.PI*2);
+  ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 2; ctx.stroke();
+}
+
+/* ================= Çıkış ================= */
+function quitGame(){
+  isRunning = false; isPaused = false; gameOver = false;
+  document.getElementById('overlay').style.display = 'none';
+  document.getElementById('menu').style.display = 'block';
+  document.getElementById('gameWrapper').style.display = 'none';
+}
+
+updateFsLabel();
+resizeCanvas();
+</script>
+</body>
+</html>

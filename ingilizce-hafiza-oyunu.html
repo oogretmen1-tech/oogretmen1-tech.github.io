@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İngilizce Flashcard Hafıza Oyunu</title>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary-bg:#0b0f19;
+  --active-neon:#ff007f;
+}
+*{box-sizing:border-box;}
+body{
+  font-family:'Andika','Segoe UI',Roboto,sans-serif;
+  background-color:var(--primary-bg);
+  color:#fff;
+  margin:0;padding:20px;
+  display:flex;flex-direction:column;align-items:center;
+  min-height:100vh;
+  transition:background-color .5s ease;
+}
+body::before{
+  content:'';position:fixed;top:0;left:0;width:100%;height:100%;
+  background:radial-gradient(circle at 50% 20%,var(--active-neon),transparent 70%);
+  opacity:.15;pointer-events:none;transition:all .5s ease;z-index:-1;
+}
+h1{
+  font-size:1.9rem;color:#fff;
+  text-shadow:0 0 15px var(--active-neon),0 0 25px var(--active-neon);
+  margin:0 0 20px;text-align:center;
+}
+.portal-layout{
+  display:flex;flex-direction:row;gap:20px;
+  max-width:1100px;width:100%;
+  background:rgba(255,255,255,.03);
+  backdrop-filter:blur(10px);
+  padding:25px;border-radius:20px;
+  border:1px solid rgba(255,255,255,.1);
+  box-shadow:0 8px 32px 0 rgba(0,0,0,.37);
+}
+.left-panel{flex:1.2;display:flex;flex-direction:column;}
+.right-panel{flex:1;display:flex;flex-direction:column;gap:18px;justify-content:space-between;}
+.category-scroll{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
+  gap:10px;max-height:480px;overflow-y:auto;padding-right:8px;
+}
+.category-scroll::-webkit-scrollbar{width:6px;}
+.category-scroll::-webkit-scrollbar-thumb{background:var(--active-neon);border-radius:10px;}
+.section-box{
+  background:rgba(255,255,255,.04);border-radius:15px;padding:15px;
+  border:1px solid rgba(255,255,255,.08);
+}
+.section-title{
+  font-size:1.05rem;font-weight:bold;margin-bottom:12px;color:#e2e8f0;
+  border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:5px;
+  display:flex;justify-content:space-between;align-items:baseline;gap:8px;
+}
+.limit-note{font-size:.75rem;font-weight:normal;color:#94a3b8;}
+.btn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(95px,1fr));gap:8px;}
+.btn-option{
+  background:rgba(255,255,255,.05);
+  border:1.5px solid rgba(255,255,255,.2);
+  color:#fff;padding:10px 8px;font-size:.85rem;font-weight:bold;
+  border-radius:10px;cursor:pointer;transition:all .2s ease;text-align:center;
+  font-family:inherit;
+}
+.btn-option:hover:not(:disabled){transform:translateY(-2px);}
+.btn-option:focus-visible{outline:3px solid #fff;outline-offset:2px;}
+.btn-option.selected{
+  background:var(--active-neon);color:#fff;border-color:#fff;
+  box-shadow:0 0 15px var(--active-neon);
+}
+.btn-option:disabled{opacity:.25;cursor:not-allowed;text-decoration:line-through;}
+.start-btn{
+  background:linear-gradient(45deg,var(--active-neon),#fff);
+  border:none;color:#000;font-size:1.15rem;font-weight:bold;
+  padding:15px;border-radius:15px;cursor:pointer;
+  box-shadow:0 0 20px var(--active-neon);transition:transform .3s ease;
+  width:100%;font-family:inherit;
+}
+.start-btn:hover{transform:scale(1.02);}
+.scoreboard{display:flex;gap:15px;margin-bottom:15px;font-size:1.05rem;font-weight:bold;flex-wrap:wrap;justify-content:center;}
+.player-box{padding:8px 16px;border-radius:10px;background:rgba(255,255,255,.05);border:2px solid transparent;}
+.player-box.active{border-color:var(--active-neon);box-shadow:0 0 15px var(--active-neon);background:rgba(255,255,255,.15);}
+.game-board{display:grid;gap:12px;justify-content:center;width:100%;max-width:1100px;}
+.card{aspect-ratio:3/4;perspective:1000px;cursor:pointer;width:100%;}
+.card-inner{position:relative;width:100%;height:100%;text-align:center;
+  transition:transform .5s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;}
+.card.flipped .card-inner{transform:rotateY(180deg);}
+.card-front,.card-back{
+  position:absolute;width:100%;height:100%;backface-visibility:hidden;
+  border-radius:12px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:5px;
+}
+.card-front{background:#111827;border:2px solid var(--active-neon);
+  box-shadow:inset 0 0 10px var(--active-neon);font-size:1.5rem;color:var(--active-neon);}
+.card-back{background:#090d16;transform:rotateY(180deg);
+  border:2px solid var(--active-neon);box-shadow:0 0 15px var(--active-neon);}
+.card.matched .card-back{border-color:#22c55e;box-shadow:0 0 18px #22c55e;}
+.card.matched{cursor:default;}
+.card-emoji{font-size:clamp(1.5rem,3.5vw,2.5rem);}
+.card-text{font-size:clamp(.6rem,2vw,.85rem);font-weight:bold;color:#fff;margin-top:4px;
+  text-shadow:0 0 5px rgba(255,255,255,.5);word-break:break-word;}
+.back-btn{
+  background:rgba(255,255,255,.1);color:#fff;border:2px solid var(--active-neon);
+  box-shadow:0 0 10px var(--active-neon);padding:8px 20px;border-radius:20px;
+  font-weight:bold;cursor:pointer;margin-bottom:15px;font-family:inherit;
+}
+.win-msg{
+  margin:18px 0;padding:14px 22px;border-radius:15px;text-align:center;
+  background:rgba(255,255,255,.08);border:2px solid var(--active-neon);
+  box-shadow:0 0 20px var(--active-neon);font-size:1.1rem;font-weight:bold;
+}
+@media (max-width:800px){
+  .portal-layout{flex-direction:column;}
+  .category-scroll{max-height:230px;}
+  .game-board{grid-template-columns:repeat(4,1fr)!important;gap:8px;}
+}
+@media (prefers-reduced-motion:reduce){
+  .card-inner{transition:none;}
+  .btn-option:hover,.start-btn:hover{transform:none;}
+}
+</style>
+</head>
+<body>
+
+<h1>✨ English Flashcard Memory ✨</h1>
+
+<div id="setup" class="portal-layout">
+
+  <div class="left-panel">
+    <div class="section-title"><span>📚 Kategoriler</span></div>
+    <div class="category-scroll" id="categoryGrid"></div>
+  </div>
+
+  <div class="right-panel">
+
+    <div class="section-box">
+      <div class="section-title"><span>👥 Oyuncu Modu</span></div>
+      <div class="btn-grid" id="modeGrid">
+        <button class="btn-option selected" data-mode="1">👤 1 Kişilik</button>
+        <button class="btn-option" data-mode="2">👥 2 Kişilik</button>
+      </div>
+    </div>
+
+    <div class="section-box">
+      <div class="section-title">
+        <span>🎴 Kart Sayısı</span>
+        <span class="limit-note" id="limitNote"></span>
+      </div>
+      <div class="btn-grid" id="countGrid"></div>
+    </div>
+
+    <div class="section-box" style="font-size:.85rem;color:#cbd5e1;line-height:1.5;">
+      <div class="section-title"><span>💡 Nasıl Oynanır?</span></div>
+      • Soldan bir konu seç.<br>
+      • Kaç kart seçersen o kadar kart açılır.<br>
+      • Kartları çevirip aynı kelimeleri eşleştir.<br>
+      • Her kartta kelimenin İngilizce okunuşunu dinle.
+    </div>
+
+    <button class="start-btn" onclick="startGame()">Oyunu başlat 🚀</button>
+  </div>
+</div>
+
+<div id="gameControls" style="display:none;flex-direction:column;align-items:center;">
+  <button class="back-btn" onclick="resetGame()">← Ana menüye dön</button>
+  <div id="scoreboard" class="scoreboard"></div>
+</div>
+<div id="winMsg" class="win-msg" style="display:none;"></div>
+<div id="gameBoard" class="game-board"></div>
+
+<script>
+const categories = {
+  animals:{name:"🐶 Hayvanlar",color:"#ff007f",data:[{text:"Dog",icon:"🐶"},{text:"Cat",icon:"🐱"},{text:"Lion",icon:"🦁"},{text:"Monkey",icon:"🐵"},{text:"Elephant",icon:"🐘"},{text:"Panda",icon:"🐼"},{text:"Rabbit",icon:"🐰"},{text:"Bear",icon:"🐻"},{text:"Tiger",icon:"🐯"},{text:"Cow",icon:"🐮"},{text:"Frog",icon:"🐸"},{text:"Owl",icon:"🦉"},{text:"Fox",icon:"🦊"},{text:"Zebra",icon:"🦓"},{text:"Giraffe",icon:"🦒"},{text:"Koala",icon:"🐨"},{text:"Chicken",icon:"🐔"},{text:"Mouse",icon:"🐭"},{text:"Horse",icon:"🐴"},{text:"Bee",icon:"🐝"},{text:"Duck",icon:"🦆"},{text:"Penguin",icon:"🐧"},{text:"Wolf",icon:"🐺"},{text:"Pig",icon:"🐷"}]},
+  fruits:{name:"🍎 Meyve & Sebze",color:"#00ffcc",data:[{text:"Apple",icon:"🍎"},{text:"Banana",icon:"🍌"},{text:"Orange",icon:"🍊"},{text:"Grapes",icon:"🍇"},{text:"Strawberry",icon:"🍓"},{text:"Watermelon",icon:"🍉"},{text:"Peach",icon:"🍑"},{text:"Pineapple",icon:"🍍"},{text:"Cherry",icon:"🍒"},{text:"Lemon",icon:"🍋"},{text:"Kiwi",icon:"🥝"},{text:"Pear",icon:"🍐"},{text:"Mango",icon:"🥭"},{text:"Coconut",icon:"🥥"},{text:"Avocado",icon:"🥑"},{text:"Melon",icon:"🍈"},{text:"Blueberry",icon:"🫐"},{text:"Olive",icon:"🫒"},{text:"Tomato",icon:"🍅"},{text:"Carrot",icon:"🥕"},{text:"Potato",icon:"🥔"},{text:"Onion",icon:"🧅"},{text:"Cucumber",icon:"🥒"},{text:"Corn",icon:"🌽"}]},
+  jobs:{name:"👨‍⚕️ Meslekler",color:"#ff9900",data:[{text:"Teacher",icon:"🧑‍🏫"},{text:"Doctor",icon:"👨‍⚕️"},{text:"Nurse",icon:"👩‍⚕️"},{text:"Police",icon:"👮"},{text:"Chef",icon:"🧑‍🍳"},{text:"Pilot",icon:"🧑‍✈️"},{text:"Firefighter",icon:"👩‍🚒"},{text:"Farmer",icon:"🧑‍🌾"},{text:"Artist",icon:"🧑‍🎨"},{text:"Singer",icon:"🧑‍🎤"},{text:"Scientist",icon:"🧑‍🔬"},{text:"Astronaut",icon:"🧑‍🚀"},{text:"Dentist",icon:"🦷"},{text:"Judge",icon:"🧑‍⚖️"},{text:"Mechanic",icon:"🧑‍🔧"},{text:"Soldier",icon:"🪖"},{text:"Driver",icon:"🚌"},{text:"Waiter",icon:"🍽️"},{text:"Builder",icon:"👷"},{text:"Baker",icon:"🥐"},{text:"Postman",icon:"📮"},{text:"Guard",icon:"💂"},{text:"Sailor",icon:"⚓"},{text:"Dancer",icon:"💃"}]},
+  school:{name:"🏫 Okul & Sınıf",color:"#3399ff",data:[{text:"Book",icon:"📖"},{text:"Pencil",icon:"✏️"},{text:"Pen",icon:"🖊️"},{text:"Ruler",icon:"📏"},{text:"Bag",icon:"🎒"},{text:"Scissors",icon:"✂️"},{text:"Desk",icon:"🪑"},{text:"Computer",icon:"💻"},{text:"Globe",icon:"🌐"},{text:"Clock",icon:"⏰"},{text:"Notebook",icon:"📒"},{text:"Eraser",icon:"🧽"},{text:"Crayon",icon:"🖍️"},{text:"Paper",icon:"📄"},{text:"Glue",icon:"🧴"},{text:"Paint",icon:"🎨"},{text:"Map",icon:"🗺️"},{text:"Bell",icon:"🔔"},{text:"Brush",icon:"🖌️"},{text:"Abacus",icon:"🧮"},{text:"Student",icon:"🧑‍🎓"},{text:"Library",icon:"📚"},{text:"Board",icon:"📋"},{text:"Folder",icon:"📁"}]},
+  actions:{name:"🏃 Fiiller",color:"#ff99cc",data:[{text:"Run",icon:"🏃"},{text:"Jump",icon:"🦘"},{text:"Sleep",icon:"😴"},{text:"Eat",icon:"🍽️"},{text:"Read",icon:"📖"},{text:"Write",icon:"✍️"},{text:"Walk",icon:"🚶"},{text:"Swim",icon:"🏊"},{text:"Sing",icon:"🎤"},{text:"Dance",icon:"💃"},{text:"Drink",icon:"🥤"},{text:"Play",icon:"⚽"},{text:"Draw",icon:"🎨"},{text:"Listen",icon:"👂"},{text:"Think",icon:"💭"},{text:"Laugh",icon:"😂"}]},
+  vehicles:{name:"🚗 Taşıtlar",color:"#ff3333",data:[{text:"Car",icon:"🚗"},{text:"Bus",icon:"🚌"},{text:"Train",icon:"🚂"},{text:"Plane",icon:"✈️"},{text:"Bike",icon:"🚲"},{text:"Ship",icon:"🚢"},{text:"Rocket",icon:"🚀"},{text:"Taxi",icon:"🚕"},{text:"Helicopter",icon:"🚁"},{text:"Subway",icon:"🚇"},{text:"Truck",icon:"🚚"},{text:"Tractor",icon:"🚜"},{text:"Ambulance",icon:"🚑"},{text:"Fire Truck",icon:"🚒"},{text:"Motorbike",icon:"🏍️"},{text:"Boat",icon:"⛵"}]},
+  body:{name:"🖐️ Vücudumuz",color:"#00ff66",data:[{text:"Eye",icon:"👁️"},{text:"Ear",icon:"👂"},{text:"Nose",icon:"👃"},{text:"Mouth",icon:"👄"},{text:"Hand",icon:"✋"},{text:"Foot",icon:"🦶"},{text:"Brain",icon:"🧠"},{text:"Tooth",icon:"🦷"},{text:"Arm",icon:"🦾"},{text:"Leg",icon:"🦵"},{text:"Hair",icon:"💇"},{text:"Tongue",icon:"👅"},{text:"Finger",icon:"👆"},{text:"Heart",icon:"❤️"},{text:"Bone",icon:"🦴"},{text:"Face",icon:"😐"}]},
+  food:{name:"🍕 Yiyecekler",color:"#ff9933",data:[{text:"Pizza",icon:"🍕"},{text:"Burger",icon:"🍔"},{text:"Ice Cream",icon:"🍦"},{text:"Cake",icon:"🍰"},{text:"Bread",icon:"🍞"},{text:"Cheese",icon:"🧀"},{text:"Egg",icon:"🥚"},{text:"Soup",icon:"🥣"},{text:"Rice",icon:"🍚"},{text:"Chicken",icon:"🍗"},{text:"Salad",icon:"🥗"},{text:"Sandwich",icon:"🥪"},{text:"Cookie",icon:"🍪"},{text:"Chocolate",icon:"🍫"},{text:"Honey",icon:"🍯"},{text:"Popcorn",icon:"🍿"}]},
+  nature:{name:"🌲 Doğa & Fen",color:"#33cc33",data:[{text:"Tree",icon:"🌳"},{text:"Flower",icon:"🌻"},{text:"Sun",icon:"☀️"},{text:"Moon",icon:"🌙"},{text:"Star",icon:"⭐"},{text:"Cloud",icon:"☁️"},{text:"Rain",icon:"🌧️"},{text:"Mountain",icon:"🏔️"},{text:"River",icon:"🏞️"},{text:"Sea",icon:"🌊"},{text:"Forest",icon:"🌲"},{text:"Leaf",icon:"🍃"},{text:"Grass",icon:"🌿"},{text:"Rock",icon:"🪨"},{text:"Fire",icon:"🔥"},{text:"Rainbow",icon:"🌈"}]},
+  furniture:{name:"🛋️ Mobilyalar",color:"#cc00ff",data:[{text:"Chair",icon:"🪑"},{text:"Sofa",icon:"🛋️"},{text:"Bed",icon:"🛏️"},{text:"Door",icon:"🚪"},{text:"Window",icon:"🪟"},{text:"Lamp",icon:"💡"},{text:"TV",icon:"📺"},{text:"Clock",icon:"🕰️"},{text:"Mirror",icon:"🪞"},{text:"Shelf",icon:"📚"},{text:"Fridge",icon:"🧊"},{text:"Bathtub",icon:"🛁"},{text:"Toilet",icon:"🚽"},{text:"Basket",icon:"🧺"},{text:"Picture",icon:"🖼️"},{text:"Cupboard",icon:"🗄️"}]},
+  math:{name:"➕ Matematik",color:"#ffee00",data:[{text:"Zero",icon:"0️⃣"},{text:"One",icon:"1️⃣"},{text:"Two",icon:"2️⃣"},{text:"Three",icon:"3️⃣"},{text:"Four",icon:"4️⃣"},{text:"Five",icon:"5️⃣"},{text:"Six",icon:"6️⃣"},{text:"Seven",icon:"7️⃣"},{text:"Eight",icon:"8️⃣"},{text:"Nine",icon:"9️⃣"},{text:"Ten",icon:"🔟"},{text:"Plus",icon:"➕"},{text:"Minus",icon:"➖"},{text:"Times",icon:"✖️"},{text:"Divide",icon:"➗"},{text:"Equal",icon:"🟰"}]},
+  clothes:{name:"👕 Kıyafetler",color:"#00ccff",data:[{text:"Shirt",icon:"👕"},{text:"Pants",icon:"👖"},{text:"Dress",icon:"👗"},{text:"Shoes",icon:"👟"},{text:"Hat",icon:"🧢"},{text:"Socks",icon:"🧦"},{text:"Glasses",icon:"👓"},{text:"Coat",icon:"🧥"},{text:"Scarf",icon:"🧣"},{text:"Gloves",icon:"🧤"},{text:"Boots",icon:"🥾"},{text:"Bag",icon:"👜"},{text:"Ring",icon:"💍"},{text:"Tie",icon:"👔"},{text:"Crown",icon:"👑"},{text:"Sandals",icon:"🩴"}]},
+  colors:{name:"🎨 Renkler",color:"#ff3399",data:[{text:"Red",icon:"🔴"},{text:"Blue",icon:"🔵"},{text:"Green",icon:"🟢"},{text:"Yellow",icon:"🟡"},{text:"Orange",icon:"🟠"},{text:"Purple",icon:"🟣"},{text:"Black",icon:"⚫"},{text:"White",icon:"⚪"},{text:"Brown",icon:"🟤"},{text:"Pink",icon:"🌸"},{text:"Gold",icon:"🥇"},{text:"Silver",icon:"🥈"}]},
+  family:{name:"👨‍👩‍👧‍👦 Aile",color:"#ff66cc",data:[{text:"Mother",icon:"👩"},{text:"Father",icon:"👨"},{text:"Baby",icon:"👶"},{text:"Brother",icon:"👦"},{text:"Sister",icon:"👧"},{text:"Grandma",icon:"👵"},{text:"Grandpa",icon:"👴"},{text:"Family",icon:"👨‍👩‍👧‍👦"},{text:"Uncle",icon:"🧔"},{text:"Aunt",icon:"👩‍🦰"},{text:"Cousin",icon:"🧒"},{text:"Twins",icon:"👯"}]},
+  sports:{name:"⚽ Sporlar",color:"#ff0000",data:[{text:"Football",icon:"⚽"},{text:"Basketball",icon:"🏀"},{text:"Tennis",icon:"🎾"},{text:"Swimming",icon:"🏊"},{text:"Skiing",icon:"🎿"},{text:"Boxing",icon:"🥊"},{text:"Volleyball",icon:"🏐"},{text:"Baseball",icon:"⚾"},{text:"Cycling",icon:"🚴"},{text:"Running",icon:"🏃"},{text:"Golf",icon:"⛳"},{text:"Chess",icon:"♟️"}]},
+  emotions:{name:"😊 Duygular",color:"#ffcc00",data:[{text:"Happy",icon:"😊"},{text:"Sad",icon:"😢"},{text:"Angry",icon:"😡"},{text:"Surprised",icon:"😲"},{text:"Sleepy",icon:"😴"},{text:"Scared",icon:"😱"},{text:"Shy",icon:"😳"},{text:"Excited",icon:"🤩"},{text:"Sick",icon:"🤒"},{text:"Bored",icon:"🥱"},{text:"Crying",icon:"😭"},{text:"Laughing",icon:"😂"}]},
+  weather:{name:"🌤️ Hava Durumu",color:"#00ffff",data:[{text:"Sunny",icon:"☀️"},{text:"Rainy",icon:"🌧️"},{text:"Snowy",icon:"❄️"},{text:"Windy",icon:"🌬️"},{text:"Stormy",icon:"🌩️"},{text:"Cloudy",icon:"☁️"},{text:"Foggy",icon:"🌫️"},{text:"Hot",icon:"🥵"},{text:"Cold",icon:"🥶"},{text:"Rainbow",icon:"🌈"},{text:"Umbrella",icon:"☂️"},{text:"Snowman",icon:"⛄"}]},
+  shapes:{name:"📐 Şekiller",color:"#ff00cc",data:[{text:"Circle",icon:"⚪"},{text:"Square",icon:"🟦"},{text:"Triangle",icon:"🔺"},{text:"Star",icon:"⭐"},{text:"Heart",icon:"❤️"},{text:"Diamond",icon:"🔷"},{text:"Arrow",icon:"➡️"},{text:"Cube",icon:"🧊"},{text:"Ball",icon:"⚽"},{text:"Ring",icon:"💍"},{text:"Line",icon:"➖"},{text:"Dot",icon:"🔘"}]},
+  hobbies:{name:"🎨 Hobiler",color:"#9933ff",data:[{text:"Music",icon:"🎵"},{text:"Dance",icon:"💃"},{text:"Painting",icon:"🎨"},{text:"Reading",icon:"📚"},{text:"Gaming",icon:"🎮"},{text:"Fishing",icon:"🎣"},{text:"Cooking",icon:"🍳"},{text:"Camping",icon:"🏕️"},{text:"Photo",icon:"📷"},{text:"Singing",icon:"🎤"},{text:"Puzzle",icon:"🧩"},{text:"Gardening",icon:"🪴"}]},
+  space:{name:"🚀 Uzay & Fen",color:"#3333ff",data:[{text:"Planet",icon:"🪐"},{text:"Rocket",icon:"🚀"},{text:"Alien",icon:"👾"},{text:"Astronaut",icon:"🧑‍🚀"},{text:"Comet",icon:"☄️"},{text:"Star",icon:"🌟"},{text:"Moon",icon:"🌕"},{text:"Sun",icon:"☀️"},{text:"Earth",icon:"🌍"},{text:"Satellite",icon:"🛰️"},{text:"Telescope",icon:"🔭"},{text:"Galaxy",icon:"🌌"}]},
+  countries:{name:"🌍 Ülkeler",color:"#66ff66",data:[{text:"Turkey",icon:"🇹🇷"},{text:"USA",icon:"🇺🇸"},{text:"UK",icon:"🇬🇧"},{text:"Japan",icon:"🇯🇵"},{text:"Germany",icon:"🇩🇪"},{text:"France",icon:"🇫🇷"},{text:"Italy",icon:"🇮🇹"},{text:"Spain",icon:"🇪🇸"},{text:"Brazil",icon:"🇧🇷"},{text:"Canada",icon:"🇨🇦"},{text:"China",icon:"🇨🇳"},{text:"Greece",icon:"🇬🇷"}]},
+  sea:{name:"🐬 Deniz Canlıları",color:"#0099ff",data:[{text:"Fish",icon:"🐟"},{text:"Shark",icon:"🦈"},{text:"Dolphin",icon:"🐬"},{text:"Whale",icon:"🐳"},{text:"Octopus",icon:"🐙"},{text:"Crab",icon:"🦀"},{text:"Turtle",icon:"🐢"},{text:"Seal",icon:"🦭"},{text:"Jellyfish",icon:"🪼"},{text:"Shrimp",icon:"🦐"},{text:"Squid",icon:"🦑"},{text:"Shell",icon:"🐚"}]},
+  time:{name:"⏰ Zaman & Günler",color:"#ffcc99",data:[{text:"Morning",icon:"🌅"},{text:"Noon",icon:"🌞"},{text:"Evening",icon:"🌇"},{text:"Night",icon:"🌌"},{text:"Today",icon:"📅"},{text:"Yesterday",icon:"⏮️"},{text:"Tomorrow",icon:"⏭️"},{text:"Week",icon:"📆"},{text:"Month",icon:"🗓️"},{text:"Year",icon:"🎆"},{text:"Hour",icon:"⌛"},{text:"Clock",icon:"⏰"}]},
+  home:{name:"🏠 Ev Bölümleri",color:"#cc9966",data:[{text:"Kitchen",icon:"🍳"},{text:"Bedroom",icon:"🛏️"},{text:"Bathroom",icon:"🛁"},{text:"Garden",icon:"🏡"},{text:"Living Room",icon:"🛋️"},{text:"Garage",icon:"🚗"},{text:"Stairs",icon:"🪜"},{text:"Roof",icon:"🏠"},{text:"Door",icon:"🚪"},{text:"Window",icon:"🪟"},{text:"Wall",icon:"🧱"},{text:"Key",icon:"🔑"}]},
+  tech:{name:"💻 Teknoloji",color:"#00ff99",data:[{text:"Phone",icon:"📱"},{text:"Laptop",icon:"💻"},{text:"Robot",icon:"🤖"},{text:"Camera",icon:"📷"},{text:"Tablet",icon:"📲"},{text:"TV",icon:"📺"},{text:"Headphones",icon:"🎧"},{text:"Mouse",icon:"🖱️"},{text:"Keyboard",icon:"⌨️"},{text:"Printer",icon:"🖨️"},{text:"Battery",icon:"🔋"},{text:"Wifi",icon:"📶"}]},
+  music:{name:"🎸 Müzik Aletleri",color:"#ff3366",data:[{text:"Guitar",icon:"🎸"},{text:"Piano",icon:"🎹"},{text:"Drums",icon:"🥁"},{text:"Violin",icon:"🎻"},{text:"Trumpet",icon:"🎺"},{text:"Saxophone",icon:"🎷"},{text:"Flute",icon:"🪈"},{text:"Accordion",icon:"🪗"},{text:"Banjo",icon:"🪕"},{text:"Microphone",icon:"🎤"},{text:"Bell",icon:"🔔"},{text:"Maracas",icon:"🪇"}]},
+  insects:{name:"🪲 Böcekler",color:"#99cc33",data:[{text:"Butterfly",icon:"🦋"},{text:"Ant",icon:"🐜"},{text:"Bee",icon:"🐝"},{text:"Spider",icon:"🕷️"},{text:"Ladybug",icon:"🐞"},{text:"Cricket",icon:"🦗"},{text:"Mosquito",icon:"🦟"},{text:"Worm",icon:"🪱"},{text:"Snail",icon:"🐌"},{text:"Beetle",icon:"🪲"},{text:"Fly",icon:"🪰"},{text:"Scorpion",icon:"🦂"}]},
+  birds:{name:"🦜 Kuşlar",color:"#33ffff",data:[{text:"Parrot",icon:"🦜"},{text:"Eagle",icon:"🦅"},{text:"Duck",icon:"🦆"},{text:"Flamingo",icon:"🦩"},{text:"Owl",icon:"🦉"},{text:"Chicken",icon:"🐔"},{text:"Penguin",icon:"🐧"},{text:"Swan",icon:"🦢"},{text:"Peacock",icon:"🦚"},{text:"Dove",icon:"🕊️"},{text:"Rooster",icon:"🐓"},{text:"Bird",icon:"🐦"}]},
+  drinks:{name:"🧃 İçecekler",color:"#ff6666",data:[{text:"Water",icon:"💧"},{text:"Milk",icon:"🥛"},{text:"Juice",icon:"🧃"},{text:"Tea",icon:"🍵"},{text:"Coffee",icon:"☕"},{text:"Soda",icon:"🥤"},{text:"Lemonade",icon:"🍋"},{text:"Milkshake",icon:"🍨"},{text:"Cocoa",icon:"🫖"},{text:"Ice",icon:"🧊"}]},
+  dinosaurs:{name:"🦖 Dinozorlar",color:"#669900",data:[{text:"T-Rex",icon:"🦖"},{text:"Dino",icon:"🦕"},{text:"Egg",icon:"🥚"},{text:"Fossil",icon:"🦴"},{text:"Volcano",icon:"🌋"},{text:"Footprint",icon:"🐾"},{text:"Meteor",icon:"☄️"},{text:"Cave",icon:"🕳️"}]}
+};
+
+const COUNT_OPTIONS = [8,16,24,32,48];
+
+let selectedCategory = "animals";
+let selectedCount = 8;
+let gameMode = 1;
+let currentPlayer = 1;
+let scores = {1:0,2:0};
+let flippedCards = [];
+let lockBoard = false;
+let matchedPairs = 0;
+let totalPairs = 0;
+
+/* ---------- Kategori butonları ---------- */
+const categoryGrid = document.getElementById('categoryGrid');
+Object.keys(categories).forEach((key,index)=>{
+  const cat = categories[key];
+  const btn = document.createElement('button');
+  btn.className = 'btn-option' + (index===0 ? ' selected' : '');
+  btn.innerHTML = `${cat.name}<br><span style="font-size:.7rem;font-weight:normal;opacity:.7">en fazla ${cat.data.length*2} kart</span>`;
+  btn.onclick = ()=>{
+    document.querySelectorAll('#categoryGrid .btn-option').forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedCategory = key;
+    document.documentElement.style.setProperty('--active-neon',cat.color);
+    playSound(600,'sine',0.1);
+    renderCountButtons();   // <-- kritik: kategori değişince kart seçenekleri güncellenir
+  };
+  categoryGrid.appendChild(btn);
+});
+
+/* ---------- Kart sayısı butonları (kategoriye göre) ---------- */
+function maxCardsForCategory(){
+  const len = categories[selectedCategory].data.length;
+  return len * 2; // her kelimeden 1 çift
+}
+
+function renderCountButtons(){
+  const grid = document.getElementById('countGrid');
+  const max = maxCardsForCategory();
+  const available = COUNT_OPTIONS.filter(c=>c<=max);
+
+  // Seçili sayı bu kategoride yoksa, en büyük uygun sayıya düş
+  if(!available.includes(selectedCount)){
+    selectedCount = available[available.length-1];
+  }
+
+  grid.innerHTML = '';
+  COUNT_OPTIONS.forEach(c=>{
+    const b = document.createElement('button');
+    b.className = 'btn-option' + (c===selectedCount ? ' selected' : '');
+    b.textContent = c + ' Kart';
+    if(c>max){
+      b.disabled = true;
+      b.title = 'Bu kategoride yeterli kelime yok';
+    }else{
+      b.onclick = ()=>{
+        selectedCount = c;
+        renderCountButtons();
+      };
+    }
+    grid.appendChild(b);
+  });
+
+  document.getElementById('limitNote').textContent = `bu konuda en fazla ${max} kart`;
+}
+renderCountButtons();
+
+/* ---------- Oyuncu modu ---------- */
+document.querySelectorAll('#modeGrid .btn-option').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('#modeGrid .btn-option').forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+    gameMode = parseInt(btn.dataset.mode);
+  };
+});
+
+/* ---------- Ses ---------- */
+let audioCtx = null;
+function playSound(freq,type,duration){
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state==='suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type; osc.frequency.value = freq;
+    gain.gain.value = 0.2;
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start();
+    gain.gain.exponentialRampToValueAtTime(0.00001,audioCtx.currentTime+duration);
+    osc.stop(audioCtx.currentTime+duration);
+  }catch(e){}
+}
+
+/* ---------- Oyun ---------- */
+function startGame(){
+  document.getElementById('setup').style.display = 'none';
+  document.getElementById('gameControls').style.display = 'flex';
+  document.getElementById('winMsg').style.display = 'none';
+  const board = document.getElementById('gameBoard');
+  board.innerHTML = '';
+
+  scores = {1:0,2:0};
+  currentPlayer = 1;
+  matchedPairs = 0;
+  flippedCards = [];
+  lockBoard = false;
+
+  const catData = categories[selectedCategory].data;
+
+  // Güvenlik: istenen kart sayısı kelime sayısını aşamaz
+  const pairCount = Math.min(selectedCount/2, catData.length);
+  totalPairs = pairCount;
+  const realCount = pairCount*2;
+
+  let cols = 4;
+  if(realCount >= 24) cols = 6;
+  if(realCount >= 32) cols = 8;
+  board.style.gridTemplateColumns = `repeat(${cols},minmax(70px,110px))`;
+
+  const shuffled = [...catData].sort(()=>Math.random()-0.5);
+  const selectedItems = shuffled.slice(0,pairCount);
+
+  let deck = [];
+  selectedItems.forEach(item=>{
+    deck.push({...item});
+    deck.push({...item});
+  });
+  deck.sort(()=>Math.random()-0.5);
+
+  deck.forEach(data=>{
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.dataset.text = data.text;
+    card.innerHTML = `
+      <div class="card-inner">
+        <div class="card-front">✦</div>
+        <div class="card-back">
+          <div class="card-emoji">${data.icon}</div>
+          <div class="card-text">${data.text}</div>
+        </div>
+      </div>`;
+    card.addEventListener('click',()=>flipCard(card));
+    board.appendChild(card);
+  });
+
+  updateScoreboard();
+}
+
+function flipCard(card){
+  if(lockBoard || card.classList.contains('flipped')) return;
+  playSound(400,'sine',0.1);
+  card.classList.add('flipped');
+  speakEnglish(card.dataset.text);
+  flippedCards.push(card);
+  if(flippedCards.length === 2) checkMatch();
+}
+
+function checkMatch(){
+  const [card1,card2] = flippedCards;
+  const isMatch = card1.dataset.text === card2.dataset.text;
+
+  if(isMatch){
+    playSound(800,'triangle',0.3);
+    card1.classList.add('matched');
+    card2.classList.add('matched');
+    scores[currentPlayer]++;
+    matchedPairs++;
+    flippedCards = [];
+    updateScoreboard();
+    if(matchedPairs === totalPairs) finishGame();
+  }else{
+    lockBoard = true;
+    setTimeout(()=>playSound(200,'sawtooth',0.2),300);
+    setTimeout(()=>{
+      card1.classList.remove('flipped');
+      card2.classList.remove('flipped');
+      flippedCards = [];
+      if(gameMode === 2) currentPlayer = currentPlayer===1 ? 2 : 1;
+      updateScoreboard();
+      lockBoard = false;
+    },1200);
+  }
+}
+
+function finishGame(){
+  const box = document.getElementById('winMsg');
+  let msg;
+  if(gameMode === 1){
+    msg = `🎉 Tebrikler! ${totalPairs} eşin hepsini buldun.`;
+  }else if(scores[1] > scores[2]){
+    msg = `🏆 1. oyuncu kazandı! ${scores[1]} - ${scores[2]}`;
+  }else if(scores[2] > scores[1]){
+    msg = `🏆 2. oyuncu kazandı! ${scores[2]} - ${scores[1]}`;
+  }else{
+    msg = `🤝 Berabere! ${scores[1]} - ${scores[2]}`;
+  }
+  box.textContent = msg;
+  box.style.display = 'block';
+  setTimeout(()=>playSound(1000,'triangle',0.5),200);
+}
+
+function updateScoreboard(){
+  const sb = document.getElementById('scoreboard');
+  if(gameMode === 1){
+    sb.innerHTML = `<div class="player-box active">Skor: ${scores[1]} / ${totalPairs}</div>`;
+  }else{
+    sb.innerHTML = `
+      <div class="player-box ${currentPlayer===1?'active':''}">1. Oyuncu: ${scores[1]}</div>
+      <div class="player-box ${currentPlayer===2?'active':''}">2. Oyuncu: ${scores[2]}</div>`;
+  }
+}
+
+function speakEnglish(text){
+  if('speechSynthesis' in window){
+    window.speechSynthesis.cancel();
+    const cleanText = text.split('(')[0];
+    const u = new SpeechSynthesisUtterance(cleanText);
+    u.lang = 'en-US';
+    u.rate = 0.85;
+    window.speechSynthesis.speak(u);
+  }
+}
+
+function resetGame(){
+  document.getElementById('setup').style.display = 'flex';
+  document.getElementById('gameControls').style.display = 'none';
+  document.getElementById('winMsg').style.display = 'none';
+  document.getElementById('gameBoard').innerHTML = '';
+  flippedCards = [];
+  lockBoard = false;
+  renderCountButtons();
+}
+</script>
+</body>
+</html>
