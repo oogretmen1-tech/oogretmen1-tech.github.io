@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Okula Uyum Haftası — Öğretmen Paketi | 1. Sınıf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1B2440;
+  --indigo:#2E3F73;
+  --indigo-soft:#E7EBF6;
+  --star:#F2B705;
+  --star-soft:#FDF3D6;
+  --paper:#FFFFFF;
+  --line:#C9D0E2;
+  --muted:#5C6889;
+  --page:#F5F6FA;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Andika','Segoe UI',Tahoma,sans-serif;
+  background:var(--page);
+  color:var(--ink);
+  line-height:1.65;
+  font-size:17px;
+}
+.wrap{max-width:900px;margin:0 auto;padding:0 14px 60px;}
+
+/* ---- Başlık ---- */
+header.top{
+  background:var(--indigo);
+  color:#fff;
+  padding:26px 0 0;
+  border-bottom:4px solid var(--star);
+}
+.top-inner{max-width:900px;margin:0 auto;padding:0 14px;}
+.top h1{
+  margin:0;
+  font-size:1.75rem;
+  font-weight:700;
+  letter-spacing:.2px;
+}
+.top p{margin:6px 0 18px;color:#C4CDE8;font-size:.95rem;}
+.top .dates{
+  display:inline-block;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:20px;
+  padding:3px 14px;
+  font-size:.9rem;
+  color:#fff;
+}
+
+/* ---- Sekmeler ---- */
+nav.tabs{
+  display:flex;
+  gap:4px;
+  overflow-x:auto;
+  padding:0 0 0;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+}
+nav.tabs button{
+  flex:0 0 auto;
+  font-family:inherit;
+  font-size:.92rem;
+  border:0;
+  background:rgba(255,255,255,.10);
+  color:#D6DDF2;
+  padding:11px 16px;
+  border-radius:9px 9px 0 0;
+  cursor:pointer;
+  white-space:nowrap;
+}
+nav.tabs button:hover{background:rgba(255,255,255,.2);color:#fff;}
+nav.tabs button[aria-selected="true"]{
+  background:var(--page);
+  color:var(--ink);
+  font-weight:700;
+}
+nav.tabs button:focus-visible{outline:3px solid var(--star);outline-offset:-3px;}
+
+/* ---- Sayfa gövdesi ---- */
+.sheet{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:0 12px 12px 12px;
+  padding:26px 24px 30px;
+  margin-top:0;
+}
+.panel[hidden]{display:none;}
+h2.sec{
+  margin:0 0 4px;
+  font-size:1.4rem;
+}
+.lead{color:var(--muted);margin:0 0 22px;font-size:.97rem;}
+
+.printbar{
+  display:flex;
+  justify-content:flex-end;
+  margin:18px 0 0;
+}
+.printbtn{
+  font-family:inherit;font-size:.9rem;
+  background:var(--indigo);color:#fff;border:0;
+  padding:9px 18px;border-radius:8px;cursor:pointer;
+}
+.printbtn:hover{background:#22305c;}
+
+/* ---- Gün kartları ---- */
+.day{
+  display:grid;
+  grid-template-columns:56px 1fr;
+  gap:16px;
+  padding:16px 0;
+  border-top:1px solid var(--line);
+}
+.day:first-of-type{border-top:0;padding-top:0;}
+.daynum{
+  background:var(--star-soft);
+  border:2px solid var(--star);
+  border-radius:12px;
+  text-align:center;
+  padding:8px 0;
+  height:fit-content;
+}
+.daynum b{display:block;font-size:1.35rem;line-height:1;}
+.daynum span{font-size:.72rem;color:var(--muted);}
+.day h3{margin:0 0 2px;font-size:1.08rem;}
+.day .etk{color:var(--indigo);font-weight:700;font-size:.95rem;}
+.day p{margin:6px 0 0;font-size:.95rem;}
+.meta{
+  margin-top:8px;font-size:.85rem;color:var(--muted);
+}
+.meta b{color:var(--ink);font-weight:700;}
+
+/* ---- Kontrol listesi ---- */
+.chk-day{margin:0 0 22px;}
+.chk-day h3{
+  margin:0 0 8px;font-size:1.05rem;
+  padding-bottom:5px;border-bottom:2px solid var(--indigo-soft);
+}
+.chk{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:5px 0;font-size:.96rem;
+}
+.chk input{
+  width:19px;height:19px;margin-top:3px;flex:0 0 auto;
+  accent-color:var(--indigo);
+}
+.chk input:checked + span{color:var(--muted);text-decoration:line-through;}
+
+/* ---- Yazdırılabilir kâğıt ---- */
+.a4{
+  border:2px dashed var(--line);
+  border-radius:10px;
+  padding:26px 24px;
+  background:#fff;
+}
+.a4 h3{margin:0 0 4px;font-size:1.25rem;text-align:center;}
+.a4 .sub{text-align:center;color:var(--muted);font-size:.9rem;margin:0 0 18px;}
+.a4 ol{padding-inline-start:22px;margin:0 0 18px;}
+.a4 ol li{margin-bottom:9px;}
+.box{
+  background:var(--indigo-soft);
+  border-radius:10px;
+  padding:14px 18px;
+  margin:16px 0;
+  font-size:.95rem;
+}
+.box h4{margin:0 0 6px;font-size:1rem;}
+.lines{margin-top:14px;}
+.lines div{border-bottom:1px solid var(--line);height:30px;}
+
+/* ---- Duyuru metni ---- */
+textarea.msg{
+  width:100%;min-height:280px;
+  font-family:inherit;font-size:.95rem;line-height:1.6;
+  padding:16px;border:1px solid var(--line);border-radius:10px;
+  color:var(--ink);background:#fff;resize:vertical;
+}
+.copybtn{
+  font-family:inherit;font-size:.9rem;margin-top:10px;
+  background:var(--star);color:#3a2c00;border:0;
+  padding:9px 18px;border-radius:8px;cursor:pointer;font-weight:700;
+}
+
+/* ---- Yıl takvimi ---- */
+.mod{
+  display:grid;grid-template-columns:88px 1fr;
+  border:1px solid var(--line);border-radius:10px;
+  overflow:hidden;margin-bottom:10px;
+}
+.mod .ay{
+  background:var(--indigo);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:.95rem;padding:10px 4px;text-align:center;
+}
+.mod .icerik{padding:11px 14px;}
+.mod h4{margin:0 0 2px;font-size:1rem;}
+.mod p{margin:0;font-size:.9rem;color:var(--muted);}
+.tema{
+  margin:22px 0 8px;font-size:.9rem;font-weight:700;
+  color:var(--indigo);border-bottom:2px solid var(--star);
+  display:inline-block;padding-bottom:3px;
+}
+.tema:first-of-type{margin-top:0;}
+
+/* ---- Yıldız kartları ---- */
+.kartlar{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.kart{
+  border:2px solid var(--indigo);border-radius:14px;
+  padding:14px 16px;position:relative;min-height:210px;
+}
+.kart .yildiz{
+  position:absolute;top:-12px;right:14px;font-size:1.6rem;color:var(--star);
+}
+.kart b{display:block;font-size:.95rem;margin-bottom:2px;}
+.kart .satir{border-bottom:1px solid var(--line);height:26px;margin-bottom:9px;}
+
+/* ---- Oyun ---- */
+.oyun-alan{display:grid;grid-template-columns:1fr;gap:12px;}
+.soru{
+  border:2px solid var(--line);border-radius:12px;padding:14px 16px;
+}
+.soru.dogru{border-color:#2E8B57;background:#EFF8F2;}
+.soru p.durum{margin:0 0 10px;font-weight:700;}
+.secenekler{display:flex;flex-wrap:wrap;gap:8px;}
+.secenekler button{
+  font-family:inherit;font-size:.9rem;
+  border:1px solid var(--line);background:#fff;color:var(--ink);
+  padding:8px 13px;border-radius:20px;cursor:pointer;
+}
+.secenekler button:hover{border-color:var(--indigo);}
+.secenekler button.sec-dogru{background:#2E8B57;color:#fff;border-color:#2E8B57;}
+.secenekler button.sec-yanlis{background:#FBE9E9;border-color:#D9534F;color:#8A2A27;}
+.skor{
+  margin-top:16px;padding:12px 16px;border-radius:10px;
+  background:var(--star-soft);border:1px solid var(--star);font-weight:700;
+}
+
+@media (max-width:640px){
+  body{font-size:16px;}
+  .sheet{padding:20px 16px 24px;border-radius:0 10px 10px 10px;}
+  .kartlar{grid-template-columns:1fr;}
+  .day{grid-template-columns:48px 1fr;gap:12px;}
+  .top h1{font-size:1.4rem;}
+}
+
+/* ---- Yazdırma: yalnızca açık sekme ---- */
+@media print{
+  body{background:#fff;font-size:12pt;}
+  header.top{background:#fff;color:#000;border-bottom:2px solid #000;padding-top:0;}
+  .top p,.top .dates,nav.tabs,.printbar,.copybtn{display:none !important;}
+  .top h1{font-size:16pt;margin-bottom:8px;}
+  .sheet{border:0;border-radius:0;padding:0;margin-top:14px;}
+  .a4{border:0;padding:0;}
+  .wrap{padding:0;max-width:none;}
+  .mod,.soru,.kart,.day{break-inside:avoid;}
+  textarea.msg{border:1px solid #999;min-height:auto;height:auto;}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <h1>Okula Uyum Haftası — Öğretmen Paketi</h1>
+    <p>İlkokul 1. Sınıf · Ailemle Okul Yolu Programı · Türkiye Yüzyılı Maarif Modeli</p>
+    <span class="dates">7–11 Eylül 2026 · 5 gün</span>
+    <nav class="tabs" role="tablist" aria-label="Bölümler">
+      <button role="tab" aria-selected="true"  data-panel="p1">Haftaya bakış</button>
+      <button role="tab" aria-selected="false" data-panel="p2">Hazırlık listesi</button>
+      <button role="tab" aria-selected="false" data-panel="p3">5. gün veli yönergesi</button>
+      <button role="tab" aria-selected="false" data-panel="p4">Veli duyurusu</button>
+      <button role="tab" aria-selected="false" data-panel="p5">Yıl boyu takvim</button>
+      <button role="tab" aria-selected="false" data-panel="p6">Yıldız kartları</button>
+      <button role="tab" aria-selected="false" data-panel="p7">Mutlu Sınıf Kutusu</button>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+<div class="sheet">
+
+<!-- ============ 1 ============ -->
+<section class="panel" id="p1" role="tabpanel">
+  <h2 class="sec">Haftanın beş günü</h2>
+  <p class="lead">Her gün 3 ders saati. İlk dört gün okulda, beşinci gün evde ailelerle yapılır.</p>
+
+  <div class="day">
+    <div class="daynum"><b>1</b><span>Pzt</span></div>
+    <div>
+      <h3>Ailem Okulumu Tanıyor</h3>
+      <div class="etk">Etkinlik: Ailem Okulumda</div>
+      <p>Veli sunumu günü. Çemberde yün yumağı ile tanışma (30 dk), ardından 1. Sınıf Okula Uyum Veli Sunumu (80 dk), soru-cevap ile kapanış (10 dk).</p>
+      <div class="meta"><b>Katılım:</b> Aileler ve öğrenciler · <b>Uygulayan:</b> Sınıf öğretmeni, okul yönetimi, rehber öğretmen · <b>Malzeme:</b> Yün yumağı, akıllı tahta</div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="daynum"><b>2</b><span>Sal</span></div>
+    <div>
+      <h3>Ailemle Okulumu Tanıyorum</h3>
+      <div class="etk">Etkinlik: Yıldızlar Sınıfı</div>
+      <p>Çocuğumla Okula İlk Adım Defteri tanıtılır, isim yazılır, sınıf hatıra fotoğrafı çekilir. Yıldız masalı, yıldız tanıtım kartları, aile paylaşımları ve “Bizim Sınıfımız” panosu.</p>
+      <div class="meta"><b>Katılım:</b> Aileler ve öğrenciler · <b>Malzeme:</b> Yıldız kartları, boya kalemleri, yapıştırıcı, pano · <b>Defter:</b> “Ailemden Mektup”</div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="daynum"><b>3</b><span>Çar</span></div>
+    <div>
+      <h3>Ailemle Keşfediyorum</h3>
+      <div class="etk">Etkinlik: Kayıp Yıldız</div>
+      <p>Zarftaki mektupla başlar. Yedi durak gezilir: sınıf, kütüphane, rehberlik servisi, okul yönetimi, kantin, lavabolar, bahçe. Dönüşte sınıfta saklanan yıldız bulunur.</p>
+      <div class="meta"><b>Katılım:</b> Aileler ve öğrenciler · <b>Ön hazırlık:</b> Güzergâh planı, birimlerin haberdar edilmesi, mektubun ve yıldızın önceden yerleştirilmesi</div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="daynum"><b>4</b><span>Per</span></div>
+    <div>
+      <h3>Ailemle Öğreniyorum</h3>
+      <div class="etk">Etkinlik: Mutlu Sınıf Kutusu</div>
+      <p>Tamir Kutusu ve Mutlu Sınıf Kutusu ile sınıf kuralları birlikte oluşturulur. Kartlar fon kartonuna yapıştırılır, öğrenciler parmak baskısı yapar, kurallar panoya asılır.</p>
+      <div class="meta"><b>Katılım:</b> Yalnızca öğrenciler · <b>Önemli:</b> Beşinci günün evde yapılacağı bugün velilere anlatılır ve yönerge dağıtılır · <b>Defter:</b> “Evimizin Enleri”</div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="daynum"><b>5</b><span>Cum</span></div>
+    <div>
+      <h3>Ailemle Değerlendiriyorum</h3>
+      <div class="etk">Etkinlik: Çantamdakiler Nerede?</div>
+      <p>Evde yapılır. Aile, haftayı değerlendiren soruları çocuğa sorar; ardından çanta eşyalarıyla saklambaç oyunu oynanır.</p>
+      <div class="meta"><b>Yer:</b> Ev · <b>Öğretmenin işi:</b> Soruların bir gün önce dağıtılması · <b>Defter:</b> “İlk Haftamın İzleri”</div>
+    </div>
+  </div>
+
+  <div class="box" style="margin-top:22px;">
+    <h4>Aklınızda bulunsun</h4>
+    Kamuda çalışan velilerden biri, talep etmesi hâlinde uyum haftası boyunca günde 3 saati aşmayacak şekilde idari izinli sayılıyor. Birinci dönem 14 Eylül Pazartesi başlıyor.
+  </div>
+
+  <div class="printbar"><button class="printbtn" onclick="window.print()">Bu sayfayı yazdır</button></div>
+</section>
+
+<!-- ============ 2 ============ -->
+<section class="panel" id="p2" role="tabpanel" hidden>
+  <h2 class="sec">Hazırlık listesi</h2>
+  <p class="lead">Hafta başlamadan tamamlanacak işler ve toplanacak malzemeler. Kutucuklara dokunarak işaretleyebilirsiniz.</p>
+
+  <div class="chk-day">
+    <h3>Hafta öncesi</h3>
+    <label class="chk"><input type="checkbox"><span>Veli listesi ve iletişim bilgileri hazır</span></label>
+    <label class="chk"><input type="checkbox"><span>1. Sınıf Okula Uyum Veli Sunumu indirildi, akıllı tahtada denendi</span></label>
+    <label class="chk"><input type="checkbox"><span>Çocuğumla Okula İlk Adım Defterleri sınıfa geldi, sayı kontrol edildi</span></label>
+    <label class="chk"><input type="checkbox"><span>Sınıf panosunda “Bizim Sınıfımız” için yer açıldı</span></label>
+    <label class="chk"><input type="checkbox"><span>Velilere hafta programı duyuruldu (5. günün evde olduğu belirtildi)</span></label>
+  </div>
+
+  <div class="chk-day">
+    <h3>1. gün — Ailem Okulumda</h3>
+    <label class="chk"><input type="checkbox"><span>Yün yumağı</span></label>
+    <label class="chk"><input type="checkbox"><span>Çember düzeni için sıralar kenara çekildi</span></label>
+    <label class="chk"><input type="checkbox"><span>Rehber öğretmen ve okul yönetimi saat için bilgilendirildi</span></label>
+  </div>
+
+  <div class="chk-day">
+    <h3>2. gün — Yıldızlar Sınıfı</h3>
+    <label class="chk"><input type="checkbox"><span>Öğrenci sayısı kadar yıldız tanıtım kartı kesildi</span></label>
+    <label class="chk"><input type="checkbox"><span>Boya kalemleri ve yapıştırıcı</span></label>
+    <label class="chk"><input type="checkbox"><span>Fotoğraf makinesi / telefon (sınıf hatıra fotoğrafı)</span></label>
+    <label class="chk"><input type="checkbox"><span>“Bizim Sınıfımız” pano başlığı hazırlandı</span></label>
+    <label class="chk"><input type="checkbox"><span>Yıldız masalı okundu, anlatım provası yapıldı</span></label>
+  </div>
+
+  <div class="chk-day">
+    <h3>3. gün — Kayıp Yıldız</h3>
+    <label class="chk"><input type="checkbox"><span>Kayıp Yıldız mektubu yazıldı, zarfa konuldu, masaya bırakıldı</span></label>
+    <label class="chk"><input type="checkbox"><span>Yıldız figürü sınıfta gizlendi</span></label>
+    <label class="chk"><input type="checkbox"><span>Gezi güzergâhı belirlendi</span></label>
+    <label class="chk"><input type="checkbox"><span>Kütüphane, rehberlik, müdürlük, kantin haberdar edildi</span></label>
+    <label class="chk"><input type="checkbox"><span>Öğrencilere sıra ve güvenlik hatırlatması yapıldı</span></label>
+  </div>
+
+  <div class="chk-day">
+    <h3>4. gün — Mutlu Sınıf Kutusu</h3>
+    <label class="chk"><input type="checkbox"><span>İki kutu hazırlandı, üzerlerine görseller yapıştırıldı</span></label>
+    <label class="chk"><input type="checkbox"><span>Olumsuz davranış kartları Tamir Kutusu’na kondu</span></label>
+    <label class="chk"><input type="checkbox"><span>Olumlu davranış kartları ayrı zarfa kondu</span></label>
+    <label class="chk"><input type="checkbox"><span>Fon kartonu, parmak boyası, ıslak mendil</span></label>
+    <label class="chk"><input type="checkbox"><span>“Mutlu Sınıfımızın Kuralları” pano başlığı</span></label>
+    <label class="chk"><input type="checkbox"><span>5. gün veli yönergesi çoğaltıldı ve dağıtıma hazır</span></label>
+  </div>
+
+  <div class="printbar"><button class="printbtn" onclick="window.print()">Bu sayfayı yazdır</button></div>
+</section>
+
+<!-- ============ 3 ============ -->
+<section class="panel" id="p3" role="tabpanel" hidden>
+  <h2 class="sec">5. gün veli yönergesi</h2>
+  <p class="lead">Dördüncü gün velilere dağıtılır. Öğrenci sayısı kadar çoğaltın.</p>
+
+  <div class="a4">
+    <h3>Uyum Haftamızın Son Günü Evde</h3>
+    <p class="sub">11 Eylül 2026, Cuma · Ailemle Değerlendiriyorum</p>
+
+    <p style="margin-top:0;">Sevgili velimiz, uyum haftamızın beşinci gününde çocuğumuz okula gelmeyecek. Bu günün etkinliğini evde birlikte yapacaksınız. Yaklaşık yarım saat sürüyor.</p>
+
+    <div class="box">
+      <h4>Önce sohbet</h4>
+      Çocuğunuza aşağıdaki soruları sırayla sorun, cevaplarını sabırla dinleyin. Kendi düşüncelerinizi de paylaşın. Doğru cevap aranmıyor; hafta hakkında birlikte konuşmak yeterli.
+    </div>
+
+    <ol>
+      <li>Yıldızlar sınıfının bir yıldızı olmak sana ne hissettirdi?</li>
+      <li>En hoşuna giden yıldızın özellikleri nelerdi?</li>
+      <li>Hangi arkadaşının yıldızı ilgini çekti?</li>
+      <li>Okulun bölümlerini gezerken en merak ettiğin yer neresiydi?</li>
+      <li>Okulu gezerken tanıştığın kişilerden en çok kim dikkatini çekti? Neden?</li>
+      <li>Mutlu Sınıf Kutusu’na bir kart daha ekleyebilseydin ne eklerdin?</li>
+      <li>Okulda yapmaktan en çok hoşlandığın şey neydi?</li>
+      <li>Arkadaşlarına okulla ilgili merak ettiğin bir şeyi sorabilsen ne sorardın?</li>
+      <li>Okulda olmak sana neredeymişsin gibi hissettirdi? Neden?</li>
+    </ol>
+
+    <div class="box">
+      <h4>Sonra oyun: Çantamdakiler Nerede?</h4>
+      <p style="margin:6px 0 0;">Çocuğunuzla okul çantasındaki eşyaları birlikte inceleyin, adlarını ve ne işe yaradıklarını konuşun. Sonra çocuğunuz gözlerini kapatsın; siz eşyaları evin farklı yerlerine saklayın. Gözlerini açtığında verdiğiniz sürede eşyaları bulup çantasına koysun. Süre bitince kaç tane bulduğunu birlikte sayın, kalanları hep birlikte çıkarın. Ardından sıra değişsin: bu kez siz gözlerinizi kapatın, eşyaları çocuğunuz saklasın.</p>
+    </div>
+
+    <p><b>Son olarak:</b> Çocuğumla Okula İlk Adım Defteri’ndeki <b>“İlk Haftamın İzleri”</b> bölümünü birlikte doldurun. Defteri pazartesi günü okula getirmeyi unutmayın.</p>
+
+    <p style="margin-bottom:6px;"><b>Bu haftadan aklınızda kalan bir not varsa buraya yazabilirsiniz:</b></p>
+    <div class="lines"><div></div><div></div><div></div></div>
+  </div>
+
+  <div class="printbar"><button class="printbtn" onclick="window.print()">Bu sayfayı yazdır</button></div>
+</section>
+
+<!-- ============ 4 ============ -->
+<section class="panel" id="p4" role="tabpanel" hidden>
+  <h2 class="sec">Veli duyurusu</h2>
+  <p class="lead">Sınıf grubuna gönderilecek metin. Üzerinde değişiklik yapabilir, sonra kopyalayabilirsiniz.</p>
+
+  <textarea class="msg" id="duyuru">Sayın velimiz,
+
+7–11 Eylül 2026 tarihleri arasında 1. sınıf öğrencilerimiz için Okula Uyum Haftası uygulanacak. Bu hafta, MEB'in "Ailemle Okul Yolu Programı" kapsamında yürütülüyor ve programın çalışmaları yıl boyunca devam edecek.
+
+Haftanın akışı:
+
+Pazartesi (7 Eylül) — Tanışma ve veli bilgilendirme sunumu. Çocuğunuzla birlikte katılmanızı rica ediyoruz.
+Salı (8 Eylül) — "Yıldızlar Sınıfı" etkinliği. Aile katılımlı.
+Çarşamba (9 Eylül) — Okulumuzu birlikte geziyoruz. Aile katılımlı.
+Perşembe (10 Eylül) — Sınıf kurallarımızı birlikte oluşturuyoruz. Öğrencilerimizle yapılacak.
+Cuma (11 Eylül) — Bu günün etkinliği evde yapılacak. Öğrencilerimiz okula gelmeyecek. Yönergeyi perşembe günü elinize ulaştıracağız.
+
+Her gün 3 ders saati sürecek.
+
+Öğrencilerimize "Çocuğumla Okula İlk Adım Defteri" verilecek. Bu defteri çocuğunuzla birlikte yıl boyunca dolduracaksınız. Defter puanlanmıyor, öğrenciler arasında karşılaştırılmıyor.
+
+Kamuda çalışan velilerimizden biri, talep etmesi hâlinde uyum haftası etkinlikleri için günde 3 saati aşmayacak şekilde idari izinli sayılabilir.
+
+Eğitim öğretim yılımızın birinci dönemi 14 Eylül Pazartesi başlayacak.
+
+Sorularınız için bana ulaşabilirsiniz. Güzel bir yıl olsun.</textarea>
+  <button class="copybtn" id="kopyala">Metni kopyala</button>
+
+  <div class="printbar"><button class="printbtn" onclick="window.print()">Bu sayfayı yazdır</button></div>
+</section>
+
+<!-- ============ 5 ============ -->
+<section class="panel" id="p5" role="tabpanel" hidden>
+  <h2 class="sec">Yıl boyu takvim</h2>
+  <p class="lead">Uyum haftasından sonra program dört tema ve sekiz modülle sürüyor. Her ay bir modül uygulanıyor; okul günü ve süreyi kendi planına göre belirleyebiliyor. Ocak ayında modül yok.</p>
+
+  <div class="tema">Günlük Yaşam Becerileri</div>
+  <div class="mod">
+    <div class="ay">Ekim</div>
+    <div class="icerik">
+      <h4>Ailemin Desteği ile Hayata Hazırlanıyorum</h4>
+      <p>“Bulalım, Eşleştirelim” — bahçede çorap eşleştirme oyunu. 1 ders saati. Defter: Yardım Ağacım.</p>
+    </div>
+  </div>
+  <div class="mod">
+    <div class="ay">Kasım</div>
+    <div class="icerik">
+      <h4>Ailemle Oynuyorum</h4>
+      <p>“Hayatın İçindeyim” — dört istasyon: bağcık bağlama, boncuk dizme, kıyafet katlama, tepsiyle bardak taşıma. 1 ders saati.</p>
+    </div>
+  </div>
+
+  <div class="tema">Ailem, Millî ve Manevi Değerlerimiz</div>
+  <div class="mod">
+    <div class="ay">Aralık</div>
+    <div class="icerik">
+      <h4>Ailemle Kültür Yolculuğum</h4>
+      <p>“Masal Çemberinde Üç Kuşak” — Topal Keçi masalı, masal bohçası ve konuşma nesnesiyle çember anlatımı. 3 ders saati.</p>
+    </div>
+  </div>
+  <div class="mod">
+    <div class="ay">Şubat</div>
+    <div class="icerik">
+      <h4>Aileden Okula, Köklerden Geleceğe</h4>
+      <p>“Nesilden Nesile Oyun” — aile büyüklerinden öğrenilen geleneksel oyunlar, bahçede oyun istasyonları. 3 ders saati.</p>
+    </div>
+  </div>
+
+  <div class="tema">Çevre ve Sürdürülebilir Yaşam</div>
+  <div class="mod">
+    <div class="ay">Mart</div>
+    <div class="icerik">
+      <h4>Yeşil Yuvamız</h4>
+      <p>“Doğaya Can Veren Eller” — ailelerle fidan dikimi, fidana isim verme. 2 ders saati.</p>
+    </div>
+  </div>
+  <div class="mod">
+    <div class="ay">Nisan</div>
+    <div class="icerik">
+      <h4>Ailemle Sürdürülebilir Yaşama Katkı</h4>
+      <p>“Geleceğe Yeşil İz” — geri dönüşüm basketi, damla taşıma, doğayı temizle avı, çevreci ulaşım parkuru. 3 ders saati.</p>
+    </div>
+  </div>
+
+  <div class="tema">Birlikte Yaşam Kültürü</div>
+  <div class="mod">
+    <div class="ay">Mayıs</div>
+    <div class="icerik">
+      <h4>Dijital Dünyada Bilinçli Adımlar</h4>
+      <p>“Dijital Dedektifler” — evde rozet arama oyunu, sınıfta slogan oluşturma. 2 ders saati.</p>
+    </div>
+  </div>
+  <div class="mod">
+    <div class="ay">Haziran</div>
+    <div class="icerik">
+      <h4>Arkadaşlığın Dili: Nezaket</h4>
+      <p>“Nezaket Ağı” — bahçede iç ve dış çember, yumakla nezaket cümleleri. 1 ders saati.</p>
+    </div>
+  </div>
+
+  <div class="printbar"><button class="printbtn" onclick="window.print()">Bu sayfayı yazdır</button></div>
+</section>
+
+<!-- ============ 6 ============ -->
+<section class="panel" id="p6" role="tabpanel" hidden>
+  <h2 class="sec">Yıldız tanıtım kartları</h2>
+  <p class="lead">İkinci günün etkinliği için. Bir sayfada dört kart; kesip dağıtabilirsiniz. Bilgileri aile yazar, çocuk kartını resimle süsler.</p>
+
+  <div class="kartlar">
+    <div class="kart">
+      <div class="yildiz">★</div>
+      <b>Adım</b><div class="satir"></div>
+      <b>Beni mutlu eden bir şey</b><div class="satir"></div>
+      <b>En sevdiğim oyun</b><div class="satir"></div>
+      <b>En sevdiğim renk</b><div class="satir"></div>
+      <b>Bir hayalim</b><div class="satir"></div>
+    </div>
+    <div class="kart">
+      <div class="yildiz">★</div>
+      <b>Adım</b><div class="satir"></div>
+      <b>Beni mutlu eden bir şey</b><div class="satir"></div>
+      <b>En sevdiğim oyun</b><div class="satir"></div>
+      <b>En sevdiğim renk</b><div class="satir"></div>
+      <b>Bir hayalim</b><div class="satir"></div>
+    </div>
+    <div class="kart">
+      <div class="yildiz">★</div>
+      <b>Adım</b><div class="satir"></div>
+      <b>Beni mutlu eden bir şey</b><div class="satir"></div>
+      <b>En sevdiğim oyun</b><div class="satir"></div>
+      <b>En sevdiğim renk</b><div class="satir"></div>
+      <b>Bir hayalim</b><div class="satir"></div>
+    </div>
+    <div class="kart">
+      <div class="yildiz">★</div>
+      <b>Adım</b><div class="satir"></div>
+      <b>Beni mutlu eden bir şey</b><div class="satir"></div>
+      <b>En sevdiğim oyun</b><div class="satir"></div>
+      <b>En sevdiğim renk</b><div class="satir"></div>
+      <b>Bir hayalim</b><div class="satir"></div>
+    </div>
+  </div>
+
+  <div class="box" style="margin-top:20px;">
+    <h4>Kayıp Yıldız mektubu — üçüncü gün</h4>
+    <p style="margin:6px 0 0;">Sevgili öğrenciler, ben okulumuza yeni gelen küçük bir yıldızım. Okulumuzun çok güzel bir yer olduğunu duydum. Fakat sınıfımı bulamadım ve okulun bölümlerinin ne işe yaradığını henüz bilmiyorum. Bana okulu tanıtır ve sınıfımı bulmama yardım eder misiniz?</p>
+  </div>
+
+  <div class="printbar"><button class="printbtn" onclick="window.print()">Bu sayfayı yazdır</button></div>
+</section>
+
+<!-- ============ 7 ============ -->
+<section class="panel" id="p7" role="tabpanel" hidden>
+  <h2 class="sec">Mutlu Sınıf Kutusu</h2>
+  <p class="lead">Dördüncü günün etkinliği için tahtaya yansıtın. Tamir Kutusu’ndan çıkan davranışın karşılığını sınıfça bulun. Kurallar hep olumlu cümlelerle yazılır.</p>
+
+  <div class="oyun-alan" id="oyun"></div>
+  <div class="skor" id="skor">0 / 6 kural bulundu.</div>
+
+  <div class="printbar"><button class="printbtn" onclick="window.print()">Bu sayfayı yazdır</button></div>
+</section>
+
+</div>
+</div>
+
+<script>
+/* --- Sekmeler --- */
+const btns = document.querySelectorAll('nav.tabs button');
+btns.forEach(b => b.addEventListener('click', () => {
+  btns.forEach(x => x.setAttribute('aria-selected', x === b ? 'true' : 'false'));
+  document.querySelectorAll('.panel').forEach(p => p.hidden = (p.id !== b.dataset.panel));
+  window.scrollTo({top:0, behavior:'smooth'});
+}));
+
+/* --- Duyuru kopyala --- */
+document.getElementById('kopyala').addEventListener('click', function(){
+  const t = document.getElementById('duyuru');
+  t.select();
+  try {
+    document.execCommand('copy');
+    this.textContent = 'Kopyalandı';
+    setTimeout(() => this.textContent = 'Metni kopyala', 1800);
+  } catch(e) {
+    this.textContent = 'Kopyalanamadı, elle seçin';
+  }
+});
+
+/* --- Mutlu Sınıf Kutusu --- */
+const kurallar = [
+  {durum:'Çöpünü yere atan çocuk', dogru:'Çöpümü çöp kutusuna atarım.', yanlis:['Çöp atmak yasaktır.','Yere çöp atmayız.']},
+  {durum:'Sınıfta koşan çocuk', dogru:'Sınıfta sakince yürürüm.', yanlis:['Sınıfta koşmak yasak.','Koşmayız.']},
+  {durum:'Sınıfta bağıran çocuk', dogru:'Sesimi yükseltmeden konuşurum.', yanlis:['Bağırmayız.','Yüksek sesle konuşmak ayıptır.']},
+  {durum:'Arkadaşının sözünü kesen çocuk', dogru:'Konuşan kişinin sözünü bitirmesini beklerim.', yanlis:['Söz kesmeyiz.','Arkadaşının sözünü kesme.']},
+  {durum:'Defterini yırtan çocuk', dogru:'Eşyalarımı özenli kullanırım.', yanlis:['Defter yırtmak yanlıştır.','Eşyalarımızı yırtmayız.']},
+  {durum:'Dersi dinlemeyen çocuk', dogru:'Dersi dikkatli dinlerim.', yanlis:['Ders sırasında oyalanmayız.','Dersi dinlememek olmaz.']}
+];
+
+let bulunan = 0;
+const alan = document.getElementById('oyun');
+const skor = document.getElementById('skor');
+
+kurallar.forEach((k, i) => {
+  const secenekler = [k.dogru, ...k.yanlis].sort(() => Math.random() - 0.5);
+  const kutu = document.createElement('div');
+  kutu.className = 'soru';
+  const p = document.createElement('p');
+  p.className = 'durum';
+  p.textContent = (i+1) + '. ' + k.durum;
+  kutu.appendChild(p);
+  const sec = document.createElement('div');
+  sec.className = 'secenekler';
+  secenekler.forEach(metin => {
+    const b = document.createElement('button');
+    b.textContent = metin;
+    b.addEventListener('click', () => {
+      if (kutu.classList.contains('dogru')) return;
+      if (metin === k.dogru) {
+        b.classList.add('sec-dogru');
+        kutu.classList.add('dogru');
+        bulunan++;
+        skor.textContent = bulunan + ' / 6 kural bulundu.'
+          + (bulunan === 6 ? ' Kurallarımız tamam, panoya asalım.' : '');
+      } else {
+        b.classList.add('sec-yanlis');
+        b.disabled = true;
+      }
+    });
+    sec.appendChild(b);
+  });
+  kutu.appendChild(sec);
+  alan.appendChild(kutu);
+});
+</script>
+</body>
+</html>
