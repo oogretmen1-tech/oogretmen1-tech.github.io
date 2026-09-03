@@ -41,6 +41,7 @@
   .start{display:block;width:100%;margin:18px auto 0;padding:16px;border:0;border-radius:14px;
     background:#2fbf6b;color:#04220f;font-size:20px;font-weight:800;cursor:pointer;}
   .hint{margin-top:14px;font-size:12.5px;color:#8fae99;line-height:1.55;text-align:center;}
+  .imza{margin-top:16px;text-align:center;font-size:13px;font-weight:700;letter-spacing:.5px;color:#2fbf6b;}
   #pause{position:fixed;inset:0;z-index:30;display:none;align-items:center;justify-content:center;
     background:rgba(4,15,9,.82);}
   #pause .box{width:min(320px,86vw);background:#0f2c1c;border-radius:16px;padding:18px;text-align:center;}
@@ -87,6 +88,7 @@
     </div>
 
     <button class="start" id="startBtn">MAÇI BAŞLAT</button>
+    <div class="imza">Dijital Öğretmen · Hasan Tutuş</div>
     <div class="hint">
       Sol alttaki yuvarlak = koşma yönü. Sağdaki tuşlar: <b>PAS</b> · <b>ŞUT</b> · <b>KOŞ</b>.<br>
       Topu rakip aldığında aynı tuşlar <b>DEĞİŞ</b> ve <b>MÜDAHALE</b> olur.<br>
@@ -127,7 +129,7 @@ const HAIRS = ['#20150f','#3a2415','#120d09','#5a3a1c','#241a12'];
 /* ============================ SAHA ============================ */
 const FW = 1400, FH = 880;          // saha ölçüleri
 const GOAL_H = 200;                 // kale genişliği
-const MARGIN = 70;                  // taç dışı alan
+const MARGIN = 42;                  // taç dışı alan
 const PR = 12.5;                    // oyuncu yarıçapı
 const BR = 7.5;                     // top yarıçapı
 
@@ -148,7 +150,7 @@ const G = {
   humanTeams:[true,false],
   restartT:0, kickTeam:0,
   shake:0,
-  setType:null, setT:0, setTaker:null,
+  setType:null, setT:0, setTaker:null, outGrace:0,
   cards:[{y:0,r:0},{y:0,r:0}], cardShow:null, cardT:0,
   pendingOff:[]
 };
@@ -516,7 +518,8 @@ function aiGK(p,dt){
       }
     }
   }
-  if(!ball.owner && inBox && Math.hypot(ball.x-p.x,ball.y-p.y)<170){
+  const sahaIci = ball.x>0 && ball.x<FW && ball.y>0 && ball.y<FH;
+  if(!ball.owner && sahaIci && inBox && Math.hypot(ball.x-p.x,ball.y-p.y)<170){
     moveTo(p, ball.x, ball.y, dt, 1.05);
     if(Math.hypot(ball.x-p.x,ball.y-p.y)<24) giveBall(p);
     return;
@@ -524,7 +527,7 @@ function aiGK(p,dt){
   const ty = clamp(lerp(FH/2, ball.y, 0.62), FH/2-GOAL_H/2-24, FH/2+GOAL_H/2+24);
   const tx = goalX + (inBox? (p.team.dir>0? 18:-18) : 0);
   moveTo(p, tx, ty, dt, 0.9);
-  if(Math.hypot(ball.x-p.x,ball.y-p.y)<26 && !ball.owner) giveBall(p);
+  if(sahaIci && Math.hypot(ball.x-p.x,ball.y-p.y)<26 && !ball.owner) giveBall(p);
 }
 
 function aiWithBall(p,dt){
@@ -780,6 +783,7 @@ function ballPhysics(dt){
         giveBall(q); break;
       }
     }
+    checkOut(5);                 // topu sürerek çizgiyi geçtiyse aut / gol
     return;
   }
 
@@ -789,6 +793,11 @@ function ballPhysics(dt){
   if(ball.ignoreT<=0) ball.ignore=null;
 
   ball.x += ball.vx*dt; ball.y += ball.vy*dt;
+  // kale çizgisini geçtiyse gol; kimse topu çizginin arkasından geri alamaz
+  if(ball.x < 0 || ball.x > FW){
+    const g0 = FH/2-GOAL_H/2, g1 = FH/2+GOAL_H/2;
+    if(ball.y>g0 && ball.y<g1){ scoreGoal(ball.x<0 ? 1 : 0); return; }
+  }
   ball.rot += Math.hypot(ball.vx,ball.vy)*dt*0.06;
   const fr = Math.pow(0.35,dt);
   ball.vx*=fr; ball.vy*=fr;
@@ -847,22 +856,33 @@ function ballPhysics(dt){
   checkOut();
 }
 
-function checkOut(){
+function checkOut(pay){
+  const m = pay || 0;
   const gy0 = FH/2-GOAL_H/2, gy1 = FH/2+GOAL_H/2;
   // gol
   if(ball.x < 0 && ball.y>gy0 && ball.y<gy1){ scoreGoal(1); return; }
   if(ball.x > FW && ball.y>gy0 && ball.y<gy1){ scoreGoal(0); return; }
   // taç (avut)
-  if(ball.y < 0 || ball.y > FH){
-    setPiece('tac', clamp(ball.x,45,FW-45), ball.y<0?14:FH-14, 1-ball.lastTeam);
+  if(ball.y < -m || ball.y > FH+m){
+    if(G.outGrace>0){                       // vuruştan hemen sonra tekrar aut olmasın
+      ball.y = clamp(ball.y, 20, FH-20);
+      ball.vy = Math.abs(ball.vy) * (ball.y<FH/2 ? 1 : -1);
+      return;
+    }
+    setPiece('tac', clamp(ball.x,60,FW-60), ball.y<FH/2 ? 40 : FH-40, 1-ball.lastTeam);
     return;
   }
   // dikine aut → korner ya da kale vuruşu
-  if(ball.x<0 || ball.x>FW){
-    const leftGoal = ball.x<0;
+  if(ball.x < -m || ball.x > FW+m){
+    if(G.outGrace>0){
+      ball.x = clamp(ball.x, 26, FW-26);
+      ball.vx = Math.abs(ball.vx) * (ball.x<FW/2 ? 1 : -1);
+      return;
+    }
+    const leftGoal = ball.x<FW/2;
     const defSide = leftGoal ? 0 : 1;
     if(ball.lastTeam===defSide){
-      setPiece('korner', leftGoal?20:FW-20, ball.y<FH/2?20:FH-20, 1-defSide);
+      setPiece('korner', leftGoal?40:FW-40, ball.y<FH/2?40:FH-40, 1-defSide);
     }else{
       setPiece('kale', leftGoal?95:FW-95, FH/2, defSide);
     }
@@ -897,9 +917,9 @@ function stepSet(dt){
   for(const p of G.players){
     p.receiving = 0;
     if(p===taker){
-      const bx = ball.x - 20*p.team.dir, by = ball.y;
-      moveTo(p, bx, by, dt, 1.0);
-      p.facing = p.team.dir>0?0:Math.PI;
+      const ang = takerAci();
+      moveTo(p, ball.x - Math.cos(ang)*22, ball.y - Math.sin(ang)*22, dt, 1.0);
+      p.facing = ang;
       continue;
     }
     if(p.isGK){                                  // kaleci çizgisine
@@ -917,14 +937,30 @@ function stepSet(dt){
   updateCamera(dt);
   if(G.setT<=0){
     if(taker && G.players.indexOf(taker)>=0){
-      taker.x = ball.x - 18*taker.team.dir; taker.y = ball.y;
+      const ang = takerAci();
+      taker.facing = ang;
+      taker.x = clamp(ball.x - Math.cos(ang)*20, 10, FW-10);
+      taker.y = clamp(ball.y - Math.sin(ang)*20, 10, FH-10);
       giveBall(taker);
     }else{
       ball.freeT=0;
     }
+    G.outGrace = 1.0;              // vuruştan sonra kısa süre aut sayılmaz
     G.setType=null; G.phase='play';
     updateControlled(true);
   }
+}
+
+/* vuruşu kullanan oyuncunun bakacağı yön: penaltıda kale, diğerlerinde saha içi */
+function takerAci(){
+  const t = G.setTaker;
+  if(!t) return 0;
+  if(G.setType==='penalti'){
+    const gx = t.team.dir>0 ? FW : 0;
+    return Math.atan2(FH/2-ball.y, gx-ball.x);
+  }
+  const hx = lerp(FW/2, t.team.dir>0 ? FW : 0, 0.25);
+  return Math.atan2(FH/2-ball.y, hx-ball.x);
 }
 
 function restartAt(x,y,side){
@@ -1350,6 +1386,8 @@ function render(){
     ctx.fillText(G.teams[0].def.name+'  '+G.score[0]+' - '+G.score[1]+'  '+G.teams[1].def.name, W/2, H*0.5);
     ctx.font='16px Arial'; ctx.fillStyle='#9fe8bb';
     ctx.fillText('Ekrana dokun → menü', W/2, H*0.62);
+    ctx.font='bold 14px Arial'; ctx.fillStyle='#2fbf6b';
+    ctx.fillText('Dijital Öğretmen · Hasan Tutuş', W/2, H*0.72);
     ctx.restore();
   }
 }
@@ -1367,6 +1405,7 @@ function step(dt){
   readKeys();
   G.msgT = Math.max(0,G.msgT-dt);
   G.cardT = Math.max(0,G.cardT-dt);
+  G.outGrace = Math.max(0,(G.outGrace||0)-dt);
   G.shake = Math.max(0,G.shake-dt*40);
   updateFX(dt);
 
