@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Milletler Voleybolu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --arena:#0a1626;
+  --arena2:#132a45;
+  --saha:#1f6fbf;
+  --hucum:#e0761c;
+  --cizgi:#f3f7ff;
+  --altin:#f5c542;
+  --kirmizi:#e30a17;
+  --yazi:#eaf1fb;
+  --sonuk:#9fb4cd;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;height:100%}
+body{
+  font-family:'Andika',sans-serif;
+  background:radial-gradient(circle at 50% 0%,var(--arena2),var(--arena) 70%);
+  color:var(--yazi);
+  overflow-x:hidden;
+  user-select:none;
+}
+.sayfa{display:none;padding:14px 14px 26px;max-width:1060px;margin:0 auto}
+.sayfa.acik{display:block}
+
+/* ---------- MENÜ ---------- */
+.logo{text-align:center;margin:18px 0 10px}
+.logo .top{
+  display:inline-block;width:74px;height:74px;border-radius:50%;
+  background:radial-gradient(circle at 34% 30%,#fff,#dfe7f2 60%,#b9c6d8);
+  position:relative;box-shadow:0 10px 26px rgba(0,0,0,.45);
+  animation:zipla 2.6s ease-in-out infinite;
+}
+.logo .top::before,.logo .top::after{
+  content:"";position:absolute;inset:6px;border-radius:50%;
+  border:3px solid #16447a;border-color:#16447a transparent #16447a transparent;
+}
+.logo .top::after{transform:rotate(58deg);border-color:#d9721c transparent transparent transparent}
+@keyframes zipla{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+h1{font-size:34px;margin:10px 0 2px;letter-spacing:.5px}
+.altbaslik{color:var(--sonuk);margin:0 0 18px;font-size:16px}
+
+.mbtn{
+  display:block;width:100%;max-width:430px;margin:10px auto;
+  padding:16px 18px;border:none;border-radius:16px;cursor:pointer;
+  font-family:'Andika',sans-serif;font-size:20px;font-weight:700;color:#0b1a2c;
+  background:linear-gradient(180deg,#ffd970,var(--altin));
+  box-shadow:0 6px 0 #b8912a, 0 12px 22px rgba(0,0,0,.35);
+  transition:transform .08s;
+}
+.mbtn.ikincil{background:linear-gradient(180deg,#3f76b8,#28558d);color:#fff;box-shadow:0 6px 0 #17385f,0 12px 22px rgba(0,0,0,.3)}
+.mbtn:active{transform:translateY(4px);box-shadow:0 2px 0 #b8912a}
+.mbtn.ikincil:active{box-shadow:0 2px 0 #17385f}
+
+h2{font-size:24px;margin:6px 0 4px}
+.aciklama{color:var(--sonuk);font-size:15px;margin:0 0 14px;line-height:1.5}
+
+/* ---------- SEÇENEKLER ---------- */
+.grup{background:rgba(255,255,255,.06);border-radius:16px;padding:12px 14px;margin-bottom:12px}
+.grup h3{margin:0 0 10px;font-size:17px;color:var(--altin)}
+.secenekler{display:flex;gap:8px;flex-wrap:wrap}
+.sec{
+  flex:1 1 92px;padding:12px 8px;border-radius:12px;border:2px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.05);color:var(--yazi);font-family:'Andika',sans-serif;font-size:16px;cursor:pointer
+}
+.sec.aktif{background:var(--altin);color:#10233a;border-color:#fff;font-weight:700}
+.sec small{display:block;font-size:12px;opacity:.75;margin-top:2px}
+
+/* ---------- TAKIMLAR ---------- */
+.takimlar{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:9px;margin-bottom:14px}
+.takim{
+  position:relative;display:flex;align-items:center;gap:8px;
+  padding:10px;border-radius:14px;cursor:pointer;
+  background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,.04));
+  border:2px solid transparent;
+}
+.takim:active{transform:scale(.98)}
+.takim.secili{border-color:var(--altin);background:rgba(245,197,66,.18)}
+.bayrak{font-size:26px;line-height:1}
+.tad{font-size:16px;font-weight:700;line-height:1.15}
+.tguc{font-size:12px;color:var(--sonuk)}
+.sira{
+  position:absolute;top:6px;right:8px;font-size:11px;color:#0e2038;
+  background:var(--altin);border-radius:20px;padding:1px 7px;font-weight:700
+}
+.kadro{font-size:13px;color:var(--sonuk);line-height:1.5;background:rgba(255,255,255,.05);
+  border-radius:12px;padding:10px 12px;margin-bottom:12px;min-height:44px}
+
+/* ---------- MAÇ ---------- */
+#macSayfa{padding:0;max-width:100%}
+.tuval-kutu{width:100%;background:#050d18;position:relative}
+canvas{display:block;width:100%;height:auto;touch-action:none}
+.kontrol{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  padding:8px 10px 14px;gap:10px;
+}
+.sol-pad{display:flex;gap:8px}
+.sag-pad{display:flex;gap:8px;align-items:flex-end}
+.pad{
+  width:66px;height:66px;border-radius:50%;border:none;
+  font-family:'Andika',sans-serif;font-weight:700;color:#0c1c2f;
+  background:linear-gradient(180deg,#e8eef7,#b6c6d9);
+  box-shadow:0 5px 0 #6d8299;font-size:26px;
+}
+.pad:active{transform:translateY(3px);box-shadow:0 2px 0 #6d8299}
+.pad.buyuk{width:80px;height:80px;font-size:15px;line-height:1.1}
+.pad.zipla{background:linear-gradient(180deg,#9fe6a0,#4fbf68);color:#08331a;box-shadow:0 5px 0 #2c7a3f}
+.pad.manset{background:linear-gradient(180deg,#9ecdfa,#3f8fdc);color:#04223f;box-shadow:0 5px 0 #23608f}
+.pad.smac{background:linear-gradient(180deg,#ffb26b,#f07c1e);color:#3a1a02;box-shadow:0 5px 0 #a8500c}
+.mac-ust{display:flex;justify-content:space-between;align-items:center;padding:6px 12px 0;font-size:14px;color:var(--sonuk)}
+.kucukbtn{background:rgba(255,255,255,.12);border:none;color:var(--yazi);font-family:'Andika',sans-serif;
+  padding:7px 12px;border-radius:10px;font-size:14px}
+
+/* ---------- FİKSTÜR ---------- */
+.tur-baslik{color:var(--altin);font-size:18px;margin:14px 0 6px}
+.es{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);
+  border-radius:12px;padding:9px 12px;margin-bottom:7px;font-size:15px}
+.es.senin{border:2px solid var(--altin)}
+.es .vs{color:var(--sonuk);font-size:13px}
+.es .skor{margin-left:auto;font-weight:700;color:var(--altin)}
+.kazanan{color:#8ff0a4;font-weight:700}
+.kaybeden{opacity:.55;text-decoration:line-through}
+
+/* ---------- SONUÇ ---------- */
+.sonuc-kutu{text-align:center;padding:22px 12px}
+.sonuc-baslik{font-size:32px;margin:8px 0}
+.sonuc-skor{font-size:52px;font-weight:700;color:var(--altin);margin:6px 0}
+.kupa{font-size:70px;margin:6px}
+
+.imza{text-align:center;color:#6f88a5;font-size:13px;padding:16px 0 8px;letter-spacing:.3px}
+.yardim li{margin-bottom:9px;line-height:1.5;font-size:15px}
+.tus{display:inline-block;background:rgba(255,255,255,.14);border-radius:7px;padding:1px 8px;font-weight:700}
+</style>
+</head>
+<body>
+
+<!-- ================= ANA MENÜ ================= -->
+<section id="menu" class="sayfa acik">
+  <div class="logo"><div class="top"></div></div>
+  <h1 style="text-align:center">Milletler Voleybolu</h1>
+  <p class="altbaslik" style="text-align:center">23 ülke · 1'e1 / 3'e3 / 6'ya6 · 4 turnuva türü</p>
+  <button class="mbtn" onclick="git('ayar','hizli')">Hızlı Maç</button>
+  <button class="mbtn" onclick="git('ayar','turnuva')">Turnuva</button>
+  <button class="mbtn ikincil" onclick="goster('yardim')">Nasıl Oynanır?</button>
+  <button class="mbtn ikincil" onclick="sesDegistir()" id="sesBtn">Ses: Açık</button>
+  <div class="imza">Dijital Öğretmen · Hasan Tutuş</div>
+</section>
+
+<!-- ================= YARDIM ================= -->
+<section id="yardim" class="sayfa">
+  <h2>Nasıl Oynanır?</h2>
+  <p class="aciklama">Voleybolda bir takım topa en fazla <b>üç kez</b> dokunur: manşet (karşılama), pas, smaç.</p>
+  <ul class="yardim">
+    <li><b>Servis:</b> <span class="tus">SMAÇ</span> tuşuna basınca oyuncu topu havaya atar. Top havadayken tam <b>halka küçüldüğü anda</b> yeniden <span class="tus">SMAÇ</span>'a bas. Ne kadar iyi zamanlarsan servis o kadar sert olur.</li>
+    <li><b>Manşet (karşılama):</b> Topun düşeceği yere koş, top sana yaklaşınca <span class="tus">MANŞET</span>'e bas. Top yükselerek file önüne gider.</li>
+    <li><b>Pas:</b> İkinci dokunuşta yine <span class="tus">MANŞET</span>'e basarsan top smaç için fileye yaklaştırılır.</li>
+    <li><b>Smaç:</b> Fileye yaklaş, <span class="tus">ZIPLA</span> ile sıçra, havadayken <span class="tus">SMAÇ</span>'a bas. Sağa-sola basılı tutarsan smacı o yöne yönlendirirsin.</li>
+    <li><b>Blok:</b> Rakip smaç yaparken filenin dibinde zıplayıp <span class="tus">SMAÇ</span>'a basarsan topu geri çevirirsin.</li>
+    <li><b>Sayı:</b> Top sahaya düşerse, dışarı çıkarsa, fileye takılırsa ya da bir takım 3'ten fazla dokunursa rakip sayıyı alır.</li>
+    <li><b>Klavye:</b> <span class="tus">←</span> <span class="tus">→</span> hareket, <span class="tus">↑</span> zıpla, <span class="tus">S</span> manşet, <span class="tus">Boşluk</span> smaç/servis.</li>
+  </ul>
+  <button class="mbtn ikincil" onclick="goster('menu')">Geri</button>
+  <div class="imza">Dijital Öğretmen · Hasan Tutuş</div>
+</section>
+
+<!-- ================= AYARLAR ================= -->
+<section id="ayar" class="sayfa">
+  <h2 id="ayarBaslik">Maç Ayarları</h2>
+  <p class="aciklama">Oyun modunu ve zorluğu seç, sonra takımını belirle.</p>
+
+  <div class="grup" id="turnuvaTuruGrup" style="display:none">
+    <h3>Turnuva Türü</h3>
+    <div class="secenekler" id="turSec">
+      <button class="sec aktif" data-v="dunya">Dünya Şamp.<small>16 ülke</small></button>
+      <button class="sec" data-v="milletler">Milletler Ligi<small>16 ülke</small></button>
+      <button class="sec" data-v="avrupasamp">Avrupa Şamp.<small>16 Avrupa ülkesi</small></button>
+      <button class="sec" data-v="avrupaligi">Avrupa Ligi<small>8 Avrupa ülkesi</small></button>
+    </div>
+  </div>
+
+  <div class="grup"><h3>Oyun Modu</h3>
+    <div class="secenekler" id="modSec">
+      <button class="sec aktif" data-v="1">Tek Kişilik<small>1'e 1</small></button>
+      <button class="sec" data-v="3">Üç Kişilik<small>3'e 3</small></button>
+      <button class="sec" data-v="6">Altı Kişilik<small>6'ya 6</small></button>
+    </div>
+  </div>
+
+  <div class="grup"><h3>Zorluk</h3>
+    <div class="secenekler" id="zorSec">
+      <button class="sec" data-v="kolay">Kolay<small>yeni başlayan</small></button>
+      <button class="sec aktif" data-v="orta">Orta<small>dengeli</small></button>
+      <button class="sec" data-v="zor">Zor<small>milli takım</small></button>
+    </div>
+  </div>
+
+  <div class="grup"><h3>Set Sayısı</h3>
+    <div class="secenekler" id="sayiSec">
+      <button class="sec" data-v="11">11 sayı<small>kısa</small></button>
+      <button class="sec aktif" data-v="15">15 sayı<small>normal</small></button>
+      <button class="sec" data-v="21">21 sayı<small>uzun</small></button>
+    </div>
+  </div>
+
+  <button class="mbtn" onclick="git('takim')">Devam</button>
+  <button class="mbtn ikincil" onclick="goster('menu')">Geri</button>
+  <div class="imza">Dijital Öğretmen · Hasan Tutuş</div>
+</section>
+
+<!-- ================= TAKIM SEÇİMİ ================= -->
+<section id="takim" class="sayfa">
+  <h2 id="takimBaslik">Takımını Seç</h2>
+  <p class="aciklama" id="takimAciklama">FIVB dünya sıralamasındaki ilk 16 ülke.</p>
+  <div class="kadro" id="kadroKutu">Bir takıma dokun.</div>
+  <div class="takimlar" id="takimListe"></div>
+  <button class="mbtn" id="takimDevam" onclick="takimOnayla()">Devam</button>
+  <button class="mbtn ikincil" onclick="goster('ayar')">Geri</button>
+  <div class="imza">Dijital Öğretmen · Hasan Tutuş</div>
+</section>
+
+<!-- ================= FİKSTÜR ================= -->
+<section id="fikstur" class="sayfa">
+  <h2 id="fiksturBaslik">Turnuva</h2>
+  <p class="aciklama" id="fiksturAlt">Son 16 turu</p>
+  <div id="fiksturListe"></div>
+  <button class="mbtn" id="fiksturBtn" onclick="turnuvaDevam()">Maça Başla</button>
+  <button class="mbtn ikincil" onclick="goster('menu')">Ana Menü</button>
+  <div class="imza">Dijital Öğretmen · Hasan Tutuş</div>
+</section>
+
+<!-- ================= MAÇ ================= -->
+<section id="macSayfa" class="sayfa">
+  <div class="mac-ust">
+    <button class="kucukbtn" onclick="macBirak()">◀ Çık</button>
+    <span id="macBilgi">Maç</span>
+    <button class="kucukbtn" onclick="duraklat()" id="durBtn">Durdur</button>
+  </div>
+  <div class="tuval-kutu"><canvas id="tuval" width="1000" height="560"></canvas></div>
+  <div class="kontrol">
+    <div class="sol-pad">
+      <button class="pad" id="btnSol">◀</button>
+      <button class="pad" id="btnSag">▶</button>
+    </div>
+    <div class="sag-pad">
+      <button class="pad buyuk manset" id="btnManset">MANŞET</button>
+      <button class="pad buyuk zipla" id="btnZipla">ZIPLA</button>
+      <button class="pad buyuk smac" id="btnSmac">SMAÇ</button>
+    </div>
+  </div>
+  <div class="imza">Dijital Öğretmen · Hasan Tutuş</div>
+</section>
+
+<!-- ================= SONUÇ ================= -->
+<section id="sonuc" class="sayfa">
+  <div class="sonuc-kutu">
+    <div class="kupa" id="sonucIkon">🏐</div>
+    <div class="sonuc-baslik" id="sonucBaslik">Maç Bitti</div>
+    <div class="sonuc-skor" id="sonucSkor">15 - 12</div>
+    <p class="aciklama" id="sonucNot"></p>
+  </div>
+  <button class="mbtn" id="sonucBtn" onclick="sonucDevam()">Devam</button>
+  <button class="mbtn ikincil" onclick="goster('menu')">Ana Menü</button>
+  <div class="imza">Dijital Öğretmen · Hasan Tutuş</div>
+</section>
+
+<script>
+/* =========================================================
+   TAKIMLAR — FIVB Kadınlar Dünya Sıralaması (Ağustos 2026)
+   Her oyuncu artık kendi ten/saç tonuyla sabit tanımlı —
+   rastgele formülle atanmıyor, karışıklık olmasın diye.
+   ========================================================= */
+const TENLER = {
+  acik:"#f7d7b8", acikorta:"#f0c49b", orta:"#e0aa7d", esmer:"#c98c5d", koyu:"#8d5a33"
+};
+const SACLAR = { siyah:"#161210", kahve:"#3d2a17", koyukahve:"#241a12", kumral:"#6b4a22", kizil:"#5b3a1e" };
+
+function oyuncuTanim(isim,no,ten,sac){ return {isim,no,ten:TENLER[ten],sac:SACLAR[sac]}; }
+
+const TAKIMLAR = [
+ {ad:"İtalya", bayrak:"🇮🇹", guc:95, r1:"#1257c4", r2:"#ffffff", bolge:"avrupa", kadro:[
+   oyuncuTanim("Egonu",18,"orta","siyah"), oyuncuTanim("Sylla",4,"esmer","koyukahve"), oyuncuTanim("Danesi",8,"acikorta","kahve"),
+   oyuncuTanim("Orro",6,"acikorta","kizil"), oyuncuTanim("De Gennaro",11,"acikorta","kahve"), oyuncuTanim("Fahr",2,"acik","kumral")
+ ]},
+ {ad:"Brezilya", bayrak:"🇧🇷", guc:91, r1:"#f2c500", r2:"#0a7d2e", bolge:"dunya", kadro:[
+   oyuncuTanim("Gabi",7,"esmer","koyukahve"), oyuncuTanim("Ana Cristina",10,"orta","kahve"), oyuncuTanim("Carol",9,"acikorta","kizil"),
+   oyuncuTanim("Julia Bergmann",5,"acikorta","kahve"), oyuncuTanim("Macris",3,"esmer","siyah"), oyuncuTanim("Roberta",12,"orta","koyukahve")
+ ]},
+ {ad:"Türkiye", bayrak:"🇹🇷", guc:89, r1:"#e30a17", r2:"#ffffff", bolge:"avrupa", kadro:[
+   oyuncuTanim("Vargas",1,"esmer","siyah"), oyuncuTanim("Eda",4,"acik","kumral"), oyuncuTanim("Zehra",8,"acikorta","koyukahve"),
+   oyuncuTanim("Hande",5,"acikorta","kahve"), oyuncuTanim("Gizem Örge",6,"acik","kizil"), oyuncuTanim("Ebrar",14,"acikorta","siyah"),
+   oyuncuTanim("İlçim",2,"acik","kahve"), oyuncuTanim("Elif",7,"acikorta","koyukahve")
+ ]},
+ {ad:"ABD", bayrak:"🇺🇸", guc:86, r1:"#1b3a93", r2:"#ffffff", bolge:"dunya", kadro:[
+   oyuncuTanim("Drews",9,"acik","kumral"), oyuncuTanim("Plummer",2,"acikorta","kahve"), oyuncuTanim("Ogbogu",4,"koyu","siyah"),
+   oyuncuTanim("Robinson",7,"esmer","koyukahve"), oyuncuTanim("Skinner",13,"acik","kizil"), oyuncuTanim("Hentz",1,"acikorta","kahve")
+ ]},
+ {ad:"Polonya", bayrak:"🇵🇱", guc:83, r1:"#d81e35", r2:"#ffffff", bolge:"avrupa", kadro:[
+   oyuncuTanim("Stysiak",17,"acik","kumral"), oyuncuTanim("Wołosz",15,"acikorta","kahve"), oyuncuTanim("Łukasik",3,"acik","kizil"),
+   oyuncuTanim("Korneluk",7,"acikorta","koyukahve"), oyuncuTanim("Kąkolewska",9,"acik","kahve"), oyuncuTanim("Kaczorowska",5,"acikorta","siyah")
+ ]},
+ {ad:"Japonya", bayrak:"🇯🇵", guc:81, r1:"#e4e9f2", r2:"#c8102e", bolge:"dunya", kadro:[
+   oyuncuTanim("Ishikawa",5,"acikorta","siyah"), oyuncuTanim("Koga",1,"acik","siyah"), oyuncuTanim("Inoue",8,"acikorta","siyah"),
+   oyuncuTanim("Sekine",2,"acik","siyah"), oyuncuTanim("Ohashi",7,"acikorta","siyah"), oyuncuTanim("Furuya",11,"acik","siyah")
+ ]},
+ {ad:"Çin", bayrak:"🇨🇳", guc:79, r1:"#d92b2b", r2:"#ffd400", bolge:"dunya", kadro:[
+   oyuncuTanim("Li Yingying",11,"acikorta","siyah"), oyuncuTanim("Yuan Xinyue",8,"acik","siyah"), oyuncuTanim("Wang",5,"acikorta","siyah"),
+   oyuncuTanim("Zhu",9,"acik","siyah"), oyuncuTanim("Gong",2,"acikorta","siyah"), oyuncuTanim("Yuan Xinyi",13,"acik","siyah")
+ ]},
+ {ad:"Hollanda", bayrak:"🇳🇱", guc:76, r1:"#f36c11", r2:"#0b3d91", bolge:"avrupa", kadro:[
+   oyuncuTanim("Daalderop",5,"acik","kumral"), oyuncuTanim("Plak",18,"acikorta","kizil"), oyuncuTanim("Timmerman",4,"acik","kahve"),
+   oyuncuTanim("Grothues",6,"acikorta","kumral"), oyuncuTanim("Buijs",2,"acik","kahve"), oyuncuTanim("Korneeva",9,"acikorta","koyukahve")
+ ]},
+ {ad:"Kanada", bayrak:"🇨🇦", guc:74, r1:"#d80621", r2:"#ffffff", bolge:"dunya", kadro:[
+   oyuncuTanim("Cordonier",21,"esmer","koyukahve"), oyuncuTanim("Van Ryk",6,"acik","kumral"), oyuncuTanim("Wilson",10,"acikorta","kahve"),
+   oyuncuTanim("Gray",7,"esmer","siyah"), oyuncuTanim("Neufeld",5,"acik","kizil"), oyuncuTanim("Bukovec",8,"acikorta","kumral")
+ ]},
+ {ad:"Sırbistan", bayrak:"🇷🇸", guc:73, r1:"#1b4b8a", r2:"#e03a3a", bolge:"avrupa", kadro:[
+   oyuncuTanim("Bošković",11,"acik","kumral"), oyuncuTanim("Lazović",18,"acikorta","kahve"), oyuncuTanim("Popović",5,"acik","kizil"),
+   oyuncuTanim("Đerisilo",4,"acikorta","koyukahve"), oyuncuTanim("Rašić",9,"acik","kahve"), oyuncuTanim("Ognjenović",8,"acikorta","siyah")
+ ]},
+ {ad:"Dominik C.", bayrak:"🇩🇴", guc:68, r1:"#1d3f94", r2:"#ffffff", bolge:"dunya", kadro:[
+   oyuncuTanim("Marte",13,"esmer","siyah"), oyuncuTanim("González",6,"koyu","koyukahve"), oyuncuTanim("Martínez",9,"esmer","siyah"),
+   oyuncuTanim("De La Cruz",2,"koyu","siyah"), oyuncuTanim("Pie",5,"esmer","koyukahve"), oyuncuTanim("Peña",11,"koyu","siyah")
+ ]},
+ {ad:"Almanya", bayrak:"🇩🇪", guc:67, r1:"#2b2b2b", r2:"#ffcc00", bolge:"avrupa", kadro:[
+   oyuncuTanim("Orthmann",11,"acik","kumral"), oyuncuTanim("Alsmeier",13,"acikorta","kahve"), oyuncuTanim("Weitzel",5,"acik","kizil"),
+   oyuncuTanim("Grün",3,"acikorta","kumral"), oyuncuTanim("Kraneburg",1,"acik","kahve"), oyuncuTanim("Roloff",4,"acikorta","siyah")
+ ]},
+ {ad:"Çekya", bayrak:"🇨🇿", guc:65, r1:"#134c9e", r2:"#d7141a", bolge:"avrupa", kadro:[
+   oyuncuTanim("Kohoutová",9,"acik","kumral"), oyuncuTanim("Dostálová",4,"acikorta","kahve"), oyuncuTanim("Trnková",7,"acik","kizil"),
+   oyuncuTanim("Hrdinová",2,"acikorta","koyukahve"), oyuncuTanim("Sazimová",11,"acik","kahve"), oyuncuTanim("Švecová",5,"acikorta","siyah")
+ ]},
+ {ad:"Fransa", bayrak:"🇫🇷", guc:64, r1:"#1e40af", r2:"#ffffff", bolge:"avrupa", kadro:[
+   oyuncuTanim("Rotar",2,"acikorta","koyukahve"), oyuncuTanim("Kone",9,"esmer","siyah"), oyuncuTanim("Perinelli",6,"acik","kahve"),
+   oyuncuTanim("Boyer",4,"acikorta","kizil"), oyuncuTanim("Chevalier",8,"acik","kumral"), oyuncuTanim("Peirano",13,"acikorta","kahve")
+ ]},
+ {ad:"Belçika", bayrak:"🇧🇪", guc:62, r1:"#f6c700", r2:"#111111", bolge:"avrupa", kadro:[
+   oyuncuTanim("Herbots",8,"acik","kumral"), oyuncuTanim("Rampelberg",9,"acikorta","kahve"), oyuncuTanim("Lemmens",11,"acik","kizil"),
+   oyuncuTanim("Grobelna",4,"acikorta","koyukahve"), oyuncuTanim("Bonami",2,"acik","kahve"), oyuncuTanim("Van Avermaet",6,"acikorta","siyah")
+ ]},
+ {ad:"Tayland", bayrak:"🇹🇭", guc:60, r1:"#b3122e", r2:"#1c3f94", bolge:"dunya", kadro:[
+   oyuncuTanim("Ajcharaporn",7,"acikorta","siyah"), oyuncuTanim("Chatchu-on",9,"acik","siyah"), oyuncuTanim("Pimpichaya",2,"acikorta","siyah"),
+   oyuncuTanim("Wilavan",5,"acik","siyah"), oyuncuTanim("Onuma",1,"acikorta","siyah"), oyuncuTanim("Thatdao",4,"acik","siyah")
+ ]},
+ {ad:"Ukrayna", bayrak:"🇺🇦", guc:58, r1:"#005bbb", r2:"#ffd500", bolge:"avrupa", kadro:[
+   oyuncuTanim("Kravchuk",9,"acik","kumral"), oyuncuTanim("Sydorenko",4,"acikorta","kahve"), oyuncuTanim("Melnyk",6,"acik","kizil"),
+   oyuncuTanim("Boyko",2,"acikorta","kumral"), oyuncuTanim("Tkachenko",11,"acik","kahve"), oyuncuTanim("Shevchenko",8,"acikorta","siyah")
+ ]},
+ {ad:"Bulgaristan", bayrak:"🇧🇬", guc:57, r1:"#00966e", r2:"#ffffff", bolge:"avrupa", kadro:[
+   oyuncuTanim("Nikolova",7,"acik","kumral"), oyuncuTanim("Dimitrova",5,"acikorta","kahve"), oyuncuTanim("Ivanova",9,"acik","kizil"),
+   oyuncuTanim("Petrova",4,"acikorta","koyukahve"), oyuncuTanim("Georgieva",2,"acik","kahve"), oyuncuTanim("Todorova",11,"acikorta","siyah")
+ ]},
+ {ad:"Hırvatistan", bayrak:"🇭🇷", guc:55, r1:"#e30a17", r2:"#ffffff", bolge:"avrupa", kadro:[
+   oyuncuTanim("Horvat",6,"acikorta","kahve"), oyuncuTanim("Kovačić",9,"acik","kizil"), oyuncuTanim("Novak",4,"acikorta","kumral"),
+   oyuncuTanim("Babić",2,"acik","kahve"), oyuncuTanim("Marić",11,"acikorta","koyukahve"), oyuncuTanim("Jurić",8,"acik","siyah")
+ ]},
+ {ad:"Slovenya", bayrak:"🇸🇮", guc:54, r1:"#005ca9", r2:"#ffffff", bolge:"avrupa", kadro:[
+   oyuncuTanim("Kranjc",5,"acikorta","kumral"), oyuncuTanim("Zupan",9,"acik","kahve"), oyuncuTanim("Novak",4,"acikorta","kizil"),
+   oyuncuTanim("Kovač",2,"acik","kumral"), oyuncuTanim("Potočnik",11,"acikorta","kahve"), oyuncuTanim("Golob",8,"acik","siyah")
+ ]},
+ {ad:"Azerbaycan", bayrak:"🇦🇿", guc:52, r1:"#00b9e4", r2:"#ed2939", bolge:"avrupa", kadro:[
+   oyuncuTanim("Aliyeva",7,"esmer","siyah"), oyuncuTanim("Hasanova",5,"acikorta","koyukahve"), oyuncuTanim("Mammadova",9,"acikorta","siyah"),
+   oyuncuTanim("Quliyeva",2,"acik","kahve"), oyuncuTanim("Ismayilova",11,"acikorta","siyah"), oyuncuTanim("Rzayeva",4,"acik","kizil")
+ ]},
+ {ad:"İspanya", bayrak:"🇪🇸", guc:51, r1:"#c60b1e","r2":"#ffc400", bolge:"avrupa", kadro:[
+   oyuncuTanim("García",6,"acikorta","koyukahve"), oyuncuTanim("Martínez",9,"acik","kahve"), oyuncuTanim("López",4,"acikorta","kizil"),
+   oyuncuTanim("Fernández",2,"esmer","siyah"), oyuncuTanim("Ruiz",11,"acikorta","kumral"), oyuncuTanim("Díaz",8,"acik","koyukahve")
+ ]},
+ {ad:"Yunanistan", bayrak:"🇬🇷", guc:50, r1:"#0d5eaf", r2:"#ffffff", bolge:"avrupa", kadro:[
+   oyuncuTanim("Papadopoulou",5,"acikorta","siyah"), oyuncuTanim("Nikolaidou",9,"acik","koyukahve"), oyuncuTanim("Georgiou",4,"acikorta","kahve"),
+   oyuncuTanim("Ioannidou",2,"acik","siyah"), oyuncuTanim("Vasiliou",11,"acikorta","kizil"), oyuncuTanim("Konstantinou",8,"acik","kahve")
+ ]}
+];
+
+function bolgeTakimlar(bolge){
+  if(bolge==="avrupa") return TAKIMLAR.map((t,i)=>({...t,ix:i})).filter(t=>t.bolge==="avrupa");
+  return TAKIMLAR.map((t,i)=>({...t,ix:i}));
+}
+
+/* =========================================================
+   SES
+   ========================================================= */
+let AC=null, sesAcik=true;
+function sesKur(){
+  if(!AC){ try{ AC=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return null; } }
+  if(AC.state==="suspended") AC.resume();
+  return AC;
+}
+function ton(f1,f2,sure,tip,vol){
+  if(!sesAcik) return; const a=sesKur(); if(!a) return;
+  const o=a.createOscillator(), g=a.createGain();
+  o.type=tip||"sine"; o.frequency.setValueAtTime(f1,a.currentTime);
+  if(f2) o.frequency.exponentialRampToValueAtTime(Math.max(30,f2),a.currentTime+sure);
+  g.gain.setValueAtTime(vol||0.18,a.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+sure);
+  o.connect(g); g.connect(a.destination); o.start(); o.stop(a.currentTime+sure+0.02);
+}
+function gurultu(sure,vol,frek){
+  if(!sesAcik) return; const a=sesKur(); if(!a) return;
+  const n=Math.floor(a.sampleRate*sure), buf=a.createBuffer(1,n,a.sampleRate), d=buf.getChannelData(0);
+  for(let i=0;i<n;i++) d[i]=(Math.random()*2-1)*(1-i/n);
+  const s=a.createBufferSource(); s.buffer=buf;
+  const f=a.createBiquadFilter(); f.type="bandpass"; f.frequency.value=frek||900;
+  const g=a.createGain(); g.gain.value=vol||0.18;
+  s.connect(f); f.connect(g); g.connect(a.destination); s.start();
+}
+const sesVurus =()=>ton(430,300,0.07,"square",0.13);
+const sesManset=()=>ton(300,420,0.09,"sine",0.16);
+const sesPas   =()=>ton(520,640,0.08,"sine",0.13);
+const sesSmac  =()=>{ton(220,80,0.14,"sawtooth",0.22); gurultu(0.09,0.14,1400);};
+const sesBlok  =()=>ton(150,90,0.12,"square",0.2);
+const sesFile  =()=>gurultu(0.16,0.13,520);
+const sesZipla =()=>ton(600,900,0.06,"sine",0.07);
+function sesDuduk(){ ton(1750,1750,0.11,"square",0.1); setTimeout(()=>ton(2100,1900,0.16,"square",0.1),120); }
+function sesSayi(bizMi){
+  sesDuduk();
+  if(bizMi){ setTimeout(()=>ton(660,660,0.1,"triangle",0.18),260);
+             setTimeout(()=>ton(880,880,0.16,"triangle",0.18),380);
+             setTimeout(()=>gurultu(0.5,0.1,700),300); }
+  else { setTimeout(()=>ton(300,200,0.22,"triangle",0.14),260); }
+}
+function sesKazandi(){ const n=[523,659,784,1046,1318];
+  n.forEach((f,i)=>setTimeout(()=>ton(f,f,0.22,"triangle",0.2),i*160));
+  setTimeout(()=>gurultu(1.1,0.13,800),200); }
+function sesKaybetti(){ [440,392,330,262].forEach((f,i)=>setTimeout(()=>ton(f,f,0.3,"sine",0.16),i*200)); }
+function sesDegistir(){
+  sesAcik=!sesAcik;
+  document.getElementById("sesBtn").textContent="Ses: "+(sesAcik?"Açık":"Kapalı");
+  if(sesAcik){ sesKur(); ton(660,880,0.1,"triangle",0.15); }
+}
+
+/* =========================================================
+   SAYFA YÖNETİMİ
+   ========================================================= */
+const D = {
+  mod:1, zorluk:"orta", hedefSayi:15,
+  akis:"hizlı", benimTakim:null, rakipTakim:null,
+  secili:null, secimAsamasi:"benim",
+  turnuva:null, turIndeks:0, turnuvaTuru:"dunya"
+};
+const TURNUVA_ADLARI = { dunya:"Dünya Şampiyonası", milletler:"Milletler Ligi", avrupasamp:"Avrupa Şampiyonası", avrupaligi:"Avrupa Ligi" };
+function goster(id){
+  document.querySelectorAll(".sayfa").forEach(s=>s.classList.remove("acik"));
+  document.getElementById(id).classList.add("acik");
+  window.scrollTo(0,0);
+}
+function git(id,akis){
+  sesKur();
+  if(akis){ D.akis=akis;
+    document.getElementById("ayarBaslik").textContent = akis==="turnuva" ? "Turnuva Ayarları" : "Maç Ayarları";
+    document.getElementById("turnuvaTuruGrup").style.display = akis==="turnuva" ? "block" : "none";
+  }
+  if(id==="takim"){ takimEkraniKur(); }
+  goster(id);
+}
+function secenekKur(kutuId, alan, sayiMi){
+  document.querySelectorAll("#"+kutuId+" .sec").forEach(b=>{
+    b.onclick=()=>{
+      document.querySelectorAll("#"+kutuId+" .sec").forEach(x=>x.classList.remove("aktif"));
+      b.classList.add("aktif");
+      D[alan]= sayiMi? parseInt(b.dataset.v,10) : b.dataset.v;
+      ton(700,900,0.05,"square",0.08);
+    };
+  });
+}
+secenekKur("modSec","mod",true);
+secenekKur("zorSec","zorluk",false);
+secenekKur("sayiSec","hedefSayi",true);
+secenekKur("turSec","turnuvaTuru",false);
+
+/* ---------- takım seçimi ---------- */
+function aktifHavuz(){
+  if(D.akis==="turnuva" && D.turnuvaTuru==="avrupasamp"){
+    return bolgeTakimlar("avrupa");
+  }
+  if(D.akis==="turnuva" && D.turnuvaTuru==="avrupaligi"){
+    // Avrupa Ligi: Avrupa havuzunun güce göre alt sıradaki 8 takımı — ikinci kademe turnuva hissi
+    return bolgeTakimlar("avrupa").sort((a,b)=>a.guc-b.guc).slice(0,8);
+  }
+  return bolgeTakimlar("dunya");
+}
+function takimEkraniKur(){
+  D.secili=null;
+  D.secimAsamasi = "benim";
+  cizTakimlar();
+  document.getElementById("takimBaslik").textContent="Takımını Seç";
+  document.getElementById("takimAciklama").textContent = D.akis==="turnuva" ?
+    (TURNUVA_ADLARI[D.turnuvaTuru]+" · "+aktifHavuz().length+" ülke") :
+    "FIVB dünya sıralamasındaki ilk 16 ülke.";
+  document.getElementById("kadroKutu").textContent="Bir takıma dokun.";
+}
+function cizTakimlar(){
+  const kutu=document.getElementById("takimListe"); kutu.innerHTML="";
+  const havuz=aktifHavuz();
+  havuz.forEach((t,sirano)=>{
+    const i=t.ix;
+    if(D.secimAsamasi==="rakip" && D.benimTakim===i) return;
+    const el=document.createElement("div");
+    el.className="takim"+(D.secili===i?" secili":"");
+    el.innerHTML='<span class="sira">'+(sirano+1)+'</span><span class="bayrak">'+t.bayrak+'</span>'+
+                 '<span><span class="tad">'+t.ad+'</span><br><span class="tguc">güç '+t.guc+'</span></span>';
+    el.onclick=()=>{
+      D.secili=i; cizTakimlar();
+      document.getElementById("kadroKutu").innerHTML="<b>"+t.ad+"</b> · yıldız oyuncular: "+t.kadro.map(o=>o.isim).join(", ");
+      ton(760,980,0.07,"triangle",0.12);
+    };
+    kutu.appendChild(el);
+  });
+}
+function takimOnayla(){
+  if(D.secili===null){ document.getElementById("kadroKutu").textContent="Önce bir takım seç."; return; }
+  if(D.secimAsamasi==="benim"){
+    D.benimTakim=D.secili;
+    if(D.akis==="turnuva"){ turnuvaKur(); goster("fikstur"); return; }
+    D.secimAsamasi="rakip"; D.secili=null;
+    document.getElementById("takimBaslik").textContent="Rakibini Seç";
+    document.getElementById("takimAciklama").textContent="Senin takımın: "+TAKIMLAR[D.benimTakim].bayrak+" "+TAKIMLAR[D.benimTakim].ad;
+    document.getElementById("kadroKutu").textContent="Karşılaşacağın ülkeye dokun.";
+    cizTakimlar(); window.scrollTo(0,0);
+  } else {
+    D.rakipTakim=D.secili;
+    macBaslat(D.benimTakim,D.rakipTakim,"Hazırlık Maçı");
+  }
+}
+
+/* =========================================================
+   TURNUVA — havuz boyutuna göre bracket (16 veya 8 takım)
+   ========================================================= */
+function turAdlariUret(n){
+  const tumu=["Son 16","Çeyrek Final","Yarı Final","Final"];
+  return tumu.slice(tumu.length-Math.log2(n));
+}
+function turnuvaKur(){
+  const havuz=aktifHavuz();
+  const boyut = havuz.length>=16 ? 16 : 8;
+  const ixler = havuz.map(t=>t.ix);
+  // Fisher-Yates benzeri sabit-tohum karışık sıralama (senin takımın hep listede kalır)
+  const geriKalan = ixler.filter(i=>i!==D.benimTakim);
+  for(let i=geriKalan.length-1;i>0;i--){ const j=Math.floor(((i*7+3)%(i+1))); const t=geriKalan[i]; geriKalan[i]=geriKalan[j]; geriKalan[j]=t; }
+  const sira=[D.benimTakim, ...geriKalan].slice(0,boyut);
+  D.turnuva={ turlar:[], aktifTur:0, boyut, turAdlari:turAdlariUret(boyut) };
+  const ilk=[];
+  for(let i=0;i<sira.length;i+=2) ilk.push({a:sira[i],b:sira[i+1],skor:null,kazanan:null});
+  D.turnuva.turlar.push(ilk);
+  fiksturCiz();
+}
+function fiksturCiz(){
+  const t=D.turnuva, tur=t.turlar[t.aktifTur];
+  document.getElementById("fiksturBaslik").textContent=TURNUVA_ADLARI[D.turnuvaTuru];
+  document.getElementById("fiksturAlt").textContent=t.turAdlari[t.aktifTur]+" · takımın: "+TAKIMLAR[D.benimTakim].bayrak+" "+TAKIMLAR[D.benimTakim].ad;
+  const liste=document.getElementById("fiksturListe"); liste.innerHTML="";
+  const b=document.createElement("div"); b.className="tur-baslik"; b.textContent=t.turAdlari[t.aktifTur];
+  liste.appendChild(b);
+  tur.forEach(e=>{
+    const A=TAKIMLAR[e.a], B=TAKIMLAR[e.b];
+    const seninMi = (e.a===D.benimTakim||e.b===D.benimTakim);
+    const d=document.createElement("div"); d.className="es"+(seninMi?" senin":"");
+    const sA = e.kazanan===null?"":(e.kazanan===e.a?"kazanan":"kaybeden");
+    const sB = e.kazanan===null?"":(e.kazanan===e.b?"kazanan":"kaybeden");
+    d.innerHTML='<span class="'+sA+'">'+A.bayrak+' '+A.ad+'</span><span class="vs">–</span>'+
+                '<span class="'+sB+'">'+B.bayrak+' '+B.ad+'</span>'+
+                '<span class="skor">'+(e.skor?e.skor:"")+'</span>';
+    liste.appendChild(d);
+  });
+  const bitti = tur.every(e=>e.kazanan!==null);
+  const btn=document.getElementById("fiksturBtn");
+  const sonTur = t.aktifTur >= t.turAdlari.length-1;
+  if(!bitti) btn.textContent="Maçına Başla";
+  else if(!sonTur) btn.textContent=t.turAdlari[t.aktifTur+1]+"'e Geç";
+  else btn.textContent=TURNUVA_ADLARI[D.turnuvaTuru]+"'ı Bitir";
+}
+function turnuvaDevam(){
+  const t=D.turnuva, tur=t.turlar[t.aktifTur];
+  const benim=tur.find(e=>(e.a===D.benimTakim||e.b===D.benimTakim)&&e.kazanan===null);
+  if(benim){
+    const rakip = benim.a===D.benimTakim? benim.b : benim.a;
+    macBaslat(D.benimTakim,rakip,t.turAdlari[t.aktifTur]);
+    return;
+  }
+  const bitti = tur.every(e=>e.kazanan!==null);
+  if(!bitti) return;
+  if(t.aktifTur < t.turAdlari.length-1){
+    const yeni=[]; const kaz=tur.map(e=>e.kazanan);
+    for(let i=0;i<kaz.length;i+=2) yeni.push({a:kaz[i],b:kaz[i+1],skor:null,kazanan:null});
+    t.turlar.push(yeni); t.aktifTur++;
+    fiksturCiz(); window.scrollTo(0,0);
+  } else {
+    goster("menu");
+  }
+}
+function digerMaclariOyna(){
+  const t=D.turnuva, tur=t.turlar[t.aktifTur];
+  tur.forEach(e=>{
+    if(e.kazanan!==null) return;
+    const gA=TAKIMLAR[e.a].guc, gB=TAKIMLAR[e.b].guc;
+    const p=gA/(gA+gB);
+    const aKazanir=Math.random()< (p-0.5)*1.5+0.5;
+    const kaybedenSkor=Math.floor(Math.random()*(D.hedefSayi-4))+6;
+    e.kazanan = aKazanir? e.a : e.b;
+    e.skor = aKazanir? (D.hedefSayi+"-"+kaybedenSkor) : (kaybedenSkor+"-"+D.hedefSayi);
+  });
+}
+
+/* =========================================================
+   OYUN MOTORU
+   ========================================================= */
+const tuval=document.getElementById("tuval"), cx=tuval.getContext("2d");
+const W=1000,H=560, ZEMIN=498, FILE_X=500, FILE_UST=284;
+const SAHA_SOL=40, SAHA_SAG=960, YER=0.42, TOP_R=13;
+
+const ZORLUK={
+  kolay:{hiz:2.6, tepki:0.55, hata:0.30, zipla:0.45, guc:0.78},
+  orta :{hiz:3.4, tepki:0.75, hata:0.16, zipla:0.72, guc:0.92},
+  zor  :{hiz:4.2, tepki:0.92, hata:0.07, zipla:0.90, guc:1.06}
+};
+
+let O=null;           // aktif maç
+let calisiyor=false;
+const bas={sol:false,sag:false,zipla:false,manset:false,smac:false};
+
+function macBaslat(benim,rakip,etiket){
+  const z=ZORLUK[D.zorluk];
+  O={
+    solT:benim, sagT:rakip, etiket:etiket,
+    skor:{sol:0,sag:0},
+    hedef:D.hedefSayi,
+    zor:z,
+    durum:"servisHazir",
+    servisTaraf:"sol",
+    servisSira:{sol:0,sag:0},
+    dokunus:{sol:0,sag:0},
+    sonVuran:null, sonVuranOyuncu:null,
+    oyuncular:[], kontrol:null, servisci:null,
+    top:{x:0,y:0,vx:0,vy:0,don:0, aktif:false, tutan:null},
+    mesaj:"", mesajT:0, bekle:60, atisT:0, sarsinti:0,
+    parcalar:[], iz:[], bittiMi:false, duraklat:false,
+    animT:0
+  };
+  kadroKur();
+  document.getElementById("macBilgi").textContent =
+    TAKIMLAR[benim].ad+" – "+TAKIMLAR[rakip].ad+" · "+etiket+" · "+D.hedefSayi+" sayı";
+  document.getElementById("durBtn").textContent="Durdur";
+  goster("macSayfa");
+  sesKur();
+  yeniServis("sol");
+  if(!calisiyor){ calisiyor=true; requestAnimationFrame(dongu); }
+}
+
+/* ---------- kadro / diziliş (1'e1, 3'e3, 6'ya6) ---------- */
+function dizilisUret(n,taraf){
+  // Her sıradaki oyuncular AYNI derinlikte (x) durur, aralarındaki fark
+  // sadece "genislik" (yanal, saha içine yayılma) ile verilir — bu sayede
+  // oyuncular file'ye göre ileri-geri değil, saha genişliğine yayılmış görünür.
+  if(n===1) return [{x:taraf==="sol"?300:700, sira:"on", genislik:0}];
+  if(n===3){
+    const on=taraf==="sol"?400:600, arka=taraf==="sol"?170:830;
+    return [
+      {x:arka, sira:"arka", genislik:0},
+      {x:on,   sira:"on",   genislik:-1},
+      {x:on,   sira:"on",   genislik: 1}
+    ];
+  }
+  // n===6: 3 ön saha (file önü) + 3 arka saha (savunma) — her sıra saha
+  // genişliğine yayılmış (gerçek voleybol dizilişindeki gibi yan yana)
+  const on=taraf==="sol"?420:580, arka=taraf==="sol"?170:830;
+  return [
+    {x:on,   sira:"on",   genislik:-1},
+    {x:on,   sira:"on",   genislik: 0},
+    {x:on,   sira:"on",   genislik: 1},
+    {x:arka, sira:"arka", genislik:-1},
+    {x:arka, sira:"arka", genislik: 0},
+    {x:arka, sira:"arka", genislik: 1}
+  ];
+}
+function kadroKur(){
+  O.oyuncular=[];
+  const n=D.mod;
+  const solPoz=dizilisUret(n,"sol"), sagPoz=dizilisUret(n,"sag");
+  for(let i=0;i<n;i++){
+    O.oyuncular.push(oyuncuYap("sol", solPoz[i], O.solT, i));
+    O.oyuncular.push(oyuncuYap("sag", sagPoz[i], O.sagT, i));
+  }
+  O.kontrol = O.oyuncular.find(p=>p.taraf==="sol" && p.sira==="on") || O.oyuncular.find(p=>p.taraf==="sol");
+}
+function oyuncuYap(taraf,poz,takimIx,ix){
+  const t=TAKIMLAR[takimIx];
+  const kisi = t.kadro[ix % t.kadro.length];
+  const derinlikOlcek = poz.sira==="arka" ? 0.86 : 1;   // arka sıra biraz küçük çizilir → derinlik hissi
+  return {
+    taraf, evX:poz.x, x:poz.x, y:ZEMIN, vx:0, vy:0, yerde:true,
+    insan:false, takim:takimIx, ix:ix, sira:poz.sira, olcek:derinlikOlcek, genislik:poz.genislik||0,
+    isim:kisi.isim, no:kisi.no,
+    yon: taraf==="sol"? 1 : -1,
+    durum:"bekle", animT:Math.random()*10, aksiyon:null, aksiyonT:0,
+    temasBekle:0, hedefX:poz.x, dusun:0, ilgilen:false,
+    ten: kisi.ten, sac: kisi.sac,
+    kutlama:0
+  };
+}
+
+/* ---------- servis ---------- */
+function yeniServis(taraf){
+  O.servisTaraf=taraf;
+  O.dokunus.sol=0; O.dokunus.sag=0;
+  O.sonVuran=null; O.sonVuranOyuncu=null;
+  O.durum="servisHazir"; O.atisT=0; O.bekle=45;
+  const takimOyunculari=O.oyuncular.filter(p=>p.taraf===taraf);
+  const s=O.servisSira[taraf]%takimOyunculari.length;
+  O.servisci=takimOyunculari[s];
+  O.servisSira[taraf]++;
+  // yerleşim
+  O.oyuncular.forEach(p=>{
+    p.x=p.evX; p.y=ZEMIN; p.vx=0; p.vy=0; p.yerde=true;
+    p.durum="bekle"; p.aksiyon=null; p.temasBekle=0; p.kutlama=0;
+  });
+  const gx = taraf==="sol"? SAHA_SOL+30 : SAHA_SAG-30;
+  O.servisci.x=gx; O.servisci.evX = O.servisci.evX;
+  O.top.aktif=false; O.top.tutan=O.servisci; O.top.vx=0; O.top.vy=0;
+  topElde();
+  if(O.servisci.taraf==="sol" ) O.kontrol=O.servisci;
+  O.iz=[];
+}
+function topElde(){
+  const p=O.top.tutan; if(!p) return;
+  O.top.x=p.x+p.yon*20; O.top.y=p.y-72*p.olcek;
+}
+function servisAt(p){
+  if(O.durum!=="servisHazir") return;
+  O.top.tutan=null; O.top.aktif=true;
+  O.top.x=p.x+p.yon*16; O.top.y=p.y-80*p.olcek;
+  O.top.vx=0; O.top.vy=-13.6;
+  O.durum="servisAtildi"; O.atisT=0;
+  p.durum="servisAt"; p.animT=0;
+  ton(360,300,0.05,"sine",0.09);
+}
+function servisVur(p,gucOran){
+  const g=Math.max(0.15,Math.min(1,gucOran));
+  const yonAyar = (bas.sol?-1:0)+(bas.sag?1:0);
+  O.top.x = p.x+p.yon*22; O.top.y = ZEMIN-158*p.olcek;
+  O.top.vx = p.yon*(8.2+g*3.8) + yonAyar*p.yon*0.9;
+  O.top.vy = -(8.6+g*1.9);
+  O.top.don = p.yon*0.3;
+  O.durum="oyunda";
+  O.dokunus[p.taraf]=1;
+  O.sonVuran=p.taraf; O.sonVuranOyuncu=p;
+  p.durum="servisVur"; p.animT=0; p.aksiyonT=0;
+  if(g>0.75){ sesSmac(); mesajVer("Sert servis!",50); }
+  else if(g>0.4) sesVurus();
+  else { sesManset(); }
+  O.sarsinti=g*4;
+}
+
+/* ---------- top fiziği ---------- */
+function topGuncelle(){
+  const t=O.top;
+  if(t.tutan){ topElde(); return; }
+  if(!t.aktif) return;
+  t.vy+=YER; t.x+=t.vx; t.y+=t.vy; t.don+=t.vx*0.012;
+  O.iz.push({x:t.x,y:t.y}); if(O.iz.length>14) O.iz.shift();
+
+  // yan duvarlar
+  if(t.x<20){ t.x=20; t.vx=Math.abs(t.vx)*0.55; }
+  if(t.x>W-20){ t.x=W-20; t.vx=-Math.abs(t.vx)*0.55; }
+  if(t.y<26){ t.y=26; t.vy=Math.abs(t.vy)*0.5; }
+
+  // file
+  if(t.x+TOP_R>FILE_X-5 && t.x-TOP_R<FILE_X+5 && t.y+TOP_R>FILE_UST){
+    if(t.y-TOP_R<FILE_UST+8 && t.vy<0){
+      t.vy*=-0.35; t.vx*=0.6;
+    }else{
+      t.x = t.vx>0 ? FILE_X-5-TOP_R : FILE_X+5+TOP_R;
+      t.vx*=-0.42; t.vy*=0.5;
+    }
+    sesFile();
+    O.sarsinti=3;
+  }
+
+  // yere düşme
+  if(t.y+TOP_R>=ZEMIN){
+    t.y=ZEMIN-TOP_R;
+    const disarida = (t.x<SAHA_SOL || t.x>SAHA_SAG);
+    let kazanan;
+    let sebep;
+    if(disarida){
+      kazanan = O.sonVuran==="sol"?"sag":"sol";
+      sebep="Top dışarı!";
+    }else{
+      kazanan = t.x<FILE_X ? "sag":"sol";
+      sebep="Sayı!";
+    }
+    sayiVer(kazanan,sebep);
+  }
+}
+function tahminEt(hedefY){
+  const t=O.top; let x=t.x,y=t.y,vx=t.vx,vy=t.vy;
+  for(let i=0;i<230;i++){
+    vy+=YER; x+=vx; y+=vy;
+    if(x<20||x>W-20) vx*=-0.55;
+    if(y>=hedefY && vy>0) return {x:x,t:i};
+  }
+  return {x:x,t:230};
+}
+
+/* ---------- vuruşlar ---------- */
+function atisHesapla(bx,by,hedefX,hedefY,sure){
+  const vx=(hedefX-bx)/sure;
+  const vy=(hedefY-by-0.5*YER*sure*sure)/sure;
+  return {vx,vy};
+}
+function fileyiGecerMi(bx,by,vx,vy){
+  if(vx===0) return false;
+  const t=(FILE_X-bx)/vx;
+  if(t<0) return false;
+  const y=by+vy*t+0.5*YER*t*t;
+  return y < FILE_UST-14;
+}
+function hucumAt(p,hedefX,hizli){
+  const t=O.top;
+  const sureler = hizli? [22,28,34,42,52,64] : [40,50,62,74];
+  for(const s of sureler){
+    const v=atisHesapla(t.x,t.y,hedefX,ZEMIN-8,s);
+    if(fileyiGecerMi(t.x,t.y,v.vx,v.vy)){
+      t.vx=v.vx; t.vy=v.vy; t.don=p.yon*0.5;
+      return true;
+    }
+  }
+  // fileyi geçirecek açı yok → topu fileye vurur
+  const v=atisHesapla(t.x,t.y,hedefX,ZEMIN-8,sureler[sureler.length-1]);
+  t.vx=v.vx*0.8; t.vy=v.vy*0.8;
+  return false;
+}
+function vur(p,tur,guc){
+  const t=O.top;
+  const taraf=p.taraf;
+  if(O.durum!=="oyunda") return;
+  if(O.sonVuran!==taraf){ O.dokunus[taraf]=0; }
+  O.dokunus[taraf]++;
+  O.sonVuran=taraf; O.sonVuranOyuncu=p;
+  p.temasBekle=14;
+  p.aksiyonT=0;
+  const dok=O.dokunus[taraf];
+  const yonAyar = (p===O.kontrol && p.taraf==="sol") ? ((bas.sol?-1:0)+(bas.sag?1:0)) : 0;
+
+  if(O.dokunus[taraf]>3){ sayiVer(taraf==="sol"?"sag":"sol","Dört dokunuş!"); return; }
+
+  if(tur==="manset"){
+    // karşılama / pas: kendi sahasında yüksek top
+    const hedef = FILE_X - p.yon*(dok>=2? 95 : 190);
+    const v=atisHesapla(t.x,t.y,hedef,ZEMIN-150, dok>=2? 46:52);
+    t.vx=v.vx; t.vy=Math.min(v.vy,-9.2); t.don=0.1;
+    p.durum= dok>=2? "pas":"manset";
+    if(dok>=2) sesPas(); else sesManset();
+    if(dok>=3){ // üçüncü dokunuş manşetle: plase
+      const hx = FILE_X + p.yon*(110+Math.random()*230);
+      hucumAt(p,hx,false);
+      p.durum="plase"; sesVurus();
+    }
+  } else if(tur==="smac"){
+    const merkez = FILE_X + p.yon*250;
+    const hx = Math.max(SAHA_SOL+30,Math.min(SAHA_SAG-30, merkez + yonAyar*p.yon*150 + (Math.random()-0.5)*60));
+    const gecti = hucumAt(p,hx,true);
+    p.durum= p.yerde? "vurus":"smac";
+    if(gecti){ sesSmac(); O.sarsinti=6; if(!p.yerde) mesajVer("Smaç!",40); }
+    else { sesFile(); }
+  } else if(tur==="blok"){
+    t.vx = p.yon*Math.abs(t.vx)*0.55 + p.yon*3.5;
+    t.vy = 2.2;
+    p.durum="blok"; sesBlok(); O.sarsinti=5;
+    mesajVer("Blok!",40);
+  } else { // kontrolsüz temas
+    t.vy = -8.5 - Math.random()*2;
+    t.vx = (Math.random()-0.5)*5 + p.yon*1.2;
+    p.durum="manset"; sesVurus();
+  }
+}
+
+/* ---------- temas kontrolü ---------- */
+function ekranX(p){ return p.x + (p.genislik||0)*60; } // çizilen (görünen) yatay konum — top yakalama/AI hedeflemesi bununla tutarlı olsun diye
+function temasVarMi(p){
+  const t=O.top;
+  if(p.temasBekle>0) return null;
+  const ex=ekranX(p);
+  const govde={x:ex+p.yon*6, y:p.y-58*p.olcek, r:44*p.olcek};
+  const eller={x:ex+p.yon*16, y:p.y-104*p.olcek, r:38*p.olcek};
+  const d1=Math.hypot(t.x-govde.x,t.y-govde.y);
+  const d2=Math.hypot(t.x-eller.x,t.y-eller.y);
+  if(d2<eller.r+TOP_R) return "ust";
+  if(d1<govde.r+TOP_R) return "govde";
+  return null;
+}
+
+/* ---------- oyuncu hareketi ---------- */
+function hareketSiniri(p){
+  if(p.sira==="arka"){
+    return p.taraf==="sol"? [SAHA_SOL-10, FILE_X-160] : [FILE_X+160, SAHA_SAG+10];
+  }
+  if(p.taraf==="sol") return [SAHA_SOL-10, FILE_X-34];
+  return [FILE_X+34, SAHA_SAG+10];
+}
+function oyuncuFizik(p){
+  const s=hareketSiniri(p);
+  p.x+=p.vx; p.y+=p.vy;
+  if(!p.yerde){ p.vy+=0.62; }
+  if(p.y>=ZEMIN){ p.y=ZEMIN; p.vy=0;
+    if(!p.yerde){ p.yerde=true; p.durum="inis"; p.aksiyonT=0; }
+  }
+  if(p.x<s[0]) {p.x=s[0]; p.vx=0;}
+  if(p.x>s[1]) {p.x=s[1]; p.vx=0;}
+  p.vx*=0.72;
+  if(p.temasBekle>0) p.temasBekle--;
+  p.animT+=1; p.aksiyonT++;
+  if(p.aksiyonT>18 && ["manset","pas","smac","vurus","blok","plase","inis","servisVur"].includes(p.durum)) p.durum="bekle";
+}
+function ziplat(p,gucOran){
+  if(!p.yerde) return;
+  p.yerde=false; p.vy=-(11.4+(gucOran||0)*1.2); p.durum="zipla"; p.aksiyonT=0;
+  sesZipla();
+}
+
+/* ---------- insan kontrolü ---------- */
+function kontrolSec(){
+  const solTakim = O.oyuncular.filter(p=>p.taraf==="sol");
+  if(D.mod===1){ O.kontrol=solTakim[0]; return; }
+  const t=O.top;
+  if(O.durum==="servisHazir"||O.durum==="servisAtildi"){
+    if(O.servisci.taraf==="sol") O.kontrol=O.servisci;
+    return;
+  }
+  const tah=tahminEt(ZEMIN-70);
+  let en=null,ed=1e9;
+  solTakim.forEach(p=>{
+    const d=Math.abs(ekranX(p)-tah.x);
+    if(d<ed){ed=d;en=p;}
+  });
+  if(en) O.kontrol=en;
+}
+function insanKontrol(p){
+  const hiz=4.9;
+  if(bas.sol) p.vx=-hiz;
+  if(bas.sag) p.vx=hiz;
+  if(bas.zipla && p.yerde) ziplat(p);
+  if(bas.manset) p.aksiyon="manset";
+  if(bas.smac) p.aksiyon="smac";
+  if(!bas.manset && !bas.smac) p.aksiyon=null;
+
+  // servis
+  if(O.durum==="servisHazir" && O.servisci===p && O.bekle<=0){
+    if(bas.smac){ servisAt(p); bas.smac=false; }
+  }
+  if(O.durum==="servisAtildi" && O.servisci===p){
+    if(bas.smac){
+      const ideal=ZEMIN-190;
+      const fark=Math.abs(O.top.y-ideal);
+      servisVur(p, 1-Math.min(1,fark/130));
+      bas.smac=false;
+    }
+  }
+  // temas
+  if(O.durum==="oyunda"){
+    const tem=temasVarMi(p);
+    if(tem){
+      if(bas.smac && (!p.yerde || tem==="ust")){
+        const yakinFile=Math.abs(p.x-FILE_X)<120;
+        const rakipHucum = O.sonVuran && O.sonVuran!==p.taraf;
+        if(!p.yerde && yakinFile && rakipHucum && Math.abs(O.top.x-FILE_X)<80 && O.dokunus[p.taraf]===0)
+          vur(p,"blok");
+        else vur(p,"smac");
+        bas.smac=false;
+      } else if(bas.manset){
+        vur(p,"manset"); bas.manset=false;
+      } else if(tem==="govde"){
+        vur(p,"otomatik");
+      }
+    }
+  }
+}
+
+/* ---------- yapay zekâ ---------- */
+function yzKontrol(p){
+  if(p===O.kontrol && p.taraf==="sol"){ insanKontrol(p); return; }
+  const z=O.zor, t=O.top;
+  const s=hareketSiniri(p);
+  const gpx=(p.genislik||0)*60; // görünen (yayılmış) konuma göre hedefleme
+  const benimTaraf = p.taraf;
+  const topBende = (benimTaraf==="sol") ? (t.x<FILE_X) : (t.x>FILE_X);
+
+  // servis
+  if(O.durum==="servisHazir" && O.servisci===p){
+    if(O.bekle<=0) servisAt(p);
+    return;
+  }
+  if(O.durum==="servisAtildi" && O.servisci===p){
+    const ideal=ZEMIN-190;
+    if(t.vy>0 && t.y>ideal-8){
+      const g = z.guc*(0.6+Math.random()*0.4) - (Math.random()<z.hata?0.4:0);
+      servisVur(p,g);
+    }
+    return;
+  }
+  if(O.durum!=="oyunda"){ p.hedefX=p.evX; }
+  else {
+    const tah=tahminEt(ZEMIN-70);
+    let hedef=p.evX;
+    if(topBende || (t.vx!==0 && ((benimTaraf==="sol"&&t.vx<0)||(benimTaraf==="sag"&&t.vx>0)))){
+      // savunma/karşılama
+      const bizimkiler=O.oyuncular.filter(q=>q.taraf===benimTaraf);
+      let sahip=bizimkiler[0], ed=1e9;
+      bizimkiler.forEach(q=>{ const d=Math.abs(ekranX(q)-tah.x); if(d<ed){ed=d;sahip=q;} });
+      p.ilgilen = (sahip===p);
+      if(p.ilgilen){
+        hedef=(tah.x-gpx) + (Math.random()<z.hata? (Math.random()-0.5)*90 : 0);
+        // hücum sırası: 3. dokunuş ise fileye yaklaş
+        if(O.dokunus[benimTaraf]===2 && p.sira==="on") hedef=Math.min(Math.max(tah.x-gpx,FILE_X-p.yon*180),FILE_X-p.yon*60);
+      } else {
+        hedef=p.evX*0.7 + tah.x*0.3;
+      }
+    } else {
+      // rakip sahada: blok/hazırlık
+      p.ilgilen=false;
+      if(p.sira==="on" && Math.abs(p.evX-FILE_X)<170) hedef=FILE_X-p.yon*70;
+      else hedef=p.evX;
+    }
+    p.hedefX=Math.max(s[0]+6,Math.min(s[1]-6,hedef));
+  }
+
+  const fark=p.hedefX-p.x;
+  if(Math.abs(fark)>8) p.vx=Math.sign(fark)*z.hiz;
+
+  if(O.durum!=="oyunda") return;
+
+  // zıplama kararı
+  const yakinFile=Math.abs(p.x-FILE_X)<130;
+  const dok=O.dokunus[benimTaraf];
+  if(p.yerde && p.sira==="on" && Math.random()<z.zipla){
+    if(topBende && dok===2 && Math.abs(t.x-ekranX(p))<70 && t.y<ZEMIN-150*p.olcek && t.vy>0 && yakinFile){
+      ziplat(p,1);
+    } else if(!topBende && yakinFile && Math.abs(t.x-FILE_X)<130 && t.y<ZEMIN-190*p.olcek && Math.abs(ekranX(p)-t.x)<80){
+      ziplat(p,0.5); // blok
+    }
+  }
+
+  const tem=temasVarMi(p);
+  if(tem){
+    const hataliMi = Math.random()<z.hata*0.5;
+    if(hataliMi){ vur(p,"otomatik"); return; }
+    if(!topBende && !p.yerde && yakinFile && dok===0 && p.sira==="on"){ vur(p,"blok"); return; }
+    if(dok>=2){ vur(p,"smac"); return; }
+    if(!p.yerde && dok===2){ vur(p,"smac"); return; }
+    vur(p,"manset");
+  }
+}
+
+/* ---------- sayı / set ---------- */
+function mesajVer(m,sure){ O.mesaj=m; O.mesajT=sure||60; }
+function sayiVer(kazanan,sebep){
+  if(O.durum==="sayi") return;
+  O.durum="sayi";
+  O.skor[kazanan]++;
+  O.top.aktif=false; O.top.vx=0; O.top.vy=0;
+  const bizMi = kazanan==="sol";
+  mesajVer(sebep+" "+TAKIMLAR[kazanan==="sol"?O.solT:O.sagT].ad,90);
+  sesSayi(bizMi);
+  patlat(O.top.x,O.top.y,bizMi?"#f5c542":"#8fb8e0");
+  O.oyuncular.filter(p=>p.taraf===kazanan).forEach(p=>{p.kutlama=90;p.durum="kutla";p.aksiyonT=0;});
+  O.sarsinti=6;
+  const s=O.skor, h=O.hedef;
+  const bitti = (s.sol>=h||s.sag>=h) && Math.abs(s.sol-s.sag)>=2;
+  setTimeout(()=>{
+    if(!O || O.bittiMi) return;
+    if(bitti){ macBitir(); }
+    else { yeniServis(kazanan); }
+  },1500);
+}
+function macBitir(){
+  O.bittiMi=true; O.durum="bitti";
+  const kazandik = O.skor.sol>O.skor.sag;
+  if(kazandik) sesKazandi(); else sesKaybetti();
+  document.getElementById("sonucIkon").textContent = kazandik? "🏆":"🏐";
+  document.getElementById("sonucBaslik").textContent = kazandik? "Kazandın!" : "Kaybettin";
+  document.getElementById("sonucSkor").textContent = O.skor.sol+" - "+O.skor.sag;
+  let not = TAKIMLAR[O.solT].ad+" – "+TAKIMLAR[O.sagT].ad;
+  if(D.akis==="turnuva"){
+    const t=D.turnuva, tur=t.turlar[t.aktifTur];
+    const es=tur.find(e=>(e.a===D.benimTakim||e.b===D.benimTakim)&&e.kazanan===null);
+    if(es){
+      const benimA = es.a===D.benimTakim;
+      es.kazanan = kazandik? D.benimTakim : (benimA?es.b:es.a);
+      es.skor = benimA? (O.skor.sol+"-"+O.skor.sag) : (O.skor.sag+"-"+O.skor.sol);
+    }
+    digerMaclariOyna();
+    const sonTur = t.aktifTur >= t.turAdlari.length-1;
+    if(!kazandik) not = t.turAdlari[t.aktifTur]+" turunda elendin.";
+    else if(sonTur) not = TURNUVA_ADLARI[D.turnuvaTuru]+"'nı kazandın! 🇹🇷";
+    else not = t.turAdlari[t.aktifTur]+" turunu geçtin.";
+    document.getElementById("sonucBtn").textContent = (!kazandik||sonTur)? "Fikstürü Gör":"Sonraki Tura Geç";
+  } else {
+    document.getElementById("sonucBtn").textContent="Yeni Maç";
+  }
+  document.getElementById("sonucNot").textContent=not;
+  setTimeout(()=>goster("sonuc"),900);
+}
+function sonucDevam(){
+  if(D.akis==="turnuva"){
+    const t=D.turnuva;
+    const kazandik = O && O.skor.sol>O.skor.sag;
+    if(!kazandik){ goster("fikstur"); fiksturCiz(); return; }
+    const sonTur = t.aktifTur >= t.turAdlari.length-1;
+    if(!sonTur){ turnuvaDevam(); goster("fikstur"); }
+    else { fiksturCiz(); goster("fikstur"); }
+  } else {
+    goster("ayar");
+  }
+}
+function macBirak(){ O=null; goster("menu"); }
+function duraklat(){
+  if(!O) return;
+  O.duraklat=!O.duraklat;
+  document.getElementById("durBtn").textContent=O.duraklat?"Devam":"Durdur";
+}
+
+/* ---------- parçacıklar ---------- */
+function patlat(x,y,renk){
+  for(let i=0;i<22;i++){
+    O.parcalar.push({x,y,vx:(Math.random()-0.5)*9,vy:-Math.random()*8-1,
+      r:2+Math.random()*4, renk, om:38+Math.random()*22});
+  }
+}
+function parcaGuncelle(){
+  O.parcalar=O.parcalar.filter(q=>{
+    q.vy+=0.32; q.x+=q.vx; q.y+=q.vy; q.om--;
+    return q.om>0;
+  });
+}
+
+/* =========================================================
+   ÇİZİM — geniş açı: saha daha basık/derin çizilir, arka sıra
+   oyuncular küçük ölçekte çizilerek derinlik hissi verir.
+   ========================================================= */
+function cizArena(){
+  const g=cx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,"#0a1a30"); g.addColorStop(.55,"#123255"); g.addColorStop(1,"#0b1c31");
+  cx.fillStyle=g; cx.fillRect(0,0,W,H);
+  // ışıklar
+  cx.globalAlpha=.10;
+  for(let i=0;i<5;i++){
+    cx.fillStyle="#cfe6ff";
+    cx.beginPath(); cx.moveTo(60+i*220,0); cx.lineTo(-20+i*220,H); cx.lineTo(220+i*220,H); cx.closePath(); cx.fill();
+  }
+  cx.globalAlpha=1;
+  // tribün — geniş açı için iki yandan da görünsün
+  cx.fillStyle="#0d2743"; cx.fillRect(0,96,W,214);
+  for(let s=0;s<5;s++){
+    for(let i=0;i<58;i++){
+      const x=(i*18+s*9)%W, y=112+s*38+Math.sin(i+s+O.animT*0.02)*1.5;
+      cx.fillStyle=["#25507f","#2f6094","#1c3f6b","#38709f"][(i+s)%4];
+      cx.beginPath(); cx.arc(x,y,5.4,0,7); cx.fill();
+      cx.fillRect(x-4.5,y+3,9,10);
+    }
+  }
+  cx.fillStyle="rgba(6,16,30,.55)"; cx.fillRect(0,96,W,214);
+  // reklam bandı
+  cx.fillStyle="#0e2c4c"; cx.fillRect(0,300,W,32);
+  cx.fillStyle="#f5c542"; cx.font="700 18px Andika, sans-serif"; cx.textAlign="center";
+  cx.fillText("MİLLETLER VOLEYBOLU  ·  "+ (typeof TURNUVA_ADLARI!=="undefined" && O && D.akis==="turnuva" ? TURNUVA_ADLARI[D.turnuvaTuru] : "GENİŞ SAHA GÖRÜNÜMÜ") +"  ·  MİLLETLER VOLEYBOLU", W/2, 323);
+}
+function cizSaha(){
+  // zemin — geniş açı: saha daha geniş bir yamuk (trapez) olarak çizilir, derinlik hissi
+  const ustGenislik=0.62; // sahanın file arkasındaki görünen genişlik oranı
+  const ustSol = W/2-(W/2-SAHA_SOL)*ustGenislik, ustSag = W/2+(SAHA_SAG-W/2)*ustGenislik;
+  const g=cx.createLinearGradient(0,ZEMIN-190,0,H);
+  g.addColorStop(0,"#2a80cf"); g.addColorStop(1,"#14538f");
+  cx.fillStyle=g;
+  cx.beginPath();
+  cx.moveTo(ustSol,ZEMIN-190); cx.lineTo(ustSag,ZEMIN-190);
+  cx.lineTo(SAHA_SAG,H); cx.lineTo(SAHA_SOL,H);
+  cx.closePath(); cx.fill();
+  cx.fillStyle="#0d3f70"; cx.fillRect(0,ZEMIN,W,4);
+  // hücum bölgeleri (yamuk üzerinde yaklaşık şerit)
+  cx.fillStyle="rgba(224,118,28,.85)";
+  const filedenX=(oran)=>({ ust: W/2-(W/2-oran)*ustGenislik, alt: oran });
+  cx.beginPath();
+  cx.moveTo(W/2-(W/2-(FILE_X-170))*ustGenislik,ZEMIN-190); cx.lineTo(W/2,ZEMIN-190);
+  cx.lineTo(FILE_X,H); cx.lineTo(FILE_X-170*1.35,H); cx.closePath(); cx.fill();
+  cx.beginPath();
+  cx.moveTo(W/2,ZEMIN-190); cx.lineTo(W/2+(FILE_X+170-W/2)*ustGenislik,ZEMIN-190);
+  cx.lineTo(FILE_X+170*1.35,H); cx.lineTo(FILE_X,H); cx.closePath(); cx.fill();
+  // çizgiler
+  cx.strokeStyle="#f3f7ff"; cx.lineWidth=3;
+  const cizgiler=[[SAHA_SOL,ustSol],[FILE_X-170*1.35,W/2-(W/2-(FILE_X-170))*ustGenislik],[FILE_X,W/2],[FILE_X+170*1.35,W/2+(FILE_X+170-W/2)*ustGenislik],[SAHA_SAG,ustSag]];
+  cizgiler.forEach(([alt,ust])=>{
+    cx.beginPath(); cx.moveTo(ust,ZEMIN-190); cx.lineTo(alt,H); cx.stroke();
+  });
+  cx.beginPath(); cx.moveTo(ustSol,ZEMIN-190); cx.lineTo(ustSag,ZEMIN-190); cx.stroke();
+  cx.beginPath(); cx.moveTo(SAHA_SOL,ZEMIN); cx.lineTo(SAHA_SAG,ZEMIN); cx.stroke();
+}
+function cizFile(){
+  // direkler
+  cx.fillStyle="#dbe6f2"; cx.fillRect(FILE_X-3,FILE_UST,6,ZEMIN-FILE_UST);
+  // ağ — geniş açı: file de hafif yamuk (perspektif) çizilir
+  cx.save();
+  cx.translate(FILE_X,0);
+  cx.strokeStyle="rgba(240,246,255,.55)"; cx.lineWidth=1;
+  const genislikUst=8, genislikAlt=11;
+  for(let k=0;k<=1;k+=0.077){
+    const y=FILE_UST+8+k*(ZEMIN-FILE_UST-8);
+    const genislik=genislikUst+(genislikAlt-genislikUst)*k;
+    cx.beginPath(); cx.moveTo(-genislik,y); cx.lineTo(genislik,y); cx.stroke();
+  }
+  for(let x=-genislikAlt;x<=genislikAlt;x+=6){
+    cx.beginPath(); cx.moveTo(x*(genislikUst/genislikAlt),FILE_UST+8); cx.lineTo(x,ZEMIN); cx.stroke();
+  }
+  cx.fillStyle="#ffffff"; cx.fillRect(-genislikUst-1,FILE_UST,genislikUst*2+2,9);
+  cx.fillStyle="#e30a17"; cx.fillRect(-2,FILE_UST-52,4,52);
+  cx.fillStyle="#ffffff"; cx.fillRect(-2,FILE_UST-52,4,12);
+  cx.restore();
+}
+function cizGolge(x,yerdenYukseklik,olcek){
+  const k=Math.max(0.25,1-yerdenYukseklik/300);
+  cx.save(); cx.globalAlpha=0.28*k; cx.fillStyle="#04203c";
+  cx.beginPath(); cx.ellipse(x,ZEMIN+6,26*k*(olcek||1),7*k*(olcek||1),0,0,7); cx.fill(); cx.restore();
+}
+
+/* ---------- İNSAN FİGÜRÜ (geliştirilmiş oranlar) ---------- */
+function uc(x,y,aci,uz){ return [x+Math.sin(aci)*uz, y+Math.cos(aci)*uz]; }
+function uzuv(x,y,a1,a2,ust,alt,genUst,genAlt,ten,yon,ucRenk,ucMi){
+  const [ex,ey]=uc(x,y,a1*yon,ust);
+  const [hx,hy]=uc(ex,ey,a2*yon,alt);
+  cx.strokeStyle=ten; cx.lineCap="round";
+  cx.lineWidth=genUst; cx.beginPath(); cx.moveTo(x,y); cx.lineTo(ex,ey); cx.stroke();
+  cx.lineWidth=genAlt; cx.beginPath(); cx.moveTo(ex,ey); cx.lineTo(hx,hy); cx.stroke();
+  if(ucMi){ cx.fillStyle=ucRenk||ten; cx.beginPath(); cx.arc(hx,hy,genAlt*0.62,0,7); cx.fill(); }
+  return [hx,hy];
+}
+function kol(x,y,a1,a2,ust,alt,ten,yon){ return uzuv(x,y,a1,a2,ust,alt,7.5,6,ten,yon,ten,true); }
+function bacak(x,y,a1,a2,ust,alt,ten,yon,ayakRenk){ return uzuv(x,y,a1,a2,ust,alt,10.5,8.5,ten,yon,ayakRenk,true); }
+function cizOyuncu(p){
+  const t=TAKIMLAR[p.takim];
+  const yon=p.yon;
+  const olcek=p.olcek||1;
+  const yukseklik=ZEMIN-p.y;
+  const gpx=(p.genislik||0)*60; // saha içine yayılma: aynı sıradaki oyuncular yan yana çizilir, arka arkaya değil
+  cx.save();
+  cx.translate(gpx,0);
+  cizGolge(p.x,yukseklik,olcek);
+
+  cx.save();
+  cx.translate(p.x,p.y);
+  cx.scale(olcek,olcek);
+  cx.translate(-p.x,-p.y);
+
+  const kalca={x:p.x,y:p.y-50}, omuz={x:p.x,y:p.y-88}, kafa={x:p.x,y:p.y-104};
+  let egim=0, kolA=[2.7,0.2], kolB=[2.7,-0.2], bacakA=[0.15,0.1], bacakB=[-0.15,0.1];
+  const a=p.aksiyonT, yur=Math.abs(p.vx)>0.6;
+  const s=p.durum;
+
+  if(s==="bekle"){
+    const b=Math.sin(p.animT*0.07)*0.05;
+    kolA=[2.55+b,0.35]; kolB=[2.55-b,0.35];
+    bacakA=[0.22,0.12]; bacakB=[-0.22,0.12]; egim=0.02;
+  }
+  if(yur && p.yerde){
+    const f=Math.sin(p.animT*0.30);
+    bacakA=[0.45*f,0.25+Math.max(0,f)*0.4]; bacakB=[-0.45*f,0.25+Math.max(0,-f)*0.4];
+    kolA=[2.5-0.5*f,0.4]; kolB=[2.5+0.5*f,0.4];
+    egim=0.10*Math.sign(p.vx)*yon;
+  }
+  if(s==="zipla"||!p.yerde){
+    bacakA=[0.30,0.55]; bacakB=[-0.20,0.75];
+    kolA=[0.5,0.15]; kolB=[0.9,0.2]; egim=0.05;
+  }
+  if(s==="manset"){
+    const k=Math.min(1,a/8);
+    kolA=[2.05-k*0.35,0.02]; kolB=[2.05-k*0.35,0.02];
+    bacakA=[0.5,0.55]; bacakB=[-0.45,0.55]; egim=0.16;
+  }
+  if(s==="pas"){
+    kolA=[0.75,0.55]; kolB=[0.55,0.55];
+    bacakA=[0.35,0.5]; bacakB=[-0.35,0.5]; egim=-0.05;
+  }
+  if(s==="smac"){
+    const k=Math.min(1,a/6);
+    kolA=[0.25+k*0.9,0.05]; kolB=[2.3,0.3];
+    bacakA=[0.35,0.5]; bacakB=[-0.25,0.6]; egim=0.12+k*0.15;
+  }
+  if(s==="blok"){
+    kolA=[0.12,0.02]; kolB=[0.12,0.02];
+    bacakA=[0.18,0.35]; bacakB=[-0.18,0.35]; egim=0;
+  }
+  if(s==="vurus"||s==="plase"){
+    const k=Math.min(1,a/6);
+    kolA=[0.8+k*0.8,0.15]; kolB=[2.4,0.35];
+    bacakA=[0.4,0.35]; bacakB=[-0.3,0.4]; egim=0.1;
+  }
+  if(s==="servisAt"){
+    kolA=[0.35,0.05]; kolB=[2.2,0.3];
+    bacakA=[0.25,0.2]; bacakB=[-0.25,0.2]; egim=0;
+  }
+  if(s==="servisVur"){
+    const k=Math.min(1,a/7);
+    kolA=[0.2+k*1.1,0.06]; kolB=[2.5,0.3];
+    bacakA=[0.3,0.25]; bacakB=[-0.3,0.3]; egim=0.12;
+  }
+  if(s==="kutla"){
+    const b=Math.sin(p.animT*0.35);
+    kolA=[0.25+b*0.15,0.1]; kolB=[0.25-b*0.15,0.1];
+    bacakA=[0.2,0.2]; bacakB=[-0.2,0.2];
+  }
+  if(s==="inis"){ bacakA=[0.42,0.55]; bacakB=[-0.42,0.55]; kolA=[2.3,0.5]; kolB=[2.3,0.5]; egim=0.12; }
+
+  cx.save();
+  cx.translate(p.x,p.y);
+  cx.rotate(egim*yon*0.5);
+  cx.translate(-p.x,-p.y);
+
+  // arka bacak & kol (koyu, gölgeli)
+  const tenKoyu = golgele(p.ten,-24);
+  bacak(kalca.x,kalca.y,bacakB[0],bacakB[1],27,25,tenKoyu,yon,"#dfe7f0");
+  kol(omuz.x,omuz.y,kolB[0],kolB[1],21,20,tenKoyu,yon);
+
+  // şort
+  cx.fillStyle=golgele(t.r1,-45);
+  cx.beginPath();
+  cx.moveTo(kalca.x-14,kalca.y-7); cx.lineTo(kalca.x+14,kalca.y-7);
+  cx.quadraticCurveTo(kalca.x+15,kalca.y+7,kalca.x+13,kalca.y+14);
+  cx.lineTo(kalca.x-13,kalca.y+14);
+  cx.quadraticCurveTo(kalca.x-15,kalca.y+7,kalca.x-14,kalca.y-7);
+  cx.closePath(); cx.fill();
+
+  // gövde / forma — hafif kum saati siluet (daha insan formu)
+  cx.fillStyle=t.r1;
+  cx.beginPath();
+  cx.moveTo(omuz.x-15,omuz.y+1);
+  cx.quadraticCurveTo(omuz.x-17,omuz.y+30, kalca.x-14,kalca.y-4);
+  cx.lineTo(kalca.x+14,kalca.y-4);
+  cx.quadraticCurveTo(omuz.x+17,omuz.y+30, omuz.x+15,omuz.y+1);
+  cx.quadraticCurveTo(omuz.x,omuz.y-6, omuz.x-15,omuz.y+1);
+  cx.closePath(); cx.fill();
+  // forma bandı + yaka
+  cx.fillStyle=t.r2;
+  cx.fillRect(omuz.x-15,omuz.y+17,30,5);
+  cx.beginPath(); cx.arc(omuz.x,omuz.y+2,6,0,Math.PI,true); cx.fill();
+  // numara
+  cx.fillStyle=okunur(t.r1);
+  cx.font="700 13px Andika, sans-serif"; cx.textAlign="center";
+  cx.fillText(String(p.no), omuz.x, omuz.y+34);
+
+  // ön bacak & kol
+  bacak(kalca.x,kalca.y,bacakA[0],bacakA[1],27,25,p.ten,yon,"#ffffff");
+  kol(omuz.x,omuz.y,kolA[0],kolA[1],21,20,p.ten,yon);
+
+  // boyun + kafa (biraz büyütülmüş, daha oranlı)
+  cx.strokeStyle=p.ten; cx.lineWidth=8; cx.beginPath();
+  cx.moveTo(omuz.x,omuz.y+2); cx.lineTo(kafa.x,kafa.y+9); cx.stroke();
+  cx.fillStyle=p.ten;
+  cx.beginPath(); cx.ellipse(kafa.x,kafa.y,10.5,12.5,0,0,7); cx.fill();
+  // kulaklar
+  cx.beginPath(); cx.ellipse(kafa.x-yon*10.5,kafa.y+1,2.6,4,0,0,7); cx.fill();
+  // saç (topuz)
+  cx.fillStyle=p.sac;
+  cx.beginPath(); cx.arc(kafa.x,kafa.y-4,12,Math.PI*1.05,Math.PI*2.05); cx.fill();
+  cx.beginPath(); cx.arc(kafa.x-yon*13,kafa.y-5,6,0,7); cx.fill();
+  cx.fillRect(kafa.x-yon*13-2,kafa.y-7,4,10);
+  // yüz
+  cx.fillStyle="#2b1a12";
+  cx.beginPath(); cx.arc(kafa.x+yon*4.5,kafa.y,1.6,0,7); cx.fill();
+  cx.strokeStyle="#2b1a12"; cx.lineWidth=1.3;
+  cx.beginPath(); cx.arc(kafa.x+yon*3.5,kafa.y+5,2.6,0.1,Math.PI-0.6); cx.stroke();
+
+  cx.restore();
+
+  // kontrol işareti
+  if(p===O.kontrol && p.taraf==="sol"){
+    cx.fillStyle="#f5c542";
+    cx.beginPath();
+    cx.moveTo(p.x,p.y-138); cx.lineTo(p.x-8,p.y-150); cx.lineTo(p.x+8,p.y-150);
+    cx.closePath(); cx.fill();
+  }
+  // isim
+  cx.fillStyle="rgba(255,255,255,.8)"; cx.font="12px Andika, sans-serif"; cx.textAlign="center";
+  cx.fillText(p.isim, p.x, ZEMIN+22*olcek);
+
+  cx.restore();
+  cx.restore();
+}
+function golgele(hex,mik){
+  const c=hex.replace("#","");
+  let r=parseInt(c.substr(0,2),16),g=parseInt(c.substr(2,2),16),b=parseInt(c.substr(4,2),16);
+  r=Math.max(0,Math.min(255,r+mik)); g=Math.max(0,Math.min(255,g+mik)); b=Math.max(0,Math.min(255,b+mik));
+  return "rgb("+r+","+g+","+b+")";
+}
+function okunur(hex){
+  const c=hex.replace("#","");
+  const r=parseInt(c.substr(0,2),16),g=parseInt(c.substr(2,2),16),b=parseInt(c.substr(4,2),16);
+  return (r*299+g*587+b*114)/1000 > 150 ? "#16273c" : "#ffffff";
+}
+
+function cizTop(){
+  const t=O.top;
+  // iz
+  O.iz.forEach((q,i)=>{
+    cx.globalAlpha=(i/O.iz.length)*0.25;
+    cx.fillStyle="#ffffff";
+    cx.beginPath(); cx.arc(q.x,q.y,TOP_R*0.7,0,7); cx.fill();
+  });
+  cx.globalAlpha=1;
+  cizGolge(t.x, ZEMIN-t.y,1);
+  cx.save(); cx.translate(t.x,t.y); cx.rotate(t.don);
+  const g=cx.createRadialGradient(-4,-5,2,0,0,TOP_R);
+  g.addColorStop(0,"#ffffff"); g.addColorStop(1,"#dbe4ef");
+  cx.fillStyle=g; cx.beginPath(); cx.arc(0,0,TOP_R,0,7); cx.fill();
+  cx.strokeStyle="#16447a"; cx.lineWidth=2;
+  cx.beginPath(); cx.arc(-3,0,TOP_R-2,-1.1,1.1); cx.stroke();
+  cx.strokeStyle="#e0761c";
+  cx.beginPath(); cx.arc(4,-3,TOP_R-2,1.7,3.6); cx.stroke();
+  cx.strokeStyle="#16447a";
+  cx.beginPath(); cx.arc(3,6,TOP_R-3,3.6,5.4); cx.stroke();
+  cx.strokeStyle="rgba(20,50,90,.35)"; cx.lineWidth=1;
+  cx.beginPath(); cx.arc(0,0,TOP_R,0,7); cx.stroke();
+  cx.restore();
+}
+function cizSkor(){
+  const A=TAKIMLAR[O.solT], B=TAKIMLAR[O.sagT];
+  cx.fillStyle="rgba(6,18,34,.82)";
+  cx.fillRect(W/2-190,10,380,50);
+  cx.strokeStyle="rgba(245,197,66,.6)"; cx.lineWidth=2; cx.strokeRect(W/2-190,10,380,50);
+  cx.textAlign="left"; cx.font="700 19px Andika, sans-serif"; cx.fillStyle="#eaf1fb";
+  cx.fillText(A.bayrak+" "+A.ad, W/2-178, 42);
+  cx.textAlign="right";
+  cx.fillText(B.ad+" "+B.bayrak, W/2+178, 42);
+  cx.textAlign="center"; cx.font="700 28px Andika, sans-serif"; cx.fillStyle="#f5c542";
+  cx.fillText(O.skor.sol+" - "+O.skor.sag, W/2, 44);
+  cx.font="12px Andika, sans-serif"; cx.fillStyle="#9fb4cd";
+  cx.fillText(O.etiket+"  ·  "+O.hedef+" sayı  ·  "+(D.mod===1?"1'e 1":D.mod===3?"3'e 3":"6'ya 6")+"  ·  "+D.zorluk, W/2, 74);
+
+  // dokunuş göstergesi
+  const dTaraf = O.sonVuran;
+  if(O.durum==="oyunda" && dTaraf){
+    const d=O.dokunus[dTaraf];
+    const bx = dTaraf==="sol"? 90:W-150;
+    cx.textAlign="left"; cx.font="14px Andika, sans-serif"; cx.fillStyle="#cfe0f5";
+    cx.fillText("dokunuş", bx, 100);
+    for(let i=0;i<3;i++){
+      cx.beginPath(); cx.arc(bx+16+i*22,118,8,0,7);
+      cx.fillStyle = i<d? "#f5c542":"rgba(255,255,255,.22)"; cx.fill();
+    }
+  }
+}
+function cizServisGosterge(){
+  if(O.durum!=="servisAtildi") return;
+  const t=O.top, ideal=ZEMIN-190;
+  const fark=Math.abs(t.y-ideal);
+  const oran=Math.max(0,1-fark/130);
+  const r=TOP_R+8+ (1-oran)*36;
+  cx.strokeStyle = oran>0.75? "#8ff0a4" : (oran>0.4? "#f5c542":"rgba(255,255,255,.45)");
+  cx.lineWidth=3;
+  cx.beginPath(); cx.arc(t.x,t.y,r,0,7); cx.stroke();
+  if(O.servisci.taraf==="sol"){
+    cx.textAlign="center"; cx.font="700 17px Andika, sans-serif"; cx.fillStyle="#eaf1fb";
+    cx.fillText("Halka küçülünce SMAÇ'a bas!", W/2, 138);
+  }
+}
+function cizMesaj(){
+  if(O.mesajT<=0) return;
+  const a=Math.min(1,O.mesajT/25);
+  cx.save(); cx.globalAlpha=a;
+  cx.textAlign="center"; cx.font="700 38px Andika, sans-serif";
+  cx.lineWidth=6; cx.strokeStyle="rgba(5,15,30,.85)";
+  cx.strokeText(O.mesaj,W/2,224); cx.fillStyle="#f5c542"; cx.fillText(O.mesaj,W/2,224);
+  cx.restore();
+}
+function ciz(){
+  cx.save();
+  if(O.sarsinti>0.2){
+    cx.translate((Math.random()-0.5)*O.sarsinti,(Math.random()-0.5)*O.sarsinti);
+    O.sarsinti*=0.88;
+  }
+  cizArena(); cizSaha();
+  // derinlik sıralaması: arka sıra > file > ön sıra (kameraya en yakın en üstte çizilir)
+  const cizSirasi=(p)=> (p.sira==="arka"?0:2) + (p.taraf==="sag"?0:1)*0.5;
+  const sirali=[...O.oyuncular].sort((a,b)=>cizSirasi(a)-cizSirasi(b));
+  sirali.filter(p=>p.sira==="arka" && p.taraf==="sag").forEach(cizOyuncu);
+  sirali.filter(p=>p.sira==="arka" && p.taraf==="sol").forEach(cizOyuncu);
+  cizFile();
+  sirali.filter(p=>p.sira!=="arka" && p.taraf==="sag").forEach(cizOyuncu);
+  sirali.filter(p=>p.sira!=="arka" && p.taraf==="sol").forEach(cizOyuncu);
+  cizTop();
+  O.parcalar.forEach(q=>{
+    cx.globalAlpha=Math.min(1,q.om/25); cx.fillStyle=q.renk;
+    cx.fillRect(q.x,q.y,q.r,q.r);
+  });
+  cx.globalAlpha=1;
+  cizServisGosterge();
+  cizSkor(); cizMesaj();
+  if(O.duraklat){
+    cx.fillStyle="rgba(5,14,26,.7)"; cx.fillRect(0,0,W,H);
+    cx.textAlign="center"; cx.fillStyle="#f5c542"; cx.font="700 40px Andika, sans-serif";
+    cx.fillText("Duraklatıldı",W/2,H/2);
+  }
+  cx.restore();
+}
+
+/* =========================================================
+   ANA DÖNGÜ
+   ========================================================= */
+function dongu(){
+  if(O){
+    if(!O.duraklat && !O.bittiMi){
+      O.animT++;
+      if(O.bekle>0) O.bekle--;
+      if(O.mesajT>0) O.mesajT--;
+      if(O.durum==="servisAtildi"){
+        O.atisT++;
+        // insan zamanında vurmazsa zayıf servis
+        if(O.top.vy>0 && O.top.y>ZEMIN-95 && O.servisci.taraf==="sol") servisVur(O.servisci,0.18);
+      }
+      kontrolSec();
+      O.oyuncular.forEach(p=>{
+        if(p.kutlama>0){ p.kutlama--; p.animT++; oyuncuFizik(p); return; }
+        yzKontrol(p);
+        oyuncuFizik(p);
+      });
+      topGuncelle();
+      parcaGuncelle();
+    }
+    ciz();
+  }
+  requestAnimationFrame(dongu);
+}
+
+/* =========================================================
+   GİRDİLER
+   ========================================================= */
+function tut(id,alan){
+  const el=document.getElementById(id);
+  const ac=e=>{ e.preventDefault(); bas[alan]=true; sesKur(); };
+  const kapa=e=>{ e.preventDefault(); bas[alan]=false; };
+  el.addEventListener("touchstart",ac,{passive:false});
+  el.addEventListener("touchend",kapa,{passive:false});
+  el.addEventListener("touchcancel",kapa,{passive:false});
+  el.addEventListener("mousedown",ac);
+  el.addEventListener("mouseup",kapa);
+  el.addEventListener("mouseleave",kapa);
+}
+tut("btnSol","sol"); tut("btnSag","sag"); tut("btnZipla","zipla");
+tut("btnManset","manset"); tut("btnSmac","smac");
+
+document.addEventListener("keydown",e=>{
+  if(e.repeat) return;
+  if(e.key==="ArrowLeft") bas.sol=true;
+  if(e.key==="ArrowRight") bas.sag=true;
+  if(e.key==="ArrowUp"||e.key==="w") bas.zipla=true;
+  if(e.key==="s"||e.key==="S") bas.manset=true;
+  if(e.key===" "){ bas.smac=true; e.preventDefault(); }
+});
+document.addEventListener("keyup",e=>{
+  if(e.key==="ArrowLeft") bas.sol=false;
+  if(e.key==="ArrowRight") bas.sag=false;
+  if(e.key==="ArrowUp"||e.key==="w") bas.zipla=false;
+  if(e.key==="s"||e.key==="S") bas.manset=false;
+  if(e.key===" ") bas.smac=false;
+});
+document.addEventListener("touchstart",()=>sesKur(),{once:true});
+</script>
+</body>
+</html>
