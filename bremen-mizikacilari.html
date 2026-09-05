@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Bremen Mızıkacıları | Hikaye Okuma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky-top:#dfe8d2;
+    --sky-bottom:#f7efdd;
+    --ground:#e3c88f;
+    --accent:#a9631f;
+    --accent-dark:#6e3f14;
+    --cream:#fffaf0;
+    --ink:#2c2620;
+    --shadow:rgba(44,38,32,.18);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;overflow:hidden;background:var(--accent-dark);}
+  body{
+    font-family:'Andika','Segoe UI',Arial,sans-serif;
+    color:var(--ink);
+    -webkit-user-select:none; user-select:none;
+    touch-action:pan-y;
+  }
+  h1,h2,.title-font{font-family:'Baloo 2','Andika',sans-serif;}
+
+  #book{ position:relative; width:100vw; height:100vh; overflow:hidden; }
+  #track{ display:flex; height:100%; transition:transform .45s cubic-bezier(.65,0,.35,1); will-change:transform; }
+  .page{
+    flex:0 0 100vw; height:100%;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:18px 18px 70px;
+    background:linear-gradient(180deg,var(--sky-top) 0%, var(--sky-bottom) 55%, var(--ground) 100%);
+    position:relative;
+  }
+  .page.cover{ background:linear-gradient(180deg,#1e2a38 0%, #33465a 55%, #16202c 100%); color:var(--cream); }
+  .page.endpage{ background:linear-gradient(180deg,#fdf0d0 0%, #f7dfa8 100%); }
+
+  .text-card{
+    margin-top:0; width:min(600px,90vw);
+    background:var(--cream); border-radius:20px; padding:26px 30px;
+    box-shadow:0 6px 16px var(--shadow);
+    font-size:clamp(19px,3vw,25px); line-height:1.6; text-align:center; min-height:3.2em;
+  }
+  .cover .text-card{background:rgba(255,255,255,.95); color:var(--ink);}
+
+  .cover-title{ font-size:clamp(30px,7vw,48px); font-weight:800; text-align:center; margin:6px 0 18px; text-shadow:0 3px 0 rgba(0,0,0,.25); font-family:'Baloo 2','Andika',sans-serif; }
+  .cover-sub{ font-size:clamp(14px,2.4vw,17px); opacity:.9; margin-top:4px; text-align:center; }
+  .endpage .cover-title{color:var(--accent-dark); text-shadow:none;}
+
+  .nav-btn{
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:52px;height:52px;border-radius:50%;
+    background:rgba(255,255,255,.85); border:none; box-shadow:0 4px 10px var(--shadow);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer; z-index:5; font-size:22px; color:var(--accent-dark);
+    transition:opacity .2s, transform .2s;
+  }
+  .nav-btn:active{transform:translateY(-50%) scale(.92);}
+  #prevBtn{left:14px;} #nextBtn{right:14px;}
+  .nav-btn[disabled]{opacity:0;pointer-events:none;}
+
+  #dots{ position:absolute; bottom:34px; left:0; right:0; display:flex; justify-content:center; gap:7px; z-index:5; }
+  #dots span{ width:8px;height:8px;border-radius:50%; background:rgba(0,0,0,.22); transition:all .25s; }
+  #dots span.active{ background:var(--accent); width:22px; border-radius:5px; }
+
+  #pageCounter{
+    position:absolute; top:14px; right:18px;
+    background:rgba(255,255,255,.7); padding:4px 12px; border-radius:14px;
+    font-size:13px; font-weight:700; color:var(--accent-dark); z-index:5;
+  }
+
+  footer.sig{
+    position:absolute; bottom:8px; left:0; right:0;
+    text-align:center; font-size:11px; color:rgba(0,0,0,.38);
+    letter-spacing:.02em; z-index:4; pointer-events:none;
+  }
+  .cover footer.sig{color:rgba(255,255,255,.55);}
+
+  @media (max-height:560px){
+    .text-card{font-size:15px; padding:10px 16px;}
+  }
+</style>
+</head>
+<body>
+
+<div id="book">
+  <div id="track">
+
+    <!-- COVER -->
+    <section class="page cover">
+      <div class="cover-title">Bremen<br>Mızıkacıları</div>
+      <div class="text-card" style="max-width:min(520px,86vw);">Bir eşek, bir köpek, bir kedi, bir horoz... ve büyük bir dostluk hikâyesi!</div>
+      <div class="cover-sub" style="margin-top:14px;">Kaydırarak masalı okumaya başla ➜</div>
+      <footer class="sig">Dijital Öğretmen · Hasan Tutuş</footer>
+    </section>
+
+    <!-- P1: Eşek -->
+    <section class="page noimg">
+      <div class="text-card">Bir varmış, bir yokmuş. Yıllarca değirmende ağır çuvallar taşıyan yaşlı bir <b>eşek</b> varmış. Artık gücü kalmayınca sahibi ondan kurtulmayı düşünmüş. Bunu duyan eşek, "Bremen şehrine gidip mızıkacı olacağım!" diyerek yola çıkmış.</div>
+      <footer class="sig">Dijital Öğretmen · Hasan Tutuş</footer>
+    </section>
+
+    <!-- P2: Köpek -->
+    <section class="page noimg">
+      <div class="text-card">Yolda karşısına yorgun bir <b>av köpeği</b> çıkmış. Köpek de yaşlandığı için artık avlanamıyor, sahibi ona kızıyormuş. Eşek, "Benimle Bremen'e gel, birlikte mızıka çalarız!" demiş. Köpek sevinçle kabul etmiş.</div>
+      <footer class="sig">Dijital Öğretmen · Hasan Tutuş</footer>
+    </section>
+
+    <!-- P3: Kedi -->
+    <section class="page noimg">
+      <div class="text-card">Biraz sonra yolun kenarında hüzünlü bir <b>kedi</b> görmüşler. Kedi artık fare tutamadığı için evden kovulacağını söylemiş. "Bizimle gel, dördümüz güzel bir mızıka takımı oluruz!" demişler. Kedi de onlara katılmış.</div>
+      <footer class="sig">Dijital Öğretmen · Hasan Tutuş</footer>
+    </section>
+
+    <!-- P4: Horoz -->
+    <section class="page noimg">
+      <div class="text-card">Sonunda bir çiftlik duvarında olanca gücüyle öten bir <b>horoz</b> bulmuşlar. Horoz, pazar günü çorbaya konulacağını öğrenince korkudan öter dururmuş. Onu da yanlarına almışlar ve dört dost birlikte Bremen'e doğru yola koyulmuş.</div>
+      <footer class="sig">Dijital Öğretmen · Hasan Tutuş</footer>
+    </section>
+
+    <!-- P5: Evi görmeleri -->
+    <section class="page noimg">
+      <div class="text-card">Akşam olunca ormanın içinde yorgun argın yürürlerken uzakta parıldayan bir ışık görmüşler. Yaklaşınca pencereden içeri bakmışlar: <b>hırsızlar</b>, sofraya kurulmuş nefis yemekler yiyorlarmış!</div>
+      <footer class="sig">Dijital Öğretmen · Hasan Tutuş</footer>
+    </section>
+
+    <!-- P6: Korkutma planı -->
+    <section class="page noimg">
+      <div class="text-card">Dört dost aç kalmıştı. Akıllıca bir plan yapmışlar: eşek pencerenin önüne durmuş, üstüne köpek, onun üstüne kedi, en tepeye de horoz çıkmış. Sonra hep birlikte bağırmışlar: anırma, havlama, miyavlama, ötme! Hırsızlar korkunç bir canavar sandıkları bu sesten dehşete kapılıp ormana kaçmışlar.</div>
+      <footer class="sig">Dijital Öğretmen · Hasan Tutuş</footer>
+    </section>
+
+    <!-- P7: Yemek yeme ve yerleşme -->
+    <section class="page noimg">
+      <div class="text-card">Dört arkadaş eve girip kalan lezzetli yemekleri mutlulukla yemişler. Karınları doyunca da uyumak için kendilerine rahat köşeler bulmuşlar: eşek avluda samanların üstüne, köpek kapının arkasına, kedi ocağın sıcak küllerine, horoz da tavana yakın bir tüneğe kurulmuş.</div>
+      <footer class="sig">Dijital Öğretmen · Hasan Tutuş</footer>
+    </section>
+
+    <!-- P8: Hırsızın geri dönmesi -->
+    <section class="page noimg">
+      <div class="text-card">Gece yarısı hırsızlardan biri evi kontrol etmeye geri dönmüş. Karanlıkta mumu yakmaya çalışırken kedinin parlayan gözlerini kor sanıp üstüne gitmiş. Kedi onu tırmalamış, köpek ısırmış, eşek tekme atmış, horoz da tepeden var gücüyle ötmüş! Hırsız dehşet içinde kaçmış ve arkadaşlarına, "Evde korkunç bir cadı var!" diye anlatmış. Hırsızlar bir daha o eve hiç dönmemiş.</div>
+      <footer class="sig">Dijital Öğretmen · Hasan Tutuş</footer>
+    </section>
+
+    <!-- END PAGE -->
+    <section class="page endpage noimg">
+      <div class="cover-title">Son</div>
+      <div class="text-card">Dört dost bu şirin evi o kadar sevmiş ki Bremen'e hiç gitmemişler; hep birlikte, dost canlısı bir aile gibi mutlu mesut yaşamışlar. Sence gerçek bir mızıkacı olmak mı, dostlarınla birlikte olmak mı daha güzeldir?</div>
+      <footer class="sig" style="position:static;margin-top:14px;color:rgba(0,0,0,.4);">Dijital Öğretmen · Hasan Tutuş</footer>
+    </section>
+
+  </div>
+
+  <button id="prevBtn" class="nav-btn" aria-label="Önceki">‹</button>
+  <button id="nextBtn" class="nav-btn" aria-label="Sonraki">›</button>
+  <div id="dots"></div>
+  <div id="pageCounter">1 / 10</div>
+</div>
+
+<script>
+(function(){
+  const track = document.getElementById('track');
+  const pages = document.querySelectorAll('.page');
+  const total = pages.length;
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const dotsWrap = document.getElementById('dots');
+  const counter = document.getElementById('pageCounter');
+  let idx = 0;
+
+  for(let i=0;i<total;i++){
+    const d = document.createElement('span');
+    if(i===0) d.classList.add('active');
+    d.addEventListener('click', ()=>goTo(i));
+    dotsWrap.appendChild(d);
+  }
+  const dots = dotsWrap.querySelectorAll('span');
+
+  function render(){
+    track.style.transform = `translateX(${-idx*100}vw)`;
+    dots.forEach((d,i)=>d.classList.toggle('active', i===idx));
+    counter.textContent = `${idx+1} / ${total}`;
+    prevBtn.disabled = idx===0;
+    nextBtn.disabled = idx===total-1;
+  }
+  function goTo(i){
+    idx = Math.max(0, Math.min(total-1, i));
+    render();
+  }
+  prevBtn.addEventListener('click', ()=>goTo(idx-1));
+  nextBtn.addEventListener('click', ()=>goTo(idx+1));
+  document.addEventListener('keydown', (e)=>{
+    if(e.key==='ArrowRight') goTo(idx+1);
+    if(e.key==='ArrowLeft') goTo(idx-1);
+  });
+
+  let startX=0, startY=0, dragging=false;
+  const book = document.getElementById('book');
+  book.addEventListener('touchstart', (e)=>{
+    startX = e.touches[0].clientX; startY = e.touches[0].clientY; dragging = true;
+  }, {passive:true});
+  book.addEventListener('touchend', (e)=>{
+    if(!dragging) return;
+    dragging = false;
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)){
+      if(dx < 0) goTo(idx+1); else goTo(idx-1);
+    }
+  }, {passive:true});
+
+  render();
+})();
+</script>
+</body>
+</html>
