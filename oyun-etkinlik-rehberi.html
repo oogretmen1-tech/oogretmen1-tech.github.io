@@ -172,9 +172,31 @@
 <meta property="og:url" content="https://oogretmen1-tech.github.io/oyun-etkinlik-rehberi.html">
 <meta property="og:image" content="https://oogretmen1-tech.github.io/logo.png">
 <meta name="twitter:card" content="summary">
+<style>
+.indir-arac-cubugu{
+  position:fixed; top:14px; right:14px; z-index:9999;
+  display:flex; gap:8px; flex-wrap:wrap;
+}
+.indir-arac-cubugu button{
+  font-family:inherit; font-size:.85rem; font-weight:700; cursor:pointer;
+  border:none; border-radius:24px; padding:9px 16px;
+  background:#16345C; color:#fff; box-shadow:0 3px 10px rgba(0,0,0,.25);
+}
+.indir-arac-cubugu button.beyaz{ background:#fff; color:#16345C; border:1.5px solid #16345C; }
+.indir-arac-cubugu button:hover{ filter:brightness(1.1); }
+@media print{ .indir-arac-cubugu{ display:none !important; } }
+@media (max-width:520px){
+  .indir-arac-cubugu{ position:static; justify-content:center; padding:10px; }
+}
+</style>
 </head>
 
 <body>
+<div class="indir-arac-cubugu">
+  <button onclick="window.print()">🖨 Yazdır / PDF Kaydet</button>
+  <button class="beyaz" onclick="__dosyayiIndir()">⬇ Dosyayı İndir</button>
+</div>
+
 
   <header>
     <h1>🎈 Detaylı İlkokul Oyun Rehberi</h1>
@@ -654,5 +676,22 @@ Ebe boş yere oturabilirse, mendili alan öğrenci yeni ebe olur.`,
 <!-- Ziyaretçi sayacı: goatcounter.com'da ücretsiz hesap açtıktan sonra
      aşağıdaki "dijitalogretmen" kısmını kendi GoatCounter kodunuzla değiştirin. -->
 <script data-goatcounter="https://dijitalogretmen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script>
+function __dosyayiIndir(){
+  var klon = document.documentElement.cloneNode(true);
+  var arac = klon.querySelector('.indir-arac-cubugu');
+  if(arac) arac.remove();
+  var html = "<!DOCTYPE html>\n" + klon.outerHTML;
+  var blob = new Blob([html], {type:"text/html;charset=utf-8"});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url;
+  a.download = "oyun-etkinlik-rehberi.html";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+</script>
 </body>
 </html>
