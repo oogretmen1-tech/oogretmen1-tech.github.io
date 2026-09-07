@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026-2027 Çalışma Takvimi | Dijital Öğretmen</title>
+<style>
+  :root{
+    --mor:#667eea; --mor-koyu:#764ba2;
+    --lacivert:#12325C;
+    --tatil-bg:#fde2e1; --tatil-cizgi:#c0392b; --tatil-yazi:#c0392b;
+    --ara-bg:#fef1da; --ara-cizgi:#c98a1b; --ara-yazi:#96650f;
+    --ozel-bg:#e9f3ff; --ozel-cizgi:#3E86E4; --ozel-yazi:#12325C;
+    --donem-bg:#e8f7ee; --donem-cizgi:#1f9d55; --donem-yazi:#136337;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+    background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+    color:#1a1a2e;
+  }
+  .sayfa{ max-width:1200px; margin:0 auto; padding:24px 16px 60px; }
+
+  .indir-arac-cubugu{
+    position:fixed; top:14px; right:14px; z-index:9999;
+    display:flex; gap:8px; flex-wrap:wrap;
+  }
+  .indir-arac-cubugu button{
+    font-family:inherit; font-size:.85rem; font-weight:700; cursor:pointer;
+    border:none; border-radius:24px; padding:9px 16px;
+    background:#16345C; color:#fff; box-shadow:0 3px 10px rgba(0,0,0,.25);
+  }
+  .indir-arac-cubugu button.beyaz{ background:#fff; color:#16345C; border:1.5px solid #16345C; }
+  .indir-arac-cubugu button:hover{ filter:brightness(1.1); }
+  @media print{ .indir-arac-cubugu{ display:none !important; } }
+  @media (max-width:520px){ .indir-arac-cubugu{ position:static; justify-content:center; padding:10px 0; } }
+
+  a.back-link{
+    display:inline-block; margin-bottom:16px; color:#fff; text-decoration:none;
+    background:rgba(255,255,255,.18); padding:8px 16px; border-radius:20px; font-size:.85rem; font-weight:600;
+  }
+  a.back-link:hover{ background:rgba(255,255,255,.3); }
+
+  header.baslik{
+    background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.35);
+    border-radius:18px; padding:22px 26px; margin-bottom:22px; color:#fff; text-align:center;
+  }
+  header.baslik h1{ margin:0 0 6px; font-size:1.5rem; }
+  header.baslik p{ margin:0; opacity:.9; font-size:.95rem; }
+
+  .lejant{
+    display:flex; flex-wrap:wrap; gap:10px; justify-content:center;
+    background:#fff; border-radius:14px; padding:14px 18px; margin-bottom:24px;
+    box-shadow:0 6px 20px rgba(0,0,0,.12);
+  }
+  .lejant span{
+    display:inline-flex; align-items:center; gap:6px; font-size:.82rem; font-weight:600; color:#333;
+  }
+  .lejant i{ width:14px; height:14px; border-radius:4px; display:inline-block; }
+  .lejant i.tatil{ background:var(--tatil-bg); border:2px solid var(--tatil-cizgi); }
+  .lejant i.ara{ background:var(--ara-bg); border:2px solid var(--ara-cizgi); }
+  .lejant i.ozel{ background:var(--ozel-bg); border:2px solid var(--ozel-cizgi); }
+  .lejant i.donem{ background:var(--donem-bg); border:2px solid var(--donem-cizgi); }
+  .lejant i.hafta-sonu{ background:#eceff3; border:2px solid #b7c0cc; }
+
+  .takvim-izgara{
+    display:grid; grid-template-columns:repeat(2,1fr); gap:20px;
+  }
+  @media (max-width:820px){ .takvim-izgara{ grid-template-columns:1fr; } }
+
+  .ay-karti{
+    background:#fff; border-radius:16px; padding:18px 18px 16px;
+    box-shadow:0 8px 24px rgba(0,0,0,.15);
+    break-inside:avoid; page-break-inside:avoid;
+  }
+  .ay-basligi{
+    font-size:1.15rem; font-weight:800; color:var(--lacivert);
+    text-align:center; margin-bottom:10px; letter-spacing:.02em;
+  }
+  .hafta-satiri{ display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:4px; }
+  .hafta-basi{ text-align:center; font-size:.72rem; font-weight:700; color:#8a93a6; padding:2px 0; }
+
+  .gunler-izgara{ display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+  .gun{
+    position:relative; aspect-ratio:1/1; display:flex; align-items:center; justify-content:center;
+    border-radius:8px; background:#f7f8fb; font-size:.85rem; font-weight:600; color:#2b2b3d;
+  }
+  .gun.bos{ background:transparent; }
+  .gun.hafta-sonu{ background:#eceff3; color:#7a8598; }
+  .gun.tatil{ background:var(--tatil-bg); border:1.5px solid var(--tatil-cizgi); color:var(--tatil-yazi); }
+  .gun.ara{ background:var(--ara-bg); border:1.5px solid var(--ara-cizgi); color:var(--ara-yazi); }
+  .gun.ozel{ background:var(--ozel-bg); border:1.5px solid var(--ozel-cizgi); color:var(--ozel-yazi); }
+  .gun.donem{ background:var(--donem-bg); border:1.5px solid var(--donem-cizgi); color:var(--donem-yazi); }
+  .gun-no{ z-index:1; }
+  .nokta{ position:absolute; bottom:3px; right:3px; width:5px; height:5px; border-radius:50%; background:currentColor; opacity:.8; }
+
+  .ay-notlari{ list-style:none; margin:12px 0 0; padding:0; border-top:1px dashed #dfe3ea; padding-top:10px; }
+  .ay-notlari li{ font-size:.76rem; line-height:1.5; color:#3d4757; margin-bottom:4px; }
+  .ay-notlari-bos{ font-size:.76rem; color:#9aa3b2; margin:12px 0 0; border-top:1px dashed #dfe3ea; padding-top:10px; }
+
+  footer.alt-not{
+    text-align:center; color:rgba(255,255,255,.85); font-size:.78rem; margin-top:26px;
+  }
+
+  @media print{
+    body{ background:#fff; }
+    .sayfa{ max-width:none; padding:6px; }
+    header.baslik{ background:#fff; color:#000; border:1.5px solid #12325C; }
+    header.baslik p{ color:#333; }
+    .lejant{ box-shadow:none; border:1px solid #ddd; }
+    .takvim-izgara{ grid-template-columns:repeat(2,1fr); }
+    .ay-karti{ box-shadow:none; border:1px solid #ccc; }
+    a.back-link{ display:none; }
+    footer.alt-not{ color:#666; }
+  }
+</style>
+</head>
+<body>
+
+<div class="indir-arac-cubugu">
+  <button onclick="window.print()">🖨 Yazdır / PDF Kaydet</button>
+  <button class="beyaz" onclick="__dosyayiIndir()">⬇ Dosyayı İndir</button>
+</div>
+
+<div class="sayfa">
+
+  <a class="back-link" href="index.html?page=yillikplanlar">← Ana Sayfa</a>
+
+  <header class="baslik">
+    <h1>📅 2026-2027 Eğitim-Öğretim Yılı Çalışma Takvimi</h1>
+    <p>T.C. Millî Eğitim Bakanlığı · Türkiye Yüzyılı Maarif Modeli</p>
+  </header>
+
+  <div class="lejant">
+    <span><i class="donem"></i> Dönem başı / sonu · Uyum Programı</span>
+    <span><i class="ara"></i> Ara Tatil / Yarıyıl Tatili</span>
+    <span><i class="tatil"></i> Resmî Tatil / Dinî Bayram</span>
+    <span><i class="ozel"></i> Belirli Gün ve Haftalar</span>
+    <span><i class="hafta-sonu"></i> Hafta Sonu</span>
+  </div>
+
+  <div class="takvim-izgara">
+    
+    <div class="ay-karti">
+      <div class="ay-basligi">Eylül 2026</div>
+      <div class="hafta-satiri"><div class='hafta-basi'>Pzt</div><div class='hafta-basi'>Sal</div><div class='hafta-basi'>Çar</div><div class='hafta-basi'>Per</div><div class='hafta-basi'>Cum</div><div class='hafta-basi'>Cmt</div><div class='hafta-basi'>Paz</div></div>
+      <div class="gunler-izgara"><div class='gun bos'></div><div class='gun '><span class='gun-no'>1</span></div><div class='gun '><span class='gun-no'>2</span></div><div class='gun '><span class='gun-no'>3</span></div><div class='gun '><span class='gun-no'>4</span></div><div class='gun hafta-sonu'><span class='gun-no'>5</span></div><div class='gun hafta-sonu'><span class='gun-no'>6</span></div><div class='gun  donem'><span class='gun-no'>7</span><span class='nokta'></span></div><div class='gun  donem'><span class='gun-no'>8</span><span class='nokta'></span></div><div class='gun  donem'><span class='gun-no'>9</span><span class='nokta'></span></div><div class='gun  donem'><span class='gun-no'>10</span><span class='nokta'></span></div><div class='gun  donem'><span class='gun-no'>11</span><span class='nokta'></span></div><div class='gun hafta-sonu'><span class='gun-no'>12</span></div><div class='gun hafta-sonu'><span class='gun-no'>13</span></div><div class='gun  donem'><span class='gun-no'>14</span><span class='nokta'></span></div><div class='gun '><span class='gun-no'>15</span></div><div class='gun '><span class='gun-no'>16</span></div><div class='gun '><span class='gun-no'>17</span></div><div class='gun '><span class='gun-no'>18</span></div><div class='gun hafta-sonu'><span class='gun-no'>19</span></div><div class='gun hafta-sonu'><span class='gun-no'>20</span></div><div class='gun '><span class='gun-no'>21</span></div><div class='gun '><span class='gun-no'>22</span></div><div class='gun '><span class='gun-no'>23</span></div><div class='gun '><span class='gun-no'>24</span></div><div class='gun '><span class='gun-no'>25</span></div><div class='gun hafta-sonu'><span class='gun-no'>26</span></div><div class='gun hafta-sonu'><span class='gun-no'>27</span></div><div class='gun '><span class='gun-no'>28</span></div><div class='gun '><span class='gun-no'>29</span></div><div class='gun '><span class='gun-no'>30</span></div></div>
+      <ul class='ay-notlari'><li><b>7 Eylül</b> — Uyum Programı başlangıcı (1.sınıf/anasınıfı)</li><li><b>14 Eylül</b> — Eğitim-öğretim başlangıcı (tüm sınıflar)</li></ul>
+    </div>
+    
+
+    <div class="ay-karti">
+      <div class="ay-basligi">Ekim 2026</div>
+      <div class="hafta-satiri"><div class='hafta-basi'>Pzt</div><div class='hafta-basi'>Sal</div><div class='hafta-basi'>Çar</div><div class='hafta-basi'>Per</div><div class='hafta-basi'>Cum</div><div class='hafta-basi'>Cmt</div><div class='hafta-basi'>Paz</div></div>
+      <div class="gunler-izgara"><div class='gun bos'></div><div class='gun bos'></div><div class='gun bos'></div><div class='gun '><span class='gun-no'>1</span></div><div class='gun '><span class='gun-no'>2</span></div><div class='gun hafta-sonu'><span class='gun-no'>3</span></div><div class='gun hafta-sonu'><span class='gun-no'>4</span></div><div class='gun '><span class='gun-no'>5</span></div><div class='gun '><span class='gun-no'>6</span></div><div class='gun '><span class='gun-no'>7</span></div><div class='gun '><span class='gun-no'>8</span></div><div class='gun '><span class='gun-no'>9</span></div><div class='gun hafta-sonu'><span class='gun-no'>10</span></div><div class='gun hafta-sonu'><span class='gun-no'>11</span></div><div class='gun '><span class='gun-no'>12</span></div><div class='gun  ozel'><span class='gun-no'>13</span><span class='nokta'></span></div><div class='gun '><span class='gun-no'>14</span></div><div class='gun '><span class='gun-no'>15</span></div><div class='gun '><span class='gun-no'>16</span></div><div class='gun hafta-sonu'><span class='gun-no'>17</span></div><div class='gun hafta-sonu'><span class='gun-no'>18</span></div><div class='gun '><span class='gun-no'>19</span></div><div class='gun '><span class='gun-no'>20</span></div><div class='gun '><span class='gun-no'>21</span></div><div class='gun '><span class='gun-no'>22</span></div><div class='gun '><span class='gun-no'>23</span></div><div class='gun hafta-sonu'><span class='gun-no'>24</span></div><div class='gun hafta-sonu'><span class='gun-no'>25</span></div><div class='gun '><span class='gun-no'>26</span></div><div class='gun '><span class='gun-no'>27</span></div><div class='gun '><span class='gun-no'>28</span></div><div class='gun  tatil'><span class='gun-no'>29</span><span class='nokta'></span></div><div class='gun '><span class='gun-no'>30</span></div><div class='gun hafta-sonu'><span class='gun-no'>31</span></div></div>
+      <ul class='ay-notlari'><li><b>13 Ekim</b> — Dünya Afet Azaltma Günü</li><li><b>29 Ekim</b> — 29 Ekim Cumhuriyet Bayramı</li></ul>
+    </div>
+    
+
+    <div class="ay-karti">
+      <div class="ay-basligi">Kasım 2026</div>
+      <div class="hafta-satiri"><div class='hafta-basi'>Pzt</div><div class='hafta-basi'>Sal</div><div class='hafta-basi'>Çar</div><div class='hafta-basi'>Per</div><div class='hafta-basi'>Cum</div><div class='hafta-basi'>Cmt</div><div class='hafta-basi'>Paz</div></div>
+      <div class="gunler-izgara"><div class='gun bos'></div><div class='gun bos'></div><div class='gun bos'></div><div class='gun bos'></div><div class='gun bos'></div><div class='gun bos'></div><div class='gun hafta-sonu'><span class='gun-no'>1</span></div><div class='gun '><span class='gun-no'>2</span></div><div class='gun '><span class='gun-no'>3</span></div><div class='gun '><span class='gun-no'>4</span></div><div class='gun '><span class='gun-no'>5</span></div><div class='gun '><span class='gun-no'>6</span></div><div class='gun hafta-sonu'><span class='gun-no'>7</span></div><div class='gun hafta-sonu'><span class='gun-no'>8</span></div><div class='gun '><span class='gun-no'>9</span></div><div class='gun  ozel'><span class='gun-no'>10</span><span class='nokta'></span></div><div class='gun '><span class='gun-no'>11</span></div><div class='gun '><span class='gun-no'>12</span></div><div class='gun '><span class='gun-no'>13</span></div><div class='gun hafta-sonu'><span class='gun-no'>14</span></div><div class='gun hafta-sonu'><span class='gun-no'>15</span></div><div class='gun  ara'><span class='gun-no'>16</span><span class='nokta'></span></div><div class='gun  ara'><span class='gun-no'>17</span><span class='nokta'></span></div><div class='gun  ara'><span class='gun-no'>18</span><span class='nokta'></span></div><div class='gun  ara'><span class='gun-no'>19</span><span class='nokta'></span></div><div class='gun  ara'><span class='gun-no'>20</span><span class='nokta'></span></div><div class='gun hafta-sonu'><span class='gun-no'>21</span></div><div class='gun hafta-sonu'><span class='gun-no'>22</span></div><div class='gun '><span class='gun-no'>23</span></div><div class='gun  ozel'><span class='gun-no'>24</span><span class='nokta'></span></div><div class='gun '><span class='gun-no'>25</span></div><div class='gun '><span class='gun-no'>26</span></div><div class='gun '><span class='gun-no'>27</span></div><div class='gun hafta-sonu'><span class='gun-no'>28</span></div><div class='gun hafta-sonu'><span class='gun-no'>29</span></div><div class='gun '><span class='gun-no'>30</span></div></div>
+      <ul class='ay-notlari'><li><b>10 Kasım</b> — Atatürk'ü Anma Günü (09:05)</li><li><b>16 Kasım</b> — 1. Dönem Ara Tatil başlangıcı</li><li><b>20 Kasım</b> — 1. Dönem Ara Tatil bitişi</li><li><b>24 Kasım</b> — Öğretmenler Günü</li></ul>
+    </div>
+    
+
+    <div class="ay-karti">
+      <div class="ay-basligi">Aralık 2026</div>
+      <div class="hafta-satiri"><div class='hafta-basi'>Pzt</div><div class='hafta-basi'>Sal</div><div class='hafta-basi'>Çar</div><div class='hafta-basi'>Per</div><div class='hafta-basi'>Cum</div><div class='hafta-basi'>Cmt</div><div class='hafta-basi'>Paz</div></div>
+      <div class="gunler-izgara"><div class='gun bos'></div><div class='gun '><span class='gun-no'>1</span></div><div class='gun '><span class='gun-no'>2</span></div><div class='gun  ozel'><span class='gun-no'>3</span><span class='nokta'></span></div><div class='gun '><span class='gun-no'>4</span></div><div class='gun hafta-sonu'><span class='gun-no'>5</span></div><div class='gun hafta-sonu'><span class='gun-no'>6</span></div><div class='gun '><span class='gun-no'>7</span></div><div class='gun '><span class='gun-no'>8</span></div><div class='gun '><span class='gun-no'>9</span></div><div class='gun  ozel'><span class='gun-no'>10</span><span class='nokta'></span></div><div class='gun '><span class='gun-no'>11</span></div><div class='gun hafta-sonu'><span class='gun-no'>12</span></div><div class='gun hafta-sonu'><span class='gun-no'>13</span></div><div class='gun '><span class='gun-no'>14</span></div><div class='gun  ozel'><span class='gun-no'>15</span><span class='nokta'></span></div><div class='gun '><span class='gun-no'>16</span></div><div class='gun '><span class='gun-no'>17</span></div><div class='gun '><span class='gun-no'>18</span></div><div class='gun hafta-sonu'><span class='gun-no'>19</span></div><div class='gun hafta-sonu'><span class='gun-no'>20</span></div><div class='gun '><span class='gun-no'>21</span></div><div class='gun '><span class='gun-no'>22</span></div><div class='gun '><span class='gun-no'>23</span></div><div class='gun '><span class='gun-no'>24</span></div><div class='gun '><span class='gun-no'>25</span></div><div class='gun hafta-sonu'><span class='gun-no'>26</span></div><div class='gun hafta-sonu'><span class='gun-no'>27</span></div><div class='gun '><span class='gun-no'>28</span></div><div class='gun '><span class='gun-no'>29</span></div><div class='gun '><span class='gun-no'>30</span></div><div class='gun '><span class='gun-no'>31</span></div></div>
+      <ul class='ay-notlari'><li><b>3 Aralık</b> — Dünya Engelliler Günü</li><li><b>10 Aralık</b> — İnsan Hakları Günü</li><li><b>15 Aralık</b> — Dünya Türkçe Günü</li></ul>
+    </div>
+    
+
+    <div class="ay-karti">
+      <div class="ay-basligi">Ocak 2027</div>
+      <div class="hafta-satiri"><div class='hafta-basi'>Pzt</div><div class='hafta-basi'>Sal</div><div class='hafta-basi'>Çar</div><div class='hafta-basi'>Per</div><div class='hafta-basi'>Cum</div><div class='hafta-basi'>Cmt</div><div class='hafta-basi'>Paz</div></div>
+      <div class="gunler-izgara"><div class='gun bos'></div><div class='gun bos'></div><div class='gun bos'></div><div class='gun bos'></div><div class='gun  tatil'><span class='gun-no'>1</span><span class='nokta'></span></div><div class='gun hafta-sonu'><span class='gun-no'>2</span></div><div class='gun hafta-sonu'><span class='gun-no'>3</span></div><div class='gun '><span class='gun-no'>4</span></div><div class='gun '><span class='gun-no'>5</span></div><div class='gun '><span class='gun-no'>6</span></div><div class='gun '><span class='gun-no'>7</span></div><div class='gun '><span class='gun-no'>8</span></div><div class='gun hafta-sonu'><span class='gun-no'>9</span></div><div class='gun hafta-sonu'><span class='gun-no'>10</span></div><div class='gun '><span class='gun-no'>11</span></div><div class='gun '><span class='gun-no'>12</span></div><div class='gun '><span class='gun-no'>13</span></div><div class='gun '><span class='gun-no'>14</span></div><div class='gun '><span class='gun-no'>15</span></div><div class='gun hafta-sonu'><span class='gun-no'>16</span></div><div class='gun hafta-sonu'><span class='gun-no'>17</span></div><div class='gun '><span class='gun-no'>18</span></div><div class='gun '><span class='gun-no'>19</span></div><div class='gun '><span class='gun-no'>20</span></div><div class='gun '><span class='gun-no'>21</span></div><div class='gun  donem'><span class='gun-no'>22</span><span class='nokta'></span></div><div class='gun hafta-sonu'><span class='gun-no'>23</span></div><div class='gun hafta-sonu'><span class='gun-no'>24</span></div><div class='gun  ara'><span class='gun-no'>25</span><span class='nokta'></span></div><div class='gun  ara'><span class='gun-no'>26</span><span class='nokta'></span></div><div class='gun  ara'><span class='gun-no'>27</span><span class='nokta'></span></div><div class='gun  ara'><span class='gun-no'>28</span><span class='nokta'></span></div><div class='gun  ara'><span class='gun-no'>29</span><span class='nokta'></span></div><div class='gun hafta-sonu ara'><span class='gun-no'>30</span><span class='nokta'></span></div><div class='gun hafta-sonu ara'><span class='gun-no'>31</span><span class='nokta'></span></div></div>
+      <ul class='ay-notlari'><li><b>1 Ocak</b> — Yılbaşı</li><li><b>22 Ocak</b> — 1. Dönem Sonu</li><li><b>25 Ocak</b> — Yarıyıl Tatili başlangıcı</li></ul>
+    </div>
+    
+
+    <div class="ay-karti">
+      <div class="ay-basligi">Şubat 2027</div>
+      <div class="hafta-satiri"><div class='hafta-basi'>Pzt</div><div class='hafta-basi'>Sal</div><div class='hafta-basi'>Çar</div><div class='hafta-basi'>Per</div><div class='hafta-basi'>Cum</div><div class='hafta-basi'>Cmt</div><div class='hafta-basi'>Paz</div></div>
+      <div class="gunler-izgara"><div class='gun  ara'><span class='gun-no'>1</span><span class='nokta'></span></div><div class='gun  ara'><span class='gun-no'>2</span><span class='nokta'></span></div><div class='gun  ara'><span class='gun-no'>3</span><span class='nokta'></span></div><div class='gun  ara'><span class='gun-no'>4</span><span class='nokta'></span></div><div class='gun  ara'><span class='gun-no'>5</span><span class='nokta'></span></div><div class='gun hafta-sonu'><span class='gun-no'>6</span></div><div class='gun hafta-sonu'><span class='gun-no'>7</span></div><div class='gun  donem'><span class='gun-no'>8</span><span class='nokta'></span></div><div class='gun '><span class='gun-no'>9</span></div><div class='gun '><span class='gun-no'>10</span></div><div class='gun '><span class='gun-no'>11</span></div><div class='gun '><span class='gun-no'>12</span></div><div class='gun hafta-sonu'><span class='gun-no'>13</span></div><div class='gun hafta-sonu'><span class='gun-no'>14</span></div><div class='gun '><span class='gun-no'>15</span></div><div class='gun '><span class='gun-no'>16</span></div><div class='gun '><span class='gun-no'>17</span></div><div class='gun '><span class='gun-no'>18</span></div><div class='gun '><span class='gun-no'>19</span></div><div class='gun hafta-sonu'><span class='gun-no'>20</span></div><div class='gun hafta-sonu'><span class='gun-no'>21</span></div><div class='gun '><span class='gun-no'>22</span></div><div class='gun '><span class='gun-no'>23</span></div><div class='gun '><span class='gun-no'>24</span></div><div class='gun '><span class='gun-no'>25</span></div><div class='gun '><span class='gun-no'>26</span></div><div class='gun hafta-sonu'><span class='gun-no'>27</span></div><div class='gun hafta-sonu'><span class='gun-no'>28</span></div></div>
+      <ul class='ay-notlari'><li><b>5 Şubat</b> — Yarıyıl Tatili bitişi</li><li><b>8 Şubat</b> — 2. Dönem Başlangıcı</li></ul>
+    </div>
+    
+
+    <div class="ay-karti">
+      <div class="ay-basligi">Mart 2027</div>
+      <div class="hafta-satiri"><div class='hafta-basi'>Pzt</div><div class='hafta-basi'>Sal</div><div class='hafta-basi'>Çar</div><div class='hafta-basi'>Per</div><div class='hafta-basi'>Cum</div><div class='hafta-basi'>Cmt</div><div class='hafta-basi'>Paz</div></div>
+      <div class="gunler-izgara"><div class='gun '><span class='gun-no'>1</span></div><div class='gun '><span class='gun-no'>2</span></div><div class='gun '><span class='gun-no'>3</span></div><div class='gun '><span class='gun-no'>4</span></div><div class='gun '><span class='gun-no'>5</span></div><div class='gun hafta-sonu'><span class='gun-no'>6</span></div><div class='gun hafta-sonu'><span class='gun-no'>7</span></div><div class='gun  ara'><span class='gun-no'>8</span><span class='nokta'></span></div><div class='gun  tatil'><span class='gun-no'>9</span><span class='nokta'></span></div><div class='gun  tatil'><span class='gun-no'>10</span><span class='nokta'></span></div><div class='gun  tatil'><span class='gun-no'>11</span><span class='nokta'></span></div><div class='gun  ara'><span class='gun-no'>12</span><span class='nokta'></span></div><div class='gun hafta-sonu'><span class='gun-no'>13</span></div><div class='gun hafta-sonu'><span class='gun-no'>14</span></div><div class='gun '><span class='gun-no'>15</span></div><div class='gun '><span class='gun-no'>16</span></div><div class='gun '><span class='gun-no'>17</span></div><div class='gun  ozel'><span class='gun-no'>18</span><span class='nokta'></span></div><div class='gun '><span class='gun-no'>19</span></div><div class='gun hafta-sonu'><span class='gun-no'>20</span></div><div class='gun hafta-sonu ozel'><span class='gun-no'>21</span><span class='nokta'></span></div><div class='gun '><span class='gun-no'>22</span></div><div class='gun '><span class='gun-no'>23</span></div><div class='gun '><span class='gun-no'>24</span></div><div class='gun '><span class='gun-no'>25</span></div><div class='gun '><span class='gun-no'>26</span></div><div class='gun hafta-sonu'><span class='gun-no'>27</span></div><div class='gun hafta-sonu'><span class='gun-no'>28</span></div><div class='gun '><span class='gun-no'>29</span></div><div class='gun '><span class='gun-no'>30</span></div><div class='gun '><span class='gun-no'>31</span></div></div>
+      <ul class='ay-notlari'><li><b>8 Mart</b> — 2. Dönem Ara Tatil / Ramazan Bayramı Arefesi</li><li><b>9 Mart</b> — Ramazan Bayramı (1. gün)</li><li><b>10 Mart</b> — Ramazan Bayramı (2. gün)</li><li><b>11 Mart</b> — Ramazan Bayramı (3. gün)</li><li><b>12 Mart</b> — 2. Dönem Ara Tatil bitişi</li><li><b>18 Mart</b> — Çanakkale Zaferi</li><li><b>21 Mart</b> — Nevruz / Dünya Şiir Günü</li></ul>
+    </div>
+    
+
+    <div class="ay-karti">
+      <div class="ay-basligi">Nisan 2027</div>
+      <div class="hafta-satiri"><div class='hafta-basi'>Pzt</div><div class='hafta-basi'>Sal</div><div class='hafta-basi'>Çar</div><div class='hafta-basi'>Per</div><div class='hafta-basi'>Cum</div><div class='hafta-basi'>Cmt</div><div class='hafta-basi'>Paz</div></div>
+      <div class="gunler-izgara"><div class='gun bos'></div><div class='gun bos'></div><div class='gun bos'></div><div class='gun '><span class='gun-no'>1</span></div><div class='gun '><span class='gun-no'>2</span></div><div class='gun hafta-sonu'><span class='gun-no'>3</span></div><div class='gun hafta-sonu'><span class='gun-no'>4</span></div><div class='gun '><span class='gun-no'>5</span></div><div class='gun '><span class='gun-no'>6</span></div><div class='gun  ozel'><span class='gun-no'>7</span><span class='nokta'></span></div><div class='gun '><span class='gun-no'>8</span></div><div class='gun '><span class='gun-no'>9</span></div><div class='gun hafta-sonu'><span class='gun-no'>10</span></div><div class='gun hafta-sonu'><span class='gun-no'>11</span></div><div class='gun '><span class='gun-no'>12</span></div><div class='gun '><span class='gun-no'>13</span></div><div class='gun '><span class='gun-no'>14</span></div><div class='gun '><span class='gun-no'>15</span></div><div class='gun '><span class='gun-no'>16</span></div><div class='gun hafta-sonu'><span class='gun-no'>17</span></div><div class='gun hafta-sonu'><span class='gun-no'>18</span></div><div class='gun '><span class='gun-no'>19</span></div><div class='gun '><span class='gun-no'>20</span></div><div class='gun '><span class='gun-no'>21</span></div><div class='gun '><span class='gun-no'>22</span></div><div class='gun  tatil'><span class='gun-no'>23</span><span class='nokta'></span></div><div class='gun hafta-sonu'><span class='gun-no'>24</span></div><div class='gun hafta-sonu'><span class='gun-no'>25</span></div><div class='gun '><span class='gun-no'>26</span></div><div class='gun '><span class='gun-no'>27</span></div><div class='gun '><span class='gun-no'>28</span></div><div class='gun '><span class='gun-no'>29</span></div><div class='gun '><span class='gun-no'>30</span></div></div>
+      <ul class='ay-notlari'><li><b>7 Nisan</b> — Dünya Sağlık Günü</li><li><b>23 Nisan</b> — 23 Nisan Ulusal Egemenlik ve Çocuk Bayramı</li></ul>
+    </div>
+    
+
+    <div class="ay-karti">
+      <div class="ay-basligi">Mayıs 2027</div>
+      <div class="hafta-satiri"><div class='hafta-basi'>Pzt</div><div class='hafta-basi'>Sal</div><div class='hafta-basi'>Çar</div><div class='hafta-basi'>Per</div><div class='hafta-basi'>Cum</div><div class='hafta-basi'>Cmt</div><div class='hafta-basi'>Paz</div></div>
+      <div class="gunler-izgara"><div class='gun bos'></div><div class='gun bos'></div><div class='gun bos'></div><div class='gun bos'></div><div class='gun bos'></div><div class='gun hafta-sonu tatil'><span class='gun-no'>1</span><span class='nokta'></span></div><div class='gun hafta-sonu'><span class='gun-no'>2</span></div><div class='gun '><span class='gun-no'>3</span></div><div class='gun '><span class='gun-no'>4</span></div><div class='gun '><span class='gun-no'>5</span></div><div class='gun '><span class='gun-no'>6</span></div><div class='gun '><span class='gun-no'>7</span></div><div class='gun hafta-sonu'><span class='gun-no'>8</span></div><div class='gun hafta-sonu'><span class='gun-no'>9</span></div><div class='gun  ozel'><span class='gun-no'>10</span><span class='nokta'></span></div><div class='gun '><span class='gun-no'>11</span></div><div class='gun '><span class='gun-no'>12</span></div><div class='gun '><span class='gun-no'>13</span></div><div class='gun '><span class='gun-no'>14</span></div><div class='gun hafta-sonu'><span class='gun-no'>15</span></div><div class='gun hafta-sonu tatil'><span class='gun-no'>16</span><span class='nokta'></span></div><div class='gun  tatil'><span class='gun-no'>17</span><span class='nokta'></span></div><div class='gun  tatil'><span class='gun-no'>18</span><span class='nokta'></span></div><div class='gun  tatil'><span class='gun-no'>19</span><span class='nokta'></span></div><div class='gun '><span class='gun-no'>20</span></div><div class='gun '><span class='gun-no'>21</span></div><div class='gun hafta-sonu'><span class='gun-no'>22</span></div><div class='gun hafta-sonu'><span class='gun-no'>23</span></div><div class='gun '><span class='gun-no'>24</span></div><div class='gun '><span class='gun-no'>25</span></div><div class='gun '><span class='gun-no'>26</span></div><div class='gun '><span class='gun-no'>27</span></div><div class='gun '><span class='gun-no'>28</span></div><div class='gun hafta-sonu'><span class='gun-no'>29</span></div><div class='gun hafta-sonu'><span class='gun-no'>30</span></div><div class='gun '><span class='gun-no'>31</span></div></div>
+      <ul class='ay-notlari'><li><b>1 Mayıs</b> — Emek ve Dayanışma Günü</li><li><b>10 Mayıs</b> — Anneler Günü</li><li><b>16 Mayıs</b> — Kurban Bayramı Arefesi</li><li><b>17 Mayıs</b> — Kurban Bayramı (1. gün)</li><li><b>18 Mayıs</b> — Kurban Bayramı (2. gün)</li><li><b>19 Mayıs</b> — Kurban Bayramı (3. gün) · 19 Mayıs Atatürk'ü Anma, Gençlik ve Spor Bayramı</li></ul>
+    </div>
+    
+
+    <div class="ay-karti">
+      <div class="ay-basligi">Haziran 2027</div>
+      <div class="hafta-satiri"><div class='hafta-basi'>Pzt</div><div class='hafta-basi'>Sal</div><div class='hafta-basi'>Çar</div><div class='hafta-basi'>Per</div><div class='hafta-basi'>Cum</div><div class='hafta-basi'>Cmt</div><div class='hafta-basi'>Paz</div></div>
+      <div class="gunler-izgara"><div class='gun bos'></div><div class='gun '><span class='gun-no'>1</span></div><div class='gun '><span class='gun-no'>2</span></div><div class='gun '><span class='gun-no'>3</span></div><div class='gun '><span class='gun-no'>4</span></div><div class='gun hafta-sonu ozel'><span class='gun-no'>5</span><span class='nokta'></span></div><div class='gun hafta-sonu'><span class='gun-no'>6</span></div><div class='gun '><span class='gun-no'>7</span></div><div class='gun '><span class='gun-no'>8</span></div><div class='gun '><span class='gun-no'>9</span></div><div class='gun '><span class='gun-no'>10</span></div><div class='gun '><span class='gun-no'>11</span></div><div class='gun hafta-sonu'><span class='gun-no'>12</span></div><div class='gun hafta-sonu'><span class='gun-no'>13</span></div><div class='gun '><span class='gun-no'>14</span></div><div class='gun '><span class='gun-no'>15</span></div><div class='gun '><span class='gun-no'>16</span></div><div class='gun '><span class='gun-no'>17</span></div><div class='gun '><span class='gun-no'>18</span></div><div class='gun hafta-sonu donem'><span class='gun-no'>19</span><span class='nokta'></span></div><div class='gun hafta-sonu'><span class='gun-no'>20</span></div><div class='gun '><span class='gun-no'>21</span></div><div class='gun '><span class='gun-no'>22</span></div><div class='gun '><span class='gun-no'>23</span></div><div class='gun '><span class='gun-no'>24</span></div><div class='gun  donem'><span class='gun-no'>25</span><span class='nokta'></span></div><div class='gun hafta-sonu'><span class='gun-no'>26</span></div><div class='gun hafta-sonu'><span class='gun-no'>27</span></div><div class='gun '><span class='gun-no'>28</span></div><div class='gun '><span class='gun-no'>29</span></div><div class='gun '><span class='gun-no'>30</span></div></div>
+      <ul class='ay-notlari'><li><b>5 Haziran</b> — Dünya Çevre Günü</li><li><b>19 Haziran</b> — 12. sınıflar mezuniyet</li><li><b>25 Haziran</b> — Eğitim-öğretim yılı sonu (tüm sınıflar)</li></ul>
+    </div>
+    
+  </div>
+
+  <footer class="alt-not">
+    Dijital Öğretmen · Hasan Tutuş — Ramazan ve Kurban Bayramı tarihleri Diyanet'in ilan ettiği takvime göre tahminidir, resmî ilan sonrası 1 gün oynayabilir.
+  </footer>
+
+</div>
+
+<script>
+function __dosyayiIndir(){
+  var klon = document.documentElement.cloneNode(true);
+  var arac = klon.querySelector('.indir-arac-cubugu');
+  if(arac) arac.remove();
+  var html = "<!DOCTYPE html>\n" + klon.outerHTML;
+  var blob = new Blob([html], {type:"text/html;charset=utf-8"});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url;
+  a.download = "2026-2027-calisma-takvimi.html";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+</script>
+
+</body>
+</html>
