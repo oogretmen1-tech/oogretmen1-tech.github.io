@@ -18,501 +18,298 @@
   --mor:#9b59b6;
   --sari:#ffc928;
   --koyu:#4c342b;
+  --alan:#7e57c2;
+  --alan2:#9575cd;
 }
 
 html,body,body *{
   font-family:'Andika','Andika New Basic',Arial,sans-serif;
 }
 
-*{
-  box-sizing:border-box;
-}
+*{ box-sizing:border-box; }
 
 body{
   margin:0;
-  font-family:'Andika','Andika New Basic',Arial,sans-serif;
-  background:linear-gradient(135deg,#fff4de,#e8f7ff);
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255,201,40,.18), transparent 22%),
+    radial-gradient(circle at 88% 14%, rgba(66,133,212,.16), transparent 20%),
+    radial-gradient(circle at 50% 96%, rgba(85,175,104,.16), transparent 26%),
+    linear-gradient(135deg,#fff4de,#e8f7ff);
+  background-attachment:fixed;
   color:var(--koyu);
+  overflow-x:hidden;
 }
 
 /* ÜST BAŞLIK */
-
 header{
-  padding:25px 15px;
+  position:relative;
+  padding:26px 15px 60px;
   text-align:center;
-  color:white;
+  color:#fff;
   background:linear-gradient(135deg,#ff7043,#ffbd28);
-  box-shadow:0 4px 12px rgba(0,0,0,.22);
+  box-shadow:0 6px 18px rgba(0,0,0,.22);
+  overflow:hidden;
 }
-
+header::after{
+  content:"";
+  position:absolute;left:0;right:0;bottom:-2px;height:46px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60' preserveAspectRatio='none'%3E%3Cpath d='M0,30 C150,60 300,0 450,25 C600,50 750,5 900,28 C1050,50 1150,20 1200,30 L1200,60 L0,60 Z' fill='%23fff8ea'/%3E%3C/svg%3E") center/100% 100% no-repeat;
+}
 header h1{
-  margin:7px 0;
-  font-size:clamp(28px,5vw,45px);
-  text-shadow:2px 2px 3px rgba(0,0,0,.2);
+  position:relative;z-index:2;
+  margin:8px 0 4px;
+  font-size:clamp(28px,5vw,46px);
+  text-shadow:2px 3px 4px rgba(0,0,0,.22);
 }
+header p{ position:relative;z-index:2;margin:5px;font-size:18px; }
+.header-emoji{ position:relative;z-index:2;font-size:50px;letter-spacing:6px; }
+.header-emoji span{ display:inline-block;animation:zipla 2.6s ease-in-out infinite; }
+.header-emoji span:nth-child(2){animation-delay:.3s}
+.header-emoji span:nth-child(3){animation-delay:.6s}
+.header-emoji span:nth-child(4){animation-delay:.9s}
+.header-emoji span:nth-child(5){animation-delay:1.2s}
+@keyframes zipla{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-12px) rotate(-6deg)}}
 
-header p{
-  margin:5px;
-  font-size:18px;
+.balon{position:absolute;border-radius:50%;opacity:.28;animation:yuz 12s linear infinite}
+@keyframes yuz{0%{transform:translateY(20px)}50%{transform:translateY(-24px)}100%{transform:translateY(20px)}}
+
+.rozet-satiri{
+  position:relative;z-index:2;
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px;
+}
+.rozet{
+  background:rgba(255,255,255,.92);color:#e2622f;font-weight:700;
+  padding:5px 13px;border-radius:30px;font-size:13.5px;
+  box-shadow:0 3px 0 rgba(0,0,0,.12);
 }
 
 /* SEKMELER */
-
 .tabs{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:9px;
-  padding:13px;
-  background:white;
-  position:sticky;
-  top:0;
-  z-index:50;
-  box-shadow:0 3px 9px rgba(0,0,0,.16);
+  display:flex;gap:9px;overflow-x:auto;
+  padding:14px 12px;justify-content:flex-start;
+  position:sticky;top:0;z-index:40;
+  background:rgba(255,248,234,.94);
+  backdrop-filter:blur(6px);
+  border-bottom:3px dashed #ffd9a6;
+  scrollbar-width:thin;
 }
-
 .tabs button{
-  border:none;
-  border-radius:17px;
-  padding:11px 13px;
-  font-size:15px;
-  font-weight:bold;
-  color:white;
-  cursor:pointer;
-  transition:.2s;
-  touch-action:manipulation;
+  flex:0 0 auto;border:none;cursor:pointer;color:#fff;
+  padding:10px 16px;border-radius:16px;font-size:15px;font-weight:700;
+  box-shadow:0 4px 0 rgba(0,0,0,.18);
+  transition:transform .16s, filter .16s;
+  opacity:.72;
 }
+.tabs button:hover{transform:translateY(-2px)}
+.tabs button.active{opacity:1;transform:translateY(-3px) scale(1.04);outline:3px solid #fff;outline-offset:-3px}
 
-.tabs button:hover{
-  transform:scale(1.05);
-}
+main{max-width:1080px;margin:0 auto;padding:16px 14px 40px}
 
-.tabs button.active{
-  outline:4px solid white;
-  box-shadow:0 0 0 4px #ff7043;
-}
-
-/* ANA ALAN */
-
-main{
-  width:min(1150px,94%);
-  margin:23px auto;
-}
-
+/* ÜNİTE BAŞLIĞI */
 .unit-title{
-  background:white;
-  text-align:center;
-  padding:23px;
-  border-radius:27px;
-  box-shadow:0 4px 12px rgba(0,0,0,.14);
+  position:relative;
+  border-radius:26px;padding:20px 18px;margin-bottom:18px;color:#fff;
+  box-shadow:0 10px 22px rgba(0,0,0,.16);
+  overflow:hidden;
 }
-
+.unit-title::before{
+  content:"";position:absolute;inset:0;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='10' cy='10' r='3.2' fill='rgba(255,255,255,.22)'/%3E%3Ccircle cx='40' cy='32' r='2.4' fill='rgba(255,255,255,.18)'/%3E%3Ccircle cx='22' cy='48' r='3' fill='rgba(255,255,255,.15)'/%3E%3C/svg%3E");
+  opacity:.9;
+}
+.unit-head{position:relative;z-index:2;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .unit-emoji{
-  font-size:70px;
+  font-size:46px;background:rgba(255,255,255,.22);
+  width:78px;height:78px;border-radius:24px;display:grid;place-items:center;
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.4);
 }
-
-.unit-title h2{
-  margin:6px 0;
-  font-size:clamp(25px,4vw,36px);
+.unit-title h2{margin:0;font-size:clamp(21px,3.4vw,30px);text-shadow:1px 2px 3px rgba(0,0,0,.22)}
+.unit-title .alan-etiket{
+  display:inline-block;background:rgba(255,255,255,.9);color:#333;
+  font-size:12.5px;font-weight:700;padding:3px 12px;border-radius:20px;margin-bottom:6px;
 }
+.unit-title p{position:relative;z-index:2;margin:12px 2px 0;font-size:16.5px;line-height:1.55}
+.unit-cizim{position:relative;z-index:2;margin-top:12px;background:rgba(255,255,255,.94);border-radius:20px;padding:10px;display:flex;justify-content:center}
+.unit-cizim svg{display:block;width:100%;max-width:460px;height:auto;border-radius:14px}
 
-.unit-title p{
-  margin:7px auto;
-  max-width:800px;
-  line-height:1.55;
-  font-size:18px;
-}
-
-/* KONU BAŞLIKLARI */
-
+/* KUTULAR */
 .section-box{
-  background:white;
-  padding:22px;
-  margin-top:22px;
-  border-radius:25px;
-  box-shadow:0 4px 12px rgba(0,0,0,.14);
+  background:#fff;border-radius:24px;padding:18px 16px 20px;margin-bottom:18px;
+  box-shadow:0 8px 20px rgba(90,70,50,.10);
+  border:3px solid #fff;
+  position:relative;
 }
-
 .section-box h2{
-  margin-top:0;
-  text-align:center;
-  font-size:27px;
+  margin:0 0 6px;font-size:21px;display:flex;align-items:center;gap:9px;
 }
+.section-box h2 .cizgi{flex:1;height:6px;border-radius:6px;background:repeating-linear-gradient(90deg,#ffd9a6 0 12px,transparent 12px 20px)}
+.bolum-not{margin:0 0 14px;font-size:14.5px;opacity:.75}
 
-.topic-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:14px;
+/* BELİRLİ GÜN VE HAFTALAR */
+.gunler{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:11px}
+.gun-kart{
+  display:flex;gap:11px;align-items:center;
+  background:linear-gradient(135deg,#fffaf0,#fff);
+  border:2px solid #ffe2b8;border-left:9px solid var(--gun-renk,#ffb74d);
+  border-radius:16px;padding:10px 12px;
+  transition:transform .16s;
 }
+.gun-kart:hover{transform:translateY(-3px) rotate(-.6deg)}
+.gun-kart .gun-emoji{font-size:29px}
+.gun-kart b{display:block;font-size:14.5px;line-height:1.25}
+.gun-kart span{font-size:12.5px;opacity:.72}
 
+/* KONU KARTLARI */
+.topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:16px}
 .topic-card{
-  background:#fff9ed;
-  border:3px solid #ffe0a5;
-  border-radius:20px;
-  padding:16px;
-  text-align:center;
-  cursor:pointer;
-  transition:.2s;
-  min-height:177px;
+  background:linear-gradient(180deg,#ffffff,#fffdf7);
+  border:3px solid #ffeccc;border-radius:24px;
+  overflow:hidden;position:relative;
+  box-shadow:0 6px 16px rgba(120,90,60,.10);
+  transition:transform .18s, box-shadow .18s;
 }
-
-.topic-card:hover{
-  transform:translateY(-5px);
-  background:#fff2cd;
+.topic-card:hover{transform:translateY(-5px);box-shadow:0 14px 26px rgba(120,90,60,.18)}
+.topic-card .kart-no{
+  position:absolute;top:10px;left:10px;z-index:3;
+  background:#fff;color:#333;font-weight:700;font-size:13px;
+  width:30px;height:30px;border-radius:50%;display:grid;place-items:center;
+  box-shadow:0 3px 7px rgba(0,0,0,.18);
 }
-
-.topic-card.open{
-  background:#e8f5ff;
-  border-color:#90caf9;
+.kart-gorsel{background:#eaf6ff;padding:0;line-height:0}
+.kart-gorsel svg{width:100%;height:auto;display:block}
+.kart-govde{padding:13px 14px 16px}
+.topic-card h3{margin:2px 0 6px;font-size:18px;display:flex;gap:8px;align-items:center}
+.topic-short{font-size:14.5px;opacity:.8;margin-bottom:10px}
+.ogren-listesi{margin:0 0 10px;padding-left:20px;font-size:14.5px;line-height:1.65}
+.ogren-listesi li{margin-bottom:3px}
+.bilgi-kutu{
+  background:#fff6d8;border:2px dashed #f2c14e;border-radius:14px;
+  padding:9px 11px;font-size:13.8px;line-height:1.5;
 }
-
-.topic-icon{
-  font-size:48px;
+.bilgi-kutu b{display:block;margin-bottom:2px}
+.kart-detay{display:none}
+.kart-detay.acik{display:block;animation:ac .3s ease}
+@keyframes ac{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.detay-dugme{
+  border:none;cursor:pointer;color:#fff;font-weight:700;font-size:14px;
+  padding:9px 15px;border-radius:14px;box-shadow:0 4px 0 rgba(0,0,0,.15);
+  margin-right:7px;margin-top:4px;
 }
+.detay-dugme:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(0,0,0,.15)}
 
-.topic-card h3{
-  margin:8px 0;
-  font-size:19px;
-}
-
-.topic-short{
-  font-size:15px;
-  line-height:1.4;
-}
-
-.topic-detail{
-  display:none;
-  margin-top:12px;
-  padding-top:12px;
-  border-top:2px dashed #90caf9;
-  font-size:15px;
-  line-height:1.55;
-  text-align:left;
-}
-
-.topic-card.open .topic-detail{
-  display:block;
-}
-
-/* DİNLEME */
-
+/* KONU ANLATIMI */
 .lesson-text{
-  background:#fff9e5;
-  border-left:8px solid var(--sari);
-  border-radius:14px;
-  padding:17px;
-  font-size:18px;
-  line-height:1.75;
+  background:#f3fbff;border:2px solid #cfeaff;border-radius:18px;
+  padding:15px 16px;font-size:17px;line-height:1.75;
 }
-
-.button-row{
-  display:flex;
-  justify-content:center;
-  gap:11px;
-  flex-wrap:wrap;
-  margin-top:15px;
+.button-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.general-button{
+  border:none;cursor:pointer;color:#fff;font-weight:700;font-size:15.5px;
+  padding:11px 18px;border-radius:16px;box-shadow:0 4px 0 rgba(0,0,0,.16);
 }
+.general-button:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(0,0,0,.16)}
+.listen-button{background:var(--yesil)}
+.stop-button{background:var(--kirmizi)}
 
-button.general-button{
-  border:none;
-  border-radius:16px;
-  padding:12px 17px;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
-  color:white;
-  touch-action:manipulation;
+/* DOĞRU DAVRANIŞ */
+.davranis-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.davranis-kutu{border-radius:20px;padding:13px 14px}
+.davranis-kutu.iyi{background:#eaf9ec;border:3px solid #a8e0b4}
+.davranis-kutu.kotu{background:#ffeceb;border:3px solid #ffb9b4}
+.davranis-kutu h4{margin:0 0 9px;font-size:17px}
+.davranis-kutu ul{margin:0;padding-left:19px;font-size:14.6px;line-height:1.7}
+
+/* PERFORMANS GÖREVİ */
+.performans{
+  background:linear-gradient(135deg,#fff1f6,#fff9ec);
+  border:3px dashed #ffa4c4;border-radius:22px;padding:15px 16px;
 }
+.performans h4{margin:0 0 8px;font-size:18px}
+.performans ol{margin:0;padding-left:21px;font-size:15px;line-height:1.75}
 
-.listen-button{background:var(--mavi);}
-.stop-button{background:var(--kirmizi);}
-
-/* OYUN MENÜSÜ */
-
-.game-menu{
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-bottom:17px;
+/* TEKRAR ZAMANI (TEST) */
+.soru-kart{
+  background:#f7f4ff;border:3px solid #dcd0ff;border-radius:20px;
+  padding:14px 15px;margin-bottom:13px;
 }
-
-.game-menu button{
-  border:none;
-  border-radius:17px;
-  padding:12px 15px;
-  font-weight:bold;
-  font-size:16px;
-  color:white;
-  cursor:pointer;
-  touch-action:manipulation;
+.soru-kart .soru-metin{font-size:16.5px;font-weight:700;margin-bottom:10px}
+.secenekler{display:grid;gap:9px}
+.secenek{
+  text-align:left;border:2px solid #cfc3f5;background:#fff;color:#463a5e;
+  padding:10px 13px;border-radius:14px;font-size:15px;cursor:pointer;
+  transition:transform .12s;
 }
+.secenek:hover{transform:translateX(4px)}
+.secenek.dogru{background:#d9f7de;border-color:#5fbf72;font-weight:700}
+.secenek.yanlis{background:#ffe3e0;border-color:#ef8b82}
+.test-sonuc{font-size:16.5px;font-weight:700;text-align:center;padding:10px}
 
-.balloon-button{background:#f06a57;}
-.order-button{background:#50a965;}
-.memory-button{background:#8c55b0;}
+/* OYUNLAR */
+.game-menu{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.balloon-button{background:var(--mavi);border:none;color:#fff;font-weight:700;font-size:15px;padding:11px 17px;border-radius:16px;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.16)}
+.order-button{background:var(--mor);border:none;color:#fff;font-weight:700;font-size:15px;padding:11px 17px;border-radius:16px;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.16)}
+.memory-button{background:var(--turuncu);border:none;color:#fff;font-weight:700;font-size:15px;padding:11px 17px;border-radius:16px;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.16)}
+.game-area{background:#fbfbff;border:3px solid #e6e6ff;border-radius:20px;padding:14px;min-height:150px}
+.game-message{text-align:center;font-size:16px;opacity:.85}
+.score-area{display:flex;gap:12px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.score-box{background:#fff3cd;border:2px solid #ffd76a;border-radius:16px;padding:8px 16px;font-weight:700}
 
-.game-area{
-  min-height:370px;
-  padding:18px;
-  text-align:center;
-  background:#f4fbff;
-  border:3px dashed #91c8eb;
-  border-radius:21px;
-}
-
-.game-message{
-  min-height:38px;
-  font-size:21px;
-  font-weight:bold;
-  color:#70483b;
-}
-
-/* BALON OYUNU */
-
-.balloon-info{
-  font-size:17px;
-  margin:10px auto 18px;
-}
-
-.balloon-board{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  align-items:flex-end;
-  gap:42px 18px;
-  padding:22px 5px 45px;
-}
-
+.balloon-info{text-align:center;font-size:16px;margin-bottom:10px;font-weight:700}
+.balloon-board{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
 .balloon{
-  width:164px;
-  min-height:150px;
-  padding:20px 14px;
   position:relative;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border:4px solid rgba(255,255,255,.7);
-  border-radius:50% 50% 46% 46%;
-  color:white;
-  font-size:15px;
-  font-weight:bold;
-  line-height:1.35;
-  box-shadow:inset -11px -11px rgba(0,0,0,.12),0 6px 9px rgba(0,0,0,.22);
-  cursor:pointer;
-  transition:.25s;
-  touch-action:manipulation;
+  width:132px;min-height:108px;border-radius:50% 50% 46% 46%;
+  color:#fff;font-weight:700;font-size:14.5px;display:grid;place-items:center;
+  padding:12px;cursor:pointer;text-align:center;border:none;
+  box-shadow:inset -8px -8px 16px rgba(0,0,0,.13);
+  animation:salin 3s ease-in-out infinite;
 }
-
-.balloon:hover{
-  transform:translateY(-6px) scale(1.04);
+.balloon::after{
+  content:"";position:absolute;bottom:-16px;left:50%;width:2px;height:16px;
+  background:rgba(0,0,0,.25);transform:translateX(-50%);
 }
-
-.balloon:after{
-  content:"";
-  position:absolute;
-  width:3px;
-  height:38px;
-  bottom:-42px;
-  background:#7c5a4a;
+.balloon-board{padding-bottom:14px}
+@keyframes salin{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.order-help{text-align:center;font-size:15px;margin-bottom:10px}
+.order-board{display:grid;gap:9px;max-width:520px;margin:0 auto}
+.order-item{
+  background:#fff;border:2px solid #d9c9ff;border-radius:14px;padding:11px 13px;
+  font-size:15px;cursor:grab;display:flex;gap:10px;align-items:center;
 }
-
-.balloon:nth-child(5n+1){background:#ef5350;}
-.balloon:nth-child(5n+2){background:#42a5f5;}
-.balloon:nth-child(5n+3){background:#ab47bc;}
-.balloon:nth-child(5n+4){background:#ff9800;}
-.balloon:nth-child(5n+5){background:#26a69a;}
-
-.balloon.popped{
-  opacity:0;
-  transform:scale(1.7) rotate(25deg);
-  pointer-events:none;
+.order-number{font-weight:700;color:#7e57c2}
+.memory-board{display:grid;grid-template-columns:repeat(4,minmax(64px,1fr));gap:10px;max-width:460px;margin:0 auto}
+.memory-card{aspect-ratio:1/1;perspective:600px;cursor:pointer}
+.memory-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.memory-card.acik .memory-inner{transform:rotateY(180deg)}
+.memory-front,.memory-back{
+  position:absolute;inset:0;border-radius:14px;display:grid;place-items:center;
+  backface-visibility:hidden;font-size:26px;
 }
-
-/* SIRALAMA OYUNU */
-
-.order-help{
-  background:#fff3cd;
-  border-radius:13px;
-  padding:12px;
-  font-size:16px;
-  margin:10px auto 18px;
-  max-width:700px;
-}
-
-.order-board{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:13px;
-  margin:20px auto;
-}
-
-.order-card{
-  width:175px;
-  min-height:130px;
-  border:4px solid #ef9c42;
-  border-radius:19px;
-  background:#ffe0a3;
-  padding:13px;
-  font-size:17px;
-  font-weight:bold;
-  color:#56372b;
-  cursor:pointer;
-  box-shadow:0 5px 8px rgba(0,0,0,.18);
-  touch-action:manipulation;
-}
-
-.order-card:hover{
-  transform:translateY(-3px);
-}
-
-.order-card.selected{
-  background:#fff176;
-  border-color:#2d8ae0;
-  outline:5px solid #90caf9;
-  transform:scale(1.05);
-}
-
-.order-number{
-  display:block;
-  font-size:29px;
-  margin-bottom:6px;
-}
-
-/* KART ÇEVİRME */
-
-.memory-board{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(110px,150px));
-  justify-content:center;
-  gap:14px;
-  margin:20px auto;
-}
-
-.memory-card{
-  height:130px;
-  cursor:pointer;
-  perspective:900px;
-  touch-action:manipulation;
-}
-
-.memory-inner{
-  width:100%;
-  height:100%;
-  position:relative;
-  transform-style:preserve-3d;
-  transition:transform .45s;
-}
-
-.memory-card.open .memory-inner,
-.memory-card.matched .memory-inner{
-  transform:rotateY(180deg);
-}
-
-.memory-front,
-.memory-back{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:18px;
-  backface-visibility:hidden;
-  box-shadow:0 4px 8px rgba(0,0,0,.2);
-}
-
-.memory-front{
-  color:white;
-  background:linear-gradient(135deg,#5e9de0,#8e65bb);
-  font-size:48px;
-}
-
-.memory-back{
-  background:white;
-  border:4px solid #a5d6a7;
-  transform:rotateY(180deg);
-  flex-direction:column;
-  padding:8px;
-  font-size:42px;
-}
-
-.memory-word{
-  margin-top:5px;
-  color:#513b31;
-  font-size:15px;
-  font-weight:bold;
-}
-
-.memory-card.matched .memory-back{
-  background:#d8f4da;
-  border-color:#55af68;
-}
-
-/* PUAN */
-
-.score-area{
-  margin-top:17px;
-  display:flex;
-  justify-content:center;
-  gap:15px;
-  flex-wrap:wrap;
-}
-
-.score-box{
-  padding:9px 15px;
-  border-radius:18px;
-  background:#fff7c9;
-  border:3px solid #ffd54f;
-  font-size:18px;
-  font-weight:bold;
-}
+.memory-front{background:linear-gradient(135deg,#4285d4,#6aa9ef);color:#fff}
+.memory-back{background:#fff;border:3px solid #ffd76a;transform:rotateY(180deg);flex-direction:column}
+.memory-word{font-size:13px;font-weight:700;margin-top:2px}
 
 footer{
-  margin-top:25px;
-  padding:23px;
-  text-align:center;
-  background:#513a31;
-  color:white;
+  text-align:center;padding:22px 14px 30px;font-size:17px;
+  background:linear-gradient(135deg,#ff7043,#ffbd28);color:#fff;
+  box-shadow:0 -4px 14px rgba(0,0,0,.15);
 }
+.imza{margin-top:8px;font-size:14.5px;font-weight:700;opacity:.95}
 
-@media(max-width:650px){
-  .tabs{
-    position:relative;
-  }
-
-  .tabs button{
-    font-size:13px;
-    padding:10px;
-  }
-
-  .memory-board{
-    grid-template-columns:repeat(2,minmax(120px,150px));
-  }
-
-  .balloon{
-    width:140px;
-    min-height:135px;
-    font-size:14px;
-  }
-
-  .order-card{
-    width:145px;
-    min-height:115px;
-    font-size:15px;
-  }
-
-  .lesson-text{
-    font-size:16px;
-  }
+@media(max-width:640px){
+  .davranis-grid{grid-template-columns:1fr}
+  .memory-board{grid-template-columns:repeat(3,1fr)}
+  .balloon{width:118px;min-height:98px;font-size:13.5px}
+  .lesson-text{font-size:16px}
+  main{padding:12px 10px 30px}
 }
 </style>
-<meta name="description" content="1. Sınıf Hayat Bilgisi - Dijital Öğretmen'den ücretsiz, MEB müfredatına (Maarif Modeli) uygun ilkokul eğitim materyali. Hasan Tutuş tarafından hazırlanmıştır.">
+<meta name="description" content="1. Sınıf Hayat Bilgisi - Dijital Öğretmen'den ücretsiz, MEB müfredatına (Türkiye Yüzyılı Maarif Modeli) uygun ilkokul eğitim materyali. 6 öğrenme alanı, konu anlatımı, görseller, etkinlik ve oyunlar.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:site_name" content="Dijital Öğretmen">
 <meta property="og:title" content="1. Sınıf Hayat Bilgisi">
-<meta property="og:description" content="1. Sınıf Hayat Bilgisi - Dijital Öğretmen'den ücretsiz, MEB müfredatına (Maarif Modeli) uygun ilkokul eğitim materyali. Hasan Tutuş tarafından hazırlanmıştır.">
+<meta property="og:description" content="1. Sınıf Hayat Bilgisi - 6 öğrenme alanı, konu anlatımı, görsel destekli konu kartları, tekrar testi ve oyunlar.">
 <meta property="og:url" content="https://oogretmen1-tech.github.io/1-sinif-hayat-bilgisi.html">
 <meta property="og:image" content="https://oogretmen1-tech.github.io/logo.png">
 <meta name="twitter:card" content="summary">
@@ -521,198 +318,764 @@ footer{
 <body>
 
 <header>
-  <div style="font-size:54px">🏫 📚 🌈 🎈</div>
+  <div class="balon" style="width:90px;height:90px;background:#fff;left:6%;top:14%"></div>
+  <div class="balon" style="width:56px;height:56px;background:#fff;right:9%;top:22%;animation-delay:2s"></div>
+  <div class="balon" style="width:38px;height:38px;background:#fff;right:26%;top:6%;animation-delay:4s"></div>
+  <div class="header-emoji"><span>🏫</span><span>🌈</span><span>🇹🇷</span><span>🌳</span><span>🎨</span></div>
   <h1>1. Sınıf Hayat Bilgisi</h1>
-  <p>Konuları öğren, dinle, oyunlarla pekiştir!</p>
+  <p>Türkiye Yüzyılı Maarif Modeli · 6 Öğrenme Alanı</p>
+  <div class="rozet-satiri">
+    <span class="rozet">📚 Konu Anlatımı</span>
+    <span class="rozet">🖼️ Görsellerle</span>
+    <span class="rozet">🎯 Performans Görevi</span>
+    <span class="rozet">🧠 Tekrar Testi</span>
+    <span class="rozet">🎮 Oyunlar</span>
+  </div>
 </header>
 
 <nav class="tabs" id="tabs"></nav>
 
 <main>
-  <section class="unit-title">
-    <div id="unitEmoji" class="unit-emoji"></div>
-    <h2 id="unitName"></h2>
+
+  <section class="unit-title" id="unitTitle">
+    <div class="unit-head">
+      <div id="unitEmoji" class="unit-emoji"></div>
+      <div>
+        <span class="alan-etiket" id="unitLabel"></span>
+        <h2 id="unitName"></h2>
+      </div>
+    </div>
     <p id="unitDescription"></p>
+    <div class="unit-cizim" id="unitCizim"></div>
   </section>
 
   <section class="section-box">
-    <h2>📚 Konu Başlıklarımız</h2>
-    <p style="text-align:center">
-      Bir konu kartına basarak ayrıntılı açıklamasını okuyabilirsin.
-    </p>
+    <h2>📅 Belirli Gün ve Haftalar <span class="cizgi"></span></h2>
+    <p class="bolum-not">Bu öğrenme alanında kutlayacağımız, anacağımız özel gün ve haftalar:</p>
+    <div class="gunler" id="gunlerGrid"></div>
+  </section>
+
+  <section class="section-box">
+    <h2>📚 Konularımız <span class="cizgi"></span></h2>
+    <p class="bolum-not">Karta dokun, çizimi incele; “Devamını Oku” ile konunun tamamını öğren.</p>
     <div class="topic-grid" id="topicGrid"></div>
   </section>
 
   <section class="section-box">
-    <h2>🎧 Ünitenin Konu Anlatımı</h2>
+    <h2>🎧 Öğrenme Alanının Konu Anlatımı <span class="cizgi"></span></h2>
     <div id="lessonText" class="lesson-text"></div>
-
     <div class="button-row">
-      <button class="general-button listen-button" onclick="readLesson()">
-        🔊 Konu Anlatımını Dinle
-      </button>
-      <button class="general-button stop-button" onclick="stopVoice()">
-        ⏹ Dinlemeyi Durdur
-      </button>
+      <button class="general-button listen-button" onclick="readLesson()">🔊 Konu Anlatımını Dinle</button>
+      <button class="general-button stop-button" onclick="stopVoice()">⏹️ Dinlemeyi Durdur</button>
     </div>
   </section>
 
   <section class="section-box">
-    <h2>🎮 Oyun Alanı</h2>
-
-    <div class="game-menu">
-      <button class="balloon-button" onclick="startBalloonGame()">
-        🎈 Doğru Balonu Patlat
-      </button>
-
-      <button class="order-button" onclick="startOrderGame()">
-        🚂 Sırala ve Düzenle
-      </button>
-
-      <button class="memory-button" onclick="startMemoryGame()">
-        🃏 Kart Çevirme
-      </button>
-    </div>
-
-    <div class="game-area">
-      <div class="game-message" id="gameMessage">
-        Bir oyun seçerek başlayabilirsin! 🌟
+    <h2>✅ Doğru Davranış – ❌ Yanlış Davranış <span class="cizgi"></span></h2>
+    <div class="davranis-grid">
+      <div class="davranis-kutu iyi">
+        <h4>👍 Böyle Yaparız</h4>
+        <ul id="iyiListe"></ul>
       </div>
+      <div class="davranis-kutu kotu">
+        <h4>👎 Böyle Yapmayız</h4>
+        <ul id="kotuListe"></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-box">
+    <h2>🎯 Performans Görevi <span class="cizgi"></span></h2>
+    <div class="performans">
+      <h4 id="perfBaslik"></h4>
+      <p id="perfAciklama" style="margin:0 0 8px;font-size:15px"></p>
+      <ol id="perfAdimlar"></ol>
+    </div>
+  </section>
+
+  <section class="section-box">
+    <h2>🧠 Tekrar Zamanı <span class="cizgi"></span></h2>
+    <p class="bolum-not">Öğrendiklerini sınayalım. Doğru seçeneği işaretle!</p>
+    <div id="testAlani"></div>
+    <div class="test-sonuc" id="testSonuc"></div>
+    <div class="button-row">
+      <button class="general-button" style="background:var(--mor)" onclick="renderTest()">🔄 Testi Yeniden Başlat</button>
+    </div>
+  </section>
+
+  <section class="section-box">
+    <h2>🎮 Oyun Alanı <span class="cizgi"></span></h2>
+    <div class="game-menu">
+      <button class="balloon-button" onclick="startBalloonGame()">🎈 Doğru Balonu Patlat</button>
+      <button class="order-button" onclick="startOrderGame()">🔢 Sırala ve Düzenle</button>
+      <button class="memory-button" onclick="startMemoryGame()">🃏 Kart Çevirme</button>
+    </div>
+    <div class="game-area">
+      <div class="game-message" id="gameMessage">Yukarıdan bir oyun seç ve başla! 🎉</div>
       <div id="gameContent"></div>
     </div>
-
     <div class="score-area">
       <div class="score-box">⭐ Puan: <span id="score">0</span></div>
       <div class="score-box">🏆 Yıldız: <span id="stars">0</span></div>
     </div>
   </section>
+
 </main>
 
 <footer>
   🌟 Hayat Bilgisi öğrenmek çok güzel! 🌟
-<p class="site-notu" style="text-align:center;font-size:.78rem;opacity:.65;padding:6px 0 0;">Bu sayfa en son 3 Eylül 2026 tarihinde güncellendi.</p></footer>
+  <div class="imza">Dijital Öğretmen · Hasan Tutuş</div>
+  <p class="site-notu" style="text-align:center;font-size:.78rem;opacity:.75;padding:6px 0 0;margin:0;">Bu sayfa en son 10 Eylül 2026 tarihinde güncellendi.</p>
+</footer>
 
 <script>
+/* ============================================================
+   ÇİZİM KİTAPLIĞI  —  her konu için özgün SVG görsel
+   ============================================================ */
+
+const SVGBAS = 'viewBox="0 0 320 170" xmlns="http://www.w3.org/2000/svg"';
+
+function _gokyuzu(a="#dff1ff",b="#c9e9ff"){
+  return `<defs><linearGradient id="g${Math.floor(Math.random()*99999)}" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs>
+  <rect width="320" height="170" fill="${a}"/>`;
+}
+function _zemin(renk="#9fdc9f",y=132){
+  return `<path d="M0 ${y} Q80 ${y-14} 160 ${y} T320 ${y} L320 170 L0 170 Z" fill="${renk}"/>`;
+}
+function _gunes(x=286,y=28,r=20){
+  return `<g><circle cx="${x}" cy="${y}" r="${r}" fill="#ffd54f"/>
+  <g stroke="#ffd54f" stroke-width="4" stroke-linecap="round">
+  <line x1="${x-r-9}" y1="${y}" x2="${x-r-3}" y2="${y}"/><line x1="${x+r+3}" y1="${y}" x2="${x+r+9}" y2="${y}"/>
+  <line x1="${x}" y1="${y-r-9}" x2="${x}" y2="${y-r-3}"/><line x1="${x-15}" y1="${y-15}" x2="${x-11}" y2="${y-11}"/>
+  <line x1="${x+11}" y1="${y+11}" x2="${x+15}" y2="${y+15}"/><line x1="${x-15}" y1="${y+15}" x2="${x-11}" y2="${y+11}"/></g></g>`;
+}
+function _bulut(x,y,s=1,renk="#ffffff"){
+  return `<g transform="translate(${x},${y}) scale(${s})" fill="${renk}" opacity=".95">
+  <ellipse cx="0" cy="0" rx="20" ry="13"/><ellipse cx="17" cy="4" rx="15" ry="10"/><ellipse cx="-17" cy="4" rx="14" ry="9"/></g>`;
+}
+function _agac(x,y,s=1,govde="#8d6e63",yaprak="#4caf50"){
+  return `<g transform="translate(${x},${y}) scale(${s})">
+  <rect x="-5" y="-16" width="10" height="26" rx="4" fill="${govde}"/>
+  <circle cx="0" cy="-30" r="20" fill="${yaprak}"/><circle cx="-15" cy="-20" r="14" fill="${yaprak}"/>
+  <circle cx="15" cy="-20" r="14" fill="${yaprak}"/></g>`;
+}
+/* çocuk figürü */
+function _cocuk(x,y,s=1,shirt="#ef5350",hair="#4e342e",skin="#f7d1ae",kol="normal"){
+  const kollar = kol==="el-kaldir"
+    ? `<path d="M-12 24 L-24 34" stroke="${skin}" stroke-width="7" stroke-linecap="round"/>
+       <path d="M12 24 L24 4" stroke="${skin}" stroke-width="7" stroke-linecap="round"/><circle cx="26" cy="1" r="5" fill="${skin}"/>`
+    : kol==="el-salla"
+    ? `<path d="M-12 24 L-23 33" stroke="${skin}" stroke-width="7" stroke-linecap="round"/>
+       <path d="M12 22 L25 12" stroke="${skin}" stroke-width="7" stroke-linecap="round"/><circle cx="27" cy="10" r="5.5" fill="${skin}"/>`
+    : kol==="dur"
+    ? `<path d="M-12 24 L-23 33" stroke="${skin}" stroke-width="7" stroke-linecap="round"/>
+       <path d="M12 22 L28 18" stroke="${skin}" stroke-width="7" stroke-linecap="round"/><circle cx="31" cy="17" r="7" fill="${skin}"/>`
+    : `<path d="M-12 24 L-22 34" stroke="${skin}" stroke-width="7" stroke-linecap="round"/>
+       <path d="M12 24 L22 34" stroke="${skin}" stroke-width="7" stroke-linecap="round"/>`;
+  return `<g transform="translate(${x},${y}) scale(${s})">
+  <ellipse cx="0" cy="62" rx="19" ry="4.5" fill="rgba(0,0,0,.10)"/>
+  ${kollar}
+  <rect x="-13" y="16" width="26" height="31" rx="12" fill="${shirt}"/>
+  <rect x="-10" y="44" width="8" height="17" rx="4" fill="#39506e"/>
+  <rect x="2" y="44" width="8" height="17" rx="4" fill="#39506e"/>
+  <rect x="-12" y="58" width="10" height="5" rx="2.5" fill="#37474f"/>
+  <rect x="2" y="58" width="10" height="5" rx="2.5" fill="#37474f"/>
+  <circle cx="0" cy="2" r="14" fill="${skin}"/>
+  <path d="M-14 0 a14 14 0 0 1 28 0 q-7 -9 -14 -7 q-7 -2 -14 7 z" fill="${hair}"/>
+  <circle cx="-5" cy="3" r="1.8" fill="#3a2a22"/><circle cx="5" cy="3" r="1.8" fill="#3a2a22"/>
+  <circle cx="-9" cy="7" r="2.6" fill="#ffb0a6" opacity=".7"/><circle cx="9" cy="7" r="2.6" fill="#ffb0a6" opacity=".7"/>
+  <path d="M-4.5 8.5 q4.5 4.5 9 0" stroke="#3a2a22" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  </g>`;
+}
+function _balon(x,y,renk,s=1){
+  return `<g transform="translate(${x},${y}) scale(${s})"><ellipse cx="0" cy="0" rx="11" ry="14" fill="${renk}"/>
+  <path d="M0 14 q3 5 0 9 q-3 4 0 8" stroke="#c9a227" stroke-width="1.6" fill="none"/></g>`;
+}
+function _konusma(x,y,metin,renk="#fff",yazi="#4c342b",w=86){
+  return `<g transform="translate(${x},${y})">
+  <rect x="0" y="0" width="${w}" height="30" rx="13" fill="${renk}" stroke="#ffd76a" stroke-width="2.5"/>
+  <path d="M14 30 l4 10 l10 -10 z" fill="${renk}"/>
+  <text x="${w/2}" y="20" font-size="14" font-family="Andika,Arial" fill="${yazi}" text-anchor="middle" font-weight="bold">${metin}</text></g>`;
+}
+function _kalp(x,y,s=1,renk="#ef5350"){
+  return `<path transform="translate(${x},${y}) scale(${s})" d="M0 8 C-9 0 -9 -9 -3 -9 C-1 -9 0 -7 0 -6 C0 -7 1 -9 3 -9 C9 -9 9 0 0 8 Z" fill="${renk}"/>`;
+}
+
+const CIZIM = {
+
+/* 1. ALAN ------------------------------------------------ */
+tanisalim(){ return `<svg ${SVGBAS}>${_gokyuzu("#e8f6ff")}${_gunes()}${_bulut(52,32,1)}${_zemin("#a8e6a1")}
+${_konusma(96,14,"Merhaba!",'#fff','#e2622f',92)}
+${_cocuk(96,66,1.05,"#42a5f5","#4e342e","#f7d1ae","el-salla")}
+${_cocuk(214,66,1.05,"#ec407a","#5d4037","#f0c39a","el-salla")}
+${_kalp(160,54,1.5,"#ef5350")}${_kalp(178,40,1,"#ffa1c4")}
+<text x="160" y="160" font-size="15" font-family="Andika,Arial" fill="#3f6d3f" text-anchor="middle" font-weight="bold">Adım ne? Sen kimsin?</text></svg>`},
+
+okul(){ return `<svg ${SVGBAS}>${_gokyuzu("#e3f3ff")}${_gunes(30,26,17)}${_bulut(240,30,1.1)}${_zemin("#9fdc9f",128)}
+<rect x="92" y="52" width="136" height="76" rx="7" fill="#ffe0b2" stroke="#e0a96d" stroke-width="3"/>
+<path d="M84 54 L160 20 L236 54 Z" fill="#ef5350"/>
+<rect x="150" y="94" width="24" height="34" rx="4" fill="#8d6e63"/>
+<rect x="106" y="68" width="24" height="20" rx="3" fill="#90caf9" stroke="#5c9ed6" stroke-width="2"/>
+<rect x="146" y="68" width="24" height="20" rx="3" fill="#90caf9" stroke="#5c9ed6" stroke-width="2"/>
+<rect x="186" y="68" width="24" height="20" rx="3" fill="#90caf9" stroke="#5c9ed6" stroke-width="2"/>
+<rect x="256" y="60" width="4" height="68" fill="#9e9e9e"/>
+<path d="M260 62 h34 v22 h-34 z" fill="#e30a17"/><circle cx="272" cy="73" r="7" fill="#fff"/><circle cx="275" cy="73" r="5.6" fill="#e30a17"/>
+<text x="277" y="76" font-size="9" fill="#fff" text-anchor="middle">★</text>
+${_agac(46,128,.85)}${_cocuk(64,96,.7,"#ffca28","#3e2723")}
+<text x="160" y="46" font-size="14" font-family="Andika,Arial" fill="#5d4037" text-anchor="middle" font-weight="bold">OKULUM</text></svg>`},
+
+kurallar(){ return `<svg ${SVGBAS}><rect width="320" height="170" fill="#fff6e6"/>
+<rect x="16" y="18" width="176" height="112" rx="8" fill="#2e7d5b" stroke="#e0c49a" stroke-width="6"/>
+<text x="104" y="44" font-size="15" fill="#fff" font-family="Andika,Arial" text-anchor="middle" font-weight="bold">SINIF KURALLARI</text>
+<text x="34" y="70" font-size="13.5" fill="#fff" font-family="Andika,Arial">✋ Söz alırım</text>
+<text x="34" y="92" font-size="13.5" fill="#fff" font-family="Andika,Arial">👂 Dinlerim</text>
+<text x="34" y="114" font-size="13.5" fill="#fff" font-family="Andika,Arial">🤝 Paylaşırım</text>
+${_cocuk(250,58,1.05,"#7e57c2","#4e342e","#f7d1ae","el-kaldir")}
+<rect x="206" y="124" width="90" height="10" rx="4" fill="#c69c6d"/>
+<rect x="216" y="134" width="8" height="24" fill="#a97c50"/><rect x="278" y="134" width="8" height="24" fill="#a97c50"/></svg>`},
+
+duygular(){ const yuz=(x,renk,agiz,ad)=>`<g><circle cx="${x}" cy="60" r="30" fill="${renk}" stroke="#e0a800" stroke-width="0"/>
+  <circle cx="${x-10}" cy="52" r="3.6" fill="#4c342b"/><circle cx="${x+10}" cy="52" r="3.6" fill="#4c342b"/>
+  ${agiz}<text x="${x}" y="112" font-size="13" font-family="Andika,Arial" text-anchor="middle" fill="#4c342b" font-weight="bold">${ad}</text></g>`;
+ return `<svg ${SVGBAS}><rect width="320" height="170" fill="#fff2f6"/>
+ ${yuz(48,"#ffd54f",`<path d="M36 70 q12 12 24 0" stroke="#4c342b" stroke-width="3" fill="none" stroke-linecap="round"/>`,"Mutlu")}
+ ${yuz(128,"#90caf9",`<path d="M116 74 q12 -12 24 0" stroke="#4c342b" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="146" cy="62" r="3.4" fill="#42a5f5"/>`,"Üzgün")}
+ ${yuz(208,"#ef9a9a",`<path d="M196 72 h24" stroke="#4c342b" stroke-width="3" stroke-linecap="round"/><path d="M194 44 l14 5 M222 44 l-14 5" stroke="#4c342b" stroke-width="3" stroke-linecap="round"/>`,"Kızgın")}
+ ${yuz(284,"#a5d6a7",`<ellipse cx="284" cy="72" rx="7" ry="9" fill="#4c342b"/>`,"Şaşkın")}
+ <text x="160" y="146" font-size="14.5" font-family="Andika,Arial" text-anchor="middle" fill="#8d5a72" font-weight="bold">Duygularımı tanır, uygun şekilde anlatırım.</text></svg>`},
+
+/* 2. ALAN ------------------------------------------------ */
+saglik(){ return `<svg ${SVGBAS}><rect width="320" height="170" fill="#eafaf0"/>
+${_cocuk(62,54,1.15,"#66bb6a","#3e2723","#f7d1ae")}
+<circle cx="176" cy="46" r="21" fill="#ef5350"/><path d="M176 26 q3 -8 9 -9" stroke="#66bb6a" stroke-width="4" fill="none" stroke-linecap="round"/>
+<rect x="212" y="26" width="26" height="46" rx="8" fill="#81d4fa" stroke="#4fc3f7" stroke-width="3"/><rect x="218" y="18" width="14" height="10" rx="3" fill="#0288d1"/>
+<g transform="translate(262,42)"><rect x="-6" y="-18" width="12" height="34" rx="5" fill="#42a5f5"/><rect x="-9" y="-30" width="18" height="14" rx="5" fill="#fff" stroke="#90a4ae" stroke-width="2"/></g>
+<circle cx="120" cy="118" r="17" fill="#fff" stroke="#4fc3f7" stroke-width="3"/><text x="120" y="124" font-size="17" text-anchor="middle">🧼</text>
+<circle cx="176" cy="122" r="17" fill="#fff" stroke="#66bb6a" stroke-width="3"/><text x="176" y="128" font-size="17" text-anchor="middle">🥦</text>
+<circle cx="232" cy="118" r="17" fill="#fff" stroke="#ffca28" stroke-width="3"/><text x="232" y="124" font-size="17" text-anchor="middle">😴</text>
+<circle cx="286" cy="122" r="17" fill="#fff" stroke="#ef5350" stroke-width="3"/><text x="286" y="128" font-size="17" text-anchor="middle">🤸</text></svg>`},
+
+mahremiyet(){ return `<svg ${SVGBAS}><rect width="320" height="170" fill="#fff4f4"/>
+<circle cx="92" cy="82" r="62" fill="#ffe0e0"/>
+${_cocuk(92,50,1.15,"#ffa726","#4e342e","#f7d1ae","dur")}
+<circle cx="222" cy="72" r="42" fill="#ef5350"/><circle cx="222" cy="72" r="34" fill="#fff"/>
+<text x="222" y="82" font-size="26" font-family="Andika,Arial" fill="#ef5350" text-anchor="middle" font-weight="bold">DUR</text>
+<text x="160" y="150" font-size="13" font-family="Andika,Arial" fill="#b0405a" text-anchor="middle" font-weight="bold">Bedenim bana aittir. “HAYIR!” diyebilirim.</text></svg>`},
+
+trafik(){ return `<svg ${SVGBAS}>${_gokyuzu("#e0f2ff")}${_gunes(292,26,15)}${_bulut(60,26,.9)}
+<rect x="0" y="96" width="320" height="60" fill="#5f6368"/>
+<g fill="#fff">${[0,1,2,3,4,5].map(i=>`<rect x="${18+i*50}" y="102" width="30" height="48" rx="3"/>`).join("")}</g>
+<rect x="0" y="150" width="320" height="20" fill="#bdbdbd"/>
+<g transform="translate(40,26)"><rect x="0" y="0" width="34" height="76" rx="10" fill="#37474f"/>
+<circle cx="17" cy="18" r="10" fill="#ef5350"/><circle cx="17" cy="40" r="10" fill="#ffca28" opacity=".45"/><circle cx="17" cy="62" r="10" fill="#66bb6a" opacity=".45"/>
+<rect x="14" y="76" width="6" height="22" fill="#546e7a"/></g>
+${_cocuk(208,52,.95,"#42a5f5","#3e2723","#f0c39a")}
+<g transform="translate(250,60)"><rect x="0" y="14" width="56" height="24" rx="8" fill="#ef5350"/><rect x="12" y="0" width="30" height="18" rx="6" fill="#ef5350"/>
+<rect x="16" y="4" width="22" height="12" rx="3" fill="#cfe8ff"/><circle cx="14" cy="40" r="7" fill="#37474f"/><circle cx="44" cy="40" r="7" fill="#37474f"/></g></svg>`},
+
+acil(){ return `<svg ${SVGBAS}><rect width="320" height="170" fill="#fff8e1"/>
+<rect x="18" y="42" width="120" height="60" rx="8" fill="#a1887f"/><rect x="18" y="42" width="120" height="12" rx="6" fill="#795548"/>
+<rect x="30" y="102" width="10" height="26" fill="#795548"/><rect x="116" y="102" width="10" height="26" fill="#795548"/>
+<g transform="translate(78,86) scale(.72)">${_cocuk(0,0,1,"#ffca28","#4e342e","#f7d1ae")}</g>
+<text x="78" y="34" font-size="13" font-family="Andika,Arial" fill="#6d4c41" text-anchor="middle" font-weight="bold">ÇÖK · KAPAN · TUTUN</text>
+<circle cx="228" cy="70" r="44" fill="#ef5350"/><circle cx="228" cy="70" r="35" fill="#fff"/>
+<text x="228" y="80" font-size="27" font-family="Andika,Arial" fill="#ef5350" text-anchor="middle" font-weight="bold">112</text>
+<g transform="translate(272,124)"><rect x="-30" y="-16" width="60" height="32" rx="7" fill="#66bb6a"/>
+<text x="0" y="6" font-size="13" fill="#fff" font-family="Andika,Arial" text-anchor="middle" font-weight="bold">ÇIKIŞ →</text></g>
+<text x="96" y="150" font-size="13.5" font-family="Andika,Arial" fill="#8d6e63" text-anchor="middle">Acil durum çantam hazır 🎒</text></svg>`},
+
+/* 3. ALAN ------------------------------------------------ */
+ev(){ return `<svg ${SVGBAS}>${_gokyuzu("#eaf6ff")}${_gunes(288,28,16)}${_bulut(56,28,.9)}${_zemin("#a5d6a7",130)}
+<rect x="88" y="62" width="144" height="70" rx="6" fill="#ffe0b2" stroke="#e0a96d" stroke-width="3"/>
+<path d="M78 64 L160 22 L242 64 Z" fill="#ef7043"/>
+<rect x="196" y="34" width="16" height="26" rx="3" fill="#8d6e63"/>
+<rect x="146" y="92" width="28" height="40" rx="4" fill="#a1674a"/><circle cx="168" cy="112" r="2.6" fill="#ffd54f"/>
+<rect x="102" y="78" width="28" height="24" rx="3" fill="#90caf9" stroke="#5c9ed6" stroke-width="2"/>
+<rect x="190" y="78" width="28" height="24" rx="3" fill="#90caf9" stroke="#5c9ed6" stroke-width="2"/>
+${_kalp(204,26,1.2,"#ef5350")}${_kalp(216,14,.8,"#ffa1c4")}
+${_cocuk(46,88,.62,"#42a5f5","#3e2723","#f7d1ae")}${_cocuk(70,84,.72,"#ec407a","#5d4037","#f0c39a")}
+${_cocuk(268,84,.72,"#7e57c2","#4e342e","#f7d1ae")}${_cocuk(292,88,.62,"#66bb6a","#3e2723","#f0c39a")}</svg>`},
+
+nezaket(){ return `<svg ${SVGBAS}><rect width="320" height="170" fill="#f6f1ff"/>
+${_konusma(46,12,"Teşekkür ederim",'#fff','#7e57c2',118)}
+${_konusma(190,18,"Afiyet olsun",'#fff','#ec407a',102)}
+${_cocuk(84,72,1,"#ffca28","#4e342e","#f7d1ae")}
+${_cocuk(226,72,1,"#26a69a","#5d4037","#f0c39a")}
+<rect x="112" y="122" width="98" height="12" rx="5" fill="#c69c6d"/>
+<rect x="122" y="134" width="9" height="26" fill="#a97c50"/><rect x="192" y="134" width="9" height="26" fill="#a97c50"/>
+<ellipse cx="146" cy="120" rx="15" ry="6" fill="#fff" stroke="#d7ccc8" stroke-width="2"/>
+<ellipse cx="180" cy="120" rx="15" ry="6" fill="#fff" stroke="#d7ccc8" stroke-width="2"/></svg>`},
+
+takim(){ return `<svg ${SVGBAS}>${_gokyuzu("#eafff2")}${_zemin("#9fe6b4",132)}
+${_cocuk(80,60,1,"#ef5350","#4e342e","#f7d1ae")}
+${_cocuk(160,60,1,"#42a5f5","#3e2723","#f0c39a")}
+${_cocuk(240,60,1,"#ffca28","#5d4037","#f7d1ae")}
+<path d="M96 84 L144 84 M176 84 L224 84" stroke="#f7d1ae" stroke-width="7" stroke-linecap="round"/>
+${_kalp(160,26,1.4,"#ef5350")}
+<text x="160" y="158" font-size="15" font-family="Andika,Arial" fill="#2e7d5b" text-anchor="middle" font-weight="bold">Birlikte daha güçlüyüz!</text></svg>`},
+
+/* 4. ALAN ------------------------------------------------ */
+ulkem(){ return `<svg ${SVGBAS}>${_gokyuzu("#ddf1ff")}${_gunes(30,26,16)}${_bulut(240,26,1)}
+<path d="M0 118 Q60 78 120 112 Q170 138 220 100 Q270 66 320 108 L320 170 L0 170 Z" fill="#8bc98b"/>
+<path d="M0 140 Q80 120 160 140 T320 138 L320 170 L0 170 Z" fill="#67b96f"/>
+<g transform="translate(150,86)"><rect x="-30" y="0" width="60" height="34" fill="#fff3e0" stroke="#d7b899" stroke-width="2"/>
+<rect x="-10" y="14" width="20" height="20" fill="#a1674a"/><path d="M-34 0 L0 -20 L34 0 Z" fill="#ef5350"/></g>
+<g transform="translate(230,92)"><rect x="0" y="0" width="22" height="30" fill="#fff3e0" stroke="#d7b899" stroke-width="2"/>
+<rect x="26" y="-12" width="20" height="42" fill="#ffe0b2" stroke="#d7b899" stroke-width="2"/></g>
+<g transform="translate(66,88)"><rect x="-3" y="-30" width="6" height="44" fill="#9e9e9e"/>
+<path d="M3 -30 h32 v20 h-32 z" fill="#e30a17"/><circle cx="14" cy="-20" r="6" fill="#fff"/><circle cx="16.5" cy="-20" r="4.8" fill="#e30a17"/></g>
+<text x="160" y="160" font-size="15" font-family="Andika,Arial" fill="#2e6b3a" text-anchor="middle" font-weight="bold">Ülkem Türkiye · Başkentim Ankara</text></svg>`},
+
+bayrak(){ return `<svg ${SVGBAS}><rect width="320" height="170" fill="#fff0f0"/>
+<rect x="30" y="24" width="12" height="132" rx="5" fill="#9e9e9e"/>
+<path d="M42 26 q40 -10 80 0 q40 10 80 0 v70 q-40 10 -80 0 q-40 -10 -80 0 z" fill="#e30a17"/>
+<circle cx="106" cy="62" r="21" fill="#fff"/><circle cx="115" cy="62" r="17" fill="#e30a17"/>
+<text x="142" y="71" font-size="26" fill="#fff" text-anchor="middle">★</text>
+<g transform="translate(228,88)"><rect x="-36" y="-30" width="72" height="60" rx="6" fill="#fffdf5" stroke="#c9a227" stroke-width="3"/>
+<text x="0" y="-8" font-size="12.5" font-family="Andika,Arial" fill="#8d6e63" text-anchor="middle" font-weight="bold">İSTİKLÂL</text>
+<text x="0" y="8" font-size="12.5" font-family="Andika,Arial" fill="#8d6e63" text-anchor="middle" font-weight="bold">MARŞI</text>
+<text x="0" y="24" font-size="10.5" font-family="Andika,Arial" fill="#a1887f" text-anchor="middle">12 Mart 1921</text></g>
+<text x="160" y="158" font-size="12.5" font-family="Andika,Arial" fill="#b71c1c" text-anchor="middle" font-weight="bold">Bayrağıma ve marşıma saygı duyarım.</text></svg>`},
+
+ataturk(){ return `<svg ${SVGBAS}><rect width="320" height="170" fill="#f3f6fb"/>
+<g transform="translate(72,86)"><rect x="-46" y="-52" width="92" height="104" rx="8" fill="#fff" stroke="#c9a227" stroke-width="5"/>
+<circle cx="0" cy="-6" r="22" fill="#cfd8dc"/>
+<path d="M-22 -10 a22 22 0 0 1 44 0 q-12 -14 -24 -9 q-12 -3 -20 9 z" fill="#546e7a"/>
+<path d="M-26 36 q26 -30 52 0 z" fill="#37474f"/>
+<path d="M-8 16 l8 12 l8 -12 q-8 -4 -16 0 z" fill="#eceff1"/>
+<text x="0" y="46" font-size="10.5" font-family="Andika,Arial" fill="#546e7a" text-anchor="middle">1881 - 1938</text></g>
+<g transform="translate(224,92)"><rect x="-56" y="-6" width="112" height="46" fill="#e0d7c6"/>
+${[0,1,2,3,4,5,6].map(i=>`<rect x="${-52+i*15}" y="-40" width="9" height="36" fill="#efe8db"/>`).join("")}
+<path d="M-58 -40 h116 v8 h-116 z" fill="#d6cbb6"/>
+<text x="0" y="58" font-size="12.5" font-family="Andika,Arial" fill="#6d4c41" text-anchor="middle" font-weight="bold">ANITKABİR</text></g>
+<text x="74" y="160" font-size="11.5" font-family="Andika,Arial" fill="#37474f" text-anchor="middle" font-weight="bold">Cumhuriyet'in kurucusu</text></svg>`},
+
+bayram(){ return `<svg ${SVGBAS}>${_gokyuzu("#fff6e0")}${_zemin("#a5d6a7",134)}
+${_balon(40,44,"#ef5350",1.2)}${_balon(74,30,"#42a5f5",1)}${_balon(106,48,"#ffca28",1.1)}
+${_balon(214,34,"#66bb6a",1.1)}${_balon(250,48,"#ab47bc",1)}${_balon(284,32,"#ef5350",1.2)}
+<g transform="translate(160,40)"><path d="M-40 0 q40 -12 80 0 v26 q-40 12 -80 0 z" fill="#e30a17"/>
+<circle cx="0" cy="14" r="9" fill="#fff"/><circle cx="4" cy="14" r="7" fill="#e30a17"/></g>
+${_cocuk(110,84,.95,"#42a5f5","#3e2723","#f7d1ae","el-kaldir")}
+${_cocuk(200,84,.95,"#ec407a","#5d4037","#f0c39a","el-kaldir")}
+<text x="160" y="160" font-size="14.5" font-family="Andika,Arial" fill="#c62828" text-anchor="middle" font-weight="bold">23 Nisan · 19 Mayıs · 30 Ağustos · 29 Ekim</text></svg>`},
+
+dinibayram(){ return `<svg ${SVGBAS}><rect width="320" height="170" fill="#fdf3ff"/>
+<g transform="translate(52,44)"><path d="M0 0 a18 18 0 1 0 6 34 a22 22 0 1 1 -6 -34 z" fill="#ffca28"/>
+<text x="34" y="26" font-size="20" fill="#ffca28">★</text></g>
+${_cocuk(120,74,.95,"#26a69a","#4e342e","#f7d1ae")}
+${_cocuk(210,72,1,"#9575cd","#9e9e9e","#f0c39a")}
+<path d="M138 96 q22 -8 42 -2" stroke="#f7d1ae" stroke-width="7" stroke-linecap="round" fill="none"/>
+${_kalp(168,58,1.2,"#ef5350")}
+<g transform="translate(276,110)"><rect x="-24" y="-20" width="48" height="40" rx="6" fill="#ffb74d"/><rect x="-24" y="-6" width="48" height="8" fill="#ef5350"/>
+<rect x="-4" y="-20" width="8" height="40" fill="#ef5350"/></g>
+<text x="150" y="158" font-size="14" font-family="Andika,Arial" fill="#7b4b8f" text-anchor="middle" font-weight="bold">Bayramda büyüklerimizi ziyaret ederiz.</text></svg>`},
+
+/* 5. ALAN ------------------------------------------------ */
+doga(){ return `<svg ${SVGBAS}>${_gokyuzu("#e6f7ff")}${_gunes(288,26,17)}${_bulut(70,28,1)}
+<path d="M0 108 Q80 66 160 104 Q240 140 320 96 L320 170 L0 170 Z" fill="#8bd08b"/>
+${_zemin("#66bb6a",138)}
+${_agac(52,140,1.1)}${_agac(268,142,.9,"#795548","#43a047")}
+<g transform="translate(140,132)"><circle cx="0" cy="0" r="7" fill="#ef5350"/><circle cx="0" cy="0" r="3" fill="#ffca28"/><rect x="-1.5" y="0" width="3" height="16" fill="#4caf50"/></g>
+<g transform="translate(172,136)"><circle cx="0" cy="0" r="7" fill="#ab47bc"/><circle cx="0" cy="0" r="3" fill="#ffca28"/><rect x="-1.5" y="0" width="3" height="14" fill="#4caf50"/></g>
+<g transform="translate(206,86)"><ellipse cx="0" cy="0" rx="6" ry="9" fill="#ff8a65" transform="rotate(-30)"/><ellipse cx="10" cy="2" rx="6" ry="9" fill="#ffb74d" transform="rotate(30)"/></g>
+<g transform="translate(96,66)"><ellipse cx="0" cy="0" rx="11" ry="8" fill="#42a5f5"/><circle cx="10" cy="-4" r="5.5" fill="#42a5f5"/><path d="M14 -5 l7 2 l-7 2 z" fill="#ffca28"/></g>
+<text x="160" y="162" font-size="14" font-family="Andika,Arial" fill="#2e7d32" text-anchor="middle" font-weight="bold">Doğadaki canlıları tanır, onları korurum.</text></svg>`},
+
+gokyuzu(){ return `<svg ${SVGBAS}><defs><linearGradient id="gk" x1="0" y1="0" x2="1" y2="0">
+<stop offset="0" stop-color="#0d2a5c"/><stop offset=".5" stop-color="#5b8fd6"/><stop offset="1" stop-color="#bfe6ff"/></linearGradient></defs>
+<rect width="320" height="170" fill="url(#gk)"/>
+<circle cx="44" cy="52" r="20" fill="#fff9c4"/><circle cx="52" cy="46" r="17" fill="#0d2a5c"/>
+${[[20,20],[76,24],[100,60],[34,96],[88,104],[16,66]].map(p=>`<text x="${p[0]}" y="${p[1]}" font-size="13" fill="#fff59d">★</text>`).join("")}
+${_gunes(268,50,22)}${_bulut(190,44,1.1)}${_bulut(232,96,.9)}
+<path d="M108 168 a72 72 0 0 1 144 0" fill="none" stroke="#ef5350" stroke-width="7"/>
+<path d="M118 168 a62 62 0 0 1 124 0" fill="none" stroke="#ffca28" stroke-width="7"/>
+<path d="M128 168 a52 52 0 0 1 104 0" fill="none" stroke="#66bb6a" stroke-width="7"/>
+<path d="M138 168 a42 42 0 0 1 84 0" fill="none" stroke="#42a5f5" stroke-width="7"/>
+<text x="60" y="150" font-size="13" font-family="Andika,Arial" fill="#fff" text-anchor="middle" font-weight="bold">Gece</text>
+<text x="278" y="150" font-size="13" font-family="Andika,Arial" fill="#0d47a1" text-anchor="middle" font-weight="bold">Gündüz</text></svg>`},
+
+afet(){ return `<svg ${SVGBAS}><rect width="320" height="170" fill="#fff3e0"/>
+<g transform="translate(78,78) rotate(-4)">
+<rect x="-40" y="-24" width="80" height="54" rx="5" fill="#ffe0b2" stroke="#e0a96d" stroke-width="3"/>
+<path d="M-48 -24 L0 -54 L48 -24 Z" fill="#ef5350"/>
+<rect x="-10" y="0" width="20" height="30" rx="3" fill="#a1674a"/>
+<rect x="-30" y="-12" width="16" height="14" rx="2" fill="#90caf9" stroke="#5c9ed6" stroke-width="2"/>
+<rect x="14" y="-12" width="16" height="14" rx="2" fill="#90caf9" stroke="#5c9ed6" stroke-width="2"/></g>
+<path d="M18 22 l-10 -10 M138 22 l10 -10 M6 66 l-12 0 M150 66 l12 0" stroke="#ff8a65" stroke-width="4" stroke-linecap="round"/>
+<path d="M0 116 q40 10 80 0 t80 0 t80 0 t80 0" stroke="#a1887f" stroke-width="6" fill="none"/>
+<g transform="translate(224,74)"><rect x="-42" y="14" width="84" height="10" rx="4" fill="#c69c6d"/>
+<rect x="-36" y="24" width="8" height="26" fill="#a97c50"/><rect x="28" y="24" width="8" height="26" fill="#a97c50"/>
+<g transform="scale(.62)">${_cocuk(0,-24,1,"#42a5f5","#3e2723","#f7d1ae")}</g></g>
+<text x="224" y="140" font-size="12.5" font-family="Andika,Arial" fill="#6d4c41" text-anchor="middle" font-weight="bold">ÇÖK · KAPAN · TUTUN</text>
+<text x="80" y="150" font-size="12.5" font-family="Andika,Arial" fill="#bf5a1e" text-anchor="middle" font-weight="bold">Deprem · Sel · Yangın</text></svg>`},
+
+geridonusum(){ const kova=(x,renk,ad,ikon)=>`<g transform="translate(${x},78)">
+  <path d="M-22 0 h44 l-5 46 h-34 z" fill="${renk}"/><rect x="-26" y="-10" width="52" height="12" rx="5" fill="${renk}"/>
+  <text x="0" y="30" font-size="19" text-anchor="middle">${ikon}</text>
+  <text x="0" y="62" font-size="11.5" font-family="Andika,Arial" fill="#4c342b" text-anchor="middle" font-weight="bold">${ad}</text></g>`;
+ return `<svg ${SVGBAS}><rect width="320" height="170" fill="#eefaf0"/>
+ ${kova(60,"#42a5f5","Kâğıt","📄")}${kova(140,"#ffca28","Plastik","🥤")}${kova(220,"#66bb6a","Cam","🍶")}${kova(292,"#9e9e9e","Metal","🥫")}
+ <g transform="translate(160,22)"><text x="0" y="0" font-size="22" text-anchor="middle">♻️</text></g>
+ <text x="160" y="162" font-size="13.5" font-family="Andika,Arial" fill="#2e7d32" text-anchor="middle" font-weight="bold">Atma, yazık olur! Ayır, geri dönüştür.</text></svg>`},
+
+/* 6. ALAN ------------------------------------------------ */
+bilim(){ return `<svg ${SVGBAS}><rect width="320" height="170" fill="#eef4ff"/>
+<g transform="translate(66,88)"><rect x="-26" y="20" width="52" height="9" rx="4" fill="#303f9f"/>
+<rect x="-18" y="8" width="36" height="12" rx="4" fill="#3f51b5"/>
+<rect x="-3" y="-30" width="10" height="40" rx="4" fill="#5c6bc0" transform="rotate(10)"/>
+<rect x="-13" y="-2" width="26" height="7" rx="3" fill="#9fa8da"/>
+<circle cx="4" cy="-36" r="10" fill="#90caf9" stroke="#3f51b5" stroke-width="3"/>
+<rect x="-1" y="-46" width="10" height="12" rx="4" fill="#3f51b5" transform="rotate(10)"/></g>
+<g transform="translate(160,92)"><path d="M-10 -34 h20 v18 l16 30 a6 6 0 0 1 -5 9 h-42 a6 6 0 0 1 -5 -9 l16 -30 z" fill="#b3e5fc" stroke="#4fc3f7" stroke-width="3"/>
+<path d="M-18 8 h36 l6 12 a6 6 0 0 1 -5 9 h-38 a6 6 0 0 1 -5 -9 z" fill="#4fc3f7"/>
+<circle cx="-4" cy="16" r="3" fill="#fff"/><circle cx="8" cy="22" r="2.4" fill="#fff"/></g>
+<g transform="translate(252,74)"><circle cx="0" cy="0" r="22" fill="#fff9c4" stroke="#fbc02d" stroke-width="4"/>
+<path d="M-6 18 h12 v8 h-12 z" fill="#fbc02d"/><path d="M-4 28 h8" stroke="#8d6e63" stroke-width="3"/>
+<path d="M0 -12 v10 M-7 -6 l4 6 M7 -6 l-4 6" stroke="#fbc02d" stroke-width="2.6" stroke-linecap="round"/></g>
+<text x="160" y="156" font-size="14" font-family="Andika,Arial" fill="#303f9f" text-anchor="middle" font-weight="bold">Merak et · Gözlemle · Sor · Dene</text></svg>`},
+
+teknoloji(){ return `<svg ${SVGBAS}><rect width="320" height="170" fill="#f1f6fb"/>
+<g transform="translate(74,80)"><rect x="-40" y="-30" width="80" height="54" rx="6" fill="#37474f"/><rect x="-34" y="-24" width="68" height="42" rx="3" fill="#81d4fa"/>
+<rect x="-16" y="24" width="32" height="8" fill="#546e7a"/><rect x="-30" y="32" width="60" height="7" rx="3" fill="#455a64"/></g>
+<g transform="translate(170,84)"><rect x="-26" y="-38" width="52" height="76" rx="8" fill="#455a64"/><rect x="-21" y="-32" width="42" height="60" rx="3" fill="#a5d6a7"/>
+<circle cx="0" cy="32" r="4" fill="#cfd8dc"/></g>
+<g transform="translate(258,80)"><rect x="-26" y="-20" width="52" height="46" rx="12" fill="#90a4ae"/>
+<circle cx="-10" cy="-2" r="5" fill="#fff"/><circle cx="10" cy="-2" r="5" fill="#fff"/><circle cx="-10" cy="-2" r="2.4" fill="#263238"/><circle cx="10" cy="-2" r="2.4" fill="#263238"/>
+<path d="M-9 14 q9 8 18 0" stroke="#263238" stroke-width="3" fill="none" stroke-linecap="round"/>
+<rect x="-3" y="-32" width="6" height="12" fill="#90a4ae"/><circle cx="0" cy="-34" r="4" fill="#ef5350"/></g>
+<text x="160" y="156" font-size="13.5" font-family="Andika,Arial" fill="#37474f" text-anchor="middle" font-weight="bold">Teknolojiyi ölçülü ve güvenli kullanırım.</text></svg>`},
+
+sanat(){ return `<svg ${SVGBAS}><rect width="320" height="170" fill="#fff5fb"/>
+<g transform="translate(72,84)"><path d="M0 -34 a34 34 0 1 0 8 67 a10 10 0 0 0 4 -18 a9 9 0 0 1 6 -16 h10 a26 26 0 0 0 -28 -33 z" fill="#fff" stroke="#ce93d8" stroke-width="3"/>
+<circle cx="-12" cy="-14" r="5.5" fill="#ef5350"/><circle cx="6" cy="-20" r="5.5" fill="#42a5f5"/><circle cx="18" cy="-4" r="5.5" fill="#ffca28"/><circle cx="-16" cy="8" r="5.5" fill="#66bb6a"/></g>
+<g transform="translate(150,80)"><rect x="-8" y="-38" width="16" height="52" rx="5" fill="#a1887f" transform="rotate(18)"/>
+<path d="M4 12 l14 24 l-20 -6 z" fill="#ec407a" transform="rotate(18)"/></g>
+<g transform="translate(232,80)"><rect x="-34" y="-38" width="68" height="52" rx="4" fill="#fff" stroke="#bcaaa4" stroke-width="3"/>
+<circle cx="-12" cy="-20" r="8" fill="#ffca28"/><path d="M-30 4 q18 -22 34 0 z" fill="#66bb6a"/>
+<path d="M-24 14 l-10 26 M24 14 l10 26 M0 14 v26" stroke="#a1887f" stroke-width="4" stroke-linecap="round"/></g>
+<text x="288" y="44" font-size="20">🎵</text><text x="270" y="24" font-size="16">🎶</text>
+<text x="160" y="158" font-size="14" font-family="Andika,Arial" fill="#ad1457" text-anchor="middle" font-weight="bold">Resim · Müzik · Dans · Tiyatro</text></svg>`}
+};
+</script>
+<script>
+/* ============================================================
+   6 ÖĞRENME ALANI — Türkiye Yüzyılı Maarif Modeli
+   ============================================================ */
 const units = [
-  {
-    title:"1. Ünite: Okulumuzda Hayat",
-    emoji:"🏫",
-    color:"#ff7043",
-    description:"Okulumuza uyum sağlıyor, arkadaşlarımızla tanışıyor ve okul kurallarını öğreniyoruz.",
-    lesson:`Okul, bilgi öğrendiğimiz ve arkadaşlarımızla güzel zaman geçirdiğimiz yerdir. Okula geldiğimizde öğretmenimizi ve arkadaşlarımızı selamlarız. Sınıfta konuşmak istediğimizde parmak kaldırır, arkadaşımız konuşurken onu dikkatle dinleriz. Koridorlarda koşmayız, sıraya girerken birbirimizi itmeyiz. Okulumuzdaki Türk bayrağına, Atatürk resmine ve İstiklâl Marşı'na saygı gösteririz. Ders programımıza bakarak kitaplarımızı, defterlerimizi ve kalemlerimizi çantamıza koyarız.`,
-    topics:[
-      ["🤝","Tanışıyoruz","Kendimizi tanıtır, arkadaşlarımızla tanışırız.","Adımızı söyler, karşımızdaki kişinin adını sorarız. Tanışırken gülümsemek ve nazik konuşmak güzel bir davranıştır."],
-      ["🧒","Fiziksel Özelliklerim","Hepimizin dış görünüşü farklı olabilir.","Saç rengimiz, göz rengimiz, boyumuz ve yüzümüz birbirinden farklı olabilir. Bu farklılıklar bizi özel yapar."],
-      ["🏫","Okulumuzu Tanıyoruz","Okuldaki bölümlerin görevlerini öğreniriz.","Sınıfta ders işleriz. Kantinde yiyecek ve içecek alırız. Lavaboda ellerimizi yıkarız. Müdür odasında okul müdürü çalışır."],
-      ["🇹🇷","Bayrağımız ve Atatürk","Bayrağımızı, Atatürk'ü ve İstiklâl Marşı'nı tanırız.","Türk bayrağı kırmızı renktedir; üzerinde beyaz ay ve yıldız bulunur. Atatürk, Cumhuriyetimizin kurucusudur. İstiklâl Marşı okunurken saygıyla dinleriz."],
-      ["📏","Okul Kuralları","Sınıfta ve okulda kurallara uyarız.","Söz almak için parmak kaldırırız. Arkadaşlarımızın eşyalarını izinsiz almayız. Çöpleri çöp kutusuna atar, okul eşyalarını dikkatli kullanırız."],
-      ["🎒","Çantamı Hazırlıyorum","Ders programına göre çantamızı düzenleriz.","Ertesi gün hangi derslerimiz varsa o derslerin kitabını ve defterini çantamıza koyarız. Kalem kutumuzu da kontrol ederiz."]
-    ],
-    good:["Söz almak için parmak kaldırmak","Arkadaşıma yardım etmek","Sırada beklemek","Çantamı düzenli hazırlamak"],
-    bad:["Sınıfta bağırmak","Arkadaşımı itmek","Yere çöp atmak","İzinsiz eşya almak"],
-    order:["Okula gelirim","Sınıfa girip selam veririm","Dersimi dikkatle dinlerim","Çantamı düzenlerim"],
-    pairs:[["🏫","Okul"],["🎒","Çanta"],["🧑‍🏫","Öğretmen"],["🇹🇷","Bayrak"]]
-  },
 
-  {
-    title:"2. Ünite: Evimizde Hayat",
-    emoji:"🏠",
-    color:"#55af68",
-    description:"Ailemizi tanıyor, evde görev alıyor ve kaynakları tasarruflu kullanıyoruz.",
-    lesson:`Evimiz ailemizle birlikte yaşadığımız yerdir. Aile bireyleri birbirine sevgiyle yaklaşır ve yardım eder. Evde oyuncaklarımızı toplamak, odamızı düzenlemek ve sofraya yardım etmek gibi görevlerimiz olabilir. Su ve elektrik gibi kaynakları dikkatli kullanmalıyız. Diş fırçalarken musluğu kapatır, kullanmadığımız odanın ışığını söndürürüz. Su, yemek, ev ve giysi ihtiyaçtır. Her istediğimiz oyuncak veya eşya ise ihtiyaç olmayabilir.`,
-    topics:[
-      ["👨‍👩‍👧","Ailemizi Tanıyoruz","Aile bireylerimizi ve akrabalarımızı tanırız.","Anne, baba, kardeş, dede, nine, hala, teyze, amca ve dayı ailemizin üyeleri veya yakın akrabaları olabilir."],
-      ["📍","Evimizin Yeri","Evimizin adresini ve çevresini öğreniriz.","Evimizin bulunduğu mahalleyi, sokağı ve kapı numarasını bilmek önemlidir. Yakınımızdaki okul, park veya marketi de tanıyabiliriz."],
-      ["🧹","Evdeki Görevlerimiz","Evde ailemize yardım ederiz.","Oyuncakları toplamak, yatağımızı düzeltmek, sofraya kaşık koymak ve odamızı düzenlemek yapabileceğimiz görevlerdendir."],
-      ["💧","Tasarruf Yapıyorum","Su ve elektriği dikkatli kullanırız.","Gereksiz yanan lambaları kapatırız. Musluğu açık bırakmayız. Yiyecekleri çöpe atmayarak israfı önleriz."],
-      ["🍎","İstek ve İhtiyaç","İhtiyaçlarımızla isteklerimizi ayırırız.","Su içmek, yemek yemek, barınmak ve giyinmek ihtiyaçtır. Çok sayıda oyuncak almak ise istek olabilir."]
-    ],
-    good:["Musluğu kapatmak","Oyuncakları toplamak","Sofraya yardım etmek","Gereksiz ışığı söndürmek"],
-    bad:["Suyu boşa akıtmak","Yemeği çöpe atmak","Odayı dağıtmak","Açık ışık bırakmak"],
-    order:["Oyuncakları toplarım","Ellerimi yıkarım","Sofraya yardım ederim","Aileme teşekkür ederim"],
-    pairs:[["🏠","Ev"],["👨‍👩‍👧","Aile"],["💧","Su"],["💡","Elektrik"]]
-  },
+/* ===================== 1. ÖĞRENME ALANI ===================== */
+{
+ label:"1. Öğrenme Alanı",
+ title:"Ben ve Okulum",
+ emoji:"🏫",
+ color:"#7e57c2",
+ color2:"#b39ddb",
+ hero:"okul",
+ description:"Kendimizi tanıtıyor, okulumuzu keşfediyor, kuralları öğreniyor ve duygularımızı tanıyoruz.",
+ gunler:[
+  ["📚","İlköğretim Haftası","Eylül ayının 3. haftası"],
+  ["🎖️","Gaziler Günü","19 Eylül"],
+  ["🧑‍🏫","Öğretmenler Günü","24 Kasım"],
+  ["📖","Kütüphaneler Haftası","Mart ayının son pazartesi başlar"]
+ ],
+ lesson:`Okul, yeni şeyler öğrendiğimiz ve arkadaşlarımızla güzel zaman geçirdiğimiz yerdir. Okula geldiğimizde öğretmenimizi ve arkadaşlarımızı selamlarız. Tanışırken adımızı söyler, karşımızdakinin adını sorarız. Okulumuzda sınıf, kütüphane, kantin, spor salonu, müdür odası ve bahçe gibi bölümler vardır. Okulumuzda müdür, öğretmen, memur, hizmetli ve rehber öğretmen görev yapar. Sınıfta konuşmak istediğimizde parmak kaldırır, arkadaşımız konuşurken onu dikkatle dinleriz. Koridorda koşmaz, sıraya girerken itişmeyiz. Kurallar her yerde vardır; kurallar bizi korur ve işlerimizi kolaylaştırır. Hepimizin saçı, boyu, göz rengi farklı olabilir. Bu farklılıklar bizi özel yapar. Bazen mutlu, bazen üzgün, bazen kızgın olabiliriz. Duygularımızı kırıcı olmadan, sözlerimizle anlatırız.`,
+ topics:[
+  {svg:"tanisalim",icon:"🤝",title:"Haydi Tanışalım",
+   short:"Kendimizi tanıtır, arkadaşlarımızla tanışırız.",
+   bullets:["Adımı ve soyadımı açıkça söylerim.","Karşımdakinin adını sorar, gülümserim.","Sevdiğim rengi, oyunu ve yemeği anlatırım.","Yeni arkadaşımı oyuna davet ederim.","Tanıştığım kişiye “Memnun oldum.” derim."],
+   fact:"Tanışırken göz teması kurmak ve gülümsemek, karşımızdaki kişiyi mutlu eder."},
+  {svg:"okul",icon:"🏫",title:"Okulumu Keşfediyorum",
+   short:"Okulun bölümlerini ve çalışanlarını tanırız.",
+   bullets:["Sınıfta ders işlerim, kütüphanede kitap okurum.","Kantinden yiyecek alır, lavaboda ellerimi yıkarım.","Okul müdürü, öğretmenler, memur ve hizmetliler okulda görev yapar.","Bayrak töreninde saygıyla dururum.","Okul eşyalarını dikkatli kullanırım."],
+   fact:"Okulumuzun bahçesi, oyun oynayabileceğimiz en güvenli alanlardan biridir."},
+  {svg:"kurallar",icon:"📏",title:"Kurallar Her Yerde",
+   short:"Evde, okulda, oyunda kurallara uyarız.",
+   bullets:["Söz almak için parmak kaldırırım.","Sıramı bekler, arkadaşımın sözünü kesmem.","Arkadaşımın eşyasını izinsiz almam.","Oyunun da kuralları vardır; kurallara uyarım.","Kurallar bizi korur ve işleri kolaylaştırır."],
+   fact:"Trafikte, kütüphanede, parkta… Her yerin kendine göre kuralları vardır."},
+  {svg:"duygular",icon:"😊",title:"Nasıl Görünüyor, Neler Hissediyorum?",
+   short:"Dış görünüşümüzü ve duygularımızı tanırız.",
+   bullets:["Saçım, boyum, göz rengim arkadaşlarımdan farklı olabilir.","Farklılıklarımızla hepimiz değerliyiz.","Mutlu, üzgün, kızgın, heyecanlı ya da şaşkın olabilirim.","Duygularımı kırıcı olmadan sözlerimle anlatırım.","Arkadaşımın duygularını da anlamaya çalışırım."],
+   fact:"“Şu an üzgünüm çünkü…” diye başlayan cümleler, duygularımızı anlatmanın en kolay yoludur."}
+ ],
+ good:["Söz almak için parmak kaldırmak","Arkadaşımı gülümseyerek karşılamak","Sıramı beklemek","Duygularımı sözle anlatmak"],
+ bad:["Sınıfta bağırmak","Arkadaşımla alay etmek","İzinsiz eşya almak","Kızınca vurmak"],
+ order:["Okula gelirim","Öğretmenime selam veririm","Dersimi dikkatle dinlerim","Çantamı düzenler, eve giderim"],
+ pairs:[["🏫","Okul"],["🎒","Çanta"],["🧑‍🏫","Öğretmen"],["🤝","Tanışma"]],
+ perf:{
+  baslik:"🎨 “Ben Kimim?” Tanıtım Afişi",
+  aciklama:"Kendini tanıtan renkli bir afiş hazırla ve sınıfta arkadaşlarına anlat.",
+  adimlar:["Bir kartona adını büyük harflerle yaz.","Kendi resmini çiz ya da fotoğrafını yapıştır.","Sevdiğin renk, oyun, yemek ve hayvanı çiz.","En mutlu olduğun anı bir cümleyle yaz.","Afişini sınıfta arkadaşlarına tanıt ve panoya as."]
+ },
+ quiz:[
+  {q:"Sınıfta konuşmak istediğimizde ne yaparız?",s:["Parmak kaldırırız","Bağırırız","Ayağa kalkıp koşarız"],d:0},
+  {q:"Okulda kitap okuyabileceğimiz bölüm hangisidir?",s:["Kantin","Kütüphane","Bahçe"],d:1},
+  {q:"Arkadaşımızın boyu bizden farklıysa ne yaparız?",s:["Alay ederiz","Farklılığa saygı duyarız","Konuşmayız"],d:1},
+  {q:"Kızgın olduğumuzda doğru davranış hangisidir?",s:["Vurmak","Eşya fırlatmak","Duygumuzu sözle anlatmak"],d:2}
+ ]
+},
 
-  {
-    title:"3. Ünite: Sağlıklı Hayat",
-    emoji:"🍎",
-    color:"#ef5350",
-    description:"Kişisel bakım, sağlıklı beslenme ve sağlığımızı koruma yollarını öğreniyoruz.",
-    lesson:`Sağlıklı olmak için temizliğimize ve beslenmemize dikkat etmeliyiz. Yemekten önce, tuvaletten sonra ve dışarıdan eve gelince ellerimizi sabunla yıkarız. Dişlerimizi sabah ve akşam fırçalarız. Meyve, sebze, süt, yoğurt, yumurta ve peynir gibi besinler büyümemize yardım eder. Yemekte ağzımız kapalı çiğner, sofrada nazik konuşuruz. Hastalandığımızda doktor, hemşire, eczacı ve diş hekimi bize yardımcı olur. Hava durumuna göre uygun kıyafet giymek de sağlığımızı korur.`,
-    topics:[
-      ["🧼","Kişisel Bakımımız","Temizliğimize dikkat ederiz.","Ellerimizi sabunla yıkar, düzenli banyo yapar, tırnaklarımızı temiz tutar ve temiz kıyafetler giyeriz."],
-      ["🥦","Sağlıklı Beslenme","Dengeli besinler seçeriz.","Meyve, sebze, süt ürünleri ve protein içeren yiyecekler vücudumuzu güçlendirir. Çok fazla şeker tüketmemeliyiz."],
-      ["🍽️","Yemekte Görgü Kuralları","Sofrada nazik davranırız.","Yemekten önce ellerimizi yıkarız. Ağzımız kapalı çiğner, ağzımız doluyken konuşmayız ve yemeğimizi israf etmeyiz."],
-      ["🩺","Sağlık Çalışanları","Sağlığımız için çalışan meslekleri tanırız.","Doktor hastalıklarımızı inceler. Hemşire doktora yardım eder. Eczacı ilaçlar konusunda yardımcı olur. Diş hekimi dişlerimizi kontrol eder."],
-      ["🧥","Mevsime Uygun Giyinme","Hava durumuna göre giyiniriz.","Kışın mont, bere ve atkı; yağmurda yağmurluk; yazın ise ince ve rahat kıyafetler seçeriz."]
-    ],
-    good:["Ellerini sabunla yıkamak","Meyve yemek","Dişlerini fırçalamak","Hava durumuna uygun giyinmek"],
-    bad:["Kirli ellerle yemek yemek","Sadece şeker yemek","Diş fırçalamamak","Kışın ince giyinmek"],
-    order:["Ellerimi yıkarım","Sağlıklı yemeğimi yerim","Dişlerimi fırçalarım","Dinlenirim"],
-    pairs:[["🧼","Sabun"],["🪥","Diş fırçası"],["🥦","Sebze"],["🩺","Doktor"]]
-  },
+/* ===================== 2. ÖĞRENME ALANI ===================== */
+{
+ label:"2. Öğrenme Alanı",
+ title:"Sağlığım ve Güvenliğim",
+ emoji:"🍎",
+ color:"#43a047",
+ color2:"#a5d6a7",
+ hero:"saglik",
+ description:"Sağlıklı yaşıyor, kişisel alanımızı koruyor, trafikte ve acil durumlarda güvende kalmayı öğreniyoruz.",
+ gunler:[
+  ["🩹","Kızılay Haftası","29 Ekim - 4 Kasım"],
+  ["🦷","Ağız ve Diş Sağlığı Haftası","Kasım ayının 3. haftası"],
+  ["🍀","Yeşilay Haftası","1 - 7 Mart"],
+  ["🛡️","Sivil Savunma Günü","28 Şubat"],
+  ["🚦","Trafik ve İlk Yardım Haftası","Mayıs ayının ilk haftası"]
+ ],
+ lesson:`Sağlıklı olmak için temizliğimize dikkat ederiz. Yemekten önce, tuvaletten sonra ve dışarıdan eve gelince ellerimizi sabunla en az yirmi saniye yıkarız. Dişlerimizi sabah ve akşam fırçalarız. Meyve, sebze, süt, yumurta ve peynir gibi besinler büyümemize yardım eder. Bol su içer, erken yatar ve her gün hareket ederiz. Bedenimiz bize aittir. Özel alanımıza kimsenin izinsiz dokunmasına izin vermeyiz; rahatsız olduğumuzda “Hayır!” der ve güvendiğimiz bir büyüğümüze anlatırız. Sokakta kaldırımdan yürür, karşıya yaya geçidinden geçeriz. Kırmızı ışıkta durur, yeşil ışıkta önce sola, sağa, tekrar sola bakarız. Arabada emniyet kemerimizi takarız. Deprem olduğunda çök, kapan, tutun deriz; sallanma bitince görevlilerle birlikte binayı boşaltırız. Acil durumda 112 numarası aranır.`,
+ topics:[
+  {svg:"saglik",icon:"🍎",title:"Sağlıklı Hayat Ne Güzel",
+   short:"Temizlik, beslenme, uyku ve hareket sağlığımızı korur.",
+   bullets:["Ellerimi sabunla yıkarım, tırnaklarımı temiz tutarım.","Dişlerimi sabah ve akşam fırçalarım.","Meyve, sebze, süt ve yumurta yerim; şekeri azaltırım.","Günde bol su içerim.","Erken yatar, her gün oyun oynayıp hareket ederim."],
+   fact:"Elleri sabunla en az 20 saniye ovmak, mikropların çoğundan kurtulmamızı sağlar."},
+  {svg:"mahremiyet",icon:"🛑",title:"Kişisel Alanıma Dikkat!",
+   short:"Bedenim bana aittir; özel alanımı korurum.",
+   bullets:["Mayo ile kapanan bölgelerim özeldir.","Rahatsız olduğumda yüksek sesle “Hayır!” derim.","Hemen güvendiğim bir büyüğüme anlatırım.","Adres, telefon gibi bilgilerimi tanımadığım kişiyle paylaşmam.","Başkalarının da özel alanına ve eşyasına saygı gösteririm."],
+   fact:"Sır olarak saklanması istenen, seni rahatsız eden hiçbir şey sır değildir; mutlaka anlatmalısın."},
+  {svg:"trafik",icon:"🚦",title:"Trafik Kuralları İyi ki Var",
+   short:"Yaya olarak ve araçta güvenli davranırız.",
+   bullets:["Kaldırımdan yürür, yolda koşmam.","Karşıya yaya geçidinden ve yeşil ışıkta geçerim.","Geçmeden önce sola, sağa, tekrar sola bakarım.","Arabada arka koltukta otururum ve emniyet kemerimi takarım.","Bisiklet sürerken kask takarım."],
+   fact:"Kırmızı ışık “dur”, sarı ışık “hazırlan”, yeşil ışık “dikkatlice geç” demektir."},
+  {svg:"acil",icon:"🚨",title:"Eyvah, Acil Durum!",
+   short:"Deprem, yangın ve acil durumlarda ne yapacağımızı biliriz.",
+   bullets:["Depremde ÇÖK - KAPAN - TUTUN yaparım.","Sallanma bitince görevlilerle sakince dışarı çıkarım.","Asansöre binmem, merdiveni kullanırım.","Acil durumda 112’yi ararım; adımı ve adresimi söylerim.","Evimizde acil durum çantası hazır bulunur."],
+   fact:"112; ambulans, polis ve itfaiyenin ortak acil numarasıdır. Gereksiz aramak, gerçek yardıma engel olur."}
+ ],
+ good:["Elleri sabunla yıkamak","Emniyet kemeri takmak","Yaya geçidini kullanmak","Rahatsız olunca büyüğüne anlatmak"],
+ bad:["Kirli elle yemek yemek","Kırmızı ışıkta geçmek","Prizle oynamak","112'yi şaka için aramak"],
+ order:["Dururum","Sola, sağa, tekrar sola bakarım","Araç yoksa yürürüm","Yaya geçidinden güvenle geçerim"],
+ pairs:[["🚦","Trafik ışığı"],["🧼","Sabun"],["🪥","Diş fırçası"],["☎️","112"]],
+ perf:{
+  baslik:"🎒 Acil Durum Çantamı Hazırlıyorum",
+  aciklama:"Ailenle birlikte acil durum çantası listesi hazırla ve sınıfa tanıt.",
+  adimlar:["Ailenle konuş: Evde acil durumda neler gerekir?","Su, bisküvi, düdük, el feneri, ilk yardım çantası gibi malzemeleri listele.","Listeni resimlerle kartona çiz.","Evinizin toplanma alanını ve 112 numarasını kartona yaz.","Çalışmanı sınıfta anlat ve panoya as."]
+ },
+ quiz:[
+  {q:"Ellerimizi ne kadar süre sabunla ovmalıyız?",s:["2 saniye","En az 20 saniye","Hiç gerek yok"],d:1},
+  {q:"Karşıdan karşıya nereden geçmeliyiz?",s:["Yaya geçidinden","Arabaların arasından","Koşarak"],d:0},
+  {q:"Deprem sırasında ne yaparız?",s:["Koşarak dışarı çıkarız","Asansöre bineriz","Çök - Kapan - Tutun yaparız"],d:2},
+  {q:"Biri seni rahatsız edecek şekilde dokunursa ne yaparsın?",s:["Sır olarak saklarım","Hayır der, güvendiğim büyüğüme anlatırım","Hiçbir şey yapmam"],d:1}
+ ]
+},
 
-  {
-    title:"4. Ünite: Güvenli Hayat",
-    emoji:"🚦",
-    color:"#4285d4",
-    description:"Evde, okulda, sokakta ve teknoloji kullanırken güvenli davranıyoruz.",
-    lesson:`Güvenli davranmak bizi kazalardan korur. Karşıdan karşıya geçerken yaya geçidini kullanırız. Kırmızı ışıkta durur, yeşil ışıkta önce sağımıza, solumuza ve tekrar sağımıza bakarak geçeriz. Evde prizlerle, kesici aletlerle ve sıcak eşyalarla oynamayız. Tanımadığımız kişilerle hiçbir yere gitmeyiz. Tablet, telefon ve bilgisayarı ailemizin belirlediği süre kadar kullanırız. Acil bir durumda ambulans, polis ve itfaiye için 112 numarası aranır.`,
-    topics:[
-      ["🚦","Trafik Kuralları","Trafik ışıklarına ve yaya geçidine dikkat ederiz.","Kırmızı ışık dur demektir. Yeşil ışıkta dikkatlice geçebiliriz. Karşıdan karşıya geçerken mümkünse yaya geçidini kullanırız."],
-      ["🚶","Okula Gidip Gelirken","Okul yolunda dikkatli oluruz.","Kaldırımdan yürür, yolda koşmayız. Tanımadığımız kişilerin tekliflerini kabul etmeyiz. Ailemizin belirlediği güvenli yolu kullanırız."],
-      ["🔌","Evde Güvenlik","Tehlikeli eşyalardan uzak dururuz.","Prizlere parmak veya eşya sokmayız. Bıçak, makas, ocak ve ütü gibi eşyalara büyüklerimizin izni olmadan dokunmayız."],
-      ["🛝","Güvenli Alanlar","Güvenli yerlerde oyun oynarız.","Park, okul bahçesi ve oyun alanları güvenli yerlerdir. İnşaat alanları, yollar ve boş arsalar oyun için tehlikeli olabilir."],
-      ["📱","Teknolojiyi Güvenli Kullanma","Ekran süresine dikkat ederiz.","Telefon ve tablet kullanırken uzun süre ekrana bakmayız. Adres, telefon numarası ve şifre gibi kişisel bilgilerimizi paylaşmayız."],
-      ["☎️","Acil Durum: 112","Acil durumda 112 aranır.","112; ambulans, polis ve itfaiye için kullanılan ortak acil durum numarasıdır. Gereksiz yere aramamalıyız."]
-    ],
-    good:["Yaya geçidini kullanmak","Prizlerden uzak durmak","112 numarasını bilmek","Kask takmak"],
-    bad:["Kırmızı ışıkta geçmek","Prizle oynamak","Yolda koşmak","Tanımadık kişiyle gitmek"],
-    order:["Dururum","Sağıma ve soluma bakarım","Trafiği dinlerim","Güvenle geçerim"],
-    pairs:[["🚦","Trafik ışığı"],["🚸","Yaya geçidi"],["🔌","Priz"],["☎️","112"]]
-  },
+/* ===================== 3. ÖĞRENME ALANI ===================== */
+{
+ label:"3. Öğrenme Alanı",
+ title:"Ailem ve Toplum",
+ emoji:"🏠",
+ color:"#e64a19",
+ color2:"#ffab91",
+ hero:"ev",
+ description:"Ailemizi tanıyor, nezaket kurallarını öğreniyor ve birlikte çalışmanın gücünü keşfediyoruz.",
+ gunler:[
+  ["⚖️","İnsan Hakları ve Demokrasi Haftası","10 Aralık"],
+  ["👵","Yaşlılar Haftası","18 - 24 Mart"],
+  ["♿","Engelliler Haftası","10 - 16 Mayıs"],
+  ["👩","Anneler Günü","Mayıs ayının 2. pazarı"],
+  ["👨","Babalar Günü","Haziran ayının 3. pazarı"]
+ ],
+ lesson:`Evimiz, ailemizle birlikte yaşadığımız yerdir. Anne, baba, kardeş, dede ve nine ailemizin üyesi olabilir. Her ailenin kendine göre alışkanlıkları ve kuralları vardır. Evimizin adresini bilmek çok önemlidir. Evde de görevlerimiz vardır: Oyuncaklarımızı toplar, yatağımızı düzeltir, sofraya yardım ederiz. Nezaketli olmak insanları mutlu eder. “Lütfen”, “Teşekkür ederim”, “Özür dilerim”, “Afiyet olsun”, “Geçmiş olsun” sözleri nezaket sözcükleridir. Sofrada ağzımız kapalı çiğner, ağzımız doluyken konuşmayız. Büyüklerimizin sözünü kesmez, misafirlikte nazik davranırız. Birlikte çalıştığımızda işler kolaylaşır. Sınıfta, evde ve oyunda iş birliği yapar, yardımlaşır, paylaşır ve sıramızı bekleriz. Biz iyi bir takımız.`,
+ topics:[
+  {svg:"ev",icon:"🏠",title:"Bizim Ev",
+   short:"Ailemizi, adresimizi ve evdeki görevlerimizi tanırız.",
+   bullets:["Anne, baba, kardeş, dede, nine ailemin üyeleri olabilir.","Her ailenin kuralları ve alışkanlıkları farklı olabilir.","Evimizin adresini ve bir yakınımın telefonunu bilirim.","Oyuncaklarımı toplar, yatağımı düzeltirim.","Ailemle oyun oynar, sohbet eder, zaman geçiririm."],
+   fact:"Adresini bilmek, kaybolduğunda sana yardım edecek en önemli bilgidir."},
+  {svg:"nezaket",icon:"🙏",title:"Nezaketli ve Görgülüyüz",
+   short:"Nezaket sözcükleri ve görgü kuralları.",
+   bullets:["Lütfen, teşekkür ederim, özür dilerim derim.","Selam verir, gülümseyerek konuşurum.","Sofrada ağzım kapalı çiğnerim.","Büyüklerimin sözünü kesmem.","Misafirlikte izin ister, nazik davranırım."],
+   fact:"“Teşekkür ederim” demek hiçbir şeye mal olmaz ama karşımızdakini çok mutlu eder."},
+  {svg:"takim",icon:"🤗",title:"Biz İyi Bir Takımız",
+   short:"İş birliği yapar, yardımlaşır ve paylaşırız.",
+   bullets:["Grup çalışmasında görevimi yaparım.","Arkadaşımın fikrini dinlerim.","Sıramı bekler, oyuncağımı paylaşırım.","Zorlanan arkadaşıma yardım ederim.","Komşularımıza saygılı davranırım."],
+   fact:"Bir işi tek başımıza uzun sürede yaparız; birlikte yaptığımızda hem kolay hem eğlenceli olur."}
+ ],
+ good:["Teşekkür etmek","Sofrada nazik olmak","Arkadaşına yardım etmek","Evde görev almak"],
+ bad:["Sözü kesmek","Ağzı doluyken konuşmak","Paylaşmamak","Büyüklere saygısızlık etmek"],
+ order:["Ellerimi yıkarım","Sofraya yardım ederim","Afiyet olsun derim","Sofrayı toplamaya yardım ederim"],
+ pairs:[["🏠","Ev"],["👨‍👩‍👧","Aile"],["🙏","Nezaket"],["🤝","İş birliği"]],
+ perf:{
+  baslik:"📋 Aile Görev Çizelgemiz",
+  aciklama:"Evde herkesin görev aldığı renkli bir çizelge hazırla.",
+  adimlar:["Bir kartona hafta günlerini yaz.","Ailenle konuşarak herkesin görevini belirle.","Kendi görevlerini resimle göster (oyuncak toplama, sofra kurma…).","Yaptığın günlere yıldız yapıştır.","Hafta sonunda ailene çizelgeni göster ve anlat."]
+ },
+ quiz:[
+  {q:"Bir şey isterken hangi sözcüğü kullanırız?",s:["Lütfen","Hemen","Ver"],d:0},
+  {q:"Evde yapabileceğimiz bir görev hangisidir?",s:["Oyuncakları dağıtmak","Yatağımı düzeltmek","Kardeşimle kavga etmek"],d:1},
+  {q:"Grup çalışmasında doğru davranış hangisidir?",s:["Herkesin işini kendim yaparım","Arkadaşımın fikrini dinlerim","Söz vermem"],d:1},
+  {q:"Sofrada nasıl davranırız?",s:["Ağzımız doluyken konuşuruz","Ağzımız kapalı çiğneriz","Bağırırız"],d:1}
+ ]
+},
 
-  {
-    title:"5. Ünite: Ülkemizde Hayat",
-    emoji:"🇹🇷",
-    color:"#9b59b6",
-    description:"Türkiye'yi, Atatürk'ü, bayramlarımızı ve farklı kültürleri tanıyoruz.",
-    lesson:`Ülkemizin adı Türkiye'dir. Başkentimiz Ankara'dır. Türk bayrağı kırmızıdır ve üzerinde beyaz ay ile yıldız vardır. Mustafa Kemal Atatürk, Türkiye Cumhuriyeti'nin kurucusudur. Atatürk'ün anıt mezarı Ankara'daki Anıtkabir'dedir. 23 Nisan Ulusal Egemenlik ve Çocuk Bayramı, çocuklara armağan edilen özel bir bayramdır. 19 Mayıs, 30 Ağustos ve 29 Ekim de millî bayramlarımızdandır. Ülkemizde farklı kültürlerden insanlar yaşayabilir. Herkesin geleneklerine ve farklılıklarına saygı duymalıyız.`,
-    topics:[
-      ["🏘️","Yaşadığımız Yer","Köy, ilçe ve il gibi yerleri tanırız.","Yaşadığımız yer bir köy, mahalle, ilçe veya şehir olabilir. Her yerleşim yerinde insanlar birlikte yaşar."],
-      ["🗺️","Türkiye ve Ankara","Ülkemizi ve başkentimizi öğreniriz.","Türkiye bizim ülkemizdir. Türkiye'nin başkenti Ankara'dır. Haritada ülkemizin yerini görebiliriz."],
-      ["👤","Mustafa Kemal Atatürk","Atatürk'ü ve Anıtkabir'i tanırız.","Mustafa Kemal Atatürk, Türkiye Cumhuriyeti'nin kurucusudur. Anıtkabir, Ankara'da bulunan anıt mezarıdır."],
-      ["🎉","Millî Bayramlarımız","Millî bayramlarımızı tanırız.","23 Nisan, 19 Mayıs, 30 Ağustos ve 29 Ekim; ülkemiz için önemli millî bayramlardır."],
-      ["🕌","Dinî Bayramlarımız","Ramazan ve Kurban Bayramı geleneklerini öğreniriz.","Bayramlarda büyüklerimizi ziyaret eder, güzel sözler söyler ve yardımlaşırız."],
-      ["🌍","Farklı Kültürlere Saygı","Farklılıklara saygı duyarız.","İnsanların yemekleri, kıyafetleri, dilleri ve gelenekleri farklı olabilir. Bu farklılıklar zenginliktir."]
-    ],
-    good:["Bayrağımıza saygı göstermek","Farklılıklara saygı duymak","Bayramda büyükleri ziyaret etmek","Atatürk'ü tanımak"],
-    bad:["İnsanlarla alay etmek","Bayrağı yere atmak","Farklı kültürleri küçümsemek","Saygısız konuşmak"],
-    order:["Türkiye'yi tanırım","Bayrağımızı tanırım","Atatürk'ü öğrenirim","Bayramlarımızı kutlarım"],
-    pairs:[["🇹🇷","Türkiye"],["🏛️","Ankara"],["👤","Atatürk"],["🎉","Bayram"]]
-  },
+/* ===================== 4. ÖĞRENME ALANI ===================== */
+{
+ label:"4. Öğrenme Alanı",
+ title:"Yaşadığım Yer ve Ülkem",
+ emoji:"🇹🇷",
+ color:"#1e88e5",
+ color2:"#90caf9",
+ hero:"ulkem",
+ description:"Yaşadığımız yeri, ülkemizi, bayrağımızı, Atatürk'ü ve bayramlarımızı tanıyoruz.",
+ gunler:[
+  ["🇹🇷","Cumhuriyet Bayramı","29 Ekim"],
+  ["🕊️","Atatürk Haftası","10 - 16 Kasım"],
+  ["📜","İstiklâl Marşı'nın Kabulü ve M. Âkif Ersoy'u Anma Günü","12 Mart"],
+  ["🎖️","Çanakkale Zaferi ve Şehitleri Anma Günü","18 Mart"],
+  ["🎈","Ulusal Egemenlik ve Çocuk Bayramı","23 Nisan"],
+  ["🏃","Atatürk'ü Anma, Gençlik ve Spor Bayramı","19 Mayıs"]
+ ],
+ lesson:`Yaşadığımız yer bir köy, mahalle, ilçe ya da şehir olabilir. Adresimizi bilmek önemlidir. Ülkemizin adı Türkiye, başkentimiz Ankara'dır. Ülkemizin denizleri, dağları, ovaları ve tarihî güzellikleri vardır. Bayrağımız kırmızıdır; üzerinde beyaz ay ve yıldız bulunur. Bayrağımızı göndere çekerken ve İstiklâl Marşı'nı söylerken hazır ol duruşunda, saygıyla dururuz. İstiklâl Marşı'mızın şairi Mehmet Âkif Ersoy'dur; marşımız 12 Mart 1921'de kabul edilmiştir. Mustafa Kemal Atatürk 1881 yılında Selanik'te doğmuştur. Türkiye Cumhuriyeti'nin kurucusudur ve çocukları çok severdi. Anıt mezarı Ankara'daki Anıtkabir'dedir. 23 Nisan, 19 Mayıs, 30 Ağustos ve 29 Ekim millî bayramlarımızdır. Ramazan ve Kurban Bayramı'nda büyüklerimizi ziyaret eder, bayramlaşır ve yardımlaşırız.`,
+ topics:[
+  {svg:"ulkem",icon:"🗺️",title:"Yaşadığım Yer ve Güzel Ülkem",
+   short:"Yaşadığımız yeri ve ülkemizi tanırız.",
+   bullets:["Yaşadığım yer köy, mahalle, ilçe ya da şehir olabilir.","Evimin adresini bilirim.","Ülkemin adı Türkiye, başkentim Ankara'dır.","Ülkemizde denizler, dağlar, ovalar ve göller vardır.","Yaşadığım yerin doğal ve tarihî güzelliklerini korurum."],
+   fact:"Türkiye'nin başkenti Ankara'dır; Anıtkabir de Ankara'dadır."},
+  {svg:"bayrak",icon:"🇹🇷",title:"Bayrağım ve Marşımla Gururluyum",
+   short:"Bayrağımızı ve İstiklâl Marşı'mızı tanırız.",
+   bullets:["Bayrağımız kırmızıdır; üzerinde beyaz ay ve yıldız vardır.","Bayrak törenlerinde hazır ol duruşunda dururum.","İstiklâl Marşı'mızın şairi Mehmet Âkif Ersoy'dur.","İstiklâl Marşı 12 Mart 1921'de kabul edilmiştir.","Marşımızı saygıyla ve doğru söylerim."],
+   fact:"İstiklâl Marşı'mızın ilk iki kıtasını törenlerde birlikte söyleriz."},
+  {svg:"ataturk",icon:"👤",title:"Atatürk'ü Tanıyalım",
+   short:"Atatürk'ün hayatını ve bize verdiği değeri öğreniriz.",
+   bullets:["Mustafa Kemal Atatürk 1881'de Selanik'te doğdu.","Annesi Zübeyde Hanım, babası Ali Rıza Efendi'dir.","Türkiye Cumhuriyeti'nin kurucusudur.","Çocukları çok sever; 23 Nisan'ı çocuklara armağan etmiştir.","Anıt mezarı Ankara'daki Anıtkabir'dedir."],
+   fact:"10 Kasım'da saat 09.05'te Atatürk'ü saygıyla anarız."},
+  {svg:"bayram",icon:"🎉",title:"Al Bayrağa Koş Bayrama",
+   short:"Millî bayramlarımızı tanır ve kutlarız.",
+   bullets:["23 Nisan Ulusal Egemenlik ve Çocuk Bayramı","19 Mayıs Atatürk'ü Anma, Gençlik ve Spor Bayramı","30 Ağustos Zafer Bayramı","29 Ekim Cumhuriyet Bayramı","Bayramlarda törenlere katılır, bayrak asarız."],
+   fact:"23 Nisan, dünyada çocuklara armağan edilen ilk ve tek bayramdır."},
+  {svg:"dinibayram",icon:"🌙",title:"El Öpenleriniz Çok Olsun",
+   short:"Dinî bayramlarımızda görgü kurallarını öğreniriz.",
+   bullets:["Ramazan Bayramı ve Kurban Bayramı'nı kutlarız.","Büyüklerimizi ziyaret eder, bayramlaşırız.","“Bayramınız kutlu olsun.” deriz.","Komşularımıza ikramda bulunur, paylaşırız.","İhtiyacı olanlara yardım ederiz."],
+   fact:"Bayramlar, küs olanların barıştığı, ailelerin bir araya geldiği özel günlerdir."}
+ ],
+ good:["Bayrak töreninde saygıyla durmak","Büyükleri bayramda ziyaret etmek","Ülkemin güzelliklerini korumak","Atatürk'ü tanımak ve anlatmak"],
+ bad:["Tören sırasında konuşmak","Bayrağı yere düşürmek","Tarihî yerlere zarar vermek","Bayramda büyükleri unutmak"],
+ order:["Bayrağımızı tanırım","İstiklâl Marşı'nı saygıyla söylerim","Atatürk'ü öğrenirim","Bayramlarımızı kutlarım"],
+ pairs:[["🇹🇷","Bayrak"],["🏛️","Anıtkabir"],["🎈","23 Nisan"],["🌙","Bayram"]],
+ perf:{
+  baslik:"💌 Bayram Kartı Tasarlıyorum",
+  aciklama:"Sevdiğin bir büyüğün için bayram kartı hazırla.",
+  adimlar:["Kartonu ikiye katla, kapağına bayrak ya da bayram resmi çiz.","İçine kutlama cümleni yaz: “Bayramınız kutlu olsun.”","Altına adını yaz.","Kartını süsle: yıldız, balon, kurdele ekle.","Kartını sevdiğin büyüğüne ver ve elini öp."]
+ },
+ quiz:[
+  {q:"Ülkemizin başkenti neresidir?",s:["İstanbul","Ankara","İzmir"],d:1},
+  {q:"İstiklâl Marşı'mızın şairi kimdir?",s:["Mehmet Âkif Ersoy","Ziya Gökalp","Nazım Hikmet"],d:0},
+  {q:"23 Nisan hangi bayramdır?",s:["Zafer Bayramı","Cumhuriyet Bayramı","Ulusal Egemenlik ve Çocuk Bayramı"],d:2},
+  {q:"Atatürk'ün anıt mezarının adı nedir?",s:["Anıtkabir","Topkapı","Dolmabahçe"],d:0}
+ ]
+},
 
-  {
-    title:"6. Ünite: Doğada Hayat",
-    emoji:"🌳",
-    color:"#26a69a",
-    description:"Hayvanları, bitkileri, mevsimleri ve doğayı korumayı öğreniyoruz.",
-    lesson:`Doğada insanlar, hayvanlar ve bitkiler birlikte yaşar. Ağaçlar bize temiz hava sağlar. Hayvanların suya, yiyeceğe ve güvenli yaşam alanlarına ihtiyacı vardır. Doğayı korumak için çöpleri yere atmamalıyız. Kâğıt, plastik, cam ve metal gibi bazı atıkları geri dönüşüm kutularına atabiliriz. Sonbaharda yapraklar sararır ve dökülür. Kışın hava soğur. İlkbaharda çiçekler açar. Yazın hava ısınır. Doğayı korumak hepimizin görevidir.`,
-    topics:[
-      ["🐶","Hayvanlar ve Bitkiler","Yakınımızdaki canlıları gözlemleriz.","Kedi, köpek, kuş ve böcek gibi hayvanları; ağaç, çiçek ve çalı gibi bitkileri çevremizde görebiliriz."],
-      ["🌳","Doğayı Koruyalım","Doğaya ve canlılara zarar vermeyiz.","Ağaçların dallarını kırmayız, çiçekleri gereksiz yere koparmayız. Hayvanlara zarar vermeyiz ve çevreyi temiz tutarız."],
-      ["♻️","Geri Dönüşüm","Atıkları uygun kutulara atarız.","Kâğıt, plastik, cam ve metalin yeniden kullanılabilmesi için onları geri dönüşüm kutularına atarız."],
-      ["🍂","Mevsimler","Dört mevsimin özelliklerini öğreniriz.","Sonbaharda yapraklar dökülür. Kışın kar yağabilir. İlkbaharda çiçekler açar. Yazın havalar sıcak olur."]
-    ],
-    good:["Çöpleri geri dönüşüm kutusuna atmak","Ağaçları korumak","Hayvanlara su vermek","Parkı temiz tutmak"],
-    bad:["Çöpü yere atmak","Çiçekleri koparmak","Hayvanlara zarar vermek","Ağaç dallarını kırmak"],
-    order:["Çevreme dikkatle bakarım","Çöpümü ayırırım","Doğayı temiz tutarım","Canlıları korurum"],
-    pairs:[["🐶","Hayvan"],["🌳","Ağaç"],["♻️","Geri dönüşüm"],["🍂","Sonbahar"]]
-  }
+/* ===================== 5. ÖĞRENME ALANI ===================== */
+{
+ label:"5. Öğrenme Alanı",
+ title:"Doğa ve Çevre",
+ emoji:"🌳",
+ color:"#00897b",
+ color2:"#80cbc4",
+ hero:"doga",
+ description:"Doğayı gözlemliyor, gökyüzünü tanıyor, afetlere hazırlanıyor ve israfı önlüyoruz.",
+ gunler:[
+  ["🐾","Hayvanları Koruma Günü","4 Ekim"],
+  ["🌍","Deprem Haftası","1 - 7 Mart"],
+  ["🌳","Orman Haftası","21 - 26 Mart"],
+  ["💧","Dünya Su Günü","22 Mart"],
+  ["🌱","Çevre Koruma Haftası","5 - 11 Haziran"]
+ ],
+ lesson:`Doğada insanlar, hayvanlar ve bitkiler birlikte yaşar. Ağaçlar bize temiz hava verir; hayvanların suya, yiyeceğe ve güvenli bir yuvaya ihtiyacı vardır. Doğayı gözlemlerken canlılara zarar vermeyiz. Gökyüzünde gündüz Güneş'i, gece Ay'ı ve yıldızları görürüz. Yağmur, kar, rüzgâr ve gökkuşağı birer hava olayıdır. Ülkemizde deprem, sel, yangın ve fırtına gibi doğa olayları yaşanabilir. Bunlara hazırlıklı olursak zarar azalır. Tatbikatlara ciddiyetle katılır, acil durum çantamızı hazır bulundururuz. Yiyeceğimizi, suyumuzu, elektriğimizi ve kâğıdımızı israf etmeyiz. Kâğıt, plastik, cam ve metal atıkları ayrı kutulara atarız. Eskiyen eşyaları onarır ya da ihtiyacı olana veririz. Doğayı korumak hepimizin görevidir.`,
+ topics:[
+  {svg:"doga",icon:"🌳",title:"Doğayla Baş Başa",
+   short:"Çevremizdeki canlıları tanır ve koruruz.",
+   bullets:["Kedi, kuş, kelebek gibi hayvanları gözlemlerim.","Ağaç, çiçek ve otları tanırım.","Çiçekleri koparmam, dalları kırmam.","Sokak hayvanlarına su ve mama bırakırım.","Mevsimlere göre doğanın değiştiğini fark ederim."],
+   fact:"Bir ağaç, yıllarca temiz hava üretir ve pek çok canlıya yuva olur."},
+  {svg:"gokyuzu",icon:"🌤️",title:"Gökyüzünde Neler Var?",
+   short:"Güneş, Ay, yıldızlar ve hava olayları.",
+   bullets:["Gündüz gökyüzünde Güneş'i görürüz.","Gece Ay'ı ve yıldızları görürüz.","Yağmur, kar, rüzgâr birer hava olayıdır.","Hava durumuna göre giyinirim.","Yağmurdan sonra gökkuşağı görülebilir."],
+   fact:"Güneş'e çıplak gözle bakmak gözlerimize zarar verir; asla doğrudan bakmayız."},
+  {svg:"afet",icon:"🌊",title:"Afetleri Tanıyalım",
+   short:"Deprem, sel ve yangına hazırlıklı oluruz.",
+   bullets:["Deprem, sel, yangın ve fırtına birer afettir.","Depremde çök, kapan, tutun yaparım.","Tatbikatlara ciddiyetle katılırım.","Evimizin toplanma alanını bilirim.","Acil durum çantamız hazır bulunur."],
+   fact:"Hazırlıklı olmak korkuyu azaltır; ne yapacağını bilen çocuk daha güvendedir."},
+  {svg:"geridonusum",icon:"♻️",title:"Atma, Yazık Olur!",
+   short:"İsrafı önler, atıkları geri dönüştürürüz.",
+   bullets:["Ekmeği ve yemeği israf etmem.","Musluğu kapatır, suyu boşa akıtmam.","Kullanmadığım odanın ışığını söndürürüm.","Kâğıt, plastik, cam ve metali ayrı kutulara atarım.","Eskiyen eşyayı onarır ya da ihtiyacı olana veririm."],
+   fact:"Geri dönüştürülen kâğıtlar sayesinde daha az ağaç kesilir."}
+ ],
+ good:["Atıkları ayırmak","Musluğu kapatmak","Hayvanlara su bırakmak","Tatbikatı ciddiye almak"],
+ bad:["Çöpü yere atmak","Ekmeği israf etmek","Çiçek koparmak","Işıkları açık bırakmak"],
+ order:["Doğayı gözlemlerim","Çöpümü ayırırım","Suyu ve elektriği tasarruflu kullanırım","Canlıları korurum"],
+ pairs:[["🌳","Ağaç"],["♻️","Geri dönüşüm"],["💧","Su"],["🌦️","Hava olayı"]],
+ perf:{
+  baslik:"♻️ Atıktan Oyuncak Atölyesi",
+  aciklama:"Evindeki atık malzemelerden bir oyuncak yap ve sınıfta tanıt.",
+  adimlar:["Kullanılmayan kutu, pet şişe, kapak ve karton topla.","Ne yapacağına karar ver: robot, araba, kalemlik…","Malzemeleri kes, yapıştır, boya (büyüklerinden yardım al).","Oyuncağına bir isim ver.","Sınıfta hangi atıkları kullandığını anlat."]
+ },
+ quiz:[
+  {q:"Gece gökyüzünde neyi görürüz?",s:["Güneş'i","Ay'ı ve yıldızları","Gökkuşağını"],d:1},
+  {q:"Kâğıt atıklar hangi kutuya atılır?",s:["Mavi (kâğıt) kutuya","Cam kutusuna","Çöpe"],d:0},
+  {q:"Deprem sırasında en doğru davranış nedir?",s:["Pencereden bakmak","Çök - Kapan - Tutun","Koşmak"],d:1},
+  {q:"Suyu tasarruflu kullanmak için ne yaparız?",s:["Musluğu açık bırakırız","Diş fırçalarken musluğu kapatırız","Uzun süre duş alırız"],d:1}
+ ]
+},
+
+/* ===================== 6. ÖĞRENME ALANI ===================== */
+{
+ label:"6. Öğrenme Alanı",
+ title:"Bilim, Teknoloji ve Sanat",
+ emoji:"🔬",
+ color:"#d81b60",
+ color2:"#f48fb1",
+ hero:"bilim",
+ description:"Merak ediyor, deniyor, teknolojiyi güvenle kullanıyor ve sanatla kendimizi ifade ediyoruz.",
+ gunler:[
+  ["💡","Yerli Malı ve Tutum Haftası","12 - 18 Aralık"],
+  ["🔌","Enerji Tasarrufu Haftası","Ocak ayının 2. haftası"],
+  ["🔬","Bilim ve Teknoloji Haftası","8 - 14 Mart"],
+  ["🏛️","Müzeler Haftası","18 - 24 Mayıs"]
+ ],
+ lesson:`Bilim merakla başlar. Çevremizi gözlemler, sorular sorar, tahmin eder ve denemeler yaparız. Bir tohumu toprağa ekip her gün gözlemlemek de küçük bir bilim çalışmasıdır. Teknoloji, işlerimizi kolaylaştıran ürünlerdir. Eskiden mektup yazılırdı, bugün telefonla konuşuyoruz. Buzdolabı, çamaşır makinesi, tablet ve bilgisayar birer teknolojik üründür. Teknolojiyi ailemizin belirlediği süre kadar, gözlerimizi yormadan kullanırız. Kişisel bilgilerimizi internette paylaşmayız. Sanat bize iyi gelir. Resim yapar, şarkı söyler, dans eder, tiyatro oynar ve el işleri yaparız. Müzeler, geçmişten kalan eserleri koruyan yerlerdir. Müzede eserlere dokunmaz, sessiz oluruz. Herkesin sanat eseri değerlidir; arkadaşımızın çalışmasıyla alay etmeyiz.`,
+ topics:[
+  {svg:"bilim",icon:"🔬",title:"Bilimin Peşindeyiz",
+   short:"Merak eder, gözlemler ve deneriz.",
+   bullets:["Çevremi merak eder, sorular sorarım.","Gözlem yapar, gördüklerimi çizerim.","Ne olacağını tahmin ederim.","Basit deneyler yaparım (tohum ekmek gibi).","Sonucu arkadaşlarımla paylaşırım."],
+   fact:"Bilim insanları da bizim gibi soru sorarak işe başlar: “Acaba neden?”"},
+  {svg:"teknoloji",icon:"💻",title:"Teknolojiyi Keşfedelim",
+   short:"Teknolojik ürünleri tanır, güvenle kullanırız.",
+   bullets:["Buzdolabı, çamaşır makinesi, tablet birer teknolojik üründür.","Teknoloji işlerimizi kolaylaştırır.","Eskiden mektup vardı, bugün telefon ve e-posta var.","Ekran süremi ailemle birlikte belirlerim.","Kişisel bilgilerimi internette paylaşmam."],
+   fact:"Uzun süre ekrana bakmak gözlerimizi yorar; 20 dakikada bir uzağa bakmak iyi gelir."},
+  {svg:"sanat",icon:"🎨",title:"Sanat Bize İyi Gelir",
+   short:"Resim, müzik, dans ve tiyatroyla kendimizi anlatırız.",
+   bullets:["Resim yapar, duygularımı renklerle anlatırım.","Şarkı söyler, ritim tutar, dans ederim.","Tiyatro ve kukla oyunları oynarım.","Müzede eserlere dokunmaz, sessiz olurum.","Arkadaşımın eserine saygı duyarım."],
+   fact:"Müzeler, geçmişten günümüze ulaşan eserleri koruyan hazine sandıklarıdır."}
+ ],
+ good:["Merak edip soru sormak","Ekran süresine uymak","Müzede sessiz olmak","Arkadaşımın eserine saygı duymak"],
+ bad:["Denemeden vazgeçmek","Saatlerce tablet kullanmak","Müzede esere dokunmak","Arkadaşımın resmiyle alay etmek"],
+ order:["Merak eder, soru sorarım","Tahminimi söylerim","Deneyimi yaparım","Sonucu paylaşırım"],
+ pairs:[["🔬","Bilim"],["💻","Teknoloji"],["🎨","Sanat"],["🏛️","Müze"]],
+ perf:{
+  baslik:"🌱 Tohum Günlüğü",
+  aciklama:"Bir fasulye tohumu ek ve iki hafta boyunca gözlem günlüğü tut.",
+  adimlar:["Pamuklu bir kaba fasulye tohumu koy, biraz su ekle.","Her gün aynı saatte gözlem yap.","Gördüklerini kutucuklara çiz ve tarih yaz.","Kaç günde çimlendiğini not et.","Günlüğünü sınıfta arkadaşlarına anlat."]
+ },
+ quiz:[
+  {q:"Bilim çalışması nasıl başlar?",s:["Merak edip soru sorarak","Hemen sonucu yazarak","Hiçbir şey yapmadan"],d:0},
+  {q:"Aşağıdakilerden hangisi teknolojik bir üründür?",s:["Taş","Buzdolabı","Ağaç"],d:1},
+  {q:"Müzede nasıl davranırız?",s:["Eserlere dokunuruz","Koşarız","Sessiz oluruz ve dokunmayız"],d:2},
+  {q:"Tablet kullanırken doğru davranış hangisidir?",s:["Süreyi ailemle belirlerim","Adresimi paylaşırım","Saatlerce bakarım"],d:0}
+ ]
+}
 ];
-
-/* GENEL DEĞİŞKENLER */
-
+</script>
+<script>
+/* ============================================================
+   SAYFA MANTIĞI
+   ============================================================ */
 let currentUnit = 0;
 let score = 0;
 let stars = 0;
@@ -722,382 +1085,286 @@ const topicGrid = document.getElementById("topicGrid");
 const gameContent = document.getElementById("gameContent");
 const gameMessage = document.getElementById("gameMessage");
 
-function addPoint(point){
-  score += point;
-  stars += 1;
+function addPoint(p){
+  score += p; stars += 1;
   document.getElementById("score").textContent = score;
   document.getElementById("stars").textContent = stars;
 }
+function karistir(dizi){
+  const d = dizi.slice();
+  for(let i=d.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [d[i],d[j]]=[d[j],d[i]]; }
+  return d;
+}
 
+/* ---------- SEKMELER ---------- */
 function createTabs(){
   tabs.innerHTML = "";
-
   units.forEach((unit,index)=>{
-    const button = document.createElement("button");
-    button.textContent = unit.emoji + " " + (index + 1) + ". Ünite";
-    button.style.background = unit.color;
-
-    if(index === currentUnit){
-      button.classList.add("active");
-    }
-
-    button.onclick = ()=>{
-      currentUnit = index;
-      stopVoice();
-      renderUnit();
+    const b = document.createElement("button");
+    b.innerHTML = unit.emoji + " " + (index+1) + ". " + unit.title;
+    b.style.background = unit.color;
+    if(index === currentUnit) b.classList.add("active");
+    b.onclick = ()=>{
+      currentUnit = index; stopVoice(); renderUnit();
       window.scrollTo({top:0,behavior:"smooth"});
     };
-
-    tabs.appendChild(button);
+    tabs.appendChild(b);
   });
 }
 
+/* ---------- ÜNİTE ---------- */
 function renderUnit(){
-  const unit = units[currentUnit];
+  const u = units[currentUnit];
 
-  document.getElementById("unitEmoji").textContent = unit.emoji;
-  document.getElementById("unitName").textContent = unit.title;
-  document.getElementById("unitDescription").textContent = unit.description;
-  document.getElementById("lessonText").textContent = unit.lesson;
+  document.getElementById("unitEmoji").textContent = u.emoji;
+  document.getElementById("unitLabel").textContent = u.label;
+  document.getElementById("unitName").textContent = u.title;
+  document.getElementById("unitDescription").textContent = u.description;
+  document.getElementById("unitTitle").style.background =
+    "linear-gradient(135deg," + u.color + "," + u.color2 + ")";
+  document.getElementById("unitCizim").innerHTML = CIZIM[u.hero] ? CIZIM[u.hero]() : "";
+  document.getElementById("lessonText").textContent = u.lesson;
 
+  /* belirli gün ve haftalar */
+  const gg = document.getElementById("gunlerGrid");
+  gg.innerHTML = "";
+  u.gunler.forEach(g=>{
+    const d = document.createElement("div");
+    d.className = "gun-kart";
+    d.style.setProperty("--gun-renk", u.color);
+    d.innerHTML = `<div class="gun-emoji">${g[0]}</div><div><b>${g[1]}</b><span>${g[2]}</span></div>`;
+    gg.appendChild(d);
+  });
+
+  /* konu kartları */
   topicGrid.innerHTML = "";
-
-  unit.topics.forEach((topic,index)=>{
+  u.topics.forEach((t,i)=>{
     const card = document.createElement("article");
     card.className = "topic-card";
-
+    card.style.borderColor = u.color2;
     card.innerHTML = `
-      <div class="topic-icon">${topic[0]}</div>
-      <h3>${index+1}. ${topic[1]}</h3>
-      <div class="topic-short">${topic[2]}</div>
-      <div class="topic-detail">
-        <b>Ayrıntılı açıklama:</b><br>
-        ${topic[3]}
-        <br><br>
-        <button class="general-button listen-button dinle-dugmesi">
-          🔊 Dinle
-        </button>
-      </div>
-    `;
-
-    const dinleDugmesi = card.querySelector(".dinle-dugmesi");
-    dinleDugmesi.onclick = (olay)=>{
-      olay.stopPropagation();
-      readText(topic[1] + ". " + topic[3]);
-    };
-
-    card.onclick = ()=>{
-      card.classList.toggle("open");
-    };
-
+      <div class="kart-no">${i+1}</div>
+      <div class="kart-gorsel">${CIZIM[t.svg] ? CIZIM[t.svg]() : ""}</div>
+      <div class="kart-govde">
+        <h3><span>${t.icon}</span> ${t.title}</h3>
+        <div class="topic-short">${t.short}</div>
+        <div class="kart-detay" id="detay${i}">
+          <ul class="ogren-listesi">${t.bullets.map(b=>`<li>${b}</li>`).join("")}</ul>
+          <div class="bilgi-kutu"><b>💡 Bunu biliyor musun?</b>${t.fact}</div>
+        </div>
+        <button class="detay-dugme" style="background:${u.color}" onclick="toggleDetay(${i},this)">📖 Devamını Oku</button>
+        <button class="detay-dugme" style="background:#55af68" onclick="konuDinle(${i})">🔊 Dinle</button>
+      </div>`;
     topicGrid.appendChild(card);
   });
 
-  createTabs();
+  /* doğru - yanlış davranışlar */
+  document.getElementById("iyiListe").innerHTML = u.good.map(g=>`<li>${g}</li>`).join("");
+  document.getElementById("kotuListe").innerHTML = u.bad.map(g=>`<li>${g}</li>`).join("");
+
+  /* performans görevi */
+  document.getElementById("perfBaslik").textContent = u.perf.baslik;
+  document.getElementById("perfAciklama").textContent = u.perf.aciklama;
+  document.getElementById("perfAdimlar").innerHTML = u.perf.adimlar.map(a=>`<li>${a}</li>`).join("");
+
+  renderTest();
+
   gameContent.innerHTML = "";
-  gameMessage.textContent = "Bir oyun seçerek başlayabilirsin! 🌟";
-  window.checkOrderGame = null;
+  gameMessage.textContent = "Yukarıdan bir oyun seç ve başla! 🎉";
+  createTabs();
 }
 
-/* SESLİ ANLATIM */
-
-function readText(text){
-  if(!("speechSynthesis" in window)){
-    alert("Bu tarayıcı sesli okumayı desteklemiyor.");
-    return;
-  }
-
-  speechSynthesis.cancel();
-
-  const speech = new SpeechSynthesisUtterance(text);
-  speech.lang = "tr-TR";
-  speech.rate = 0.82;
-  speech.pitch = 0.9;
-
-  const sesler = speechSynthesis.getVoices();
-  const turkceSes = sesler.find(v => v.lang.toLowerCase().startsWith("tr"));
-
-  if(turkceSes){
-    speech.voice = turkceSes;
-    speechSynthesis.speak(speech);
-    return;
-  }
-
-  /* Sesler henüz yüklenmemişse yüklenince tekrar dene */
-  if(sesler.length === 0){
-    speechSynthesis.onvoiceschanged = ()=>{
-      speechSynthesis.onvoiceschanged = null;
-      const yeniSesler = speechSynthesis.getVoices();
-      const ses = yeniSesler.find(v => v.lang.toLowerCase().startsWith("tr"));
-      if(ses){ speech.voice = ses; }
-      speechSynthesis.speak(speech);
-    };
-    return;
-  }
-
-  speechSynthesis.speak(speech);
+function toggleDetay(i,btn){
+  const d = document.getElementById("detay"+i);
+  d.classList.toggle("acik");
+  btn.innerHTML = d.classList.contains("acik") ? "🔽 Kapat" : "📖 Devamını Oku";
 }
 
-function readLesson(){
-  readText(units[currentUnit].lesson);
+/* ---------- SESLENDİRME ---------- */
+function seslendir(metin){
+  if(!("speechSynthesis" in window)){ alert("Tarayıcın sesli okumayı desteklemiyor."); return; }
+  window.speechSynthesis.cancel();
+  const s = new SpeechSynthesisUtterance(metin);
+  s.lang = "tr-TR"; s.rate = .92; s.pitch = 1.05;
+  window.speechSynthesis.speak(s);
 }
+function readLesson(){ seslendir(units[currentUnit].lesson); }
+function konuDinle(i){
+  const t = units[currentUnit].topics[i];
+  seslendir(t.title + ". " + t.short + " " + t.bullets.join(" "));
+}
+function stopVoice(){ if("speechSynthesis" in window) window.speechSynthesis.cancel(); }
 
-function stopVoice(){
-  if("speechSynthesis" in window){
-    speechSynthesis.cancel();
+/* ---------- TEKRAR ZAMANI (TEST) ---------- */
+function renderTest(){
+  const u = units[currentUnit];
+  const alan = document.getElementById("testAlani");
+  const sonuc = document.getElementById("testSonuc");
+  sonuc.textContent = "";
+  alan.innerHTML = "";
+  u.quiz.forEach((soru,si)=>{
+    const kart = document.createElement("div");
+    kart.className = "soru-kart";
+    kart.innerHTML = `<div class="soru-metin">${si+1}. ${soru.q}</div>
+      <div class="secenekler">${soru.s.map((sec,i)=>
+        `<button class="secenek" onclick="cevapla(${si},${i},this)">${String.fromCharCode(65+i)}) ${sec}</button>`).join("")}</div>`;
+    alan.appendChild(kart);
+  });
+  window._dogruSayisi = 0;
+  window._cevaplanan = [];
+}
+function cevapla(si,i,btn){
+  if(window._cevaplanan.includes(si)) return;
+  window._cevaplanan.push(si);
+  const u = units[currentUnit];
+  const dogru = u.quiz[si].d;
+  const kart = btn.closest(".soru-kart");
+  kart.querySelectorAll(".secenek").forEach((b,bi)=>{
+    if(bi === dogru) b.classList.add("dogru");
+    else if(bi === i) b.classList.add("yanlis");
+  });
+  if(i === dogru){ window._dogruSayisi++; addPoint(10); }
+  if(window._cevaplanan.length === u.quiz.length){
+    const s = document.getElementById("testSonuc");
+    const t = u.quiz.length;
+    s.textContent = `🎉 ${t} sorudan ${window._dogruSayisi} tanesini doğru bildin!` +
+      (window._dogruSayisi === t ? " Harikasın! ⭐" : " Tekrar deneyebilirsin.");
   }
 }
 
-/* 1. OYUN: BALON PATLATMA */
-
+/* ---------- OYUN 1: BALON ---------- */
 function startBalloonGame(){
-  const unit = units[currentUnit];
-  const allItems = [
-    ...unit.good.map(text => ({text:text,correct:true})),
-    ...unit.bad.map(text => ({text:text,correct:false}))
-  ].sort(()=>Math.random()-0.5);
-
-  let correctFound = 0;
-
-  gameMessage.textContent = "Balonların üzerindeki doğru davranışları bul ve patlat! 🎈";
-
-  gameContent.innerHTML = `
-    <div class="balloon-info">
-      <b>Görev:</b> Doğru davranış yazan balonlara bas. 
-      Yanlış davranış yazan balonlara basma.
-    </div>
-    <div class="balloon-board" id="balloonBoard"></div>
-  `;
-
-  const balloonBoard = document.getElementById("balloonBoard");
-
-  allItems.forEach(item=>{
-    const balloon = document.createElement("button");
-    balloon.className = "balloon";
-    balloon.textContent = item.text;
-
-    balloon.onclick = ()=>{
-      if(item.correct){
-        if(!balloon.classList.contains("popped")){
-          balloon.classList.add("popped");
-          correctFound++;
-          addPoint(10);
-          gameMessage.textContent = "Harika! Bu doğru bir davranış! ⭐";
-
-          if(correctFound === unit.good.length){
-            gameMessage.textContent = "Tebrikler! Tüm doğru davranış balonlarını patlattın! 🎉";
-          }
-        }
+  const u = units[currentUnit];
+  const dogru = u.good[Math.floor(Math.random()*u.good.length)];
+  const yanlislar = karistir(u.bad).slice(0,3);
+  const secenekler = karistir([dogru,...yanlislar]);
+  const renkler = ["#ef5350","#42a5f5","#66bb6a","#ab47bc","#ffa726"];
+  gameMessage.textContent = "🎈 Doğru davranışın balonunu patlat!";
+  gameContent.innerHTML = `<div class="balloon-info">Hangisi doğru davranıştır?</div>
+    <div class="balloon-board" id="balloonBoard"></div>`;
+  const board = document.getElementById("balloonBoard");
+  secenekler.forEach((s,i)=>{
+    const b = document.createElement("button");
+    b.className = "balloon";
+    b.style.background = renkler[i % renkler.length];
+    b.style.animationDelay = (i*.25)+"s";
+    b.textContent = s;
+    b.onclick = ()=>{
+      if(s === dogru){
+        b.textContent = "💥 Doğru!";
+        addPoint(10);
+        gameMessage.textContent = "🎉 Tebrikler! Doğru davranışı buldun.";
+        setTimeout(startBalloonGame,1200);
       }else{
-        gameMessage.textContent = "Dikkat! Bu doğru bir davranış değil. Başka bir balon seç. 🤔";
-        balloon.style.opacity = ".55";
+        b.style.opacity = ".45";
+        gameMessage.textContent = "🤔 Bu doğru bir davranış değil, tekrar dene.";
       }
     };
-
-    balloonBoard.appendChild(balloon);
+    board.appendChild(b);
   });
 }
 
-/* 2. OYUN: SIRALAMA */
-
+/* ---------- OYUN 2: SIRALA ---------- */
+let secilenSira = null;
 function startOrderGame(){
-  const unit = units[currentUnit];
-  const orderList = [...unit.order].sort(()=>Math.random()-0.5);
-  let selectedCard = null;
-
-  gameMessage.textContent = "Kartlara dokunarak olayları doğru sıraya koy! 🚂";
-
-  gameContent.innerHTML = `
-    <div class="order-help">
-      <b>Nasıl oynanır?</b><br>
-      Önce bir kartı seç. Sonra yerini değiştirmek istediğin ikinci karta bas.
-      İki kartın yeri değişir.
-    </div>
-
+  const u = units[currentUnit];
+  gameMessage.textContent = "🔢 İki kutuya sırayla dokunarak yerlerini değiştir.";
+  gameContent.innerHTML = `<div class="order-help">Adımları doğru sıraya diz, sonra kontrol et.</div>
     <div class="order-board" id="orderBoard"></div>
-
-    <button class="general-button" style="background:#55af68" onclick="checkOrderGame()">
-      ✅ Sıramı Kontrol Et
-    </button>
-  `;
-
-  const orderBoard = document.getElementById("orderBoard");
-
-  function drawCards(){
-    orderBoard.innerHTML = "";
-
-    orderList.forEach((text,index)=>{
-      const card = document.createElement("button");
-      card.className = "order-card";
-      card.dataset.text = text;
-
-      card.innerHTML = `
-        <span class="order-number">🚃 ${index+1}</span>
-        ${text}
-      `;
-
-      card.onclick = ()=>{
-        if(selectedCard === null){
-          selectedCard = index;
-          card.classList.add("selected");
-          gameMessage.textContent = "Şimdi yer değiştirmek istediğin başka bir karta bas.";
-          return;
-        }
-
-        if(selectedCard === index){
-          selectedCard = null;
-          drawCards();
-          gameMessage.textContent = "Kart seçimi kaldırıldı.";
-          return;
-        }
-
-        const temporary = orderList[selectedCard];
-        orderList[selectedCard] = orderList[index];
-        orderList[index] = temporary;
-
-        selectedCard = null;
-        drawCards();
-        gameMessage.textContent = "Kartların yerleri değişti. Sıralamayı tamamla! 🚂";
-      };
-
-      orderBoard.appendChild(card);
+    <div class="button-row" style="justify-content:center">
+      <button class="general-button" style="background:#55af68" onclick="checkOrderGame()">✅ Kontrol Et</button>
+      <button class="general-button" style="background:#9b59b6" onclick="startOrderGame()">🔄 Karıştır</button>
+    </div>`;
+  const board = document.getElementById("orderBoard");
+  secilenSira = null;
+  karistir(u.order).forEach(item=>{
+    const d = document.createElement("div");
+    d.className = "order-item";
+    d.dataset.metin = item;
+    d.innerHTML = `<span class="order-number">🚃</span><span>${item}</span>`;
+    d.onclick = ()=>{
+      if(secilenSira === null){ secilenSira = d; d.style.background = "#efe6ff"; }
+      else if(secilenSira === d){ secilenSira = null; d.style.background = "#fff"; }
+      else{
+        const t = secilenSira.innerHTML, m = secilenSira.dataset.metin;
+        secilenSira.innerHTML = d.innerHTML; secilenSira.dataset.metin = d.dataset.metin;
+        d.innerHTML = t; d.dataset.metin = m;
+        secilenSira.style.background = "#fff"; secilenSira = null;
+      }
+    };
+    board.appendChild(d);
+  });
+  numaralandir();
+}
+function numaralandir(){
+  document.querySelectorAll("#orderBoard .order-item").forEach((d,i)=>{
+    d.querySelector(".order-number").textContent = "🚃 " + (i+1);
+  });
+}
+function checkOrderGame(){
+  const u = units[currentUnit];
+  const mevcut = [...document.querySelectorAll("#orderBoard .order-item")].map(d=>d.dataset.metin);
+  const dogruMu = mevcut.every((m,i)=> m === u.order[i]);
+  if(dogruMu){
+    addPoint(15);
+    gameMessage.textContent = "🎉 Süper! Sıralama tamamen doğru.";
+    document.querySelectorAll("#orderBoard .order-item").forEach(d=>d.style.background="#e3f9e6");
+  }else{
+    gameMessage.textContent = "🤔 Sıralama henüz doğru değil, tekrar dene.";
+    document.querySelectorAll("#orderBoard .order-item").forEach((d,i)=>{
+      d.style.background = (d.dataset.metin === u.order[i]) ? "#e3f9e6" : "#ffecea";
     });
   }
-
-  window.checkOrderGame = function(){
-    const correct = unit.order.join("|");
-    const answer = orderList.join("|");
-
-    if(answer === correct){
-      gameMessage.textContent = "Mükemmel! Olayları doğru sıraya koydun! 🎉";
-      addPoint(25);
-    }else{
-      let doguSayisi = 0;
-      unit.order.forEach((metin,sira)=>{ if(orderList[sira] === metin) doguSayisi++; });
-      gameMessage.textContent =
-        doguSayisi + " kart doğru yerde. Diğerlerinin yerini değiştirip tekrar dene! 💪";
-    }
-  };
-
-  drawCards();
+  numaralandir();
 }
 
-/* 3. OYUN: KART ÇEVİRME */
-
+/* ---------- OYUN 3: KART ÇEVİRME ---------- */
+let acikKart = null, kilit = false, bulunan = 0;
 function startMemoryGame(){
-  const unit = units[currentUnit];
-  const selectedPairs = unit.pairs;
-
-  let cards = [];
-
-  selectedPairs.forEach((pair,index)=>{
-    cards.push({
-      pair:index,
-      type:"emoji",
-      value:pair[0]
-    });
-
-    cards.push({
-      pair:index,
-      type:"word",
-      value:pair[1]
-    });
+  const u = units[currentUnit];
+  const kartlar = [];
+  u.pairs.forEach((p,i)=>{
+    kartlar.push({id:i,tip:"emoji",deger:p[0]});
+    kartlar.push({id:i,tip:"kelime",deger:p[1]});
   });
-
-  cards.sort(()=>Math.random()-0.5);
-
-  let firstCard = null;
-  let lock = false;
-  let matchedCount = 0;
-
-  gameMessage.textContent = "Görsel kart ile kelime kartını eşleştir! 🃏";
-
+  const karisik = karistir(kartlar);
+  acikKart = null; kilit = false; bulunan = 0;
+  gameMessage.textContent = "🃏 Görseli, doğru kelimesiyle eşleştir!";
   gameContent.innerHTML = `<div class="memory-board" id="memoryBoard"></div>`;
-
-  const memoryBoard = document.getElementById("memoryBoard");
-
-  cards.forEach(cardData=>{
-    const card = document.createElement("div");
-    card.className = "memory-card";
-    card.dataset.pair = cardData.pair;
-    card.dataset.type = cardData.type;
-
-    let backContent = "";
-
-    if(cardData.type === "emoji"){
-      backContent = `
-        <div style="font-size:43px">${cardData.value}</div>
-        <div class="memory-word">Görsel</div>
-      `;
-    }else{
-      backContent = `
-        <div style="font-size:29px">📖</div>
-        <div class="memory-word">${cardData.value}</div>
-      `;
-    }
-
-    card.innerHTML = `
-      <div class="memory-inner">
-        <div class="memory-front">❓</div>
-        <div class="memory-back">${backContent}</div>
-      </div>
-    `;
-
-    card.onclick = ()=>{
-      if(lock || card.classList.contains("open") || card.classList.contains("matched")){
-        return;
-      }
-
-      card.classList.add("open");
-
-      if(firstCard === null){
-        firstCard = card;
-        return;
-      }
-
-      const samePair = firstCard.dataset.pair === card.dataset.pair;
-      const differentType = firstCard.dataset.type !== card.dataset.type;
-
-      if(samePair && differentType){
-        firstCard.classList.remove("open");
-        firstCard.classList.add("matched");
-
-        card.classList.remove("open");
-        card.classList.add("matched");
-
-        firstCard = null;
-        matchedCount++;
-        addPoint(10);
-
-        gameMessage.textContent = "Doğru eşleştirme! Harikasın! ⭐";
-
-        if(matchedCount === selectedPairs.length){
-          gameMessage.textContent = "Tebrikler! Bütün kartları eşleştirdin! 🎉";
-        }
+  const board = document.getElementById("memoryBoard");
+  karisik.forEach(k=>{
+    const c = document.createElement("div");
+    c.className = "memory-card";
+    c.innerHTML = `<div class="memory-inner">
+      <div class="memory-front">❓</div>
+      <div class="memory-back">${k.tip==="emoji" ? `<div style="font-size:30px">${k.deger}</div>` : `<div class="memory-word">${k.deger}</div>`}</div>
+    </div>`;
+    c.onclick = ()=>{
+      if(kilit || c.classList.contains("acik")) return;
+      c.classList.add("acik");
+      if(!acikKart){ acikKart = {el:c,veri:k}; return; }
+      if(acikKart.veri.id === k.id && acikKart.veri.tip !== k.tip){
+        addPoint(10); bulunan++;
+        acikKart.el.style.opacity=".72"; c.style.opacity=".72";
+        acikKart = null;
+        if(bulunan === u.pairs.length) gameMessage.textContent = "🏆 Tebrikler! Bütün kartları eşleştirdin.";
       }else{
-        lock = true;
-        gameMessage.textContent = "Bu kartlar eşleşmedi. Bir daha dene!";
-
+        kilit = true;
         setTimeout(()=>{
-          firstCard.classList.remove("open");
-          card.classList.remove("open");
-          firstCard = null;
-          lock = false;
-        },900);
+          c.classList.remove("acik"); acikKart.el.classList.remove("acik");
+          acikKart = null; kilit = false;
+        },800);
       }
     };
-
-    memoryBoard.appendChild(card);
+    board.appendChild(c);
   });
 }
 
+/* ---------- BAŞLAT ---------- */
+createTabs();
 renderUnit();
 </script>
 
-
-<div style="text-align:center;padding:18px 10px;margin-top:28px;font-size:0.82rem;color:#8a8a8a;border-top:1px solid #e5e5e5;">Dijital Öğretmen Hasan Tutuş</div>
-<!-- Ziyaretçi sayacı: goatcounter.com'da ücretsiz hesap açtıktan sonra
-     aşağıdaki "dijitalogretmen" kısmını kendi GoatCounter kodunuzla değiştirin. -->
 <script data-goatcounter="https://dijitalogretmen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
