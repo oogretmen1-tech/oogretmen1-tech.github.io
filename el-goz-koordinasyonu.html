@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Gözüm Elimde — El-Göz Koordinasyonu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ana:#2f6ea8; --acik:#e7f1f9; --turuncu:#f2913d; --kirmizi:#e0574f;
+  --yesil:#3fa66b; --sari:#f3c53d; --mor:#8d6fd1; --koyu:#2c3846;
+  --golge:0 6px 0 rgba(0,0,0,.08), 0 12px 28px rgba(30,70,110,.15);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{font-family:'Andika','Segoe UI',system-ui,sans-serif;color:var(--koyu);
+  background:linear-gradient(165deg,#e4f0fa 0%,#eef6f2 55%,#fdf6e8 100%);
+  min-height:100vh;padding:14px;padding-bottom:60px;user-select:none;}
+h1,h2,h3{margin:0;}
+.wrap{max-width:1000px;margin:0 auto;}
+.topbar{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+.logo{background:var(--ana);color:#fff;border-radius:18px;padding:10px 18px;font-weight:700;font-size:22px;box-shadow:var(--golge);}
+.logo small{display:block;font-weight:400;font-size:12px;opacity:.85;letter-spacing:.5px;}
+.geri{margin-left:auto;background:#fff;border:none;border-radius:16px;padding:12px 20px;font-family:inherit;font-size:17px;font-weight:700;color:var(--ana);box-shadow:var(--golge);cursor:pointer;}
+.geri:active{transform:translateY(3px);}
+.aciklama{background:#fff;border-radius:20px;padding:14px 18px;box-shadow:var(--golge);margin-bottom:14px;font-size:16px;line-height:1.5;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;}
+.kart{background:#fff;border:none;border-radius:22px;padding:18px;text-align:left;font-family:inherit;color:var(--koyu);box-shadow:var(--golge);cursor:pointer;display:flex;flex-direction:column;gap:6px;}
+.kart:active{transform:translateY(4px);}
+.kart .ikon{font-size:38px;line-height:1;}
+.kart .ad{font-size:20px;font-weight:700;}
+.kart .alt{font-size:14px;opacity:.75;line-height:1.4;}
+.kart .rozet{align-self:flex-start;margin-top:6px;font-size:12px;font-weight:700;background:var(--acik);color:var(--ana);border-radius:20px;padding:4px 12px;}
+.btn{font-family:inherit;border:none;border-radius:18px;padding:15px 24px;font-size:18px;font-weight:700;cursor:pointer;box-shadow:0 5px 0 rgba(0,0,0,.13);}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.13);}
+.btn.ana{background:var(--ana);color:#fff;}
+.btn.acik{background:var(--acik);color:var(--ana);}
+.btn.yesil{background:var(--yesil);color:#fff;}
+.btn.buyuk{font-size:22px;padding:19px 34px;}
+.ekran{display:none;} .ekran.acik{display:block;}
+.panel{background:#fff;border-radius:24px;padding:20px;box-shadow:var(--golge);}
+.baslik{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;}
+.baslik h2{font-size:24px;color:var(--ana);}
+.yonerge{font-size:17px;line-height:1.5;margin:6px 0 10px;}
+.satir{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+.rozet2{background:var(--acik);color:var(--ana);border-radius:20px;padding:6px 14px;font-weight:700;font-size:15px;}
+.sahne{position:relative;border-radius:22px;overflow:hidden;background:linear-gradient(180deg,#f5faff,#eef6f9);
+  height:400px;margin:8px 0;touch-action:none;border:3px solid #dfeaf2;}
+.durumyazi{text-align:center;font-size:19px;font-weight:700;color:var(--ana);min-height:28px;}
+.ogrnot{margin-top:14px;background:#fffaf0;border-left:6px solid var(--turuncu);border-radius:12px;padding:12px 14px;font-size:15px;line-height:1.55;}
+.ogrnot b{color:#a9781a;}
+.sonuc{text-align:center;padding:10px;}
+.sonuc .yildiz{font-size:56px;letter-spacing:6px;}
+.sonuc .msj{font-size:24px;font-weight:700;margin:10px 0 16px;color:var(--ana);}
+.imza{text-align:center;margin-top:26px;font-size:14px;color:#6f8091;}
+
+/* fincan */
+.fincan{position:absolute;font-size:82px;line-height:1;transition:left .32s ease-in-out,transform .18s;cursor:pointer;}
+.top{position:absolute;font-size:34px;transition:opacity .2s;}
+/* yakala */
+.sepet{position:absolute;bottom:6px;font-size:56px;transform:translateX(-50%);pointer-events:none;}
+.meyve{position:absolute;font-size:40px;pointer-events:none;}
+/* ızgara */
+.izgaralar{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;align-items:flex-start;}
+.izgara{display:grid;gap:6px;background:#eef4f8;padding:8px;border-radius:16px;}
+.hucre{width:56px;height:56px;border-radius:10px;background:#fff;border:2px solid #dfe8ef;cursor:pointer;touch-action:none;}
+.izgara.model .hucre{cursor:default;}
+.baslikcik{text-align:center;font-weight:700;font-size:16px;color:#5d6f80;margin-bottom:6px;}
+.palet{display:flex;gap:10px;justify-content:center;margin:12px 0;flex-wrap:wrap;}
+.renk{width:52px;height:52px;border-radius:14px;border:4px solid #fff;box-shadow:0 4px 0 rgba(0,0,0,.12);cursor:pointer;}
+.renk.sec{border-color:#2c3846;transform:scale(1.08);}
+/* gölge */
+.golgeler{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:10px;}
+.golge{background:#fff;border:3px solid #e3ecf3;border-radius:20px;padding:10px;font-size:52px;text-align:center;cursor:pointer;
+  filter:brightness(0) saturate(0);opacity:.85;}
+.golge.dogru{filter:none;opacity:1;border-color:var(--yesil);background:#e9f8ef;}
+.golge.yanlis{border-color:var(--kirmizi);background:#fdeceb;}
+.buyukGorsel{font-size:96px;text-align:center;line-height:1.1;}
+/* ışık */
+.isik{position:absolute;width:70px;height:70px;border-radius:50%;background:radial-gradient(circle,#fff59a,#f3c53d);
+  box-shadow:0 0 26px #f7d774;pointer-events:none;}
+@media(max-width:520px){ .sahne{height:330px;} .hucre{width:44px;height:44px;} .baslik h2{font-size:21px;} .buyukGorsel{font-size:74px;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="logo">Gözüm Elimde<small>EL-GÖZ KOORDİNASYONU · 1. SINIF HAZIRLIK</small></div>
+    <button class="geri" id="geriBtn" style="display:none" onclick="menuyeDon()">‹ Menü</button>
+  </div>
+
+  <div id="hub" class="ekran acik">
+    <div class="aciklama">
+      👁️ <b>Göz görür, el yapar.</b> Okumada göz satırı takip eder; yazmada el gözün gördüğünü kâğıda geçirir.
+      Bu iki iş birbirinden ayrı değildir. Buradaki çalışmalar gözün hareketi izlemesini, gördüğünü hatırlamasını
+      ve elin buna uymasını çalıştırır. Her bölümün altında <b>sınıfta gerçek materyalle nasıl yapılacağı</b> yazıyor.
+    </div>
+    <div class="grid" id="hubGrid"></div>
+    <div class="ogrnot">
+      <b>Öğretmen notu:</b> El-göz koordinasyonu parmak kası çalışmasından farklıdır: orada kas gücü,
+      burada <b>gözün yönlendirmesi</b> vardır. Kaslar yeterli olduğu hâlde harfleri satıra oturtamayan,
+      yazarken satır atlayan, panodan deftere geçirirken zorlanan çocuklarda asıl eksik budur.
+    </div>
+    <div class="imza">Dijital Öğretmen · Hasan Tutuş</div>
+  </div>
+
+  <!-- 1 FİNCAN -->
+  <div id="fincan" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">🥤</span><h2>Top Hangi Bardakta?</h2></div>
+    <p class="yonerge">Topu bardağın altına koyuyorum. <b>Gözünü bardaktan ayırma</b> ve karıştıktan sonra bul!</p>
+    <div class="satir"><span class="rozet2" id="fiSayac">Tur: 1 / 6</span><span class="rozet2" id="fiPuan">⭐ 0</span>
+      <button class="btn acik" onclick="fincanBaslat()">↻ Baştan</button></div>
+    <div class="sahne" id="fiSahne"></div>
+    <div class="durumyazi" id="fiDurum">Hazır ol…</div>
+    <div class="ogrnot"><b>Sınıfta gerçeği:</b> Üç plastik bardak ve bir düğme yeter. Masaya oturun, çocuk karşınıza geçsin.
+      Yavaş başlayın; çocuk buldukça hızlandırın. Sırayı çocuğa da verin — <b>o karıştırırken siz bulun</b>,
+      karıştırmak bulmaktan daha zordur. Kalabalıkta grup hâlinde oynanır, sınıfın gözü tahtada olur.</div>
+  </div></div>
+
+  <!-- 2 YAKALA -->
+  <div id="yakala" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">🧺</span><h2>Düşenleri Yakala</h2></div>
+    <p class="yonerge">Parmağını ekranda kaydır, sepeti hareket ettir. <b>Meyveleri yakala, taşlardan kaç!</b></p>
+    <div class="satir"><span class="rozet2" id="yaPuan">Yakalanan: 0</span><span class="rozet2" id="yaKacan">Kaçan: 0</span>
+      <span class="rozet2" id="yaSure">Süre: 45</span><button class="btn acik" onclick="yakalaBaslat()">↻ Baştan</button></div>
+    <div class="sahne" id="yaSahne"></div>
+    <div class="durumyazi" id="yaDurum">Sepeti parmağınla sürükle 👆</div>
+    <div class="ogrnot"><b>Sınıfta gerçeği:</b> Balon havada tutma en iyi başlangıçtır — balon yavaş düştüğü için göz
+      rahat takip eder. Sonra sırayla: yumuşak top yakalama (önce iki el, sonra tek el), sekmiş topu yakalama,
+      hedefe atma. Kâğıt topunu kutuya atmak da olur; kutuyu her turda biraz uzaklaştırın.</div>
+  </div></div>
+
+  <!-- 3 AYNISINI YAP -->
+  <div id="kopya" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">🧩</span><h2>Aynısını Yap</h2></div>
+    <p class="yonerge">Soldaki örneğe bak, <b>aynısını</b> sağdaki boş kareye yap. Önce renge, sonra kareye dokun.</p>
+    <div class="satir"><span class="rozet2" id="koSayac">Tur: 1 / 4</span><span class="rozet2" id="koPuan">⭐ 0</span>
+      <button class="btn yesil" id="koKontrol">✔ Kontrol Et</button>
+      <button class="btn acik" onclick="kopyaBaslat()">↻ Baştan</button></div>
+    <div class="izgaralar">
+      <div><div class="baslikcik">ÖRNEK</div><div class="izgara model" id="koModel"></div></div>
+      <div><div class="baslikcik">SEN YAP</div><div class="izgara" id="koBos"></div></div>
+    </div>
+    <div class="palet" id="koPalet"></div>
+    <div class="durumyazi" id="koDurum"></div>
+    <div class="ogrnot"><b>Sınıfta gerçeği:</b> Kareli deftere ya da kareli kartona renkli kalemle bir örüntü çizin,
+      çocuk yanındaki boş kareli alana aynısını yapsın. Lego, kapak, renkli pul veya mozaik ile de olur.
+      Bu çalışma <b>panodan deftere geçirme</b> becerisinin ta kendisidir; zorlanan çocuk yazı derslerinde de zorlanır.</div>
+  </div></div>
+
+  <!-- 4 GÖLGE -->
+  <div id="golge" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">🔍</span><h2>Gölgesini Bul</h2></div>
+    <p class="yonerge">Yukarıdaki nesnenin <b>gölgesi</b> hangisi? Dikkatle bak, benzerleri var!</p>
+    <div class="satir"><span class="rozet2" id="goSayac">1 / 10</span><span class="rozet2" id="goPuan">⭐ 0</span>
+      <button class="btn acik" onclick="golgeBaslat()">↻ Baştan</button></div>
+    <div class="buyukGorsel" id="goGorsel">🐘</div>
+    <div class="golgeler" id="goSecenek"></div>
+    <div class="durumyazi" id="goDurum"></div>
+    <div class="ogrnot"><b>Sınıfta gerçeği:</b> Nesnelerin gölgesini gerçekten düşürün: perdeyi kapatın, el fenerini
+      duvara tutun, oyuncakları önüne koyun. Çocuk gölgeye bakarak nesneyi tahmin etsin. Ayrıca kartonu kesip
+      siyah şablonlar yaptırın ya da çocukların el gölgesiyle hayvan yapmasını isteyin.</div>
+  </div></div>
+
+  <!-- 5 IŞIK -->
+  <div id="isik" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">💡</span><h2>Işığı Takip Et</h2></div>
+    <p class="yonerge">Parmağını ışığın üstünde tut, <b>bırakma!</b> Işık kaçmaya çalışacak.</p>
+    <div class="satir"><span class="rozet2" id="isSure">Süre: 30</span><span class="rozet2" id="isOran">Üstünde: %0</span>
+      <button class="btn acik" onclick="isikBaslat()">↻ Baştan</button></div>
+    <div class="sahne" id="isSahne"></div>
+    <div class="durumyazi" id="isDurum">Işığa dokun ve takip et 👆</div>
+    <div class="ogrnot"><b>Sınıfta gerçeği:</b> El feneriyle tavana/duvara ışık düşürün, yavaşça gezdirin;
+      çocuklar <b>sadece gözleriyle</b> takip etsin, kafalarını çevirmesinler. Bu, okurken satır takibi için
+      doğrudan hazırlıktır. İkinci aşamada ikinci bir fenerle çocuk sizin ışığınızı kovalasın.</div>
+  </div></div>
+
+  <!-- 6 SİMETRİ -->
+  <div id="simetri" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">🦋</span><h2>Simetriyi Tamamla</h2></div>
+    <p class="yonerge">Soldaki yarım şeklin <b>aynadaki hâlini</b> sağ tarafa yap. Sarı çizgi ayna!</p>
+    <div class="satir"><span class="rozet2" id="siSayac">Tur: 1 / 4</span><span class="rozet2" id="siPuan">⭐ 0</span>
+      <button class="btn yesil" id="siKontrol">✔ Kontrol Et</button>
+      <button class="btn acik" onclick="simetriBaslat()">↻ Baştan</button></div>
+    <div class="izgaralar"><div class="izgara" id="siIzgara"></div></div>
+    <div class="palet" id="siPalet"></div>
+    <div class="durumyazi" id="siDurum"></div>
+    <div class="ogrnot"><b>Sınıfta gerçeği:</b> Kareli kâğıdın ortasına dikey çizgi çekin, sol tarafa yarım bir şekil
+      çizin; çocuk sağ tarafı tamamlasın. Aynayı çizginin üstüne koyup göstermek kavramı anlatır.
+      Beden diliyle de yapın: siz kolunuzu kaldırın, çocuk <b>ayna gibi</b> karşınızda aynısını yapsın — “Ayna Oyunu”.</div>
+  </div></div>
+
+  <!-- SONUÇ -->
+  <div id="sonuc" class="ekran"><div class="panel sonuc">
+    <div class="yildiz" id="soYildiz">⭐⭐⭐</div>
+    <div class="msj" id="soMsj">Gözün çok keskin!</div>
+    <div id="soDetay" style="font-size:18px;margin-bottom:16px"></div>
+    <button class="btn ana buyuk" id="soTekrar">↻ Tekrar</button>
+    <button class="btn acik buyuk" onclick="menuyeDon()">🏠 Menü</button>
+  </div></div>
+</div>
+
+<script>
+const BOLUMLER=[
+  {id:'fincan',ikon:'🥤',ad:'Top Hangi Bardakta?',alt:'Karışan bardakları gözle takip et. Görsel izleme.',rozet:'GÖZ TAKİBİ',baslat:()=>fincanBaslat()},
+  {id:'yakala',ikon:'🧺',ad:'Düşenleri Yakala',alt:'Sepeti kaydırarak meyveleri topla. Sürekli takip.',rozet:'TAKİP + TEPKİ',baslat:()=>yakalaBaslat()},
+  {id:'kopya',ikon:'🧩',ad:'Aynısını Yap',alt:'Örnekteki deseni boş ızgaraya aktar. Görsel aktarım.',rozet:'KOPYALAMA',baslat:()=>kopyaBaslat()},
+  {id:'golge',ikon:'🔍',ad:'Gölgesini Bul',alt:'Benzer gölgeler arasından doğrusunu seç.',rozet:'AYIRT ETME',baslat:()=>golgeBaslat()},
+  {id:'isik',ikon:'💡',ad:'Işığı Takip Et',alt:'Kaçan ışığın üstünde parmağını tut.',rozet:'SÜREKLİ TAKİP',baslat:()=>isikBaslat()},
+  {id:'simetri',ikon:'🦋',ad:'Simetriyi Tamamla',alt:'Yarım şeklin ayna görüntüsünü tamamla.',rozet:'YÖN VE UZAM',baslat:()=>simetriBaslat()}
+];
+function hubKur(){
+  const g=document.getElementById('hubGrid'); g.innerHTML='';
+  BOLUMLER.forEach(b=>{
+    const k=document.createElement('button'); k.className='kart';
+    k.innerHTML='<span class="ikon">'+b.ikon+'</span><span class="ad">'+b.ad+'</span><span class="alt">'+b.alt+'</span><span class="rozet">'+b.rozet+'</span>';
+    k.onclick=()=>{ ekranAc(b.id); b.baslat(); };
+    g.appendChild(k);
+  });
+}
+hubKur();
+let rafId=null,zamanlar=[];
+function bekle(fn,ms){ const t=setTimeout(fn,ms); zamanlar.push(t); return t; }
+function dur(){ if(rafId) cancelAnimationFrame(rafId); rafId=null; zamanlar.forEach(clearTimeout); zamanlar=[]; }
+function ekranAc(id){
+  document.querySelectorAll('.ekran').forEach(e=>e.classList.remove('acik'));
+  document.getElementById(id).classList.add('acik');
+  document.getElementById('geriBtn').style.display=(id==='hub')?'none':'block';
+  window.scrollTo(0,0);
+}
+function menuyeDon(){ dur(); ekranAc('hub'); }
+let sonTekrar=null;
+function sonucGoster(y,msj,detay,tekrar){
+  dur(); sonTekrar=tekrar;
+  document.getElementById('soYildiz').textContent='⭐'.repeat(y)+'☆'.repeat(3-y);
+  document.getElementById('soMsj').textContent=msj;
+  document.getElementById('soDetay').textContent=detay||'';
+  ekranAc('sonuc');
+}
+document.getElementById('soTekrar').onclick=()=>{ if(sonTekrar) sonTekrar(); };
+function rast(n){ return Math.floor(Math.random()*n); }
+function karistir(a){ const b=a.slice(); for(let i=b.length-1;i>0;i--){ const j=rast(i+1); [b[i],b[j]]=[b[j],b[i]]; } return b; }
+
+/* ============ 1) FİNCAN ============ */
+let fiTur=0,fiPuan=0,fiYer=[],fiTopta=0,fiKilit=true,fiFincanlar=[],fiTopEl=null;
+function fincanBaslat(){
+  dur(); ekranAc('fincan');
+  fiTur=0; fiPuan=0; fiKur();
+}
+function fiKonum(i,W){ return (W/3)*i + (W/3-90)/2; }
+function fiKur(){
+  const s=document.getElementById('fiSahne'); s.innerHTML='';
+  const W=s.clientWidth||600, H=s.clientHeight||400;
+  const taban=document.createElement('div');
+  taban.style.cssText='position:absolute;left:0;right:0;bottom:70px;height:14px;background:#d9e6ef;';
+  s.appendChild(taban);
+  fiFincanlar=[]; fiYer=[0,1,2];
+  fiTopta=rast(3);
+  fiTopEl=document.createElement('div'); fiTopEl.className='top'; fiTopEl.textContent='🔴';
+  fiTopEl.style.left=(fiKonum(fiTopta,W)+28)+'px'; fiTopEl.style.top=(H-118)+'px';
+  s.appendChild(fiTopEl);
+  for(let i=0;i<3;i++){
+    const f=document.createElement('div'); f.className='fincan'; f.textContent='🥤';
+    f.style.left=fiKonum(i,W)+'px'; f.style.top=(H-190)+'px';
+    f.dataset.yer=i;
+    f.onclick=()=>fiSec(f);
+    s.appendChild(f); fiFincanlar.push(f);
+  }
+  document.getElementById('fiSayac').textContent='Tur: '+(fiTur+1)+' / 6';
+  document.getElementById('fiPuan').textContent='⭐ '+fiPuan;
+  document.getElementById('fiDurum').textContent='Topa iyi bak… 👀';
+  fiKilit=true;
+  bekle(()=>{
+    fiTopEl.style.opacity='0';
+    document.getElementById('fiDurum').textContent='Bardaklar karışıyor!';
+    bekle(fiKaristir,500);
+  },1400);
+}
+function fiKaristir(){
+  const s=document.getElementById('fiSahne'); const W=s.clientWidth||600;
+  const adet=4+fiTur*2, hiz=Math.max(180,360-fiTur*30);
+  let n=0;
+  function adim(){
+    if(n>=adet){
+      fiKilit=false;
+      document.getElementById('fiDurum').textContent='Top hangi bardakta? 👆';
+      return;
+    }
+    const a=rast(3); let b=rast(3); while(b===a) b=rast(3);
+    // a ve b konumundaki fincanları yer değiştir
+    const fa=fiFincanlar.find(f=>+f.dataset.yer===a), fb=fiFincanlar.find(f=>+f.dataset.yer===b);
+    fa.dataset.yer=b; fb.dataset.yer=a;
+    fa.style.left=fiKonum(b,W)+'px'; fb.style.left=fiKonum(a,W)+'px';
+    if(fiTopta===a) fiTopta=b; else if(fiTopta===b) fiTopta=a;
+    n++;
+    bekle(adim,hiz);
+  }
+  adim();
+}
+function fiSec(f){
+  if(fiKilit) return; fiKilit=true;
+  const s=document.getElementById('fiSahne'); const W=s.clientWidth||600, H=s.clientHeight||400;
+  const dogru=(+f.dataset.yer===fiTopta);
+  const kazanan=fiFincanlar.find(x=>+x.dataset.yer===fiTopta);
+  kazanan.style.transform='translateY(-46px)';
+  fiTopEl.style.left=(fiKonum(fiTopta,W)+28)+'px'; fiTopEl.style.opacity='1';
+  if(dogru){ fiPuan++; document.getElementById('fiDurum').textContent='✔ Buldun!'; }
+  else document.getElementById('fiDurum').textContent='✘ Top buradaydı.';
+  document.getElementById('fiPuan').textContent='⭐ '+fiPuan;
+  bekle(()=>{
+    fiTur++;
+    if(fiTur>=6){
+      const y=fiPuan>=5?3:fiPuan>=3?2:1;
+      sonucGoster(y,'Gözün topu takip etti! 👀','Doğru: '+fiPuan+' / 6',fincanBaslat);
+    } else fiKur();
+  },1700);
+}
+
+/* ============ 2) YAKALA ============ */
+let yaSepetX=0,yaNesneler=[],yaPuan=0,yaKacan=0,yaSure=45,yaSon=0,yaSepetEl=null;
+function yakalaBaslat(){
+  dur(); ekranAc('yakala');
+  const s=document.getElementById('yaSahne'); s.innerHTML='';
+  const W=s.clientWidth||600;
+  yaSepetEl=document.createElement('div'); yaSepetEl.className='sepet'; yaSepetEl.textContent='🧺';
+  yaSepetX=W/2; yaSepetEl.style.left=yaSepetX+'px';
+  s.appendChild(yaSepetEl);
+  yaNesneler=[]; yaPuan=0; yaKacan=0; yaSure=45; yaSon=performance.now();
+  document.getElementById('yaPuan').textContent='Yakalanan: 0';
+  document.getElementById('yaKacan').textContent='Kaçan: 0';
+  document.getElementById('yaDurum').textContent='Sepeti parmağınla sürükle 👆';
+  const tasi=e=>{ const r=s.getBoundingClientRect(); yaSepetX=Math.max(30,Math.min(r.width-30,e.clientX-r.left)); yaSepetEl.style.left=yaSepetX+'px'; };
+  s.onpointerdown=e=>{ e.preventDefault(); tasi(e); };
+  s.onpointermove=e=>{ if(e.buttons||e.pointerType==='touch'){ e.preventDefault(); tasi(e); } };
+  rafId=requestAnimationFrame(yaDongu);
+}
+const MEYVE=['🍎','🍐','🍊','🍓','🍌','🍇'];
+function yaDongu(t){
+  const dt=Math.min((t-yaSon)/1000,.05); yaSon=t;
+  yaSure-=dt;
+  document.getElementById('yaSure').textContent='Süre: '+Math.max(0,yaSure).toFixed(0);
+  const s=document.getElementById('yaSahne'); const W=s.clientWidth||600,H=s.clientHeight||400;
+  if(Math.random()<0.028){
+    const tas=Math.random()<0.25;
+    const el=document.createElement('div'); el.className='meyve';
+    el.textContent = tas?'🪨':MEYVE[rast(MEYVE.length)];
+    const x=30+Math.random()*(W-60);
+    el.style.left=(x-20)+'px'; el.style.top='-40px';
+    s.appendChild(el);
+    yaNesneler.push({el,x,y:-40,hiz:95+Math.random()*70,tas});
+  }
+  yaNesneler=yaNesneler.filter(n=>{
+    n.y+=n.hiz*dt; n.el.style.top=n.y+'px';
+    if(n.y>H-78 && n.y<H-20 && Math.abs(n.x-yaSepetX)<44){
+      n.el.remove();
+      if(n.tas){ yaKacan++; document.getElementById('yaDurum').textContent='🪨 Taş yakaladın!'; }
+      else{ yaPuan++; document.getElementById('yaDurum').textContent='👍 Yakaladın!'; }
+      document.getElementById('yaPuan').textContent='Yakalanan: '+yaPuan;
+      document.getElementById('yaKacan').textContent='Kaçan: '+yaKacan;
+      return false;
+    }
+    if(n.y>H){ n.el.remove(); if(!n.tas){ yaKacan++; document.getElementById('yaKacan').textContent='Kaçan: '+yaKacan; } return false; }
+    return true;
+  });
+  if(yaSure<=0){
+    const y=yaPuan>=18?3:yaPuan>=10?2:1;
+    sonucGoster(y,'Süre bitti! 🧺','Yakalanan: '+yaPuan+' · Kaçan: '+yaKacan,yakalaBaslat);
+    return;
+  }
+  rafId=requestAnimationFrame(yaDongu);
+}
+
+/* ============ 3) AYNISINI YAP ============ */
+const RENKLER=['#e0574f','#3d8ad1','#f3c53d','#3fa66b','#8d6fd1'];
+let koTur=0,koPuan=0,koSecili=RENKLER[0],koModel=[],koBos=[],koN=3;
+function kopyaBaslat(){ dur(); ekranAc('kopya'); koTur=0; koPuan=0; koSoru(); }
+function izgaraCiz(kap,n,veri,tiklanabilir,tikFn){
+  kap.style.gridTemplateColumns='repeat('+n+',auto)';
+  kap.innerHTML='';
+  veri.forEach((renk,i)=>{
+    const h=document.createElement('div'); h.className='hucre';
+    if(renk) h.style.background=renk;
+    if(tiklanabilir) h.onclick=()=>tikFn(i,h);
+    kap.appendChild(h);
+  });
+}
+function koSoru(){
+  koN = koTur<2?3:4;
+  const toplam=koN*koN, dolu=koTur<2?4+koTur:6+koTur;
+  koModel=new Array(toplam).fill(null);
+  const yerler=karistir([...Array(toplam).keys()]).slice(0,dolu);
+  yerler.forEach(y=>koModel[y]=RENKLER[rast(4)]);
+  koBos=new Array(toplam).fill(null);
+  izgaraCiz(document.getElementById('koModel'),koN,koModel,false);
+  izgaraCiz(document.getElementById('koBos'),koN,koBos,true,(i,h)=>{
+    koBos[i]= (koBos[i]===koSecili)?null:koSecili;
+    h.style.background=koBos[i]||'#fff';
+  });
+  const pal=document.getElementById('koPalet'); pal.innerHTML='';
+  RENKLER.slice(0,4).forEach(r=>{
+    const b=document.createElement('div'); b.className='renk'+(r===koSecili?' sec':'');
+    b.style.background=r;
+    b.onclick=()=>{ koSecili=r; [...pal.children].forEach(c=>c.classList.remove('sec')); b.classList.add('sec'); };
+    pal.appendChild(b);
+  });
+  koSecili=RENKLER[0]; pal.children[0].classList.add('sec');
+  document.getElementById('koSayac').textContent='Tur: '+(koTur+1)+' / 4';
+  document.getElementById('koPuan').textContent='⭐ '+koPuan;
+  document.getElementById('koDurum').textContent='';
+}
+document.getElementById('koKontrol').onclick=()=>{
+  const dogru=koModel.every((v,i)=>v===koBos[i]);
+  const d=document.getElementById('koDurum');
+  if(dogru){ koPuan++; d.textContent='✔ Aynısı oldu!'; }
+  else{
+    const yanlis=koModel.filter((v,i)=>v!==koBos[i]).length;
+    d.textContent='✘ '+yanlis+' kare farklı. Tekrar bak.';
+    return;
+  }
+  document.getElementById('koPuan').textContent='⭐ '+koPuan;
+  bekle(()=>{
+    koTur++;
+    if(koTur>=4){ const y=koPuan>=4?3:koPuan>=2?2:1; sonucGoster(y,'Gözünle elin anlaştı! 🧩','Doğru: '+koPuan+' / 4',kopyaBaslat); }
+    else koSoru();
+  },1100);
+};
+
+/* ============ 4) GÖLGE ============ */
+const GRUPLAR=[
+  ['🐘','🦏','🦛','🐄'],['🍎','🍅','🍑','🍒'],['🚗','🚙','🚕','🚌'],
+  ['🐦','🦆','🐓','🦉'],['🌳','🌲','🌴','🌵'],['⚽','🏀','🏐','🎾'],
+  ['🐟','🐠','🐬','🦈'],['🏠','🏡','🏢','⛪'],['🦋','🐝','🐞','🕷️'],['✏️','🖊️','🖍️','📏']
+];
+let goNo=0,goPuan=0,goDogru='',goKilit=false;
+function golgeBaslat(){ dur(); ekranAc('golge'); goNo=0; goPuan=0; goSoru(); }
+function goSoru(){
+  goKilit=false;
+  const g=GRUPLAR[goNo%GRUPLAR.length];
+  goDogru=g[rast(g.length)];
+  document.getElementById('goGorsel').textContent=goDogru;
+  const k=document.getElementById('goSecenek'); k.innerHTML='';
+  karistir(g).forEach(x=>{
+    const b=document.createElement('div'); b.className='golge'; b.textContent=x;
+    b.onclick=()=>goSec(x,b);
+    k.appendChild(b);
+  });
+  document.getElementById('goSayac').textContent=(goNo+1)+' / 10';
+  document.getElementById('goPuan').textContent='⭐ '+goPuan;
+  document.getElementById('goDurum').textContent='';
+}
+function goSec(x,b){
+  if(goKilit) return; goKilit=true;
+  const d=document.getElementById('goDurum');
+  if(x===goDogru){ goPuan++; b.classList.add('dogru'); d.textContent='✔ Doğru gölge!'; }
+  else{
+    b.classList.add('yanlis');
+    [...document.getElementById('goSecenek').children].forEach(c=>{ if(c.textContent===goDogru) c.classList.add('dogru'); });
+    d.textContent='✘ Doğrusu yeşil olan.';
+  }
+  document.getElementById('goPuan').textContent='⭐ '+goPuan;
+  bekle(()=>{
+    goNo++;
+    if(goNo>=10){ const y=goPuan>=9?3:goPuan>=6?2:1; sonucGoster(y,'Gözün ayrıntıyı yakalıyor! 🔍','Doğru: '+goPuan+' / 10',golgeBaslat); }
+    else goSoru();
+  },1300);
+}
+
+/* ============ 5) IŞIK ============ */
+let isEl=null,isX=0,isY=0,isHedefX=0,isHedefY=0,isSure=30,isUstunde=0,isToplam=0,isBasili=false,isSon=0,isParmak={x:-999,y:-999};
+function isikBaslat(){
+  dur(); ekranAc('isik');
+  const s=document.getElementById('isSahne'); s.innerHTML='';
+  const W=s.clientWidth||600,H=s.clientHeight||400;
+  isEl=document.createElement('div'); isEl.className='isik';
+  isX=W/2; isY=H/2; isHedefX=isX; isHedefY=isY;
+  isEl.style.left=(isX-35)+'px'; isEl.style.top=(isY-35)+'px';
+  s.appendChild(isEl);
+  isSure=30; isUstunde=0; isToplam=0; isBasili=false; isSon=performance.now(); isParmak={x:-999,y:-999};
+  document.getElementById('isDurum').textContent='Işığa dokun ve takip et 👆';
+  const oku=e=>{ const r=s.getBoundingClientRect(); isParmak={x:e.clientX-r.left,y:e.clientY-r.top}; };
+  s.onpointerdown=e=>{ e.preventDefault(); isBasili=true; oku(e); };
+  s.onpointermove=e=>{ if(isBasili){ e.preventDefault(); oku(e); } };
+  s.onpointerup=()=>{ isBasili=false; isParmak={x:-999,y:-999}; };
+  s.onpointercancel=()=>{ isBasili=false; isParmak={x:-999,y:-999}; };
+  rafId=requestAnimationFrame(isDongu);
+}
+function isDongu(t){
+  const dt=Math.min((t-isSon)/1000,.05); isSon=t;
+  isSure-=dt; isToplam+=dt;
+  const s=document.getElementById('isSahne'); const W=s.clientWidth||600,H=s.clientHeight||400;
+  if(Math.hypot(isX-isHedefX,isY-isHedefY)<12){
+    isHedefX=50+Math.random()*(W-100); isHedefY=50+Math.random()*(H-100);
+  }
+  const hiz=70+ (30-isSure)*3.2;
+  const a=Math.atan2(isHedefY-isY,isHedefX-isX);
+  isX+=Math.cos(a)*hiz*dt; isY+=Math.sin(a)*hiz*dt;
+  isEl.style.left=(isX-35)+'px'; isEl.style.top=(isY-35)+'px';
+  const d=Math.hypot(isParmak.x-isX,isParmak.y-isY);
+  if(isBasili && d<48){
+    isUstunde+=dt; isEl.style.boxShadow='0 0 40px #f7c948'; isEl.style.transform='scale(1.08)';
+    document.getElementById('isDurum').textContent='Aferin, takip ediyorsun! ✨';
+  }else{
+    isEl.style.boxShadow='0 0 26px #f7d774'; isEl.style.transform='scale(1)';
+    if(isBasili) document.getElementById('isDurum').textContent='Işığın üstüne gel!';
+  }
+  document.getElementById('isSure').textContent='Süre: '+Math.max(0,isSure).toFixed(0);
+  document.getElementById('isOran').textContent='Üstünde: %'+Math.round(isUstunde/Math.max(isToplam,.1)*100);
+  if(isSure<=0){
+    const o=isUstunde/Math.max(isToplam,.1);
+    const y=o>.7?3:o>.45?2:1;
+    sonucGoster(y,'Işığı kovaladın! 💡','Işığın üstünde kalma: %'+Math.round(o*100),isikBaslat);
+    return;
+  }
+  rafId=requestAnimationFrame(isDongu);
+}
+
+/* ============ 6) SİMETRİ ============ */
+let siTur=0,siPuan=0,siN=6,siVeri=[],siDogruVeri=[],siSecili=RENKLER[0];
+function simetriBaslat(){ dur(); ekranAc('simetri'); siTur=0; siPuan=0; siSoru(); }
+function siSoru(){
+  siN=6;
+  const yarim=siN/2, toplam=siN*siN;
+  siVeri=new Array(toplam).fill(null);
+  siDogruVeri=new Array(toplam).fill(null);
+  const dolu=4+siTur;
+  const solHucreler=[];
+  for(let r=0;r<siN;r++) for(let c=0;c<yarim;c++) solHucreler.push(r*siN+c);
+  karistir(solHucreler).slice(0,dolu).forEach(i=>{
+    const renk=RENKLER[rast(4)];
+    siVeri[i]=renk; siDogruVeri[i]=renk;
+    const r=Math.floor(i/siN), c=i%siN;
+    siDogruVeri[r*siN+(siN-1-c)]=renk;
+  });
+  const kap=document.getElementById('siIzgara');
+  kap.style.gridTemplateColumns='repeat('+siN+',auto)';
+  kap.innerHTML='';
+  siVeri.forEach((renk,i)=>{
+    const c=i%siN;
+    const h=document.createElement('div'); h.className='hucre';
+    if(renk) h.style.background=renk;
+    if(c===siN/2-1) h.style.borderRight='5px solid #f3c53d';
+    if(c<siN/2){ h.style.opacity='.95'; }
+    else h.onclick=()=>{ siVeri[i]=(siVeri[i]===siSecili)?null:siSecili; h.style.background=siVeri[i]||'#fff'; };
+    kap.appendChild(h);
+  });
+  const pal=document.getElementById('siPalet'); pal.innerHTML='';
+  RENKLER.slice(0,4).forEach((r,k)=>{
+    const b=document.createElement('div'); b.className='renk'; b.style.background=r;
+    b.onclick=()=>{ siSecili=r; [...pal.children].forEach(c=>c.classList.remove('sec')); b.classList.add('sec'); };
+    pal.appendChild(b);
+  });
+  siSecili=RENKLER[0]; pal.children[0].classList.add('sec');
+  document.getElementById('siSayac').textContent='Tur: '+(siTur+1)+' / 4';
+  document.getElementById('siPuan').textContent='⭐ '+siPuan;
+  document.getElementById('siDurum').textContent='';
+}
+document.getElementById('siKontrol').onclick=()=>{
+  const d=document.getElementById('siDurum');
+  const dogru=siDogruVeri.every((v,i)=>v===siVeri[i]);
+  if(!dogru){
+    const yanlis=siDogruVeri.filter((v,i)=>v!==siVeri[i]).length;
+    d.textContent='✘ '+yanlis+' kare uymuyor. Aynaya göre bak.';
+    return;
+  }
+  siPuan++; d.textContent='✔ Simetri tamam!';
+  document.getElementById('siPuan').textContent='⭐ '+siPuan;
+  bekle(()=>{
+    siTur++;
+    if(siTur>=4){ const y=siPuan>=4?3:siPuan>=2?2:1; sonucGoster(y,'Kelebeğin iki kanadı eşit! 🦋','Doğru: '+siPuan+' / 4',simetriBaslat); }
+    else siSoru();
+  },1100);
+};
+</script>
+</body>
+</html>

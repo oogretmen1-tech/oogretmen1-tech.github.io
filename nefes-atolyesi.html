@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Üfle Bakalım! — Nefes Atölyesi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --mor:#2f7fb8; --mor2:#5aa7d8; --acik:#e8f3fb;
+  --turuncu:#f2913d; --yesil:#3fa66b; --kirmizi:#e0574f;
+  --sari:#f3c53d; --koyu:#2c3a4a;
+  --golge:0 6px 0 rgba(0,0,0,.08), 0 12px 28px rgba(30,70,110,.15);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Andika','Segoe UI',system-ui,sans-serif;color:var(--koyu);
+  background:linear-gradient(165deg,#dff0fb 0%,#eaf7f1 55%,#fdf6e8 100%);
+  min-height:100vh;padding:14px;padding-bottom:60px;user-select:none;
+}
+h1,h2,h3{margin:0;}
+.wrap{max-width:1000px;margin:0 auto;}
+.topbar{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+.logo{background:var(--mor);color:#fff;border-radius:18px;padding:10px 18px;font-weight:700;font-size:22px;box-shadow:var(--golge);}
+.logo small{display:block;font-weight:400;font-size:12px;opacity:.85;letter-spacing:.5px;}
+.geri{margin-left:auto;background:#fff;border:none;border-radius:16px;padding:12px 20px;font-family:inherit;font-size:17px;font-weight:700;color:var(--mor);box-shadow:var(--golge);cursor:pointer;}
+.geri:active{transform:translateY(3px);}
+
+.aciklama{background:#fff;border-radius:20px;padding:14px 18px;box-shadow:var(--golge);margin-bottom:14px;font-size:16px;line-height:1.5;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;}
+.kart{background:#fff;border:none;border-radius:22px;padding:18px;text-align:left;font-family:inherit;color:var(--koyu);box-shadow:var(--golge);cursor:pointer;display:flex;flex-direction:column;gap:6px;}
+.kart:active{transform:translateY(4px);}
+.kart .ikon{font-size:38px;line-height:1;}
+.kart .ad{font-size:20px;font-weight:700;}
+.kart .alt{font-size:14px;opacity:.75;line-height:1.4;}
+.kart .rozet{align-self:flex-start;margin-top:6px;font-size:12px;font-weight:700;background:var(--acik);color:var(--mor);border-radius:20px;padding:4px 12px;}
+
+.btn{font-family:inherit;border:none;border-radius:18px;padding:16px 26px;font-size:19px;font-weight:700;cursor:pointer;box-shadow:0 5px 0 rgba(0,0,0,.13);}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.13);}
+.btn.mor{background:var(--mor);color:#fff;}
+.btn.yesil{background:var(--yesil);color:#fff;}
+.btn.acik{background:var(--acik);color:var(--mor);}
+.btn.buyuk{font-size:23px;padding:20px 36px;}
+.btn[disabled]{opacity:.45;pointer-events:none;}
+
+/* MİKROFON DURUMU */
+.micbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#fff;border-radius:20px;padding:12px 16px;box-shadow:var(--golge);margin-bottom:14px;}
+.durum{font-weight:700;font-size:15px;border-radius:20px;padding:6px 14px;}
+.durum.bekle{background:#fff4e0;color:#a9781a;}
+.durum.acik{background:#e5f7ec;color:#1e7a48;}
+.durum.kapali{background:#fdeceb;color:#a83229;}
+.olcer{flex:1;min-width:160px;height:22px;background:#e9eef3;border-radius:20px;overflow:hidden;}
+.olcer i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#7ecb8f,#f3c53d,#f2913d);transition:width .06s linear;}
+
+.ekran{display:none;}
+.ekran.acik{display:block;}
+.panel{background:#fff;border-radius:24px;padding:20px;box-shadow:var(--golge);}
+.baslik{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;}
+.baslik h2{font-size:24px;color:var(--mor);}
+.yonerge{font-size:17px;line-height:1.5;margin:6px 0 12px;}
+.satir{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+.rozet2{background:var(--acik);color:var(--mor);border-radius:20px;padding:6px 14px;font-weight:700;font-size:15px;}
+.sahne{position:relative;border-radius:22px;overflow:hidden;background:linear-gradient(180deg,#cfeafd,#eaf7ff 65%,#dff0d8);height:340px;margin:8px 0;
+  touch-action:none;cursor:pointer;}
+#tutBtn{touch-action:none;}
+input[type=range]{accent-color:var(--mor);height:28px;}
+.durumyazi{text-align:center;font-size:20px;font-weight:700;color:var(--mor);min-height:30px;}
+
+/* rüzgâr gülü */
+#rgSvg{position:absolute;left:50%;top:50%;transform:translate(-50%,-52%);}
+/* mumlar */
+.pasta{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);width:86%;max-width:460px;}
+.katman{height:72px;background:linear-gradient(180deg,#f7d9a6,#e0ab63);border-radius:14px;box-shadow:inset 0 -10px 0 rgba(0,0,0,.07);}
+.krema{height:20px;background:#fff3f6;border-radius:14px 14px 20px 20px;box-shadow:0 3px 0 #f2d7de;}
+.mumlar{display:flex;justify-content:space-around;align-items:flex-end;height:96px;}
+.mum{width:16px;height:56px;background:repeating-linear-gradient(180deg,#f28ba0 0 8px,#fff 8px 16px);border-radius:5px;position:relative;}
+.alev{position:absolute;left:50%;top:-30px;transform:translateX(-50%);width:20px;height:30px;
+  background:radial-gradient(circle at 50% 70%,#fff6c7,#f8b13d 55%,#ef6b2a);border-radius:50% 50% 45% 45%;
+  filter:blur(.3px);transform-origin:50% 100%;}
+.mum.sondu .alev{display:none;}
+.mum.sondu::after{content:'';position:absolute;left:50%;top:-16px;width:8px;height:14px;transform:translateX(-50%);
+  background:rgba(150,150,150,.5);border-radius:50%;filter:blur(2px);}
+/* karahindiba */
+.tohum{position:absolute;font-size:20px;will-change:transform;}
+.sap{position:absolute;left:50%;bottom:0;width:8px;height:150px;background:linear-gradient(180deg,#5aa05a,#3d7a3d);transform:translateX(-50%);border-radius:6px;}
+/* yelkenli */
+.deniz{position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(180deg,#7ec4ea,#3f8fc4);}
+.gemi{position:absolute;bottom:96px;font-size:52px;transition:none;}
+.bayrak{position:absolute;right:14px;bottom:96px;font-size:46px;}
+.mesafe{position:absolute;left:0;right:0;top:10px;text-align:center;font-weight:700;color:#20597d;}
+/* balon */
+.balon{position:absolute;left:50%;bottom:60px;transform:translate(-50%,0);font-size:60px;transform-origin:50% 100%;}
+.hedefcizgi{position:absolute;left:0;right:0;border-top:4px dashed #e0574f;top:70px;text-align:right;color:#e0574f;font-weight:700;font-size:14px;padding-right:8px;}
+/* nefes rehberi */
+.nefesHalka{width:230px;height:230px;border-radius:50%;margin:16px auto;background:radial-gradient(circle,#bfe3f7,#7bc0e8);
+  display:flex;align-items:center;justify-content:center;transition:transform .1s linear;box-shadow:0 10px 30px rgba(40,110,160,.25);}
+.nefesHalka span{font-size:26px;font-weight:700;color:#1b5c85;text-align:center;}
+
+.ogrnot{margin-top:16px;background:#fffaf0;border-left:6px solid var(--turuncu);border-radius:12px;padding:12px 14px;font-size:15px;line-height:1.5;}
+.ogrnot b{color:#a9781a;}
+.sonuc{text-align:center;padding:10px;}
+.sonuc .yildiz{font-size:56px;letter-spacing:6px;}
+.sonuc .msj{font-size:24px;font-weight:700;margin:10px 0 16px;color:var(--mor);}
+.imza{text-align:center;margin-top:26px;font-size:14px;color:#6f8091;}
+@media(max-width:520px){ .sahne{height:280px;} .baslik h2{font-size:21px;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="logo">Üfle Bakalım!<small>NEFES ATÖLYESİ · 1. SINIF HAZIRLIK</small></div>
+    <button class="geri" id="geriBtn" style="display:none" onclick="menuyeDon()">‹ Menü</button>
+  </div>
+
+  <div class="micbar">
+    <button class="btn mor" id="micBtn">🎤 Mikrofonu Aç</button>
+    <button class="btn acik" id="tutBtn">👆 Basılı Tut = Üfle</button>
+    <span class="durum bekle" id="micDurum">Mikrofon kapalı</span>
+    <div class="olcer"><i id="micOlcer"></i></div>
+    <div id="uyari" style="flex-basis:100%;font-size:14px;line-height:1.45;color:#a83229;display:none"></div>
+    <div style="flex-basis:100%;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:14px;color:#5c6b7a">
+      <span>Hassasiyet</span>
+      <input type="range" id="hassas" min="0.5" max="1.8" step="0.1" value="1" style="flex:1;min-width:120px;max-width:240px">
+      <b id="hassasYazi">normal</b>
+      <button id="taniBtn" style="margin-left:auto;background:none;border:none;font-family:inherit;font-size:13px;color:#8a97a4;text-decoration:underline;cursor:pointer">ölçüm değerleri</button>
+    </div>
+    <div id="tani" style="flex-basis:100%;font-size:13px;color:#6f8091;display:none"></div>
+  </div>
+
+  <!-- HUB -->
+  <div id="hub" class="ekran acik">
+    <div class="aciklama">
+      💨 <b>Gerçekten üflüyoruz.</b> Ekrana (ya da akıllı tahtanın mikrofonuna) üflediğinde rüzgâr gülü döner,
+      mumlar söner, karahindiba dağılır, yelkenli ilerler. Mikrofon açılmazsa <b>parmakla basılı tutma</b> modu
+      devreye girer, oyunlar yine oynanır.
+    </div>
+    <div class="grid" id="hubGrid"></div>
+    <div class="ogrnot">
+      <b>Öğretmen notu:</b> Üflemeden önce “burnumuzdan derin alalım” denmeli; asıl kazanım kontrollü ve uzun
+      soluk vermek. Çocuk cihaza 20–30 cm mesafeden üflesin, ağzını yaklaştırmasın. Akıllı tahtada tek cihazla
+      sırayla oynanabilir. Üst üste 3–4 denemeden fazlası baş dönmesi yapabilir, sıraya geçilsin.
+    </div>
+    <div class="imza">Dijital Öğretmen · Hasan Tutuş</div>
+  </div>
+
+  <!-- 1 RÜZGÂR GÜLÜ -->
+  <div id="ruzgar" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">🌀</span><h2>Rüzgâr Gülü</h2></div>
+    <p class="yonerge">Üfle ve fırıldağı döndür. <b>Hedef:</b> gülü 8 saniye boyunca hızlı döndür.</p>
+    <div class="satir"><span class="rozet2" id="rgHiz">Hız: 0</span><span class="rozet2" id="rgSure">Hedef: 8.0 sn</span>
+      <button class="btn acik" onclick="ruzgarBaslat()">↻ Baştan</button></div>
+    <div class="sahne" id="rgSahne">
+      <svg id="rgSvg" width="230" height="230" viewBox="0 0 200 200">
+        <g id="rgDon" transform-origin="100 100">
+          <path d="M100 100 L100 20 A80 80 0 0 1 180 100 Z" fill="#e0574f"/>
+          <path d="M100 100 L180 100 A80 80 0 0 1 100 180 Z" fill="#f3c53d"/>
+          <path d="M100 100 L100 180 A80 80 0 0 1 20 100 Z" fill="#3fa66b"/>
+          <path d="M100 100 L20 100 A80 80 0 0 1 100 20 Z" fill="#3d8ad1"/>
+          <circle cx="100" cy="100" r="14" fill="#fff"/><circle cx="100" cy="100" r="7" fill="#7a6f96"/>
+        </g>
+        <rect x="96" y="100" width="8" height="95" rx="4" fill="#a9744a"/>
+      </svg>
+    </div>
+    <div class="durumyazi" id="rgDurum">Hazırsan üfle! 💨</div>
+  </div></div>
+
+  <!-- 2 MUMLAR -->
+  <div id="mumlar" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">🎂</span><h2>Mumları Söndür</h2></div>
+    <p class="yonerge">Derin bir nefes al, <b>tek seferde</b> mumları söndürmeye çalış!</p>
+    <div class="satir"><span class="rozet2" id="muSayac">Yanan mum: 6</span>
+      <button class="btn acik" onclick="mumBaslat()">↻ Mumları Yak</button></div>
+    <div class="sahne" id="muSahne">
+      <div class="pasta">
+        <div class="mumlar" id="muMumlar"></div>
+        <div class="krema"></div><div class="katman"></div>
+      </div>
+    </div>
+    <div class="durumyazi" id="muDurum">Üfle! 💨</div>
+  </div></div>
+
+  <!-- 3 KARAHİNDİBA -->
+  <div id="karahindiba" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">🌼</span><h2>Karahindiba</h2></div>
+    <p class="yonerge">Yavaş ve <b>uzun</b> üfle; tohumlar tek tek uçsun. Hepsini uçur!</p>
+    <div class="satir"><span class="rozet2" id="khSayac">Tohum: 36</span>
+      <button class="btn acik" onclick="karaBaslat()">↻ Yeniden</button></div>
+    <div class="sahne" id="khSahne"><div class="sap"></div></div>
+    <div class="durumyazi" id="khDurum">Üfle! 💨</div>
+  </div></div>
+
+  <!-- 4 YELKENLİ -->
+  <div id="yelken" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">⛵</span><h2>Yelkenli Yarışı</h2></div>
+    <p class="yonerge">Nefesin bitmeden gemiyi karşı kıyıya ulaştır. <b>Uzun ve düzenli</b> üflemek gerek!</p>
+    <div class="satir"><span class="rozet2" id="yeYol">Yol: %0</span><span class="rozet2" id="yeSure">Süre: 30.0</span>
+      <button class="btn acik" onclick="yelkenBaslat()">↻ Baştan</button></div>
+    <div class="sahne" id="yeSahne">
+      <div class="mesafe" id="yeMesafe">Karşı kıyıya!</div>
+      <div class="deniz"></div>
+      <div class="bayrak">🏁</div>
+      <div class="gemi" id="yeGemi" style="left:10px">⛵</div>
+    </div>
+    <div class="durumyazi" id="yeDurum">Üfle! 💨</div>
+  </div></div>
+
+  <!-- 5 BALON -->
+  <div id="balon" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">🎈</span><h2>Balonu Şişir</h2></div>
+    <p class="yonerge">Durmadan üfle, balon büyüsün. <b>Durursan söner!</b> Kesik kesik değil, uzun üfle.</p>
+    <div class="satir"><span class="rozet2" id="baOran">Şişme: %0</span>
+      <button class="btn acik" onclick="balonBaslat()">↻ Yeni Balon</button></div>
+    <div class="sahne" id="baSahne">
+      <div class="hedefcizgi">hedef</div>
+      <div class="balon" id="baBalon">🎈</div>
+    </div>
+    <div class="durumyazi" id="baDurum">Üfle! 💨</div>
+  </div></div>
+
+  <!-- 6 NEFES REHBERİ -->
+  <div id="rehber" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">🫧</span><h2>Nefes Rehberi</h2></div>
+    <p class="yonerge">Mikrofon gerekmez. Halka <b>büyürken burnundan al</b>, <b>küçülürken ağzından ver</b>. 5 tur.</p>
+    <div class="nefesHalka" id="reHalka"><span id="reYazi">Hazır mısın?</span></div>
+    <div style="text-align:center"><button class="btn yesil buyuk" id="reBasla">▶ Başlat</button></div>
+    <div class="durumyazi" id="reTur"></div>
+    <div class="ogrnot">Ders başında ya da teneffüs dönüşü 2 dakikada sınıfı toplar. Omuzlar gevşek,
+      eller karında; karnın şiştiğini hissetsinler.</div>
+  </div></div>
+
+  <!-- SONUÇ -->
+  <div id="sonuc" class="ekran"><div class="panel sonuc">
+    <div class="yildiz" id="soYildiz">⭐⭐⭐</div>
+    <div class="msj" id="soMsj">Harika nefes!</div>
+    <div id="soDetay" style="font-size:18px;margin-bottom:16px"></div>
+    <button class="btn yesil buyuk" id="soTekrar">↻ Tekrar</button>
+    <button class="btn acik buyuk" onclick="menuyeDon()">🏠 Menü</button>
+  </div></div>
+
+</div>
+
+<script>
+/* ==========================================================
+   MİKROFON — üfleme algılama
+   ========================================================== */
+const MIC={ctx:null,analyser:null,frek:null,hazir:false,zemin:12,tepeFazla:0,seviye:0,ham:0,basili:false};
+
+/* ortam kontrolü: iframe / file:// içinde mikrofon açılmaz */
+function ortamKontrol(){
+  const u=document.getElementById('uyari');
+  const iframeDe = (window.self!==window.top);
+  const guvenli = window.isSecureContext && location.protocol!=='file:';
+  if(iframeDe){
+    u.style.display='block';
+    u.innerHTML='⚠️ <b>Bu pencerede mikrofon kapalı.</b> Dosyayı önizleme penceresinde değil, tarayıcıda '+
+                '(siteye yükleyip https adresinden) aç. Şimdilik <b>👆 Basılı Tut = Üfle</b> düğmesiyle oynayabilirsin.';
+  }else if(!guvenli){
+    u.style.display='block';
+    u.innerHTML='⚠️ <b>Dosya bilgisayardan açıldı (file://).</b> Tarayıcılar bu durumda mikrofona izin vermez. '+
+                'Siteye yükleyip <b>https</b> adresinden açınca mikrofon çalışır. Şimdilik <b>👆 Basılı Tut</b> ile oynayabilirsin.';
+  }
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    u.style.display='block';
+    u.innerHTML='⚠️ Bu tarayıcı mikrofon kaydını desteklemiyor. <b>👆 Basılı Tut</b> ile oynayabilirsin.';
+  }
+}
+ortamKontrol();
+function bant(a,b){
+  const sr=MIC.ctx.sampleRate, n=MIC.analyser.frequencyBinCount, hz=(sr/2)/n;
+  let t=0,c=0;
+  for(let i=Math.floor(a/hz);i<Math.min(n,Math.ceil(b/hz));i++){ t+=MIC.frek[i]; c++; }
+  return c?t/c:0;
+}
+let micDeniyor=false;
+async function micAc(){
+  if(micDeniyor) return; micDeniyor=true;
+  const d=document.getElementById('micDurum');
+  d.className='durum bekle'; d.textContent='İzin bekleniyor…';
+  try{
+    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia) throw new Error('yok');
+    const ak=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
+    MIC.akis=ak;
+    MIC.ctx=new (window.AudioContext||window.webkitAudioContext)();
+    if(MIC.ctx.state==='suspended') await MIC.ctx.resume();
+    const src=MIC.ctx.createMediaStreamSource(ak);
+    MIC.analyser=MIC.ctx.createAnalyser();
+    MIC.analyser.fftSize=1024; MIC.analyser.smoothingTimeConstant=.3;
+    src.connect(MIC.analyser);
+    // iOS/Safari bazı sürümlerde grafiğin bir çıkışa bağlı olmasını ister (sessiz bağlantı)
+    const sus=MIC.ctx.createGain(); sus.gain.value=0;
+    MIC.analyser.connect(sus).connect(MIC.ctx.destination);
+    MIC.frek=new Uint8Array(MIC.analyser.frequencyBinCount);
+    kalibreEt(true);
+  }catch(e){
+    const ad=(e&&e.name)||'';
+    let mesaj='Mikrofon açılamadı';
+    if(ad==='NotAllowedError'||ad==='SecurityError') mesaj='İzin verilmedi — 👆 Basılı Tut ile oyna';
+    else if(ad==='NotFoundError') mesaj='Mikrofon bulunamadı — 👆 Basılı Tut ile oyna';
+    else mesaj='Mikrofon açılamadı — 👆 Basılı Tut ile oyna';
+    d.className='durum kapali'; d.textContent=mesaj;
+    document.getElementById('micBtn').textContent='🎤 Tekrar Dene';
+    document.getElementById('uyari').style.display='block';
+    if(!document.getElementById('uyari').innerHTML)
+      document.getElementById('uyari').innerHTML='⚠️ Mikrofona ulaşılamadı. Adres çubuğundaki kilit simgesinden bu siteye mikrofon izni verebilirsin.';
+  }
+  micDeniyor=false;
+}
+/* ortam gürültüsünü ölç (akıllı tahtanın uzak mikrofonu ile tabletin yakın mikrofonu farklıdır) */
+function kalibreEt(ilk){
+  const d=document.getElementById('micDurum');
+  MIC.hazir=false; MIC.tepeFazla=0;
+  d.className='durum bekle'; d.textContent='Sessiz olun… ayarlanıyor';
+  let top=0,n=0;
+  const it=setInterval(()=>{
+    MIC.analyser.getByteFrequencyData(MIC.frek);
+    top+=bant(1200,6000); n++;
+    if(n>=30){
+      clearInterval(it);
+      MIC.zemin=top/n; MIC.hazir=true;
+      d.className='durum acik'; d.textContent='🎤 Hazır — üfleyebilirsin';
+      document.getElementById('micBtn').textContent='🎤 Yeniden Ayarla';
+      document.getElementById('uyari').style.display='none';
+    }
+  },35);
+}
+document.getElementById('micBtn').onclick=()=>{ if(MIC.hazir) kalibreEt(); else micAc(); };
+
+/* 👆 BASILI TUT — her cihazda çalışan yedek mod */
+const tutBtn=document.getElementById('tutBtn');
+function tutBasla(e){ e.preventDefault(); MIC.basili=true; tutBtn.style.filter='brightness(.9)'; }
+function tutBirak(){ MIC.basili=false; tutBtn.style.filter=''; }
+['pointerdown','touchstart','mousedown'].forEach(t=>tutBtn.addEventListener(t,tutBasla,{passive:false}));
+['pointerup','pointercancel','pointerleave','touchend','touchcancel','mouseup'].forEach(t=>tutBtn.addEventListener(t,tutBirak));
+/* sahneye basılı tutmak da üflemek sayılır */
+document.addEventListener('pointerdown',e=>{ if(e.target.closest('.sahne')){ e.preventDefault(); MIC.basili=true; } },{passive:false});
+document.addEventListener('pointerup',tutBirak);
+document.addEventListener('pointercancel',tutBirak);
+window.addEventListener('blur',tutBirak);
+
+function uflemeOku(){
+  let v=0;
+  if(MIC.hazir){
+    MIC.analyser.getByteFrequencyData(MIC.frek);
+    const hi=bant(1200,6000);
+    MIC.ham=hi;
+    const fazla=hi-MIC.zemin;
+    // kendini ayarlayan ölçek: ilk kuvvetli üfleme "tam güç" kabul edilir
+    if(fazla>MIC.tepeFazla) MIC.tepeFazla=fazla; else MIC.tepeFazla*=0.9995;
+    const olcek=Math.max(16,Math.min(MIC.tepeFazla,70))*HASSAS;
+    v=(fazla-5)/olcek;
+  }
+  if(MIC.basili) v=Math.max(v,.85+Math.random()*.1);
+  v=Math.max(0,Math.min(1,v));
+  MIC.seviye=MIC.seviye*.55+v*.45;
+  document.getElementById('micOlcer').style.width=(MIC.seviye*100).toFixed(0)+'%';
+  const t=document.getElementById('tani');
+  if(t.style.display!=='none')
+    t.textContent='ortam: '+MIC.zemin.toFixed(0)+' · anlık: '+MIC.ham.toFixed(0)+' · fark: '+(MIC.ham-MIC.zemin).toFixed(0)+' · güç: %'+(MIC.seviye*100).toFixed(0);
+  return MIC.seviye;
+}
+/* hassasiyet: akıllı tahtada mikrofon uzak olduğu için düşürülebilir */
+let HASSAS=1;
+document.getElementById('hassas').addEventListener('input',e=>{
+  HASSAS=parseFloat(e.target.value);
+  document.getElementById('hassasYazi').textContent = HASSAS<0.8?'çok hassas':HASSAS>1.3?'daha güçlü üfle':'normal';
+});
+document.getElementById('taniBtn').onclick=()=>{
+  const t=document.getElementById('tani');
+  t.style.display = t.style.display==='none'?'block':'none';
+};
+
+/* ==========================================================
+   GEZİNME
+   ========================================================== */
+const BOLUMLER=[
+  {id:'ruzgar',ikon:'🌀',ad:'Rüzgâr Gülü',alt:'Üfledikçe dönen fırıldak. Güçlü ve sürekli nefes.',rozet:'MİKROFONLU',baslat:()=>ruzgarBaslat()},
+  {id:'mumlar',ikon:'🎂',ad:'Mumları Söndür',alt:'6 mumu tek nefeste söndür. Ani ve güçlü üfleme.',rozet:'MİKROFONLU',baslat:()=>mumBaslat()},
+  {id:'karahindiba',ikon:'🌼',ad:'Karahindiba',alt:'Tohumları uçur. Yumuşak ve uzun üfleme.',rozet:'MİKROFONLU',baslat:()=>karaBaslat()},
+  {id:'yelken',ikon:'⛵',ad:'Yelkenli Yarışı',alt:'Gemiyi karşı kıyıya ulaştır. Nefes dayanıklılığı.',rozet:'MİKROFONLU',baslat:()=>yelkenBaslat()},
+  {id:'balon',ikon:'🎈',ad:'Balonu Şişir',alt:'Durmadan üfle; kesince söner. Kesintisiz soluk.',rozet:'MİKROFONLU',baslat:()=>balonBaslat()},
+  {id:'rehber',ikon:'🫧',ad:'Nefes Rehberi',alt:'Al–ver ritmi ile sakinleşme. Mikrofon gerekmez.',rozet:'SINIF ETKİNLİĞİ',baslat:()=>rehberHazir()}
+];
+function hubKur(){
+  const g=document.getElementById('hubGrid'); g.innerHTML='';
+  BOLUMLER.forEach(b=>{
+    const k=document.createElement('button'); k.className='kart';
+    k.innerHTML='<span class="ikon">'+b.ikon+'</span><span class="ad">'+b.ad+'</span><span class="alt">'+b.alt+'</span><span class="rozet">'+b.rozet+'</span>';
+    k.onclick=()=>{
+      // mikrofonlu bir bölüme girerken izin henüz alınmadıysa burada iste (dokunma = kullanıcı hareketi)
+      if(b.rozet==='MİKROFONLU' && !MIC.hazir && !micDeniyor) micAc();
+      ekranAc(b.id); b.baslat();
+    };
+    g.appendChild(k);
+  });
+}
+hubKur();
+let rafId=null;
+function ekranAc(id){
+  document.querySelectorAll('.ekran').forEach(e=>e.classList.remove('acik'));
+  document.getElementById(id).classList.add('acik');
+  document.getElementById('geriBtn').style.display=(id==='hub')?'none':'block';
+  window.scrollTo(0,0);
+}
+function dur(){ if(rafId) cancelAnimationFrame(rafId); rafId=null; }
+function menuyeDon(){ dur(); rehberDur(); ekranAc('hub'); }
+let sonTekrar=null;
+function sonucGoster(yildiz,msj,detay,tekrar){
+  dur(); sonTekrar=tekrar;
+  document.getElementById('soYildiz').textContent='⭐'.repeat(yildiz)+'☆'.repeat(3-yildiz);
+  document.getElementById('soMsj').textContent=msj;
+  document.getElementById('soDetay').textContent=detay||'';
+  ekranAc('sonuc');
+}
+document.getElementById('soTekrar').onclick=()=>{ if(sonTekrar) sonTekrar(); };
+
+/* ==========================================================
+   1) RÜZGÂR GÜLÜ
+   ========================================================== */
+let rgAci=0,rgHiz=0,rgKalan=8,rgSon=0;
+function ruzgarBaslat(){
+  dur(); ekranAc('ruzgar');
+  rgAci=0; rgHiz=0; rgKalan=8; rgSon=performance.now();
+  document.getElementById('rgDurum').textContent='Hazırsan üfle! 💨';
+  rafId=requestAnimationFrame(rgDongu);
+}
+function rgDongu(t){
+  const dt=Math.min((t-rgSon)/1000,.05); rgSon=t;
+  const u=uflemeOku();
+  rgHiz += u*1500*dt;        // üfleme hızlandırır
+  rgHiz *= (1-1.4*dt);       // sürtünme
+  if(rgHiz>1400) rgHiz=1400;
+  rgAci=(rgAci+rgHiz*dt)%360;
+  document.getElementById('rgDon').setAttribute('transform','rotate('+rgAci.toFixed(1)+' 100 100)');
+  document.getElementById('rgHiz').textContent='Hız: '+Math.round(rgHiz);
+  if(rgHiz>320){
+    rgKalan-=dt;
+    document.getElementById('rgDurum').textContent='Dönüyor! Devam et 🌀';
+  }else{
+    document.getElementById('rgDurum').textContent = rgHiz>80?'Biraz daha kuvvetli üfle…':'Hazırsan üfle! 💨';
+  }
+  document.getElementById('rgSure').textContent='Hedef: '+Math.max(0,rgKalan).toFixed(1)+' sn';
+  if(rgKalan<=0){ sonucGoster(3,'Rüzgâr gülü uçtu!','Nefesin çok kuvvetliydi 💨',ruzgarBaslat); return; }
+  rafId=requestAnimationFrame(rgDongu);
+}
+
+/* ==========================================================
+   2) MUMLAR
+   ========================================================== */
+let muDurumlar=[],muEnerji=0,muSon=0,muGecen=0;
+function mumBaslat(){
+  dur(); ekranAc('mumlar');
+  muDurumlar=[1,1,1,1,1,1]; muEnerji=0; muGecen=0; muSon=performance.now();
+  const k=document.getElementById('muMumlar'); k.innerHTML='';
+  muDurumlar.forEach((_,i)=>{
+    const m=document.createElement('div'); m.className='mum'; m.id='mum'+i;
+    m.innerHTML='<div class="alev"></div>'; k.appendChild(m);
+  });
+  document.getElementById('muSayac').textContent='Yanan mum: 6';
+  document.getElementById('muDurum').textContent='Derin nefes al ve üfle! 💨';
+  rafId=requestAnimationFrame(muDongu);
+}
+function muDongu(t){
+  const dt=Math.min((t-muSon)/1000,.05); muSon=t; muGecen+=dt;
+  const u=uflemeOku();
+  // alevler üflemeye göre yatar
+  muDurumlar.forEach((v,i)=>{
+    if(!v) return;
+    const el=document.getElementById('mum'+i);
+    const a=el.querySelector('.alev');
+    const egim=u*55+Math.sin(t/90+i)*4;
+    const boy=1-u*.55;
+    a.style.transform='translateX(-50%) rotate('+egim.toFixed(1)+'deg) scaleY('+boy.toFixed(2)+')';
+  });
+  if(u>.32){
+    muEnerji+=u*dt;
+    const sonmesiGereken=Math.min(6,Math.floor(muEnerji/0.42));
+    let yanan=0;
+    muDurumlar.forEach((v,i)=>{
+      if(i<sonmesiGereken && v){ muDurumlar[i]=0; document.getElementById('mum'+i).classList.add('sondu'); }
+      if(muDurumlar[i]) yanan++;
+    });
+    document.getElementById('muSayac').textContent='Yanan mum: '+yanan;
+    document.getElementById('muDurum').textContent = yanan? 'Devam! '+yanan+' mum kaldı 💨' : '';
+    if(yanan===0){
+      const y = muGecen<4?3 : muGecen<7?2 : 1;
+      sonucGoster(y,'Mutlu yıllar! 🎉','Bütün mumları '+muGecen.toFixed(1)+' saniyede söndürdün.',mumBaslat);
+      return;
+    }
+  }
+  rafId=requestAnimationFrame(muDongu);
+}
+
+/* ==========================================================
+   3) KARAHİNDİBA
+   ========================================================== */
+let khTohumlar=[],khSon=0,khKalan=0,khGecen=0;
+function karaBaslat(){
+  dur(); ekranAc('karahindiba');
+  const s=document.getElementById('khSahne');
+  s.querySelectorAll('.tohum').forEach(e=>e.remove());
+  khTohumlar=[]; khGecen=0;
+  const W=s.clientWidth||600, H=s.clientHeight||340;
+  const mx=W/2, my=H-170;
+  for(let i=0;i<36;i++){
+    const a=(i/36)*Math.PI*2, r=42+Math.random()*26;
+    const el=document.createElement('div'); el.className='tohum'; el.textContent='✽';
+    el.style.color='#efefef'; el.style.textShadow='0 0 3px #b9c7cf';
+    const x=mx+Math.cos(a)*r, y=my+Math.sin(a)*r*0.9;
+    el.style.left='0px'; el.style.top='0px';
+    el.style.transform='translate('+x+'px,'+y+'px)';
+    s.appendChild(el);
+    khTohumlar.push({el,x,y,vx:0,vy:0,ucuyor:false});
+  }
+  khKalan=36;
+  document.getElementById('khSayac').textContent='Tohum: 36';
+  document.getElementById('khDurum').textContent='Yumuşak üfle 💨';
+  khSon=performance.now();
+  rafId=requestAnimationFrame(khDongu);
+}
+function khDongu(t){
+  const dt=Math.min((t-khSon)/1000,.05); khSon=t; khGecen+=dt;
+  const u=uflemeOku();
+  const s=document.getElementById('khSahne'); const W=s.clientWidth||600;
+  if(u>.18){
+    // her karede üfleme gücüne göre birkaç tohum kopar
+    let kopar=Math.random()< (u*0.55) ? 1 : 0;
+    for(let i=0;i<khTohumlar.length && kopar>0;i++){
+      const to=khTohumlar[i];
+      if(!to.ucuyor){ to.ucuyor=true; to.vx=90+u*260+Math.random()*70; to.vy=-30-Math.random()*70; kopar--; khKalan--; }
+    }
+    document.getElementById('khSayac').textContent='Tohum: '+Math.max(0,khKalan);
+  }
+  khTohumlar.forEach(to=>{
+    if(!to.ucuyor) return;
+    to.vy += 22*dt; to.vx += u*120*dt;
+    to.x += to.vx*dt; to.y += to.vy*dt;
+    to.el.style.transform='translate('+to.x.toFixed(1)+'px,'+to.y.toFixed(1)+'px) rotate('+(to.x*1.2).toFixed(0)+'deg)';
+  });
+  if(khKalan<=0){
+    const y=khGecen<10?3:khGecen<18?2:1;
+    sonucGoster(y,'Bütün tohumlar uçtu! 🌬️','Süre: '+khGecen.toFixed(1)+' saniye',karaBaslat);
+    return;
+  }
+  document.getElementById('khDurum').textContent = u>.18?'Uçuyorlar! 🌬️':'Yumuşak üfle 💨';
+  rafId=requestAnimationFrame(khDongu);
+}
+
+/* ==========================================================
+   4) YELKENLİ
+   ========================================================== */
+let yeX=0,yeSon=0,yeKalan=30;
+function yelkenBaslat(){
+  dur(); ekranAc('yelken');
+  yeX=0; yeKalan=30; yeSon=performance.now();
+  document.getElementById('yeDurum').textContent='Üfle! 💨';
+  rafId=requestAnimationFrame(yeDongu);
+}
+function yeDongu(t){
+  const dt=Math.min((t-yeSon)/1000,.05); yeSon=t; yeKalan-=dt;
+  const u=uflemeOku();
+  const s=document.getElementById('yeSahne'); const W=(s.clientWidth||600)-90;
+  yeX += u*95*dt*3;
+  if(yeX>W) yeX=W;
+  const g=document.getElementById('yeGemi');
+  g.style.left=(10+yeX)+'px';
+  g.style.transform='rotate('+(Math.sin(t/220)*5).toFixed(1)+'deg)';
+  document.getElementById('yeYol').textContent='Yol: %'+Math.round(yeX/W*100);
+  document.getElementById('yeSure').textContent='Süre: '+Math.max(0,yeKalan).toFixed(1);
+  document.getElementById('yeDurum').textContent = u>.2?'Rüzgâr var! ⛵':'Üfle! 💨';
+  if(yeX>=W){
+    const gecen=30-yeKalan;
+    const y=gecen<10?3:gecen<18?2:1;
+    sonucGoster(y,'Karşı kıyıdasın! 🏁','Süre: '+gecen.toFixed(1)+' saniye',yelkenBaslat); return;
+  }
+  if(yeKalan<=0){ sonucGoster(1,'Süre bitti','Yolun %'+Math.round(yeX/W*100)+"'ini gittin. Tekrar deneyelim!",yelkenBaslat); return; }
+  rafId=requestAnimationFrame(yeDongu);
+}
+
+/* ==========================================================
+   5) BALON
+   ========================================================== */
+let baOran=0,baSon=0,baGecen=0;
+function balonBaslat(){
+  dur(); ekranAc('balon');
+  baOran=0; baGecen=0; baSon=performance.now();
+  const b=document.getElementById('baBalon');
+  b.style.transform='translate(-50%,0) scale(1)'; b.style.bottom='60px'; b.style.opacity='1';
+  document.getElementById('baDurum').textContent='Üfle! 💨';
+  rafId=requestAnimationFrame(baDongu);
+}
+function baDongu(t){
+  const dt=Math.min((t-baSon)/1000,.05); baSon=t; baGecen+=dt;
+  const u=uflemeOku();
+  if(u>.2) baOran += u*24*dt; else baOran -= 11*dt;
+  if(baOran<0) baOran=0;
+  const b=document.getElementById('baBalon');
+  b.style.transform='translate(-50%,0) scale('+(1+baOran/100*2.4).toFixed(3)+')';
+  document.getElementById('baOran').textContent='Şişme: %'+Math.round(baOran);
+  document.getElementById('baDurum').textContent = u>.2?'Büyüyor! 🎈':'Durma, söndü söndü…';
+  if(baOran>=100){
+    b.style.transition='bottom 1.6s ease-in, opacity 1.6s'; b.style.bottom='420px'; b.style.opacity='0';
+    dur();
+    setTimeout(()=>{ b.style.transition='';
+      const y=baGecen<8?3:baGecen<14?2:1;
+      sonucGoster(y,'Balon uçtu! 🎈','Nefesini '+baGecen.toFixed(1)+' saniye kesmeden verdin.',balonBaslat);
+    },1500);
+    return;
+  }
+  rafId=requestAnimationFrame(baDongu);
+}
+
+/* ==========================================================
+   6) NEFES REHBERİ (mikrofonsuz)
+   ========================================================== */
+let reTimer=null,reFaz=0,reTur=0,reBas=0;
+function rehberHazir(){
+  rehberDur(); ekranAc('rehber');
+  document.getElementById('reYazi').textContent='Hazır mısın?';
+  document.getElementById('reHalka').style.transform='scale(1)';
+  document.getElementById('reTur').textContent='';
+  document.getElementById('reBasla').style.display='inline-block';
+}
+function rehberDur(){ if(reTimer){ cancelAnimationFrame(reTimer); reTimer=null; } }
+document.getElementById('reBasla').onclick=()=>{
+  document.getElementById('reBasla').style.display='none';
+  reFaz=0; reTur=0; reBas=performance.now(); reTimer=requestAnimationFrame(reDongu);
+};
+function reDongu(t){
+  const SURE=4000;
+  const gecen=t-reBas;
+  const oran=Math.min(gecen/SURE,1);
+  const h=document.getElementById('reHalka'), y=document.getElementById('reYazi');
+  if(reFaz===0){
+    h.style.transform='scale('+(1+oran*0.55).toFixed(3)+')';
+    y.textContent='Burnundan al… '+Math.ceil(4-oran*4);
+  }else{
+    h.style.transform='scale('+(1.55-oran*0.55).toFixed(3)+')';
+    y.textContent='Ağzından ver… '+Math.ceil(4-oran*4);
+  }
+  if(oran>=1){
+    reBas=t;
+    if(reFaz===1){ reTur++; document.getElementById('reTur').textContent='Tur: '+reTur+' / 5'; }
+    reFaz=1-reFaz;
+    if(reTur>=5){ y.textContent='Rahatladık 🫧'; document.getElementById('reBasla').style.display='inline-block';
+      document.getElementById('reBasla').textContent='↻ Tekrar'; rehberDur(); return; }
+  }
+  reTimer=requestAnimationFrame(reDongu);
+}
+</script>
+</body>
+</html>

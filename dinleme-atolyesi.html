@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Kulak Kesil! — Dinleme Atölyesi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --mor:#6b4ea8; --mor2:#8d6fd1; --acik:#f3eefc;
+  --turuncu:#f2913d; --yesil:#3fa66b; --kirmizi:#e0574f;
+  --mavi:#3d8ad1; --sari:#f3c53d; --koyu:#3a3050;
+  --kart:#ffffff; --golge:0 6px 0 rgba(0,0,0,.08), 0 12px 28px rgba(60,40,110,.14);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Andika','Segoe UI',system-ui,sans-serif;
+  background:linear-gradient(160deg,#efe7fb 0%,#e6f2fb 55%,#fdf3e6 100%);
+  color:var(--koyu); min-height:100vh; padding:14px; padding-bottom:60px;
+  user-select:none;
+}
+h1,h2,h3{margin:0;}
+.wrap{max-width:1000px;margin:0 auto;}
+
+/* ÜST BAŞLIK */
+.topbar{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
+.logo{
+  background:var(--mor);color:#fff;border-radius:18px;padding:10px 18px;
+  font-weight:700;font-size:22px;box-shadow:var(--golge);
+}
+.logo small{display:block;font-weight:400;font-size:12px;opacity:.85;letter-spacing:.5px;}
+.geri{
+  margin-left:auto;background:#fff;border:none;border-radius:16px;padding:12px 20px;
+  font-family:inherit;font-size:17px;font-weight:700;color:var(--mor);
+  box-shadow:var(--golge);cursor:pointer;
+}
+.geri:active{transform:translateY(3px);box-shadow:0 3px 0 rgba(0,0,0,.08);}
+
+/* HUB KARTLARI */
+.aciklama{
+  background:#fff;border-radius:20px;padding:14px 18px;box-shadow:var(--golge);
+  margin-bottom:16px;font-size:16px;line-height:1.5;
+}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;}
+.kart{
+  background:var(--kart);border:none;border-radius:22px;padding:18px;text-align:left;
+  font-family:inherit;color:var(--koyu);box-shadow:var(--golge);cursor:pointer;
+  display:flex;flex-direction:column;gap:6px;transition:transform .12s;
+}
+.kart:active{transform:translateY(4px);}
+.kart .ikon{font-size:38px;line-height:1;}
+.kart .ad{font-size:20px;font-weight:700;}
+.kart .alt{font-size:14px;opacity:.75;line-height:1.4;}
+.kart .rozet{
+  align-self:flex-start;margin-top:6px;font-size:12px;font-weight:700;
+  background:var(--acik);color:var(--mor);border-radius:20px;padding:4px 12px;
+}
+
+/* OYUN EKRANI */
+.ekran{display:none;}
+.ekran.acik{display:block;}
+.panel{
+  background:#fff;border-radius:24px;padding:20px;box-shadow:var(--golge);
+}
+.baslik{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;}
+.baslik h2{font-size:24px;color:var(--mor);}
+.yonerge{font-size:17px;line-height:1.5;margin:6px 0 16px;}
+.satir{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+.sayac{
+  background:var(--acik);color:var(--mor);border-radius:20px;padding:6px 14px;
+  font-weight:700;font-size:15px;
+}
+.puan{background:#fff6dd;color:#a9781a;border-radius:20px;padding:6px 14px;font-weight:700;font-size:15px;}
+
+.btn{
+  font-family:inherit;border:none;border-radius:18px;padding:16px 26px;
+  font-size:19px;font-weight:700;cursor:pointer;box-shadow:0 5px 0 rgba(0,0,0,.13);
+  transition:transform .1s;
+}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.13);}
+.btn.mor{background:var(--mor);color:#fff;}
+.btn.yesil{background:var(--yesil);color:#fff;}
+.btn.turuncu{background:var(--turuncu);color:#fff;}
+.btn.acik{background:var(--acik);color:var(--mor);}
+.btn.buyuk{font-size:24px;padding:22px 40px;border-radius:24px;}
+.btn[disabled]{opacity:.45;pointer-events:none;}
+
+.secenekler{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;}
+.secenek{
+  font-family:inherit;border:3px solid #eae3f7;background:#fff;border-radius:22px;
+  padding:22px 12px;font-size:22px;font-weight:700;color:var(--koyu);cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:8px;box-shadow:0 5px 0 rgba(0,0,0,.07);
+}
+.secenek .e{font-size:44px;line-height:1;}
+.secenek:active{transform:translateY(4px);box-shadow:none;}
+.secenek.dogru{background:#e5f7ec;border-color:var(--yesil);}
+.secenek.yanlis{background:#fdeceb;border-color:var(--kirmizi);}
+
+.geribildirim{
+  margin-top:16px;font-size:22px;font-weight:700;min-height:34px;text-align:center;
+}
+.geribildirim.iyi{color:var(--yesil);}
+.geribildirim.kotu{color:var(--kirmizi);}
+
+/* SES DÜĞMELERİ (zincir / kayıp ses) */
+.sesler{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px;}
+.sesbtn{
+  font-family:inherit;border:3px solid #eae3f7;background:#fff;border-radius:22px;
+  padding:16px 8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;
+  box-shadow:0 5px 0 rgba(0,0,0,.07);font-size:15px;font-weight:700;color:var(--koyu);
+}
+.sesbtn .e{font-size:40px;line-height:1;}
+.sesbtn:active{transform:translateY(4px);box-shadow:none;}
+.sesbtn.parla{background:#fff6dd;border-color:var(--sari);transform:scale(1.05);}
+.sesbtn.sec{background:var(--acik);border-color:var(--mor2);}
+.dizi{
+  display:flex;gap:8px;flex-wrap:wrap;min-height:52px;align-items:center;
+  background:var(--acik);border-radius:16px;padding:8px 12px;margin-top:12px;
+}
+.dizi span{font-size:30px;}
+.dizi .bos{font-size:15px;color:var(--mor);opacity:.7;font-weight:700;}
+
+/* DAVUL */
+.davul{
+  width:190px;height:190px;border-radius:50%;margin:10px auto;
+  background:radial-gradient(circle at 35% 30%,#f6b26b,#c96f22);
+  border:10px solid #8c4a12;box-shadow:0 8px 0 #6d380c, 0 16px 30px rgba(0,0,0,.2);
+  display:flex;align-items:center;justify-content:center;font-size:60px;cursor:pointer;
+}
+.davul:active{transform:translateY(5px);}
+.davul.vur{transform:scale(.94);}
+.ritim{display:flex;gap:10px;justify-content:center;margin:14px 0;min-height:34px;}
+.nokta{width:26px;height:26px;border-radius:50%;background:#e2d9f4;}
+.nokta.uzun{width:52px;border-radius:14px;}
+.nokta.yan{background:var(--turuncu);}
+
+/* YÖNERGE OYUNU */
+.sahne{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:12px;margin:12px 0;}
+.nesne{
+  font-family:inherit;border:3px solid #eae3f7;background:#fff;border-radius:20px;padding:14px 6px;
+  cursor:pointer;font-size:15px;font-weight:700;box-shadow:0 5px 0 rgba(0,0,0,.07);color:var(--koyu);
+}
+.nesne .e{font-size:40px;display:block;line-height:1.1;}
+.nesne.sec{border-color:var(--mor2);background:var(--acik);transform:scale(1.05);}
+.nesne.bitti{opacity:.35;pointer-events:none;}
+.hedefler{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:6px;}
+.hedef{
+  font-family:inherit;border:3px dashed #c9bce8;background:#faf7ff;border-radius:22px;
+  padding:16px 8px;cursor:pointer;font-size:16px;font-weight:700;color:var(--mor);
+}
+.hedef .e{font-size:44px;display:block;line-height:1.1;}
+.hedef .icerik{font-size:24px;min-height:30px;}
+
+/* SESSİZLİK */
+.halka{
+  width:220px;height:220px;border-radius:50%;margin:14px auto;
+  background:conic-gradient(var(--mor) 0deg,#e6dcf7 0deg);
+  display:flex;align-items:center;justify-content:center;
+}
+.halka .ic{
+  width:170px;height:170px;border-radius:50%;background:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-size:46px;font-weight:700;color:var(--mor);
+}
+.halka .ic small{font-size:15px;font-weight:400;opacity:.7;}
+.liste{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:12px;}
+.tik{
+  font-family:inherit;border:3px solid #eae3f7;background:#fff;border-radius:18px;padding:12px;
+  font-size:16px;font-weight:700;cursor:pointer;text-align:left;color:var(--koyu);
+}
+.tik.on{background:#e5f7ec;border-color:var(--yesil);}
+
+/* SONUÇ */
+.sonuc{text-align:center;padding:10px;}
+.sonuc .yildiz{font-size:56px;letter-spacing:6px;}
+.sonuc .msj{font-size:24px;font-weight:700;margin:10px 0 18px;color:var(--mor);}
+
+.ogrnot{
+  margin-top:16px;background:#fffaf0;border-left:6px solid var(--turuncu);
+  border-radius:12px;padding:12px 14px;font-size:15px;line-height:1.5;
+}
+.ogrnot b{color:#a9781a;}
+
+.imza{text-align:center;margin-top:26px;font-size:14px;color:#7a6f96;}
+
+@media(max-width:520px){
+  .secenekler{grid-template-columns:1fr;}
+  .sesler{grid-template-columns:repeat(2,1fr);}
+  .baslik h2{font-size:21px;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="logo">Kulak Kesil!<small>DİNLEME ATÖLYESİ · 1. SINIF HAZIRLIK</small></div>
+    <button class="geri" id="geriBtn" style="display:none" onclick="menuyeDon()">‹ Menü</button>
+  </div>
+
+  <!-- ================= HUB ================= -->
+  <div id="hub" class="ekran acik">
+    <div class="aciklama">
+      🎧 <b>Kulakla öğrenme atölyesi.</b> Sesin özelliğini ayırt etmek, ritmi tekrarlamak, duyduğunu
+      akılda tutmak ve yönergeyi uygulamak — okuma yazmaya geçmeden önce kulağın çalıştırılması gereken
+      basamaklar. Sınıfta akıllı tahtadan ya da tablette oynatabilirsin.
+    </div>
+    <div class="grid" id="hubGrid"></div>
+    <div class="ogrnot">
+      <b>Öğretmen notu:</b> Her gün bir bölüm yeterlidir (5–8 dakika). Önce 1 ve 2. bölümlerle başla;
+      işitsel hafıza (3–4) ve sözcük ayırt etme (6) daha üst basamaktır, birkaç hafta sonra aç.
+      Sesler cihazda üretilir; ilk dokunuşta ses açılır, cihazın sesini yükseltmeyi unutma.
+    </div>
+    <div class="imza">Dijital Öğretmen · Hasan Tutuş</div>
+  </div>
+
+  <!-- ================= 1. SESİN ÖZELLİĞİ ================= -->
+  <div id="ozellik" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">🎚️</span><h2>Sesin Özelliği</h2></div>
+    <p class="yonerge">Sesi dikkatle dinle. <b>Nasıl bir sesti?</b> Doğru kutuya dokun.</p>
+    <div class="satir">
+      <span class="sayac" id="ozSayac">1 / 10</span>
+      <span class="puan" id="ozPuan">⭐ 0</span>
+      <button class="btn mor" id="ozCal">🔊 Sesi Dinle</button>
+      <button class="btn acik" onclick="ozelikTekrar()">↻ Tekrar</button>
+    </div>
+    <div class="secenekler" id="ozSecenek"></div>
+    <div class="geribildirim" id="ozGeri"></div>
+  </div></div>
+
+  <!-- ================= 2. RİTİM YANKISI ================= -->
+  <div id="ritim" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">🥁</span><h2>Ritim Yankısı</h2></div>
+    <p class="yonerge">Davulu dinle, sonra <b>aynısını</b> sen çal. Kısa boşluk küçük nokta, uzun boşluk uzun çizgidir.</p>
+    <div class="satir">
+      <span class="sayac" id="riSayac">Basamak 1 / 6</span>
+      <span class="puan" id="riPuan">⭐ 0</span>
+      <button class="btn mor" id="riCal">🔊 Ritmi Dinle</button>
+    </div>
+    <div class="ritim" id="riGoster"></div>
+    <div class="davul" id="riDavul">🥁</div>
+    <div style="text-align:center;font-size:16px;opacity:.75" id="riDurum">Önce “Ritmi Dinle”ye dokun.</div>
+    <div class="geribildirim" id="riGeri"></div>
+  </div></div>
+
+  <!-- ================= 3. SES ZİNCİRİ ================= -->
+  <div id="zincir" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">🔗</span><h2>Ses Zinciri</h2></div>
+    <p class="yonerge">Sesler sırayla çalacak. Sonra <b>aynı sırayla</b> resimlere dokun.</p>
+    <div class="satir">
+      <span class="sayac" id="zSayac">Basamak 1 / 5</span>
+      <span class="puan" id="zPuan">⭐ 0</span>
+      <button class="btn mor" id="zCal">🔊 Zinciri Dinle</button>
+    </div>
+    <div class="dizi" id="zDizi"><span class="bos">Dinlediğin sıra buraya gelecek…</span></div>
+    <div class="sesler" id="zSesler"></div>
+    <div class="geribildirim" id="zGeri"></div>
+  </div></div>
+
+  <!-- ================= 4. KAYIP SES ================= -->
+  <div id="kayip" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">🕵️</span><h2>Kayıp Ses</h2></div>
+    <p class="yonerge">Önce bütün sesler çalar. Sonra biri <b>kaybolur</b>. Kaybolan sesi bul!</p>
+    <div class="satir">
+      <span class="sayac" id="kSayac">1 / 8</span>
+      <span class="puan" id="kPuan">⭐ 0</span>
+      <button class="btn mor" id="kCal">🔊 Başla</button>
+      <button class="btn acik" id="kTekrar">↻ Eksik diziyi tekrar dinle</button>
+    </div>
+    <div class="sesler" id="kSesler"></div>
+    <div class="geribildirim" id="kGeri"></div>
+  </div></div>
+
+  <!-- ================= 5. SİHİRLİ YÖNERGELER ================= -->
+  <div id="yonerge" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">🪄</span><h2>Sihirli Yönergeler</h2></div>
+    <p class="yonerge">Yönergeyi dinle. Önce <b>nesneye</b>, sonra <b>gideceği yere</b> dokun.</p>
+    <div class="satir">
+      <span class="sayac" id="ySayac">1 / 6</span>
+      <span class="puan" id="yPuan">⭐ 0</span>
+      <button class="btn mor" id="yCal">🔊 Yönergeyi Dinle</button>
+      <button class="btn acik" onclick="yonergeGoster()">👁️ Öğretmene göster</button>
+    </div>
+    <div style="font-size:16px;min-height:24px;color:var(--mor);font-weight:700" id="yMetin"></div>
+    <div class="sahne" id="yNesneler"></div>
+    <div class="hedefler" id="yHedefler"></div>
+    <div class="geribildirim" id="yGeri"></div>
+  </div></div>
+
+  <!-- ================= 6. AYNI MI FARKLI MI ================= -->
+  <div id="ayni" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">👂</span><h2>Aynı mı, Farklı mı?</h2></div>
+    <p class="yonerge">İki kelime duyacaksın. <b>Aynı kelimeler mi, farklı mı?</b></p>
+    <div class="satir">
+      <span class="sayac" id="aSayac">1 / 10</span>
+      <span class="puan" id="aPuan">⭐ 0</span>
+      <button class="btn mor" id="aCal">🔊 Kelimeleri Dinle</button>
+    </div>
+    <div class="secenekler">
+      <button class="secenek" onclick="ayniCevap(true)"><span class="e">🟰</span>AYNI</button>
+      <button class="secenek" onclick="ayniCevap(false)"><span class="e">↔️</span>FARKLI</button>
+    </div>
+    <div class="geribildirim" id="aGeri"></div>
+    <div class="ogrnot">Cihazda Türkçe konuşma sesi yoksa kelimeler okunamaz. O durumda öğretmen
+      “göster” düğmesiyle kelimeleri kendi sesiyle okuyabilir.
+      <button class="btn acik" style="padding:8px 16px;font-size:15px;margin-top:8px" onclick="ayniGoster()">👁️ Kelimeleri göster</button>
+      <div id="aMetin" style="font-weight:700;color:var(--mor);margin-top:6px"></div>
+    </div>
+  </div></div>
+
+  <!-- ================= 7. SESSİZLİK DAKİKASI ================= -->
+  <div id="sessizlik" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">🤫</span><h2>Sessizlik Dakikası</h2></div>
+    <p class="yonerge">Herkes sussun, gözler kapansın. <b>30 saniye</b> boyunca sadece dinleyeceğiz.
+      Süre bitince duyduğumuz sesleri işaretleyelim.</p>
+    <div class="halka" id="ssHalka"><div class="ic" id="ssSayi">30<small>saniye</small></div></div>
+    <div style="text-align:center">
+      <button class="btn yesil buyuk" id="ssBasla">▶ Başlat</button>
+    </div>
+    <div id="ssListe" style="display:none">
+      <p class="yonerge" style="margin-top:18px"><b>Neler duyduk?</b> Duyduğun her sese dokun.</p>
+      <div class="liste" id="ssTikler"></div>
+      <div style="text-align:center;margin-top:14px;font-size:20px;font-weight:700;color:var(--mor)" id="ssSonuc"></div>
+    </div>
+  </div></div>
+
+  <!-- ================= SONUÇ ================= -->
+  <div id="sonuc" class="ekran"><div class="panel sonuc">
+    <div class="yildiz" id="soYildiz">⭐⭐⭐</div>
+    <div class="msj" id="soMsj">Harikasın!</div>
+    <div id="soDetay" style="font-size:18px;margin-bottom:16px"></div>
+    <button class="btn yesil buyuk" id="soTekrar">↻ Tekrar Oyna</button>
+    <button class="btn acik buyuk" onclick="menuyeDon()">🏠 Menü</button>
+  </div></div>
+
+</div>
+
+<script>
+/* ============================================================
+   SES MOTORU — bütün sesler tarayıcıda üretilir (dosya gerekmez)
+   ============================================================ */
+let AC=null;
+function ac(){
+  if(!AC){ AC = new (window.AudioContext||window.webkitAudioContext)(); }
+  if(AC.state==='suspended') AC.resume();
+  return AC;
+}
+let gurultuBuf=null;
+function gurultu(){
+  const c=ac();
+  if(!gurultuBuf){
+    gurultuBuf=c.createBuffer(1,c.sampleRate*3,c.sampleRate);
+    const d=gurultuBuf.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+  }
+  const s=c.createBufferSource(); s.buffer=gurultuBuf; s.loop=true; return s;
+}
+function zarf(gain,t,atak,sure,tepe){
+  gain.gain.setValueAtTime(0.0001,t);
+  gain.gain.exponentialRampToValueAtTime(tepe,t+atak);
+  gain.gain.exponentialRampToValueAtTime(0.0001,t+sure);
+}
+function ton(t,{f=440,f2=null,tip='sine',sure=.5,ses=.3,atak=.01}){
+  const c=ac(),o=c.createOscillator(),g=c.createGain();
+  o.type=tip; o.frequency.setValueAtTime(f,t);
+  if(f2) o.frequency.exponentialRampToValueAtTime(f2,t+sure);
+  zarf(g,t,atak,sure,ses);
+  o.connect(g).connect(c.destination); o.start(t); o.stop(t+sure+.05);
+  return o;
+}
+function patlama(t,{sure=.15,ses=.3,tip='lowpass',kesim=800,q=1}){
+  const c=ac(),n=gurultu(),f=c.createBiquadFilter(),g=c.createGain();
+  f.type=tip; f.frequency.setValueAtTime(kesim,t); f.Q.value=q;
+  zarf(g,t,.005,sure,ses);
+  n.connect(f).connect(g).connect(c.destination); n.start(t); n.stop(t+sure+.05);
+  return f;
+}
+
+/* --- ses kataloğu --- */
+const SESLER={
+  davul:{ad:'Davul',e:'🥁',sure:.45,cal(t){ ton(t,{f:150,f2:45,tip:'sine',sure:.35,ses:.5}); patlama(t,{sure:.08,ses:.25,kesim:400}); }},
+  zil:{ad:'Zil',e:'🔔',sure:1.4,cal(t){ [880,1318,2093,2637].forEach((f,i)=>ton(t,{f:f*1.0,tip:'sine',sure:1.3-i*0.15,ses:.16/(i*.6+1)})); }},
+  yagmur:{ad:'Yağmur',e:'🌧️',sure:1.8,cal(t){ const f=patlama(t,{sure:1.7,ses:.22,tip:'bandpass',kesim:1600,q:.7}); }},
+  ruzgar:{ad:'Rüzgâr',e:'🍃',sure:1.9,cal(t){
+      const f=patlama(t,{sure:1.8,ses:.28,tip:'lowpass',kesim:500,q:2});
+      f.frequency.linearRampToValueAtTime(900,t+.9); f.frequency.linearRampToValueAtTime(350,t+1.8); }},
+  damla:{ad:'Su Damlası',e:'💧',sure:.35,cal(t){ ton(t,{f:520,f2:1500,tip:'sine',sure:.16,ses:.35}); ton(t+.22,{f:600,f2:1700,tip:'sine',sure:.14,ses:.2}); }},
+  kus:{ad:'Kuş',e:'🐦',sure:.9,cal(t){ for(let i=0;i<4;i++){ const b=t+i*.16; ton(b,{f:2200+Math.random()*600,f2:3200,tip:'sine',sure:.07,ses:.22}); } }},
+  saat:{ad:'Saat',e:'⏰',sure:1.2,cal(t){ for(let i=0;i<4;i++) patlama(t+i*.3,{sure:.04,ses:.3,tip:'highpass',kesim:2500}); }},
+  korna:{ad:'Korna',e:'🚗',sure:.65,cal(t){ ton(t,{f:400,tip:'square',sure:.6,ses:.14}); ton(t,{f:505,tip:'square',sure:.6,ses:.12}); }},
+  telefon:{ad:'Telefon',e:'📞',sure:1.3,cal(t){ for(let k=0;k<2;k++){ const b=t+k*.7; for(let i=0;i<8;i++) ton(b+i*.05,{f:i%2?1000:1300,tip:'sine',sure:.05,ses:.2}); } }},
+  kapi:{ad:'Kapı',e:'🚪',sure:.9,cal(t){ [0,.25,.5].forEach(d=>patlama(t+d,{sure:.12,ses:.4,kesim:300,q:3})); }},
+  alkis:{ad:'Alkış',e:'👏',sure:1.4,cal(t){ for(let i=0;i<9;i++) patlama(t+i*.15+Math.random()*.04,{sure:.08,ses:.25,tip:'bandpass',kesim:1800,q:.9}); }},
+  flut:{ad:'Flüt',e:'🎵',sure:.9,cal(t){ ton(t,{f:784,tip:'sine',sure:.8,ses:.25,atak:.09}); ton(t,{f:1568,tip:'sine',sure:.7,ses:.05,atak:.09}); patlama(t,{sure:.8,ses:.03,tip:'bandpass',kesim:2500,q:1}); }},
+  gitar:{ad:'Gitar',e:'🎸',sure:1.1,cal(t){ [220,440,660].forEach((f,i)=>ton(t,{f,tip:i?'sine':'sawtooth',sure:1-i*.2,ses:.2/(i+1)})); }},
+  ari:{ad:'Arı',e:'🐝',sure:1.4,cal(t){
+      const c=ac(),o=c.createOscillator(),l=c.createOscillator(),lg=c.createGain(),g=c.createGain(),fl=c.createBiquadFilter();
+      o.type='sawtooth'; o.frequency.value=190; l.frequency.value=26; lg.gain.value=45;
+      l.connect(lg).connect(o.frequency); fl.type='lowpass'; fl.frequency.value=900;
+      zarf(g,t,.08,1.3,.16); o.connect(fl).connect(g).connect(c.destination);
+      o.start(t); l.start(t); o.stop(t+1.4); l.stop(t+1.4); }},
+  kalp:{ad:'Kalp',e:'❤️',sure:1.3,cal(t){ [0,.28,.85,1.13].forEach((d,i)=>ton(t+d,{f:70,f2:40,tip:'sine',sure:.16,ses:i%2?.3:.45})); }},
+  ates:{ad:'Ateş',e:'🔥',sure:1.8,cal(t){ patlama(t,{sure:1.7,ses:.1,tip:'lowpass',kesim:700});
+      for(let i=0;i<14;i++) patlama(t+Math.random()*1.6,{sure:.05,ses:.18,tip:'bandpass',kesim:1200+Math.random()*2500,q:2}); }},
+  dudukk:{ad:'Düdük',e:'📢',sure:.8,cal(t){ ton(t,{f:1800,f2:2100,tip:'square',sure:.7,ses:.1}); ton(t,{f:2400,tip:'sine',sure:.7,ses:.05}); }}
+};
+function calSes(id,t){ const s=SESLER[id]; s.cal(t!==undefined?t:ac().currentTime); return s.sure; }
+
+/* --- Türkçe konuşma --- */
+let sesler=[];
+function sesleriYukle(){ sesler = window.speechSynthesis ? speechSynthesis.getVoices() : []; }
+if(window.speechSynthesis){ sesleriYukle(); speechSynthesis.onvoiceschanged=sesleriYukle; }
+function konus(metin,bitince,hiz){
+  if(!window.speechSynthesis){ if(bitince) bitince(); return; }
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(metin);
+  const tr = sesler.find(v=>v.lang && v.lang.toLowerCase().startsWith('tr'));
+  if(tr) u.voice=tr;
+  u.lang='tr-TR'; u.rate=hiz||0.88; u.pitch=1.05;
+  if(bitince) u.onend=bitince;
+  speechSynthesis.speak(u);
+}
+
+/* ============================================================
+   GEZİNME
+   ============================================================ */
+const BOLUMLER=[
+  {id:'ozellik',ikon:'🎚️',ad:'Sesin Özelliği',alt:'Kalın–ince, yüksek–alçak, hızlı–yavaş, uzun–kısa sesleri ayırt etme.',rozet:'1. BASAMAK',baslat:()=>ozellikBaslat()},
+  {id:'ritim',ikon:'🥁',ad:'Ritim Yankısı',alt:'Duyduğun ritmi davula vurarak aynen tekrar et.',rozet:'1. BASAMAK',baslat:()=>ritimBaslat()},
+  {id:'zincir',ikon:'🔗',ad:'Ses Zinciri',alt:'Sesleri sırasıyla hatırla ve aynı sırayla göster. İşitsel hafıza.',rozet:'2. BASAMAK',baslat:()=>zincirBaslat()},
+  {id:'kayip',ikon:'🕵️',ad:'Kayıp Ses',alt:'Dizideki hangi sesin eksildiğini bul. Dikkat ve hafıza.',rozet:'2. BASAMAK',baslat:()=>kayipBaslat()},
+  {id:'yonerge',ikon:'🪄',ad:'Sihirli Yönergeler',alt:'Dinlediğin yönergeyi uygula. Tek yönergeden üç yönergeye.',rozet:'2. BASAMAK',baslat:()=>yonergeBaslat()},
+  {id:'ayni',ikon:'👂',ad:'Aynı mı, Farklı mı?',alt:'Birbirine benzeyen kelimeleri ayırt et. Sese duyarlılık.',rozet:'3. BASAMAK',baslat:()=>ayniBaslat()},
+  {id:'sessizlik',ikon:'🤫',ad:'Sessizlik Dakikası',alt:'30 saniye sus ve dinle; sonra duyduklarını işaretle. Sınıfça.',rozet:'SINIF ETKİNLİĞİ',baslat:()=>sessizlikBaslat()}
+];
+function hubKur(){
+  const g=document.getElementById('hubGrid'); g.innerHTML='';
+  BOLUMLER.forEach(b=>{
+    const k=document.createElement('button'); k.className='kart';
+    k.innerHTML='<span class="ikon">'+b.ikon+'</span><span class="ad">'+b.ad+'</span>'+
+                '<span class="alt">'+b.alt+'</span><span class="rozet">'+b.rozet+'</span>';
+    k.onclick=()=>{ ac(); ekranAc(b.id); b.baslat(); };
+    g.appendChild(k);
+  });
+}
+hubKur();
+function ekranAc(id){
+  document.querySelectorAll('.ekran').forEach(e=>e.classList.remove('acik'));
+  document.getElementById(id).classList.add('acik');
+  document.getElementById('geriBtn').style.display = (id==='hub')?'none':'block';
+  window.scrollTo(0,0);
+}
+function menuyeDon(){
+  if(window.speechSynthesis) speechSynthesis.cancel();
+  temizle(); ekranAc('hub');
+}
+let zamanlar=[];
+function bekle(fn,ms){ const t=setTimeout(fn,ms); zamanlar.push(t); return t; }
+function temizle(){ zamanlar.forEach(clearTimeout); zamanlar=[]; }
+
+let sonSekme=null;
+function sonucGoster(dogru,toplam,tekrarFn,ekstra){
+  sonSekme=tekrarFn;
+  const oran=dogru/toplam, y=oran>=.85?3:oran>=.6?2:1;
+  document.getElementById('soYildiz').textContent='⭐'.repeat(y)+'☆'.repeat(3-y);
+  document.getElementById('soMsj').textContent = y===3?'Kulakların çok keskin!' : y===2?'Çok iyi gidiyorsun!' : 'Biraz daha çalışalım.';
+  document.getElementById('soDetay').textContent = (ekstra||('Doğru: '+dogru+' / '+toplam));
+  ekranAc('sonuc');
+}
+document.getElementById('soTekrar').onclick=()=>{ if(sonSekme) sonSekme(); };
+
+function rast(n){ return Math.floor(Math.random()*n); }
+function karistir(a){ const b=a.slice(); for(let i=b.length-1;i>0;i--){ const j=rast(i+1); [b[i],b[j]]=[b[j],b[i]]; } return b; }
+
+/* ============================================================
+   1) SESİN ÖZELLİĞİ
+   ============================================================ */
+const OZ_TIPLER=[
+  {tip:'kalinlik', soru:['Kalın ses','İnce ses'], e:['🐘','🐤'],
+   cal(a){ const t=ac().currentTime; ton(t,{f:a?120:1200,tip:'sine',sure:1.0,ses:.3,atak:.05}); }},
+  {tip:'siddet', soru:['Yüksek ses','Alçak ses'], e:['📢','🤫'],
+   cal(a){ const t=ac().currentTime; ton(t,{f:440,tip:'triangle',sure:.9,ses:a?.45:.04,atak:.04}); }},
+  {tip:'hiz', soru:['Hızlı ses','Yavaş ses'], e:['🐇','🐢'],
+   cal(a){ const t=ac().currentTime, ar=a?.16:.55; for(let i=0;i<6;i++) SESLER.davul.cal(t+i*ar); }},
+  {tip:'sure', soru:['Uzun ses','Kısa ses'], e:['➖','▫️'],
+   cal(a){ const t=ac().currentTime; ton(t,{f:520,tip:'sine',sure:a?1.8:.18,ses:.3,atak:.04}); }}
+];
+let ozSira=[],ozNo=0,ozDogru=0,ozCevap=null,ozKilit=false;
+function ozellikBaslat(){
+  temizle(); ozSira=[]; for(let i=0;i<10;i++){ ozSira.push({t:OZ_TIPLER[rast(4)], a:Math.random()<.5}); }
+  ozNo=0; ozDogru=0; ozSoru();
+}
+function ozSoru(){
+  ozKilit=false;
+  const s=ozSira[ozNo];
+  document.getElementById('ozSayac').textContent=(ozNo+1)+' / 10';
+  document.getElementById('ozPuan').textContent='⭐ '+ozDogru;
+  document.getElementById('ozGeri').textContent='';
+  document.getElementById('ozGeri').className='geribildirim';
+  const kap=document.getElementById('ozSecenek'); kap.innerHTML='';
+  [0,1].forEach(i=>{
+    const b=document.createElement('button'); b.className='secenek';
+    b.innerHTML='<span class="e">'+s.t.e[i]+'</span>'+s.t.soru[i];
+    b.onclick=()=>ozCevapVer(i===0, b);
+    kap.appendChild(b);
+  });
+  ozCevap=s.a;
+  bekle(()=>s.t.cal(s.a),350);
+}
+function ozelikTekrar(){ const s=ozSira[ozNo]; if(s) s.t.cal(s.a); }
+document.getElementById('ozCal').onclick=ozelikTekrar;
+function ozCevapVer(secilenIlk,btn){
+  if(ozKilit) return; ozKilit=true;
+  const dogru = (secilenIlk===ozCevap);
+  const g=document.getElementById('ozGeri');
+  if(dogru){ ozDogru++; btn.classList.add('dogru'); g.textContent='✔ Doğru!'; g.className='geribildirim iyi'; }
+  else{ btn.classList.add('yanlis'); g.textContent='✘ Tekrar dinleyelim.'; g.className='geribildirim kotu'; }
+  document.getElementById('ozPuan').textContent='⭐ '+ozDogru;
+  bekle(()=>{ ozNo++; if(ozNo>=10) sonucGoster(ozDogru,10,ozellikBaslatVeAc); else ozSoru(); },1200);
+}
+function ozellikBaslatVeAc(){ ekranAc('ozellik'); ozellikBaslat(); }
+
+/* ============================================================
+   2) RİTİM YANKISI
+   ============================================================ */
+const RITIMLER=[[1,1],[1,2],[2,1,1],[1,2,1],[2,1,2,1],[1,1,2,1,1]];
+const BIRIM=430;
+let riNo=0,riDogru=0,riKayit=[],riDinlemede=false,riAktif=false;
+function ritimBaslat(){ temizle(); riNo=0; riDogru=0; riSoru(); }
+function riSoru(){
+  riKayit=[]; riAktif=false;
+  document.getElementById('riSayac').textContent='Basamak '+(riNo+1)+' / '+RITIMLER.length;
+  document.getElementById('riPuan').textContent='⭐ '+riDogru;
+  document.getElementById('riGeri').textContent='';
+  document.getElementById('riDurum').textContent='“Ritmi Dinle”ye dokun.';
+  riCiz(RITIMLER[riNo],-1);
+}
+function riCiz(p,vurgu){
+  const k=document.getElementById('riGoster'); k.innerHTML='';
+  const n=document.createElement('div'); n.className='nokta'+(vurgu===0?' yan':''); k.appendChild(n);
+  p.forEach((g,i)=>{
+    const d=document.createElement('div'); d.className='nokta'+(g===2?' uzun':'')+(vurgu===i+1?' yan':'');
+    k.appendChild(d);
+  });
+}
+document.getElementById('riCal').onclick=()=>{
+  if(riDinlemede) return; riDinlemede=true; riAktif=false; riKayit=[];
+  const p=RITIMLER[riNo]; let t=0;
+  document.getElementById('riDurum').textContent='Dinle…';
+  SESLER.davul.cal(ac().currentTime); riCiz(p,0);
+  p.forEach((g,i)=>{ t+=g*BIRIM; bekle(()=>{ SESLER.davul.cal(ac().currentTime); riCiz(p,i+1); },t); });
+  bekle(()=>{
+    riCiz(p,-1); riDinlemede=false; riAktif=true;
+    document.getElementById('riDurum').textContent='🥁 Şimdi sen çal!';
+  },t+700);
+};
+const davulEl=document.getElementById('riDavul');
+davulEl.addEventListener('pointerdown',()=>{
+  ac(); SESLER.davul.cal(ac().currentTime);
+  davulEl.classList.add('vur'); setTimeout(()=>davulEl.classList.remove('vur'),90);
+  if(!riAktif) return;
+  riKayit.push(performance.now());
+  const gerek=RITIMLER[riNo].length+1;
+  if(riKayit.length>=gerek){ riAktif=false; bekle(riDegerlendir,450); }
+});
+function riDegerlendir(){
+  const p=RITIMLER[riNo], boslar=[];
+  for(let i=1;i<riKayit.length;i++) boslar.push(riKayit[i]-riKayit[i-1]);
+  const kucuk=Math.min.apply(null,boslar);
+  const bulunan=boslar.map(b=> b>kucuk*1.55 ? 2 : 1 );
+  const dogru = bulunan.length===p.length && bulunan.every((v,i)=>v===p[i]);
+  const g=document.getElementById('riGeri');
+  if(dogru){ riDogru++; g.textContent='✔ Tam isabet!'; g.className='geribildirim iyi'; }
+  else{ g.textContent='✘ Kısa ve uzun boşluklara dikkat.'; g.className='geribildirim kotu'; }
+  document.getElementById('riPuan').textContent='⭐ '+riDogru;
+  bekle(()=>{ riNo++; if(riNo>=RITIMLER.length) sonucGoster(riDogru,RITIMLER.length,()=>{ekranAc('ritim');ritimBaslat();}); else riSoru(); },1400);
+}
+
+/* ============================================================
+   3) SES ZİNCİRİ
+   ============================================================ */
+const ZSET=['davul','zil','kus','damla','korna','kapi'];
+let zNo=0,zDogru=0,zDizi=[],zGiris=[],zKilit=true;
+function zincirBaslat(){
+  temizle(); zNo=0; zDogru=0;
+  const k=document.getElementById('zSesler'); k.innerHTML='';
+  ZSET.forEach(id=>{
+    const b=document.createElement('button'); b.className='sesbtn'; b.dataset.id=id;
+    b.innerHTML='<span class="e">'+SESLER[id].e+'</span>'+SESLER[id].ad;
+    b.onclick=()=>zSec(id,b);
+    k.appendChild(b);
+  });
+  zSoru();
+}
+function zSoru(){
+  zKilit=true; zGiris=[];
+  const uzunluk=zNo+2;
+  zDizi=[]; for(let i=0;i<uzunluk;i++) zDizi.push(ZSET[rast(ZSET.length)]);
+  document.getElementById('zSayac').textContent='Basamak '+(zNo+1)+' / 5';
+  document.getElementById('zPuan').textContent='⭐ '+zDogru;
+  document.getElementById('zGeri').textContent='';
+  document.getElementById('zDizi').innerHTML='<span class="bos">Önce “Zinciri Dinle”ye dokun…</span>';
+  bekle(zCalDizi,600);
+}
+function zCalDizi(){
+  zKilit=true; document.getElementById('zDizi').innerHTML='<span class="bos">Dinle…</span>';
+  let t=0;
+  zDizi.forEach(id=>{
+    bekle(()=>{
+      calSes(id);
+      const b=document.querySelector('.sesbtn[data-id="'+id+'"]');
+      if(b){ b.classList.add('parla'); setTimeout(()=>b.classList.remove('parla'),380); }
+    },t);
+    t += Math.max(SESLER[id].sure*1000,500)+180;
+  });
+  bekle(()=>{ zKilit=false; document.getElementById('zDizi').innerHTML='<span class="bos">Sırayla dokun 👇</span>'; },t+300);
+}
+document.getElementById('zCal').onclick=zCalDizi;
+function zSec(id,b){
+  if(zKilit) return;
+  calSes(id); zGiris.push(id);
+  const d=document.getElementById('zDizi');
+  if(zGiris.length===1) d.innerHTML='';
+  const s=document.createElement('span'); s.textContent=SESLER[id].e; d.appendChild(s);
+  const i=zGiris.length-1;
+  if(zGiris[i]!==zDizi[i]){ zKilit=true; zBitir(false); return; }
+  if(zGiris.length===zDizi.length){ zKilit=true; zBitir(true); }
+}
+function zBitir(dogru){
+  const g=document.getElementById('zGeri');
+  if(dogru){ zDogru++; g.textContent='✔ Zincir tamam!'; g.className='geribildirim iyi'; }
+  else{ g.textContent='✘ Sıra karıştı. Tekrar dinleyelim.'; g.className='geribildirim kotu'; }
+  document.getElementById('zPuan').textContent='⭐ '+zDogru;
+  bekle(()=>{ zNo++; if(zNo>=5) sonucGoster(zDogru,5,()=>{ekranAc('zincir');zincirBaslat();}); else zSoru(); },1400);
+}
+
+/* ============================================================
+   4) KAYIP SES
+   ============================================================ */
+const KSET=['davul','zil','kus','damla','korna','kapi','ari','saat','flut'];
+let kNo=0,kDogru=0,kGrup=[],kEksik=null,kKilit=true;
+function kayipBaslat(){ temizle(); kNo=0; kDogru=0; kSoru(); }
+function kSoru(){
+  kKilit=true;
+  const adet = kNo<3?3 : kNo<6?4 : 5;
+  kGrup=karistir(KSET).slice(0,adet);
+  kEksik=kGrup[rast(kGrup.length)];
+  document.getElementById('kSayac').textContent=(kNo+1)+' / 8';
+  document.getElementById('kPuan').textContent='⭐ '+kDogru;
+  document.getElementById('kGeri').textContent='';
+  const k=document.getElementById('kSesler'); k.innerHTML='';
+  kGrup.forEach(id=>{
+    const b=document.createElement('button'); b.className='sesbtn'; b.dataset.id=id;
+    b.innerHTML='<span class="e">'+SESLER[id].e+'</span>'+SESLER[id].ad;
+    b.onclick=()=>kSec(id,b);
+    k.appendChild(b);
+  });
+  bekle(kTamCal,500);
+}
+function kDiziCal(liste,bitince){
+  let t=0;
+  liste.forEach(id=>{
+    bekle(()=>{
+      calSes(id);
+      const b=document.querySelector('#kSesler .sesbtn[data-id="'+id+'"]');
+      if(b){ b.classList.add('parla'); setTimeout(()=>b.classList.remove('parla'),380); }
+    },t);
+    t+=Math.max(SESLER[id].sure*1000,500)+200;
+  });
+  bekle(bitince,t+250);
+}
+function kTamCal(){
+  kKilit=true;
+  document.getElementById('kGeri').textContent='Bütün sesler…';
+  document.getElementById('kGeri').className='geribildirim';
+  kDiziCal(kGrup,()=>{
+    document.getElementById('kGeri').textContent='Şimdi bir ses kayboldu…';
+    bekle(()=>{
+      kDiziCal(kGrup.filter(x=>x!==kEksik),()=>{
+        kKilit=false;
+        document.getElementById('kGeri').textContent='Hangi ses kayboldu? 👇';
+      });
+    },700);
+  });
+}
+document.getElementById('kCal').onclick=kTamCal;
+document.getElementById('kTekrar').onclick=()=>{ if(!kKilit) kDiziCal(kGrup.filter(x=>x!==kEksik),()=>{}); };
+function kSec(id,b){
+  if(kKilit) return; kKilit=true;
+  const g=document.getElementById('kGeri');
+  if(id===kEksik){ kDogru++; b.classList.add('sec'); g.textContent='✔ Bulundu: '+SESLER[id].ad; g.className='geribildirim iyi'; }
+  else{ g.textContent='✘ Kaybolan ses: '+SESLER[kEksik].ad; g.className='geribildirim kotu';
+        const d=document.querySelector('#kSesler .sesbtn[data-id="'+kEksik+'"]'); if(d) d.classList.add('sec'); }
+  document.getElementById('kPuan').textContent='⭐ '+kDogru;
+  bekle(()=>{ kNo++; if(kNo>=8) sonucGoster(kDogru,8,()=>{ekranAc('kayip');kayipBaslat();}); else kSoru(); },1600);
+}
+
+/* ============================================================
+   5) SİHİRLİ YÖNERGELER
+   ============================================================ */
+const NESNELER=[
+  {id:'top',ad:'kırmızı topu',e:'🔴',etiket:'kırmızı top'},
+  {id:'kalem',ad:'mavi kalemi',e:'🖊️',etiket:'mavi kalem'},
+  {id:'elma',ad:'yeşil elmayı',e:'🍏',etiket:'yeşil elma'},
+  {id:'yildiz',ad:'sarı yıldızı',e:'⭐',etiket:'sarı yıldız'},
+  {id:'cicek',ad:'mor çiçeği',e:'🌸',etiket:'mor çiçek'},
+  {id:'yaprak',ad:'yeşil yaprağı',e:'🍃',etiket:'yeşil yaprak'}
+];
+const HEDEFLER=[
+  {id:'sepet',ad:'sepete',e:'🧺',etiket:'sepet'},
+  {id:'kutu',ad:'kutuya',e:'📦',etiket:'kutu'},
+  {id:'masa',ad:'masaya',e:'🪑',etiket:'masa'}
+];
+let yNo=0,yDogru=0,yGorevler=[],ySeciliNesne=null,yAdim=0,yMetinTam='';
+function yonergeBaslat(){ temizle(); yNo=0; yDogru=0; ySoru(); }
+function ySoru(){
+  const adet = yNo<2?1 : yNo<4?2 : 3;
+  const ns=karistir(NESNELER).slice(0,adet);
+  yGorevler=ns.map(n=>({n, h:HEDEFLER[rast(3)], tamam:false}));
+  yAdim=0; ySeciliNesne=null;
+  yMetinTam = yGorevler.map(g=>g.n.ad+' '+g.h.ad+' koy').join(', sonra ');
+  yMetinTam = yMetinTam.charAt(0).toUpperCase()+yMetinTam.slice(1)+'.';
+  document.getElementById('ySayac').textContent=(yNo+1)+' / 6';
+  document.getElementById('yPuan').textContent='⭐ '+yDogru;
+  document.getElementById('yGeri').textContent='';
+  document.getElementById('yMetin').textContent='';
+  // nesneler
+  const kn=document.getElementById('yNesneler'); kn.innerHTML='';
+  karistir(NESNELER).forEach(n=>{
+    const b=document.createElement('button'); b.className='nesne'; b.dataset.id=n.id;
+    b.innerHTML='<span class="e">'+n.e+'</span>'+n.etiket;
+    b.onclick=()=>{ ac(); document.querySelectorAll('.nesne').forEach(x=>x.classList.remove('sec'));
+                    b.classList.add('sec'); ySeciliNesne=n.id; };
+    kn.appendChild(b);
+  });
+  const kh=document.getElementById('yHedefler'); kh.innerHTML='';
+  HEDEFLER.forEach(h=>{
+    const b=document.createElement('button'); b.className='hedef'; b.dataset.id=h.id;
+    b.innerHTML='<span class="e">'+h.e+'</span>'+h.etiket+'<div class="icerik" id="ic-'+h.id+'"></div>';
+    b.onclick=()=>yHedefeKoy(h.id);
+    kh.appendChild(b);
+  });
+  bekle(yKonus,500);
+}
+function yKonus(){ konus(yMetinTam); }
+document.getElementById('yCal').onclick=yKonus;
+function yonergeGoster(){ document.getElementById('yMetin').textContent=yMetinTam; }
+function yHedefeKoy(hid){
+  if(!ySeciliNesne) return;
+  const gorev=yGorevler[yAdim];
+  const dogru = gorev && gorev.n.id===ySeciliNesne && gorev.h.id===hid;
+  const g=document.getElementById('yGeri');
+  const nb=document.querySelector('.nesne[data-id="'+ySeciliNesne+'"]');
+  if(dogru){
+    document.getElementById('ic-'+hid).textContent += gorev.n.e;
+    nb.classList.add('bitti'); nb.classList.remove('sec');
+    gorev.tamam=true; yAdim++; ySeciliNesne=null;
+    if(yAdim>=yGorevler.length){
+      yDogru++; g.textContent='✔ Bütün yönergeleri uyguladın!'; g.className='geribildirim iyi';
+      document.getElementById('yPuan').textContent='⭐ '+yDogru;
+      bekle(()=>{ yNo++; if(yNo>=6) sonucGoster(yDogru,6,()=>{ekranAc('yonerge');yonergeBaslat();}); else ySoru(); },1500);
+    } else { g.textContent='👍 Devam et…'; g.className='geribildirim iyi'; }
+  } else {
+    g.textContent='✘ Yönergeyi tekrar dinleyelim.'; g.className='geribildirim kotu';
+    if(nb) nb.classList.remove('sec'); ySeciliNesne=null;
+    bekle(yKonus,900);
+  }
+}
+
+/* ============================================================
+   6) AYNI MI FARKLI MI
+   ============================================================ */
+const CIFTLER=[['bal','dal'],['kaz','kas'],['top','tok'],['nar','kar'],['dil','dul'],
+  ['masa','kasa'],['tarak','tabak'],['saç','sac'],['kum','kuş'],['el','al'],
+  ['kapı','karı'],['balık','sabık'],['deve','dere'],['kedi','keçi'],['burun','burun']];
+let aNo=0,aDogru=0,aCift=null,aAyniMi=false,aKilit=true;
+function ayniBaslat(){ temizle(); aNo=0; aDogru=0; aSoru(); }
+function aSoru(){
+  aKilit=true;
+  const c=CIFTLER[rast(CIFTLER.length)];
+  aAyniMi=Math.random()<.45;
+  aCift = aAyniMi ? [c[0],c[0]] : [c[0],c[1]];
+  document.getElementById('aSayac').textContent=(aNo+1)+' / 10';
+  document.getElementById('aPuan').textContent='⭐ '+aDogru;
+  document.getElementById('aGeri').textContent='';
+  document.getElementById('aMetin').textContent='';
+  document.querySelectorAll('#ayni .secenek').forEach(b=>b.classList.remove('dogru','yanlis'));
+  bekle(aKonus,500);
+}
+function aKonus(){
+  aKilit=true;
+  konus(aCift[0],()=>{ bekle(()=>konus(aCift[1],()=>{ aKilit=false; }),450); });
+  bekle(()=>{ aKilit=false; },3500);
+}
+document.getElementById('aCal').onclick=aKonus;
+function ayniGoster(){ document.getElementById('aMetin').textContent=aCift[0]+' — '+aCift[1]; }
+function ayniCevap(secim){
+  if(aKilit) return; aKilit=true;
+  const g=document.getElementById('aGeri');
+  if(secim===aAyniMi){ aDogru++; g.textContent='✔ Doğru! ('+aCift[0]+' – '+aCift[1]+')'; g.className='geribildirim iyi'; }
+  else{ g.textContent='✘ '+aCift[0]+' – '+aCift[1]; g.className='geribildirim kotu'; }
+  document.getElementById('aPuan').textContent='⭐ '+aDogru;
+  bekle(()=>{ aNo++; if(aNo>=10) sonucGoster(aDogru,10,()=>{ekranAc('ayni');ayniBaslat();}); else aSoru(); },1500);
+}
+
+/* ============================================================
+   7) SESSİZLİK DAKİKASI
+   ============================================================ */
+const DUYULANLAR=['🚗 Araba','🐦 Kuş','🗣️ Konuşma','🚪 Kapı','💨 Rüzgâr','⏰ Saat','👟 Ayak sesi',
+  '📣 Zil','✏️ Kalem','🌧️ Yağmur','🐕 Köpek','🎵 Müzik','🪟 Cam','❤️ Kalbim'];
+let ssSayac=null;
+function sessizlikBaslat(){
+  temizle(); if(ssSayac) clearInterval(ssSayac);
+  document.getElementById('ssListe').style.display='none';
+  document.getElementById('ssSonuc').textContent='';
+  document.getElementById('ssSayi').innerHTML='30<small>saniye</small>';
+  document.getElementById('ssHalka').style.background='conic-gradient(var(--mor) 0deg,#e6dcf7 0deg)';
+  document.getElementById('ssBasla').style.display='inline-block';
+  const k=document.getElementById('ssTikler'); k.innerHTML='';
+  DUYULANLAR.forEach(d=>{
+    const b=document.createElement('button'); b.className='tik'; b.textContent=d;
+    b.onclick=()=>{ b.classList.toggle('on'); ssSay(); };
+    k.appendChild(b);
+  });
+}
+document.getElementById('ssBasla').onclick=()=>{
+  ac(); let kalan=30;
+  document.getElementById('ssBasla').style.display='none';
+  ssSayac=setInterval(()=>{
+    kalan--;
+    const derece=(30-kalan)/30*360;
+    document.getElementById('ssHalka').style.background='conic-gradient(var(--mor) '+derece+'deg,#e6dcf7 '+derece+'deg)';
+    document.getElementById('ssSayi').innerHTML=kalan+'<small>saniye</small>';
+    if(kalan<=0){
+      clearInterval(ssSayac);
+      SESLER.zil.cal(ac().currentTime);
+      document.getElementById('ssSayi').innerHTML='🔔<small>süre bitti</small>';
+      document.getElementById('ssListe').style.display='block';
+    }
+  },1000);
+};
+function ssSay(){
+  const n=document.querySelectorAll('#ssTikler .tik.on').length;
+  document.getElementById('ssSonuc').textContent = n?('👂 '+n+' farklı ses duyduk!'):'';
+}
+
+/* ilk dokunuşta sesi aç */
+document.addEventListener('pointerdown',()=>{ ac(); },{once:true});
+</script>
+</body>
+</html>

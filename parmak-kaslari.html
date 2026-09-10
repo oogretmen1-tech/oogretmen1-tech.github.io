@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Parmaklarım Güçleniyor — Kas Atölyesi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ana:#3d8f5f; --ana2:#63b183; --acik:#e8f5ec;
+  --turuncu:#f2913d; --kirmizi:#e0574f; --mavi:#3d8ad1; --sari:#f3c53d; --mor:#8d6fd1;
+  --koyu:#2f3d33;
+  --golge:0 6px 0 rgba(0,0,0,.08), 0 12px 28px rgba(40,90,60,.15);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{font-family:'Andika','Segoe UI',system-ui,sans-serif;color:var(--koyu);
+  background:linear-gradient(165deg,#e6f4ea 0%,#f2f7e8 55%,#fdf6e8 100%);
+  min-height:100vh;padding:14px;padding-bottom:60px;user-select:none;}
+h1,h2,h3{margin:0;}
+.wrap{max-width:1000px;margin:0 auto;}
+.topbar{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+.logo{background:var(--ana);color:#fff;border-radius:18px;padding:10px 18px;font-weight:700;font-size:22px;box-shadow:var(--golge);}
+.logo small{display:block;font-weight:400;font-size:12px;opacity:.85;letter-spacing:.5px;}
+.geri{margin-left:auto;background:#fff;border:none;border-radius:16px;padding:12px 20px;font-family:inherit;font-size:17px;font-weight:700;color:var(--ana);box-shadow:var(--golge);cursor:pointer;}
+.geri:active{transform:translateY(3px);}
+.aciklama{background:#fff;border-radius:20px;padding:14px 18px;box-shadow:var(--golge);margin-bottom:14px;font-size:16px;line-height:1.5;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;}
+.kart{background:#fff;border:none;border-radius:22px;padding:18px;text-align:left;font-family:inherit;color:var(--koyu);box-shadow:var(--golge);cursor:pointer;display:flex;flex-direction:column;gap:6px;}
+.kart:active{transform:translateY(4px);}
+.kart .ikon{font-size:38px;line-height:1;}
+.kart .ad{font-size:20px;font-weight:700;}
+.kart .alt{font-size:14px;opacity:.75;line-height:1.4;}
+.kart .rozet{align-self:flex-start;margin-top:6px;font-size:12px;font-weight:700;background:var(--acik);color:var(--ana);border-radius:20px;padding:4px 12px;}
+.btn{font-family:inherit;border:none;border-radius:18px;padding:15px 24px;font-size:18px;font-weight:700;cursor:pointer;box-shadow:0 5px 0 rgba(0,0,0,.13);}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.13);}
+.btn.ana{background:var(--ana);color:#fff;}
+.btn.acik{background:var(--acik);color:var(--ana);}
+.btn.turuncu{background:var(--turuncu);color:#fff;}
+.btn.buyuk{font-size:22px;padding:19px 34px;}
+.ekran{display:none;} .ekran.acik{display:block;}
+.panel{background:#fff;border-radius:24px;padding:20px;box-shadow:var(--golge);}
+.baslik{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;}
+.baslik h2{font-size:24px;color:var(--ana);}
+.yonerge{font-size:17px;line-height:1.5;margin:6px 0 10px;}
+.satir{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+.rozet2{background:var(--acik);color:var(--ana);border-radius:20px;padding:6px 14px;font-weight:700;font-size:15px;}
+.sahne{position:relative;border-radius:22px;overflow:hidden;background:linear-gradient(180deg,#f7fbf5,#eef7f0);
+  height:400px;margin:8px 0;touch-action:none;border:3px solid #e2eee6;}
+.durumyazi{text-align:center;font-size:19px;font-weight:700;color:var(--ana);min-height:28px;}
+.ogrnot{margin-top:14px;background:#fffaf0;border-left:6px solid var(--turuncu);border-radius:12px;padding:12px 14px;font-size:15px;line-height:1.55;}
+.ogrnot b{color:#a9781a;}
+.sonuc{text-align:center;padding:10px;}
+.sonuc .yildiz{font-size:56px;letter-spacing:6px;}
+.sonuc .msj{font-size:24px;font-weight:700;margin:10px 0 16px;color:var(--ana);}
+.imza{text-align:center;margin-top:26px;font-size:14px;color:#6f8091;}
+
+/* sürüklenen parçalar */
+.parca{position:absolute;width:52px;height:52px;border-radius:50%;cursor:grab;touch-action:none;
+  display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 4px 8px rgba(0,0,0,.18);}
+.parca.tutuluyor{transform:scale(1.15);box-shadow:0 8px 18px rgba(0,0,0,.28);}
+.parca.yerlesti{box-shadow:none;pointer-events:none;}
+.yuva{position:absolute;border:3px dashed #b9d3c2;border-radius:50%;background:rgba(255,255,255,.6);}
+.yuva.dolu{border-style:solid;border-color:transparent;background:transparent;}
+.tepsi{position:absolute;left:0;right:0;bottom:0;height:88px;background:#eaf3ec;border-top:3px solid #d6e7db;}
+
+/* baloncuk */
+.balon2{position:absolute;border-radius:50%;background:radial-gradient(circle at 32% 30%,rgba(255,255,255,.95),rgba(120,200,255,.55));
+  border:2px solid rgba(90,170,220,.6);cursor:pointer;}
+
+/* egzersiz kartı */
+.egKart{text-align:center;padding:10px;}
+.egEl{font-size:110px;line-height:1.1;display:inline-block;}
+.egAd{font-size:28px;font-weight:700;color:var(--ana);margin:6px 0;}
+.egAciklama{font-size:18px;line-height:1.5;max-width:620px;margin:0 auto 10px;}
+.halka{width:120px;height:120px;border-radius:50%;margin:8px auto;background:conic-gradient(var(--ana) 0deg,#e2eee6 0deg);
+  display:flex;align-items:center;justify-content:center;}
+.halka .ic{width:92px;height:92px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:32px;font-weight:700;color:var(--ana);}
+@keyframes yuru{0%,100%{transform:translateX(-26px) rotate(-6deg)}50%{transform:translateX(26px) rotate(6deg)}}
+@keyframes acKapa{0%,100%{transform:scale(1)}50%{transform:scale(.72)}}
+@keyframes salla{0%,100%{transform:rotate(-14deg)}50%{transform:rotate(14deg)}}
+@keyframes zipla{0%,100%{transform:translateY(0)}50%{transform:translateY(-22px)}}
+.an-yuru{animation:yuru 1.1s ease-in-out infinite;}
+.an-ackapa{animation:acKapa .9s ease-in-out infinite;}
+.an-salla{animation:salla .8s ease-in-out infinite;}
+.an-zipla{animation:zipla .7s ease-in-out infinite;}
+.egListe{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:12px;}
+.egMini{background:#fff;border:3px solid #e2eee6;border-radius:16px;padding:10px;font-family:inherit;font-size:15px;
+  font-weight:700;cursor:pointer;color:var(--koyu);}
+.egMini:active{transform:translateY(3px);}
+.egMini span{display:block;font-size:30px;}
+@media(max-width:520px){ .sahne{height:330px;} .baslik h2{font-size:21px;} .egEl{font-size:80px;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="logo">Parmaklarım Güçleniyor<small>PARMAK KASLARI ATÖLYESİ · 1. SINIF HAZIRLIK</small></div>
+    <button class="geri" id="geriBtn" style="display:none" onclick="menuyeDon()">‹ Menü</button>
+  </div>
+
+  <div id="hub" class="ekran acik">
+    <div class="aciklama">
+      ✋ <b>Kalem tutmadan önce parmakların güçlenmesi gerekir.</b> Buradaki çalışmalar dokunmatik ekranda
+      sürükleme, isabetli dokunma ve yol takibi ile parmak-el kontrolünü çalıştırır. Her bölümün altında
+      <b>aynı çalışmanın gerçek materyalle sınıfta nasıl yapılacağı</b> yazıyor — asıl kas gelişimi orada olur,
+      ekran onun ısınması ve tekrarıdır.
+    </div>
+    <div class="grid" id="hubGrid"></div>
+    <div class="ogrnot">
+      <b>Öğretmen notu:</b> Günde 10–15 dakika yeterli. Sıralama şöyledir: önce büyük kaslar (kol, bilek),
+      sonra el içi, en son parmak uçları. Ekran çalışmasını 5 dakikada bitirip gerçek materyale geçmek en iyisi;
+      tablet tek başına kas geliştirmez, hamur ve mandal geliştirir.
+    </div>
+    <div class="imza">Dijital Öğretmen · Hasan Tutuş</div>
+  </div>
+
+  <!-- 1 KREPON TOPLARI -->
+  <div id="krepon" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">🎨</span><h2>Krepon Topları</h2></div>
+    <p class="yonerge">Renkli topları <b>parmağınla sürükleyip</b> kelebeğin aynı renkteki dairelerine yerleştir.</p>
+    <div class="satir"><span class="rozet2" id="krSayac">0 / 10</span><button class="btn acik" onclick="kreponBaslat()">↻ Baştan</button></div>
+    <div class="sahne" id="krSahne"></div>
+    <div class="durumyazi" id="krDurum">Topu al, dairesine götür 👆</div>
+    <div class="ogrnot"><b>Sınıfta gerçeği:</b> Renkli krepon kâğıdını 4×4 cm karelere kes, çocuk
+      <b>baş ve işaret parmağıyla</b> yuvarlayıp minik top yapsın (avuç içiyle yuvarlatma — bu çok kolay olur).
+      Kelebek/çiçek şablonundaki dairelere yapıştırsın. 20 top = 20 tekrar. Yapıştırıcıyı çubukla sürmek ayrı bir kas çalışmasıdır.</div>
+  </div></div>
+
+  <!-- 2 MANDAL -->
+  <div id="mandal" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">🧺</span><h2>Mandal Tak</h2></div>
+    <p class="yonerge">Mandalları güneşin etrafındaki yuvalara sürükle. <b>Hepsini tak!</b></p>
+    <div class="satir"><span class="rozet2" id="maSayac">0 / 8</span><button class="btn acik" onclick="mandalBaslat()">↻ Baştan</button></div>
+    <div class="sahne" id="maSahne"></div>
+    <div class="durumyazi" id="maDurum">Mandalı yuvaya götür 👆</div>
+    <div class="ogrnot"><b>Sınıfta gerçeği:</b> Karton daireye "güneş" çiz, çocuk gerçek mandalları kenarına taksın.
+      Mandal açmak <b>kıskaç tutuşunu</b> (baş + işaret + orta parmak) doğrudan çalıştırır — kalem tutuşunun ta kendisi.
+      Sayı çalışmasıyla birleştir: "Güneşe 7 ışın tak." Mandallara harf/rakam yapıştırıp eşleştirme de yaptırabilirsin.</div>
+  </div></div>
+
+  <!-- 3 İP GEÇİRME -->
+  <div id="ip" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">🪡</span><h2>İp Geçirme</h2></div>
+    <p class="yonerge">Deliklere <b>sırayla</b> dokun, ip kendiliğinden geçsin. Sıra şaşarsa ip geçmez!</p>
+    <div class="satir"><span class="rozet2" id="ipSayac">0 / 12</span><button class="btn acik" onclick="ipBaslat()">↻ Baştan</button></div>
+    <div class="sahne" id="ipSahne"></div>
+    <div class="durumyazi" id="ipDurum">1 numaradan başla 👆</div>
+    <div class="ogrnot"><b>Sınıfta gerçeği:</b> Kalın kartona (ayakkabı, elma, kalp şekli) delgeçle delikler aç,
+      ucu selobantla sertleştirilmiş yün ip ver. Sırayla geçirsin. İki elin birlikte çalışmasını
+      (<b>bimanuel koordinasyon</b>) öğreten en iyi etkinliktir — bir el kartonu tutar, diğeri ipi çeker.</div>
+  </div></div>
+
+  <!-- 4 YOL TAKİBİ -->
+  <div id="yol" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">🐌</span><h2>Yoldan Çıkma</h2></div>
+    <p class="yonerge">Parmağını kaldırmadan yolu takip et. <b>Yavaş git</b>, dışarı çıkma!</p>
+    <div class="satir"><span class="rozet2" id="yoSayac">Durak: 0 / 12</span><span class="rozet2" id="yoHata">Dışarı çıkma: 0</span>
+      <button class="btn acik" onclick="yolBaslat()">↻ Baştan</button></div>
+    <div class="sahne" id="yoSahne"></div>
+    <div class="durumyazi" id="yoDurum">Yeşil noktadan başla 👆</div>
+    <div class="ogrnot"><b>Sınıfta gerçeği:</b> Yere maskeleme bandıyla dolambaçlı bir yol yapıştır; çocuk önce
+      <b>üstünde yürüsün</b>, sonra parmağıyla takip etsin. Büyük hareketten küçüğe inmek doğru sıradır.
+      Masada: tepsiye ince irmik ser, parmakla yol çizsin. Silinip tekrar çizilebilir, çocuklar bayılır.</div>
+  </div></div>
+
+  <!-- 5 BALONCUK -->
+  <div id="baloncuk" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">🫧</span><h2>Baloncuk Patlat</h2></div>
+    <p class="yonerge">Baloncuklara <b>tam üstüne</b> dokun. Küçüldükçe zorlaşır — işaret parmağını kullan!</p>
+    <div class="satir"><span class="rozet2" id="blSayac">Patlayan: 0</span><span class="rozet2" id="blIsabet">İsabet: %100</span>
+      <span class="rozet2" id="blSure">Süre: 40</span><button class="btn acik" onclick="baloncukBaslat()">↻ Baştan</button></div>
+    <div class="sahne" id="blSahne"></div>
+    <div class="durumyazi" id="blDurum">Hazır ol… 🫧</div>
+    <div class="ogrnot"><b>Sınıfta gerçeği:</b> Balonlu naylon (patpat) parçaları dağıt — tek tek patlatmak
+      parmak ucu gücü için birebirdir. Alternatif: karta yapıştırılmış küçük çıkartmaları tırnakla kaldırıp
+      sökmek. Çıkartma sökmek/yapıştırmak en az fark edilen ama en etkili parmak ucu çalışmasıdır.</div>
+  </div></div>
+
+  <!-- 6 EGZERSİZ KARTLARI -->
+  <div id="egzersiz" class="ekran"><div class="panel">
+    <div class="baslik"><span style="font-size:34px">✋</span><h2>Parmak Egzersizleri</h2></div>
+    <p class="yonerge">Tahtaya yansıt, sınıfça birlikte yapın. Her egzersiz <b>20 saniye</b>.</p>
+    <div class="satir">
+      <button class="btn ana" id="egBasla">▶ Sırayla Başlat</button>
+      <button class="btn turuncu" id="egCark">🎲 Günün 3 Egzersizi</button>
+      <button class="btn acik" id="egDur" style="display:none">⏹ Durdur</button>
+    </div>
+    <div class="egKart">
+      <div class="egEl" id="egGorsel">✋</div>
+      <div class="egAd" id="egAd">Bir egzersiz seç</div>
+      <div class="egAciklama" id="egAciklama">Aşağıdaki kartlardan birine dokun ya da “Sırayla Başlat”a bas.</div>
+      <div class="halka" id="egHalka" style="display:none"><div class="ic" id="egSayi">20</div></div>
+    </div>
+    <div class="egListe" id="egListe"></div>
+    <div class="ogrnot"><b>Sınıfta gerçeği:</b> Bu egzersizler <b>hiçbir materyal istemez</b> — sıra başında,
+      teneffüs dönüşünde, yazı çalışmasından hemen önce 2 dakikada yapılır. Kalem tutmadan önce eli ısıtmak,
+      yazının bozulmasını ve çabuk yorulmayı azaltır. Sen de yap, çocuklar taklit ederek öğrenir.</div>
+  </div></div>
+
+  <!-- SONUÇ -->
+  <div id="sonuc" class="ekran"><div class="panel sonuc">
+    <div class="yildiz" id="soYildiz">⭐⭐⭐</div>
+    <div class="msj" id="soMsj">Parmakların güçleniyor!</div>
+    <div id="soDetay" style="font-size:18px;margin-bottom:16px"></div>
+    <button class="btn ana buyuk" id="soTekrar">↻ Tekrar</button>
+    <button class="btn acik buyuk" onclick="menuyeDon()">🏠 Menü</button>
+  </div></div>
+</div>
+
+<script>
+/* ================= GEZİNME ================= */
+const BOLUMLER=[
+  {id:'krepon',ikon:'🎨',ad:'Krepon Topları',alt:'Sürükle-bırak ile renk eşleştirme. Kıskaç tutuşu.',rozet:'SÜRÜKLEME',baslat:()=>kreponBaslat()},
+  {id:'mandal',ikon:'🧺',ad:'Mandal Tak',alt:'Mandalları güneşin ışınlarına yerleştir.',rozet:'SÜRÜKLEME',baslat:()=>mandalBaslat()},
+  {id:'ip',ikon:'🪡',ad:'İp Geçirme',alt:'Delikleri sırayla takip et. Sıralama + koordinasyon.',rozet:'SIRALAMA',baslat:()=>ipBaslat()},
+  {id:'yol',ikon:'🐌',ad:'Yoldan Çıkma',alt:'Parmağını kaldırmadan yolu takip et. Kontrol.',rozet:'KONTROL',baslat:()=>yolBaslat()},
+  {id:'baloncuk',ikon:'🫧',ad:'Baloncuk Patlat',alt:'Küçülen hedeflere isabetli dokunma.',rozet:'İSABET',baslat:()=>baloncukBaslat()},
+  {id:'egzersiz',ikon:'✋',ad:'Parmak Egzersizleri',alt:'10 egzersiz, süreli. Tahtada sınıfça yapılır.',rozet:'SINIF ETKİNLİĞİ',baslat:()=>egzersizHazir()}
+];
+function hubKur(){
+  const g=document.getElementById('hubGrid'); g.innerHTML='';
+  BOLUMLER.forEach(b=>{
+    const k=document.createElement('button'); k.className='kart';
+    k.innerHTML='<span class="ikon">'+b.ikon+'</span><span class="ad">'+b.ad+'</span><span class="alt">'+b.alt+'</span><span class="rozet">'+b.rozet+'</span>';
+    k.onclick=()=>{ ekranAc(b.id); b.baslat(); };
+    g.appendChild(k);
+  });
+}
+hubKur();
+let rafId=null,zamanlar=[];
+function bekle(fn,ms){ const t=setTimeout(fn,ms); zamanlar.push(t); return t; }
+function dur(){ if(rafId) cancelAnimationFrame(rafId); rafId=null; zamanlar.forEach(clearTimeout); zamanlar=[]; }
+function ekranAc(id){
+  document.querySelectorAll('.ekran').forEach(e=>e.classList.remove('acik'));
+  document.getElementById(id).classList.add('acik');
+  document.getElementById('geriBtn').style.display=(id==='hub')?'none':'block';
+  window.scrollTo(0,0);
+}
+function menuyeDon(){ dur(); egDurdur(); ekranAc('hub'); }
+let sonTekrar=null;
+function sonucGoster(yildiz,msj,detay,tekrar){
+  dur(); sonTekrar=tekrar;
+  document.getElementById('soYildiz').textContent='⭐'.repeat(yildiz)+'☆'.repeat(3-yildiz);
+  document.getElementById('soMsj').textContent=msj;
+  document.getElementById('soDetay').textContent=detay||'';
+  ekranAc('sonuc');
+}
+document.getElementById('soTekrar').onclick=()=>{ if(sonTekrar) sonTekrar(); };
+function rast(n){ return Math.floor(Math.random()*n); }
+function karistir(a){ const b=a.slice(); for(let i=b.length-1;i>0;i--){ const j=rast(i+1); [b[i],b[j]]=[b[j],b[i]]; } return b; }
+
+/* ================= SÜRÜKLEME MOTORU ================= */
+function surukle(el,sahne,birak){
+  let ax=0,ay=0,aktif=false;
+  el.addEventListener('pointerdown',e=>{
+    e.preventDefault(); aktif=true;
+    try{ el.setPointerCapture(e.pointerId); }catch(x){}
+    const r=el.getBoundingClientRect(); ax=e.clientX-r.left; ay=e.clientY-r.top;
+    el.classList.add('tutuluyor'); el.style.zIndex=99;
+  });
+  el.addEventListener('pointermove',e=>{
+    if(!aktif) return; e.preventDefault();
+    const s=sahne.getBoundingClientRect();
+    el.style.left=(e.clientX-s.left-ax)+'px';
+    el.style.top=(e.clientY-s.top-ay)+'px';
+  });
+  const bitir=e=>{
+    if(!aktif) return; aktif=false;
+    el.classList.remove('tutuluyor'); el.style.zIndex='';
+    birak(el,e.clientX,e.clientY);
+  };
+  el.addEventListener('pointerup',bitir);
+  el.addEventListener('pointercancel',bitir);
+}
+function icinde(hedef,x,y,pay){
+  const r=hedef.getBoundingClientRect(); pay=pay||16;
+  return x>r.left-pay && x<r.right+pay && y>r.top-pay && y<r.bottom+pay;
+}
+function yerlestir(parca,yuva,sahne){
+  const s=sahne.getBoundingClientRect(), r=yuva.getBoundingClientRect();
+  parca.style.left=(r.left-s.left+(r.width-parca.offsetWidth)/2)+'px';
+  parca.style.top=(r.top-s.top+(r.height-parca.offsetHeight)/2)+'px';
+  parca.classList.add('yerlesti'); yuva.classList.add('dolu');
+}
+
+/* ================= 1) KREPON TOPLARI ================= */
+const KRENK=[['#e0574f','kırmızı'],['#3d8ad1','mavi'],['#f3c53d','sarı'],['#3fa66b','yeşil'],['#8d6fd1','mor']];
+let krKalan=0;
+function kreponBaslat(){
+  dur(); ekranAc('krepon');
+  const s=document.getElementById('krSahne'); s.innerHTML='';
+  const W=s.clientWidth||600, H=s.clientHeight||400;
+  // kelebek gövdesi (SVG)
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('viewBox','0 0 400 260'); svg.setAttribute('width','100%');
+  svg.style.position='absolute'; svg.style.left='0'; svg.style.top='6px'; svg.style.pointerEvents='none';
+  svg.innerHTML='<ellipse cx="200" cy="140" rx="16" ry="66" fill="#c98a4b"/>'+
+    '<circle cx="200" cy="62" r="22" fill="#c98a4b"/>'+
+    '<path d="M188 46 Q170 14 152 20" stroke="#c98a4b" stroke-width="5" fill="none"/>'+
+    '<path d="M212 46 Q230 14 248 20" stroke="#c98a4b" stroke-width="5" fill="none"/>'+
+    '<path d="M186 100 Q80 50 66 118 Q56 176 176 150 Z" fill="#fdf0d8" stroke="#e3c79a" stroke-width="3"/>'+
+    '<path d="M214 100 Q320 50 334 118 Q344 176 224 150 Z" fill="#fdf0d8" stroke="#e3c79a" stroke-width="3"/>'+
+    '<path d="M186 158 Q100 168 96 216 Q94 250 180 208 Z" fill="#fdf0d8" stroke="#e3c79a" stroke-width="3"/>'+
+    '<path d="M214 158 Q300 168 304 216 Q306 250 220 208 Z" fill="#fdf0d8" stroke="#e3c79a" stroke-width="3"/>';
+  s.appendChild(svg);
+  const tepsi=document.createElement('div'); tepsi.className='tepsi'; s.appendChild(tepsi);
+  // yuvalar (kelebek kanatları üstünde oranlı yerler)
+  const yerler=[[.28,.30],[.40,.24],[.60,.24],[.72,.30],[.30,.46],[.70,.46],[.31,.62],[.44,.68],[.56,.68],[.69,.62]];
+  const renkler=[]; for(let i=0;i<10;i++) renkler.push(KRENK[i%KRENK.length]);
+  const kYuvalar=[];
+  yerler.forEach((p,i)=>{
+    const y=document.createElement('div'); y.className='yuva';
+    y.style.width='46px'; y.style.height='46px';
+    y.style.left=(p[0]*W-23)+'px'; y.style.top=(p[1]*(H-95)-23)+'px';
+    y.dataset.renk=renkler[i][0];
+    y.style.borderColor=renkler[i][0];
+    s.appendChild(y); kYuvalar.push(y);
+  });
+  // toplar
+  krKalan=10;
+  const sira=karistir(renkler.map((r,i)=>i));
+  sira.forEach((ri,k)=>{
+    const p=document.createElement('div'); p.className='parca';
+    p.style.background='radial-gradient(circle at 34% 30%,#fff6,'+renkler[ri][0]+')';
+    p.style.left=(14+(k%10)*Math.max(30,(W-70)/10))+'px';
+    p.style.top=(H-70)+'px';
+    p.dataset.renk=renkler[ri][0];
+    s.appendChild(p);
+    surukle(p,s,(el,x,y)=>{
+      const hedef=kYuvalar.find(v=>!v.classList.contains('dolu') && v.dataset.renk===el.dataset.renk && icinde(v,x,y,22));
+      if(hedef){
+        yerlestir(el,hedef,s); krKalan--;
+        document.getElementById('krSayac').textContent=(10-krKalan)+' / 10';
+        document.getElementById('krDurum').textContent = krKalan? 'Aferin! '+krKalan+' top kaldı':'';
+        if(krKalan===0) bekle(()=>sonucGoster(3,'Kelebek rengarenk oldu! 🦋','10 topu da yerine koydun.',kreponBaslat),600);
+      }else{
+        document.getElementById('krDurum').textContent='Aynı renkteki daireye götür 🎨';
+      }
+    });
+  });
+  document.getElementById('krSayac').textContent='0 / 10';
+  document.getElementById('krDurum').textContent='Topu al, dairesine götür 👆';
+}
+
+/* ================= 2) MANDAL ================= */
+let maKalan=0;
+function mandalBaslat(){
+  dur(); ekranAc('mandal');
+  const s=document.getElementById('maSahne'); s.innerHTML='';
+  const W=s.clientWidth||600, H=s.clientHeight||400;
+  const cx=W/2, cy=(H-95)/2+10, r=Math.min(W,H-95)*0.26;
+  const gunes=document.createElement('div');
+  gunes.style.cssText='position:absolute;border-radius:50%;background:radial-gradient(circle at 38% 34%,#ffe89a,#f3c53d);'+
+    'width:'+(r*2)+'px;height:'+(r*2)+'px;left:'+(cx-r)+'px;top:'+(cy-r)+'px;display:flex;align-items:center;'+
+    'justify-content:center;font-size:'+(r*0.8)+'px;';
+  gunes.textContent='😊'; s.appendChild(gunes);
+  const tepsi=document.createElement('div'); tepsi.className='tepsi'; s.appendChild(tepsi);
+  const yuvalar=[];
+  for(let i=0;i<8;i++){
+    const a=(i/8)*Math.PI*2 - Math.PI/2;
+    const y=document.createElement('div'); y.className='yuva';
+    y.style.width='40px'; y.style.height='40px'; y.style.borderRadius='10px';
+    y.style.left=(cx+Math.cos(a)*(r+34)-20)+'px';
+    y.style.top=(cy+Math.sin(a)*(r+34)-20)+'px';
+    s.appendChild(y); yuvalar.push(y);
+  }
+  maKalan=8;
+  for(let i=0;i<8;i++){
+    const p=document.createElement('div'); p.className='parca';
+    p.style.borderRadius='8px'; p.style.background='#e8b06a'; p.textContent='📎';
+    p.style.width='42px'; p.style.height='42px'; p.style.fontSize='24px';
+    p.style.left=(12+i*Math.max(34,(W-60)/8))+'px'; p.style.top=(H-66)+'px';
+    s.appendChild(p);
+    surukle(p,s,(el,x,y)=>{
+      const hedef=yuvalar.find(v=>!v.classList.contains('dolu')&&icinde(v,x,y,24));
+      if(hedef){
+        yerlestir(el,hedef,s); maKalan--;
+        document.getElementById('maSayac').textContent=(8-maKalan)+' / 8';
+        document.getElementById('maDurum').textContent = maKalan? maKalan+' mandal kaldı':'';
+        if(maKalan===0) bekle(()=>sonucGoster(3,'Güneşin bütün ışınları tamam! ☀️','8 mandalı da taktın.',mandalBaslat),600);
+      }
+    });
+  }
+  document.getElementById('maSayac').textContent='0 / 8';
+  document.getElementById('maDurum').textContent='Mandalı yuvaya götür 👆';
+}
+
+/* ================= 3) İP GEÇİRME ================= */
+let ipSira=0,ipNoktalar=[];
+function ipBaslat(){
+  dur(); ekranAc('ip');
+  const s=document.getElementById('ipSahne'); s.innerHTML='';
+  const W=s.clientWidth||600, H=s.clientHeight||400;
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('width','100%'); svg.setAttribute('height','100%');
+  svg.style.position='absolute'; svg.style.left=0; svg.style.top=0; svg.style.pointerEvents='none';
+  const cizgi=document.createElementNS('http://www.w3.org/2000/svg','polyline');
+  cizgi.setAttribute('fill','none'); cizgi.setAttribute('stroke','#e0574f');
+  cizgi.setAttribute('stroke-width','6'); cizgi.setAttribute('stroke-linecap','round');
+  svg.appendChild(cizgi); s.appendChild(svg);
+  // kalp şeklinde 12 delik
+  ipNoktalar=[];
+  const cx=W/2, cy=(H)/2, R=Math.min(W,H)*0.34;
+  for(let i=0;i<12;i++){
+    const t=(i/12)*Math.PI*2;
+    const x=cx+R*16*Math.pow(Math.sin(t),3)/16;
+    const y=cy-R*(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))/16;
+    const d=document.createElement('div');
+    d.style.cssText='position:absolute;width:44px;height:44px;border-radius:50%;background:#fff;border:3px solid #c9bce8;'+
+      'display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px;color:#8d6fd1;cursor:pointer;'+
+      'left:'+(x-22)+'px;top:'+(y-22)+'px;touch-action:none;';
+    d.textContent=(i+1);
+    d.dataset.no=i;
+    d.addEventListener('pointerdown',e=>{ e.preventDefault(); ipDokun(i,d,cizgi); });
+    s.appendChild(d);
+    ipNoktalar.push({x,y,el:d});
+  }
+  ipSira=0;
+  document.getElementById('ipSayac').textContent='0 / 12';
+  document.getElementById('ipDurum').textContent='1 numaradan başla 👆';
+}
+function ipDokun(i,el,cizgi){
+  if(i!==ipSira){
+    el.style.background='#fdeceb';
+    setTimeout(()=>el.style.background='#fff',350);
+    document.getElementById('ipDurum').textContent='Sıradaki delik: '+(ipSira+1);
+    return;
+  }
+  el.style.background='#efe9fb'; el.style.borderColor='#8d6fd1';
+  ipSira++;
+  const p=ipNoktalar.slice(0,ipSira).map(n=>n.x.toFixed(0)+','+n.y.toFixed(0)).join(' ');
+  cizgi.setAttribute('points',p);
+  document.getElementById('ipSayac').textContent=ipSira+' / 12';
+  if(ipSira===12){
+    cizgi.setAttribute('points',p+' '+ipNoktalar[0].x.toFixed(0)+','+ipNoktalar[0].y.toFixed(0));
+    document.getElementById('ipDurum').textContent='';
+    bekle(()=>sonucGoster(3,'İpi bitirdin! ❤️','12 deliği de sırayla geçtin.',ipBaslat),700);
+  }else{
+    document.getElementById('ipDurum').textContent='Sıradaki: '+(ipSira+1);
+  }
+}
+
+/* ================= 4) YOL TAKİBİ ================= */
+let yoDurak=0,yoHata=0,yoBasili=false,yoNoktalar=[];
+function yolBaslat(){
+  dur(); ekranAc('yol');
+  const s=document.getElementById('yoSahne'); s.innerHTML='';
+  const W=s.clientWidth||600, H=s.clientHeight||400;
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('width','100%'); svg.setAttribute('height','100%');
+  svg.style.cssText='position:absolute;left:0;top:0;pointer-events:none;';
+  const d='M '+(W*0.10)+' '+(H*0.80)+' C '+(W*0.28)+' '+(H*0.15)+', '+(W*0.45)+' '+(H*0.95)+', '+
+          (W*0.62)+' '+(H*0.45)+' S '+(W*0.86)+' '+(H*0.20)+', '+(W*0.92)+' '+(H*0.72);
+  const yolStr='<path d="'+d+'" fill="none" stroke="#dcefe2" stroke-width="52" stroke-linecap="round"/>'+
+               '<path d="'+d+'" fill="none" stroke="#b6dcc3" stroke-width="44" stroke-linecap="round" stroke-dasharray="2 14"/>';
+  svg.innerHTML=yolStr;
+  const olcum=document.createElementNS('http://www.w3.org/2000/svg','path');
+  olcum.setAttribute('d',d); olcum.setAttribute('fill','none'); olcum.setAttribute('stroke','none');
+  svg.appendChild(olcum);
+  s.appendChild(svg);
+  // duraklar
+  yoNoktalar=[];
+  const L=olcum.getTotalLength();
+  for(let i=0;i<12;i++){
+    const p=olcum.getPointAtLength(L*(i/11));
+    const d2=document.createElement('div');
+    d2.style.cssText='position:absolute;width:26px;height:26px;border-radius:50%;background:#fff;border:3px solid #7cc39a;'+
+      'left:'+(p.x-13)+'px;top:'+(p.y-13)+'px;pointer-events:none;';
+    if(i===0){ d2.style.background='#3fa66b'; d2.style.width='34px'; d2.style.height='34px'; d2.style.left=(p.x-17)+'px'; d2.style.top=(p.y-17)+'px'; }
+    if(i===11){ d2.style.background='#f2913d'; }
+    s.appendChild(d2);
+    yoNoktalar.push({x:p.x,y:p.y,el:d2});
+  }
+  yoDurak=0; yoHata=0; yoBasili=false;
+  document.getElementById('yoSayac').textContent='Durak: 0 / 12';
+  document.getElementById('yoHata').textContent='Dışarı çıkma: 0';
+  document.getElementById('yoDurum').textContent='Yeşil noktadan başla 👆';
+  s.onpointerdown=e=>{ e.preventDefault(); yoBasili=true; yoIsle(e,s); };
+  s.onpointermove=e=>{ if(yoBasili){ e.preventDefault(); yoIsle(e,s);} };
+  s.onpointerup=()=>{ yoBasili=false; };
+  s.onpointercancel=()=>{ yoBasili=false; };
+}
+function yoIsle(e,s){
+  const r=s.getBoundingClientRect();
+  const x=e.clientX-r.left, y=e.clientY-r.top;
+  const h=yoNoktalar[yoDurak];
+  if(!h) return;
+  const d=Math.hypot(x-h.x,y-h.y);
+  if(d<32){
+    h.el.style.background='#3fa66b'; h.el.style.borderColor='#2c7d4c';
+    yoDurak++;
+    document.getElementById('yoSayac').textContent='Durak: '+yoDurak+' / 12';
+    if(yoDurak>=12){
+      const y3=yoHata<=2?3:yoHata<=5?2:1;
+      document.getElementById('yoDurum').textContent='';
+      bekle(()=>sonucGoster(y3,'Yolu tamamladın! 🐌','Dışarı çıkma sayın: '+yoHata,yolBaslat),500);
+      return;
+    }
+    document.getElementById('yoDurum').textContent='Devam et… '+(12-yoDurak)+' durak kaldı';
+  }else if(d>96){
+    yoHata++;
+    document.getElementById('yoHata').textContent='Dışarı çıkma: '+yoHata;
+    document.getElementById('yoDurum').textContent='Yola geri dön 🙂';
+  }
+}
+
+/* ================= 5) BALONCUK ================= */
+let blPat=0,blDokunma=0,blKalanSure=40,blSon=0,blBaloncuklar=[];
+function baloncukBaslat(){
+  dur(); ekranAc('baloncuk');
+  const s=document.getElementById('blSahne'); s.innerHTML='';
+  blPat=0; blDokunma=0; blKalanSure=40; blBaloncuklar=[]; blSon=performance.now();
+  document.getElementById('blSayac').textContent='Patlayan: 0';
+  document.getElementById('blIsabet').textContent='İsabet: %100';
+  document.getElementById('blDurum').textContent='Baloncuklara dokun! 🫧';
+  s.onpointerdown=e=>{ e.preventDefault(); blDokunma++; blOran(); };
+  rafId=requestAnimationFrame(blDongu);
+}
+function blOran(){
+  const o=blDokunma? Math.round(blPat/blDokunma*100):100;
+  document.getElementById('blIsabet').textContent='İsabet: %'+o;
+}
+function blYeni(){
+  const s=document.getElementById('blSahne');
+  const W=s.clientWidth||600,H=s.clientHeight||400;
+  const zorluk=Math.min(1,blPat/16);
+  const cap=Math.round(78-zorluk*46);
+  const el=document.createElement('div'); el.className='balon2';
+  const x=20+Math.random()*(W-40-cap), y=20+Math.random()*(H-40-cap);
+  el.style.cssText+='width:'+cap+'px;height:'+cap+'px;left:'+x+'px;top:'+y+'px;touch-action:none;';
+  el.addEventListener('pointerdown',e=>{
+    e.stopPropagation(); e.preventDefault();
+    blPat++; blDokunma++;
+    document.getElementById('blSayac').textContent='Patlayan: '+blPat;
+    blOran();
+    el.style.transition='transform .18s,opacity .18s';
+    el.style.transform='scale(1.6)'; el.style.opacity='0';
+    setTimeout(()=>el.remove(),180);
+    blBaloncuklar=blBaloncuklar.filter(b=>b.el!==el);
+  });
+  s.appendChild(el);
+  blBaloncuklar.push({el,dogum:performance.now(),omur:2600-zorluk*900});
+}
+function blDongu(t){
+  const dt=(t-blSon)/1000; blSon=t;
+  blKalanSure-=dt;
+  document.getElementById('blSure').textContent='Süre: '+Math.max(0,blKalanSure).toFixed(0);
+  if(blBaloncuklar.length<3 && Math.random()<0.06) blYeni();
+  blBaloncuklar=blBaloncuklar.filter(b=>{
+    if(t-b.dogum>b.omur){ b.el.remove(); return false; }
+    const k=1-(t-b.dogum)/b.omur;
+    b.el.style.opacity=(0.45+k*0.55).toFixed(2);
+    return true;
+  });
+  if(blKalanSure<=0){
+    const o=blDokunma?blPat/blDokunma:0;
+    const y=(blPat>=14&&o>.75)?3:(blPat>=8?2:1);
+    sonucGoster(y,'Süre bitti! 🫧','Patlattığın: '+blPat+' · İsabet: %'+Math.round(o*100),baloncukBaslat);
+    return;
+  }
+  rafId=requestAnimationFrame(blDongu);
+}
+
+/* ================= 6) EGZERSİZ KARTLARI ================= */
+const EGZ=[
+  {ad:'Örümcek Yürüyüşü',e:'🕷️',an:'an-yuru',a:'İki elin parmak uçları masada karşı karşıya. Parmaklar örümcek gibi yürüsün — ileri, geri, sağa, sola.'},
+  {ad:'Aç – Kapa',e:'🖐️',an:'an-ackapa',a:'Elleri yumruk yap, sonra parmakları sonuna kadar aç. Yavaş yavaş 10 kez. Açarken parmaklar iyice gerilsin.'},
+  {ad:'Piyano Çal',e:'🎹',an:'an-salla',a:'Masaya iki elin bütün parmaklarıyla sırayla vur. Baş parmaktan serçeye, serçeden başa. Şarkı da söyleyebiliriz.'},
+  {ad:'Makas Parmaklar',e:'✌️',an:'an-salla',a:'İşaret ve orta parmakla makas yap, aç-kapa. Sonra diğer elle. En son iki elle birden.'},
+  {ad:'Çimdik (Kıskaç)',e:'🤏',an:'an-ackapa',a:'Baş parmak sırayla işaret, orta, yüzük ve serçe parmağa değsin. Halka yapar gibi. Kalem tutuşunun kendisidir.'},
+  {ad:'Tırtıl',e:'🐛',an:'an-yuru',a:'El masada düz dursun; parmakları büzüp uzatarak eli hiç kaldırmadan öne doğru yürüt.'},
+  {ad:'Yağmur Damlaları',e:'🌧️',an:'an-zipla',a:'Parmak uçlarıyla masaya hafif hafif vurarak yağmur sesi çıkar. Önce çiseler, sonra sağanak, sonra durur.'},
+  {ad:'Kelebek',e:'🦋',an:'an-salla',a:'İki elin baş parmaklarını birbirine kenetle, avuçları aç-kapa yaparak kelebeği uçur.'},
+  {ad:'Sıkı Yumruk',e:'✊',an:'an-ackapa',a:'Beşe kadar sayarak yumruğu sık, beşe kadar sayarak gevşet. 5 kez. Sonra elleri silkeleyip gevşet.'},
+  {ad:'Tek Parmak Sayma',e:'☝️',an:'an-zipla',a:'Yumruktan başlayarak parmakları teker teker kaldır: 1-2-3-4-5. Sonra teker teker kapat. Diğer el yardım etmeyecek!'}
+];
+let egSira=-1,egSayacInt=null,egOtomatik=false,egKuyruk=[];
+function egzersizHazir(){
+  egDurdur(); ekranAc('egzersiz');
+  const l=document.getElementById('egListe'); l.innerHTML='';
+  EGZ.forEach((x,i)=>{
+    const b=document.createElement('button'); b.className='egMini';
+    b.innerHTML='<span>'+x.e+'</span>'+x.ad;
+    b.onclick=()=>{ egOtomatik=false; egKuyruk=[]; egGoster(i); };
+    l.appendChild(b);
+  });
+}
+function egGoster(i,sonra){
+  egSira=i; const x=EGZ[i];
+  const g=document.getElementById('egGorsel');
+  g.className='egEl '+x.an; g.textContent=x.e;
+  document.getElementById('egAd').textContent=x.ad;
+  document.getElementById('egAciklama').textContent=x.a;
+  egGeriSay(20,sonra);
+}
+function egGeriSay(sn,sonra){
+  clearInterval(egSayacInt);
+  const h=document.getElementById('egHalka'), s=document.getElementById('egSayi');
+  h.style.display='flex'; document.getElementById('egDur').style.display='inline-block';
+  let kalan=sn;
+  s.textContent=kalan;
+  h.style.background='conic-gradient(var(--ana) 0deg,#e2eee6 0deg)';
+  egSayacInt=setInterval(()=>{
+    kalan--;
+    const der=(sn-kalan)/sn*360;
+    h.style.background='conic-gradient(var(--ana) '+der+'deg,#e2eee6 '+der+'deg)';
+    s.textContent=Math.max(0,kalan);
+    if(kalan<=0){
+      clearInterval(egSayacInt);
+      if(sonra) sonra();
+      else { s.textContent='✔'; document.getElementById('egDur').style.display='none'; }
+    }
+  },1000);
+}
+function egDurdur(){
+  clearInterval(egSayacInt); egOtomatik=false; egKuyruk=[];
+  const h=document.getElementById('egHalka'); if(h) h.style.display='none';
+  const d=document.getElementById('egDur'); if(d) d.style.display='none';
+}
+function egKuyrukIsle(){
+  if(!egKuyruk.length){
+    document.getElementById('egAd').textContent='Bitti! 👏';
+    document.getElementById('egAciklama').textContent='Eller ısındı, artık kalem tutmaya hazırız.';
+    document.getElementById('egGorsel').className='egEl'; document.getElementById('egGorsel').textContent='👏';
+    egDurdur(); return;
+  }
+  const i=egKuyruk.shift();
+  egGoster(i,()=>egKuyrukIsle());
+}
+document.getElementById('egBasla').onclick=()=>{ egKuyruk=EGZ.map((_,i)=>i); egKuyrukIsle(); };
+document.getElementById('egCark').onclick=()=>{ egKuyruk=karistir(EGZ.map((_,i)=>i)).slice(0,3); egKuyrukIsle(); };
+document.getElementById('egDur').onclick=egDurdur;
+</script>
+</body>
+</html>
