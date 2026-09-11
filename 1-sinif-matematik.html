@@ -3,1561 +3,1886 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Minik Matematikçiler</title>
-
+<title>1. Sınıf Matematik · Dijital Öğretmen</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --mor:#7557d9;
-  --koyu-mor:#49339b;
-  --mavi:#4eb6ed;
-  --yesil:#42c486;
-  --pembe:#ff6f91;
-  --sari:#ffd166;
-  --turuncu:#ff9f43;
-  --koyu:#26334d;
-  --beyaz:#fff;
-  --gölge:0 8px 20px rgba(47,58,110,.16);
+  --gok:#8FD2F0; --gok-acik:#C9ECFA; --gok-koyu:#4FA9D8;
+  --cim:#6DBE45; --cim-koyu:#4E9B2E; --cim-acik:#96D96E;
+  --tahta:#C4874A; --tahta-koyu:#9B6633;
+  --kirmizi:#E8453C; --kirmizi-koyu:#C22F27;
+  --sari:#FFC93C; --sari-koyu:#D8A216;
+  --mor:#A97BC9; --mavi:#2F80B8; --turuncu:#F08A3C;
+  --metin:#2C3A42; --metin-acik:#5E6F79;
+  --kart:#FFFFFF; --zemin:#F3FAFE;
+  --golge:0 4px 0 rgba(44,58,66,.10);
 }
-
-html,body,body *{
-  font-family:'Andika','Andika New Basic',"Trebuchet MS",Arial,sans-serif;
-}
-
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-}
-
-html{
-  scroll-behavior:smooth;
-}
-
+*{box-sizing:border-box;margin:0;padding:0}
 body{
-  margin:0;
-  color:var(--koyu);
-  font-family:'Andika','Andika New Basic',"Trebuchet MS",Arial,sans-serif;
-  font-size:21px;
-  line-height:1.6;
-  background:
-    radial-gradient(circle at 5% 5%,#fff1a8 0 2%,transparent 3%),
-    radial-gradient(circle at 95% 15%,#ffd0df 0 2%,transparent 3%),
-    linear-gradient(135deg,#f4efff,#e8faff);
+  font-family:'Andika','Segoe UI',sans-serif;
+  background:var(--zemin); color:var(--metin); line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.sayfa{max-width:1000px;margin:0 auto;padding:0 16px 50px}
+
+/* ================= HERO ================= */
+.hero{position:relative;line-height:0}
+.hero svg{display:block;width:100%;height:auto}
+
+/* ================= NAV ================= */
+.nav{
+  position:sticky;top:0;z-index:60;background:rgba(243,250,254,.97);
+  border-bottom:4px solid var(--gok);padding:10px 0;backdrop-filter:blur(6px);
+}
+.nav-ic{max-width:1000px;margin:0 auto;display:flex;gap:8px;overflow-x:auto;padding:0 12px;scrollbar-width:none}
+.nav-ic::-webkit-scrollbar{display:none}
+.sekme{
+  flex:0 0 auto;background:#fff;border:3px solid var(--gok-acik);border-radius:26px;
+  padding:8px 15px;font-family:inherit;font-size:14px;font-weight:700;color:var(--metin-acik);
+  cursor:pointer;white-space:nowrap;transition:.16s;
+}
+.sekme:hover{border-color:var(--gok-koyu);color:var(--mavi)}
+.sekme.aktif{background:var(--kirmizi);border-color:var(--kirmizi);color:#fff;box-shadow:0 3px 0 var(--kirmizi-koyu)}
+
+/* ================= TEMA ================= */
+.tema{display:none;animation:gir .3s ease}
+.tema.acik{display:block}
+@keyframes gir{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+.kitap-serit{
+  display:flex;align-items:center;gap:10px;margin-top:22px;
+  background:var(--tahta);color:#fff;border-radius:14px;padding:8px 16px;
+  font-weight:700;font-size:14px;box-shadow:0 4px 0 var(--tahta-koyu);
 }
 
-header{
-  color:white;
-  text-align:center;
-  padding:35px 18px 42px;
-  background:
-    radial-gradient(circle at 12% 22%,#ffd166 0 3%,transparent 3.5%),
-    radial-gradient(circle at 88% 25%,#ff7598 0 4%,transparent 4.5%),
-    linear-gradient(135deg,#7959dc,#4bb8e9);
-  border-radius:0 0 38px 38px;
+.tema-bas{
+  margin-top:12px;background:var(--kart);border:4px solid #fff;border-radius:24px;
+  overflow:hidden;box-shadow:0 6px 18px rgba(44,58,66,.12);
+}
+.tema-bas .gorsel{display:block;width:100%;height:auto}
+.tema-bas .yazi{padding:18px 20px 20px}
+.tema-bas h2{font-size:clamp(21px,5.2vw,31px);color:var(--kirmizi-koyu);line-height:1.35}
+.tema-bas .ozet{margin-top:8px;font-size:15.5px;color:var(--metin-acik)}
+
+/* tek sütun: her konu tam genişlikte bir satır */
+.konu-satir{
+  display:flex;align-items:flex-start;gap:14px;background:#fff;
+  border:3px solid #E4F1F8;border-left:9px solid var(--gok-koyu);
+  border-radius:16px;padding:14px 16px;margin-top:14px;box-shadow:var(--golge);
+}
+.konu-satir.y{border-left-color:var(--cim-koyu)}
+.konu-satir.s{border-left-color:var(--sari-koyu)}
+.konu-satir.m{border-left-color:var(--mor)}
+.konu-satir .ikon{
+  flex:0 0 48px;height:48px;background:var(--gok-acik);border-radius:14px;
+  display:flex;align-items:center;justify-content:center;font-size:25px;
+}
+.konu-satir h3{font-size:17.5px}
+.konu-satir p{font-size:14.5px;color:var(--metin-acik);margin-top:3px}
+
+h4.bolum{
+  margin-top:32px;font-size:19.5px;color:var(--mavi);
+  border-bottom:4px dotted var(--gok-acik);padding-bottom:8px;
 }
 
-header h1{
-  margin:0;
-  font-size:clamp(42px,7vw,76px);
-  line-height:1.15;
-  text-shadow:3px 4px #49339b66;
+.kutu{
+  background:#fff;border:3px solid #E4F1F8;border-radius:22px;
+  padding:18px;margin-top:16px;box-shadow:var(--golge);
+}
+.kutu > h5{font-size:17px;color:var(--kirmizi-koyu)}
+.kutu .aciklama{font-size:14.5px;color:var(--metin-acik);margin-bottom:10px}
+
+.bilgi{
+  background:#FFF6DF;border:3px dashed var(--sari-koyu);border-radius:16px;
+  padding:12px 14px;margin-top:14px;font-size:15px;
+}
+.bilgi b{color:var(--kirmizi-koyu)}
+
+/* ================= butonlar ================= */
+.btn{
+  font-family:inherit;font-weight:700;font-size:15px;border:none;border-radius:14px;
+  padding:10px 18px;cursor:pointer;transition:.15s;color:#fff;
+  background:var(--kirmizi);box-shadow:0 4px 0 var(--kirmizi-koyu);
+}
+.btn:active{transform:translateY(4px);box-shadow:none}
+.btn.yesil{background:var(--cim);box-shadow:0 4px 0 var(--cim-koyu)}
+.btn.mavi{background:var(--mavi);box-shadow:0 4px 0 #21618F}
+.btn-sira{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+
+.secenekler{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.secenek{
+  font-family:inherit;font-size:16px;font-weight:700;background:var(--gok-acik);
+  border:3px solid #BCE3F5;border-radius:14px;padding:10px 18px;cursor:pointer;color:var(--metin);
+}
+.secenek:hover{border-color:var(--gok-koyu)}
+.secenek.dogru{background:#DFF5D2;border-color:var(--cim-koyu);color:#2E6B14}
+.secenek.yanlis{background:#FBDEDC;border-color:var(--kirmizi);color:var(--kirmizi-koyu)}
+.geri{margin-top:12px;font-weight:700;font-size:15.5px;min-height:24px}
+.geri.ok{color:var(--cim-koyu)}
+.geri.no{color:var(--kirmizi)}
+
+input.cevap{
+  font-family:inherit;font-size:18px;font-weight:700;width:96px;text-align:center;
+  border:3px solid #D9EDF7;border-radius:12px;padding:7px;color:var(--metin);background:#fff;
+}
+input.cevap:focus{outline:none;border-color:var(--sari-koyu)}
+.satir{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:12px;font-size:17px;font-weight:700}
+.sayma-alan{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;font-size:30px;line-height:1.25}
+
+/* ================= test ================= */
+.test-soru{border-top:3px dotted #E4F1F8;padding-top:14px;margin-top:16px}
+.test-soru:first-child{border-top:none;padding-top:0;margin-top:0}
+.test-soru .metin{font-weight:700;font-size:16.5px}
+.skor{
+  margin-top:18px;background:#FFF6DF;border:3px solid var(--sari);border-radius:18px;
+  padding:12px 16px;font-weight:700;font-size:16.5px;text-align:center;
 }
 
-header p{
-  max-width:950px;
-  margin:14px auto 0;
-  font-size:clamp(21px,3vw,30px);
-  line-height:1.5;
-  font-weight:bold;
+/* ================= para ================= */
+.para-alan{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:12px}
+.para-alan svg{filter:drop-shadow(0 2px 4px rgba(44,58,66,.2));border-radius:6px}
+
+table.veri{width:100%;border-collapse:collapse;margin-top:12px;font-size:15px}
+table.veri th,table.veri td{border:3px solid #E4F1F8;padding:8px 10px;text-align:center}
+table.veri th{background:var(--gok-acik)}
+
+.ogretmen{
+  background:#EFFAE9;border:3px solid #CDEBBB;border-left:9px solid var(--cim-koyu);
+  border-radius:18px;padding:15px 17px;margin-top:20px;
 }
-
-.tabs{
-  position:sticky;
-  top:0;
-  z-index:20;
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:10px;
-  padding:15px 10px;
-  background:#ffffffef;
-  box-shadow:0 4px 18px #39416a22;
-}
-
-.tab{
-  min-height:62px;
-  border:0;
-  border-radius:30px;
-  padding:13px 20px;
-  color:var(--koyu);
-  background:#edf0ff;
-  font-family:inherit;
-  font-size:21px;
-  font-weight:bold;
-  cursor:pointer;
-  touch-action:manipulation;
-  box-shadow:0 4px #ccd0ee;
-}
-
-.tab:hover,
-.tab.active{
-  color:white;
-  background:var(--mor);
-  box-shadow:0 4px var(--koyu-mor);
-  transform:translateY(-2px);
-}
-
-main{
-  max-width:1350px;
-  margin:auto;
-  padding:30px 18px 70px;
-}
-
-.page{
-  display:none;
-  animation:acil .35s ease;
-}
-
-.page.active{
-  display:block;
-}
-
-@keyframes acil{
-  from{opacity:0;transform:translateY(12px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-.hero{
-  display:grid;
-  grid-template-columns:1.35fr 1fr;
-  gap:25px;
-  align-items:center;
-  margin-bottom:25px;
-  padding:32px;
-  background:white;
-  border-radius:32px;
-  box-shadow:var(--gölge);
-}
-
-.hero h2{
-  margin:0 0 12px;
-  color:var(--mor);
-  font-size:clamp(34px,5vw,52px);
-  line-height:1.2;
-}
-
-.hero p{
-  margin:0;
-  font-size:24px;
-  line-height:1.65;
-}
-
-.hero-picture{
-  min-height:220px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:28px;
-  font-size:clamp(70px,9vw,120px);
-  background:linear-gradient(135deg,#fff5bd,#e9dcff);
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-  gap:20px;
-}
-
-.card{
-  margin-bottom:3px;
-  padding:27px;
-  background:white;
-  border:3px solid #eeeaff;
-  border-radius:27px;
-  box-shadow:var(--gölge);
-}
-
-.card h3{
-  margin:0 0 13px;
-  color:var(--koyu-mor);
-  font-size:30px;
-  line-height:1.3;
-}
-
-.card p,
-.card li{
-  font-size:22px;
-  line-height:1.7;
-}
-
-.card ul,
-.card ol{
-  padding-left:30px;
-}
-
-.activity{
-  background:#fcfaff;
-  border:4px dashed #c8bef1;
-}
-
-.tip{
-  margin-top:18px;
-  padding:17px 20px;
-  background:#fff8d8;
-  border-left:9px solid var(--sari);
-  border-radius:14px;
-  font-size:21px;
-}
-
-button,
-select,
-input{
-  font-family:inherit;
-  font-size:21px;
-}
-
-button{
-  min-height:58px;
-  margin:5px 4px;
-  padding:13px 20px;
-  border:0;
-  border-radius:17px;
-  color:white;
-  background:var(--mor);
-  font-weight:bold;
-  cursor:pointer;
-  touch-action:manipulation;
-  box-shadow:0 4px #4d3b9d;
-}
-
-button:hover{
-  filter:brightness(1.08);
-}
-
-button:active{
-  transform:translateY(3px);
-  box-shadow:none;
-}
-
-.green{background:var(--yesil);box-shadow:0 4px #228c5d}
-.blue{background:var(--mavi);box-shadow:0 4px #2689bd}
-.pink{background:var(--pembe);box-shadow:0 4px #c64362}
-.orange{background:var(--turuncu);box-shadow:0 4px #c66e1f}
-
-input,
-select{
-  min-height:56px;
-  max-width:180px;
-  padding:10px 14px;
-  border:3px solid #d9d4f4;
-  border-radius:15px;
-  color:var(--koyu);
-  background:white;
-  font-weight:bold;
-}
-
-.objects{
-  display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-  gap:10px;
-  min-height:75px;
-  margin:15px 0;
-  padding:16px;
-  border-radius:20px;
-  background:#eef8ff;
-  font-size:42px;
-}
-
-.object{
-  display:inline-flex;
-  width:56px;
-  height:56px;
-  align-items:center;
-  justify-content:center;
-  border-radius:50%;
-  background:#ffd25b;
-  font-size:34px;
-  animation:gel .25s;
-}
-
-@keyframes gel{
-  from{transform:scale(0)}
-  to{transform:scale(1)}
-}
-
-.number-line{
-  display:flex;
-  flex-wrap:wrap;
-  gap:9px;
-  margin:17px 0;
-}
-
-.number-line span{
-  min-width:55px;
-  min-height:55px;
-  padding:8px;
-  border-radius:14px;
-  text-align:center;
-  font-size:25px;
-  font-weight:bold;
-  background:#e8e3ff;
-}
-
-.number-line span:nth-child(3n){background:#d9f7e8}
-.number-line span:nth-child(3n+1){background:#ffe2eb}
-.number-line span:nth-child(3n+2){background:#fff0bb}
-
-.feedback{
-  min-height:38px;
-  margin-top:14px;
-  color:#3d3190;
-  font-size:23px;
-  font-weight:bold;
-}
-
-.ten-frame{
-  display:grid;
-  grid-template-columns:repeat(10,48px);
-  gap:8px;
-  margin:16px 0;
-}
-
-.ten-frame span{
-  height:48px;
-  border:3px solid #aaa0e4;
-  border-radius:9px;
-  background:#fff;
-}
-
-.ten-frame span.filled{
-  background:#ffbd46;
-}
-
-.balloon-area{
-  display:flex;
-  flex-wrap:wrap;
-  gap:24px;
-  min-height:120px;
-  margin:18px 0;
-}
-
-.balloon{
-  position:relative;
-  display:flex;
-  width:80px;
-  height:98px;
-  align-items:center;
-  justify-content:center;
-  border-radius:50% 50% 46% 46%;
-  color:white;
-  font-size:30px;
-  font-weight:bold;
-  cursor:pointer;
-  box-shadow:inset -7px -9px #0003,0 5px 5px #0002;
-}
-
-.balloon:after{
-  content:"";
-  position:absolute;
-  bottom:-21px;
-  height:23px;
-  border-left:3px solid #555;
-}
-
-.balloon:nth-child(3n){background:#ff6f91}
-.balloon:nth-child(3n+1){background:#50b9f0}
-.balloon:nth-child(3n+2){background:#48c88c}
-
-.wagons{
-  display:flex;
-  flex-wrap:wrap;
-  gap:17px;
-  margin:18px 0;
-}
-
-.wagon{
-  display:flex;
-  width:100px;
-  height:72px;
-  align-items:center;
-  justify-content:center;
-  border-radius:17px;
-  color:#603a00;
-  background:#ffb84d;
-  font-size:30px;
-  font-weight:bold;
-  cursor:pointer;
-  box-shadow:0 5px #c6811f;
-}
-
-.wagon.selected{
-  outline:5px solid var(--mor);
-  transform:translateY(-4px);
-}
-
-.products{
-  display:flex;
-  flex-wrap:wrap;
-  gap:15px;
-}
-
-.product{
-  width:150px;
-  min-height:145px;
-  padding:15px;
-  border:4px solid transparent;
-  border-radius:21px;
-  text-align:center;
-  background:#eef8ff;
-  cursor:pointer;
-  font-size:22px;
-  font-weight:bold;
-}
-
-.product:hover{
-  border-color:var(--mavi);
-}
-
-.product .emoji{
-  display:block;
-  font-size:57px;
-}
-
-.receipt{
-  margin-top:18px;
-  padding:17px;
-  border:3px dashed #d2b85e;
-  border-radius:14px;
-  background:#fffdf0;
-  font-size:22px;
-  line-height:1.8;
-}
-
-.shape{
-  display:inline-flex;
-  width:105px;
-  height:105px;
-  margin:10px;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-}
-
-.circle{border-radius:50%;background:#ff728f}
-.square{background:#50b9f0}
-.rectangle{width:145px;background:#ffd166}
-.triangle{
-  width:0;
-  height:0;
-  border-left:55px solid transparent;
-  border-right:55px solid transparent;
-  border-bottom:105px solid #48c88c;
-}
-
-.clock{
-  position:relative;
-  width:220px;
-  height:220px;
-  margin:18px auto;
-  border:12px solid var(--mor);
-  border-radius:50%;
-  background:white;
-}
-
-.clock b{
-  position:absolute;
-  font-size:25px;
-}
-.twelve{top:3px;left:91px}
-.three{right:8px;top:87px}
-.six{bottom:3px;left:96px}
-.nine{left:8px;top:87px}
-
-.hand{
-  position:absolute;
-  bottom:50%;
-  left:50%;
-  transform-origin:bottom;
-  border-radius:5px;
-  background:var(--koyu);
-}
-
-.hour{width:10px;height:65px;transform:rotate(30deg)}
-.minute{width:7px;height:90px;transform:rotate(0deg)}
-
-.bar-chart{
-  display:flex;
-  height:220px;
-  align-items:flex-end;
-  gap:20px;
-  padding:10px;
-  border-left:4px solid #555;
-  border-bottom:4px solid #555;
-}
-
-.bar{
-  width:65px;
-  padding-top:5px;
-  border-radius:10px 10px 0 0;
-  background:#ff7997;
-  color:white;
-  text-align:center;
-  font-size:20px;
-  font-weight:bold;
-}
+.ogretmen h5{color:var(--cim-koyu);font-size:16.5px;margin-bottom:6px}
+.ogretmen ul{margin-left:18px;font-size:14.8px;color:#3F5A33}
+.ogretmen li{margin-top:5px}
 
 footer{
-  padding:30px 18px;
-  color:white;
-  background:#443d78;
-  text-align:center;
-  font-size:23px;
+  text-align:center;padding:26px 16px 40px;margin-top:44px;
+  border-top:5px solid var(--gok-acik);color:var(--metin-acik);font-size:14.5px;
 }
+footer b{color:var(--kirmizi-koyu)}
 
-@media(max-width:750px){
-  body{font-size:19px}
-
-  header h1{font-size:45px}
-  header p{font-size:22px}
-
-  .tabs{
-    justify-content:flex-start;
-    flex-wrap:nowrap;
-    overflow-x:auto;
-  }
-
-  .tab{
-    flex:0 0 auto;
-    font-size:19px;
-  }
-
-  .hero{
-    grid-template-columns:1fr;
-    padding:24px;
-  }
-
-  .hero h2{font-size:36px}
-  .hero p{font-size:21px}
-  .hero-picture{min-height:155px;font-size:75px}
-
-  .card{padding:22px}
-  .card h3{font-size:27px}
-  .card p,
-  .card li{font-size:20px}
-
-  .ten-frame{
-    grid-template-columns:repeat(5,48px);
-  }
-
-  .product{
-    width:calc(50% - 8px);
-  }
+@media(max-width:560px){
+  .konu-satir{gap:10px;padding:12px}
+  .konu-satir .ikon{flex-basis:40px;height:40px;font-size:21px}
+  .secenek{padding:9px 14px;font-size:15px}
+  .sayma-alan{font-size:26px}
 }
-
-/* ================= SAYI DOĞRUSU ================= */
-.sd-kaydir{
-  overflow-x:auto;
-  overflow-y:hidden;
-  padding:6px 2px 12px;
-  -webkit-overflow-scrolling:touch;
-  border-radius:16px;
-  background:#ffffffcc;
-  border:3px solid #e2dbff;
-}
-.sd-kaydir svg{display:block}
-.sd-butonlar{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
-.sd-ipucu{font-size:18px;color:#5b4bb5;margin:8px 0 0}
-.sd-tik{cursor:pointer}
-.sd-tik:hover .sd-hedef{fill:#ffd166}
-
 </style>
-<meta name="description" content="Minik Matematikçiler - Dijital Öğretmen'den ücretsiz, MEB müfredatına (Maarif Modeli) uygun ilkokul eğitim materyali. Hasan Tutuş tarafından hazırlanmıştır.">
-<meta property="og:type" content="website">
-<meta property="og:locale" content="tr_TR">
-<meta property="og:site_name" content="Dijital Öğretmen">
-<meta property="og:title" content="Minik Matematikçiler">
-<meta property="og:description" content="Minik Matematikçiler - Dijital Öğretmen'den ücretsiz, MEB müfredatına (Maarif Modeli) uygun ilkokul eğitim materyali. Hasan Tutuş tarafından hazırlanmıştır.">
-<meta property="og:url" content="https://oogretmen1-tech.github.io/1-sinif-matematik.html">
-<meta property="og:image" content="https://oogretmen1-tech.github.io/logo.png">
-<meta name="twitter:card" content="summary">
 </head>
-
 <body>
 
-<header>
-  <h1>🌈 Minik Matematikçiler</h1>
-  <p>
-    Görerek, dokunarak, sayarak ve oyun oynayarak matematik öğreniyoruz!
-  </p>
+<!-- ================= KAPAK ================= -->
+<header class="hero">
+<svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="1. Sınıf Matematik kapak görseli">
+  <defs>
+    <linearGradient id="gokyuzu" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6EC6EC"/><stop offset="1" stop-color="#C4EAF8"/>
+    </linearGradient>
+    <linearGradient id="cimlik" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8FD65E"/><stop offset="1" stop-color="#59A833"/>
+    </linearGradient>
+    <linearGradient id="tahtaG" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#D89A5E"/><stop offset="0.5" stop-color="#C4874A"/><stop offset="1" stop-color="#AE743B"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1000" height="360" fill="url(#gokyuzu)"/>
+
+  <!-- bulutlar -->
+  <g fill="#FFFFFF" opacity=".92">
+    <g><ellipse cx="150" cy="82" rx="54" ry="30"/><ellipse cx="196" cy="74" rx="40" ry="26"/><ellipse cx="108" cy="90" rx="36" ry="22"/></g>
+    <g opacity=".8"><ellipse cx="560" cy="56" rx="46" ry="25"/><ellipse cx="600" cy="50" rx="33" ry="21"/><ellipse cx="524" cy="64" rx="30" ry="18"/></g>
+    <g opacity=".7"><ellipse cx="880" cy="108" rx="50" ry="27"/><ellipse cx="922" cy="100" rx="34" ry="21"/></g>
+  </g>
+
+  <!-- çimen tepesi -->
+  <path d="M0 250 q130 -40 270 -12 q140 28 260 -8 q140 -42 300 -6 q100 22 170 6 V360 H0 Z" fill="url(#cimlik)"/>
+  <path d="M0 290 q160 -26 330 -4 q170 22 340 -6 q160 -26 330 2 V360 H0 Z" fill="#4E9B2E" opacity=".55"/>
+
+  <!-- ağaç -->
+  <g transform="translate(60,140)">
+    <rect x="46" y="98" width="20" height="70" rx="8" fill="#8B5E34"/>
+    <circle cx="56" cy="74" r="52" fill="#4E9B2E"/>
+    <circle cx="24" cy="90" r="34" fill="#5FAE37"/>
+    <circle cx="90" cy="92" r="32" fill="#5FAE37"/>
+    <g fill="#E8453C"><circle cx="34" cy="70" r="8"/><circle cx="72" cy="56" r="8"/><circle cx="86" cy="96" r="8"/><circle cx="42" cy="104" r="8"/></g>
+  </g>
+
+  <!-- ip çitler -->
+  <g stroke="#E0C08A" stroke-width="7" stroke-linecap="round" fill="none" opacity=".95">
+    <path d="M210 196 q160 22 330 0 q170 -22 330 2"/>
+    <path d="M210 240 q160 22 330 0 q170 -22 330 2"/>
+  </g>
+  <g fill="#B57A3D">
+    <rect x="556" y="150" width="16" height="120" rx="6"/>
+    <rect x="880" y="150" width="16" height="120" rx="6"/>
+  </g>
+
+  <!-- tahta tabela -->
+  <g transform="translate(268,96)">
+    <rect x="-8" y="-8" width="446" height="136" rx="20" fill="#8B5E34" opacity=".25"/>
+    <rect x="0" y="0" width="430" height="120" rx="16" fill="url(#tahtaG)" stroke="#8B5E34" stroke-width="6"/>
+    <g stroke="#A9713A" stroke-width="3" opacity=".6">
+      <line x1="0" y1="40" x2="430" y2="40"/><line x1="0" y1="80" x2="430" y2="80"/>
+    </g>
+    <text x="215" y="56" text-anchor="middle" font-family="Andika, sans-serif" font-size="44" font-weight="700" fill="#FFFFFF" stroke="#2F80B8" stroke-width="6" paint-order="stroke">MATEMATİK</text>
+    <text x="215" y="98" text-anchor="middle" font-family="Andika, sans-serif" font-size="30" font-weight="700" fill="#FFF6DF">1. SINIF</text>
+  </g>
+
+  <!-- bloklar -->
+  <g transform="translate(786,150)">
+    <rect x="0" y="52" width="46" height="46" rx="6" fill="#E8453C"/>
+    <rect x="50" y="52" width="46" height="46" rx="6" fill="#FFC93C"/>
+    <rect x="100" y="52" width="46" height="46" rx="6" fill="#4FA9D8"/>
+    <rect x="25" y="4" width="46" height="46" rx="6" fill="#A97BC9"/>
+    <rect x="75" y="4" width="46" height="46" rx="6" fill="#6DBE45"/>
+    <text x="23" y="86" text-anchor="middle" font-family="Andika, sans-serif" font-size="28" font-weight="700" fill="#fff">1</text>
+    <text x="73" y="86" text-anchor="middle" font-family="Andika, sans-serif" font-size="28" font-weight="700" fill="#7A5B00">2</text>
+    <text x="123" y="86" text-anchor="middle" font-family="Andika, sans-serif" font-size="28" font-weight="700" fill="#fff">3</text>
+    <text x="48" y="38" text-anchor="middle" font-family="Andika, sans-serif" font-size="28" font-weight="700" fill="#fff">4</text>
+    <text x="98" y="38" text-anchor="middle" font-family="Andika, sans-serif" font-size="28" font-weight="700" fill="#fff">5</text>
+  </g>
+
+  <!-- tavşan -->
+  <g transform="translate(150,258)">
+    <ellipse cx="40" cy="44" rx="34" ry="26" fill="#F2F2F2"/>
+    <circle cx="12" cy="26" r="19" fill="#FFFFFF"/>
+    <ellipse cx="4" cy="2" rx="6" ry="17" fill="#FFFFFF" transform="rotate(-14 4 2)"/>
+    <ellipse cx="20" cy="0" rx="6" ry="17" fill="#FFFFFF" transform="rotate(8 20 0)"/>
+    <circle cx="7" cy="24" r="3" fill="#2C3A42"/>
+    <circle cx="70" cy="46" r="10" fill="#FFFFFF"/>
+  </g>
+
+  <!-- kelebekler -->
+  <g transform="translate(470,168)">
+    <path d="M0 0 q-16 -14 -4 -22 q12 -6 14 12Z" fill="#A97BC9"/>
+    <path d="M2 0 q16 -14 4 -22 q-12 -6 -14 12Z" fill="#C79BE0"/>
+  </g>
+  <g transform="translate(690,206)">
+    <path d="M0 0 q-13 -12 -3 -18 q10 -5 11 10Z" fill="#F08A3C"/>
+    <path d="M2 0 q13 -12 3 -18 q-10 -5 -11 10Z" fill="#FFC93C"/>
+  </g>
+
+  <!-- çiçekler -->
+  <g>
+    <g transform="translate(930,300)" fill="#FFFFFF"><circle cx="0" cy="0" r="7"/><circle cx="10" cy="6" r="7"/><circle cx="-10" cy="6" r="7"/><circle cx="0" cy="12" r="7"/><circle cx="0" cy="6" r="4" fill="#FFC93C"/></g>
+    <g transform="translate(380,318)" fill="#FFFFFF"><circle cx="0" cy="0" r="7"/><circle cx="10" cy="6" r="7"/><circle cx="-10" cy="6" r="7"/><circle cx="0" cy="12" r="7"/><circle cx="0" cy="6" r="4" fill="#FFC93C"/></g>
+  </g>
+
+  <text x="500" y="344" text-anchor="middle" font-family="Andika, sans-serif" font-size="19" font-weight="700" fill="#FFFFFF">Türkiye Yüzyılı Maarif Modeli · 1. Kitap ve 2. Kitap · 7 Tema</text>
+</svg>
 </header>
 
-<nav class="tabs">
-  <button class="tab active" data-page="baslangic">🏠 Başlangıç</button>
-  <button class="tab" data-page="sayilar">🔢 Sayılar</button>
-  <button class="tab" data-page="islemler">➕ İşlemler</button>
-  <button class="tab" data-page="geometri">🔺 Şekiller</button>
-  <button class="tab" data-page="olcme">📏 Ölçme</button>
-  <button class="tab" data-page="veri">📊 Grafik</button>
-  <button class="tab" data-page="oyunlar">🎮 Oyunlar</button>
+<nav class="nav">
+  <div class="nav-ic" id="navIc">
+    <button class="sekme aktif" data-t="t1">1️⃣ Nesnelerin Geometrisi 1</button>
+    <button class="sekme" data-t="t2">2️⃣ Sayılar ve Nicelikler 1</button>
+    <button class="sekme" data-t="t3">3️⃣ Sayılar ve Nicelikler 2</button>
+    <button class="sekme" data-t="t4">4️⃣ İşlemlerden Cebirsel Düşünmeye</button>
+    <button class="sekme" data-t="t5">5️⃣ Sayılar ve Nicelikler 3</button>
+    <button class="sekme" data-t="t6">6️⃣ Nesnelerin Geometrisi 2</button>
+    <button class="sekme" data-t="t7">7️⃣ Veriye Dayalı Araştırma</button>
+    <button class="sekme" data-t="t8">🎮 Oyunlar</button>
+  </div>
 </nav>
 
-<main>
+<main class="sayfa">
+<!-- ==================== TEMA 1 ==================== -->
+<section class="tema acik" id="t1">
+  <div class="kitap-serit">📕 1. KİTAP · 1. TEMA <span style="opacity:.8;font-weight:400">(s. 12–40)</span></div>
 
-<section id="baslangic" class="page active">
-  <div class="hero">
-    <div>
-      <h2>Matematik Bir Oyun Alanıdır! 🎈</h2>
-      <p>
-        Önce gerçek nesneleri görürüz. Sonra resimlerle düşünürüz.
-        En son sayı ve işlem işaretlerini kullanırız.
-      </p>
-      <div class="tip">
-        👩‍🏫 Çocuğa hemen cevabı söylemeyin.
-        “Kaç tane gördün?”, “Nasıl saydın?”, “Başka nasıl yapabiliriz?”
-        diye sorun.
-      </div>
+  <div class="tema-bas">
+    <svg class="gorsel" viewBox="0 0 960 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Uzamsal ilişkiler ve eş nesneler">
+      <defs><linearGradient id="sk1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7FCDEE"/><stop offset="1" stop-color="#CCEDFA"/></linearGradient></defs>
+      <rect width="960" height="230" fill="url(#sk1)"/>
+      <g fill="#fff" opacity=".85"><ellipse cx="120" cy="44" rx="42" ry="22"/><ellipse cx="156" cy="38" rx="30" ry="18"/>
+        <ellipse cx="760" cy="38" rx="38" ry="20"/><ellipse cx="794" cy="33" rx="26" ry="15"/></g>
+      <path d="M0 176 q160 -26 330 -6 q170 20 340 -6 q150 -24 290 4 V230 H0Z" fill="#6DBE45"/>
+      <path d="M0 200 q200 -18 420 0 q220 18 540 -2 V230 H0Z" fill="#4E9B2E" opacity=".6"/>
+
+      <!-- kutu ve içindeki top -->
+      <g transform="translate(90,86)">
+        <polygon points="0,30 96,30 96,100 0,100" fill="#C4874A"/>
+        <polygon points="0,30 26,8 122,8 96,30" fill="#DEA167"/>
+        <polygon points="96,30 122,8 122,78 96,100" fill="#9B6633"/>
+        <circle cx="48" cy="66" r="22" fill="#E8453C"/>
+      </g>
+      <text x="102" y="212" font-family="Andika, sans-serif" font-size="20" font-weight="700" fill="#fff">içinde</text>
+
+      <!-- masa üstünde top -->
+      <g transform="translate(300,80)">
+        <circle cx="56" cy="26" r="22" fill="#FFC93C"/>
+        <rect x="0" y="50" width="112" height="14" rx="6" fill="#C4874A"/>
+        <rect x="10" y="64" width="12" height="42" rx="5" fill="#9B6633"/>
+        <rect x="90" y="64" width="12" height="42" rx="5" fill="#9B6633"/>
+      </g>
+      <text x="322" y="212" font-family="Andika, sans-serif" font-size="20" font-weight="700" fill="#fff">üstünde</text>
+
+      <!-- sandalye altında top -->
+      <g transform="translate(500,66)">
+        <rect x="8" y="14" width="14" height="92" rx="6" fill="#9B6633"/>
+        <rect x="8" y="14" width="86" height="12" rx="5" fill="#C4874A"/>
+        <rect x="0" y="62" width="102" height="13" rx="6" fill="#C4874A"/>
+        <rect x="86" y="62" width="12" height="44" rx="5" fill="#9B6633"/>
+        <circle cx="52" cy="94" r="17" fill="#4FA9D8"/>
+      </g>
+      <text x="516" y="212" font-family="Andika, sans-serif" font-size="20" font-weight="700" fill="#fff">altında</text>
+
+      <!-- eş nesneler -->
+      <g transform="translate(700,80)">
+        <g fill="#A97BC9"><polygon points="40,0 80,66 0,66"/></g>
+        <g fill="#A97BC9" transform="translate(110,0)"><polygon points="40,0 80,66 0,66"/></g>
+        <path d="M92 34 h18" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+        <text x="100" y="100" text-anchor="middle" font-family="Andika, sans-serif" font-size="22" font-weight="700" fill="#fff">eş</text>
+      </g>
+    </svg>
+    <div class="yazi">
+      <h2>Tema 1 · Nesnelerin Geometrisi 1</h2>
+      <p class="ozet">Yıl, geometriyle başlıyor. Çocuk önce kendini ve nesneleri mekânda konumlandırmayı, sonra birbirinin aynısı olan nesneleri ayırt etmeyi öğreniyor.</p>
     </div>
-    <div class="hero-picture">🧒 🧮 🧸</div>
   </div>
 
-  <div class="grid">
-    <div class="card">
-      <h3>🌟 Burada Neler Var?</h3>
-      <ul>
-        <li>Sayıları tanıma ve sayma</li>
-        <li>Toplama ve çıkarma</li>
-        <li>Şekiller ve geometrik cisimler</li>
-        <li>Uzun-kısa, ağır-hafif</li>
-        <li>Saat, para ve market oyunu</li>
-        <li>Grafik ve olasılık</li>
-        <li>Balon, vagon ve kart oyunları</li>
-      </ul>
-    </div>
+  <div class="konu-satir"><div class="ikon">🧭</div><div><h3>Bölüm 1 · Uzamsal İlişkiler</h3><p>Sağ–sol, ön–arka, üst–alt, iç–dış, yakın–uzak. Kendine ve başka bir nesneye göre konum belirleme.</p></div></div>
+  <div class="konu-satir"><div class="ikon">🚶</div><div><h3>Yön ve Konum Tarifi</h3><p>Sözlü yönergelerle bir yeri bulma; "sıranın önünde, kapının sağında" gibi ifadeleri kullanma.</p></div></div>
+  <div class="konu-satir y"><div class="ikon">👯</div><div><h3>Bölüm 2 · Eş Nesneler</h3><p>Biçim ve büyüklük bakımından birbirinin aynısı olan nesneleri bulma ve eşleştirme.</p></div></div>
+  <div class="konu-satir y"><div class="ikon">🔍</div><div><h3>Farklı Olanı Bulma</h3><p>Bir gruptaki nesnelerden eş olmayanı ayırt etme ve nedenini açıklama.</p></div></div>
 
-    <div class="card">
-      <h3>🧺 Evdeki Matematik</h3>
-      <p>
-        Legolar, oyuncaklar, düğmeler, meyveler, mandallar ve kalemler
-        matematik öğrenmek için kullanılabilir.
-      </p>
-    </div>
-
-    <div class="card">
-      <h3>🧠 Öğrenme Sırası</h3>
-      <p>
-        <b>Göster → Say → Açıkla → Çiz → Yaz</b>
-      </p>
-      <p>
-        Çocuk işlem yaparken nesneleri hareket ettirebilir,
-        gruplayabilir ve tekrar sayabilir.
-      </p>
-    </div>
+  <h4 class="bolum">🧭 Etkinlik · Top Nerede?</h4>
+  <div class="kutu">
+    <h5>Konumu söyle</h5>
+    <p class="aciklama">Topun kutuya göre nerede olduğunu seç.</p>
+    <svg id="uzSvg" viewBox="0 0 360 200" style="width:100%;max-width:360px;height:auto"></svg>
+    <div class="secenekler" id="uzSec"></div>
+    <div class="geri" id="uzGeri"></div>
+    <div class="btn-sira"><button class="btn" onclick="uzYeni()">Yeni Soru</button></div>
   </div>
+
+  <h4 class="bolum">👯 Etkinlik · Eşini Bul</h4>
+  <div class="kutu">
+    <h5>Hangisi soldaki şeklin eşi?</h5>
+    <p class="aciklama">Soldaki şekle bak, aynısını aşağıdakiler arasından seç.</p>
+    <svg id="esSvg" viewBox="0 0 420 150" style="width:100%;max-width:420px;height:auto"></svg>
+    <div class="geri" id="esGeri"></div>
+    <div class="btn-sira"><button class="btn" onclick="esYeni()">Yeni Soru</button></div>
+  </div>
+
+  <div class="ogretmen">
+    <h5>👩‍🏫 Sınıfta gerçek materyalle</h5>
+    <ul>
+      <li>"Sağ elini kaldır, sol ayağını öne koy" oyunuyla derse başlayın; ısınma hem uzamsal dili hem dikkati açar.</li>
+      <li>Bir kutu ve bir topla sınıfın ortasında durup topu her seferinde farklı yere koyun, çocuklar koro hâlinde söylesin.</li>
+      <li>Çorap, düğme, kalem gibi ikişer ikişer eşi olan malzemeleri torbaya atın; çocuklar dokunarak eşini bulsun.</li>
+      <li>Sınıf krokisini tahtaya çizip "benim sıram kapının sağında" gibi cümleler kurdurun.</li>
+    </ul>
+  </div>
+
+  <h4 class="bolum">📝 Tema Değerlendirme</h4>
+  <div class="kutu"><div id="test1"></div></div>
 </section>
 
-<section id="sayilar" class="page">
-  <div class="hero">
-    <div>
-      <h2>Sayılar ve Nicelikler 🔢</h2>
-      <p>
-        Her sayı bir miktarı gösterir. Sayıları nesnelerle eşleştirerek öğrenelim.
-      </p>
+<!-- ==================== TEMA 2 ==================== -->
+<section class="tema" id="t2">
+  <div class="kitap-serit">📕 1. KİTAP · 2. TEMA <span style="opacity:.8;font-weight:400">(s. 42–140)</span></div>
+
+  <div class="tema-bas">
+    <svg class="gorsel" viewBox="0 0 960 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Rakamlar, sayılar ve örüntüler">
+      <defs><linearGradient id="sk2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7FCDEE"/><stop offset="1" stop-color="#CCEDFA"/></linearGradient></defs>
+      <rect width="960" height="230" fill="url(#sk2)"/>
+      <g fill="#fff" opacity=".85"><ellipse cx="820" cy="46" rx="44" ry="23"/><ellipse cx="858" cy="40" rx="30" ry="17"/></g>
+      <path d="M0 178 q170 -24 340 -4 q180 20 350 -8 q140 -22 270 6 V230 H0Z" fill="#6DBE45"/>
+      <path d="M0 202 q220 -16 450 2 q230 18 510 -4 V230 H0Z" fill="#4E9B2E" opacity=".6"/>
+
+      <!-- rakam blokları -->
+      <g transform="translate(56,52)">
+        <rect x="0" y="0" width="58" height="58" rx="10" fill="#E8453C"/>
+        <rect x="66" y="0" width="58" height="58" rx="10" fill="#FFC93C"/>
+        <rect x="132" y="0" width="58" height="58" rx="10" fill="#4FA9D8"/>
+        <rect x="198" y="0" width="58" height="58" rx="10" fill="#A97BC9"/>
+        <rect x="264" y="0" width="58" height="58" rx="10" fill="#6DBE45"/>
+        <g font-family="Andika, sans-serif" font-size="34" font-weight="700" text-anchor="middle" fill="#fff">
+          <text x="29" y="42">1</text><text x="95" y="42" fill="#7A5B00">2</text><text x="161" y="42">3</text>
+          <text x="227" y="42">4</text><text x="293" y="42">5</text>
+        </g>
+      </g>
+
+      <!-- elmalar sayma -->
+      <g transform="translate(60,124)" fill="#E8453C">
+        <circle cx="16" cy="16" r="15"/><circle cx="52" cy="16" r="15"/><circle cx="88" cy="16" r="15"/>
+        <circle cx="124" cy="16" r="15"/><circle cx="160" cy="16" r="15"/><circle cx="196" cy="16" r="15"/>
+        <circle cx="232" cy="16" r="15"/>
+      </g>
+      <text x="316" y="152" font-family="Andika, sans-serif" font-size="34" font-weight="700" fill="#2F80B8">= 7</text>
+
+      <!-- örüntü -->
+      <g transform="translate(470,64)">
+        <rect x="0" y="0" width="46" height="46" rx="8" fill="#FFC93C"/>
+        <circle cx="92" cy="23" r="23" fill="#A97BC9"/>
+        <rect x="138" y="0" width="46" height="46" rx="8" fill="#FFC93C"/>
+        <circle cx="230" cy="23" r="23" fill="#A97BC9"/>
+        <rect x="276" y="0" width="46" height="46" rx="8" fill="#fff" stroke="#2F80B8" stroke-width="4" stroke-dasharray="8 6"/>
+        <text x="299" y="34" text-anchor="middle" font-family="Andika, sans-serif" font-size="30" font-weight="700" fill="#2F80B8">?</text>
+      </g>
+
+      <!-- onluk birlik -->
+      <g transform="translate(520,126)">
+        <g fill="#4E9B2E" stroke="#3B7A22" stroke-width="2"><rect x="0" y="0" width="22" height="66" rx="4"/></g>
+        <g fill="#F08A3C" stroke="#C96C22" stroke-width="2">
+          <rect x="32" y="44" width="22" height="22" rx="4"/><rect x="60" y="44" width="22" height="22" rx="4"/><rect x="88" y="44" width="22" height="22" rx="4"/>
+        </g>
+        <text x="128" y="58" font-family="Andika, sans-serif" font-size="30" font-weight="700" fill="#2F80B8">13</text>
+      </g>
+
+      <!-- tahmin kavanozu -->
+      <g transform="translate(790,74)">
+        <path d="M12 18 h84 v88 a16 16 0 0 1 -16 16 h-52 a16 16 0 0 1 -16 -16 z" fill="#fff" opacity=".9" stroke="#4FA9D8" stroke-width="4"/>
+        <rect x="8" y="6" width="92" height="14" rx="7" fill="#4FA9D8"/>
+        <g fill="#E8453C"><circle cx="34" cy="60" r="9"/><circle cx="58" cy="52" r="9"/><circle cx="80" cy="64" r="9"/><circle cx="44" cy="84" r="9"/><circle cx="70" cy="90" r="9"/><circle cx="30" cy="102" r="9"/><circle cx="58" cy="108" r="9"/></g>
+        <text x="54" y="146" text-anchor="middle" font-family="Andika, sans-serif" font-size="20" font-weight="700" fill="#fff">tahmin et</text>
+      </g>
+    </svg>
+    <div class="yazi">
+      <h2>Tema 2 · Sayılar ve Nicelikler 1</h2>
+      <p class="ozet">Kitabın en uzun teması. Rakamların yazımından 20'ye kadar sayılara, örüntülerden tahmine kadar sayı kavramının temeli burada atılıyor.</p>
     </div>
-    <div class="hero-picture">🍎🍎🍎🍎🍎</div>
   </div>
 
-  <div class="grid">
-    <div class="card activity">
-      <h3>🍎 Nesneleri Sayalım</h3>
-      <p>Elmaları tek tek say. Sonra kontrol düğmesine bas.</p>
-      <div class="objects" id="saymaAlan"></div>
-      <button onclick="yeniSayma()">🎲 Yeni Grup</button>
-      <button class="green" onclick="saymayiKontrolEt()">✅ Kontrol Et</button>
-      <div class="feedback" id="saymaCevap"></div>
-    </div>
+  <div class="konu-satir"><div class="ikon">🔢</div><div><h3>Bölüm 1 · Rakamlar ve Sayılar</h3><p>0'dan 20'ye kadar sayıları sayma, okuma ve yazma; nesne sayısını rakamla eşleştirme.</p></div></div>
+  <div class="konu-satir"><div class="ikon">⚖️</div><div><h3>Karşılaştırma ve Sıralama</h3><p>Az–çok, eşit; sayıları büyükten küçüğe ve küçükten büyüğe sıralama.</p></div></div>
+  <div class="konu-satir"><div class="ikon">🥇</div><div><h3>Sıra Bildiren Sayılar</h3><p>Birinci, ikinci, üçüncü... Sıradaki yerini söyleme ve gösterme.</p></div></div>
+  <div class="konu-satir"><div class="ikon">🏠</div><div><h3>Onluk ve Birlik</h3><p>10'dan 20'ye kadar sayıları "bir onluk ve birlikler" olarak görme.</p></div></div>
+  <div class="konu-satir s"><div class="ikon">🔁</div><div><h3>Bölüm 2 · Sayı ve Şekil Örüntüleri</h3><p>Tekrar eden şekil ve sayı örüntülerindeki kuralı bulma, eksik adımı tamamlama.</p></div></div>
+  <div class="konu-satir m"><div class="ikon">🤔</div><div><h3>Bölüm 3 · Tahmin</h3><p>Bir gruptaki nesne sayısını tahmin etme, sayarak tahminini kontrol etme.</p></div></div>
 
-    <div class="card activity" style="grid-column:1/-1">
-      <h3>🔢 Sayı Doğrusu</h3>
-      <p>
-        Sayı doğrusunda sayılar <b>soldan sağa</b> doğru büyür.
-        Sağa gittikçe sayı <b>artar</b>, sola gittikçe <b>azalır</b>.
-      </p>
-      <div class="sd-butonlar">
-        <button class="green" data-max="10" onclick="sayiDogrusuGoster(10)">0 – 10</button>
-        <button data-max="20" onclick="sayiDogrusuGoster(20)">0 – 20</button>
-        <button data-max="100" onclick="sayiDogrusuGoster(100)">0 – 100</button>
-      </div>
-      <div class="sd-kaydir"><div id="sayiDogrusu"></div></div>
-      <p class="sd-ipucu">👉 Doğru üzerindeki bir sayıya dokun, kurbağa oraya zıplasın!</p>
-      <div class="feedback" id="sayiDogrusuCevap"></div>
-    </div>
-
-    <div class="card">
-      <h3>🔟 Onluk ve Birlik</h3>
-      <p>10 birlik, 1 onluk olur.</p>
-      <p>
-        Örneğin <b>14</b> sayısı 1 onluk ve 4 birliktir.
-      </p>
-      <input id="onlukSayi" type="number" min="0" max="99" value="14">
-      <button onclick="onlukGoster()">Göster</button>
-      <div id="onlukCevap"></div>
-    </div>
-
-    <div class="card" style="grid-column:1/-1">
-      <h3>🚶 Ritmik Sayma</h3>
-      <p>Kaçar kaçar sayalım?</p>
-      <select id="ritmik">
-        <option value="1">Birer</option>
-        <option value="2">İkişer</option>
-        <option value="5">Beşer</option>
-        <option value="10">Onar</option>
-      </select>
-      <button onclick="ritmikSay()">Başla</button>
-      <div class="sd-kaydir"><div id="ritmikCevap"></div></div>
-      <div class="feedback" id="ritmikYazi"></div>
-    </div>
-
-    <div class="card activity">
-      <h3>⚖️ Hangisi Fazla?</h3>
-      <div id="karsilastirma"></div>
-      <button onclick="yeniKarsilastirma()">Yeni Soru</button>
-      <div id="karsilastirmaButonlari"></div>
-      <div class="feedback" id="karsilastirmaCevap"></div>
-    </div>
-
-    <div class="card">
-      <h3>🏁 Sıra Bildiren Sayılar</h3>
-      <p>Arabaları inceleyelim.</p>
-      <div class="objects">🚗 🚌 🚲 🚜 🛴</div>
-      <p>Bisiklet kaçıncı sırada?</p>
-      <button onclick="mesaj('Bisiklet üçüncü sıradadır. 🚲')">
-        Cevabı Gör
-      </button>
-    </div>
-
-    <div class="card">
-      <h3>🔁 Sayı Örüntüsü</h3>
-      <div class="number-line">
-        <span>2</span><span>4</span><span>6</span><span>?</span><span>10</span>
-      </div>
-      <p>Sayılar kaçar kaçar artıyor?</p>
-      <button onclick="mesaj('İkişer artıyor. Eksik sayı 8! 🌟')">
-        Kontrol Et
-      </button>
-    </div>
+  <h4 class="bolum">🔢 Etkinlik · Say ve Rakamı Seç</h4>
+  <div class="kutu">
+    <h5>Kaç tane var?</h5>
+    <p class="aciklama">Nesneleri say, doğru rakamı seç.</p>
+    <div class="sayma-alan" id="sayAlan"></div>
+    <div class="secenekler" id="saySec"></div>
+    <div class="geri" id="sayGeri"></div>
+    <div class="btn-sira"><button class="btn" onclick="sayYeni()">Yeni Soru</button></div>
   </div>
+
+  <h4 class="bolum">🏠 Etkinlik · Onluk ve Birlik</h4>
+  <div class="kutu">
+    <h5>Blokları oku</h5>
+    <p class="aciklama">Yeşil çubuk bir <b>onluk</b>, turuncu kare bir <b>birlik</b>tir.</p>
+    <svg id="blokSvg" viewBox="0 0 420 140" style="width:100%;max-width:420px;height:auto"></svg>
+    <div class="satir">
+      <span>Sayı:</span><input class="cevap" id="blokIn" inputmode="numeric" placeholder="?">
+      <button class="btn yesil" onclick="blokKontrol()">Kontrol</button>
+      <button class="btn mavi" onclick="blokKur()">Yeni</button>
+    </div>
+    <div class="geri" id="blokGeri"></div>
+  </div>
+
+  <h4 class="bolum">🔁 Etkinlik · Örüntüyü Tamamla</h4>
+  <div class="kutu">
+    <h5>Sırada hangisi var?</h5>
+    <div class="sayma-alan" id="orDizi"></div>
+    <div class="secenekler" id="orSec"></div>
+    <div class="geri" id="orGeri"></div>
+    <div class="btn-sira"><button class="btn" onclick="orYeni()">Yeni Örüntü</button></div>
+  </div>
+
+  <h4 class="bolum">⚖️ Etkinlik · Hangisi Daha Çok?</h4>
+  <div class="kutu">
+    <h5>Sayıları karşılaştır</h5>
+    <div class="satir" id="karDizi"></div>
+    <div class="secenekler" id="karSec"></div>
+    <div class="geri" id="karGeri"></div>
+    <div class="btn-sira"><button class="btn" onclick="karYeni()">Yeni Soru</button></div>
+    <div class="bilgi"><b>İpucu:</b> Timsahın ağzı her zaman <b>çok olana</b> doğru açılır.</div>
+  </div>
+
+  <div class="ogretmen">
+    <h5>👩‍🏫 Sınıfta gerçek materyalle</h5>
+    <ul>
+      <li>Rakamları önce havada, sonra sırtta, sonra kum/pirinç tepsisinde yazdırın; kalem en son gelsin.</li>
+      <li>Cam kavanoza fasulye koyup tahmin ettirin, sonra onarlı gruplayarak birlikte sayın.</li>
+      <li>Pipet ve lastikle 10'luk demetler yaptırın: 13 = bir demet + üç pipet.</li>
+      <li>Sıraya dizilip "kaçıncı sıradasın?" sorusuyla sıra bildiren sayıları bedenle yaşatın.</li>
+      <li>Boncuk ipliğiyle renk örüntüsü kurdurun, sıradakini arkadaşına tahmin ettirsin.</li>
+    </ul>
+  </div>
+
+  <h4 class="bolum">📝 Tema Değerlendirme</h4>
+  <div class="kutu"><div id="test2"></div></div>
 </section>
 
-<section id="islemler" class="page">
-  <div class="hero">
-    <div>
-      <h2>Toplama ve Çıkarma ➕➖</h2>
-      <p>
-        Toplama iki grubu birleştirmektir. Çıkarma ise bir gruptan
-        bazı nesneleri ayırmaktır.
-      </p>
+<!-- ==================== TEMA 3 ==================== -->
+<section class="tema" id="t3">
+  <div class="kitap-serit">📕 1. KİTAP · 3. TEMA <span style="opacity:.8;font-weight:400">(s. 142–180)</span></div>
+
+  <div class="tema-bas">
+    <svg class="gorsel" viewBox="0 0 960 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Uzunluk ölçme ve tartma">
+      <defs><linearGradient id="sk3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7FCDEE"/><stop offset="1" stop-color="#CCEDFA"/></linearGradient></defs>
+      <rect width="960" height="230" fill="url(#sk3)"/>
+      <g fill="#fff" opacity=".85"><ellipse cx="180" cy="42" rx="40" ry="21"/><ellipse cx="214" cy="36" rx="28" ry="16"/></g>
+      <path d="M0 176 q180 -22 360 -2 q180 18 340 -8 q130 -20 260 6 V230 H0Z" fill="#6DBE45"/>
+      <path d="M0 200 q240 -16 480 2 q240 18 480 -4 V230 H0Z" fill="#4E9B2E" opacity=".6"/>
+
+      <!-- karışla ölçme -->
+      <g transform="translate(60,96)">
+        <rect x="0" y="30" width="250" height="20" rx="8" fill="#C4874A" stroke="#9B6633" stroke-width="3"/>
+        <g stroke="#2F80B8" stroke-width="5" stroke-linecap="round" fill="none">
+          <path d="M6 24 q26 -22 52 0"/><path d="M64 24 q26 -22 52 0"/><path d="M122 24 q26 -22 52 0"/><path d="M180 24 q26 -22 52 0"/>
+        </g>
+        <text x="125" y="76" text-anchor="middle" font-family="Andika, sans-serif" font-size="22" font-weight="700" fill="#2F80B8">4 karış</text>
+      </g>
+
+      <!-- cetvel -->
+      <g transform="translate(360,104)">
+        <rect x="0" y="18" width="190" height="38" rx="6" fill="#FFC93C" stroke="#D8A216" stroke-width="3"/>
+        <g stroke="#8A6A00" stroke-width="3">
+          <line x1="18" y1="18" x2="18" y2="36"/><line x1="52" y1="18" x2="52" y2="30"/><line x1="86" y1="18" x2="86" y2="36"/>
+          <line x1="120" y1="18" x2="120" y2="30"/><line x1="154" y1="18" x2="154" y2="36"/>
+        </g>
+      </g>
+
+      <!-- terazi -->
+      <g transform="translate(640,66)">
+        <rect x="104" y="40" width="12" height="78" rx="5" fill="#9B6633"/>
+        <rect x="62" y="112" width="96" height="14" rx="6" fill="#9B6633"/>
+        <line x1="26" y1="52" x2="194" y2="30" stroke="#C4874A" stroke-width="10" stroke-linecap="round"/>
+        <path d="M26 52 v22" stroke="#9B6633" stroke-width="4"/><path d="M194 30 v22" stroke="#9B6633" stroke-width="4"/>
+        <path d="M0 74 h52 l-12 26 h-28 z" fill="#4FA9D8"/>
+        <path d="M168 52 h52 l-12 26 h-28 z" fill="#E8453C"/>
+        <circle cx="26" cy="66" r="11" fill="#6DBE45"/>
+      </g>
+      <text x="756" y="212" text-anchor="middle" font-family="Andika, sans-serif" font-size="20" font-weight="700" fill="#fff">ağır – hafif</text>
+    </svg>
+    <div class="yazi">
+      <h2>Tema 3 · Sayılar ve Nicelikler 2</h2>
+      <p class="ozet">Ölçmeye giriş: önce karış, adım, ayak gibi kendi birimlerimizle uzunluk; sonra elle ve teraziyle ağırlık karşılaştırması.</p>
     </div>
-    <div class="hero-picture">🍓 + 🍓 = 😊</div>
   </div>
 
-  <div class="grid">
-    <div class="card activity">
-      <h3>🍓 Toplamayı Görelim</h3>
-      <p>İki grubu birleştir ve sonucu yaz.</p>
-      <div id="toplamaAlan"></div>
-      <button onclick="yeniToplama()">Yeni Toplama</button>
-      <input id="toplamaCevap" type="number" placeholder="Sonuç">
-      <button class="green" onclick="toplamayiKontrolEt()">Kontrol Et</button>
-      <div class="feedback" id="toplamaMesaj"></div>
-    </div>
+  <div class="konu-satir"><div class="ikon">📏</div><div><h3>Bölüm 1 · Uzunluk Ölçme</h3><p>Uzun–kısa, geniş–dar, kalın–ince; nesneleri uzunluklarına göre sıralama.</p></div></div>
+  <div class="konu-satir"><div class="ikon">🖐️</div><div><h3>Standart Olmayan Birimler</h3><p>Karış, adım, ayak, kalem, ataş ile ölçme; aynı nesnenin farklı birimlerle farklı sayıda ölçülmesi.</p></div></div>
+  <div class="konu-satir s"><div class="ikon">⚖️</div><div><h3>Bölüm 2 · Tartma</h3><p>Ağır–hafif ayrımı, iki nesneyi elde tartarak karşılaştırma.</p></div></div>
+  <div class="konu-satir s"><div class="ikon">🪶</div><div><h3>Denge ve Eşitlik</h3><p>Basit terazide hangi kefenin indiğini yorumlama; eşit ağırlığı fark etme.</p></div></div>
 
-    <div class="card activity">
-      <h3>🍊 Çıkarmayı Görelim</h3>
-      <p>Giden meyveleri ayır. Kaç tane kaldı?</p>
-      <div id="cikarmaAlan"></div>
-      <button onclick="yeniCikarma()">Yeni Çıkarma</button>
-      <input id="cikarmaCevap" type="number" placeholder="Kalan">
-      <button class="green" onclick="cikarmayiKontrolEt()">Kontrol Et</button>
-      <div class="feedback" id="cikarmaMesaj"></div>
+  <h4 class="bolum">📏 Etkinlik · Kaç Ataş Uzunluğunda?</h4>
+  <div class="kutu">
+    <h5>Ölç ve yaz</h5>
+    <p class="aciklama">Kalemin altındaki ataşları say.</p>
+    <svg id="olcSvg" viewBox="0 0 460 140" style="width:100%;max-width:460px;height:auto"></svg>
+    <div class="satir">
+      <input class="cevap" id="olcIn" inputmode="numeric" placeholder="?">
+      <button class="btn yesil" onclick="olcKontrol()">Kontrol</button>
+      <button class="btn mavi" onclick="olcYeni()">Yeni</button>
     </div>
+    <div class="geri" id="olcGeri"></div>
+  </div>
 
-    <div class="card">
-      <h3>🍎 Parça ve Bütün</h3>
-      <p>7 elma iki parçaya ayrıldı:</p>
-      <div class="objects">🍎🍎🍎 + 🍎🍎🍎🍎 = 🍎🍎🍎🍎🍎🍎🍎</div>
-      <p><b>3 + 4 = 7</b></p>
-    </div>
+  <h4 class="bolum">⚖️ Etkinlik · Hangisi Daha Ağır?</h4>
+  <div class="kutu">
+    <h5>Teraziyi oku</h5>
+    <p class="aciklama">Terazide aşağıda kalan kefe daha ağırdır.</p>
+    <svg id="terSvg" viewBox="0 0 400 200" style="width:100%;max-width:400px;height:auto"></svg>
+    <div class="secenekler" id="terSec"></div>
+    <div class="geri" id="terGeri"></div>
+    <div class="btn-sira"><button class="btn" onclick="terYeni()">Yeni Soru</button></div>
+  </div>
 
-    <div class="card">
-      <h3>🎈 Toplama Problemi</h3>
-      <p>
-        Elif’in 4 balonu vardı. 3 balon daha geldi.
-        Elif’in kaç balonu oldu?
-      </p>
-      <div class="objects">🎈🎈🎈🎈 + 🎈🎈🎈</div>
-      <button onclick="mesaj('4 + 3 = 7 balon oldu! 🎈')">
-        Birleştir
-      </button>
-    </div>
+  <div class="ogretmen">
+    <h5>👩‍🏫 Sınıfta gerçek materyalle</h5>
+    <ul>
+      <li>Sırayı önce öğretmenin karışıyla, sonra çocuğun karışıyla ölçtürün; sayılar neden farklı çıktı diye tartıştırın.</li>
+      <li>Koridoru adımla ölçtürüp sonuçları tahtaya yazın; boy uzadıkça adım sayısının azaldığını fark ettirin.</li>
+      <li>Askı ve iki poşetle sınıf terazisi yapın; silgi, kitap, sünger tartıştırın.</li>
+      <li>Aynı büyüklükte ama farklı ağırlıkta iki kutu verin (biri boş, biri dolu): "büyük olan hep ağır mıdır?"</li>
+    </ul>
+  </div>
 
-    <div class="card">
-      <h3>🍏 Çıkarma Problemi</h3>
-      <p>
-        Sepette 8 elma vardı. 2 elma yenildi.
-        Kaç elma kaldı?
-      </p>
-      <div class="objects">🍎🍎🍎🍎🍎🍎🍎🍎 − 🍎🍎</div>
-      <button onclick="mesaj('8 − 2 = 6 elma kaldı! 🍎')">
-        Çözümü Gör
-      </button>
-    </div>
+  <h4 class="bolum">📝 Tema Değerlendirme</h4>
+  <div class="kutu"><div id="test3"></div></div>
+</section>
+<!-- ==================== TEMA 4 ==================== -->
+<section class="tema" id="t4">
+  <div class="kitap-serit">📗 2. KİTAP · 4. TEMA <span style="opacity:.8;font-weight:400">(s. 12–90)</span></div>
 
-    <div class="card">
-      <h3>🔟 Onluk Tablo</h3>
-      <p>14 sayısını onluk tablo üzerinde görelim.</p>
-      <div class="ten-frame" id="onlukTablo"></div>
-      <button onclick="onlukTabloGoster()">14’ü Göster</button>
+  <div class="tema-bas">
+    <svg class="gorsel" viewBox="0 0 960 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Toplama ve çıkarma işlemleri">
+      <defs><linearGradient id="sk4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7FCDEE"/><stop offset="1" stop-color="#CCEDFA"/></linearGradient></defs>
+      <rect width="960" height="230" fill="url(#sk4)"/>
+      <g fill="#fff" opacity=".85"><ellipse cx="700" cy="40" rx="42" ry="22"/><ellipse cx="736" cy="34" rx="28" ry="16"/></g>
+      <path d="M0 176 q170 -24 340 -4 q180 20 350 -8 q140 -22 270 6 V230 H0Z" fill="#6DBE45"/>
+      <path d="M0 200 q220 -16 450 2 q230 18 510 -4 V230 H0Z" fill="#4E9B2E" opacity=".6"/>
+
+      <!-- 3 + 4 = 7 -->
+      <g transform="translate(56,72)">
+        <g fill="#E8453C"><circle cx="18" cy="18" r="17"/><circle cx="56" cy="18" r="17"/><circle cx="94" cy="18" r="17"/></g>
+        <text x="122" y="30" font-family="Andika, sans-serif" font-size="38" font-weight="700" fill="#2F80B8">+</text>
+        <g fill="#FFC93C" transform="translate(160,0)"><circle cx="18" cy="18" r="17"/><circle cx="56" cy="18" r="17"/><circle cx="94" cy="18" r="17"/><circle cx="132" cy="18" r="17"/></g>
+        <text x="324" y="30" font-family="Andika, sans-serif" font-size="38" font-weight="700" fill="#2F80B8">=</text>
+        <text x="368" y="32" font-family="Andika, sans-serif" font-size="42" font-weight="700" fill="#E8453C">7</text>
+      </g>
+
+      <!-- sayı doğrusu -->
+      <g transform="translate(60,142)">
+        <line x1="0" y1="36" x2="420" y2="36" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+        <g stroke="#fff" stroke-width="5">
+          <line x1="20" y1="24" x2="20" y2="48"/><line x1="100" y1="24" x2="100" y2="48"/><line x1="180" y1="24" x2="180" y2="48"/>
+          <line x1="260" y1="24" x2="260" y2="48"/><line x1="340" y1="24" x2="340" y2="48"/>
+        </g>
+        <path d="M100 20 q40 -40 80 0" fill="none" stroke="#E8453C" stroke-width="6" stroke-linecap="round"/>
+        <path d="M180 20 q40 -40 80 0" fill="none" stroke="#E8453C" stroke-width="6" stroke-linecap="round"/>
+        <polygon points="260,18 250,4 268,2" fill="#E8453C"/>
+        <g font-family="Andika, sans-serif" font-size="18" font-weight="700" fill="#fff">
+          <text x="12" y="70">0</text><text x="90" y="70">5</text><text x="166" y="70">10</text><text x="246" y="70">15</text><text x="326" y="70">20</text>
+        </g>
+      </g>
+
+      <!-- parça bütün -->
+      <g transform="translate(600,60)">
+        <rect x="70" y="0" width="120" height="46" rx="12" fill="#A97BC9"/>
+        <text x="130" y="32" text-anchor="middle" font-family="Andika, sans-serif" font-size="26" font-weight="700" fill="#fff">9</text>
+        <line x1="110" y1="46" x2="60" y2="80" stroke="#fff" stroke-width="5"/>
+        <line x1="150" y1="46" x2="200" y2="80" stroke="#fff" stroke-width="5"/>
+        <rect x="10" y="80" width="100" height="46" rx="12" fill="#4FA9D8"/>
+        <text x="60" y="112" text-anchor="middle" font-family="Andika, sans-serif" font-size="26" font-weight="700" fill="#fff">5</text>
+        <rect x="150" y="80" width="100" height="46" rx="12" fill="#6DBE45"/>
+        <text x="200" y="112" text-anchor="middle" font-family="Andika, sans-serif" font-size="26" font-weight="700" fill="#fff">4</text>
+      </g>
+    </svg>
+    <div class="yazi">
+      <h2>Tema 4 · İşlemlerden Cebirsel Düşünmeye</h2>
+      <p class="ozet">Sayılarla işlem yapma yılın en yoğun bölümü. Toplama ve çıkarma somut nesneden sayı doğrusuna, oradan zihinden işleme doğru ilerliyor.</p>
     </div>
   </div>
+
+  <div class="konu-satir"><div class="ikon">➕</div><div><h3>Bölüm 1 · Toplama İşlemi</h3><p>Bir araya getirme, ekleme; toplama sembolünü (+) ve eşittir (=) kullanma.</p></div></div>
+  <div class="konu-satir"><div class="ikon">🧩</div><div><h3>Parça – Bütün İlişkisi</h3><p>Bir sayıyı iki parçaya ayırma; 9 = 5 + 4 gibi ayrıştırmalar.</p></div></div>
+  <div class="konu-satir"><div class="ikon">❓</div><div><h3>Eksik Toplananı Bulma</h3><p>4 + ? = 9 biçimindeki işlemler; cebirsel düşünmenin ilk adımı.</p></div></div>
+  <div class="konu-satir y"><div class="ikon">➖</div><div><h3>Bölüm 2 · Çıkarma İşlemi</h3><p>Ayırma, eksiltme, kalanı bulma; sayı doğrusunda geriye sayma.</p></div></div>
+  <div class="konu-satir y"><div class="ikon">🔗</div><div><h3>Toplama – Çıkarma İlişkisi</h3><p>İşlem ailesi kurma: 5 + 4 = 9, 9 − 4 = 5, 9 − 5 = 4.</p></div></div>
+  <div class="konu-satir m"><div class="ikon">📖</div><div><h3>Problem Kurma ve Çözme</h3><p>Görselden problem üretme; tek işlemli günlük hayat problemleri.</p></div></div>
+
+  <h4 class="bolum">➕ Etkinlik · Topla</h4>
+  <div class="kutu">
+    <h5>Nesneleri birleştir</h5>
+    <p class="aciklama">İki grubu birlikte say, sonucu yaz.</p>
+    <div class="sayma-alan" id="topAlan"></div>
+    <div class="satir" id="topIfade"></div>
+    <div class="satir">
+      <input class="cevap" id="topIn" inputmode="numeric" placeholder="?">
+      <button class="btn yesil" onclick="topKontrol()">Kontrol</button>
+      <button class="btn mavi" onclick="topYeni()">Yeni</button>
+    </div>
+    <div class="geri" id="topGeri"></div>
+  </div>
+
+  <h4 class="bolum">➖ Etkinlik · Çıkar</h4>
+  <div class="kutu">
+    <h5>Üstü çizilenleri çıkar</h5>
+    <p class="aciklama">Kalan nesneleri say.</p>
+    <div class="sayma-alan" id="cikAlan"></div>
+    <div class="satir" id="cikIfade"></div>
+    <div class="satir">
+      <input class="cevap" id="cikIn" inputmode="numeric" placeholder="?">
+      <button class="btn yesil" onclick="cikKontrol()">Kontrol</button>
+      <button class="btn mavi" onclick="cikYeni()">Yeni</button>
+    </div>
+    <div class="geri" id="cikGeri"></div>
+  </div>
+
+  <h4 class="bolum">❓ Etkinlik · Eksik Sayıyı Bul</h4>
+  <div class="kutu">
+    <h5>Kutuya hangi sayı gelmeli?</h5>
+    <div class="satir" id="eksIfade"></div>
+    <div class="secenekler" id="eksSec"></div>
+    <div class="geri" id="eksGeri"></div>
+    <div class="btn-sira"><button class="btn" onclick="eksYeni()">Yeni Soru</button></div>
+  </div>
+
+  <h4 class="bolum">📖 Etkinlik · Problem Çöz</h4>
+  <div class="kutu">
+    <h5>Günlük hayat problemi</h5>
+    <div class="satir" id="probMetin" style="font-weight:400;font-size:16.5px"></div>
+    <div class="satir">
+      <input class="cevap" id="probIn" inputmode="numeric" placeholder="?">
+      <button class="btn yesil" onclick="probKontrol()">Kontrol</button>
+      <button class="btn mavi" onclick="probYeni()">Yeni Problem</button>
+    </div>
+    <div class="geri" id="probGeri"></div>
+  </div>
+
+  <div class="bilgi"><b>Not:</b> 1. sınıfta toplama ve çıkarma işlemleri <b>20'ye kadar</b> olan sayılarla yapılır. Buradaki bütün işlemler bu sınırın içindedir.</div>
+
+  <div class="ogretmen">
+    <h5>👩‍🏫 Sınıfta gerçek materyalle</h5>
+    <ul>
+      <li>Sayma pullarını iki tabağa ayırıp birleştirin; her seferinde "kaç oldu?" diye sorun.</li>
+      <li>Yere kocaman bir sayı doğrusu bantlayın; çocuklar üzerinde zıplayarak toplayıp çıkarsın.</li>
+      <li>10'luk yumurta viyolüyle parça–bütün çalıştırın: 10'u kaç farklı şekilde ikiye ayırabiliriz?</li>
+      <li>Avucunuza saklanan boncuklarla "kaç tane sakladım?" oyunu eksik toplananı sezdirir.</li>
+      <li>Sınıf fotoğrafından problem kurdurun: "Kaç çocuk ayakta, kaç çocuk oturuyor?"</li>
+    </ul>
+  </div>
+
+  <h4 class="bolum">📝 Tema Değerlendirme</h4>
+  <div class="kutu"><div id="test4"></div></div>
 </section>
 
-<section id="geometri" class="page">
-  <div class="hero">
-    <div>
-      <h2>Şekiller ve Cisimler 🔺</h2>
-      <p>
-        Çevremizdeki nesneler geometrik şekillere ve cisimlere benzer.
-      </p>
+<!-- ==================== TEMA 5 ==================== -->
+<section class="tema" id="t5">
+  <div class="kitap-serit">📗 2. KİTAP · 5. TEMA <span style="opacity:.8;font-weight:400">(s. 92–108)</span></div>
+
+  <div class="tema-bas">
+    <svg class="gorsel" viewBox="0 0 960 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paralarımız">
+      <defs>
+        <linearGradient id="sk5" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7FCDEE"/><stop offset="1" stop-color="#CCEDFA"/></linearGradient>
+        <linearGradient id="mdn" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F5D98A"/><stop offset="1" stop-color="#C9A23E"/></linearGradient>
+      </defs>
+      <rect width="960" height="230" fill="url(#sk5)"/>
+      <path d="M0 178 q190 -22 380 -2 q190 18 330 -8 q140 -20 250 6 V230 H0Z" fill="#6DBE45"/>
+      <path d="M0 202 q240 -16 480 2 q240 18 480 -4 V230 H0Z" fill="#4E9B2E" opacity=".6"/>
+
+      <!-- kumbara -->
+      <g transform="translate(70,72)">
+        <ellipse cx="86" cy="60" rx="80" ry="56" fill="#F4A0BE"/>
+        <circle cx="150" cy="44" r="30" fill="#F4A0BE"/>
+        <circle cx="160" cy="40" r="5" fill="#7A4257"/>
+        <ellipse cx="176" cy="52" rx="12" ry="10" fill="#E387A8"/>
+        <rect x="66" y="-2" width="42" height="10" rx="5" fill="#7A4257"/>
+        <g fill="#E387A8"><rect x="34" y="104" width="20" height="22" rx="6"/><rect x="118" y="104" width="20" height="22" rx="6"/></g>
+        <path d="M18 46 q-16 -10 -6 -22" stroke="#E387A8" stroke-width="8" fill="none" stroke-linecap="round"/>
+      </g>
+
+      <!-- madeni paralar -->
+      <g transform="translate(300,64)">
+        <g><circle cx="40" cy="40" r="38" fill="url(#mdn)" stroke="#A8862F" stroke-width="4"/>
+          <text x="40" y="50" text-anchor="middle" font-family="Andika, sans-serif" font-size="26" font-weight="700" fill="#6B5417">1 ₺</text></g>
+        <g transform="translate(88,16)"><circle cx="34" cy="34" r="32" fill="#E8E4DA" stroke="#A9A498" stroke-width="4"/>
+          <text x="34" y="43" text-anchor="middle" font-family="Andika, sans-serif" font-size="19" font-weight="700" fill="#5A564C">50 kr</text></g>
+        <g transform="translate(168,26)"><circle cx="30" cy="30" r="28" fill="#E8E4DA" stroke="#A9A498" stroke-width="4"/>
+          <text x="30" y="38" text-anchor="middle" font-family="Andika, sans-serif" font-size="17" font-weight="700" fill="#5A564C">25 kr</text></g>
+      </g>
+
+      <!-- kağıt paralar -->
+      <g transform="translate(600,60)">
+        <g transform="rotate(-8 90 40)">
+          <rect x="0" y="0" width="180" height="86" rx="10" fill="#C98BC3" stroke="#9C5F97" stroke-width="4"/>
+          <text x="90" y="54" text-anchor="middle" font-family="Andika, sans-serif" font-size="34" font-weight="700" fill="#5C2F58">200 ₺</text>
+        </g>
+        <g transform="translate(56,58) rotate(7 90 40)">
+          <rect x="0" y="0" width="180" height="86" rx="10" fill="#8CC7E8" stroke="#4F8FB3" stroke-width="4"/>
+          <text x="90" y="54" text-anchor="middle" font-family="Andika, sans-serif" font-size="34" font-weight="700" fill="#1E5372">100 ₺</text>
+        </g>
+      </g>
+    </svg>
+    <div class="yazi">
+      <h2>Tema 5 · Sayılar ve Nicelikler 3 — Paralarımız</h2>
+      <p class="ozet">Madeni ve kâğıt paralarımızı tanıma, birbirine denk değerleri bulma ve basit alışveriş durumlarını çözme.</p>
     </div>
-    <div class="hero-picture">🔵 🔺 🟦</div>
   </div>
 
-  <div class="grid">
-    <div class="card activity">
-      <h3>🔵 Şekli Tanı</h3>
-      <p>Şekillere dokun.</p>
-      <div class="shape circle" onclick="sekil('Bu bir daire veya çemberdir. 🔵')"></div>
-      <div class="shape square" onclick="sekil('Bu bir karedir. 🟦')"></div>
-      <div class="shape triangle" onclick="sekil('Bu bir üçgendir. 🔺')"></div>
-      <div class="shape rectangle" onclick="sekil('Bu bir dikdörtgendir. ▭')"></div>
-      <div class="feedback" id="sekilCevap"></div>
-    </div>
+  <div class="konu-satir"><div class="ikon">🪙</div><div><h3>Madeni Paralarımız</h3><p>1 kr, 5 kr, 10 kr, 25 kr, 50 kr ve 1 ₺'yi tanıma; büyüklük ve renklerinden ayırt etme.</p></div></div>
+  <div class="konu-satir y"><div class="ikon">💵</div><div><h3>Kâğıt Paralarımız</h3><p>5 ₺, 10 ₺, 20 ₺, 50 ₺, 100 ₺ ve 200 ₺'yi tanıma ve okuma.</p></div></div>
+  <div class="konu-satir s"><div class="ikon">🟰</div><div><h3>Denk Değerler</h3><p>1 ₺ = 2 tane 50 kr; 10 ₺ = 2 tane 5 ₺ gibi eşit değerleri kurma.</p></div></div>
+  <div class="konu-satir m"><div class="ikon">🛒</div><div><h3>Alışveriş</h3><p>Paraların toplam değerini bulma, yeterli para var mı diye karar verme.</p></div></div>
 
-    <div class="card">
-      <h3>⚽ Geometrik Cisimler</h3>
-      <ul>
-        <li>⚽ Küre: Top gibi yuvarlanır.</li>
-        <li>🧊 Küp: Zar gibi görünür.</li>
-        <li>🥫 Silindir: Konserve kutusuna benzer.</li>
-        <li>🍦 Koni: Dondurma külahına benzer.</li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <h3>📍 Konum ve Yön</h3>
-      <div style="font-size:70px;text-align:center">🪑　🧸　📦</div>
-      <p>
-        Ayıcık kutunun <b>solunda</b>, sandalyenin <b>sağındadır</b>.
-      </p>
-      <button onclick="mesaj('Ayıcık kutunun solundadır. 🧸')">
-        Konumu Söyle
-      </button>
-    </div>
-
-    <div class="card">
-      <h3>🔴🔵 Şekil Örüntüsü</h3>
-      <div class="number-line">
-        <span>🔴</span><span>🔵</span><span>🔴</span><span>🔵</span><span>?</span>
-      </div>
-      <button onclick="mesaj('Eksik şekil kırmızıdır. 🔴')">
-        Tamamla
-      </button>
-    </div>
-
-    <div class="card">
-      <h3>🔍 Şekil Avı</h3>
-      <p>Çevrende şu şekillere benzeyen nesneleri bul:</p>
-      <ul>
-        <li>Daireye benzeyen bir nesne</li>
-        <li>Kareye benzeyen bir nesne</li>
-        <li>Üçgene benzeyen bir nesne</li>
-        <li>Dikdörtgene benzeyen bir nesne</li>
-      </ul>
-    </div>
+  <h4 class="bolum">🪙 Paralarımızı Tanıyalım</h4>
+  <div class="kutu">
+    <h5>Madeni paralar</h5>
+    <div class="para-alan" id="madeniAlan"></div>
+    <h5 style="margin-top:18px">Kâğıt paralar</h5>
+    <div class="para-alan" id="kagitAlan"></div>
+    <div class="bilgi"><b>Unutma:</b> 100 kuruş 1 liraya eşittir. 100 kr = 1 ₺<br>
+    Bütün paralarımızı <b>tanırız</b>, ama 1. sınıfta hesap yaparken <b>20 ₺'ye kadar</b> çalışırız.</div>
   </div>
+
+  <h4 class="bolum">🧮 Etkinlik · Kaç Lira Var?</h4>
+  <div class="kutu">
+    <h5>Paraları topla</h5>
+    <p class="aciklama">Kumbaradan çıkan paraların toplam değerini bul.</p>
+    <div class="para-alan" id="topParaAlan"></div>
+    <div class="satir">
+      <input class="cevap" id="paraIn" inputmode="numeric" placeholder="?">
+      <span>₺</span>
+      <button class="btn yesil" onclick="paraKontrol()">Kontrol</button>
+      <button class="btn mavi" onclick="paraYeni()">Yeni</button>
+    </div>
+    <div class="geri" id="paraGeri"></div>
+  </div>
+
+  <h4 class="bolum">🛒 Etkinlik · Alabilir mi?</h4>
+  <div class="kutu">
+    <h5>Yeterli para var mı?</h5>
+    <div class="satir" id="alisMetin" style="font-weight:400;font-size:16.5px"></div>
+    <div class="para-alan" id="alisAlan"></div>
+    <div class="secenekler" id="alisSec"></div>
+    <div class="geri" id="alisGeri"></div>
+    <div class="btn-sira"><button class="btn" onclick="alisYeni()">Yeni Soru</button></div>
+  </div>
+
+  <div class="ogretmen">
+    <h5>👩‍🏫 Sınıfta gerçek materyalle</h5>
+    <ul>
+      <li>Gerçek madeni paraları getirip elden ele gezdirin; renk, büyüklük ve üzerindeki sayıyı konuşturun.</li>
+      <li>Sınıfın bir köşesine market kurun; ürünlere 1–20 ₺ arası etiket yapıştırıp sırayla satıcı–müşteri oynatın.</li>
+      <li>Kâğıt paraları fotokopiyle çoğaltıp cüzdan yaptırın; her çocuğun cüzdanında farklı kombinasyon olsun.</li>
+      <li>"1 lirayı kaç farklı şekilde yapabiliriz?" sorusunu madeni paralarla masada denetin.</li>
+    </ul>
+  </div>
+
+  <h4 class="bolum">📝 Tema Değerlendirme</h4>
+  <div class="kutu"><div id="test5"></div></div>
 </section>
 
-<section id="olcme" class="page">
-  <div class="hero">
-    <div>
-      <h2>Ölçme ve Zaman 📏⏰</h2>
-      <p>
-        Önce nesneleri karşılaştırırız. Sonra ölçme araçlarını kullanırız.
-      </p>
-    </div>
-    <div class="hero-picture">📏 ⚖️ ⏰</div>
-  </div>
+<!-- ==================== TEMA 6 ==================== -->
+<section class="tema" id="t6">
+  <div class="kitap-serit">📗 2. KİTAP · 6. TEMA <span style="opacity:.8;font-weight:400">(s. 110–128)</span></div>
 
-  <div class="grid">
-    <div class="card">
-      <h3>📏 Uzun ve Kısa</h3>
-      <div style="font-size:42px">🟦━━━━━━━━━━━━</div>
-      <div style="font-size:42px">🟨━━━━━━</div>
-      <p>Mavi şerit daha uzundur.</p>
-      <button onclick="mesaj('Mavi şerit uzun, sarı şerit kısadır.')">
-        Karşılaştır
-      </button>
-    </div>
+  <div class="tema-bas">
+    <svg class="gorsel" viewBox="0 0 960 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Nesneler ve geometrik şekiller">
+      <defs><linearGradient id="sk6" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7FCDEE"/><stop offset="1" stop-color="#CCEDFA"/></linearGradient></defs>
+      <rect width="960" height="230" fill="url(#sk6)"/>
+      <g fill="#fff" opacity=".85"><ellipse cx="480" cy="36" rx="40" ry="20"/><ellipse cx="514" cy="31" rx="26" ry="15"/></g>
+      <path d="M0 178 q190 -22 380 -2 q190 18 330 -8 q140 -20 250 6 V230 H0Z" fill="#6DBE45"/>
+      <path d="M0 202 q240 -16 480 2 q240 18 480 -4 V230 H0Z" fill="#4E9B2E" opacity=".6"/>
 
-    <div class="card">
-      <h3>🧱 Küplerle Ölçme</h3>
-      <p>Bir kalemin uzunluğunu küplerle ölçebiliriz.</p>
-      <div class="objects">✏️ 🧱 🧱 🧱 🧱 🧱</div>
-      <p>Kalem yaklaşık 5 küp uzunluğundadır.</p>
-    </div>
-
-    <div class="card">
-      <h3>⚖️ Ağır ve Hafif</h3>
-      <div class="objects">🎈　　　　🪨</div>
-      <p>Balon hafif, taş ağırdır.</p>
-      <button onclick="mesaj('Taş daha ağırdır. 🪨')">Tahmin Et</button>
-    </div>
-
-    <div class="card">
-      <h3>🛒 Market Oyunu</h3>
-      <p>Ürünlere dokun. Sepete ekle. Toplam parayı bul.</p>
-      <div class="products">
-        <div class="product" onclick="urunEkle('Elma','🍎',3)">
-          <span class="emoji">🍎</span>Elma<br>3 TL
-        </div>
-        <div class="product" onclick="urunEkle('Süt','🥛',5)">
-          <span class="emoji">🥛</span>Süt<br>5 TL
-        </div>
-        <div class="product" onclick="urunEkle('Ekmek','🍞',4)">
-          <span class="emoji">🍞</span>Ekmek<br>4 TL
-        </div>
-        <div class="product" onclick="urunEkle('Muz','🍌',2)">
-          <span class="emoji">🍌</span>Muz<br>2 TL
-        </div>
-      </div>
-
-      <div class="receipt">
-        <b>🧾 Sepetim</b>
-        <div id="sepet">Henüz ürün yok.</div>
-        <hr>
-        Toplam: <b><span id="toplam">0</span> TL</b>
-      </div>
-      <button class="pink" onclick="sepetiTemizle()">Sepeti Temizle</button>
-    </div>
-
-    <div class="card">
-      <h3>🌸 Mevsimler</h3>
-      <div class="objects">🌸 ☀️ 🍂 ❄️</div>
-      <p>İlkbahar, yaz, sonbahar ve kış birer mevsimdir.</p>
-      <button onclick="mesaj('Mevsimler: İlkbahar, Yaz, Sonbahar, Kış')">
-        Mevsimleri Söyle
-      </button>
-    </div>
-
-    <div class="card">
-      <h3>⏰ Tam Saat</h3>
-      <div class="clock">
-        <b class="twelve">12</b>
-        <b class="three">3</b>
-        <b class="six">6</b>
-        <b class="nine">9</b>
-        <div class="hand hour" id="akrep"></div>
-        <div class="hand minute" id="yelkovan"></div>
-      </div>
-      <p style="text-align:center" id="saatYazi">
-        Kısa olan <b>akrep</b> 1'i, uzun olan <b>yelkovan</b> 12'yi gösteriyor.
-        Saat <b>1 tam</b>.
-      </p>
-      <button onclick="saatDegistir()">🔄 Başka Bir Saat</button>
+      <!-- küp -->
+      <g transform="translate(60,84)">
+        <polygon points="0,28 66,28 66,94 0,94" fill="#E8453C"/>
+        <polygon points="0,28 22,8 88,8 66,28" fill="#F4736B"/>
+        <polygon points="66,28 88,8 88,74 66,94" fill="#B8322B"/>
+      </g>
+      <!-- küre -->
+      <g transform="translate(190,92)"><circle cx="40" cy="44" r="40" fill="#FFC93C"/><ellipse cx="26" cy="30" rx="13" ry="8" fill="#FFE59B" opacity=".8"/></g>
+      <!-- silindir -->
+      <g transform="translate(310,80)">
+        <rect x="0" y="20" width="66" height="72" fill="#4FA9D8"/>
+        <ellipse cx="33" cy="92" rx="33" ry="13" fill="#3A85AE"/>
+        <ellipse cx="33" cy="20" rx="33" ry="13" fill="#82CBEA"/>
+      </g>
+      <!-- koni -->
+      <g transform="translate(430,78)"><polygon points="36,6 72,92 0,92" fill="#A97BC9"/><ellipse cx="36" cy="92" rx="36" ry="13" fill="#8A5FAC"/></g>
+      <!-- düz şekiller -->
+      <g transform="translate(560,84)">
+        <polygon points="42,0 84,74 0,74" fill="#F08A3C"/>
+        <rect x="108" y="8" width="66" height="66" rx="6" fill="#6DBE45"/>
+        <rect x="198" y="20" width="96" height="46" rx="6" fill="#E8453C"/>
+        <circle cx="348" cy="42" r="36" fill="#A97BC9"/>
+      </g>
+    </svg>
+    <div class="yazi">
+      <h2>Tema 6 · Nesnelerin Geometrisi 2</h2>
+      <p class="ozet">Yılın başında konumu öğrenen çocuk, şimdi nesnelerin biçimiyle tanışıyor: küp, küre, silindir, koni ve bunların yüzlerindeki düz şekiller.</p>
     </div>
   </div>
+
+  <div class="konu-satir"><div class="ikon">🧊</div><div><h3>Geometrik Cisimler</h3><p>Küp, küre, silindir, koni ve prizmayı günlük hayattaki nesnelerle eşleştirme.</p></div></div>
+  <div class="konu-satir y"><div class="ikon">🔺</div><div><h3>Geometrik Şekiller</h3><p>Üçgen, kare, dikdörtgen ve çemberi tanıma, kenar ve köşelerini sayma.</p></div></div>
+  <div class="konu-satir s"><div class="ikon">✂️</div><div><h3>Şekillerle Yeni Şekiller</h3><p>Şekilleri birleştirerek yeni şekiller oluşturma; bir şekli parçalara ayırma.</p></div></div>
+  <div class="konu-satir m"><div class="ikon">🏙️</div><div><h3>Çevremizdeki Şekiller</h3><p>Sınıfta, evde ve doğada geometrik şekil ve cisimleri fark etme.</p></div></div>
+
+  <h4 class="bolum">🧊 Etkinlik · Hangi Cisim?</h4>
+  <div class="kutu">
+    <h5>Nesneye bak, cismi seç</h5>
+    <div class="satir" id="cisMetin" style="font-weight:400;font-size:16.5px"></div>
+    <svg id="cisSvg" viewBox="0 0 200 160" style="width:100%;max-width:200px;height:auto"></svg>
+    <div class="secenekler" id="cisSec"></div>
+    <div class="geri" id="cisGeri"></div>
+    <div class="btn-sira"><button class="btn" onclick="cisYeni()">Yeni Soru</button></div>
+  </div>
+
+  <h4 class="bolum">🔺 Etkinlik · Kenar ve Köşe Say</h4>
+  <div class="kutu">
+    <h5>Bu şeklin kaç kenarı var?</h5>
+    <svg id="kenSvg" viewBox="0 0 220 180" style="width:100%;max-width:220px;height:auto"></svg>
+    <div class="secenekler" id="kenSec"></div>
+    <div class="geri" id="kenGeri"></div>
+    <div class="btn-sira"><button class="btn" onclick="kenYeni()">Yeni Şekil</button></div>
+    <div class="bilgi"><b>Bilgi:</b> Çemberin kenarı ve köşesi yoktur. Üçgenin 3, karenin ve dikdörtgenin 4 kenarı vardır.</div>
+  </div>
+
+  <div class="ogretmen">
+    <h5>👩‍🏫 Sınıfta gerçek materyalle</h5>
+    <ul>
+      <li>Kutu, top, konserve, külah ve zar getirip "geometri sepeti" oluşturun; çocuklar sepetten çekip adlandırsın.</li>
+      <li>Cisimleri boyaya batırıp kâğıda bastırın: silindirin izi çember, küpün izi kare çıkar.</li>
+      <li>Kürdan ve hamurla üçgen, kare, dikdörtgen kurdurun; kenar ve köşeyi elle saydırın.</li>
+      <li>Sınıfta "şekil avı" yapın: pencere dikdörtgen, saat çember, cetvel dikdörtgen.</li>
+    </ul>
+  </div>
+
+  <h4 class="bolum">📝 Tema Değerlendirme</h4>
+  <div class="kutu"><div id="test6"></div></div>
 </section>
 
-<section id="veri" class="page">
-  <div class="hero">
-    <div>
-      <h2>Gruplama ve Grafik 📊</h2>
-      <p>
-        Nesneleri gruplar, sayar ve bilgileri grafikle gösteririz.
-      </p>
+<!-- ==================== TEMA 7 ==================== -->
+<section class="tema" id="t7">
+  <div class="kitap-serit">📗 2. KİTAP · 7. TEMA <span style="opacity:.8;font-weight:400">(s. 130–145)</span></div>
+
+  <div class="tema-bas">
+    <svg class="gorsel" viewBox="0 0 960 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Veri toplama ve grafik">
+      <defs><linearGradient id="sk7" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7FCDEE"/><stop offset="1" stop-color="#CCEDFA"/></linearGradient></defs>
+      <rect width="960" height="230" fill="url(#sk7)"/>
+      <path d="M0 180 q200 -20 400 0 q200 20 560 -6 V230 H0Z" fill="#6DBE45"/>
+      <path d="M0 204 q240 -14 480 2 q240 16 480 -6 V230 H0Z" fill="#4E9B2E" opacity=".6"/>
+
+      <!-- nesne grafiği -->
+      <g transform="translate(90,36)">
+        <line x1="0" y1="0" x2="0" y2="136" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+        <line x1="0" y1="136" x2="330" y2="136" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+        <g fill="#E8453C"><circle cx="40" cy="118" r="14"/><circle cx="40" cy="88" r="14"/><circle cx="40" cy="58" r="14"/><circle cx="40" cy="28" r="14"/></g>
+        <g fill="#FFC93C"><circle cx="118" cy="118" r="14"/><circle cx="118" cy="88" r="14"/></g>
+        <g fill="#4FA9D8"><circle cx="196" cy="118" r="14"/><circle cx="196" cy="88" r="14"/><circle cx="196" cy="58" r="14"/></g>
+        <g fill="#A97BC9"><circle cx="274" cy="118" r="14"/></g>
+      </g>
+
+      <!-- çetele -->
+      <g transform="translate(520,50)">
+        <rect x="0" y="0" width="330" height="130" rx="14" fill="#fff" opacity=".92"/>
+        <line x1="0" y1="44" x2="330" y2="44" stroke="#CCEDFA" stroke-width="4"/>
+        <line x1="0" y1="88" x2="330" y2="88" stroke="#CCEDFA" stroke-width="4"/>
+        <line x1="150" y1="0" x2="150" y2="130" stroke="#CCEDFA" stroke-width="4"/>
+        <g font-family="Andika, sans-serif" font-size="22" font-weight="700" fill="#2C3A42">
+          <text x="24" y="30">🍎 Elma</text><text x="24" y="74">🍌 Muz</text><text x="24" y="118">🍇 Üzüm</text>
+        </g>
+        <g stroke="#E8453C" stroke-width="5" stroke-linecap="round">
+          <line x1="176" y1="14" x2="176" y2="34"/><line x1="190" y1="14" x2="190" y2="34"/><line x1="204" y1="14" x2="204" y2="34"/><line x1="218" y1="14" x2="218" y2="34"/><line x1="170" y1="34" x2="224" y2="12"/>
+          <line x1="176" y1="58" x2="176" y2="78"/><line x1="190" y1="58" x2="190" y2="78"/>
+          <line x1="176" y1="102" x2="176" y2="122"/><line x1="190" y1="102" x2="190" y2="122"/><line x1="204" y1="102" x2="204" y2="122"/>
+        </g>
+      </g>
+    </svg>
+    <div class="yazi">
+      <h2>Tema 7 · Veriye Dayalı Araştırma</h2>
+      <p class="ozet">Yılın son teması: bir soru sor, arkadaşlarından veri topla, çetele tut ve nesne grafiğiyle göster.</p>
     </div>
-    <div class="hero-picture">🍎 🍌 🍊 📊</div>
   </div>
 
-  <div class="grid">
-    <div class="card">
-      <h3>🍎 Nesneleri Gruplayalım</h3>
-      <div class="objects">🍎 🍌 🍎 🍊 🍌 🍎 🍊 🍌</div>
-      <button onclick="mesaj('Elmalar, muzlar ve portakallar ayrı gruplara ayrılır.')">
-        Grupları Söyle
-      </button>
-    </div>
+  <div class="konu-satir"><div class="ikon">❓</div><div><h3>Araştırma Sorusu</h3><p>Sınıfta cevaplanabilecek basit bir soru belirleme ("En sevdiğin meyve hangisi?").</p></div></div>
+  <div class="konu-satir y"><div class="ikon">✍️</div><div><h3>Veri Toplama ve Çetele</h3><p>Arkadaşlarına sorup çetele işaretleriyle kaydetme; beşliyi çapraz çizgiyle tamamlama.</p></div></div>
+  <div class="konu-satir s"><div class="ikon">📊</div><div><h3>Nesne ve Şekil Grafiği</h3><p>Toplanan veriyi nesne/şekil grafiğiyle gösterme.</p></div></div>
+  <div class="konu-satir m"><div class="ikon">🔎</div><div><h3>Grafiği Yorumlama</h3><p>En çok, en az ve eşit olanı grafiğe bakarak söyleme.</p></div></div>
 
-    <div class="card">
-      <h3>📊 Şekil Grafiği</h3>
-      <p>En sevilen meyveleri gösteren grafik:</p>
-      <div class="bar-chart">
-        <div class="bar" style="height:150px">5<br>🍎</div>
-        <div class="bar" style="height:90px">3<br>🍌</div>
-        <div class="bar" style="height:120px">4<br>🍊</div>
-      </div>
-      <p>En çok sevilen meyve hangisi?</p>
-      <button onclick="mesaj('En çok sevilen meyve elmadır. 🍎')">
-        Cevabı Gör
-      </button>
-    </div>
-
-    <div class="card activity">
-      <h3>🎯 Kendi Grafiğini Oluştur</h3>
-      <p>Meyvelere tıklayarak oy ver.</p>
-      <button onclick="oyEkle('elma')">🍎 Elma</button>
-      <button onclick="oyEkle('muz')">🍌 Muz</button>
-      <button onclick="oyEkle('portakal')">🍊 Portakal</button>
-      <div class="bar-chart" id="benimGrafik"></div>
-    </div>
-
-    <div class="card activity">
-      <h3>🎲 Mümkün mü?</h3>
-      <p>Bir torbada kırmızı ve mavi toplar var. Mavi top çekilebilir mi?</p>
-      <button onclick="mesaj('Doğru! Torbada mavi top olduğu için mavi top çekmek MÜMKÜNDÜR. 🎉')">Mümkün</button>
-      <button onclick="mesaj('Kesin değil. Torbada kırmızı toplar da var; elimize kırmızı da gelebilir.')">Kesin</button>
-      <button onclick="mesaj('İmkânsız değil. Torbanın içinde mavi top var, mavi top gelebilir.')">İmkânsız</button>
-    </div>
+  <h4 class="bolum">📊 Etkinlik · Grafiği Oku</h4>
+  <div class="kutu">
+    <h5>Grafiğe bak, cevapla</h5>
+    <svg id="grSvg" viewBox="0 0 440 240" style="width:100%;max-width:440px;height:auto"></svg>
+    <div class="satir" id="grSoru"></div>
+    <div class="secenekler" id="grSec"></div>
+    <div class="geri" id="grGeri"></div>
+    <div class="btn-sira"><button class="btn" onclick="grYeni()">Yeni Soru</button></div>
   </div>
+
+  <h4 class="bolum">✍️ Etkinlik · Çeteleyi Say</h4>
+  <div class="kutu">
+    <h5>Kaç kişi seçmiş?</h5>
+    <svg id="ceSvg" viewBox="0 0 420 90" style="width:100%;max-width:420px;height:auto"></svg>
+    <div class="satir">
+      <input class="cevap" id="ceIn" inputmode="numeric" placeholder="?">
+      <button class="btn yesil" onclick="ceKontrol()">Kontrol</button>
+      <button class="btn mavi" onclick="ceYeni()">Yeni</button>
+    </div>
+    <div class="geri" id="ceGeri"></div>
+    <div class="bilgi"><b>Bilgi:</b> Çetelede dört çizgi yan yana çizilir, beşincisi üzerine çapraz atılır. Böylece beşer beşer kolayca sayarız.</div>
+  </div>
+
+  <div class="ogretmen">
+    <h5>👩‍🏫 Sınıfta gerçek materyalle</h5>
+    <ul>
+      <li>Gerçek bir sınıf araştırması yapın: "En sevdiğin renk?" Her çocuk tahtaya kendi renginde bir pul yapıştırsın — grafik canlı oluşsun.</li>
+      <li>Çeteleyi önce parmakla, sonra kibrit çöpüyle, en son kalemle çizdirin.</li>
+      <li>Grafiği okuduktan sonra "neden böyle çıktı?" diye yorumlatın; veri konuşmaya dönüşsün.</li>
+      <li>Haftalık hava durumu grafiği tutun; ay sonunda güneşli–yağmurlu günleri karşılaştırın.</li>
+    </ul>
+  </div>
+
+  <h4 class="bolum">📝 Tema Değerlendirme</h4>
+  <div class="kutu"><div id="test7"></div></div>
 </section>
 
-<section id="oyunlar" class="page">
-  <div class="hero">
-    <div>
-      <h2>Matematik Oyunları 🎮</h2>
-      <p>
-        Sayıları ve işlemleri oyun oynayarak öğrenelim!
-      </p>
+<!-- ==================== OYUNLAR ==================== -->
+<section class="tema" id="t8">
+  <div class="kitap-serit">🎮 OYUN BAHÇESİ <span style="opacity:.8;font-weight:400">· 6 matematik oyunu</span></div>
+
+  <div class="tema-bas">
+    <svg class="gorsel" viewBox="0 0 960 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Matematik oyunları">
+      <defs><linearGradient id="sk8" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7FCDEE"/><stop offset="1" stop-color="#CCEDFA"/></linearGradient></defs>
+      <rect width="960" height="210" fill="url(#sk8)"/>
+      <path d="M0 160 q200 -22 400 -2 q200 20 560 -8 V210 H0Z" fill="#6DBE45"/>
+      <path d="M0 186 q240 -14 480 2 q240 16 480 -6 V210 H0Z" fill="#4E9B2E" opacity=".6"/>
+      <g>
+        <g transform="translate(90,30)">
+          <ellipse cx="30" cy="34" rx="28" ry="34" fill="#E8453C"/><path d="M30 68 v40" stroke="#fff" stroke-width="3"/>
+          <text x="30" y="44" text-anchor="middle" font-family="Andika, sans-serif" font-size="26" font-weight="700" fill="#fff">3</text>
+        </g>
+        <g transform="translate(180,46)">
+          <ellipse cx="30" cy="34" rx="28" ry="34" fill="#FFC93C"/><path d="M30 68 v34" stroke="#fff" stroke-width="3"/>
+          <text x="30" y="44" text-anchor="middle" font-family="Andika, sans-serif" font-size="26" font-weight="700" fill="#7A5B00">8</text>
+        </g>
+        <g transform="translate(268,22)">
+          <ellipse cx="30" cy="34" rx="28" ry="34" fill="#A97BC9"/><path d="M30 68 v44" stroke="#fff" stroke-width="3"/>
+          <text x="30" y="44" text-anchor="middle" font-family="Andika, sans-serif" font-size="26" font-weight="700" fill="#fff">5</text>
+        </g>
+      </g>
+      <!-- kurbağa -->
+      <g transform="translate(430,96)">
+        <ellipse cx="40" cy="36" rx="38" ry="28" fill="#6DBE45"/>
+        <circle cx="22" cy="10" r="13" fill="#6DBE45"/><circle cx="58" cy="10" r="13" fill="#6DBE45"/>
+        <circle cx="22" cy="8" r="6" fill="#fff"/><circle cx="58" cy="8" r="6" fill="#fff"/>
+        <circle cx="23" cy="9" r="3" fill="#2C3A42"/><circle cx="59" cy="9" r="3" fill="#2C3A42"/>
+        <path d="M24 42 q16 12 32 0" stroke="#3F7A22" stroke-width="4" fill="none" stroke-linecap="round"/>
+      </g>
+      <!-- vagonlar -->
+      <g transform="translate(600,104)">
+        <rect x="0" y="0" width="76" height="48" rx="10" fill="#4FA9D8"/>
+        <rect x="88" y="0" width="76" height="48" rx="10" fill="#F08A3C"/>
+        <rect x="176" y="0" width="76" height="48" rx="10" fill="#A97BC9"/>
+        <g fill="#2C3A42"><circle cx="20" cy="56" r="9"/><circle cx="58" cy="56" r="9"/><circle cx="108" cy="56" r="9"/><circle cx="146" cy="56" r="9"/><circle cx="196" cy="56" r="9"/><circle cx="234" cy="56" r="9"/></g>
+        <g font-family="Andika, sans-serif" font-size="26" font-weight="700" fill="#fff" text-anchor="middle">
+          <text x="38" y="34">1</text><text x="126" y="34">2</text><text x="214" y="34">3</text>
+        </g>
+      </g>
+    </svg>
+    <div class="yazi">
+      <h2>Oyun Bahçesi</h2>
+      <p class="ozet">Temalarda öğrendiklerini oyunla pekiştir. Her oyun ayrı ayrı oynanabilir, istediğin kadar tekrar edebilirsin.</p>
     </div>
-    <div class="hero-picture">🎈 🚂 🃏 🛒</div>
   </div>
 
-  <div class="grid">
-    <div class="card activity">
-      <h3>🎈 Balon Patlatma</h3>
-      <p id="balonGorev">Hedef sayıyı bul.</p>
-      <div class="balloon-area" id="balonlar"></div>
-      <button onclick="balonOyunu()">Yeni Balonlar</button>
-      <div class="feedback" id="balonMesaj"></div>
-    </div>
+  <h4 class="bolum">🎈 Oyun 1 · Balon Patlat</h4>
+  <div class="kutu">
+    <h5 id="balHedef">Hazır mısın?</h5>
+    <p class="aciklama">Söylenen sayının yazdığı balona dokun.</p>
+    <div id="balAlan" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px"></div>
+    <div class="geri" id="balGeri"></div>
+    <div class="satir"><span id="balSkor">Puan: 0</span></div>
+    <div class="btn-sira"><button class="btn" onclick="balBasla()">Oyunu Başlat</button></div>
+  </div>
 
-    <div class="card activity">
-      <h3>🚂 Vagonları Sırala</h3>
-      <p>Vagonlara küçükten büyüğe dokun.</p>
-      <div class="wagons" id="vagonlar"></div>
-      <div class="wagons" id="seciliVagonlar"></div>
-      <button onclick="vagonOyunu()">Karıştır</button>
-      <button class="green" onclick="vagonKontrol()">Kontrol Et</button>
-      <div class="feedback" id="vagonMesaj"></div>
-    </div>
+  <h4 class="bolum">🐸 Oyun 2 · Kurbağa Zıplıyor</h4>
+  <div class="kutu">
+    <h5>Sayı doğrusunda işlem</h5>
+    <p class="aciklama">İşlemi yap, kurbağanın ineceği sayıya dokun.</p>
+    <div class="satir" id="kurIfade"></div>
+    <svg id="kurSvg" viewBox="0 0 460 120" style="width:100%;max-width:460px;height:auto"></svg>
+    <div class="secenekler" id="kurSec"></div>
+    <div class="geri" id="kurGeri"></div>
+    <div class="satir"><span id="kurSkor">Doğru: 0 · Yanlış: 0</span></div>
+    <div class="btn-sira"><button class="btn" onclick="kurYeni()">Yeni İşlem</button></div>
+  </div>
 
-    <div class="card activity">
-      <h3>🃏 Kart Çevirmeci</h3>
-      <p>Kartı çevir ve içindeki nesneleri say.</p>
-      <button class="blue" onclick="kartCevir()">Kartı Çevir</button>
-      <div class="hero-picture" id="kart" style="min-height:150px;font-size:65px">
-        ❓
-      </div>
-      <div class="feedback" id="kartMesaj"></div>
-    </div>
+  <h4 class="bolum">🃏 Oyun 3 · Hafıza Kartları</h4>
+  <div class="kutu">
+    <h5>Sayıyı ve nesneyi eşleştir</h5>
+    <p class="aciklama">Kartları çevir; nesne grubunu doğru rakamla eşle.</p>
+    <div id="hafAlan" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:420px;margin-top:10px"></div>
+    <div class="geri" id="hafGeri"></div>
+    <div class="btn-sira"><button class="btn" onclick="hafBasla()">Yeni Oyun</button></div>
+  </div>
 
-    <div class="card">
-      <h3>🏠 Evde Matematik Avı</h3>
-      <ol>
-        <li>10 küçük nesne bul.</li>
-        <li>Renklerine göre grupla.</li>
-        <li>Grupları say.</li>
-        <li>Hangisi fazla, karşılaştır.</li>
-        <li>İki grubu birleştirerek toplama yap.</li>
-      </ol>
-    </div>
+  <h4 class="bolum">🚂 Oyun 4 · Vagonları Sırala</h4>
+  <div class="kutu">
+    <h5>Küçükten büyüğe diz</h5>
+    <p class="aciklama">Vagonlara sırayla, en küçük sayıdan başlayarak dokun.</p>
+    <div id="vagAlan" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px"></div>
+    <div class="geri" id="vagGeri"></div>
+    <div class="btn-sira"><button class="btn" onclick="vagBasla()">Yeni Tren</button></div>
+  </div>
 
-    <div class="card">
-      <h3>🎲 Zar At ve İlerle</h3>
-      <p>Zarı at. Gelen sayı kadar ilerle.</p>
-      <button onclick="zarAt()">Zar At 🎲</button>
-      <div class="hero-picture" id="zar" style="min-height:130px;font-size:80px">
-        🎲
-      </div>
-    </div>
+  <h4 class="bolum">🛒 Oyun 5 · Mini Market</h4>
+  <div class="kutu">
+    <h5>Doğru parayı ver</h5>
+    <p class="aciklama">Ürünün fiyatını oku, tam ödemeyi yapacak parayı seç.</p>
+    <div class="satir" id="marUrun"></div>
+    <div class="para-alan" id="marSec"></div>
+    <div class="geri" id="marGeri"></div>
+    <div class="satir"><span id="marSkor">Puan: 0</span></div>
+    <div class="btn-sira"><button class="btn" onclick="marYeni()">Yeni Ürün</button></div>
+  </div>
+
+  <h4 class="bolum">🔷 Oyun 6 · Şekil Avı</h4>
+  <div class="kutu">
+    <h5 id="sekHedef">Şekilleri yakala</h5>
+    <p class="aciklama">Sadece istenen şekillere dokun. Yanlışa dokunursan puan gider.</p>
+    <svg id="sekSvg" viewBox="0 0 440 260" style="width:100%;max-width:440px;height:auto"></svg>
+    <div class="geri" id="sekGeri"></div>
+    <div class="satir"><span id="sekSkor">Kalan: 0</span></div>
+    <div class="btn-sira"><button class="btn" onclick="sekBasla()">Yeni Tur</button></div>
   </div>
 </section>
-
 </main>
 
 <footer>
-  🌟 Minik Matematikçiler — Görerek, yaparak ve oyun oynayarak öğreniyoruz! 🌟
-<p class="site-notu" style="text-align:center;font-size:.78rem;opacity:.65;padding:6px 0 0;">Bu sayfa en son 3 Eylül 2026 tarihinde güncellendi.</p></footer>
-
+  <div><b>Dijital Öğretmen · Hasan Tutuş</b></div>
+  <div style="margin-top:4px">1. Sınıf Matematik · Türkiye Yüzyılı Maarif Modeli · 2026–2027</div>
+</footer>
 <script>
-/* SEKME SİSTEMİ */
-document.querySelectorAll(".tab").forEach(button=>{
-  button.addEventListener("click",()=>{
-    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-    document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+/* ================= YARDIMCILAR ================= */
+const $=id=>document.getElementById(id);
+const rnd=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const karistir=a=>{for(let i=a.length-1;i>0;i--){const j=rnd(0,i);[a[i],a[j]]=[a[j],a[i]];}return a;};
+function geri(el,ok,msg){el.className='geri '+(ok?'ok':'no');el.textContent=(ok?'✅ ':'❌ ')+msg;}
 
-    button.classList.add("active");
-    document.getElementById(button.dataset.page).classList.add("active");
-    window.scrollTo({top:0,behavior:"smooth"});
+/* ================= SEKMELER ================= */
+document.querySelectorAll('.sekme').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.sekme').forEach(x=>x.classList.remove('aktif'));
+    document.querySelectorAll('.tema').forEach(x=>x.classList.remove('acik'));
+    b.classList.add('aktif');
+    $(b.dataset.t).classList.add('acik');
+    window.scrollTo({top:0,behavior:'smooth'});
   });
 });
 
-function mesaj(yazi){
-  alert(yazi);
-}
-
-/* SAYMA */
-let saymaHedefi=0;
-
-function yeniSayma(){
-  saymaHedefi=Math.floor(Math.random()*10)+1;
-  document.getElementById("saymaAlan").innerHTML=
-    "🍎".repeat(saymaHedefi);
-  document.getElementById("saymaCevap").textContent="";
-}
-
-function saymayiKontrolEt(){
-  document.getElementById("saymaCevap").textContent=
-    "Bu grupta "+saymaHedefi+" elma var. Harika! 🍎";
-}
-
-
-/* ONLUK VE BİRLİK */
-function onlukGoster(){
-  let sayi=Number(document.getElementById("onlukSayi").value);
-  let onluk=Math.floor(sayi/10);
-  let birlik=sayi%10;
-
-  document.getElementById("onlukCevap").innerHTML=`
-    <p><b>${sayi} = ${onluk} onluk + ${birlik} birlik</b></p>
-    <div class="objects">
-      ${"🟦".repeat(onluk)} ${"🟡".repeat(birlik)}
-    </div>
-  `;
-}
-
-
-/* KARŞILAŞTIRMA */
-let k1=0,k2=0;
-
-function yeniKarsilastirma(){
-  k1=Math.floor(Math.random()*8)+1;
-  k2=Math.floor(Math.random()*8)+1;
-
-  document.getElementById("karsilastirma").innerHTML=`
-    <div class="objects">${"🍊".repeat(k1)}</div>
-    <div class="objects">${"🍊".repeat(k2)}</div>
-  `;
-
-  document.getElementById("karsilastirmaButonlari").innerHTML=`
-    <button onclick="karsilastir('fazla')">Fazla</button>
-    <button onclick="karsilastir('az')">Az</button>
-    <button onclick="karsilastir('eşit')">Eşit</button>
-  `;
-  document.getElementById("karsilastirmaCevap").textContent="";
-}
-
-function karsilastir(secim){
-  let dogru=k1>k2?"fazla":k1<k2?"az":"eşit";
-
-  document.getElementById("karsilastirmaCevap").textContent=
-    secim===dogru
-    ?"Doğru cevap! 🎉"
-    :"Meyveleri tekrar saymayı dene.";
-}
-
-/* TOPLAMA */
-let t1=0,t2=0;
-
-function yeniToplama(){
-  t1=Math.floor(Math.random()*6)+1;
-  t2=Math.floor(Math.random()*6)+1;
-
-  document.getElementById("toplamaAlan").innerHTML=`
-    <div class="objects">${"🍓".repeat(t1)}</div>
-    <p style="text-align:center;font-size:32px">+</p>
-    <div class="objects">${"🍓".repeat(t2)}</div>
-    <p><b>${t1} + ${t2} = ?</b></p>
-  `;
-  document.getElementById("toplamaCevap").value="";
-  document.getElementById("toplamaMesaj").textContent="";
-}
-
-function toplamayiKontrolEt(){
-  let cevap=Number(document.getElementById("toplamaCevap").value);
-
-  document.getElementById("toplamaMesaj").textContent=
-    cevap===t1+t2
-    ?"Doğru! Grupları birleştirince "+cevap+" tane oldu. 🌟"
-    :"İki grubu birleştirip yeniden say.";
-}
-
-/* ÇIKARMA */
-let c1=0,c2=0;
-
-function yeniCikarma(){
-  c1=Math.floor(Math.random()*7)+5;
-  c2=Math.floor(Math.random()*c1)+1;
-
-  document.getElementById("cikarmaAlan").innerHTML=`
-    <div class="objects">${"🍊".repeat(c1)}</div>
-    <p>${c2} tanesi gidiyor:</p>
-    <div class="objects">${"❌".repeat(c2)}</div>
-    <p><b>${c1} − ${c2} = ?</b></p>
-  `;
-  document.getElementById("cikarmaCevap").value="";
-  document.getElementById("cikarmaMesaj").textContent="";
-}
-
-function cikarmayiKontrolEt(){
-  let cevap=Number(document.getElementById("cikarmaCevap").value);
-
-  document.getElementById("cikarmaMesaj").textContent=
-    cevap===c1-c2
-    ?"Doğru! Geriye "+cevap+" tane kaldı. 🎉"
-    :"Gidenleri ayırıp kalanları tekrar say.";
-}
-
-/* ONLUK TABLO */
-function onlukTabloGoster(){
-  let alan=document.getElementById("onlukTablo");
-  alan.innerHTML="";
-
-  for(let i=0;i<20;i++){
-    alan.innerHTML+=`<span class="${i<14?"filled":""}"></span>`;
-  }
-}
-
-/* ŞEKİLLER */
-function sekil(yazi){
-  alert(yazi);
-}
-
-/* MARKET */
-let sepet=[],toplam=0;
-
-function urunEkle(ad,emoji,fiyat){
-  sepet.push(`${emoji} ${ad} — ${fiyat} TL`);
-  toplam+=fiyat;
-
-  document.getElementById("sepet").innerHTML=sepet.join("<br>");
-  document.getElementById("toplam").textContent=toplam;
-}
-
-function sepetiTemizle(){
-  sepet=[];
-  toplam=0;
-  document.getElementById("sepet").textContent="Henüz ürün yok.";
-  document.getElementById("toplam").textContent="0";
-}
-
-/* GRAFİK */
-let oylar={elma:0,muz:0,portakal:0};
-
-function oyEkle(meyve){
-  oylar[meyve]++;
-  let bilgiler=[
-    ["🍎",oylar.elma],
-    ["🍌",oylar.muz],
-    ["🍊",oylar.portakal]
-  ];
-
-  document.getElementById("benimGrafik").innerHTML=
-    bilgiler.map(x=>`
-      <div class="bar" style="height:${Math.max(30,x[1]*28)}px">
-        ${x[1]}<br>${x[0]}
-      </div>
-    `).join("");
-}
-
-/* BALON */
-let balonHedefi=0;
-
-function balonOyunu(){
-  balonHedefi=Math.floor(Math.random()*10)+1;
-  document.getElementById("balonGorev").textContent=
-    "Üzerinde "+balonHedefi+" yazan balona dokun! 🎈";
-
-  let sayilar=[balonHedefi];
-  while(sayilar.length<6){
-    let sayi=Math.floor(Math.random()*10)+1;
-    if(!sayilar.includes(sayi)) sayilar.push(sayi);
-  }
-  /* hedef balonun yeri her seferinde degissin */
-  for(let i=sayilar.length-1;i>0;i--){
-    let j=Math.floor(Math.random()*(i+1));
-    [sayilar[i],sayilar[j]]=[sayilar[j],sayilar[i]];
-  }
-
-  document.getElementById("balonlar").innerHTML=
-    sayilar.map(sayi=>
-      `<div class="balloon" onclick="balonaDokun(this,${sayi})">
-        ${sayi}
-      </div>`
-    ).join("");
-
-  document.getElementById("balonMesaj").textContent="";
-}
-
-function balonaDokun(balon,sayi){
-  if(sayi===balonHedefi){
-    balon.remove();
-    document.getElementById("balonMesaj").textContent=
-      "Balon patladı! Doğru sayıyı buldun! 🎉";
-  }else{
-    document.getElementById("balonMesaj").textContent=
-      "Bu balon değil. Hedef sayıyı tekrar oku.";
-  }
-}
-
-/* VAGON */
-let vagonSayilari=[],secilenVagonlar=[];
-
-function vagonOyunu(){
-  vagonSayilari=[];
-
-  while(vagonSayilari.length<5){
-    let sayi=Math.floor(Math.random()*20)+1;
-    if(!vagonSayilari.includes(sayi)){
-      vagonSayilari.push(sayi);
-    }
-  }
-
-  secilenVagonlar=[];
-  vagonlariGoster();
-  document.getElementById("vagonMesaj").textContent="";
-}
-
-function vagonlariGoster(){
-  document.getElementById("vagonlar").innerHTML=
-    vagonSayilari.map(sayi=>
-      `<div class="wagon" onclick="vagonSec(${sayi})">${sayi}</div>`
-    ).join("");
-
-  document.getElementById("seciliVagonlar").innerHTML=
-    secilenVagonlar.map(sayi=>
-      `<div class="wagon selected">${sayi}</div>`
-    ).join("");
-}
-
-function vagonSec(sayi){
-  if(!secilenVagonlar.includes(sayi)){
-    secilenVagonlar.push(sayi);
-    vagonlariGoster();
-  }
-}
-
-function vagonKontrol(){
-  let dogru=[...vagonSayilari].sort((a,b)=>a-b);
-  let mesaj;
-
-  if(secilenVagonlar.length<vagonSayilari.length){
-    mesaj="Önce bütün vagonlara dokun. "+
-      (vagonSayilari.length-secilenVagonlar.length)+" vagon kaldı.";
-  }else if(JSON.stringify(dogru)===JSON.stringify(secilenVagonlar)){
-    mesaj="Vagonları doğru sıraladın! 🚂🎉";
-  }else{
-    mesaj="En küçük sayı en önde olmalı. Karıştır'a basıp yeniden dene.";
-  }
-
-  document.getElementById("vagonMesaj").textContent=mesaj;
-}
-
-/* KART */
-function kartCevir(){
-  let sayi=Math.floor(Math.random()*10)+1;
-
-  document.getElementById("kart").innerHTML=`
-    <div>
-      <b>${sayi}</b><br>
-      <span style="font-size:42px">${"⭐".repeat(sayi)}</span>
-    </div>
-  `;
-
-  document.getElementById("kartMesaj").textContent=
-    "Sayıyı oku ve yıldızları tek tek say.";
-}
-
-/* TAM SAAT */
-function saatDegistir(){
-  const saat = Math.floor(Math.random()*12)+1;
-  document.getElementById("akrep").style.transform = "rotate("+(saat*30)+"deg)";
-  document.getElementById("yelkovan").style.transform = "rotate(0deg)";
-  document.getElementById("saatYazi").innerHTML =
-    "Kısa olan <b>akrep</b> " + saat + "'i, uzun olan <b>yelkovan</b> 12'yi gösteriyor. " +
-    "Saat <b>" + saat + " tam</b>.";
-}
-
-/* ZAR */
-function zarAt(){
-  let sayi=Math.floor(Math.random()*6)+1;
-  let zarlar=["⚀","⚁","⚂","⚃","⚄","⚅"];
-
-  document.getElementById("zar").innerHTML=
-    zarlar[sayi-1]+"<br><small>"+sayi+" adım ilerle!</small>";
-}
-
-
-/* ================= SAYI DOĞRUSU ================= */
-let sdMax = 10;
-let sdSecili = null;
-
-function sayiDogrusuGoster(max){
-  sdMax = max;
-  sdSecili = null;
-  sayiDogrusuCiz();
-  document.getElementById("sayiDogrusuCevap").textContent = "";
-  document.querySelectorAll(".sd-butonlar button").forEach(b=>{
-    b.classList.toggle("green", Number(b.dataset.max) === max);
-  });
-}
-
-/* Sayı doğrusunun SVG çizimi */
-function sayiDogrusuCiz(){
-  const alan = document.getElementById("sayiDogrusu");
-  if(!alan) return;
-
-  const max  = sdMax;
-  const adim = max <= 10 ? 68 : (max <= 20 ? 48 : 27);
-  const solPay = 46, sagPay = 52;
-  const eksenY = 80;
-  const genislik = solPay + sagPay + max * adim;
-  const yukseklik = 138;
-
-  /* etiket sıklığı: 0-20 arası her sayı, 100'de beşer */
-  const etiketAdim = max <= 20 ? 1 : 5;
-  /* büyük çentik */
-  const buyukAdim = max <= 10 ? 1 : (max <= 20 ? 5 : 10);
-
-  let s = '<svg viewBox="0 0 '+genislik+' '+yukseklik+'" width="'+genislik+'" height="'+yukseklik+'" xmlns="http://www.w3.org/2000/svg">';
-
-  /* ana doğru */
-  s += '<line x1="14" y1="'+eksenY+'" x2="'+(genislik-14)+'" y2="'+eksenY+'" stroke="#49339b" stroke-width="5" stroke-linecap="round"/>';
-  /* sol ve sağ ok uçları */
-  s += '<polygon points="6,'+eksenY+' 24,'+(eksenY-10)+' 24,'+(eksenY+10)+'" fill="#49339b"/>';
-  s += '<polygon points="'+genislik+','+eksenY+' '+(genislik-18)+','+(eksenY-10)+' '+(genislik-18)+','+(eksenY+10)+'" fill="#49339b"/>';
-
-  for(let i=0; i<=max; i++){
-    const x = solPay + i * adim;
-    const buyuk = (i % buyukAdim === 0);
-    const uzunluk = buyuk ? 20 : 11;
-    const renk = buyuk ? "#49339b" : "#9b8ede";
-
-    s += '<line x1="'+x+'" y1="'+(eksenY-uzunluk)+'" x2="'+x+'" y2="'+(eksenY+uzunluk)+'" stroke="'+renk+'" stroke-width="'+(buyuk?4:3)+'" stroke-linecap="round"/>';
-
-    if(i % etiketAdim === 0){
-      s += '<text x="'+x+'" y="'+(eksenY+46)+'" text-anchor="middle" font-size="'+(max<=20?26:20)+'" font-weight="bold" fill="#26334d">'+i+'</text>';
-    }
-
-    /* dokunma alanı */
-    s += '<g class="sd-tik" data-sayi="'+i+'">'
-       + '<circle class="sd-hedef" cx="'+x+'" cy="'+eksenY+'" r="'+(adim/2.4)+'" fill="transparent"/>'
-       + '</g>';
-  }
-
-  /* seçili sayının işaretçisi */
-  if(sdSecili !== null){
-    const x = solPay + sdSecili * adim;
-    s += '<circle cx="'+x+'" cy="'+eksenY+'" r="14" fill="#ff6f91" stroke="#fff" stroke-width="4"/>';
-    s += '<text x="'+x+'" y="'+(eksenY-30)+'" text-anchor="middle" font-size="40">🐸</text>';
-  }
-
-  s += '</svg>';
-  alan.innerHTML = s;
-
-  alan.querySelectorAll(".sd-tik").forEach(g=>{
-    g.addEventListener("click", ()=>{
-      sdSecili = Number(g.dataset.sayi);
-      sayiDogrusuCiz();
-      const c = document.getElementById("sayiDogrusuCevap");
-      let yazi = "🐸 Kurbağa " + sdSecili + " sayısına zıpladı.";
-      if(sdSecili > 0) yazi += " " + sdSecili + " sayısı " + (sdSecili-1) + " sayısından 1 fazladır.";
-      if(sdSecili < sdMax) yazi += " Sağındaki sayı " + (sdSecili+1) + ".";
-      c.textContent = yazi;
+/* ================= GENEL TEST ================= */
+function testKur(kap,sorular){
+  const k=$(kap); k.innerHTML='';
+  let dogru=0,cevaplanan=0;
+  sorular.forEach((s,i)=>{
+    const d=document.createElement('div'); d.className='test-soru';
+    d.innerHTML='<div class="metin">'+(i+1)+'. '+s.s+'</div><div class="secenekler"></div>';
+    const sec=d.querySelector('.secenekler');
+    s.sec.forEach((t,j)=>{
+      const b=document.createElement('button'); b.className='secenek'; b.innerHTML=t;
+      b.onclick=()=>{
+        if(d.dataset.bitti)return; d.dataset.bitti='1'; cevaplanan++;
+        if(j===s.d){b.classList.add('dogru');dogru++;}
+        else{b.classList.add('yanlis');sec.children[s.d].classList.add('dogru');}
+        if(cevaplanan===sorular.length){
+          const sk=document.createElement('div'); sk.className='skor';
+          sk.textContent='🌟 '+sorular.length+' sorudan '+dogru+' doğru!'+(dogru===sorular.length?' Harikasın!':' Tekrar dene.');
+          k.appendChild(sk);
+        }
+      };
+      sec.appendChild(b);
     });
+    k.appendChild(d);
   });
 }
 
-/* RİTMİK SAYMA — sayı doğrusunda zıplayarak */
-function ritmikSay(){
-  const adim = Number(document.getElementById("ritmik").value);
-  const alan = document.getElementById("ritmikCevap");
-  const max  = (adim <= 2) ? 20 : 100;
-
-  const birim = (max === 20) ? 48 : 27;
-  const solPay = 46, sagPay = 52;
-  const eksenY = 108;
-  const genislik = solPay + sagPay + max * birim;
-  const yukseklik = 168;
-  const etiketAdim = (max === 20) ? (adim === 1 ? 1 : 2) : (adim === 5 ? 5 : 10);
-
-  let s = '<svg viewBox="0 0 '+genislik+' '+yukseklik+'" width="'+genislik+'" height="'+yukseklik+'" xmlns="http://www.w3.org/2000/svg">';
-  s += '<line x1="14" y1="'+eksenY+'" x2="'+(genislik-14)+'" y2="'+eksenY+'" stroke="#49339b" stroke-width="5" stroke-linecap="round"/>';
-  s += '<polygon points="6,'+eksenY+' 24,'+(eksenY-10)+' 24,'+(eksenY+10)+'" fill="#49339b"/>';
-  s += '<polygon points="'+genislik+','+eksenY+' '+(genislik-18)+','+(eksenY-10)+' '+(genislik-18)+','+(eksenY+10)+'" fill="#49339b"/>';
-
-  for(let i=0; i<=max; i++){
-    const x = solPay + i * birim;
-    const sayilan = (i % adim === 0);
-    s += '<line x1="'+x+'" y1="'+(eksenY-(sayilan?18:9))+'" x2="'+x+'" y2="'+(eksenY+(sayilan?18:9))+'" stroke="'+(sayilan?"#49339b":"#b7addf")+'" stroke-width="'+(sayilan?4:2)+'" stroke-linecap="round"/>';
-    if(i % etiketAdim === 0){
-      s += '<text x="'+x+'" y="'+(eksenY+44)+'" text-anchor="middle" font-size="'+(max===20?24:19)+'" font-weight="bold" fill="'+(sayilan?"#26334d":"#8e86b8")+'">'+i+'</text>';
-    }
-    if(sayilan){
-      s += '<circle cx="'+x+'" cy="'+eksenY+'" r="'+(max===20?11:7)+'" fill="#42c486" stroke="#fff" stroke-width="3"/>';
-    }
+/* ================= PARA GÖRSELLERİ ================= */
+const PARALAR={
+  '1kr':{t:'m',r:26,dis:'#C98A4B',ic:'#E0A868',yz:'#6B4318',et:'1 kr',v:0.01},
+  '5kr':{t:'m',r:29,dis:'#C98A4B',ic:'#E0A868',yz:'#6B4318',et:'5 kr',v:0.05},
+  '10kr':{t:'m',r:32,dis:'#C98A4B',ic:'#E0A868',yz:'#6B4318',et:'10 kr',v:0.10},
+  '25kr':{t:'m',r:34,dis:'#A9A498',ic:'#DCD8CE',yz:'#4E4A42',et:'25 kr',v:0.25},
+  '50kr':{t:'m',r:37,dis:'#A9A498',ic:'#DCD8CE',yz:'#4E4A42',et:'50 kr',v:0.50},
+  '1tl':{t:'m',r:40,dis:'#C9A23E',ic:'#DCD8CE',yz:'#4E4A42',et:'1 ₺',v:1},
+  '5tl':{t:'k',renk:'#B07C56',cer:'#8A5C3A',yz:'#3E2415',et:'5 ₺',v:5},
+  '10tl':{t:'k',renk:'#D9736E',cer:'#AE4A45',yz:'#5C1D1A',et:'10 ₺',v:10},
+  '20tl':{t:'k',renk:'#74B27E',cer:'#4C8A57',yz:'#1F4B28',et:'20 ₺',v:20},
+  '50tl':{t:'k',renk:'#EFA65E',cer:'#C47C2E',yz:'#6B3C08',et:'50 ₺',v:50},
+  '100tl':{t:'k',renk:'#83B7DC',cer:'#4F8AB5',yz:'#1C4A6B',et:'100 ₺',v:100},
+  '200tl':{t:'k',renk:'#B98FD0',cer:'#8B5FA8',yz:'#4A2560',et:'200 ₺',v:200}
+};
+function paraSVG(kod,olcek){
+  const p=PARALAR[kod]; const s=olcek||1;
+  if(p.t==='m'){
+    const r=p.r*s, w=r*2+8;
+    return '<svg width="'+w+'" height="'+w+'" viewBox="0 0 '+w+' '+w+'">'+
+      '<circle cx="'+(w/2)+'" cy="'+(w/2)+'" r="'+r+'" fill="'+p.dis+'"/>'+
+      '<circle cx="'+(w/2)+'" cy="'+(w/2)+'" r="'+(r*0.74)+'" fill="'+p.ic+'"/>'+
+      '<text x="'+(w/2)+'" y="'+(w/2+r*0.2)+'" text-anchor="middle" font-family="Andika,sans-serif" font-size="'+(r*0.52)+'" font-weight="700" fill="'+p.yz+'">'+p.et+'</text>'+
+      '</svg>';
   }
-
-  /* zıplama yayları */
-  for(let i=0; i+adim<=max; i+=adim){
-    const x1 = solPay + i * birim;
-    const x2 = solPay + (i+adim) * birim;
-    const orta = (x1+x2)/2;
-    s += '<path d="M '+x1+' '+(eksenY-16)+' Q '+orta+' '+(eksenY-70)+' '+x2+' '+(eksenY-16)+'" fill="none" stroke="#ff6f91" stroke-width="4" stroke-linecap="round"/>';
-    s += '<polygon points="'+x2+','+(eksenY-14)+' '+(x2-11)+','+(eksenY-30)+' '+(x2+4)+','+(eksenY-32)+'" fill="#ff6f91"/>';
-  }
-
-  s += '</svg>';
-  alan.innerHTML = s;
-
-  const liste = [];
-  for(let i=0; i<=max; i+=adim){ liste.push(i); }
-  const adlar = {1:"Birer birer", 2:"İkişer ikişer", 5:"Beşer beşer", 10:"Onar onar"};
-  document.getElementById("ritmikYazi").textContent =
-    (adlar[adim] || (adim + "'er " + adim + "'er")) + " sayıyoruz: " + liste.join(" - ");
+  const w=118*s,h=58*s;
+  return '<svg width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'">'+
+    '<rect x="2" y="2" width="'+(w-4)+'" height="'+(h-4)+'" rx="'+(7*s)+'" fill="'+p.renk+'" stroke="'+p.cer+'" stroke-width="'+(3*s)+'"/>'+
+    '<rect x="'+(9*s)+'" y="'+(9*s)+'" width="'+(w-18*s)+'" height="'+(h-18*s)+'" rx="'+(5*s)+'" fill="none" stroke="'+p.cer+'" stroke-width="'+(1.5*s)+'" opacity=".6"/>'+
+    '<circle cx="'+(w-20*s)+'" cy="'+(h/2)+'" r="'+(12*s)+'" fill="'+p.cer+'" opacity=".35"/>'+
+    '<text x="'+(w*0.42)+'" y="'+(h/2+8*s)+'" text-anchor="middle" font-family="Andika,sans-serif" font-size="'+(23*s)+'" font-weight="700" fill="'+p.yz+'">'+p.et+'</text>'+
+    '</svg>';
 }
 
+/* ================= TEMA 1 ================= */
+const UZ=['içinde','üstünde','altında','yanında'];
+let uzD='';
+function uzCiz(k){
+  const kutu='<polygon points="120,70 230,70 230,150 120,150" fill="#C4874A"/>'+
+             '<polygon points="120,70 148,46 258,46 230,70" fill="#DEA167"/>'+
+             '<polygon points="230,70 258,46 258,126 230,150" fill="#9B6633"/>';
+  let top='';
+  if(k==='içinde') top='<circle cx="175" cy="110" r="26" fill="#E8453C"/>';
+  if(k==='üstünde') top='<circle cx="189" cy="30" r="26" fill="#E8453C"/>';
+  if(k==='altında') top='<circle cx="175" cy="176" r="24" fill="#E8453C"/>';
+  if(k==='yanında') top='<circle cx="70" cy="130" r="26" fill="#E8453C"/>';
+  const zemin='<rect x="0" y="150" width="360" height="50" fill="#6DBE45"/>';
+  $('uzSvg').innerHTML='<rect width="360" height="200" fill="#CCEDFA"/>'+zemin+(k==='üstünde'?kutu+top:(k==='altında'?top+kutu:kutu+top));
+}
+function uzYeni(){
+  uzD=UZ[rnd(0,3)]; uzCiz(uzD); $('uzGeri').textContent='';
+  const s=$('uzSec'); s.innerHTML='';
+  karistir(UZ.slice()).forEach(o=>{
+    const b=document.createElement('button'); b.className='secenek'; b.textContent='Kutunun '+o;
+    b.onclick=()=>{ if(o===uzD){b.classList.add('dogru');geri($('uzGeri'),true,'Doğru! Top kutunun '+uzD+'.');}
+      else{b.classList.add('yanlis');geri($('uzGeri'),false,'Tekrar bak.');} };
+    s.appendChild(b);
+  });
+}
 
-/* BAŞLANGIÇ */
-yeniSayma();
-sayiDogrusuGoster(10);
-onlukGoster();
-yeniKarsilastirma();
-yeniToplama();
-yeniCikarma();
-onlukTabloGoster();
-balonOyunu();
-vagonOyunu();
+const SEKILLER=[
+  {ad:'üçgen',d:'<polygon points="35,6 66,60 4,60" fill="%C%"/>'},
+  {ad:'kare',d:'<rect x="7" y="8" width="56" height="56" rx="5" fill="%C%"/>'},
+  {ad:'çember',d:'<circle cx="35" cy="35" r="29" fill="%C%"/>'},
+  {ad:'dikdörtgen',d:'<rect x="2" y="16" width="66" height="38" rx="5" fill="%C%"/>'},
+  {ad:'yıldız',d:'<polygon points="35,4 43,26 66,26 47,40 54,62 35,48 16,62 23,40 4,26 27,26" fill="%C%"/>'}
+];
+const RENK=['#E8453C','#FFC93C','#4FA9D8','#6DBE45','#A97BC9','#F08A3C'];
+function esYeni(){
+  $('esGeri').textContent='';
+  const hepsi=karistir(SEKILLER.slice());
+  const hedef=hepsi[0], r=RENK[rnd(0,RENK.length-1)];
+  const yanlis=[hepsi[1],hepsi[2]];
+  const secim=karistir([{s:hedef,ok:true},{s:yanlis[0],ok:false},{s:yanlis[1],ok:false}]);
+  let h='<rect width="420" height="150" fill="#F3FAFE"/>';
+  h+='<g transform="translate(14,40)">'+hedef.d.replace('%C%',r)+'</g>';
+  h+='<line x1="104" y1="20" x2="104" y2="130" stroke="#BCE3F5" stroke-width="4"/>';
+  secim.forEach((o,i)=>{
+    const x=132+i*96;
+    h+='<g class="esSec" data-ok="'+o.ok+'" style="cursor:pointer" transform="translate('+x+',40)">'+
+       '<rect x="-8" y="-8" width="86" height="86" rx="12" fill="#fff" stroke="#BCE3F5" stroke-width="3"/>'+
+       o.s.d.replace('%C%',r)+'</g>';
+  });
+  $('esSvg').innerHTML=h;
+  $('esSvg').querySelectorAll('.esSec').forEach(g=>{
+    g.onclick=()=>{
+      const kutu=g.querySelector('rect');
+      if(g.dataset.ok==='true'){kutu.setAttribute('stroke','#4E9B2E');kutu.setAttribute('fill','#DFF5D2');geri($('esGeri'),true,'Doğru! İkisi eş.');}
+      else{kutu.setAttribute('stroke','#E8453C');kutu.setAttribute('fill','#FBDEDC');geri($('esGeri'),false,'Bu eşi değil, tekrar dene.');}
+    };
+  });
+}
+
+/* ================= TEMA 2 ================= */
+const NESNE=['🍎','🍐','🐝','🌻','⭐','🐟','🎈','🍓'];
+let sayD=0;
+function sayYeni(){
+  sayD=rnd(3,20); const e=NESNE[rnd(0,NESNE.length-1)];
+  $('sayAlan').innerHTML=Array(sayD).fill('<span>'+e+'</span>').join('');
+  $('sayGeri').textContent='';
+  const sec=karistir([sayD,sayD+1,Math.max(1,sayD-1),sayD+2].filter((v,i,a)=>a.indexOf(v)===i));
+  const s=$('saySec'); s.innerHTML='';
+  sec.forEach(v=>{
+    const b=document.createElement('button'); b.className='secenek'; b.textContent=v;
+    b.onclick=()=>{ if(v===sayD){b.classList.add('dogru');geri($('sayGeri'),true,'Doğru, '+sayD+' tane!');}
+      else{b.classList.add('yanlis');geri($('sayGeri'),false,'Bir daha say.');} };
+    s.appendChild(b);
+  });
+}
+
+let blokD=0;
+function blokKur(){
+  blokD=rnd(10,20); const o=Math.floor(blokD/10), b=blokD%10;
+  let h='<rect width="420" height="140" fill="#F3FAFE"/>';
+  for(let i=0;i<o;i++){
+    h+='<rect x="'+(14+i*34)+'" y="18" width="26" height="104" rx="5" fill="#4E9B2E" stroke="#3B7A22" stroke-width="2"/>';
+    for(let j=1;j<10;j++) h+='<line x1="'+(14+i*34)+'" y1="'+(18+j*10.4)+'" x2="'+(40+i*34)+'" y2="'+(18+j*10.4)+'" stroke="#3B7A22" stroke-width="1.5" opacity=".7"/>';
+  }
+  for(let i=0;i<b;i++){
+    const cx=120+(i%5)*34, cy=i<5?60:96;
+    h+='<rect x="'+cx+'" y="'+cy+'" width="26" height="26" rx="5" fill="#F08A3C" stroke="#C96C22" stroke-width="2"/>';
+  }
+  $('blokSvg').innerHTML=h; $('blokIn').value=''; $('blokGeri').textContent='';
+}
+function blokKontrol(){
+  const v=parseInt($('blokIn').value,10);
+  if(v===blokD) geri($('blokGeri'),true,'Doğru! '+Math.floor(blokD/10)+' onluk '+(blokD%10)+' birlik = '+blokD);
+  else geri($('blokGeri'),false,'Onlukları onar onar, birlikleri birer birer say.');
+}
+
+const ORS=['🔴','🔺','⭐','🟦','🟨','🟣'];
+let orD='';
+function orYeni(){
+  const a=ORS[rnd(0,5)]; let b=ORS[rnd(0,5)]; while(b===a) b=ORS[rnd(0,5)];
+  const tip=rnd(0,1);
+  let dizi=[];
+  if(tip===0){ for(let i=0;i<6;i++) dizi.push(i%2===0?a:b); }
+  else { for(let i=0;i<6;i++) dizi.push(i%3===2?b:a); }
+  orD=dizi[5]; dizi[5]='❔';
+  $('orDizi').innerHTML=dizi.map(x=>'<span>'+x+'</span>').join('');
+  $('orGeri').textContent='';
+  const s=$('orSec'); s.innerHTML='';
+  karistir([a,b]).forEach(o=>{
+    const btn=document.createElement('button'); btn.className='secenek'; btn.style.fontSize='26px'; btn.textContent=o;
+    btn.onclick=()=>{ if(o===orD){btn.classList.add('dogru');geri($('orGeri'),true,'Doğru! Örüntüyü buldun.');}
+      else{btn.classList.add('yanlis');geri($('orGeri'),false,'Kuralı tekrar incele.');} };
+    s.appendChild(btn);
+  });
+}
+
+let karA=0,karB=0;
+function karYeni(){
+  karA=rnd(1,20); karB=rnd(1,20); while(karB===karA) karB=rnd(1,20);
+  $('karDizi').innerHTML='<span style="font-size:30px">'+karA+'</span><span style="font-size:24px;color:#5E6F79">?</span><span style="font-size:30px">'+karB+'</span>';
+  $('karGeri').textContent='';
+  const d=karA>karB?'>':'<';
+  const s=$('karSec'); s.innerHTML='';
+  ['<','>'].forEach(o=>{
+    const b=document.createElement('button'); b.className='secenek'; b.style.fontSize='24px'; b.textContent=o;
+    b.onclick=()=>{ if(o===d){b.classList.add('dogru');geri($('karGeri'),true,karA+' '+d+' '+karB);}
+      else{b.classList.add('yanlis');geri($('karGeri'),false,'Ağız çok olana açılır.');} };
+    s.appendChild(b);
+  });
+}
+
+/* ================= TEMA 3 ================= */
+let olcD=0;
+function olcYeni(){
+  olcD=rnd(3,8);
+  const bw=44, kal=olcD*bw;
+  let h='<rect width="460" height="140" fill="#F3FAFE"/>';
+  h+='<rect x="20" y="26" width="'+kal+'" height="22" rx="10" fill="#FFC93C" stroke="#D8A216" stroke-width="3"/>';
+  h+='<polygon points="'+(20+kal)+',26 '+(20+kal+26)+',37 '+(20+kal)+',48" fill="#C4874A"/>';
+  for(let i=0;i<olcD;i++){
+    const x=20+i*bw;
+    h+='<g transform="translate('+x+',70)"><rect x="6" y="6" width="32" height="16" rx="8" fill="none" stroke="#4FA9D8" stroke-width="4"/>'+
+       '<rect x="12" y="10" width="22" height="8" rx="4" fill="none" stroke="#4FA9D8" stroke-width="3"/></g>';
+  }
+  h+='<text x="20" y="122" font-family="Andika,sans-serif" font-size="17" font-weight="700" fill="#5E6F79">ataşları say</text>';
+  $('olcSvg').innerHTML=h; $('olcIn').value=''; $('olcGeri').textContent='';
+}
+function olcKontrol(){
+  const v=parseInt($('olcIn').value,10);
+  if(v===olcD) geri($('olcGeri'),true,'Doğru! Kalem '+olcD+' ataş uzunluğunda.');
+  else geri($('olcGeri'),false,'Ataşları tek tek say.');
+}
+
+let terD='';
+function terYeni(){
+  const nesne=[['🧱','tuğla',3],['🪶','tüy',1],['📚','kitap',2],['🎈','balon',1],['🍉','karpuz',3],['✏️','kalem',1]];
+  let a=nesne[rnd(0,5)], b=nesne[rnd(0,5)];
+  let t=0; while(a[2]===b[2] && t<10){ b=nesne[rnd(0,5)]; t++; }
+  const solAgir=a[2]>b[2]; terD=solAgir?a[1]:b[1];
+  const solY=solAgir?96:52, sagY=solAgir?52:96;
+  let h='<rect width="400" height="200" fill="#F3FAFE"/>';
+  h+='<rect x="188" y="60" width="16" height="110" rx="7" fill="#9B6633"/><rect x="140" y="164" width="112" height="16" rx="8" fill="#9B6633"/>';
+  h+='<line x1="60" y1="'+solY+'" x2="332" y2="'+sagY+'" stroke="#C4874A" stroke-width="12" stroke-linecap="round"/>';
+  h+='<line x1="60" y1="'+solY+'" x2="60" y2="'+(solY+26)+'" stroke="#9B6633" stroke-width="4"/>';
+  h+='<line x1="332" y1="'+sagY+'" x2="332" y2="'+(sagY+26)+'" stroke="#9B6633" stroke-width="4"/>';
+  h+='<path d="M22 '+(solY+26)+' h76 l-14 30 h-48 z" fill="#4FA9D8"/>';
+  h+='<path d="M294 '+(sagY+26)+' h76 l-14 30 h-48 z" fill="#E8453C"/>';
+  h+='<text x="60" y="'+(solY+14)+'" text-anchor="middle" font-size="28">'+a[0]+'</text>';
+  h+='<text x="332" y="'+(sagY+14)+'" text-anchor="middle" font-size="28">'+b[0]+'</text>';
+  $('terSvg').innerHTML=h; $('terGeri').textContent='';
+  const s=$('terSec'); s.innerHTML='';
+  karistir([a,b]).forEach(o=>{
+    const btn=document.createElement('button'); btn.className='secenek'; btn.textContent=o[0]+' '+o[1];
+    btn.onclick=()=>{ if(o[1]===terD){btn.classList.add('dogru');geri($('terGeri'),true,'Doğru! Aşağıda kalan kefe daha ağırdır.');}
+      else{btn.classList.add('yanlis');geri($('terGeri'),false,'Hangi kefe aşağıda kaldı?');} };
+    s.appendChild(btn);
+  });
+}
+
+/* ================= TEMA 4 ================= */
+let topD=0;
+function topYeni(){
+  const a=rnd(2,9), b=rnd(2,9); topD=a+b;
+  const e1=NESNE[rnd(0,3)], e2=NESNE[rnd(4,7)];
+  $('topAlan').innerHTML=Array(a).fill('<span>'+e1+'</span>').join('')+'<span style="color:#2F80B8">➕</span>'+Array(b).fill('<span>'+e2+'</span>').join('');
+  $('topIfade').innerHTML='<span style="font-size:22px">'+a+' + '+b+' = ?</span>';
+  $('topIn').value=''; $('topGeri').textContent='';
+}
+function topKontrol(){
+  const v=parseInt($('topIn').value,10);
+  if(v===topD) geri($('topGeri'),true,'Doğru! Toplam '+topD+'.');
+  else geri($('topGeri'),false,'Hepsini birlikte say.');
+}
+
+let cikD=0;
+function cikYeni(){
+  const a=rnd(5,20), b=rnd(1,Math.min(9,a-1)); cikD=a-b;
+  const e=NESNE[rnd(0,NESNE.length-1)];
+  let h='';
+  for(let i=0;i<a;i++) h+='<span style="'+(i<b?'opacity:.35;text-decoration:line-through':'')+'">'+e+'</span>';
+  $('cikAlan').innerHTML=h;
+  $('cikIfade').innerHTML='<span style="font-size:22px">'+a+' − '+b+' = ?</span>';
+  $('cikIn').value=''; $('cikGeri').textContent='';
+}
+function cikKontrol(){
+  const v=parseInt($('cikIn').value,10);
+  if(v===cikD) geri($('cikGeri'),true,'Doğru! Geriye '+cikD+' kaldı.');
+  else geri($('cikGeri'),false,'Üstü çizilmeyenleri say.');
+}
+
+let eksD=0;
+function eksYeni(){
+  const t=rnd(6,20), a=rnd(1,t-1); eksD=t-a;
+  $('eksIfade').innerHTML='<span style="font-size:24px">'+a+' + ❓ = '+t+'</span>';
+  $('eksGeri').textContent='';
+  const sec=karistir([eksD,Math.max(1,eksD-1),eksD+1,eksD+2].filter((v,i,a2)=>a2.indexOf(v)===i));
+  const s=$('eksSec'); s.innerHTML='';
+  sec.forEach(v=>{
+    const b=document.createElement('button'); b.className='secenek'; b.textContent=v;
+    b.onclick=()=>{ if(v===eksD){b.classList.add('dogru');geri($('eksGeri'),true,a+' + '+eksD+' = '+t);}
+      else{b.classList.add('yanlis');geri($('eksGeri'),false,'Bütünden parçayı çıkar.');} };
+    s.appendChild(b);
+  });
+}
+
+const PROBLEMLER=[
+  {m:(a,b)=>'Ayşe\'nin '+a+' balonu vardı. Babası ona '+b+' balon daha aldı. Ayşe\'nin kaç balonu oldu?',f:(a,b)=>a+b,t:'+'},
+  {m:(a,b)=>'Bir dalda '+a+' kuş vardı. '+b+' tanesi uçtu. Dalda kaç kuş kaldı?',f:(a,b)=>a-b,t:'-'},
+  {m:(a,b)=>'Ali '+a+' ceviz topladı. Kardeşi '+b+' ceviz topladı. İkisi toplam kaç ceviz topladı?',f:(a,b)=>a+b,t:'+'},
+  {m:(a,b)=>'Sepette '+a+' elma vardı. '+b+' elma yendi. Sepette kaç elma kaldı?',f:(a,b)=>a-b,t:'-'},
+  {m:(a,b)=>'Sınıfta '+a+' kız, '+b+' erkek öğrenci var. Sınıfta toplam kaç öğrenci var?',f:(a,b)=>a+b,t:'+'}
+];
+let probD=0;
+function probYeni(){
+  const p=PROBLEMLER[rnd(0,PROBLEMLER.length-1)];
+  let a,b;
+  if(p.t==='+'){a=rnd(3,10);b=rnd(2,9);} else {a=rnd(8,20);b=rnd(2,7);}
+  probD=p.f(a,b);
+  $('probMetin').textContent=p.m(a,b);
+  $('probIn').value=''; $('probGeri').textContent='';
+}
+function probKontrol(){
+  const v=parseInt($('probIn').value,10);
+  if(v===probD) geri($('probGeri'),true,'Doğru! Cevap '+probD+'.');
+  else geri($('probGeri'),false,'Problemi tekrar oku: artıyor mu, azalıyor mu?');
+}
+
+/* ================= TEMA 5 ================= */
+function paralariGoster(){
+  $('madeniAlan').innerHTML=['1kr','5kr','10kr','25kr','50kr','1tl'].map(k=>paraSVG(k)).join('');
+  $('kagitAlan').innerHTML=['5tl','10tl','20tl','50tl','100tl','200tl'].map(k=>paraSVG(k,0.9)).join('');
+}
+let paraD=0;
+function paraYeni(){
+  // 1. sınıf: toplam 20 ₺'yi geçmez
+  const kodlar=['1tl','5tl','10tl'];
+  const hedef=rnd(2,4); let top=0,h='',adet=0;
+  while(adet<hedef){
+    const uygun=kodlar.filter(k=>top+PARALAR[k].v<=20);
+    if(!uygun.length) break;
+    const k=uygun[rnd(0,uygun.length-1)];
+    top+=PARALAR[k].v; h+=paraSVG(k,0.85); adet++;
+  }
+  if(adet===0){ top=1; h=paraSVG('1tl',0.85); }
+  paraD=top; $('topParaAlan').innerHTML=h; $('paraIn').value=''; $('paraGeri').textContent='';
+}
+function paraKontrol(){
+  const v=parseInt($('paraIn').value,10);
+  if(v===paraD) geri($('paraGeri'),true,'Doğru! Toplam '+paraD+' ₺.');
+  else geri($('paraGeri'),false,'Paraları büyükten küçüğe doğru topla.');
+}
+
+const URUNLER=[['🍫','çikolata'],['📒','defter'],['✏️','kalem'],['🧃','meyve suyu'],['🍞','ekmek'],['🎨','boya kalemi'],['⚽','top'],['🧸','oyuncak ayı']];
+let alisD=false;
+function alisYeni(){
+  const u=URUNLER[rnd(0,URUNLER.length-1)];
+  const fiyat=rnd(3,20);
+  const kodlar=['1tl','5tl','10tl'];
+  const hedef=rnd(1,3); let top=0,h='',adet=0;
+  while(adet<hedef){
+    const uygun=kodlar.filter(k=>top+PARALAR[k].v<=20);
+    if(!uygun.length) break;
+    const k=uygun[rnd(0,uygun.length-1)];
+    top+=PARALAR[k].v; h+=paraSVG(k,0.85); adet++;
+  }
+  if(adet===0){ top=1; h=paraSVG('1tl',0.85); }
+  alisD = top>=fiyat;
+  $('alisMetin').textContent=u[0]+' '+u[1]+' '+fiyat+' ₺. Elimizdeki para bu ürünü almaya yeter mi?';
+  $('alisAlan').innerHTML=h; $('alisGeri').textContent='';
+  const s=$('alisSec'); s.innerHTML='';
+  [['Evet, yeter',true],['Hayır, yetmez',false]].forEach(o=>{
+    const b=document.createElement('button'); b.className='secenek'; b.textContent=o[0];
+    b.onclick=()=>{ if(o[1]===alisD){b.classList.add('dogru');geri($('alisGeri'),true,'Doğru! Elimizde '+top+' ₺ var, ürün '+fiyat+' ₺.');}
+      else{b.classList.add('yanlis');geri($('alisGeri'),false,'Önce paraları topla: '+top+' ₺.');} };
+    s.appendChild(b);
+  });
+}
+
+/* ================= TEMA 6 ================= */
+const CISIMLER=[
+  {ad:'küp',nesne:'zar',d:'<polygon points="30,52 110,52 110,132 30,132" fill="#E8453C"/><polygon points="30,52 58,26 138,26 110,52" fill="#F4736B"/><polygon points="110,52 138,26 138,106 110,132" fill="#B8322B"/>'},
+  {ad:'küre',nesne:'top',d:'<circle cx="86" cy="86" r="56" fill="#FFC93C"/><ellipse cx="64" cy="62" rx="18" ry="11" fill="#FFE59B" opacity=".85"/>'},
+  {ad:'silindir',nesne:'konserve kutusu',d:'<rect x="40" y="42" width="92" height="90" fill="#4FA9D8"/><ellipse cx="86" cy="132" rx="46" ry="17" fill="#3A85AE"/><ellipse cx="86" cy="42" rx="46" ry="17" fill="#82CBEA"/>'},
+  {ad:'koni',nesne:'külah',d:'<polygon points="86,20 140,132 32,132" fill="#A97BC9"/><ellipse cx="86" cy="132" rx="54" ry="17" fill="#8A5FAC"/>'}
+];
+let cisD='';
+function cisYeni(){
+  const c=CISIMLER[rnd(0,3)]; cisD=c.ad;
+  $('cisMetin').textContent='Bu '+c.nesne+' hangi geometrik cisme benzer?';
+  $('cisSvg').innerHTML='<rect width="200" height="160" fill="#F3FAFE"/>'+c.d;
+  $('cisGeri').textContent='';
+  const s=$('cisSec'); s.innerHTML='';
+  karistir(CISIMLER.map(x=>x.ad)).forEach(o=>{
+    const b=document.createElement('button'); b.className='secenek'; b.textContent=o;
+    b.onclick=()=>{ if(o===cisD){b.classList.add('dogru');geri($('cisGeri'),true,'Doğru! Bu bir '+cisD+'.');}
+      else{b.classList.add('yanlis');geri($('cisGeri'),false,'Tekrar bak.');} };
+    s.appendChild(b);
+  });
+}
+
+const DUZ=[
+  {ad:'üçgen',k:3,d:'<polygon points="110,20 190,150 30,150" fill="#F08A3C"/>'},
+  {ad:'kare',k:4,d:'<rect x="42" y="24" width="122" height="122" rx="6" fill="#6DBE45"/>'},
+  {ad:'dikdörtgen',k:4,d:'<rect x="20" y="48" width="176" height="82" rx="6" fill="#E8453C"/>'},
+  {ad:'çember',k:0,d:'<circle cx="110" cy="88" r="64" fill="#A97BC9"/>'}
+];
+let kenD=0;
+function kenYeni(){
+  const s0=DUZ[rnd(0,3)]; kenD=s0.k;
+  $('kenSvg').innerHTML='<rect width="220" height="180" fill="#F3FAFE"/>'+s0.d;
+  $('kenGeri').textContent='';
+  const s=$('kenSec'); s.innerHTML='';
+  karistir([0,3,4]).forEach(v=>{
+    const b=document.createElement('button'); b.className='secenek'; b.textContent=v+' kenar';
+    b.onclick=()=>{ if(v===kenD){b.classList.add('dogru');geri($('kenGeri'),true,'Doğru! Bu bir '+s0.ad+'.');}
+      else{b.classList.add('yanlis');geri($('kenGeri'),false,'Kenarları tek tek say.');} };
+    s.appendChild(b);
+  });
+}
+
+/* ================= TEMA 7 ================= */
+const MEYVE=[['🍎','elma','#E8453C'],['🍌','muz','#FFC93C'],['🍇','üzüm','#A97BC9'],['🍓','çilek','#F08A3C']];
+let grVeri=[],grD='';
+function grCiz(){
+  let h='<rect width="440" height="240" fill="#F3FAFE"/>';
+  h+='<line x1="56" y1="16" x2="56" y2="196" stroke="#5E6F79" stroke-width="4"/>';
+  h+='<line x1="56" y1="196" x2="424" y2="196" stroke="#5E6F79" stroke-width="4"/>';
+  grVeri.forEach((v,i)=>{
+    const x=92+i*88;
+    for(let j=0;j<v;j++) h+='<circle cx="'+x+'" cy="'+(180-j*30)+'" r="13" fill="'+MEYVE[i][2]+'"/>';
+    h+='<text x="'+x+'" y="222" text-anchor="middle" font-size="24">'+MEYVE[i][0]+'</text>';
+  });
+  $('grSvg').innerHTML=h;
+}
+function grYeni(){
+  grVeri=MEYVE.map(()=>rnd(1,6));
+  while(new Set(grVeri).size<3) grVeri=MEYVE.map(()=>rnd(1,6));
+  grCiz(); $('grGeri').textContent='';
+  const tip=rnd(0,2);
+  let soru,dogru,secenekler;
+  if(tip===0){
+    const mx=Math.max(...grVeri); soru='En çok sevilen meyve hangisi?';
+    dogru=MEYVE[grVeri.indexOf(mx)][1]; secenekler=karistir(MEYVE.map(m=>m[1]));
+  }else if(tip===1){
+    const mn=Math.min(...grVeri); soru='En az sevilen meyve hangisi?';
+    dogru=MEYVE[grVeri.indexOf(mn)][1]; secenekler=karistir(MEYVE.map(m=>m[1]));
+  }else{
+    const i=rnd(0,3); soru=MEYVE[i][0]+' '+MEYVE[i][1]+' kaç kişi tarafından seçilmiş?';
+    dogru=String(grVeri[i]);
+    secenekler=karistir(Array.from(new Set([grVeri[i],grVeri[i]+1,Math.max(1,grVeri[i]-1),grVeri[i]+2])).map(String));
+  }
+  grD=dogru; $('grSoru').textContent=soru;
+  const s=$('grSec'); s.innerHTML='';
+  secenekler.forEach(o=>{
+    const b=document.createElement('button'); b.className='secenek'; b.textContent=o;
+    b.onclick=()=>{ if(o===grD){b.classList.add('dogru');geri($('grGeri'),true,'Doğru!');}
+      else{b.classList.add('yanlis');geri($('grGeri'),false,'Grafiği tekrar oku.');} };
+    s.appendChild(b);
+  });
+}
+
+let ceD=0;
+function ceYeni(){
+  ceD=rnd(3,18);
+  let h='<rect width="420" height="90" fill="#F3FAFE"/>', x=18;
+  const besli=Math.floor(ceD/5), kalan=ceD%5;
+  for(let g=0;g<besli;g++){
+    for(let i=0;i<4;i++) h+='<line x1="'+(x+i*13)+'" y1="22" x2="'+(x+i*13)+'" y2="66" stroke="#E8453C" stroke-width="5" stroke-linecap="round"/>';
+    h+='<line x1="'+(x-5)+'" y1="66" x2="'+(x+44)+'" y2="20" stroke="#E8453C" stroke-width="5" stroke-linecap="round"/>';
+    x+=70;
+  }
+  for(let i=0;i<kalan;i++){ h+='<line x1="'+(x+i*13)+'" y1="22" x2="'+(x+i*13)+'" y2="66" stroke="#E8453C" stroke-width="5" stroke-linecap="round"/>'; }
+  $('ceSvg').innerHTML=h; $('ceIn').value=''; $('ceGeri').textContent='';
+}
+function ceKontrol(){
+  const v=parseInt($('ceIn').value,10);
+  if(v===ceD) geri($('ceGeri'),true,'Doğru! '+ceD+' kişi.');
+  else geri($('ceGeri'),false,'Beşerli grupları beşer beşer say, kalanları ekle.');
+}
 </script>
+<script>
+/* ================= OYUN 1 · BALON PATLAT ================= */
+let balPuan=0,balHedef=0,balTur=0;
+const BALRENK=['#E8453C','#FFC93C','#4FA9D8','#6DBE45','#A97BC9','#F08A3C','#F4A0BE','#2F80B8'];
+function balBasla(){ balPuan=0; balTur=0; $('balSkor').textContent='Puan: 0'; balTurYeni(); }
+function balTurYeni(){
+  balTur++;
+  if(balTur>8){ $('balHedef').textContent='🎉 Oyun bitti!'; $('balAlan').innerHTML='';
+    geri($('balGeri'),true,'8 turda '+balPuan+' puan topladın.'); return; }
+  const sayilar=[]; while(sayilar.length<8){ const v=rnd(1,20); if(!sayilar.includes(v)) sayilar.push(v); }
+  balHedef=sayilar[rnd(0,7)];
+  $('balHedef').textContent='Tur '+balTur+'/8 · '+balHedef+' sayısını bul!';
+  $('balGeri').textContent='';
+  const a=$('balAlan'); a.innerHTML='';
+  sayilar.forEach((v,i)=>{
+    const b=document.createElement('button');
+    b.style.cssText='border:none;background:none;cursor:pointer;padding:0;font-family:inherit';
+    b.innerHTML='<svg width="62" height="86" viewBox="0 0 62 86"><ellipse cx="31" cy="34" rx="29" ry="34" fill="'+BALRENK[i]+'"/>'+
+      '<ellipse cx="21" cy="22" rx="7" ry="10" fill="#fff" opacity=".45"/>'+
+      '<polygon points="31,68 26,76 36,76" fill="'+BALRENK[i]+'"/>'+
+      '<path d="M31 76 q6 6 0 10" stroke="#5E6F79" stroke-width="2" fill="none"/>'+
+      '<text x="31" y="44" text-anchor="middle" font-family="Andika,sans-serif" font-size="24" font-weight="700" fill="'+(i===1?'#7A5B00':'#fff')+'">'+v+'</text></svg>';
+    b.onclick=()=>{
+      if(v===balHedef){ balPuan+=10; b.style.opacity='.25'; geri($('balGeri'),true,'Patlattın! +10 puan');
+        $('balSkor').textContent='Puan: '+balPuan; setTimeout(balTurYeni,650); }
+      else { balPuan=Math.max(0,balPuan-3); geri($('balGeri'),false,'O değil, tekrar bak. −3 puan');
+        $('balSkor').textContent='Puan: '+balPuan; }
+    };
+    a.appendChild(b);
+  });
+}
 
+/* ================= OYUN 2 · KURBAĞA ================= */
+let kurD=0,kurDog=0,kurYan=0;
+function kurCiz(bas){
+  let h='<rect width="460" height="120" fill="#F3FAFE"/>';
+  h+='<line x1="20" y1="86" x2="440" y2="86" stroke="#5E6F79" stroke-width="5" stroke-linecap="round"/>';
+  for(let i=0;i<=20;i+=5){
+    const x=20+i*21;
+    h+='<line x1="'+x+'" y1="76" x2="'+x+'" y2="96" stroke="#5E6F79" stroke-width="4"/>';
+    h+='<text x="'+x+'" y="114" text-anchor="middle" font-family="Andika,sans-serif" font-size="15" font-weight="700" fill="#5E6F79">'+i+'</text>';
+  }
+  const bx=20+bas*21;
+  h+='<g transform="translate('+(bx-20)+',34)"><ellipse cx="20" cy="24" rx="19" ry="14" fill="#6DBE45"/>'+
+     '<circle cx="10" cy="8" r="7" fill="#6DBE45"/><circle cx="30" cy="8" r="7" fill="#6DBE45"/>'+
+     '<circle cx="10" cy="7" r="3.2" fill="#fff"/><circle cx="30" cy="7" r="3.2" fill="#fff"/>'+
+     '<circle cx="10.5" cy="7.5" r="1.6" fill="#2C3A42"/><circle cx="30.5" cy="7.5" r="1.6" fill="#2C3A42"/></g>';
+  $('kurSvg').innerHTML=h;
+}
+function kurYeni(){
+  const artir=rnd(0,1)===0;
+  let a,b;
+  if(artir){ a=rnd(1,12); b=rnd(1,Math.min(8,20-a)); kurD=a+b; }
+  else { a=rnd(8,20); b=rnd(1,7); kurD=a-b; }
+  $('kurIfade').innerHTML='<span style="font-size:24px">'+a+' '+(artir?'+':'−')+' '+b+' = ?</span>';
+  kurCiz(a); $('kurGeri').textContent='';
+  const sec=karistir(Array.from(new Set([kurD,kurD+1,Math.max(0,kurD-1),kurD+2])));
+  const s=$('kurSec'); s.innerHTML='';
+  sec.forEach(v=>{
+    const btn=document.createElement('button'); btn.className='secenek'; btn.textContent=v;
+    btn.onclick=()=>{
+      if(v===kurD){ btn.classList.add('dogru'); kurDog++; kurCiz(kurD); geri($('kurGeri'),true,'Kurbağa '+kurD+' sayısına kondu!'); }
+      else { btn.classList.add('yanlis'); kurYan++; geri($('kurGeri'),false,'Sayı doğrusunda tekrar zıpla.'); }
+      $('kurSkor').textContent='Doğru: '+kurDog+' · Yanlış: '+kurYan;
+    };
+    s.appendChild(btn);
+  });
+}
 
-<div style="text-align:center;padding:18px 10px;margin-top:28px;font-size:0.82rem;color:#8a8a8a;border-top:1px solid #e5e5e5;">Dijital Öğretmen Hasan Tutuş</div>
-<!-- Ziyaretçi sayacı: goatcounter.com'da ücretsiz hesap açtıktan sonra
-     aşağıdaki "dijitalogretmen" kısmını kendi GoatCounter kodunuzla değiştirin. -->
-<script data-goatcounter="https://dijitalogretmen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+/* ================= OYUN 3 · HAFIZA ================= */
+let hafAcik=[],hafKilit=false,hafBulunan=0;
+function hafBasla(){
+  hafAcik=[]; hafKilit=false; hafBulunan=0; $('hafGeri').textContent='';
+  const sayilar=[]; while(sayilar.length<6){ const v=rnd(1,10); if(!sayilar.includes(v)) sayilar.push(v); }
+  const e=NESNE[rnd(0,NESNE.length-1)];
+  let kartlar=[];
+  sayilar.forEach(v=>{ kartlar.push({v:v,tip:'r',ic:String(v)}); kartlar.push({v:v,tip:'n',ic:Array(v).fill(e).join('')}); });
+  kartlar=karistir(kartlar);
+  const a=$('hafAlan'); a.innerHTML='';
+  kartlar.forEach(k=>{
+    const d=document.createElement('button');
+    d.className='hafKart';
+    d.style.cssText='aspect-ratio:1;border:3px solid #BCE3F5;border-radius:14px;background:#4FA9D8;color:#fff;'+
+      'font-family:inherit;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;'+
+      'font-size:'+(k.tip==='r'?'26px':'13px')+';line-height:1.1;padding:4px;word-break:break-all;overflow:hidden';
+    d.textContent='?';
+    d.dataset.v=k.v; d.dataset.ic=k.ic; d.dataset.acik='0';
+    d.onclick=()=>hafTikla(d);
+    a.appendChild(d);
+  });
+}
+function hafTikla(d){
+  if(hafKilit||d.dataset.acik==='1'||d.dataset.bitti==='1')return;
+  d.dataset.acik='1'; d.textContent=d.dataset.ic; d.style.background='#fff'; d.style.color='#2C3A42';
+  hafAcik.push(d);
+  if(hafAcik.length===2){
+    hafKilit=true;
+    const [a,b]=hafAcik;
+    if(a.dataset.v===b.dataset.v){
+      setTimeout(()=>{
+        [a,b].forEach(x=>{x.dataset.bitti='1';x.style.background='#DFF5D2';x.style.borderColor='#4E9B2E';});
+        hafAcik=[]; hafKilit=false; hafBulunan++;
+        if(hafBulunan===6) geri($('hafGeri'),true,'Tebrikler! Bütün eşleri buldun. 🎉');
+        else geri($('hafGeri'),true,'Eşleştirdin! ('+hafBulunan+'/6)');
+      },450);
+    } else {
+      setTimeout(()=>{
+        [a,b].forEach(x=>{x.dataset.acik='0';x.textContent='?';x.style.background='#4FA9D8';x.style.color='#fff';});
+        hafAcik=[]; hafKilit=false; geri($('hafGeri'),false,'Eş değil, tekrar dene.');
+      },800);
+    }
+  }
+}
+
+/* ================= OYUN 4 · VAGONLAR ================= */
+let vagSira=[],vagIndex=0;
+const VAGRENK=['#4FA9D8','#F08A3C','#A97BC9','#6DBE45','#E8453C'];
+function vagBasla(){
+  const s=[]; while(s.length<5){ const v=rnd(1,20); if(!s.includes(v)) s.push(v); }
+  vagSira=s.slice().sort((a,b)=>a-b); vagIndex=0;
+  $('vagGeri').textContent='En küçük sayıdan başla.';
+  $('vagGeri').className='geri';
+  const a=$('vagAlan'); a.innerHTML='';
+  karistir(s).forEach((v,i)=>{
+    const b=document.createElement('button');
+    b.style.cssText='border:none;background:none;cursor:pointer;padding:0;font-family:inherit';
+    b.innerHTML='<svg width="86" height="72" viewBox="0 0 86 72">'+
+      '<rect x="4" y="6" width="78" height="46" rx="10" fill="'+VAGRENK[i]+'"/>'+
+      '<circle cx="24" cy="60" r="9" fill="#2C3A42"/><circle cx="62" cy="60" r="9" fill="#2C3A42"/>'+
+      '<text x="43" y="40" text-anchor="middle" font-family="Andika,sans-serif" font-size="26" font-weight="700" fill="#fff">'+v+'</text></svg>';
+    b.dataset.v=v;
+    b.onclick=()=>{
+      if(b.dataset.bitti==='1')return;
+      if(parseInt(b.dataset.v,10)===vagSira[vagIndex]){
+        b.dataset.bitti='1'; b.style.opacity='.35'; vagIndex++;
+        if(vagIndex===5) geri($('vagGeri'),true,'Tren hazır! Sıralama doğru. 🚂');
+        else geri($('vagGeri'),true,'Doğru! Sıradaki en küçüğü bul.');
+      } else geri($('vagGeri'),false,'Bu değil. Kalanların en küçüğünü seç.');
+    };
+    a.appendChild(b);
+  });
+}
+
+/* ================= OYUN 5 · MİNİ MARKET ================= */
+let marPuan=0,marD=-1;
+function marYeni(){
+  const u=URUNLER[rnd(0,URUNLER.length-1)];
+  // 1. sınıf: fiyatlar 20 ₺'yi geçmez
+  const kodlar=['1tl','5tl','10tl'];
+  function kombo(){
+    const n=rnd(1,3); const k=[]; let t=0;
+    for(let i=0;i<n;i++){
+      const uygun=kodlar.filter(x=>t+PARALAR[x].v<=20);
+      if(!uygun.length) break;
+      const c=uygun[rnd(0,uygun.length-1)]; k.push(c); t+=PARALAR[c].v;
+    }
+    return k.length?k:['1tl'];
+  }
+  const dogruK=kombo();
+  const fiyat=dogruK.reduce((t,k)=>t+PARALAR[k].v,0);
+  let secenek=[dogruK];
+  let guvenlik=0;
+  while(secenek.length<3 && guvenlik<50){
+    const k=kombo(); const t=k.reduce((s,x)=>s+PARALAR[x].v,0);
+    if(t!==fiyat) secenek.push(k);
+    guvenlik++;
+  }
+  secenek=karistir(secenek);
+  marD=secenek.findIndex(k=>k.reduce((s,x)=>s+PARALAR[x].v,0)===fiyat);
+  $('marUrun').innerHTML='<span style="font-size:26px">'+u[0]+'</span> <span>'+u[1]+' — '+fiyat+' ₺</span>';
+  $('marGeri').textContent='';
+  const s=$('marSec'); s.innerHTML='';
+  secenek.forEach((k,i)=>{
+    const b=document.createElement('button');
+    b.style.cssText='border:3px solid #BCE3F5;border-radius:16px;background:#fff;padding:8px;cursor:pointer;display:flex;gap:4px;flex-wrap:wrap;align-items:center;max-width:100%';
+    b.innerHTML=k.map(x=>paraSVG(x,0.62)).join('');
+    b.onclick=()=>{
+      if(i===marD){ b.style.borderColor='#4E9B2E'; b.style.background='#DFF5D2'; marPuan+=10;
+        geri($('marGeri'),true,'Tam ödeme! +10 puan'); }
+      else { b.style.borderColor='#E8453C'; b.style.background='#FBDEDC'; marPuan=Math.max(0,marPuan-3);
+        geri($('marGeri'),false,'Bu paralar '+fiyat+' ₺ etmiyor. −3 puan'); }
+      $('marSkor').textContent='Puan: '+marPuan;
+    };
+    s.appendChild(b);
+  });
+}
+
+/* ================= OYUN 6 · ŞEKİL AVI ================= */
+let sekKalan=0;
+function sekBasla(){
+  const tipler=[
+    {ad:'üçgen',ciz:(x,y,c)=>'<polygon points="'+x+','+(y-22)+' '+(x+24)+','+(y+18)+' '+(x-24)+','+(y+18)+'" fill="'+c+'"/>'},
+    {ad:'kare',ciz:(x,y,c)=>'<rect x="'+(x-22)+'" y="'+(y-22)+'" width="44" height="44" rx="5" fill="'+c+'"/>'},
+    {ad:'çember',ciz:(x,y,c)=>'<circle cx="'+x+'" cy="'+y+'" r="24" fill="'+c+'"/>'},
+    {ad:'dikdörtgen',ciz:(x,y,c)=>'<rect x="'+(x-30)+'" y="'+(y-16)+'" width="60" height="32" rx="5" fill="'+c+'"/>'}
+  ];
+  const hedef=tipler[rnd(0,3)];
+  $('sekHedef').textContent='Bütün '+hedef.ad+'lere dokun!';
+  $('sekGeri').textContent='';
+  const yerler=[];
+  for(let r=0;r<4;r++) for(let c=0;c<6;c++) yerler.push({x:40+c*72,y:38+r*62});
+  karistir(yerler);
+  const adet=rnd(4,7); sekKalan=adet;
+  let h='<rect width="440" height="260" fill="#F3FAFE"/>';
+  const kullan=yerler.slice(0,14);
+  kullan.forEach((p,i)=>{
+    const t = i<adet ? hedef : tipler.filter(x=>x.ad!==hedef.ad)[rnd(0,2)];
+    const c = RENK[rnd(0,RENK.length-1)];
+    h+='<g class="sekTik" data-ok="'+(t.ad===hedef.ad)+'" style="cursor:pointer">'+t.ciz(p.x,p.y,c)+'</g>';
+  });
+  $('sekSvg').innerHTML=h;
+  $('sekSkor').textContent='Kalan: '+sekKalan;
+  $('sekSvg').querySelectorAll('.sekTik').forEach(g=>{
+    g.onclick=()=>{
+      if(g.dataset.bitti==='1')return;
+      if(g.dataset.ok==='true'){
+        g.dataset.bitti='1'; g.style.opacity='.25'; sekKalan--;
+        $('sekSkor').textContent='Kalan: '+sekKalan;
+        if(sekKalan===0) geri($('sekGeri'),true,'Hepsini buldun! 🎉');
+        else geri($('sekGeri'),true,'Doğru!');
+      } else { g.style.opacity='.5'; geri($('sekGeri'),false,'Bu '+hedef.ad+' değil.'); }
+    };
+  });
+}
+
+/* ================= TEMA DEĞERLENDİRMELERİ ================= */
+testKur('test1',[
+  {s:'Kalem kutunun <b>içinde</b>. Kalem nerededir?',sec:['Kutunun dışında','Kutunun içinde','Kutunun üstünde'],d:1},
+  {s:'Sağ elinle kulağını tuttun. Hangi elini kullandın?',sec:['Sol elimi','Sağ elimi','İki elimi'],d:1},
+  {s:'İki nesnenin biçimi ve büyüklüğü aynıysa bu nesneler nedir?',sec:['Eştir','Farklıdır','Büyüktür'],d:0},
+  {s:'Top masanın altındaysa top masaya göre nerededir?',sec:['Üstünde','Altında','İçinde'],d:1},
+  {s:'Aşağıdakilerden hangisi <b>eş</b> nesnelere örnektir?',sec:['Bir çift aynı çorap','Bir kitap ve bir silgi','Büyük top ve küçük top'],d:0}
+]);
+testKur('test2',[
+  {s:'1 onluk ve 5 birlik kaç eder?',sec:['15','51','6'],d:0},
+  {s:'Hangisi 12\'den büyüktür?',sec:['9','11','17'],d:2},
+  {s:'🔺🟦🔺🟦🔺 örüntüsünde sırada hangisi gelir?',sec:['🔺','🟦','⭐'],d:1},
+  {s:'Sıraya dizilen çocuklardan en öndeki kaçıncıdır?',sec:['İkinci','Birinci','Üçüncü'],d:1},
+  {s:'Bir kavanozdaki fasulye sayısını önce ne yaparız?',sec:['Tahmin ederiz','Döker atarız','Boyarız'],d:0},
+  {s:'18 sayısı kaç onluk kaç birliktir?',sec:['1 onluk 8 birlik','8 onluk 1 birlik','18 onluk'],d:0}
+]);
+testKur('test3',[
+  {s:'Sıramızı ölçmek için aşağıdakilerden hangisini kullanabiliriz?',sec:['Karış','Litre','Saat'],d:0},
+  {s:'Öğretmenin karışı çocuğun karışından büyüktür. Aynı sırayı ölçerlerse kimin sayısı daha azdır?',sec:['Öğretmenin','Çocuğun','Eşittir'],d:0},
+  {s:'Terazide aşağıda kalan kefedeki nesne nasıldır?',sec:['Daha hafiftir','Daha ağırdır','Eşittir'],d:1},
+  {s:'Bir tüy ile bir tuğladan hangisi daha hafiftir?',sec:['Tüy','Tuğla','İkisi de aynı'],d:0},
+  {s:'Aşağıdakilerden hangisi uzunluk ölçmede kullanılmaz?',sec:['Adım','Ayak','Bardak'],d:2}
+]);
+testKur('test4',[
+  {s:'7 + 5 = ?',sec:['11','12','13'],d:1},
+  {s:'15 − 6 = ?',sec:['9','8','11'],d:0},
+  {s:'6 + ❓ = 10 işleminde kutuya hangi sayı gelir?',sec:['3','4','5'],d:1},
+  {s:'Dalda 12 kuş vardı, 4\'ü uçtu. Kaç kuş kaldı?',sec:['16','8','6'],d:1},
+  {s:'8 + 3 = 11 ise aşağıdakilerden hangisi doğrudur?',sec:['11 − 3 = 8','11 + 3 = 8','8 − 3 = 11'],d:0},
+  {s:'Sınıfta 9 kız, 8 erkek var. Toplam kaç öğrenci vardır?',sec:['17','16','18'],d:0}
+]);
+testKur('test5',[
+  {s:'100 kuruş kaç liradır?',sec:['1 ₺','10 ₺','100 ₺'],d:0},
+  {s:'Aşağıdakilerden hangisi madeni paramız <b>değildir</b>?',sec:['25 kr','50 kr','20 ₺'],d:2},
+  {s:'2 tane 50 kuruş kaç lira eder?',sec:['1 ₺','2 ₺','5 ₺'],d:0},
+  {s:'10 ₺ + 5 ₺ = ?',sec:['15 ₺','50 ₺','20 ₺'],d:0},
+  {s:'Elimizde 10 ₺ var. 15 ₺\'lik bir oyuncağı alabilir miyiz?',sec:['Evet','Hayır','Bilinmez'],d:1},
+  {s:'5 ₺ + 5 ₺ + 5 ₺ kaç lira eder?',sec:['15 ₺','10 ₺','20 ₺'],d:0}
+]);
+testKur('test6',[
+  {s:'Zar hangi geometrik cisme benzer?',sec:['Küre','Küp','Koni'],d:1},
+  {s:'Topun benzediği cisim hangisidir?',sec:['Küre','Silindir','Küp'],d:0},
+  {s:'Üçgenin kaç kenarı vardır?',sec:['3','4','0'],d:0},
+  {s:'Çemberin kaç köşesi vardır?',sec:['1','4','Yoktur'],d:2},
+  {s:'Konserve kutusu hangi cisme benzer?',sec:['Koni','Silindir','Kare prizma'],d:1},
+  {s:'Karenin bütün kenarları nasıldır?',sec:['Eşit uzunluktadır','Farklıdır','İkisi uzun ikisi kısadır'],d:0}
+]);
+testKur('test7',[
+  {s:'Çetelede beşinci çizgi nasıl çizilir?',sec:['Düz','Çapraz','Yatay'],d:1},
+  {s:'Grafikte en yüksek sütun neyi gösterir?',sec:['En azı','En çoğu','Ortalamayı'],d:1},
+  {s:'||||| |||  çetelesi kaç eder?',sec:['8','7','5'],d:0},
+  {s:'Arkadaşlarımıza soru sorup cevapları kaydetmeye ne denir?',sec:['Veri toplama','Ölçme','Tartma'],d:0},
+  {s:'Nesne grafiğinde her nesne kaç kişiyi gösterir?',sec:['Bir kişiyi','Beş kişiyi','On kişiyi'],d:0}
+]);
+
+/* ================= BAŞLANGIÇ ================= */
+uzYeni(); esYeni();
+sayYeni(); blokKur(); orYeni(); karYeni();
+olcYeni(); terYeni();
+topYeni(); cikYeni(); eksYeni(); probYeni();
+paralariGoster(); paraYeni(); alisYeni();
+cisYeni(); kenYeni();
+grYeni(); ceYeni();
+kurYeni(); hafBasla(); vagBasla(); marYeni(); sekBasla();
+$('balHedef').textContent='Başlamak için "Oyunu Başlat" düğmesine bas.';
+</script>
 </body>
 </html>
