@@ -82,6 +82,33 @@ body{
 .konu-satir h3{font-size:17.5px}
 .konu-satir p{font-size:14.5px;color:var(--metin-acik);margin-top:3px}
 
+.konu-satir{cursor:pointer;transition:.15s}
+.konu-satir:hover{background:#FAFDFF}
+.konu-satir .ok{
+  margin-left:auto;flex:0 0 auto;align-self:center;font-size:15px;font-weight:700;
+  color:#fff;background:var(--mavi);border-radius:20px;padding:3px 12px;white-space:nowrap;
+}
+.konu-satir.acik .ok{background:var(--kirmizi)}
+.detay{
+  display:none;background:#fff;border:3px solid #E4F1F8;border-top:none;
+  border-radius:0 0 18px 18px;margin:-6px 0 14px;padding:6px 18px 20px;box-shadow:var(--golge);
+}
+.detay.acik{display:block;animation:gir .25s ease}
+.detay h6{font-size:16.5px;color:var(--mavi);margin:16px 0 2px}
+.detay p{font-size:15.2px;margin-top:6px}
+.detay svg.res{display:block;width:100%;max-width:500px;height:auto;margin:12px 0;border-radius:14px;background:#F3FAFE}
+.detay .ornek{
+  background:#FFF6DF;border:3px dashed var(--sari-koyu);border-radius:14px;
+  padding:12px 14px;margin-top:14px;font-size:15px;
+}
+.detay .ornek b{color:var(--kirmizi-koyu)}
+.detay .dikkat{
+  background:#FBE9E8;border:3px dashed var(--kirmizi);border-radius:14px;
+  padding:12px 14px;margin-top:12px;font-size:15px;
+}
+.detay ul{margin:8px 0 0 20px;font-size:15px}
+.detay li{margin-top:5px}
+
 h4.bolum{
   margin-top:32px;font-size:19.5px;color:var(--mavi);
   border-bottom:4px dotted var(--gok-acik);padding-bottom:8px;
@@ -1884,5 +1911,770 @@ grYeni(); ceYeni();
 kurYeni(); hafBasla(); vagBasla(); marYeni(); sekBasla();
 $('balHedef').textContent='Başlamak için "Oyunu Başlat" düğmesine bas.';
 </script>
+<script>
+/* ============ KONU ANLATIMI DETAYLARI ============ */
+const R={k:'#E8453C',s:'#FFC93C',m:'#4FA9D8',y:'#6DBE45',mo:'#A97BC9',t:'#F08A3C',ah:'#C4874A',ahk:'#9B6633',gri:'#5E6F79'};
+function SV(h,inner){return '<svg class="res" viewBox="0 0 500 '+h+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>';}
+function yz(x,y,t,b,r,anc){return '<text x="'+x+'" y="'+y+'" '+(anc?'text-anchor="'+anc+'" ':'')+'font-family="Andika,sans-serif" font-size="'+(b||16)+'" font-weight="700" fill="'+(r||'#2C3A42')+'">'+t+'</text>';}
+
+const DETAY={};
+
+/* ---------- TEMA 1 ---------- */
+DETAY.t1=[
+{b:'Uzamsal İlişkiler — nesneler nerede?',
+ m:'Bir nesnenin yerini söylerken onu <b>başka bir nesneye göre</b> anlatırız. "Top kutunun içinde" dediğimizde topun yerini kutuya göre söylemiş oluruz. Bu kelimeleri günde onlarca kez kullanırız: içinde–dışında, üstünde–altında, önünde–arkasında, sağında–solunda, yakın–uzak.',
+ s:SV(250,
+  '<rect width="500" height="250" fill="#F3FAFE"/>'+
+  // içinde / dışında
+  '<g transform="translate(20,16)">'+
+    '<polygon points="0,30 70,30 70,82 0,82" fill="'+R.ah+'"/><polygon points="0,30 18,14 88,14 70,30" fill="#DEA167"/><polygon points="70,30 88,14 88,66 70,82" fill="'+R.ahk+'"/>'+
+    '<circle cx="35" cy="58" r="16" fill="'+R.k+'"/><circle cx="110" cy="70" r="14" fill="'+R.m+'"/>'+
+    yz(44,110,'içinde · dışında',15,R.gri,'middle')+
+  '</g>'+
+  // üstünde / altında
+  '<g transform="translate(190,16)">'+
+    '<circle cx="46" cy="20" r="15" fill="'+R.s+'"/>'+
+    '<rect x="4" y="40" width="90" height="11" rx="5" fill="'+R.ah+'"/>'+
+    '<rect x="12" y="51" width="10" height="34" rx="4" fill="'+R.ahk+'"/><rect x="76" y="51" width="10" height="34" rx="4" fill="'+R.ahk+'"/>'+
+    '<circle cx="49" cy="70" r="14" fill="'+R.y+'"/>'+
+    yz(49,110,'üstünde · altında',15,R.gri,'middle')+
+  '</g>'+
+  // önünde / arkasında
+  '<g transform="translate(340,20)">'+
+    '<rect x="30" y="20" width="56" height="60" rx="8" fill="'+R.mo+'"/>'+
+    '<circle cx="24" cy="70" r="16" fill="'+R.t+'"/>'+
+    yz(56,106,'önünde · arkasında',15,R.gri,'middle')+
+  '</g>'+
+  // sağ sol
+  '<g transform="translate(40,140)">'+
+    '<rect x="70" y="14" width="44" height="60" rx="8" fill="'+R.ah+'"/>'+
+    '<circle cx="34" cy="46" r="16" fill="'+R.m+'"/><circle cx="150" cy="46" r="16" fill="'+R.k+'"/>'+
+    yz(34,86,'solunda',14,R.gri,'middle')+yz(150,86,'sağında',14,R.gri,'middle')+
+  '</g>'+
+  '<g transform="translate(280,140)">'+
+    '<rect x="0" y="30" width="26" height="34" rx="5" fill="'+R.y+'"/>'+
+    '<circle cx="60" cy="48" r="14" fill="'+R.s+'"/><circle cx="180" cy="48" r="14" fill="'+R.mo+'"/>'+
+    '<line x1="26" y1="80" x2="180" y2="80" stroke="'+R.gri+'" stroke-width="3" stroke-dasharray="6 5"/>'+
+    yz(60,26,'yakın',14,R.gri,'middle')+yz(180,26,'uzak',14,R.gri,'middle')+
+  '</g>'),
+ o:'<b>Sınıfta deneyelim:</b> Silgini kaleminin <b>sağına</b> koy. Şimdi kitabının <b>altına</b> koy. Şimdi sıranın <b>üstüne</b> koy. Her seferinde yüksek sesle söyle.',
+ d:'<b>Dikkat:</b> Sağ–sol <b>kime göre</b> söylendiğine bağlıdır. Karşındaki arkadaşının sağı, senin solundadır.'},
+
+{b:'Yön ve Konum Tarifi — yolu anlatmak',
+ m:'Bir yeri tarif ederken adım adım yönerge veririz: "İki adım ileri git, sağa dön, üçüncü sıranın önünde dur." Bu, hem dinlemeyi hem de yön kelimelerini doğru kullanmayı gerektirir. Krokide de aynı şeyi yaparız: başlangıç noktasından hedefe giden yolu ok ile gösteririz.',
+ s:SV(210,
+  '<rect width="500" height="210" fill="#F3FAFE"/>'+
+  (function(){let g='';for(let r=0;r<4;r++)for(let c=0;c<8;c++)g+='<rect x="'+(30+c*54)+'" y="'+(16+r*44)+'" width="54" height="44" fill="none" stroke="#D9EDF7" stroke-width="2"/>';return g;})()+
+  '<text x="46" y="48" font-size="26">🏫</text>'+
+  '<text x="370" y="180" font-size="26">🏠</text>'+
+  '<path d="M62 52 h108 v44 h108 v44 h108" fill="none" stroke="'+R.k+'" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>'+
+  '<polygon points="386,140 374,132 374,148" fill="'+R.k+'"/>'+
+  yz(30,204,'2 kare sağa → 1 kare aşağı → 2 kare sağa → 1 kare aşağı → 2 kare sağa',14,R.gri)),
+ o:'<b>Oyun:</b> Bir arkadaşının gözlerini kapat, sadece sözle yön tarif ederek onu kapıya götür. Sadece "ileri, geri, sağa, sola, dur" kelimelerini kullanabilirsin.',
+ d:''},
+
+{b:'Eş Nesneler — birbirinin aynısı',
+ m:'İki nesnenin <b>biçimi</b> ve <b>büyüklüğü</b> aynıysa bu nesneler <b>eştir</b>. Eş nesneler üst üste konduğunda tam olarak çakışır, taşan ya da eksik kalan yer olmaz. Bir çift aynı çorap, aynı kalıptan çıkmış iki kurabiye, birbirinin aynısı iki oyuncak araba eş nesnelerdir.',
+ s:SV(200,
+  '<rect width="500" height="200" fill="#F3FAFE"/>'+
+  '<rect x="16" y="14" width="230" height="172" rx="16" fill="#DFF5D2" stroke="'+R.y+'" stroke-width="3"/>'+
+  '<rect x="258" y="14" width="226" height="172" rx="16" fill="#FBDEDC" stroke="'+R.k+'" stroke-width="3"/>'+
+  yz(131,42,'EŞ ✔',18,'#2E6B14','middle')+yz(371,42,'EŞ DEĞİL ✘',18,'#B8322B','middle')+
+  '<polygon points="70,66 106,132 34,132" fill="'+R.mo+'"/><polygon points="190,66 226,132 154,132" fill="'+R.mo+'"/>'+
+  '<polygon points="310,66 346,132 274,132" fill="'+R.t+'"/><polygon points="424,84 448,132 400,132" fill="'+R.t+'"/>'+
+  yz(131,162,'aynı biçim, aynı büyüklük',14,R.gri,'middle')+
+  yz(371,162,'aynı biçim, farklı büyüklük',14,R.gri,'middle')),
+ o:'<b>Kendin dene:</b> İki kâğıdı üst üste koy ve birlikte kes. Çıkan iki parça her zaman eştir.',
+ d:'<b>Dikkat:</b> Renk eşliği bozmaz. Kırmızı kare ile mavi kare aynı büyüklükteyse yine eştir.'},
+
+{b:'Farklı Olanı Bulma',
+ m:'Bir gruptaki nesnelere bakarken hepsinin ortak özelliğini buluruz; ortak özelliğe uymayan nesne <b>farklı olandır</b>. Farklılık biçimden, büyüklükten, sayıdan ya da duruştan gelebilir. Önemli olan, cevabı söylerken <b>nedenini de açıklamaktır</b>.',
+ s:SV(150,
+  '<rect width="500" height="150" fill="#F3FAFE"/>'+
+  '<circle cx="70" cy="70" r="34" fill="'+R.m+'"/><circle cx="170" cy="70" r="34" fill="'+R.m+'"/>'+
+  '<rect x="236" y="36" width="68" height="68" rx="8" fill="'+R.k+'"/>'+
+  '<circle cx="370" cy="70" r="34" fill="'+R.m+'"/>'+
+  '<circle cx="270" cy="70" r="46" fill="none" stroke="'+R.k+'" stroke-width="5" stroke-dasharray="10 7"/>'+
+  yz(270,138,'farklı olan: kare — diğerleri çember',15,R.gri,'middle')),
+ o:'<b>Söyleyerek pekiştir:</b> "Bu farklı çünkü ... " cümlesini her seferinde tamamla.',
+ d:''}
+];
+
+/* ---------- TEMA 2 ---------- */
+DETAY.t2=[
+{b:'Rakamlar ve Sayılar — 0\'dan 20\'ye',
+ m:'<b>Rakam</b> sayıları yazmak için kullandığımız sembollerdir: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9. Bu on rakamla bütün sayıları yazarız. <b>Sayı</b> ise bir çokluğu anlatır. 12 sayısı iki rakamla yazılır ama tek bir sayıdır. 1. sınıfta 0\'dan 20\'ye kadar olan sayıları sayar, okur ve yazarız.',
+ s:SV(230,
+  '<rect width="500" height="230" fill="#F3FAFE"/>'+
+  (function(){let g='';const rn=['#E8453C','#FFC93C','#4FA9D8','#6DBE45','#A97BC9','#F08A3C','#4FA9D8','#E8453C','#6DBE45','#A97BC9'];
+   for(let i=0;i<10;i++){const x=20+i*47;g+='<rect x="'+x+'" y="16" width="40" height="40" rx="8" fill="'+rn[i]+'"/>'+yz(x+20,45,String(i),24,i===1?'#7A5B00':'#fff','middle');}return g;})()+
+  yz(250,78,'On rakamımız',15,R.gri,'middle')+
+  // 14 örneği
+  '<g transform="translate(20,96)">'+
+    (function(){let g='';for(let i=0;i<14;i++){const x=(i%7)*40, y=Math.floor(i/7)*40;g+='<circle cx="'+(x+18)+'" cy="'+(y+18)+'" r="15" fill="'+R.k+'"/>';}return g;})()+
+    yz(310,42,'14',44,R.m)+yz(300,76,'on dört',18,R.gri)+
+  '</g>'+
+  yz(20,220,'14 iki rakamla yazılır: 1 ve 4 — ama tek bir sayıdır.',15,R.gri)),
+ o:'<b>Sıfır da bir sayıdır:</b> Hiç olmamayı gösterir. Tabakta hiç elma yoksa "0 elma var" deriz.',
+ d:''},
+
+{b:'Karşılaştırma ve Sıralama',
+ m:'İki grubu karşılaştırırken önce <b>birebir eşleriz</b>: her nesneye bir eş bulmaya çalışırız. Eşi kalmayan tarafta daha çok nesne vardır. Sayıları karşılaştırırken <b>büyüktür (&gt;)</b>, <b>küçüktür (&lt;)</b> ve <b>eşittir (=)</b> sembollerini kullanırız. Sembolün açık ağzı her zaman büyük sayıya bakar.',
+ s:SV(240,
+  '<rect width="500" height="240" fill="#F3FAFE"/>'+
+  // birebir eşleme
+  (function(){let g='';for(let i=0;i<5;i++)g+='<circle cx="'+(44+i*52)+'" cy="36" r="16" fill="'+R.k+'"/>';
+   for(let i=0;i<3;i++)g+='<circle cx="'+(44+i*52)+'" cy="96" r="16" fill="'+R.m+'"/>';
+   for(let i=0;i<3;i++)g+='<line x1="'+(44+i*52)+'" y1="54" x2="'+(44+i*52)+'" y2="78" stroke="'+R.gri+'" stroke-width="3" stroke-dasharray="4 4"/>';
+   for(let i=3;i<5;i++)g+='<circle cx="'+(44+i*52)+'" cy="96" r="16" fill="none" stroke="'+R.k+'" stroke-width="3" stroke-dasharray="5 5"/>';
+   return g;})()+
+  yz(310,42,'5 tane',17,R.gri)+yz(310,102,'3 tane — 2 eksik',17,R.gri)+
+  yz(20,140,'5 > 3   ·   3 < 5   ·   4 = 4',26,R.m)+
+  // sıralama
+  '<g transform="translate(20,164)">'+
+    (function(){let g='';[3,7,11,16,20].forEach((v,i)=>{g+='<rect x="'+(i*88)+'" y="14" width="62" height="44" rx="10" fill="'+R.y+'"/>'+yz(i*88+31,46,String(v),24,'#fff','middle');
+      if(i<4)g+='<text x="'+(i*88+70)+'" y="44" font-family="Andika,sans-serif" font-size="22" font-weight="700" fill="'+R.gri+'">&lt;</text>';});return g;})()+
+    yz(0,74,'küçükten büyüğe sıralama',14,R.gri)+
+  '</g>'),
+ o:'<b>Timsah kuralı:</b> Sembolü ağzı açık bir timsah gibi düşün. Timsah her zaman <b>çok olanı</b> yemek ister, ağzı ona döner.',
+ d:''},
+
+{b:'Sıra Bildiren Sayılar',
+ m:'Bir sırada kimin nerede olduğunu söylerken <b>sıra bildiren sayıları</b> kullanırız: birinci, ikinci, üçüncü, dördüncü, beşinci... Bunlar kaç tane olduğunu değil, <b>kaçıncı</b> olduğunu anlatır. Rakamla yazarken sayının yanına nokta koyarız: 1., 2., 3.',
+ s:SV(170,
+  '<rect width="500" height="170" fill="#F3FAFE"/>'+
+  (function(){let g='';const ad=['1.','2.','3.','4.','5.'],sz=['birinci','ikinci','üçüncü','dördüncü','beşinci'],rk=[R.k,R.s,R.m,R.y,R.mo];
+   for(let i=0;i<5;i++){const x=30+i*92;
+    g+='<circle cx="'+(x+30)+'" cy="52" r="26" fill="'+rk[i]+'"/>'+'<text x="'+(x+30)+'" y="62" text-anchor="middle" font-size="26">🙂</text>';
+    g+=yz(x+30,104,ad[i],22,R.m,'middle')+yz(x+30,130,sz[i],14,R.gri,'middle');}
+   return g;})()+
+  '<path d="M26 148 h444" stroke="'+R.gri+'" stroke-width="4" stroke-linecap="round"/>'+
+  '<polygon points="470,148 458,142 458,154" fill="'+R.gri+'"/>'),
+ o:'<b>Fark et:</b> "Üç elma" kaç tane olduğunu, "üçüncü elma" sıradaki yerini söyler.',
+ d:'<b>Dikkat:</b> Sıra hangi uçtan sayıldığına bağlıdır. Soldan üçüncü ile sağdan üçüncü aynı kişi olmayabilir.'},
+
+{b:'Onluk ve Birlik',
+ m:'On tane birliği bir araya toplayıp bağladığımızda <b>bir onluk</b> elde ederiz. 10\'dan 20\'ye kadar olan sayıları "bir onluk ve birkaç birlik" olarak okuruz. Örneğin 14 sayısı <b>1 onluk ve 4 birliktir</b>. 20 sayısı ise <b>2 onluktur</b>, hiç birlik yoktur.',
+ s:SV(290,
+  '<rect width="500" height="290" fill="#F3FAFE"/>'+
+  // 10 birlik -> 1 onluk
+  (function(){let g='';for(let i=0;i<10;i++)g+='<rect x="'+(20+i*26)+'" y="18" width="22" height="22" rx="4" fill="'+R.t+'" stroke="#C96C22" stroke-width="2"/>';return g;})()+
+  yz(290,36,'10 birlik',17,R.gri)+
+  '<path d="M180 50 v22" stroke="'+R.gri+'" stroke-width="4"/><polygon points="180,80 172,66 188,66" fill="'+R.gri+'"/>'+
+  '<rect x="160" y="86" width="26" height="104" rx="5" fill="'+R.y+'" stroke="#3B7A22" stroke-width="2"/>'+
+  (function(){let g='';for(let j=1;j<10;j++)g+='<line x1="160" y1="'+(86+j*10.4)+'" x2="186" y2="'+(86+j*10.4)+'" stroke="#3B7A22" stroke-width="1.5" opacity=".7"/>';return g;})()+
+  yz(200,144,'= 1 onluk',18,R.gri)+
+  // 14
+  '<g transform="translate(20,196)">'+
+    '<rect x="0" y="0" width="24" height="80" rx="5" fill="'+R.y+'" stroke="#3B7A22" stroke-width="2"/>'+
+    (function(){let g='';for(let j=1;j<10;j++)g+='<line x1="0" y1="'+(j*8)+'" x2="24" y2="'+(j*8)+'" stroke="#3B7A22" stroke-width="1.2" opacity=".7"/>';return g;})()+
+    (function(){let g='';for(let i=0;i<4;i++)g+='<rect x="'+(44+i*28)+'" y="54" width="24" height="24" rx="4" fill="'+R.t+'" stroke="#C96C22" stroke-width="2"/>';return g;})()+
+    yz(176,50,'1 onluk + 4 birlik',18,R.gri)+yz(176,78,'14',34,R.m)+
+    yz(300,70,'10 + 4 = 14',22,R.k)+
+  '</g>'),
+ o:'<b>Pipetle yap:</b> 10 pipeti lastikle bağla — bu bir onluk. Yanına 4 pipet koy. Elindeki sayı 14.',
+ d:'<b>Dikkat:</b> 14 ile 41 aynı rakamları kullanır ama farklı sayılardır. Onluk her zaman <b>solda</b> yazılır.'},
+
+{b:'Sayı ve Şekil Örüntüleri',
+ m:'<b>Örüntü</b>, belli bir kurala göre tekrar eden dizilimdir. Şekil örüntüsünde renk ya da biçim tekrar eder; sayı örüntüsünde sayılar belli bir kurala göre artar ya da azalır. Örüntüyü çözmek için önce <b>tekrar eden parçayı</b> bulur, sonra kuralı söyleriz.',
+ s:SV(250,
+  '<rect width="500" height="250" fill="#F3FAFE"/>'+
+  yz(20,30,'Şekil örüntüsü',16,R.m)+
+  (function(){let g='';const dizi=[0,1,0,1,0,1];
+   for(let i=0;i<6;i++){const x=20+i*72;
+    g+= dizi[i]===0 ? '<rect x="'+x+'" y="44" width="48" height="48" rx="8" fill="'+R.s+'"/>' : '<circle cx="'+(x+24)+'" cy="68" r="24" fill="'+R.mo+'"/>';}
+   g+='<rect x="'+(20+6*72)+'" y="44" width="48" height="48" rx="8" fill="#fff" stroke="'+R.m+'" stroke-width="3" stroke-dasharray="7 5"/>';
+   return g;})()+
+  '<rect x="14" y="38" width="150" height="60" rx="10" fill="none" stroke="'+R.k+'" stroke-width="3"/>'+
+  yz(20,118,'tekrar eden parça: kare–daire',14,R.gri)+
+  yz(20,158,'Sayı örüntüsü',16,R.m)+
+  (function(){let g='';[2,4,6,8,10].forEach((v,i)=>{const x=20+i*82;
+    g+='<rect x="'+x+'" y="172" width="60" height="44" rx="10" fill="'+R.y+'"/>'+yz(x+30,203,String(v),24,'#fff','middle');
+    if(i<4)g+='<path d="M'+(x+64)+' 194 h14" stroke="'+R.gri+'" stroke-width="3"/>'+yz(x+72,166,'+2',14,R.k,'middle');});
+   return g;})()+
+  yz(438,203,'12',24,R.m)),
+ o:'<b>Örüntü kuralını söyle:</b> "Kare, daire, kare, daire..." ya da "ikişer artıyor". Kuralı söyleyebiliyorsan devamını da getirebilirsin.',
+ d:''},
+
+{b:'Tahmin',
+ m:'<b>Tahmin</b>, saymadan önce yaklaşık bir sayı söylemektir. Tahmin yanlış olabilir, önemli değil — önemli olan mantıklı bir sayı söylemektir. Tahmin ettikten sonra <b>sayarak kontrol ederiz</b>. Zamanla tahminlerimiz gerçeğe yaklaşır.',
+ s:SV(210,
+  '<rect width="500" height="210" fill="#F3FAFE"/>'+
+  '<g transform="translate(40,20)">'+
+    '<path d="M14 22 h104 v118 a20 20 0 0 1 -20 20 h-64 a20 20 0 0 1 -20 -20 z" fill="#fff" stroke="'+R.m+'" stroke-width="4"/>'+
+    '<rect x="8" y="8" width="116" height="16" rx="8" fill="'+R.m+'"/>'+
+    (function(){let g='';const pts=[[40,60],[70,52],[96,66],[50,88],[82,92],[38,114],[68,118],[96,110],[54,138],[86,140]];
+     pts.forEach(p=>g+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="11" fill="'+R.k+'"/>');return g;})()+
+  '</g>'+
+  '<g transform="translate(220,40)">'+
+    '<rect x="0" y="0" width="240" height="50" rx="14" fill="#FFF6DF" stroke="'+R.s+'" stroke-width="3"/>'+
+    yz(16,32,'Tahminim: yaklaşık 12',18,R.gri)+
+    '<rect x="0" y="66" width="240" height="50" rx="14" fill="#DFF5D2" stroke="'+R.y+'" stroke-width="3"/>'+
+    yz(16,98,'Saydım: 10 tane',18,'#2E6B14')+
+    yz(0,144,'Tahminim gerçeğe yakınmış!',15,R.gri)+
+  '</g>'),
+ o:'<b>İpucu:</b> Önce küçük bir grubu (mesela 5 tane) gözünle ölç, sonra "kaç tane böyle grup var?" diye düşün.',
+ d:''}
+];
+</script>
+<script>
+/* ---------- TEMA 3 ---------- */
+DETAY.t3=[
+{b:'Uzunluk Ölçme — uzun mu, kısa mı?',
+ m:'Nesneleri uzunluklarına göre karşılaştırırken <b>aynı hizadan</b> başlatmamız gerekir. Uzunlukla ilgili kelimelerimiz çifter çifter kullanılır: <b>uzun–kısa</b>, <b>geniş–dar</b>, <b>kalın–ince</b>, <b>yüksek–alçak</b>. Üç ve daha fazla nesneyi ise en kısadan en uzuna doğru sıralarız.',
+ s:SV(300,
+  '<rect width="500" height="300" fill="#F3FAFE"/>'+
+  // uzun kısa
+  '<g transform="translate(20,16)">'+
+    '<rect x="0" y="10" width="180" height="18" rx="9" fill="'+R.k+'"/>'+
+    '<rect x="0" y="40" width="86" height="18" rx="9" fill="'+R.m+'"/>'+
+    '<line x1="0" y1="4" x2="0" y2="66" stroke="'+R.gri+'" stroke-width="3" stroke-dasharray="5 4"/>'+
+    yz(190,26,'uzun',16,R.gri)+yz(96,56,'kısa',16,R.gri)+
+  '</g>'+
+  // geniş dar
+  '<g transform="translate(290,16)">'+
+    '<rect x="0" y="6" width="110" height="26" rx="6" fill="'+R.y+'"/>'+
+    '<rect x="0" y="40" width="110" height="10" rx="5" fill="'+R.mo+'"/>'+
+    yz(118,28,'geniş',16,R.gri)+yz(118,52,'dar',16,R.gri)+
+  '</g>'+
+  // kalın ince
+  '<g transform="translate(20,110)">'+
+    '<rect x="0" y="0" width="40" height="96" rx="10" fill="'+R.ah+'"/>'+
+    '<rect x="66" y="0" width="14" height="96" rx="7" fill="'+R.ah+'"/>'+
+    yz(20,120,'kalın',16,R.gri,'middle')+yz(73,120,'ince',16,R.gri,'middle')+
+  '</g>'+
+  // yüksek alçak
+  '<g transform="translate(150,110)">'+
+    '<rect x="0" y="0" width="50" height="96" rx="6" fill="'+R.m+'"/>'+
+    '<rect x="70" y="50" width="50" height="46" rx="6" fill="'+R.t+'"/>'+
+    yz(25,120,'yüksek',16,R.gri,'middle')+yz(95,120,'alçak',16,R.gri,'middle')+
+  '</g>'+
+  // sıralama
+  '<g transform="translate(300,110)">'+
+    '<rect x="0" y="78" width="30" height="18" rx="9" fill="'+R.s+'"/>'+
+    '<rect x="44" y="78" width="56" height="18" rx="9" fill="'+R.s+'"/>'+
+    '<rect x="114" y="78" width="84" height="18" rx="9" fill="'+R.s+'"/>'+
+    yz(0,64,'en kısadan en uzuna',15,R.gri)+
+  '</g>'+
+  yz(20,264,'Karşılaştırırken iki nesnenin de başlangıcı aynı çizgide olmalıdır.',15,R.gri)+
+  '<line x1="20" y1="278" x2="480" y2="278" stroke="#D9EDF7" stroke-width="3"/>'),
+ o:'<b>Dene:</b> İki kalemi masaya koy; birini biraz öne kaydır. Şimdi hangisi uzun görünüyor? Aynı hizaya getirince cevap değişti mi?',
+ d:''},
+
+{b:'Standart Olmayan Birimler',
+ m:'Uzunluk ölçerken cetvel yerine <b>karış, adım, ayak, kalem, ataş</b> gibi birimler de kullanabiliriz. Bunlara <b>standart olmayan birim</b> denir. Aynı nesneyi farklı birimlerle ölçersek farklı sayılar buluruz. Birim <b>küçüldükçe</b> sayı büyür, birim <b>büyüdükçe</b> sayı küçülür.',
+ s:SV(290,
+  '<rect width="500" height="290" fill="#F3FAFE"/>'+
+  yz(20,28,'Aynı sıra, farklı birimler',16,R.m)+
+  // karış
+  '<g transform="translate(20,40)">'+
+    '<rect x="0" y="26" width="300" height="18" rx="8" fill="'+R.ah+'"/>'+
+    (function(){let g='';for(let i=0;i<4;i++)g+='<path d="M'+(6+i*74)+' 20 q37 -26 68 0" fill="none" stroke="'+R.m+'" stroke-width="5" stroke-linecap="round"/>';return g;})()+
+    yz(312,42,'4 karış',18,R.gri)+
+  '</g>'+
+  // ayak
+  '<g transform="translate(20,124)">'+
+    '<rect x="0" y="26" width="300" height="18" rx="8" fill="'+R.ah+'"/>'+
+    (function(){let g='';for(let i=0;i<6;i++)g+='<ellipse cx="'+(26+i*50)+'" cy="12" rx="20" ry="10" fill="'+R.y+'"/>';return g;})()+
+    yz(312,42,'6 ayak',18,R.gri)+
+  '</g>'+
+  // ataş
+  '<g transform="translate(20,206)">'+
+    '<rect x="0" y="26" width="300" height="18" rx="8" fill="'+R.ah+'"/>'+
+    (function(){let g='';for(let i=0;i<12;i++)g+='<rect x="'+(3+i*25)+'" y="6" width="19" height="11" rx="5" fill="none" stroke="'+R.t+'" stroke-width="4"/>';return g;})()+
+    yz(312,42,'12 ataş',18,R.gri)+
+  '</g>'+
+  yz(20,282,'Birim küçüldükçe sayı büyür: ataş en küçük birim, en büyük sayıyı verdi.',14,R.gri)),
+ o:'<b>Kural:</b> Ölçerken birimleri boşluk bırakmadan, üst üste bindirmeden, uç uca dizeriz.',
+ d:'<b>Dikkat:</b> Herkesin karışı farklıdır. Bu yüzden karışla ölçüm kişiden kişiye değişir — cetvel bu yüzden icat edilmiştir.'},
+
+{b:'Tartma — ağır mı, hafif mi?',
+ m:'Bir nesnenin ne kadar ağır olduğunu anlamanın üç yolu vardır: <b>elimizde tartarız</b>, <b>basit terazi</b> kullanırız ya da ikisini karşılaştırırız. Elde tartarken iki avucumuza birer nesne alır, hangi elimizin daha çok aşağı indiğine bakarız. Terazi bunu daha kesin gösterir: <b>ağır olan taraf aşağı iner</b>.',
+ s:SV(300,
+  '<rect width="500" height="300" fill="#F3FAFE"/>'+
+  yz(20,28,'1) Elimizde tartarız',16,R.m)+
+  '<g transform="translate(20,38)">'+
+    '<circle cx="70" cy="24" r="18" fill="#FFE0BE"/>'+
+    '<rect x="58" y="42" width="24" height="42" rx="10" fill="'+R.m+'"/>'+
+    '<line x1="58" y1="52" x2="18" y2="78" stroke="#FFE0BE" stroke-width="10" stroke-linecap="round"/>'+
+    '<line x1="82" y1="52" x2="122" y2="62" stroke="#FFE0BE" stroke-width="10" stroke-linecap="round"/>'+
+    '<rect x="0" y="80" width="34" height="26" rx="5" fill="'+R.k+'"/>'+
+    '<circle cx="132" cy="60" r="12" fill="'+R.s+'"/>'+
+    yz(0,124,'aşağı inen el → ağır',14,R.gri)+
+  '</g>'+
+  yz(230,28,'2) Basit terazi',16,R.m)+
+  '<g transform="translate(250,40)">'+
+    '<rect x="104" y="26" width="12" height="74" rx="5" fill="'+R.ahk+'"/><rect x="70" y="96" width="82" height="12" rx="6" fill="'+R.ahk+'"/>'+
+    '<line x1="26" y1="52" x2="196" y2="26" stroke="'+R.ah+'" stroke-width="10" stroke-linecap="round"/>'+
+    '<line x1="26" y1="52" x2="26" y2="72" stroke="'+R.ahk+'" stroke-width="4"/><line x1="196" y1="26" x2="196" y2="46" stroke="'+R.ahk+'" stroke-width="4"/>'+
+    '<path d="M0 72 h52 l-10 22 h-32 z" fill="'+R.m+'"/><path d="M170 46 h52 l-10 22 h-32 z" fill="'+R.k+'"/>'+
+    '<rect x="14" y="52" width="24" height="18" rx="4" fill="'+R.ah+'"/>'+
+    '<circle cx="196" cy="34" r="9" fill="'+R.s+'"/>'+
+    yz(0,126,'aşağıdaki kefe → ağır',14,R.gri)+
+  '</g>'+
+  yz(20,208,'3) Büyük her zaman ağır değildir',16,R.m)+
+  '<g transform="translate(20,214)">'+
+    '<rect x="0" y="10" width="90" height="58" rx="8" fill="'+R.mo+'"/>'+yz(45,46,'BOŞ',16,'#fff','middle')+
+    '<rect x="120" y="26" width="44" height="42" rx="8" fill="'+R.t+'"/>'+yz(142,54,'DOLU',12,'#fff','middle')+
+    yz(186,52,'küçük kutu daha ağır olabilir',15,R.gri)+
+  '</g>'),
+ o:'<b>Sınıf terazisi:</b> Bir askının iki ucuna poşet bağla — bedava ve çok işe yarayan bir terazi olur.',
+ d:'<b>Dikkat:</b> Ağırlık ile büyüklük farklı şeylerdir. Koca bir balon, küçük bir taştan hafiftir.'},
+
+{b:'Denge ve Eşitlik',
+ m:'Terazinin iki kefesi <b>aynı hizada duruyorsa</b> terazi dengededir; yani iki taraftaki nesneler eşit ağırlıktadır. Denge, ileride öğreneceğimiz <b>eşittir (=)</b> işaretinin ilk hâlidir. Bir tarafa nesne eklersek denge bozulur, o taraf aşağı iner.',
+ s:SV(280,
+  '<rect width="500" height="280" fill="#F3FAFE"/>'+
+  // dengede
+  '<g transform="translate(30,20)">'+
+    '<rect x="84" y="30" width="12" height="70" rx="5" fill="'+R.ahk+'"/><rect x="52" y="96" width="76" height="12" rx="6" fill="'+R.ahk+'"/>'+
+    '<line x1="10" y1="34" x2="170" y2="34" stroke="'+R.ah+'" stroke-width="10" stroke-linecap="round"/>'+
+    '<path d="M-14 46 h48 l-9 20 h-30 z" fill="'+R.m+'"/><path d="M146 46 h48 l-9 20 h-30 z" fill="'+R.k+'"/>'+
+    '<circle cx="10" cy="26" r="10" fill="'+R.s+'"/><circle cx="170" cy="26" r="10" fill="'+R.s+'"/>'+
+    yz(90,132,'DENGEDE — eşit',16,'#2E6B14','middle')+
+  '</g>'+
+  // dengesiz
+  '<g transform="translate(280,20)">'+
+    '<rect x="84" y="30" width="12" height="70" rx="5" fill="'+R.ahk+'"/><rect x="52" y="96" width="76" height="12" rx="6" fill="'+R.ahk+'"/>'+
+    '<line x1="10" y1="52" x2="170" y2="20" stroke="'+R.ah+'" stroke-width="10" stroke-linecap="round"/>'+
+    '<path d="M-14 64 h48 l-9 20 h-30 z" fill="'+R.m+'"/><path d="M146 32 h48 l-9 20 h-30 z" fill="'+R.k+'"/>'+
+    '<circle cx="0" cy="42" r="10" fill="'+R.s+'"/><circle cx="20" cy="42" r="10" fill="'+R.s+'"/>'+
+    '<circle cx="170" cy="12" r="10" fill="'+R.s+'"/>'+
+    yz(90,132,'SOL AĞIR',16,'#B8322B','middle')+
+  '</g>'+
+  yz(30,198,'1 kitap  =  3 silgi',24,R.m)+
+  (function(){let g='<rect x="230" y="176" width="46" height="34" rx="5" fill="'+R.mo+'"/>';
+   for(let i=0;i<3;i++)g+='<rect x="'+(300+i*46)+'" y="182" width="34" height="22" rx="5" fill="'+R.t+'"/>';return g;})()+
+  yz(30,250,'Denge kurulduğunda iki taraf birbirine eşittir.',15,R.gri)),
+ o:'<b>Deney:</b> Terazinin bir kefesine bir kitap koy. Diğer kefeye denge kurulana kadar silgi ekle. Kaç silgi gerekti?',
+ d:''}
+];
+
+/* ---------- TEMA 4 ---------- */
+DETAY.t4=[
+{b:'Toplama İşlemi — bir araya getirmek',
+ m:'İki grubu <b>bir araya getirdiğimizde</b> ya da bir gruba <b>ekleme yaptığımızda</b> toplama işlemi yaparız. Toplama işaretini <b>+ (artı)</b>, sonucu gösteren işareti <b>= (eşittir)</b> ile yazarız. "3 + 4 = 7" ifadesini "üç artı dört eşittir yedi" diye okuruz. Toplamayı üç yolla yapabiliriz: sayarak, ileri sayarak ya da sayı doğrusunda zıplayarak.',
+ s:SV(330,
+  '<rect width="500" height="330" fill="#F3FAFE"/>'+
+  yz(20,28,'1) Bir araya getirerek',16,R.m)+
+  (function(){let g='';for(let i=0;i<3;i++)g+='<circle cx="'+(40+i*44)+'" cy="66" r="18" fill="'+R.k+'"/>';
+   g+=yz(158,76,'+',30,R.gri);
+   for(let i=0;i<4;i++)g+='<circle cx="'+(196+i*44)+'" cy="66" r="18" fill="'+R.s+'"/>';
+   g+=yz(376,76,'=',30,R.gri)+yz(412,78,'7',34,R.m);return g;})()+
+  yz(20,124,'2) İleri sayarak',16,R.m)+
+  '<g transform="translate(20,132)">'+
+    '<rect x="0" y="6" width="60" height="40" rx="10" fill="'+R.k+'"/>'+yz(30,34,'3',24,'#fff','middle')+
+    yz(70,36,'→ 4, 5, 6, 7',22,R.gri)+
+    yz(230,36,'üçten sonra dört kere ileri say',14,R.gri)+
+  '</g>'+
+  yz(20,216,'3) Sayı doğrusunda zıplayarak',16,R.m)+
+  '<g transform="translate(20,224)">'+
+    '<line x1="0" y1="60" x2="440" y2="60" stroke="'+R.gri+'" stroke-width="5" stroke-linecap="round"/>'+
+    (function(){let g='';for(let i=0;i<=10;i++){const x=i*44;g+='<line x1="'+x+'" y1="50" x2="'+x+'" y2="70" stroke="'+R.gri+'" stroke-width="3"/>'+yz(x,90,String(i),14,R.gri,'middle');}return g;})()+
+    (function(){let g='';for(let i=3;i<7;i++)g+='<path d="M'+(i*44)+' 46 q22 -30 44 0" fill="none" stroke="'+R.k+'" stroke-width="4" stroke-linecap="round"/>';return g;})()+
+    '<polygon points="308,44 298,30 316,30" fill="'+R.k+'"/>'+
+    yz(132,20,'3\'ten başla, 4 kere zıpla → 7',15,R.k)+
+  '</g>'),
+ o:'<b>Yer değişse de sonuç aynı:</b> 3 + 4 = 7 ve 4 + 3 = 7. Toplarken büyük sayıdan başlamak işimizi kolaylaştırır.',
+ d:'<b>Sıfırla toplama:</b> Bir sayıya 0 eklersek sayı değişmez. 6 + 0 = 6'},
+
+{b:'Parça – Bütün İlişkisi',
+ m:'Her sayı daha küçük sayılardan oluşur. Bir sayıyı iki <b>parçaya</b> ayırdığımızda, parçaları topladığımızda yine <b>bütüne</b> ulaşırız. Bu ilişkiyi bilirsek hem toplamayı hem çıkarmayı kolayca yaparız. Özellikle <b>10\'un parçalarını</b> ezbere bilmek çok işe yarar.',
+ s:SV(320,
+  '<rect width="500" height="320" fill="#F3FAFE"/>'+
+  '<g transform="translate(150,16)">'+
+    '<rect x="40" y="0" width="120" height="52" rx="14" fill="'+R.mo+'"/>'+yz(100,36,'10',30,'#fff','middle')+
+    yz(176,34,'BÜTÜN',15,R.gri)+
+    '<line x1="80" y1="52" x2="36" y2="88" stroke="'+R.gri+'" stroke-width="5"/>'+
+    '<line x1="120" y1="52" x2="164" y2="88" stroke="'+R.gri+'" stroke-width="5"/>'+
+    '<rect x="-14" y="88" width="100" height="50" rx="14" fill="'+R.m+'"/>'+yz(36,122,'6',26,'#fff','middle')+
+    '<rect x="114" y="88" width="100" height="50" rx="14" fill="'+R.y+'"/>'+yz(164,122,'4',26,'#fff','middle')+
+    yz(228,120,'PARÇALAR',15,R.gri)+
+  '</g>'+
+  yz(20,190,'10\'un bütün parçaları',16,R.m)+
+  (function(){let g='';const p=[[1,9],[2,8],[3,7],[4,6],[5,5],[6,4],[7,3],[8,2],[9,1]];
+   p.forEach((c,i)=>{const x=20+(i%5)*94, y=200+Math.floor(i/5)*56;
+     g+='<rect x="'+x+'" y="'+y+'" width="38" height="38" rx="8" fill="'+R.m+'"/>'+yz(x+19,y+27,String(c[0]),20,'#fff','middle');
+     g+='<rect x="'+(x+44)+'" y="'+y+'" width="38" height="38" rx="8" fill="'+R.y+'"/>'+yz(x+63,y+27,String(c[1]),20,'#fff','middle');});
+   return g;})()),
+ o:'<b>Avuç oyunu:</b> 10 boncuğu iki avucuna böl. Bir avucunu aç: 6. Diğerinde kaç var? 4! Bu oyunla 10\'un parçaları ezberlenir.',
+ d:''},
+
+{b:'Eksik Toplananı Bulma',
+ m:'Bazen toplananlardan biri gizlidir: <b>4 + ❓ = 9</b>. Bunu bulmak için iki yol vardır: 4\'ten başlayıp 9\'a kadar <b>ileri sayarız</b> (5, 6, 7, 8, 9 → beş adım), ya da <b>bütünden parçayı çıkarırız</b> (9 − 4 = 5). Bu, cebirsel düşünmenin ilk adımıdır.',
+ s:SV(260,
+  '<rect width="500" height="260" fill="#F3FAFE"/>'+
+  yz(20,44,'4  +',30,R.gri)+
+  '<rect x="92" y="14" width="52" height="44" rx="10" fill="#fff" stroke="'+R.k+'" stroke-width="4" stroke-dasharray="8 5"/>'+yz(118,46,'?',26,R.k,'middle')+
+  yz(158,44,'=  9',30,R.gri)+
+  yz(20,96,'1. yol: ileri sayma',16,R.m)+
+  '<g transform="translate(20,104)">'+
+    '<line x1="0" y1="42" x2="440" y2="42" stroke="'+R.gri+'" stroke-width="5" stroke-linecap="round"/>'+
+    (function(){let g='';for(let i=0;i<=10;i++){const x=i*44;g+='<line x1="'+x+'" y1="32" x2="'+x+'" y2="52" stroke="'+R.gri+'" stroke-width="3"/>'+yz(x,72,String(i),14,R.gri,'middle');}return g;})()+
+    (function(){let g='';for(let i=4;i<9;i++)g+='<path d="M'+(i*44)+' 28 q22 -26 44 0" fill="none" stroke="'+R.y+'" stroke-width="4" stroke-linecap="round"/>';return g;})()+
+    yz(176,8,'5 adım',15,'#2E6B14')+
+  '</g>'+
+  yz(20,216,'2. yol: bütünden parçayı çıkar → 9 − 4 = 5',18,R.m)+
+  yz(20,246,'Demek ki eksik toplanan 5\'tir:  4 + 5 = 9',16,R.gri)),
+ o:'<b>Kontrol et:</b> Bulduğun sayıyı yerine koy ve topla. Sonuç bütüne eşit çıkıyorsa doğru bulmuşsun.',
+ d:''},
+
+{b:'Çıkarma İşlemi — ayırmak, eksiltmek, kalanı bulmak',
+ m:'Çıkarma üç farklı durumda karşımıza çıkar: bir gruptan bir kısmını <b>ayırırız</b>, elimizdekinden bir miktar <b>eksiltiriz</b> ya da iki grup arasındaki <b>farkı</b> buluruz. Çıkarma işaretini <b>− (eksi)</b> ile yazarız. "9 − 4 = 5" ifadesini "dokuz eksi dört eşittir beş" diye okuruz. Sayı doğrusunda <b>geriye</b> zıplayarak da bulabiliriz.',
+ s:SV(340,
+  '<rect width="500" height="340" fill="#F3FAFE"/>'+
+  yz(20,28,'1) Ayırma / eksiltme',16,R.m)+
+  (function(){let g='';for(let i=0;i<9;i++){const x=30+i*48;
+    g+='<circle cx="'+x+'" cy="66" r="18" fill="'+(i<4?'#D9D9D9':R.k)+'"/>';
+    if(i<4)g+='<line x1="'+(x-14)+'" y1="52" x2="'+(x+14)+'" y2="80" stroke="'+R.gri+'" stroke-width="4"/>';}
+   return g;})()+
+  yz(20,106,'9 − 4 = 5   (üstü çizilenler gitti, 5 kaldı)',16,R.gri)+
+  yz(20,146,'2) Fark bulma',16,R.m)+
+  (function(){let g='';for(let i=0;i<7;i++)g+='<circle cx="'+(30+i*44)+'" cy="184" r="15" fill="'+R.m+'"/>';
+   for(let i=0;i<4;i++)g+='<circle cx="'+(30+i*44)+'" cy="224" r="15" fill="'+R.y+'"/>';
+   for(let i=4;i<7;i++)g+='<circle cx="'+(30+i*44)+'" cy="224" r="15" fill="none" stroke="'+R.k+'" stroke-width="3" stroke-dasharray="5 4"/>';
+   return g;})()+
+  yz(330,192,'7 tane',15,R.gri)+yz(330,232,'4 tane',15,R.gri)+
+  yz(20,258,'Fark: 7 − 4 = 3',16,R.k)+
+  yz(20,290,'3) Sayı doğrusunda geriye zıplama',16,R.m)+
+  '<g transform="translate(20,292)">'+
+    '<line x1="0" y1="34" x2="440" y2="34" stroke="'+R.gri+'" stroke-width="5" stroke-linecap="round"/>'+
+    (function(){let g='';for(let i=0;i<=10;i++){const x=i*44;g+='<line x1="'+x+'" y1="26" x2="'+x+'" y2="42" stroke="'+R.gri+'" stroke-width="3"/>';}return g;})()+
+    (function(){let g='';for(let i=9;i>5;i--)g+='<path d="M'+(i*44)+' 22 q-22 -24 -44 0" fill="none" stroke="'+R.k+'" stroke-width="4" stroke-linecap="round"/>';return g;})()+
+    '<polygon points="220,20 230,6 212,6" fill="'+R.k+'"/>'+
+  '</g>'),
+ o:'<b>Toplamayla kontrol:</b> 9 − 4 = 5 bulduysan, 5 + 4 = 9 mu diye bak. Eşitse doğrudur.',
+ d:'<b>Dikkat:</b> Çıkarmada sıra değişmez. 9 − 4 ile 4 − 9 aynı şey değildir.'},
+
+{b:'Toplama – Çıkarma İlişkisi (İşlem Ailesi)',
+ m:'Toplama ve çıkarma birbirinin <b>tersidir</b>. Üç sayı — iki parça ve bir bütün — dört işlem üretir. Bunlara <b>işlem ailesi</b> deriz. 5, 4 ve 9 sayılarıyla kurulan aile: 5 + 4 = 9, 4 + 5 = 9, 9 − 4 = 5, 9 − 5 = 4. Bu ilişkiyi bilen çocuk ezbere değil, akıl yürüterek işlem yapar.',
+ s:SV(280,
+  '<rect width="500" height="280" fill="#F3FAFE"/>'+
+  '<g transform="translate(160,14)">'+
+    '<polygon points="90,4 172,132 8,132" fill="none" stroke="'+R.mo+'" stroke-width="4"/>'+
+    '<circle cx="90" cy="30" r="26" fill="'+R.mo+'"/>'+yz(90,39,'9',24,'#fff','middle')+
+    '<circle cx="34" cy="112" r="26" fill="'+R.m+'"/>'+yz(34,121,'5',24,'#fff','middle')+
+    '<circle cx="146" cy="112" r="26" fill="'+R.y+'"/>'+yz(146,121,'4',24,'#fff','middle')+
+  '</g>'+
+  yz(20,192,'5 + 4 = 9',24,R.m)+yz(260,192,'4 + 5 = 9',24,R.m)+
+  yz(20,236,'9 − 4 = 5',24,R.k)+yz(260,236,'9 − 5 = 4',24,R.k)+
+  yz(20,268,'Üç sayıdan dört işlem çıkar — bu bir işlem ailesidir.',15,R.gri)),
+ o:'<b>Ev oyunu:</b> Üçgenin köşelerine üç sayı yaz. En üstteki her zaman bütün, alttakiler parçadır. Dört işlemi de kur.',
+ d:''},
+
+{b:'Problem Kurma ve Çözme',
+ m:'Problem, bir durumu anlatan ve bizden bir şey isteyen sorudur. Çözerken üç adım izleriz: <b>1)</b> Ne verilmiş? <b>2)</b> Ne isteniyor? <b>3)</b> Hangi işlemi yapmalıyım? Sayı artıyorsa, bir araya geliyorsa toplama; azalıyorsa, ayrılıyorsa, fark soruluyorsa çıkarma yaparız. Cevabı yazarken <b>birimini</b> de söyleriz: "7 balon".',
+ s:SV(280,
+  '<rect width="500" height="280" fill="#F3FAFE"/>'+
+  '<rect x="20" y="14" width="460" height="66" rx="14" fill="#fff" stroke="'+R.m+'" stroke-width="3"/>'+
+  yz(36,42,'Ayşe\'nin 5 balonu vardı.',17,'#2C3A42')+
+  yz(36,68,'Babası 3 balon daha aldı. Kaç balonu oldu?',17,'#2C3A42')+
+  '<g transform="translate(20,96)">'+
+    '<rect x="0" y="0" width="146" height="64" rx="12" fill="#DFF5D2" stroke="'+R.y+'" stroke-width="3"/>'+
+    yz(12,26,'Verilenler',15,'#2E6B14')+yz(12,50,'5 balon, 3 balon',16,R.gri)+
+    '<rect x="158" y="0" width="146" height="64" rx="12" fill="#FFF6DF" stroke="'+R.s+'" stroke-width="3"/>'+
+    yz(170,26,'İstenen',15,'#8A6420')+yz(170,50,'toplam balon',16,R.gri)+
+    '<rect x="316" y="0" width="146" height="64" rx="12" fill="#FBDEDC" stroke="'+R.k+'" stroke-width="3"/>'+
+    yz(328,26,'İşlem',15,'#B8322B')+yz(328,50,'toplama (+)',16,R.gri)+
+  '</g>'+
+  yz(20,202,'5 + 3 = 8',30,R.m)+
+  yz(170,202,'Cevap: 8 balon',20,'#2E6B14')+
+  '<rect x="20" y="222" width="460" height="44" rx="12" fill="#EFF6FB" stroke="#CBE2F0" stroke-width="3"/>'+
+  yz(34,250,'"daha aldı, geldi, eklendi" → toplama   ·   "yedi, uçtu, kırıldı, kaldı" → çıkarma',14,R.gri)),
+ o:'<b>Sen de kur:</b> Bir görsele bak ve ondan problem üret. Problem kurmak, problem çözmekten daha çok şey öğretir.',
+ d:''}
+];
+</script>
+<script>
+/* ---------- TEMA 5 ---------- */
+DETAY.t5=[
+{b:'Madeni Paralarımız',
+ m:'Ülkemizde kullanılan madeni paralar: <b>1 kuruş, 5 kuruş, 10 kuruş, 25 kuruş, 50 kuruş ve 1 lira</b>. Madeni paraları <b>büyüklüklerinden</b> ve <b>renklerinden</b> ayırt ederiz. 1, 5 ve 10 kuruşlar bakır renkli ve küçüktür; 25 ve 50 kuruşlar gümüş renklidir; 1 lira ise en büyüğüdür ve dış kenarı sarı, ortası gümüş renklidir.',
+ s:'<div class="para-alan" style="justify-content:center">'+['1kr','5kr','10kr','25kr','50kr','1tl'].map(k=>paraSVG(k)).join('')+'</div>',
+ o:'<b>Kuruş ve lira:</b> <b>100 kuruş = 1 lira</b>. Lirayı ₺ sembolüyle gösteririz.',
+ d:'<b>Dikkat:</b> Paranın büyüklüğü değerini göstermez. 25 kuruş, 10 kuruştan büyüktür ama 1 lira hepsinden değerlidir.'},
+
+{b:'Kâğıt Paralarımız',
+ m:'Kâğıt paralarımız <b>5 ₺, 10 ₺, 20 ₺, 50 ₺, 100 ₺ ve 200 ₺</b>\'dir. Her birinin rengi farklıdır; bu sayede uzaktan bile ayırt edebiliriz. Üzerlerindeki sayıyı okuyarak değerini söyleriz. 1. sınıfta bu paraların hepsini <b>tanırız</b>, ama işlem yaparken küçük değerlerle çalışırız.',
+ s:'<div class="para-alan" style="justify-content:center">'+['5tl','10tl','20tl','50tl','100tl','200tl'].map(k=>paraSVG(k,0.86)).join('')+'</div>',
+ o:'<b>Renklerini hatırla:</b> 5 kahverengi, 10 kırmızı, 20 yeşil, 50 turuncu, 100 mavi, 200 mor.',
+ d:''},
+
+{b:'Denk Değerler — aynı parayı farklı kurmak',
+ m:'Aynı değeri <b>farklı paralarla</b> oluşturabiliriz. Buna denk değer denir. Örneğin 1 lirayı iki tane 50 kuruşla ya da dört tane 25 kuruşla yapabiliriz. Aynı şekilde 10 lirayı iki tane 5 lirayla, 20 lirayı iki tane 10 lirayla oluşturabiliriz. Alışverişte bu çok işimize yarar.',
+ s:'<div style="margin-top:12px">'+
+   '<div class="para-alan">'+paraSVG('1tl',0.8)+'<span style="font-size:24px;font-weight:700">=</span>'+paraSVG('50kr',0.8)+'<span style="font-size:22px;font-weight:700">+</span>'+paraSVG('50kr',0.8)+'</div>'+
+   '<div class="para-alan">'+paraSVG('1tl',0.8)+'<span style="font-size:24px;font-weight:700">=</span>'+paraSVG('25kr',0.8)+paraSVG('25kr',0.8)+paraSVG('25kr',0.8)+paraSVG('25kr',0.8)+'</div>'+
+   '<div class="para-alan">'+paraSVG('10tl',0.72)+'<span style="font-size:24px;font-weight:700">=</span>'+paraSVG('5tl',0.72)+'<span style="font-size:22px;font-weight:700">+</span>'+paraSVG('5tl',0.72)+'</div>'+
+   '<div class="para-alan">'+paraSVG('20tl',0.72)+'<span style="font-size:24px;font-weight:700">=</span>'+paraSVG('10tl',0.72)+'<span style="font-size:22px;font-weight:700">+</span>'+paraSVG('10tl',0.72)+'</div>'+
+   '</div>',
+ o:'<b>Meydan okuma:</b> 20 ₺\'yi kaç farklı şekilde oluşturabilirsin? (10+10, 10+5+5, 5+5+5+5 ...)',
+ d:''},
+
+{b:'Alışveriş',
+ m:'Alışverişte üç soru sorarız: <b>Ürün kaç lira?</b> <b>Elimde kaç lira var?</b> <b>Yeter mi?</b> Elimizdeki para ürünün fiyatından büyük ya da ona eşitse alabiliriz. Fiyattan küçükse alamayız. Birden fazla ürün alırken fiyatları toplarız.',
+ s:SV(250,
+  '<rect width="500" height="250" fill="#F3FAFE"/>'+
+  '<rect x="20" y="16" width="130" height="110" rx="14" fill="#fff" stroke="'+R.m+'" stroke-width="3"/>'+
+  '<text x="85" y="76" text-anchor="middle" font-size="44">🧃</text>'+
+  '<rect x="44" y="88" width="82" height="30" rx="8" fill="'+R.s+'"/>'+yz(85,110,'8 ₺',20,'#7A5B00','middle')+
+  '<rect x="176" y="16" width="130" height="110" rx="14" fill="#fff" stroke="'+R.m+'" stroke-width="3"/>'+
+  '<text x="241" y="76" text-anchor="middle" font-size="44">🍞</text>'+
+  '<rect x="200" y="88" width="82" height="30" rx="8" fill="'+R.s+'"/>'+yz(241,110,'6 ₺',20,'#7A5B00','middle')+
+  '<rect x="332" y="16" width="148" height="110" rx="14" fill="#DFF5D2" stroke="'+R.y+'" stroke-width="3"/>'+
+  yz(406,52,'Toplam',17,'#2E6B14','middle')+yz(406,92,'8 + 6 = 14 ₺',20,'#2E6B14','middle')+
+  '<rect x="20" y="146" width="220" height="84" rx="14" fill="#DFF5D2" stroke="'+R.y+'" stroke-width="3"/>'+
+  yz(130,176,'Elimde 20 ₺ var',17,'#2E6B14','middle')+yz(130,208,'20 > 14 → YETER ✔',18,'#2E6B14','middle')+
+  '<rect x="262" y="146" width="218" height="84" rx="14" fill="#FBDEDC" stroke="'+R.k+'" stroke-width="3"/>'+
+  yz(371,176,'Elimde 10 ₺ var',17,'#B8322B','middle')+yz(371,208,'10 < 14 → YETMEZ ✘',18,'#B8322B','middle')),
+ o:'<b>Para üstü:</b> 20 ₺ verip 14 ₺\'lik alışveriş yaparsak kasiyer bize 6 ₺ geri verir. Bu bir çıkarma işlemidir: 20 − 14 = 6.',
+ d:''}
+];
+
+/* ---------- TEMA 6 ---------- */
+DETAY.t6=[
+{b:'Geometrik Cisimler',
+ m:'Etrafımızdaki nesnelerin çoğu bir geometrik cisme benzer. 1. sınıfta tanıdığımız cisimler: <b>küp, kare prizma, dikdörtgenler prizması, silindir, koni ve küre</b>. Bunları adlandırırken elimize alır, çevirir, yuvarlanıp yuvarlanmadığına ve üst üste konup konmadığına bakarız.',
+ s:SV(320,
+  '<rect width="500" height="320" fill="#F3FAFE"/>'+
+  // küp
+  '<g transform="translate(24,16)">'+
+    '<polygon points="0,26 56,26 56,82 0,82" fill="'+R.k+'"/><polygon points="0,26 18,10 74,10 56,26" fill="#F4736B"/><polygon points="56,26 74,10 74,66 56,82" fill="#B8322B"/>'+
+    yz(30,104,'küp',16,R.gri,'middle')+'<text x="30" y="132" text-anchor="middle" font-size="24">🎲</text>'+
+  '</g>'+
+  // dikdörtgenler prizması
+  '<g transform="translate(140,16)">'+
+    '<polygon points="0,34 84,34 84,82 0,82" fill="'+R.t+'"/><polygon points="0,34 16,18 100,18 84,34" fill="#F8AC72"/><polygon points="84,34 100,18 100,66 84,82" fill="#C96C22"/>'+
+    yz(48,104,'dikdörtgenler prizması',13,R.gri,'middle')+'<text x="48" y="132" text-anchor="middle" font-size="24">📦</text>'+
+  '</g>'+
+  // silindir
+  '<g transform="translate(292,12)">'+
+    '<rect x="0" y="26" width="56" height="58" fill="'+R.m+'"/><ellipse cx="28" cy="84" rx="28" ry="11" fill="#3A85AE"/><ellipse cx="28" cy="26" rx="28" ry="11" fill="#82CBEA"/>'+
+    yz(28,108,'silindir',16,R.gri,'middle')+'<text x="28" y="136" text-anchor="middle" font-size="24">🥫</text>'+
+  '</g>'+
+  // koni
+  '<g transform="translate(396,12)">'+
+    '<polygon points="34,12 66,84 2,84" fill="'+R.mo+'"/><ellipse cx="34" cy="84" rx="32" ry="11" fill="#8A5FAC"/>'+
+    yz(34,108,'koni',16,R.gri,'middle')+'<text x="34" y="136" text-anchor="middle" font-size="24">🍦</text>'+
+  '</g>'+
+  // küre
+  '<g transform="translate(40,168)">'+
+    '<circle cx="34" cy="42" r="34" fill="'+R.s+'"/><ellipse cx="22" cy="30" rx="11" ry="7" fill="#FFE59B"/>'+
+    yz(34,100,'küre',16,R.gri,'middle')+'<text x="34" y="128" text-anchor="middle" font-size="24">⚽</text>'+
+  '</g>'+
+  '<g transform="translate(150,176)">'+
+    '<rect x="0" y="0" width="320" height="120" rx="14" fill="#fff" stroke="#D9EDF7" stroke-width="3"/>'+
+    yz(16,30,'Yuvarlanır mı?',16,R.m)+
+    yz(16,56,'küre, silindir, koni → yuvarlanır',15,R.gri)+
+    yz(16,82,'küp ve prizmalar → yuvarlanmaz, kayar',15,R.gri)+
+    yz(16,108,'küp ve prizmalar üst üste konabilir',15,R.gri)+
+  '</g>'),
+ o:'<b>Evet, koni 1. sınıfta vardır.</b> Dondurma külahı, parti şapkası ve trafik konisi en bilinen örnekleridir.',
+ d:'<b>Dikkat:</b> Cisimler <b>üç boyutludur</b>, elimize alabiliriz. Şekiller ise düzdür, kâğıda çizeriz.'},
+
+{b:'Geometrik Şekiller',
+ m:'Düz yüzeylere çizdiğimiz <b>üçgen, kare, dikdörtgen ve çember</b> geometrik şekillerdir. Şekilleri birbirinden <b>kenar</b> ve <b>köşe</b> sayılarıyla ayırırız. Kenar, şeklin kenarındaki düz çizgidir; köşe ise iki kenarın birleştiği noktadır.',
+ s:SV(300,
+  '<rect width="500" height="300" fill="#F3FAFE"/>'+
+  '<g transform="translate(24,16)">'+
+    '<polygon points="48,8 92,86 4,86" fill="'+R.t+'"/>'+
+    (function(){let g='';[[48,8],[92,86],[4,86]].forEach(p=>g+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="7" fill="'+R.k+'"/>');return g;})()+
+    yz(48,112,'üçgen',16,R.gri,'middle')+yz(48,134,'3 kenar · 3 köşe',13,R.gri,'middle')+
+  '</g>'+
+  '<g transform="translate(148,16)">'+
+    '<rect x="8" y="10" width="78" height="78" rx="2" fill="'+R.y+'"/>'+
+    (function(){let g='';[[8,10],[86,10],[86,88],[8,88]].forEach(p=>g+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="7" fill="'+R.k+'"/>');return g;})()+
+    yz(47,112,'kare',16,R.gri,'middle')+yz(47,134,'4 eşit kenar · 4 köşe',13,R.gri,'middle')+
+  '</g>'+
+  '<g transform="translate(268,16)">'+
+    '<rect x="0" y="24" width="104" height="52" rx="2" fill="'+R.k+'"/>'+
+    (function(){let g='';[[0,24],[104,24],[104,76],[0,76]].forEach(p=>g+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="7" fill="'+R.m+'"/>');return g;})()+
+    yz(52,112,'dikdörtgen',16,R.gri,'middle')+yz(52,134,'4 kenar · 4 köşe',13,R.gri,'middle')+
+  '</g>'+
+  '<g transform="translate(400,16)">'+
+    '<circle cx="46" cy="50" r="42" fill="'+R.mo+'"/>'+
+    yz(46,112,'çember',16,R.gri,'middle')+yz(46,134,'kenarı ve köşesi yok',13,R.gri,'middle')+
+  '</g>'+
+  '<rect x="24" y="170" width="452" height="112" rx="14" fill="#fff" stroke="#D9EDF7" stroke-width="3"/>'+
+  yz(40,200,'Kare ile dikdörtgenin farkı',17,R.m)+
+  yz(40,232,'Karenin dört kenarı da birbirine eşittir.',15,R.gri)+
+  yz(40,262,'Dikdörtgende karşılıklı kenarlar eşittir; ikisi uzun, ikisi kısadır.',15,R.gri)),
+ o:'<b>Parmakla say:</b> Şeklin etrafında parmağını gezdirirken her düz çizgide "kenar", her dönüşte "köşe" de.',
+ d:''},
+
+{b:'Şekillerle Yeni Şekiller',
+ m:'Geometrik şekilleri <b>birleştirerek</b> yeni şekiller kurabiliriz; bir şekli <b>parçalara ayırarak</b> da içinden başka şekiller çıkarabiliriz. İki eş üçgen birleşince kare olur; kare ile üçgen birleşince ev olur. Bu çalışma, çocuğun uzamsal düşünmesini ve hayal gücünü geliştirir.',
+ s:SV(300,
+  '<rect width="500" height="300" fill="#F3FAFE"/>'+
+  // 2 üçgen -> kare
+  '<g transform="translate(24,20)">'+
+    '<polygon points="0,70 70,70 0,0" fill="'+R.m+'"/>'+
+    '<polygon points="84,0 154,0 154,70" fill="'+R.y+'"/>'+
+    yz(178,44,'→',26,R.gri)+
+    '<polygon points="214,0 284,0 214,70" fill="'+R.m+'"/><polygon points="214,70 284,0 284,70" fill="'+R.y+'"/>'+
+    yz(300,44,'= kare',18,R.gri)+
+  '</g>'+
+  // ev
+  '<g transform="translate(24,120)">'+
+    '<rect x="0" y="30" width="70" height="60" fill="'+R.t+'"/>'+
+    '<polygon points="100,26 148,26 124,-6" fill="'+R.k+'"/>'+
+    yz(168,62,'→',26,R.gri)+
+    '<polygon points="206,30 276,30 241,-4" fill="'+R.k+'"/><rect x="206" y="30" width="70" height="60" fill="'+R.t+'"/>'+
+    '<rect x="228" y="58" width="26" height="32" fill="'+R.ah+'"/>'+
+    yz(296,62,'= ev',18,R.gri)+
+  '</g>'+
+  // parçalara ayırma
+  '<g transform="translate(24,228)">'+
+    '<rect x="0" y="0" width="66" height="52" fill="'+R.mo+'"/>'+
+    '<line x1="0" y1="52" x2="66" y2="0" stroke="#fff" stroke-width="4"/>'+
+    yz(86,32,'Bir dikdörtgeni ikiye bölünce iki üçgen elde ederiz.',15,R.gri)+
+  '</g>'),
+ o:'<b>Malzeme:</b> Renkli kâğıttan üçgen, kare ve dikdörtgen kesip bir zarfa koy. Çocuklar bunlarla ev, gemi, roket, ağaç kursun.',
+ d:''},
+
+{b:'Çevremizdeki Şekiller',
+ m:'Geometri sadece defterde değil, her yerdedir. Sınıfın penceresi dikdörtgen, saat çember, cetvel dikdörtgen, silgi dikdörtgenler prizması, kalemin ucu konidir. Çevremize geometri gözüyle bakmak, öğrendiğimiz kelimeleri kalıcı kılar.',
+ s:SV(230,
+  '<rect width="500" height="230" fill="#F3FAFE"/>'+
+  (function(){let g='';
+   const L=[['🪟','pencere','dikdörtgen'],['🕐','saat','çember'],['📕','kitap','dikdörtgen'],['🎲','zar','küp'],
+            ['🥫','konserve','silindir'],['⚽','top','küre'],['🍕','pizza dilimi','üçgen'],['🖼️','tablo','dikdörtgen']];
+   L.forEach((o,i)=>{const x=24+(i%4)*118, y=16+Math.floor(i/4)*104;
+     g+='<rect x="'+x+'" y="'+y+'" width="104" height="90" rx="14" fill="#fff" stroke="#D9EDF7" stroke-width="3"/>'+
+        '<text x="'+(x+52)+'" y="'+(y+40)+'" text-anchor="middle" font-size="28">'+o[0]+'</text>'+
+        yz(x+52,y+62,o[1],14,R.gri,'middle')+yz(x+52,y+82,o[2],14,R.m,'middle');});
+   return g;})()),
+ o:'<b>Şekil avı:</b> Sınıfta 2 dakika süre ver; kim en çok dikdörtgen bulacak?',
+ d:''}
+];
+
+/* ---------- TEMA 7 ---------- */
+DETAY.t7=[
+{b:'Araştırma Sorusu',
+ m:'Veri toplamaya <b>bir soruyla</b> başlarız. İyi bir araştırma sorusunun cevabı <b>sayılabilir</b> olmalı ve herkes cevap verebilmelidir. "En sevdiğin meyve hangisi?" iyi bir sorudur; cevaplar sayılabilir. "Meyve güzel mi?" iyi bir soru değildir; cevabı sayıya dökemeyiz.',
+ s:SV(220,
+  '<rect width="500" height="220" fill="#F3FAFE"/>'+
+  '<rect x="20" y="16" width="220" height="180" rx="16" fill="#DFF5D2" stroke="'+R.y+'" stroke-width="3"/>'+
+  yz(130,46,'İYİ SORU ✔',18,'#2E6B14','middle')+
+  yz(38,84,'En sevdiğin meyve?',16,R.gri)+
+  yz(38,116,'Kaç kardeşin var?',16,R.gri)+
+  yz(38,148,'Okula nasıl geliyorsun?',16,R.gri)+
+  yz(38,180,'cevapları sayabiliriz',14,'#2E6B14')+
+  '<rect x="260" y="16" width="220" height="180" rx="16" fill="#FBDEDC" stroke="'+R.k+'" stroke-width="3"/>'+
+  yz(370,46,'UYGUN DEĞİL ✘',18,'#B8322B','middle')+
+  yz(278,84,'Meyve güzel mi?',16,R.gri)+
+  yz(278,116,'Yarın ne olacak?',16,R.gri)+
+  yz(278,148,'En iyi renk hangisi ya?',16,R.gri)+
+  yz(278,180,'cevapları sayamayız',14,'#B8322B')),
+ o:'<b>Kendi araştırmanı yap:</b> Sınıfa bir soru sor, herkesin cevabını al. Sen artık bir araştırmacısın.',
+ d:''},
+
+{b:'Veri Toplama ve Çetele',
+ m:'Topladığımız cevaplara <b>veri</b> deriz. Verileri hızlıca kaydetmek için <b>çetele</b> tutarız: her cevap için bir çizgi çizeriz. Dört çizgiyi yan yana çizdikten sonra <b>beşinciyi üzerine çapraz atarız</b>. Böylece beşerli gruplar oluşur ve sayarken çok hızlanırız. Çeteleleri sayıp <b>sıklık tablosuna</b> yazarız.',
+ s:SV(300,
+  '<rect width="500" height="300" fill="#F3FAFE"/>'+
+  yz(20,30,'Çetele nasıl çizilir?',16,R.m)+
+  (function(){let g='';
+   for(let i=0;i<4;i++)g+='<line x1="'+(30+i*22)+'" y1="46" x2="'+(30+i*22)+'" y2="92" stroke="'+R.k+'" stroke-width="6" stroke-linecap="round"/>';
+   g+=yz(130,78,'4 çizgi',16,R.gri);
+   for(let i=0;i<4;i++)g+='<line x1="'+(240+i*22)+'" y1="46" x2="'+(240+i*22)+'" y2="92" stroke="'+R.k+'" stroke-width="6" stroke-linecap="round"/>';
+   g+='<line x1="232" y1="92" x2="316" y2="44" stroke="'+R.k+'" stroke-width="6" stroke-linecap="round"/>';
+   g+=yz(336,78,'= 5 (beşinci çapraz)',16,R.gri);
+   return g;})()+
+  yz(20,134,'Sıklık tablosu',16,R.m)+
+  '<g transform="translate(20,146)">'+
+    '<rect x="0" y="0" width="460" height="140" rx="12" fill="#fff" stroke="#D9EDF7" stroke-width="3"/>'+
+    '<line x1="0" y1="36" x2="460" y2="36" stroke="#D9EDF7" stroke-width="3"/>'+
+    '<line x1="0" y1="70" x2="460" y2="70" stroke="#D9EDF7" stroke-width="3"/>'+
+    '<line x1="0" y1="104" x2="460" y2="104" stroke="#D9EDF7" stroke-width="3"/>'+
+    '<line x1="150" y1="0" x2="150" y2="140" stroke="#D9EDF7" stroke-width="3"/>'+
+    '<line x1="370" y1="0" x2="370" y2="140" stroke="#D9EDF7" stroke-width="3"/>'+
+    yz(16,25,'Meyve',15,R.m)+yz(166,25,'Çetele',15,R.m)+yz(386,25,'Sıklık',15,R.m)+
+    yz(16,60,'🍎 Elma',15,R.gri)+yz(16,94,'🍌 Muz',15,R.gri)+yz(16,128,'🍇 Üzüm',15,R.gri)+
+    (function(){let g='';
+     const satir=[[60,7],[94,3],[128,4]];
+     satir.forEach(s=>{const y=s[0],n=s[1];let x=166;
+       const b=Math.floor(n/5),k=n%5;
+       for(let q=0;q<b;q++){for(let i=0;i<4;i++)g+='<line x1="'+(x+i*13)+'" y1="'+(y-18)+'" x2="'+(x+i*13)+'" y2="'+(y+4)+'" stroke="'+R.k+'" stroke-width="4" stroke-linecap="round"/>';
+         g+='<line x1="'+(x-4)+'" y1="'+(y+4)+'" x2="'+(x+44)+'" y2="'+(y-19)+'" stroke="'+R.k+'" stroke-width="4" stroke-linecap="round"/>'; x+=64;}
+       for(let i=0;i<k;i++)g+='<line x1="'+(x+i*13)+'" y1="'+(y-18)+'" x2="'+(x+i*13)+'" y2="'+(y+4)+'" stroke="'+R.k+'" stroke-width="4" stroke-linecap="round"/>';});
+     return g;})()+
+    yz(400,60,'7',20,R.m)+yz(400,94,'3',20,R.m)+yz(400,128,'4',20,R.m)+
+  '</g>'),
+ o:'<b>Neden beşerli?</b> Çünkü beşer beşer saymak birer birer saymaktan çok daha hızlıdır: 5, 10, 15...',
+ d:''},
+
+{b:'Nesne ve Şekil Grafiği',
+ m:'Sıklık tablosundaki sayıları <b>resimle</b> göstermeye grafik denir. 1. sınıfta iki çeşidini kullanırız: <b>nesne grafiği</b> (gerçek nesneleri ya da resimlerini üst üste diziyoruz) ve <b>şekil grafiği</b> (her veriyi bir daire, kare ya da yıldızla gösteriyoruz). Grafikte her resim <b>bir kişiyi</b> gösterir ve resimler <b>aynı boyda</b>, <b>aynı hizada</b> dizilir.',
+ s:SV(330,
+  '<rect width="500" height="330" fill="#F3FAFE"/>'+
+  yz(20,28,'Nesne grafiği',16,R.m)+
+  '<g transform="translate(30,36)">'+
+    '<line x1="0" y1="0" x2="0" y2="150" stroke="'+R.gri+'" stroke-width="4"/>'+
+    '<line x1="0" y1="150" x2="420" y2="150" stroke="'+R.gri+'" stroke-width="4"/>'+
+    (function(){let g='';const d=[[7,'🍎'],[3,'🍌'],[4,'🍇']];
+     d.forEach((c,i)=>{for(let j=0;j<c[0];j++)g+='<text x="'+(60+i*120)+'" y="'+(142-j*20)+'" text-anchor="middle" font-size="17">'+c[1]+'</text>';
+       g+='<text x="'+(60+i*120)+'" y="174" text-anchor="middle" font-size="20">'+c[1]+'</text>';});
+     return g;})()+
+  '</g>'+
+  yz(20,232,'Şekil grafiği',16,R.m)+
+  '<g transform="translate(30,240)">'+
+    '<line x1="0" y1="0" x2="0" y2="60" stroke="'+R.gri+'" stroke-width="4"/>'+
+    '<line x1="0" y1="60" x2="420" y2="60" stroke="'+R.gri+'" stroke-width="4"/>'+
+    (function(){let g='';const d=[[7,R.k],[3,R.s],[4,R.mo]];
+     d.forEach((c,i)=>{for(let j=0;j<c[0];j++)g+='<circle cx="'+(24+i*140+j*16)+'" cy="40" r="7" fill="'+c[1]+'"/>';});
+     return g;})()+
+  '</g>'),
+ o:'<b>Sonra ne geliyor?</b> Aynı veriler ileride başka grafiklerle de gösterilir: <b>çubuk grafik</b> 2–3. sınıfta, <b>daire (pasta) grafiği</b> ise daha ileri sınıflarda öğrenilir. 1. sınıfta nesne ve şekil grafiği yeterlidir.',
+ d:'<b>Dikkat:</b> Resimler farklı boyda çizilirse grafik yanıltır. Hepsi aynı büyüklükte ve düzgün sırada olmalıdır.'},
+
+{b:'Grafiği Yorumlama',
+ m:'Grafik çizmek yetmez; ona bakıp <b>soru cevaplamayı</b> da öğreniriz. Grafikten şunları okuruz: en çok hangisi, en az hangisi, hangileri eşit, bir seçeneği kaç kişi seçti, toplam kaç kişi katıldı, iki seçenek arasındaki fark kaç. Cevabı bulurken sütunları sayarız.',
+ s:SV(300,
+  '<rect width="500" height="300" fill="#F3FAFE"/>'+
+  '<g transform="translate(40,20)">'+
+    '<line x1="0" y1="0" x2="0" y2="150" stroke="'+R.gri+'" stroke-width="4"/>'+
+    '<line x1="0" y1="150" x2="400" y2="150" stroke="'+R.gri+'" stroke-width="4"/>'+
+    (function(){let g='';const d=[[6,R.k,'🍎'],[2,R.s,'🍌'],[4,R.mo,'🍇'],[4,R.m,'🍓']];
+     d.forEach((c,i)=>{for(let j=0;j<c[0];j++)g+='<circle cx="'+(52+i*100)+'" cy="'+(138-j*24)+'" r="10" fill="'+c[1]+'"/>';
+       g+='<text x="'+(52+i*100)+'" y="176" text-anchor="middle" font-size="22">'+c[2]+'</text>';});
+     return g;})()+
+  '</g>'+
+  '<rect x="20" y="208" width="460" height="80" rx="14" fill="#fff" stroke="#D9EDF7" stroke-width="3"/>'+
+  yz(36,236,'En çok: elma (6)   ·   En az: muz (2)',16,R.gri)+
+  yz(36,262,'Eşit olanlar: üzüm ve çilek (4\'er)   ·   Fark: 6 − 2 = 4',16,R.gri)),
+ o:'<b>Yorumla:</b> "Neden elma en çok seçilmiş olabilir?" sorusu, sayıları konuşmaya çevirir. Asıl öğrenme orada olur.',
+ d:''}
+];
+
+/* ============ DETAYLARI SATIRLARA BAĞLA ============ */
+(function(){
+  Object.keys(DETAY).forEach(tk=>{
+    const sec=document.getElementById(tk);
+    if(!sec)return;
+    const satirlar=sec.querySelectorAll('.konu-satir');
+    satirlar.forEach((sat,i)=>{
+      const d=DETAY[tk][i];
+      if(!d)return;
+      const ok=document.createElement('span');
+      ok.className='ok'; ok.textContent='Aç ▸';
+      sat.appendChild(ok);
+      const panel=document.createElement('div');
+      panel.className='detay';
+      panel.innerHTML='<h6>'+d.b+'</h6><p>'+d.m+'</p>'+(d.s||'')+
+        (d.o?'<div class="ornek">'+d.o+'</div>':'')+
+        (d.d?'<div class="dikkat">'+d.d+'</div>':'');
+      sat.parentNode.insertBefore(panel,sat.nextSibling);
+      sat.addEventListener('click',()=>{
+        const acik=panel.classList.toggle('acik');
+        sat.classList.toggle('acik',acik);
+        ok.textContent=acik?'Kapat ▾':'Aç ▸';
+        if(acik) setTimeout(()=>{ if(panel.getBoundingClientRect().top<60) sat.scrollIntoView({behavior:'smooth',block:'start'}); },120);
+      });
+    });
+  });
+})();
+</script>
+
 </body>
 </html>
