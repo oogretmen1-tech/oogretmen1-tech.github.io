@@ -211,19 +211,98 @@ nav a:hover{color:var(--coral);}
   box-shadow:0 6px 14px rgba(50,27,67,.18);
 }
 
-/* ===== YAKLAŞAN GÜNLER ===== */
-.gunler{background:#fff;border-bottom:1px solid var(--line);}
-.gunler-ic{width:min(1120px,92%);margin:auto;padding:13px 0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.gunler-baslik{font-size:.68rem;font-weight:800;letter-spacing:1.8px;color:var(--coral);white-space:nowrap;}
-.gun-rozet{
-  display:inline-flex;align-items:center;gap:8px;background:var(--purple-light);border-radius:50px;
-  padding:7px 15px;font-size:.8rem;font-weight:700;color:var(--purple-dark);transition:all .18s;white-space:nowrap;
+/* ===== YAKLAŞAN GÜNLER · YAPRAK TAKVİM + SAAT (yatay şerit) ===== */
+.gunler{background:linear-gradient(180deg,#FFFFFF 0%,#F1F5FA 100%);border-top:1px solid var(--cerceve);border-bottom:2px solid var(--cerceve);}
+.gunler-ic{width:min(1120px,94%);margin:auto;padding:9px 0 11px;display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;}
+.tk-ayirac{width:1px;height:78px;background:linear-gradient(180deg,transparent,var(--line),transparent);}
+
+/* --- saat (küçük) --- */
+.saat-blok{display:flex;flex-direction:column;align-items:center;gap:3px;}
+.saat-kutu{
+  position:relative;width:76px;height:76px;border-radius:50%;
+  background:radial-gradient(circle at 50% 30%,#fff 0%,#F4F8FC 60%,#DDE7F2 100%);
+  border:3px solid var(--purple);
+  box-shadow:0 4px 10px rgba(14,29,51,.24),inset 0 0 0 2.5px var(--gold-soft);
 }
-.gun-rozet:hover{background:var(--purple);color:#fff;}
-.gun-rozet .kalan{font-weight:400;font-size:.75rem;color:var(--muted);}
-.gun-rozet:hover .kalan{color:#e6d8ef;}
-.gun-rozet.bugun{background:var(--yellow);color:var(--purple-dark);}
-.gun-rozet.bugun .kalan{color:#6b4d12;}
+.saat-kutu svg{position:absolute;inset:0;width:100%;height:100%;}
+.saat-yazi{text-align:center;line-height:1.15;}
+.saat-yazi b{display:block;font-size:.92rem;font-weight:800;color:var(--purple-dark);letter-spacing:.6px;}
+.saat-yazi span{display:block;font-size:.62rem;font-weight:700;color:var(--muted);}
+
+/* --- güncel yaprak takvim (sağ yarısında yaklaşan günler) --- */
+.ytk{position:relative;display:flex;flex-direction:column;align-items:center;user-select:none;}
+.ytk-halka{position:relative;z-index:6;display:flex;justify-content:center;gap:150px;height:13px;align-items:center;}
+.ytk-halka i{width:10px;height:16px;border-radius:6px;border:2.5px solid #9FB0C4;border-bottom-color:#E9EEF4;
+  background:linear-gradient(90deg,#F2F5F9,#CBD7E4);}
+.ytk-tahta{position:relative;margin-top:-8px;padding:7px;border-radius:12px;
+  background:linear-gradient(180deg,var(--purple) 0%,var(--purple-dark) 100%);
+  box-shadow:0 6px 14px rgba(14,29,51,.30);}
+.ytk-ic{display:flex;align-items:stretch;gap:7px;}
+.ytk-yapraklar{position:relative;width:172px;height:80px;flex:0 0 172px;}
+.ytk-kenar{position:absolute;left:0;right:0;bottom:-3px;height:78px;border-radius:8px;background:#F2EFE5;border:1px solid #D9D3C2;}
+.ytk-kenar.k2{bottom:-5px;left:3px;right:3px;background:#E8E4D6;}
+.ytk-yaprak{
+  position:absolute;inset:0;border-radius:8px;background:#FFFDF6;border:1px solid #D9D3C2;
+  box-shadow:0 2px 7px rgba(14,29,51,.16);display:flex;align-items:stretch;cursor:pointer;
+  transform-origin:50% 0;overflow:hidden;
+}
+.ytk-sol{flex:0 0 72px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:linear-gradient(180deg,#FFF8EA,#F6EEDC);border-right:1px dashed #CFC7B2;}
+.ytk-gun{font-size:2.2rem;line-height:1;font-weight:800;color:var(--purple-dark);}
+.ytk-yaprak.tatil .ytk-gun{color:#A63D3D;}
+.ytk-ay{margin-top:2px;padding:1px 7px;border-radius:50px;background:var(--cerceve);color:#fff;
+  font-size:.53rem;font-weight:800;letter-spacing:1.1px;}
+.ytk-sag{flex:1;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:5px 8px;}
+.ytk-hafta{font-size:.82rem;font-weight:800;letter-spacing:.3px;color:var(--purple-dark);}
+.ytk-yaprak.tatil .ytk-hafta{color:#A63D3D;}
+.ytk-ad{font-size:.6rem;font-weight:700;letter-spacing:1.2px;color:var(--muted);}
+.ytk-etiket{align-self:flex-start;margin-top:2px;padding:1px 9px;border-radius:50px;
+  background:var(--cerceve);border:1.2px solid var(--cerceve-koyu);font-size:.6rem;font-weight:800;color:#fff;}
+.ytk-etiket.sade{background:var(--purple-light);border-color:var(--purple);color:var(--purple);}
+.ytk-yaprak.kopuk{
+  clip-path:polygon(0 5%,6% 0,13% 6%,20% 0,27% 6%,34% 0,41% 6%,48% 0,55% 6%,62% 0,69% 6%,76% 0,83% 6%,90% 0,97% 6%,100% 2%,100% 100%,0 100%);
+  animation:tkKopar .8s cubic-bezier(.36,0,.66,1) forwards;pointer-events:none;
+}
+@keyframes tkKopar{
+  0%{transform:rotate(0) translate(0,0);opacity:1;}
+  18%{transform:rotate(-5deg) translate(-6px,4px);}
+  70%{opacity:.8;}
+  100%{transform:rotate(22deg) translate(46px,120px) scale(.94);opacity:0;}
+}
+.ytk-bitti{position:absolute;inset:0;border-radius:8px;background:#FFFDF6;border:1px dashed var(--line);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:5px;}
+.ytk-bitti p{font-size:.64rem;font-weight:700;color:var(--purple-dark);text-align:center;}
+.tk-btn{padding:4px 11px;border-radius:50px;border:1.2px solid var(--purple);background:var(--purple);
+  color:#fff;font-size:.64rem;font-weight:800;cursor:pointer;}
+.ytk-ipucu{position:absolute;left:8px;top:-1px;z-index:7;padding:0 6px;border-radius:50px;background:#fff;
+  border:1px solid var(--cerceve);font-size:.55rem;font-weight:800;color:var(--cerceve-koyu);}
+
+/* --- takvimin sağ bölmesi: yaklaşan özel günler --- */
+.ytk-gunler{
+  flex:0 0 234px;display:flex;flex-direction:column;justify-content:center;gap:3px;
+  padding:5px 8px;border-radius:8px;background:#FFFDF6;border:1px solid #D9D3C2;
+}
+.ytk-gunler-baslik{font-size:.53rem;font-weight:800;letter-spacing:1.5px;color:var(--cerceve-koyu);text-align:center;}
+.tk-liste{display:flex;flex-direction:column;gap:3px;}
+.tk-satir{display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.tk-satir .t{flex:0 0 42px;font-size:.6rem;font-weight:800;color:var(--cerceve-koyu);}
+.tk-satir .n{flex:1;overflow:hidden;text-overflow:ellipsis;font-size:.66rem;font-weight:700;color:var(--purple-dark);}
+.tk-satir .k{padding:0 7px;border-radius:50px;background:var(--purple-light);
+  border:1px solid var(--purple);font-size:.55rem;font-weight:800;color:var(--purple);}
+.tk-satir.bugun .k{background:var(--cerceve);border-color:var(--cerceve-koyu);color:#fff;}
+.tk-tumu{margin-top:6px;padding:4px 14px;border-radius:50px;background:#fff;
+  border:1.3px solid var(--cerceve);color:var(--cerceve-koyu);font-size:.66rem;font-weight:800;cursor:pointer;}
+
+@media (max-width:760px){
+  .gunler-ic{gap:12px;padding:11px 0;}
+  .tk-ayirac{display:none;}
+  .ytk-halka{gap:110px;}
+  .ytk-ic{flex-direction:column;gap:6px;}
+  .ytk-yapraklar{width:min(248px,74vw);flex:0 0 80px;}
+  .ytk-gunler{flex:none;width:min(248px,74vw);}
+  .tk-satir{white-space:normal;align-items:flex-start;}
+  .tk-satir .n{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.2;}
+}
 
 /* ===== GENEL BÖLÜM ===== */
 section{padding:64px 0;}
@@ -656,8 +735,114 @@ footer{padding:32px 0;color:#d6cadf;background:var(--purple-dark);}
 
   <div class="gunler">
     <div class="gunler-ic">
-      <span class="gunler-baslik">YAKLAŞAN GÜNLER</span>
-      <span id="gunlerListe"></span>
+
+      <!-- SAAT -->
+      <div class="saat-blok">
+        <div class="saat-kutu">
+          <svg viewBox="0 0 100 100" aria-hidden="true">
+            <g>
+              <line x1="50.0" y1="12.0" x2="50.0" y2="5.5" stroke="#16345C" stroke-width="1.7" stroke-linecap="round"/>
+              <line x1="54.3" y1="9.2" x2="54.6" y2="6.2" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="58.5" y1="9.9" x2="59.1" y2="7.0" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="62.7" y1="11.0" x2="63.6" y2="8.2" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="66.7" y1="12.5" x2="67.9" y2="9.8" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="69.0" y1="17.1" x2="72.2" y2="11.5" stroke="#16345C" stroke-width="1.7" stroke-linecap="round"/>
+              <line x1="74.1" y1="16.8" x2="75.9" y2="14.4" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="77.4" y1="19.5" x2="79.4" y2="17.3" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="80.5" y1="22.6" x2="82.7" y2="20.6" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="83.2" y1="25.9" x2="85.6" y2="24.1" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="82.9" y1="31.0" x2="88.5" y2="27.8" stroke="#16345C" stroke-width="1.7" stroke-linecap="round"/>
+              <line x1="87.5" y1="33.3" x2="90.2" y2="32.1" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="89.0" y1="37.3" x2="91.8" y2="36.4" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="90.1" y1="41.5" x2="93.0" y2="40.9" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="90.8" y1="45.7" x2="93.8" y2="45.4" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="88.0" y1="50.0" x2="94.5" y2="50.0" stroke="#16345C" stroke-width="1.7" stroke-linecap="round"/>
+              <line x1="90.8" y1="54.3" x2="93.8" y2="54.6" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="90.1" y1="58.5" x2="93.0" y2="59.1" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="89.0" y1="62.7" x2="91.8" y2="63.6" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="87.5" y1="66.7" x2="90.2" y2="67.9" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="82.9" y1="69.0" x2="88.5" y2="72.2" stroke="#16345C" stroke-width="1.7" stroke-linecap="round"/>
+              <line x1="83.2" y1="74.1" x2="85.6" y2="75.9" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="80.5" y1="77.4" x2="82.7" y2="79.4" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="77.4" y1="80.5" x2="79.4" y2="82.7" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="74.1" y1="83.2" x2="75.9" y2="85.6" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="69.0" y1="82.9" x2="72.2" y2="88.5" stroke="#16345C" stroke-width="1.7" stroke-linecap="round"/>
+              <line x1="66.7" y1="87.5" x2="67.9" y2="90.2" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="62.7" y1="89.0" x2="63.6" y2="91.8" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="58.5" y1="90.1" x2="59.1" y2="93.0" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="54.3" y1="90.8" x2="54.6" y2="93.8" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="50.0" y1="88.0" x2="50.0" y2="94.5" stroke="#16345C" stroke-width="1.7" stroke-linecap="round"/>
+              <line x1="45.7" y1="90.8" x2="45.4" y2="93.8" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="41.5" y1="90.1" x2="40.9" y2="93.0" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="37.3" y1="89.0" x2="36.4" y2="91.8" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="33.3" y1="87.5" x2="32.1" y2="90.2" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="31.0" y1="82.9" x2="27.8" y2="88.5" stroke="#16345C" stroke-width="1.7" stroke-linecap="round"/>
+              <line x1="25.9" y1="83.2" x2="24.1" y2="85.6" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="22.6" y1="80.5" x2="20.6" y2="82.7" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="19.5" y1="77.4" x2="17.3" y2="79.4" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="16.8" y1="74.1" x2="14.4" y2="75.9" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="17.1" y1="69.0" x2="11.5" y2="72.2" stroke="#16345C" stroke-width="1.7" stroke-linecap="round"/>
+              <line x1="12.5" y1="66.7" x2="9.8" y2="67.9" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="11.0" y1="62.7" x2="8.2" y2="63.6" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="9.9" y1="58.5" x2="7.0" y2="59.1" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="9.2" y1="54.3" x2="6.2" y2="54.6" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="12.0" y1="50.0" x2="5.5" y2="50.0" stroke="#16345C" stroke-width="1.7" stroke-linecap="round"/>
+              <line x1="9.2" y1="45.7" x2="6.2" y2="45.4" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="9.9" y1="41.5" x2="7.0" y2="40.9" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="11.0" y1="37.3" x2="8.2" y2="36.4" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="12.5" y1="33.3" x2="9.8" y2="32.1" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="17.1" y1="31.0" x2="11.5" y2="27.7" stroke="#16345C" stroke-width="1.7" stroke-linecap="round"/>
+              <line x1="16.8" y1="25.9" x2="14.4" y2="24.1" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="19.5" y1="22.6" x2="17.3" y2="20.6" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="22.6" y1="19.5" x2="20.6" y2="17.3" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="25.9" y1="16.8" x2="24.1" y2="14.4" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="31.0" y1="17.1" x2="27.7" y2="11.5" stroke="#16345C" stroke-width="1.7" stroke-linecap="round"/>
+              <line x1="33.3" y1="12.5" x2="32.1" y2="9.8" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="37.3" y1="11.0" x2="36.4" y2="8.2" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="41.5" y1="9.9" x2="40.9" y2="7.0" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="45.7" y1="9.2" x2="45.4" y2="6.2" stroke="#8CA4C1" stroke-width="0.7" stroke-linecap="round"/>
+              <text x="50.0" y="20.0" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="700" fill="#0E1D33">12</text>
+              <text x="80.0" y="50.0" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="700" fill="#0E1D33">3</text>
+              <text x="50.0" y="80.0" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="700" fill="#0E1D33">6</text>
+              <text x="20.0" y="50.0" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="700" fill="#0E1D33">9</text>
+              <text x="65.0" y="24.0" text-anchor="middle" dominant-baseline="central" font-size="7.5" font-weight="700" fill="#5E6E82">1</text>
+              <text x="76.0" y="35.0" text-anchor="middle" dominant-baseline="central" font-size="7.5" font-weight="700" fill="#5E6E82">2</text>
+              <text x="76.0" y="65.0" text-anchor="middle" dominant-baseline="central" font-size="7.5" font-weight="700" fill="#5E6E82">4</text>
+              <text x="65.0" y="76.0" text-anchor="middle" dominant-baseline="central" font-size="7.5" font-weight="700" fill="#5E6E82">5</text>
+              <text x="35.0" y="76.0" text-anchor="middle" dominant-baseline="central" font-size="7.5" font-weight="700" fill="#5E6E82">7</text>
+              <text x="24.0" y="65.0" text-anchor="middle" dominant-baseline="central" font-size="7.5" font-weight="700" fill="#5E6E82">8</text>
+              <text x="24.0" y="35.0" text-anchor="middle" dominant-baseline="central" font-size="7.5" font-weight="700" fill="#5E6E82">10</text>
+              <text x="35.0" y="24.0" text-anchor="middle" dominant-baseline="central" font-size="7.5" font-weight="700" fill="#5E6E82">11</text>
+            </g>
+            <g id="saatAkrep"><line x1="50" y1="54" x2="50" y2="26" stroke="#0E1D33" stroke-width="3.2" stroke-linecap="round"/></g>
+            <g id="saatYelkovan"><line x1="50" y1="56" x2="50" y2="15" stroke="#16345C" stroke-width="2.2" stroke-linecap="round"/></g>
+            <g id="saatSaniye"><line x1="50" y1="59" x2="50" y2="13" stroke="#C08A2E" stroke-width="1" stroke-linecap="round"/></g>
+            <circle cx="50" cy="50" r="2.8" fill="#16345C"/>
+          </svg>
+        </div>
+        <div class="saat-yazi"><b id="saatRakam">--:--</b><span id="saatTarih"></span></div>
+      </div>
+
+      <span class="tk-ayirac"></span>
+
+      <!-- GÜNCEL YAPRAK TAKVİM + YAKLAŞAN GÜNLER -->
+      <div class="ytk" id="yaprakTakvim">
+        <span class="ytk-ipucu">✂ dokun</span>
+        <div class="ytk-halka"><i></i><i></i></div>
+        <div class="ytk-tahta">
+          <div class="ytk-ic">
+            <div class="ytk-yapraklar" id="tkYapraklar">
+              <span class="ytk-kenar k2"></span><span class="ytk-kenar k1"></span>
+            </div>
+            <div class="ytk-gunler">
+              <span class="ytk-gunler-baslik">YAKLAŞAN ÖZEL GÜNLER</span>
+              <div class="tk-liste" id="tkListe"></div>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="tk-tumu" onclick="showPage('belirli')">Belirli Gün ve Haftalar →</button>
+      </div>
+
     </div>
   </div>
 
@@ -1983,49 +2168,166 @@ function araKapat(){
   });
 })();
 
-/* ===== YAKLAŞAN GÜNLER ===== */
+/* ===== GÜNCEL YAPRAK TAKVİM + YAKLAŞAN GÜNLER + SAAT ===== */
 (function(){
-  var alan = document.getElementById('gunlerListe');
-  if (!alan) return;
-  function mayisIkinciPazar(y){
-    var d = new Date(y,4,1);
+  var yuva  = document.getElementById('tkYapraklar');
+  var liste = document.getElementById('tkListe');
+  if (!yuva || !liste) return;
+
+  var aylar   = ['OCAK','ŞUBAT','MART','NİSAN','MAYIS','HAZİRAN','TEMMUZ','AĞUSTOS','EYLÜL','EKİM','KASIM','ARALIK'];
+  var aylarK  = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+  var aylarKs = ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
+  var haftaAd = ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+
+  function nPazar(y,ay,n){
+    var d = new Date(y,ay,1);
     var ilk = 1 + ((7 - d.getDay()) % 7);
-    return new Date(y,4,ilk+7);
+    return new Date(y,ay,ilk + (n-1)*7);
   }
-  function gunler(y){
+
+  function ozelGunler(y){
     return [
       { t:new Date(y,8,19),  ad:'Gaziler Günü' },
+      { t:new Date(y,9,4),   ad:'Hayvanları Koruma Günü' },
+      { t:new Date(y,9,5),   ad:'Dünya Öğretmenler Günü' },
+      { t:new Date(y,9,24),  ad:'Birleşmiş Milletler Günü' },
       { t:new Date(y,9,29),  ad:'29 Ekim Cumhuriyet Bayramı' },
-      { t:new Date(y,10,10), ad:'10 Kasım Atatürk’ü Anma' },
+      { t:new Date(y,10,10), ad:'Atatürk’ü Anma ve Atatürk Haftası' },
+      { t:new Date(y,10,20), ad:'Dünya Çocuk Hakları Günü' },
       { t:new Date(y,10,24), ad:'24 Kasım Öğretmenler Günü' },
       { t:new Date(y,11,3),  ad:'Dünya Engelliler Günü' },
-      { t:new Date(y,0,10),  ad:'Çalışan Gazeteciler Günü' },
+      { t:new Date(y,11,10), ad:'İnsan Hakları ve Demokrasi Haftası' },
+      { t:new Date(y,11,12), ad:'Tutum, Yatırım ve Türk Malları Haftası' },
+      { t:new Date(y,0,7),   ad:'Beyaz Baston Görme Engelliler Haftası' },
+      { t:new Date(y,0,11),  ad:'Enerji Tasarrufu Haftası' },
       { t:new Date(y,2,1),   ad:'Yeşilay Haftası' },
+      { t:new Date(y,2,8),   ad:'Bilim ve Teknoloji Haftası' },
       { t:new Date(y,2,12),  ad:'İstiklâl Marşı’nın Kabulü' },
+      { t:new Date(y,2,15),  ad:'Tüketiciyi Koruma Haftası' },
       { t:new Date(y,2,18),  ad:'18 Mart Çanakkale Zaferi' },
+      { t:new Date(y,2,21),  ad:'Orman Haftası' },
+      { t:new Date(y,2,29),  ad:'Kütüphaneler Haftası' },
+      { t:new Date(y,3,15),  ad:'Turizm Haftası' },
       { t:new Date(y,3,23),  ad:'23 Nisan Çocuk Bayramı' },
-      { t:new Date(y,4,1),   ad:'Trafik ve İlk Yardım Haftası' },
-      { t:mayisIkinciPazar(y), ad:'Anneler Günü' },
-      { t:new Date(y,4,19),  ad:'19 Mayıs Gençlik ve Spor Bayramı' }
+      { t:new Date(y,4,3),   ad:'Trafik ve İlk Yardım Haftası' },
+      { t:nPazar(y,4,2),     ad:'Anneler Günü' },
+      { t:new Date(y,4,10),  ad:'Engelliler Haftası' },
+      { t:new Date(y,4,18),  ad:'Müzeler Haftası' },
+      { t:new Date(y,4,19),  ad:'19 Mayıs Gençlik ve Spor Bayramı' },
+      { t:new Date(y,4,25),  ad:'Etik Günü' },
+      { t:new Date(y,5,5),   ad:'Dünya Çevre Günü' },
+      { t:nPazar(y,5,3),     ad:'Babalar Günü' },
+      { t:new Date(y,6,15),  ad:'Demokrasi ve Millî Birlik Günü' },
+      { t:new Date(y,7,30),  ad:'30 Ağustos Zafer Bayramı' }
     ];
   }
-  var simdi = new Date(); simdi.setHours(0,0,0,0);
-  var y = simdi.getFullYear();
-  var yakin = gunler(y).concat(gunler(y+1))
-    .filter(function(g){ return g.t >= simdi; })
+
+  var bugun = new Date(); bugun.setHours(0,0,0,0);
+  var yil = bugun.getFullYear();
+
+  /* --- yaklaşan özel günler --- */
+  var yakin = ozelGunler(yil).concat(ozelGunler(yil+1))
+    .filter(function(g){ return g.t >= bugun; })
     .sort(function(a,b){ return a.t - b.t; })
     .slice(0,3);
-  var aylar = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+
   yakin.forEach(function(g){
-    var fark = Math.round((g.t - simdi)/86400000);
-    var a = document.createElement('a');
-    a.href='#'; a.className='gun-rozet' + (fark===0 ? ' bugun' : '');
-    a.onclick = function(e){ e.preventDefault(); showPage('belirli'); };
-    a.innerHTML = '<span></span><span class="kalan"></span>';
-    a.children[0].textContent = g.t.getDate() + ' ' + aylar[g.t.getMonth()] + ' · ' + g.ad;
-    a.children[1].textContent = fark===0 ? 'bugün' : fark + ' gün kaldı';
-    alan.appendChild(a); alan.appendChild(document.createTextNode(' '));
+    var fark = Math.round((g.t - bugun)/86400000);
+    var s = document.createElement('div');
+    s.className = 'tk-satir' + (fark===0 ? ' bugun' : '');
+    s.innerHTML = '<span class="t">'+g.t.getDate()+' '+aylarKs[g.t.getMonth()]+'</span>'+
+                  '<span class="n">'+g.ad+'</span>'+
+                  '<span class="k">'+(fark===0 ? 'bugün' : fark+' gün')+'</span>';
+    liste.appendChild(s);
   });
+
+  /* --- güncel yaprak takvim (bugünün tarihi; dokununca yaprak kopar) --- */
+  var kaydirma = 0;           /* koparılan yaprak sayısı */
+  var enFazla  = 10;
+
+  function tarihAl(k){
+    var d = new Date(bugun.getTime());
+    d.setDate(d.getDate() + k);
+    return d;
+  }
+
+  function etiketAdi(k,d){
+    if (k===0) return 'BUGÜN';
+    if (k===1) return 'YARIN';
+    return k + '. GÜN';
+  }
+
+  function yaprakYap(k){
+    var d = tarihAl(k);
+    var el = document.createElement('div');
+    el.className = 'ytk-yaprak' + (k===0 ? ' bugun' : '') + (d.getDay()===0 ? ' tatil' : '');
+    el.style.zIndex = 10 + (enFazla - k);
+    el.innerHTML =
+      '<div class="ytk-sol">'+
+        '<span class="ytk-gun">'+d.getDate()+'</span>'+
+        '<span class="ytk-ay">'+aylar[d.getMonth()]+'</span>'+
+      '</div>'+
+      '<div class="ytk-sag">'+
+        '<span class="ytk-hafta">'+haftaAd[d.getDay()]+'</span>'+
+        '<span class="ytk-ad">'+d.getFullYear()+'</span>'+
+        '<span class="ytk-etiket'+(k===0?'':' sade')+'">'+etiketAdi(k,d)+'</span>'+
+      '</div>';
+    return el;
+  }
+
+  function takvimCiz(){
+    Array.prototype.slice.call(yuva.querySelectorAll('.ytk-yaprak,.ytk-bitti')).forEach(function(e){ e.remove(); });
+    for (var k = Math.min(kaydirma+3, enFazla); k >= kaydirma; k--){
+      var el = yaprakYap(k);
+      if (k === kaydirma) el.addEventListener('click', kopar);
+      yuva.appendChild(el);
+    }
+    if (kaydirma >= enFazla) bittiGoster();
+  }
+
+  function kopar(e){
+    var d = e.currentTarget;
+    d.removeEventListener('click', kopar);
+    d.classList.add('kopuk');
+    kaydirma++;
+    setTimeout(function(){
+      d.remove();
+      takvimCiz();
+    }, 820);
+  }
+
+  function bittiGoster(){
+    var b = document.createElement('div');
+    b.className = 'ytk-bitti'; b.style.zIndex = 40;
+    b.innerHTML = '<p>Yaprakları kopardın 🙂</p>';
+    var btn = document.createElement('button');
+    btn.type='button'; btn.className='tk-btn'; btn.textContent='↺ Bugüne dön';
+    btn.addEventListener('click', function(){ kaydirma = 0; takvimCiz(); });
+    b.appendChild(btn);
+    yuva.appendChild(b);
+  }
+
+  takvimCiz();
+
+  /* ===== SAAT ===== */
+  var ak = document.getElementById('saatAkrep'),
+      yk = document.getElementById('saatYelkovan'),
+      sn = document.getElementById('saatSaniye'),
+      rk = document.getElementById('saatRakam'),
+      tr = document.getElementById('saatTarih');
+  function iki(n){ return (n<10?'0':'') + n; }
+  function saatiKur(){
+    if (!ak) return;
+    var n = new Date();
+    var s = n.getHours(), d = n.getMinutes(), sa = n.getSeconds();
+    ak.setAttribute('transform','rotate('+(((s%12)+d/60)*30)+' 50 50)');
+    yk.setAttribute('transform','rotate('+((d+sa/60)*6)+' 50 50)');
+    sn.setAttribute('transform','rotate('+(sa*6)+' 50 50)');
+    rk.textContent = iki(s)+':'+iki(d);
+    tr.textContent = n.getDate()+' '+aylarK[n.getMonth()]+' · '+haftaAd[n.getDay()];
+  }
+  saatiKur();
+  setInterval(saatiKur,1000);
 })();
 
 /* ===== AÇILIŞ ===== */
