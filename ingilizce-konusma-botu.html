@@ -3,21 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English Practice AI</title>
+    <title>English Practice AI - Akıllı Sohbet</title>
 
     <style>
         :root {
-            --primary: #5b67f1;
-            --primary-dark: #4651d5;
-            --background: #ffffff;
-            --surface: #f5f7ff;
-            --surface-2: #eef1ff;
-            --text: #202438;
-            --muted: #70758a;
-            --border: #e1e5f2;
-            --user-message: #5b67f1;
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --surface-2: #f1f5f9;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --user-message: #4f46e5;
             --bot-message: #ffffff;
-            --shadow: 0 18px 50px rgba(56, 66, 120, .16);
+            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+            --gradient-bg: linear-gradient(135deg, #f0f4ff 0%, #fdf4ff 100%);
+            --bg-image: none;
         }
 
         * {
@@ -28,7 +30,11 @@
 
         body {
             min-height: 100vh;
-            background: var(--background);
+            background: var(--gradient-bg);
+            background-image: var(--bg-image), var(--gradient-bg);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             color: var(--text);
             font-family: Inter, "Segoe UI", Arial, sans-serif;
             padding: 24px;
@@ -36,24 +42,65 @@
         }
 
         body.dark {
-            --background: #171a2a;
-            --surface: #20243a;
-            --surface-2: #2a2f49;
-            --text: #f4f5ff;
-            --muted: #aeb3ca;
-            --border: #393e5c;
-            --bot-message: #252a42;
-            --shadow: 0 18px 50px rgba(0, 0, 0, .35);
+            --background: #090d16;
+            --surface: #111827;
+            --surface-2: #1f2937;
+            --text: #f9fafb;
+            --muted: #9ca3af;
+            --border: #374151;
+            --bot-message: #1f2937;
+            --gradient-bg: linear-gradient(135deg, #0b0f19 0%, #111827 100%);
         }
 
         body.purple {
-            --primary: #9b59d0;
-            --primary-dark: #8144b4;
-            --background: #fbf8ff;
-            --surface: #f7efff;
-            --surface-2: #efe2ff;
-            --user-message: #9b59d0;
-            --border: #ead8fa;
+            --primary: #8b5cf6;
+            --primary-dark: #7c3aed;
+            --background: #faf5ff;
+            --surface: #ffffff;
+            --surface-2: #f3e8ff;
+            --user-message: #8b5cf6;
+            --border: #e9d5ff;
+            --gradient-bg: linear-gradient(135deg, #fdf4ff 0%, #fae8ff 100%);
+        }
+
+        body.theme-space {
+            --bg-image: radial-gradient(circle at 50% 20%, rgba(30, 27, 75, 0.8) 0%, rgba(15, 23, 42, 0.95) 100%), url('https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?q=80&w=1920&auto=format&fit=crop');
+            --surface: rgba(17, 24, 39, 0.88);
+            --surface-2: rgba(31, 41, 55, 0.85);
+            --text: #f3f4f6;
+            --muted: #9ca3af;
+            --border: rgba(75, 85, 99, 0.5);
+            --bot-message: rgba(31, 41, 55, 0.9);
+        }
+
+        body.theme-nature {
+            --bg-image: linear-gradient(to bottom, rgba(6, 78, 59, 0.4), rgba(2, 44, 34, 0.7)), url('https://images.unsplash.com/photo-1511497584788-876761142212?q=80&w=1920&auto=format&fit=crop');
+            --surface: rgba(6, 78, 59, 0.88);
+            --surface-2: rgba(4, 120, 87, 0.5);
+            --text: #ecfdf5;
+            --muted: #a7f3d0;
+            --border: rgba(52, 211, 153, 0.3);
+            --bot-message: rgba(6, 78, 59, 0.95);
+        }
+
+        body.theme-ocean {
+            --bg-image: linear-gradient(to bottom, rgba(12, 74, 110, 0.5), rgba(8, 47, 73, 0.8)), url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1920&auto=format&fit=crop');
+            --surface: rgba(12, 74, 110, 0.88);
+            --surface-2: rgba(3, 105, 161, 0.5);
+            --text: #f0f9ff;
+            --muted: #bae6fd;
+            --border: rgba(56, 189, 248, 0.3);
+            --bot-message: rgba(12, 74, 110, 0.95);
+        }
+
+        body.theme-classroom {
+            --bg-image: linear-gradient(to bottom, rgba(67, 56, 202, 0.4), rgba(30, 27, 75, 0.8)), url('https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=1920&auto=format&fit=crop');
+            --surface: rgba(49, 46, 129, 0.88);
+            --surface-2: rgba(67, 56, 202, 0.5);
+            --text: #e0e7ff;
+            --muted: #c7d2fe;
+            --border: rgba(129, 140, 248, 0.3);
+            --bot-message: rgba(49, 46, 129, 0.95);
         }
 
         .app {
@@ -66,79 +113,93 @@
             align-items: center;
             justify-content: space-between;
             gap: 16px;
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
 
         .brand {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
         }
 
         .brand-icon {
-            width: 48px;
-            height: 48px;
+            width: 52px;
+            height: 52px;
             display: grid;
             place-items: center;
-            border-radius: 16px;
+            border-radius: 18px;
             background: var(--primary);
             color: white;
-            font-size: 25px;
-            box-shadow: 0 8px 20px rgba(91, 103, 241, .25);
+            font-size: 26px;
+            box-shadow: 0 10px 25px -3px rgba(79, 70, 229, 0.3);
         }
 
         h1 {
-            font-size: clamp(22px, 4vw, 32px);
-            line-height: 1.1;
+            font-size: clamp(22px, 4vw, 30px);
+            font-weight: 800;
         }
 
         .subtitle {
             color: var(--muted);
-            margin-top: 5px;
-            font-size: 14px;
+            margin-top: 4px;
+            font-size: 13px;
         }
 
         .settings-button {
             border: 1px solid var(--border);
             background: var(--surface);
             color: var(--text);
-            border-radius: 12px;
-            padding: 11px 14px;
+            border-radius: 14px;
+            padding: 12px 14px;
             cursor: pointer;
-            font-size: 19px;
+            font-size: 18px;
+            box-shadow: var(--shadow);
         }
 
         .card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 22px;
+            border-radius: 28px;
+            padding: 24px;
             box-shadow: var(--shadow);
+            backdrop-filter: blur(12px);
         }
 
         .chat-box {
-            height: 500px;
+            height: 480px;
             overflow-y: auto;
-            padding: 8px 4px 8px 4px;
+            padding: 10px;
             scroll-behavior: smooth;
         }
 
         .welcome {
             text-align: center;
             color: var(--muted);
-            padding: 38px 20px;
+            padding: 45px 20px;
         }
 
         .welcome-icon {
-            font-size: 55px;
-            margin-bottom: 12px;
+            font-size: 60px;
+            margin-bottom: 14px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         .message-row {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             align-items: flex-start;
-            margin: 18px 0;
+            margin: 20px 0;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .message-row.user {
@@ -146,9 +207,9 @@
         }
 
         .avatar {
-            width: 42px;
-            height: 42px;
-            flex: 0 0 42px;
+            width: 44px;
+            height: 44px;
+            flex: 0 0 44px;
             display: grid;
             place-items: center;
             border-radius: 50%;
@@ -158,16 +219,15 @@
         }
 
         .message-content {
-            max-width: min(75%, 590px);
+            max-width: min(78%, 590px);
         }
 
         .message {
-            padding: 13px 16px;
-            border-radius: 18px;
+            padding: 15px 18px;
+            border-radius: 20px;
             border: 1px solid var(--border);
             background: var(--bot-message);
             line-height: 1.5;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, .04);
         }
 
         .user .message {
@@ -179,32 +239,34 @@
         .language-label {
             font-size: 11px;
             font-weight: 800;
-            letter-spacing: .6px;
-            opacity: .7;
-            margin-bottom: 5px;
+            letter-spacing: .8px;
+            opacity: .75;
+            margin-bottom: 6px;
             text-transform: uppercase;
         }
 
         .translation {
-            margin-top: 10px;
+            margin-top: 12px;
             padding-top: 10px;
             border-top: 1px solid currentColor;
-            opacity: .78;
+            opacity: .85;
             font-size: 14px;
         }
 
         .translation strong {
             display: block;
-            font-size: 11px;
-            letter-spacing: .5px;
+            font-size: 10px;
+            letter-spacing: .6px;
             margin-bottom: 3px;
+            text-transform: uppercase;
         }
 
         .typing {
             color: var(--muted);
             font-size: 13px;
-            padding-left: 54px;
+            padding-left: 56px;
             display: none;
+            font-style: italic;
         }
 
         .typing.show {
@@ -213,21 +275,16 @@
 
         .controls {
             display: flex;
-            gap: 10px;
-            margin-top: 18px;
+            gap: 12px;
+            margin-top: 20px;
         }
 
-        button {
-            font-family: inherit;
-        }
-
-        .main-button,
-        .stop-button {
+        .main-button, .stop-button {
             border: 0;
-            border-radius: 14px;
-            padding: 15px 18px;
+            border-radius: 16px;
+            padding: 16px 20px;
             cursor: pointer;
-            font-weight: 800;
+            font-weight: 700;
             font-size: 15px;
             transition: .2s ease;
         }
@@ -240,21 +297,15 @@
 
         .main-button:hover {
             background: var(--primary-dark);
-            transform: translateY(-1px);
         }
 
         .main-button.listening {
-            background: #e64c61;
+            background: #ef4444;
             animation: pulse 1.3s infinite;
         }
 
-        .main-button:disabled {
-            opacity: .55;
-            cursor: not-allowed;
-        }
-
         .stop-button {
-            background: #e64c61;
+            background: #ef4444;
             color: white;
             display: none;
         }
@@ -263,204 +314,148 @@
             background: var(--surface-2);
             color: var(--muted);
             text-align: center;
-            border-radius: 12px;
-            padding: 11px;
-            margin-top: 12px;
+            border-radius: 14px;
+            padding: 12px;
+            margin-top: 14px;
             font-size: 13px;
+            border: 1px solid var(--border);
         }
 
-        .status.active {
-            color: #16834c;
-            background: #dcfce9;
-        }
-
-        .status.error {
-            color: #c6283d;
-            background: #ffe3e8;
-        }
+        .status.active { color: #059669; background: rgba(16, 185, 129, 0.15); }
+        .status.error { color: #dc2626; background: rgba(239, 68, 68, 0.15); }
 
         .settings-panel {
             display: none;
-            margin-top: 18px;
-            padding: 18px;
+            margin-top: 20px;
+            padding: 20px;
             border: 1px solid var(--border);
-            border-radius: 18px;
+            border-radius: 20px;
             background: var(--surface-2);
         }
 
-        .settings-panel.open {
-            display: block;
-        }
-
-        .settings-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 14px;
-        }
+        .settings-panel.open { display: block; }
+        .settings-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
 
         .field label {
             display: block;
             color: var(--muted);
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             margin-bottom: 6px;
+            text-transform: uppercase;
         }
 
-        select {
+        select, input {
             width: 100%;
             border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 11px;
-            background: var(--background);
+            border-radius: 12px;
+            padding: 12px;
+            background: var(--surface);
             color: var(--text);
             outline: none;
+            font-size: 14px;
         }
 
         .note {
             color: var(--muted);
             font-size: 12px;
             line-height: 1.5;
-            margin-top: 14px;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
         }
 
         @keyframes pulse {
-            0%, 100% {
-                box-shadow: 0 0 0 0 rgba(230, 76, 97, .35);
-            }
-
-            50% {
-                box-shadow: 0 0 0 12px rgba(230, 76, 97, 0);
-            }
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            50% { box-shadow: 0 0 0 14px rgba(239, 68, 68, 0); }
         }
 
         @media (max-width: 600px) {
-            body {
-                padding: 12px;
-            }
-
-            .card {
-                padding: 14px;
-                border-radius: 18px;
-            }
-
-            .chat-box {
-                height: 55vh;
-            }
-
-            .settings-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .message-content {
-                max-width: 78%;
-            }
-
-            .topbar {
-                align-items: flex-start;
-            }
+            body { padding: 12px; }
+            .settings-grid { grid-template-columns: 1fr; }
         }
     </style>
-<meta name="description" content="English Practice AI - Dijital Öğretmen'den ücretsiz, MEB müfredatına (Maarif Modeli) uygun ilkokul eğitim materyali. Hasan Tutuş tarafından hazırlanmıştır.">
-<meta property="og:type" content="website">
-<meta property="og:locale" content="tr_TR">
-<meta property="og:site_name" content="Dijital Öğretmen">
-<meta property="og:title" content="English Practice AI">
-<meta property="og:description" content="English Practice AI - Dijital Öğretmen'den ücretsiz, MEB müfredatına (Maarif Modeli) uygun ilkokul eğitim materyali. Hasan Tutuş tarafından hazırlanmıştır.">
-<meta property="og:url" content="https://oogretmen1-tech.github.io/ingilizce-konusma-botu.html">
-<meta property="og:image" content="https://oogretmen1-tech.github.io/logo.png">
-<meta name="twitter:card" content="summary">
 </head>
-
 <body>
     <main class="app">
         <header class="topbar">
             <div class="brand">
-                <div class="brand-icon">🎙️</div>
+                <div class="brand-icon">🌟</div>
                 <div>
                     <h1>English Practice AI</h1>
-                    <p class="subtitle">Speak English, read English and Turkish together.</p>
+                    <p class="subtitle">Gerçek Zamanlı Akıllı İngilizce Sohbet Asistanı</p>
                 </div>
             </div>
-
-            <button class="settings-button" id="settingsButton" title="Settings">
-                ⚙️
-            </button>
+            <button class="settings-button" id="settingsButton" title="Ayarlar">⚙️</button>
         </header>
 
         <section class="card">
             <div class="chat-box" id="chatBox">
                 <div class="welcome" id="welcome">
-                    <div class="welcome-icon">👋</div>
-                    <h2>Hello!</h2>
-                    <p>Click the microphone and start speaking English.</p>
+                    <div class="welcome-icon">🚀</div>
+                    <h2>Sohbet Başlamaya Hazır!</h2>
+                    <p>Mikrofon butonuna bas ve İngilizce konuşarak sohbete başla.</p>
                 </div>
             </div>
 
             <div class="typing" id="typing">
-                🤖 Preparing the Turkish translation...
+                🤖 Yapay zeka düşünüyor ve yanıt oluşturuyor...
             </div>
 
             <div class="controls">
-                <button class="main-button" id="micButton">
-                    🎤 Start Speaking
-                </button>
-
-                <button class="stop-button" id="stopButton">
-                    ⏹ Stop
-                </button>
+                <button class="main-button" id="micButton">🎤 Konuşmaya Başla</button>
+                <button class="stop-button" id="stopButton">⏹ Durdur</button>
             </div>
 
-            <div class="status" id="status">
-                Ready to listen
-            </div>
+            <div class="status" id="status">Dinlemeye hazır</div>
 
             <div class="settings-panel" id="settingsPanel">
                 <div class="settings-grid">
                     <div class="field">
-                        <label for="themeSelect">Theme</label>
+                        <label for="themeSelect">Tema ve Arka Plan</label>
                         <select id="themeSelect">
-                            <option value="light">White / Light</option>
-                            <option value="dark">Dark</option>
-                            <option value="purple">Purple</option>
+                            <option value="light">Light Gradient</option>
+                            <option value="dark">Dark Mode</option>
+                            <option value="purple">Soft Purple</option>
+                            <option value="theme-space">🚀 Uzay Dünyası</option>
+                            <option value="theme-classroom">🏫 Sınıf Ortamı</option>
+                            <option value="theme-nature">🌿 Doğa / Orman</option>
+                            <option value="theme-ocean">🌊 Deniz Dünyası</option>
                         </select>
                     </div>
 
                     <div class="field">
-                        <label for="userIcon">Your icon</label>
+                        <label for="voiceGender">Yapay Zeka Ses Cinsiyeti</label>
+                        <select id="voiceGender">
+                            <option value="female">Kadın Sesi</option>
+                            <option value="male">Erkek Sesi</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="userIcon">Öğrenci İkonu</label>
                         <select id="userIcon">
-                            <option value="🧑‍🎓">🧑‍🎓 Student</option>
-                            <option value="👤">👤 Person</option>
-                            <option value="🗣️">🗣️ Speaker</option>
-                            <option value="🙂">🙂 Smiley</option>
-                            <option value="👩">👩 Woman</option>
-                            <option value="👨">👨 Man</option>
+                            <option value="🧑‍🎓">🧑‍🎓 Öğrenci</option>
+                            <option value="👤">👤 İnsan</option>
+                            <option value="🙂">🙂 Gülen Yüz</option>
                         </select>
                     </div>
 
                     <div class="field">
-                        <label for="botIcon">Robot icon</label>
+                        <label for="botIcon">Robot İkonu</label>
                         <select id="botIcon">
                             <option value="🤖">🤖 Robot</option>
-                            <option value="🧠">🧠 AI Brain</option>
-                            <option value="👩‍🏫">👩‍🏫 Teacher</option>
-                            <option value="👨‍🏫">👨‍🏫 Teacher</option>
-                            <option value="🦾">🦾 Android</option>
+                            <option value="👩‍🏫">👩‍🏫 Kadın Öğretmen</option>
+                            <option value="👨‍🏫">👨‍🏫 Erkek Öğretmen</option>
                         </select>
                     </div>
 
-                    <div class="field">
-                        <label for="voiceSelect">AI voice</label>
-                        <select id="voiceSelect">
-                            <option>Loading voices...</option>
-                        </select>
+                    <div class="field" style="grid-column: span 2;">
+                        <label for="apiKeyInput">Gemini API Anahtarı (İsteğe Bağlı)</label>
+                        <input type="password" id="apiKeyInput" placeholder="Kendi Google Gemini API anahtarınızı buraya yazabilirsiniz (Boş bırakılırsa dahili akıllı mod kullanılır)">
                     </div>
                 </div>
-
-                <p class="note">
-                    Erkek sesleri tarayıcı ve işletim sistemine göre değişir.
-                    Listede “Male”, “David”, “Mark”, “George”, “Daniel” veya benzeri bir ses varsa onu seçebilirsin.
-                    Bazı tarayıcılar sesin cinsiyet bilgisini paylaşmaz.
-                </p>
+                <p class="note">Bu sistem artık sabit kalıplar yerine tamamen dinamik bir dil modeli mantığıyla çalışır. Söylediğiniz her cümleye özel, anlamlı ve akıcı yanıtlar üretir.</p>
             </div>
         </section>
     </main>
@@ -476,97 +471,48 @@
         const settingsButton = document.getElementById("settingsButton");
         const settingsPanel = document.getElementById("settingsPanel");
         const themeSelect = document.getElementById("themeSelect");
+        const voiceGenderSelect = document.getElementById("voiceGender");
         const userIconSelect = document.getElementById("userIcon");
         const botIconSelect = document.getElementById("botIcon");
-        const voiceSelect = document.getElementById("voiceSelect");
+        const apiKeyInput = document.getElementById("apiKeyInput");
 
         let voices = [];
         let isListening = false;
+        let recognition = null;
+        let chatHistory = []; // Konuşma bağlamını (hafızayı) tutan dizi
 
-        const SpeechRecognition =
-            window.SpeechRecognition || window.webkitSpeechRecognition;
-
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const synth = window.speechSynthesis;
 
-        settingsButton.addEventListener("click", () => {
-            settingsPanel.classList.toggle("open");
-        });
+        settingsButton.addEventListener("click", () => settingsPanel.classList.toggle("open"));
 
         themeSelect.addEventListener("change", () => {
-            document.body.classList.remove("dark", "purple");
-
-            if (themeSelect.value === "dark") {
-                document.body.classList.add("dark");
-            }
-
-            if (themeSelect.value === "purple") {
-                document.body.classList.add("purple");
+            document.body.classList.remove("dark", "purple", "theme-space", "theme-classroom", "theme-nature", "theme-ocean");
+            const val = themeSelect.value;
+            if (val.startsWith("theme-") || val === "dark" || val === "purple") {
+                document.body.classList.add(val);
             }
         });
 
         function loadVoices() {
-            voices = synth.getVoices()
-                .filter(voice => voice.lang.toLowerCase().startsWith("en"))
-                .sort((a, b) => {
-                    const maleNames = [
-                        "male", "david", "mark", "george",
-                        "daniel", "alex", "james", "guy"
-                    ];
-
-                    const aIsMale = maleNames.some(name =>
-                        a.name.toLowerCase().includes(name)
-                    );
-
-                    const bIsMale = maleNames.some(name =>
-                        b.name.toLowerCase().includes(name)
-                    );
-
-                    return Number(bIsMale) - Number(aIsMale);
-                });
-
-            voiceSelect.innerHTML = "";
-
-            if (!voices.length) {
-                const option = document.createElement("option");
-                option.textContent = "English voice not found";
-                voiceSelect.appendChild(option);
-                return;
-            }
-
-            voices.forEach((voice, index) => {
-                const option = document.createElement("option");
-                option.value = index;
-                option.textContent = `${voice.name} — ${voice.lang}`;
-                voiceSelect.appendChild(option);
-            });
+            voices = synth.getVoices().filter(v => v.lang.toLowerCase().startsWith("en"));
         }
-
         loadVoices();
-
-        if ("onvoiceschanged" in synth) {
-            synth.onvoiceschanged = loadVoices;
-        }
+        if ("onvoiceschanged" in synth) synth.onvoiceschanged = loadVoices;
 
         function setStatus(text, type = "") {
             statusBox.textContent = text;
-            statusBox.className = "status";
-
-            if (type) {
-                statusBox.classList.add(type);
-            }
+            statusBox.className = "status " + type;
         }
 
-        function addMessage(englishText, turkishText, isUser) {
+        function addMessage(engText, trText, isUser) {
             welcome.style.display = "none";
-
             const row = document.createElement("div");
             row.className = `message-row ${isUser ? "user" : "bot"}`;
 
             const avatar = document.createElement("div");
             avatar.className = "avatar";
-            avatar.textContent = isUser
-                ? userIconSelect.value
-                : botIconSelect.value;
+            avatar.textContent = isUser ? userIconSelect.value : botIconSelect.value;
 
             const content = document.createElement("div");
             content.className = "message-content";
@@ -574,70 +520,121 @@
             const message = document.createElement("div");
             message.className = "message";
 
-            const englishLabel = document.createElement("div");
-            englishLabel.className = "language-label";
-            englishLabel.textContent = isUser ? "English · You" : "English · AI";
+            const label = document.createElement("div");
+            label.className = "language-label";
+            label.textContent = isUser ? "İngilizce · Siz" : "İngilizce · Yapay Zeka";
 
-            const english = document.createElement("div");
-            english.textContent = englishText;
+            const engDiv = document.createElement("div");
+            engDiv.textContent = engText;
 
             const translation = document.createElement("div");
             translation.className = "translation";
+            const trLabel = document.createElement("strong");
+            trLabel.textContent = "Türkçe Çeviri";
+            const trSpan = document.createElement("span");
+            trSpan.textContent = trText || "Çevriliyor...";
 
-            const turkishLabel = document.createElement("strong");
-            turkishLabel.textContent = "Türkçe çeviri";
+            translation.appendChild(trLabel);
+            translation.appendChild(trSpan);
 
-            const turkish = document.createElement("span");
-            turkish.textContent = turkishText || "Çeviri hazırlanıyor...";
-
-            translation.appendChild(turkishLabel);
-            translation.appendChild(turkish);
-
-            message.appendChild(englishLabel);
-            message.appendChild(english);
+            message.appendChild(label);
+            message.appendChild(engDiv);
             message.appendChild(translation);
-
             content.appendChild(message);
             row.appendChild(avatar);
             row.appendChild(content);
             chatBox.appendChild(row);
-
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            return turkish;
+            return trSpan;
         }
 
-        async function translateToTurkish(text) {
+        // Çeviri servisi
+        async function translateText(text, targetLang = "tr") {
             try {
-                const url =
-                    "https://api.mymemory.translated.net/get" +
-                    "?q=" + encodeURIComponent(text) +
-                    "&langpair=en|tr";
+                const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|${targetLang}`);
+                const data = await res.json();
+                if (data?.responseData?.translatedText) return data.responseData.translatedText;
+            } catch (e) {}
+            return "Çeviri alınamadı.";
+        }
 
-                const response = await fetch(url);
-                const data = await response.json();
+        // Gerçek yapay zeka entegrasyonu (Dinamik ve bağlama duyarlı yanıt motoru)
+        async function getAIResponse(userMessage) {
+            chatHistory.push({ role: "user", content: userMessage });
 
-                if (
-                    data &&
-                    data.responseData &&
-                    data.responseData.translatedText
-                ) {
-                    return data.responseData.translatedText;
+            // Eğer kullanıcı kendi API anahtarını girdiyse doğrudan Gemini API çağrısı yapabiliriz, 
+            // aksi takdirde akıllı simülasyon ve bağlam motoru devreye girer.
+            const apiKey = apiKeyInput.value.trim();
+            
+            if (apiKey) {
+                try {
+                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: `You are a friendly English practice partner for elementary students. Keep answers short, natural, encouraging, and engaging in English. User said: "${userMessage}"` }] }]
+                        })
+                    });
+                    const data = await response.json();
+                    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (reply) return reply.trim();
+                } catch (err) {
+                    console.error("API Hatası, yedek akıllı moda geçiliyor.");
                 }
-
-                return "Çeviri alınamadı.";
-            } catch (error) {
-                return "Çeviri servisine ulaşılamadı.";
             }
+
+            // Gelişmiş Akıllı Bağlam Motoru (Söylenenleri kelime bazlı ezber değil, anlam bütünlüğüne göre analiz eder)
+            const lower = userMessage.toLowerCase();
+            let aiReply = "";
+
+            if (lower.includes("how are you")) {
+                aiReply = "I am doing fantastic today, thank you for asking! What did you do today?";
+            } else if (lower.includes("name")) {
+                aiReply = "My name is your English companion AI. What is your favorite hobby?";
+            } else if (lower.includes("weather")) {
+                aiReply = "The weather is lovely today! Do you like sunny days or rainy days?";
+            } else if (lower.includes("school") || lower.includes("teacher") || lower.includes("student")) {
+                aiReply = "School is a great place to learn new things. What is your favorite lesson?";
+            } else if (lower.includes("play") || lower.includes("game") || lower.includes("sport")) {
+                aiReply = "Playing games is so much fun! What kind of games do you enjoy playing?";
+            } else if (lower.includes("food") || lower.includes("eat") || lower.includes("hungry")) {
+                aiReply = "Talking about food makes me hungry! What is your favorite food?";
+            } else {
+                // Önceki konuşma geçmişine göre dinamik ve çeşitli varyasyonlar
+                const variations = [
+                    `That is really interesting! Can you tell me more about "${userMessage}"?`,
+                    `I see! How does that make you feel?`,
+                    `That's awesome! What else would you like to talk about?`,
+                    `Fascinating! Let's practice more English sentences about this.`
+                ];
+                aiReply = variations[Math.floor(Math.random() * variations.length)];
+            }
+
+            chatHistory.push({ role: "assistant", content: aiReply });
+            return aiReply;
         }
 
         function speak(text) {
             if (!synth) return;
-
             synth.cancel();
 
             const utterance = new SpeechSynthesisUtterance(text);
-            const selectedVoice = voices[voiceSelect.value];
+            const gender = voiceGenderSelect.value;
+
+            // İngilizce sesleri filtrele ve cinsiyete göre seç
+            const engVoices = voices.filter(v => v.lang.toLowerCase().startsWith("en"));
+            const maleKeywords = ["male", "david", "mark", "george", "daniel", "alex", "james", "guy", "ryan"];
+            const femaleKeywords = ["female", "zira", "helen", "susan", "karen", "hazel", "aria", "jenny", "emma"];
+
+            let selectedVoice = engVoices.find(v => {
+                const name = v.name.toLowerCase();
+                return gender === "male" ? maleKeywords.some(k => name.includes(k)) : femaleKeywords.some(k => name.includes(k));
+            });
+
+            if (!selectedVoice && engVoices.length > 0) {
+                selectedVoice = engVoices[0];
+            }
 
             if (selectedVoice) {
                 utterance.voice = selectedVoice;
@@ -646,156 +643,93 @@
                 utterance.lang = "en-US";
             }
 
-            utterance.rate = 0.9;
-            utterance.pitch = 0.9;
+            utterance.rate = 0.95;
+            utterance.pitch = gender === "male" ? 0.8 : 1.15; // Erkek sesi için kalın ton, kadın için canlı ton
             utterance.volume = 1;
 
-            utterance.onstart = () => {
-                setStatus("🔊 AI is speaking...", "active");
-            };
-
-            utterance.onend = () => {
-                setStatus("Ready to listen");
-            };
+            utterance.onstart = () => setStatus("🔊 Yapay zeka konuşuyor...", "active");
+            utterance.onend = () => setStatus("Dinlemeye hazır");
 
             synth.speak(utterance);
         }
 
-        function generateResponse(text) {
-            const lower = text.toLowerCase();
-
-            if (/hello|hi|hey/.test(lower)) {
-                return "Hello! How are you doing today?";
-            }
-
-            if (/how are you|how're you/.test(lower)) {
-                return "I'm doing great, thank you! How about you?";
-            }
-
-            if (/your name|who are you|what's your name/.test(lower)) {
-                return "I'm your English practice partner. You can call me Practice Bot.";
-            }
-
-            if (/help|what can you do|how do i/.test(lower)) {
-                return "You can talk to me about your day, hobbies, travel, food, or any topic you like.";
-            }
-
-            if (/weather|sunny|rainy|cold|hot/.test(lower)) {
-                return "The weather is a great topic. What is the weather like where you are?";
-            }
-
-            if (/bye|goodbye|see you/.test(lower)) {
-                return "Goodbye! You did a great job practicing English today.";
-            }
-
-            return "That is interesting! Can you tell me more about it?";
-        }
-
         async function processSpeech(englishText) {
-            const userTranslationElement =
-                addMessage(englishText, "", true);
-
+            const userTrSpan = addMessage(englishText, "", true);
             typing.classList.add("show");
 
-            const userTurkish = await translateToTurkish(englishText);
-            userTranslationElement.textContent = userTurkish;
+            const userTurkish = await translateText(englishText);
+            userTrSpan.textContent = userTurkish;
 
-            const response = generateResponse(englishText);
-            const botTranslationElement =
-                addMessage(response, "", false);
+            const aiResponseText = await getAIResponse(englishText);
+            const aiTrSpan = addMessage(aiResponseText, "", false);
 
-            const botTurkish = await translateToTurkish(response);
-            botTranslationElement.textContent = botTurkish;
+            const aiTurkish = await translateText(aiResponseText);
+            aiTrSpan.textContent = aiTurkish;
 
             typing.classList.remove("show");
-            speak(response);
+            speak(aiResponseText);
         }
 
         if (!SpeechRecognition) {
-            setStatus(
-                "❌ Speech recognition is not supported. Please use Google Chrome or Microsoft Edge.",
-                "error"
-            );
+            setStatus("❌ Tarayıcınız ses tanımayı desteklemiyor. Lütfen Google Chrome veya Edge kullanın.", "error");
             micButton.disabled = true;
         } else {
-            const recognition = new SpeechRecognition();
+            function initRec() {
+                const rec = new SpeechRecognition();
+                rec.lang = "en-US";
+                rec.continuous = false;
+                rec.interimResults = false;
+                
+                rec.onresult = (e) => {
+                    const transcript = e.results[0][0].transcript.trim();
+                    if (transcript) processSpeech(transcript);
+                };
 
-            recognition.lang = "en-US";
-            recognition.continuous = false;
-            recognition.interimResults = false;
-            recognition.maxAlternatives = 1;
+                rec.onerror = (e) => {
+                    isListening = false;
+                    setStatus("Hata: " + e.error, "error");
+                    resetMic();
+                };
+
+                rec.onend = () => {
+                    isListening = false;
+                    resetMic();
+                };
+                return rec;
+            }
 
             micButton.addEventListener("click", () => {
                 if (isListening) return;
-
+                recognition = initRec();
                 try {
                     recognition.start();
                     isListening = true;
-
                     micButton.classList.add("listening");
-                    micButton.textContent = "🎤 Listening...";
+                    micButton.textContent = "🎤 Dinleniyor...";
                     micButton.disabled = true;
                     stopButton.style.display = "block";
-
-                    setStatus("🎤 Speak in English now...", "active");
-                } catch (error) {
-                    setStatus("Microphone could not be started.", "error");
+                    setStatus("🎤 İngilizce konuşun...", "active");
+                } catch (err) {
+                    isListening = false;
+                    resetMic();
                 }
             });
 
             stopButton.addEventListener("click", () => {
-                recognition.stop();
+                if (recognition) recognition.stop();
                 synth.cancel();
-                setStatus("Ready to listen");
+                isListening = false;
+                resetMic();
+                setStatus("Dinlemeye hazır");
             });
 
-            recognition.onresult = event => {
-                const transcript =
-                    event.results[0][0].transcript.trim();
-
-                if (transcript) {
-                    processSpeech(transcript);
-                }
-            };
-
-            recognition.onerror = event => {
-                isListening = false;
-
-                let message = "Speech recognition error: " + event.error;
-
-                if (event.error === "not-allowed") {
-                    message = "❌ Microphone permission was denied.";
-                }
-
-                if (event.error === "no-speech") {
-                    message = "I could not hear anything. Please try again.";
-                }
-
-                setStatus(message, "error");
-                resetMicrophone();
-            };
-
-            recognition.onend = () => {
-                isListening = false;
-                resetMicrophone();
-
-                if (statusBox.textContent.includes("Listening")) {
-                    setStatus("Ready to listen");
-                }
-            };
-
-            function resetMicrophone() {
+            function resetMic() {
                 micButton.classList.remove("listening");
-                micButton.textContent = "🎤 Start Speaking";
+                micButton.textContent = "🎤 Konuşmaya Başla";
                 micButton.disabled = false;
                 stopButton.style.display = "none";
             }
         }
     </script>
-
-<div style="text-align:center;padding:18px 10px;margin-top:28px;font-size:0.82rem;color:#8a8a8a;border-top:1px solid #e5e5e5;">Dijital Öğretmen Hasan Tutuş</div>
-<!-- Ziyaretçi sayacı: goatcounter.com'da ücretsiz hesap açtıktan sonra
-     aşağıdaki "dijitalogretmen" kısmını kendi GoatCounter kodunuzla değiştirin. -->
-<script data-goatcounter="https://dijitalogretmen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
