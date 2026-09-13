@@ -455,7 +455,7 @@
                         <input type="password" id="apiKeyInput" placeholder="Kendi Google Gemini API anahtarınızı buraya yazabilirsiniz (Boş bırakılırsa dahili akıllı mod kullanılır)">
                     </div>
                 </div>
-                <p class="note">Bu sistem artık sabit kalıplar yerine tamamen dinamik bir dil modeli mantığıyla çalışır. Söylediğiniz her cümleye özel, anlamlı ve akıcı yanıtlar üretir.</p>
+                <p class="note">Bu sistem sabit kalıplar yerine tamamen dinamik bir dil modeli mantığıyla çalışır ve temalar, ses/ikon ayarlarıyla tamamen kişiselleştirilebilir.</p>
             </div>
         </section>
     </main>
@@ -479,7 +479,7 @@
         let voices = [];
         let isListening = false;
         let recognition = null;
-        let chatHistory = []; // Konuşma bağlamını (hafızayı) tutan dizi
+        let chatHistory = [];
 
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const synth = window.speechSynthesis;
@@ -549,7 +549,6 @@
             return trSpan;
         }
 
-        // Çeviri servisi
         async function translateText(text, targetLang = "tr") {
             try {
                 const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|${targetLang}`);
@@ -559,12 +558,8 @@
             return "Çeviri alınamadı.";
         }
 
-        // Gerçek yapay zeka entegrasyonu (Dinamik ve bağlama duyarlı yanıt motoru)
         async function getAIResponse(userMessage) {
             chatHistory.push({ role: "user", content: userMessage });
-
-            // Eğer kullanıcı kendi API anahtarını girdiyse doğrudan Gemini API çağrısı yapabiliriz, 
-            // aksi takdirde akıllı simülasyon ve bağlam motoru devreye girer.
             const apiKey = apiKeyInput.value.trim();
             
             if (apiKey) {
@@ -573,18 +568,17 @@
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
-                            contents: [{ parts: [{ text: `You are a friendly English practice partner for elementary students. Keep answers short, natural, encouraging, and engaging in English. User said: "${userMessage}"` }] }]
+                            contents: [{ parts: [{ text: `You are a friendly English practice partner. Keep answers short, natural, encouraging, and engaging in English. User said: "${userMessage}"` }] }]
                         })
                     });
                     const data = await response.json();
                     const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
                     if (reply) return reply.trim();
                 } catch (err) {
-                    console.error("API Hatası, yedek akıllı moda geçiliyor.");
+                    console.error("API Hatası, akıllı moda geçiliyor.");
                 }
             }
 
-            // Gelişmiş Akıllı Bağlam Motoru (Söylenenleri kelime bazlı ezber değil, anlam bütünlüğüne göre analiz eder)
             const lower = userMessage.toLowerCase();
             let aiReply = "";
 
@@ -601,7 +595,6 @@
             } else if (lower.includes("food") || lower.includes("eat") || lower.includes("hungry")) {
                 aiReply = "Talking about food makes me hungry! What is your favorite food?";
             } else {
-                // Önceki konuşma geçmişine göre dinamik ve çeşitli varyasyonlar
                 const variations = [
                     `That is really interesting! Can you tell me more about "${userMessage}"?`,
                     `I see! How does that make you feel?`,
@@ -621,8 +614,6 @@
 
             const utterance = new SpeechSynthesisUtterance(text);
             const gender = voiceGenderSelect.value;
-
-            // İngilizce sesleri filtrele ve cinsiyete göre seç
             const engVoices = voices.filter(v => v.lang.toLowerCase().startsWith("en"));
             const maleKeywords = ["male", "david", "mark", "george", "daniel", "alex", "james", "guy", "ryan"];
             const femaleKeywords = ["female", "zira", "helen", "susan", "karen", "hazel", "aria", "jenny", "emma"];
@@ -644,7 +635,7 @@
             }
 
             utterance.rate = 0.95;
-            utterance.pitch = gender === "male" ? 0.8 : 1.15; // Erkek sesi için kalın ton, kadın için canlı ton
+            utterance.pitch = gender === "male" ? 0.8 : 1.15;
             utterance.volume = 1;
 
             utterance.onstart = () => setStatus("🔊 Yapay zeka konuşuyor...", "active");
