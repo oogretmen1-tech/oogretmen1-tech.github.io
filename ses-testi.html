@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ses Testi | Dijital Öğretmen</title>
+<meta name="robots" content="noindex">
+<style>
+  :root{ --lacivert:#1f2d3d; --mavi:#2f6fb0; --acik:#eef3f8; --gri:#5a6b7b; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--acik); color:var(--lacivert);
+        font:16px/1.6 system-ui,"Segoe UI",Roboto,Arial,sans-serif; padding:18px; }
+  .kutu{ max-width:860px; margin:0 auto; background:#fff; border:2px solid #cfdae6;
+         border-radius:16px; padding:20px; }
+  h1{ font-size:1.35rem; margin:0 0 4px; }
+  .alt{ color:var(--gri); margin:0 0 18px; }
+  .durum{ padding:14px 16px; border-radius:12px; font-weight:600; margin-bottom:18px; }
+  .iyi{ background:#e6f6ec; border:2px solid #37a05f; color:#1d6b3c; }
+  .kotu{ background:#fdecec; border:2px solid #d24b4b; color:#a12d2d; }
+  .bekle{ background:#fff6e0; border:2px solid #e0a72f; color:#8a6410; }
+  button{ background:var(--mavi); color:#fff; border:0; border-radius:10px;
+          padding:11px 18px; font-size:1rem; font-weight:600; cursor:pointer; margin:0 8px 8px 0; }
+  button.sade{ background:#6b7c8c; }
+  table{ width:100%; border-collapse:collapse; margin-top:10px; font-size:.93rem; }
+  th,td{ text-align:left; padding:8px 10px; border-bottom:1px solid #e2e9f0; vertical-align:middle; }
+  th{ background:#f3f7fb; }
+  tr.tr td{ background:#eef8f1; }
+  td.d{ font-family:ui-monospace,Menlo,Consolas,monospace; color:var(--gri); white-space:nowrap; }
+  .rozet{ display:inline-block; background:#37a05f; color:#fff; border-radius:20px;
+          padding:2px 10px; font-size:.78rem; font-weight:700; }
+  .yardim{ background:#f3f7fb; border-radius:12px; padding:14px 16px; margin-top:20px; font-size:.95rem; }
+  .yardim b{ color:var(--lacivert); }
+  footer{ text-align:center; color:var(--gri); font-size:.85rem; margin-top:22px; }
+  button.mini{ padding:6px 12px; font-size:.85rem; margin:0; }
+</style>
+</head>
+<body>
+<div class="kutu">
+  <h1>Sesli Okuma Testi</h1>
+  <p class="alt">Bu sayfa, kullandığınız cihazda sesli okumanın neden bozuk duyulduğunu gösterir.</p>
+
+  <div id="durum" class="durum bekle">Sesler yükleniyor…</div>
+
+  <div>
+    <button onclick="dene()">Türkçe cümleyi oku</button>
+    <button class="sade" onclick="speechSynthesis.cancel()">Durdur</button>
+    <button class="sade" onclick="yenile()">Listeyi yenile</button>
+  </div>
+
+  <p id="secilen" class="alt" style="margin-top:14px;"></p>
+
+  <h2 style="font-size:1.05rem;margin-bottom:0;">Cihazınızdaki sesler</h2>
+  <table>
+    <thead><tr><th>Ses adı</th><th>Dil</th><th></th></tr></thead>
+    <tbody id="liste"><tr><td colspan="3">…</td></tr></tbody>
+  </table>
+
+  <div class="yardim">
+    <b>Türkçe ses yoksa ne yapmalı?</b><br>
+    <b>Android:</b> Ayarlar &rsaquo; Erişilebilirlik &rsaquo; Metin okuma (TTS) çıkışı &rsaquo;
+    Google Konuşma Hizmetleri &rsaquo; Dilleri yükle &rsaquo; <b>Türkçe</b>. Ardından
+    “Tercih edilen motor”u Google olarak seçin.<br>
+    <b>iPad / iPhone:</b> Ayarlar &rsaquo; Erişilebilirlik &rsaquo; Konuşulan İçerik &rsaquo;
+    Sesler &rsaquo; Türkçe &rsaquo; <b>Yelda</b> (Gelişmiş sürümü indirin).<br>
+    <b>Windows:</b> Ayarlar &rsaquo; Saat ve Dil &rsaquo; Dil ve Bölge &rsaquo; Türkçe &rsaquo;
+    Dil seçenekleri &rsaquo; <b>Konuşma</b> paketini yükleyin.
+  </div>
+</div>
+
+<footer>Dijital Öğretmen · Hasan Tutuş</footer>
+
+<script src="ses.js"></script>
+<script>
+var ORNEK = "Merhaba çocuklar! Bugün okulumuzu ve sınıfımızı tanıyacağız. " +
+            "Şeftali, ağaç, üzüm, ışık, çiçek.";
+
+function sesListesi(){ return (window.speechSynthesis && speechSynthesis.getVoices()) || []; }
+
+function ciz(){
+  var sesler = sesListesi();
+  var durum  = document.getElementById("durum");
+  var liste  = document.getElementById("liste");
+  var trler  = sesler.filter(function(v){ return (v.lang||"").toLowerCase().indexOf("tr") === 0; });
+
+  if(!sesler.length){
+    durum.className = "durum bekle";
+    durum.textContent = "Sesler henüz yüklenmedi. Birkaç saniye bekleyip “Listeyi yenile”ye dokunun.";
+  } else if(trler.length){
+    durum.className = "durum iyi";
+    durum.textContent = "Bu cihazda " + trler.length + " Türkçe ses yüklü. Sesli okuma düzgün çalışmalı.";
+  } else {
+    durum.className = "durum kotu";
+    durum.textContent = "Bu cihazda hiç Türkçe ses yok! Bu yüzden Türkçe metinler yabancı aksanıyla okunuyor. Aşağıdaki adımlarla Türkçe ses paketini kurun.";
+  }
+
+  liste.innerHTML = "";
+  if(!sesler.length){ liste.innerHTML = '<tr><td colspan="3">Liste boş.</td></tr>'; return; }
+  sesler.sort(function(a,b){
+    var at = (a.lang||"").toLowerCase().indexOf("tr")===0 ? 0 : 1;
+    var bt = (b.lang||"").toLowerCase().indexOf("tr")===0 ? 0 : 1;
+    return at-bt || String(a.name).localeCompare(String(b.name),"tr");
+  });
+  sesler.forEach(function(v){
+    var trMi = (v.lang||"").toLowerCase().indexOf("tr") === 0;
+    var satir = document.createElement("tr");
+    if(trMi) satir.className = "tr";
+    satir.innerHTML =
+      "<td>" + v.name + (trMi ? ' <span class="rozet">Türkçe</span>' : "") + "</td>" +
+      '<td class="d">' + v.lang + "</td>" +
+      '<td><button class="mini sade">Dinle</button></td>';
+    satir.querySelector("button").onclick = function(){ dogrudanOku(v); };
+    liste.appendChild(satir);
+  });
+
+  var secilen = window.DTSes ? DTSes.turkceVar() : false;
+  document.getElementById("secilen").textContent = secilen
+    ? "Sayfalarda otomatik olarak Türkçe ses kullanılacak."
+    : "";
+}
+
+/* ses.js'i devre dışı bırakmadan tek bir sesi doğrudan denemek için */
+function dogrudanOku(v){
+  speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance("Merhaba, ben " + v.name + ". Türkçe okuyorum.");
+  u.voice = v; u.lang = v.lang || "tr-TR";
+  speechSynthesis.speak(u);
+}
+
+function dene(){
+  speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(ORNEK);
+  u.lang = "tr-TR"; u.rate = 0.92;
+  speechSynthesis.speak(u);
+}
+
+function yenile(){ ciz(); }
+
+ciz();
+try { speechSynthesis.addEventListener("voiceschanged", ciz); } catch(e){ speechSynthesis.onvoiceschanged = ciz; }
+setTimeout(ciz, 800);
+setTimeout(ciz, 2000);
+</script>
+</body>
+</html>
