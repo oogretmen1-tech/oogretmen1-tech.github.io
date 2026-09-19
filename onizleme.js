@@ -42,6 +42,11 @@
     if (document.getElementById("oi-stil")) return;
     var css =
       ".card-onizle{background:#0f766e !important;box-shadow:none}" +
+      ".card.kapakli{flex-direction:column;align-items:stretch;padding:0;gap:0;overflow:hidden}" +
+      ".card.kapakli .card-alt{display:flex;align-items:flex-start;gap:12px;padding:14px}" +
+      ".card-kapak{display:block;width:100%;aspect-ratio:4/3;object-fit:contain;" +
+        "background:#eef2f7;border-bottom:1px solid rgba(14,29,51,.10);cursor:zoom-in}" +
+      "@media(max-width:600px){.card-kapak{aspect-ratio:3/2}}" +
       "#oi-kaplama{position:fixed;inset:0;z-index:2147483500;background:rgba(15,23,42,.78);" +
         "display:none;align-items:center;justify-content:center;padding:14px;" +
         "font-family:Nunito,Arial,sans-serif}" +
@@ -111,6 +116,41 @@
     var b = document.createElement("button");
     b.type = "button"; b.className = sinif; b.textContent = yazi; b.onclick = islev;
     alt.appendChild(b); return b;
+  }
+
+  /* ---------------- kapak görselleri (tek paket dosyası) ---------------- */
+  var paketSoz = null;
+  function paketYukle() {
+    if (paketSoz) return paketSoz;
+    paketSoz = new Promise(function (ok) {
+      if (window.DO_KAPAKLAR) return ok();
+      var s = document.createElement("script");
+      s.src = kokYol() + "onizleme-kapaklar.js";
+      s.onload = function () { ok(); };
+      s.onerror = function () { ok(); };
+      document.head.appendChild(s);
+    });
+    return paketSoz;
+  }
+  var kapakGozlemci = null;
+  function kapakIzle(img) {
+    function doldur() {
+      paketYukle().then(function () {
+        var k = img.dataset.kapak;
+        var p = window.DO_KAPAKLAR && window.DO_KAPAKLAR[k];
+        img.src = p || (kokYol() + "onizleme-" + encodeURIComponent(k) + ".jpg");
+      });
+    }
+    if (!("IntersectionObserver" in window)) { doldur(); return; }
+    if (!kapakGozlemci) {
+      kapakGozlemci = new IntersectionObserver(function (g) {
+        g.forEach(function (x) {
+          if (x.isIntersecting) { kapakGozlemci.unobserve(x.target); x.target.__doldur(); }
+        });
+      }, { rootMargin: "500px 0px" });
+    }
+    img.__doldur = doldur;
+    kapakGozlemci.observe(img);
   }
 
   /* ---------------- pdf.js ---------------- */
@@ -271,6 +311,27 @@
         } else {
           if (!bilgi.pdf) bilgi.pdf = href + "?indir=1";
           if (!bilgi.word) bilgi.word = href + "?indir=word";
+        }
+
+        /* kartın üstüne kapak görseli (ön izleme resmi) */
+        if (!kart.querySelector(".card-kapak")) {
+          var kapak = new Image();
+          kapak.className = "card-kapak";
+          kapak.loading = "lazy";
+          kapak.alt = "";
+          kapak.dataset.kapak = kokAd(onizHedef);
+          kapak.onerror = function () {
+            kart.classList.remove("kapakli");
+            if (kapak.parentNode) kapak.parentNode.removeChild(kapak);
+          };
+          kapak.onclick = function (e) { e.preventDefault(); e.stopPropagation(); ac(bilgi); };
+          var sarmal = document.createElement("div");
+          sarmal.className = "card-alt";
+          while (kart.firstChild) sarmal.appendChild(kart.firstChild);
+          kart.appendChild(kapak);
+          kart.appendChild(sarmal);
+          kart.classList.add("kapakli");
+          kapakIzle(kapak);
         }
 
         var span = document.createElement("span");
