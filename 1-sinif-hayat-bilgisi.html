@@ -147,6 +147,18 @@ main{max-width:1080px;margin:0 auto;padding:16px 14px 40px}
 .section-box h2 .cizgi{flex:1;height:6px;border-radius:6px;background:repeating-linear-gradient(90deg,#ffd9a6 0 12px,transparent 12px 20px)}
 .bolum-not{margin:0 0 14px;font-size:14.5px;opacity:.75}
 
+/* EK MATERYALLER */
+.materyal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.materyal-kart{
+  display:flex;align-items:flex-start;gap:11px;text-decoration:none;color:inherit;
+  background:#fff;border:3px solid var(--mat-renk,#b39ddb);border-radius:18px;padding:13px 14px;
+  transition:transform .18s, box-shadow .18s;
+}
+.materyal-kart:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(90,70,50,.16)}
+.materyal-kart .mk-ikon{font-size:26px;line-height:1;flex-shrink:0}
+.materyal-kart b{display:block;font-size:15px;margin-bottom:3px}
+.materyal-kart span{font-size:13px;opacity:.75}
+
 /* BELİRLİ GÜN VE HAFTALAR */
 .gunler{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:11px}
 .gun-kart{
@@ -361,6 +373,12 @@ footer{
     <h2>📚 Konularımız <span class="cizgi"></span></h2>
     <p class="bolum-not">Karta dokun, çizimi incele; “Devamını Oku” ile konunun tamamını öğren.</p>
     <div class="topic-grid" id="topicGrid"></div>
+  </section>
+
+  <section class="section-box" id="materyalBox" style="display:none">
+    <h2>📎 Bu Alanın Materyalleri <span class="cizgi"></span></h2>
+    <p class="bolum-not">Panoya asmalık, yazdırılabilir ve tahtada gösterilebilir çalışmalar.</p>
+    <div class="materyal-grid" id="materyalGrid"></div>
   </section>
 
   <section class="section-box">
@@ -808,6 +826,10 @@ const units = [
  hero:"okul",
  heroFoto:"alan1hero",
  description:"Kendimizi tanıtıyor, okulumuzu keşfediyor, kuralları öğreniyor ve duygularımızı tanıyoruz.",
+ materyaller:[
+  {icon:"📋",title:"Sınıf Kurallarımız · Kural Kartları",note:"8 kart · Tahtada göster · Yazdır / PDF / Word",href:"sinif-kurallari.html"},
+  {icon:"🖼️",title:"Sınıf Kuralları Pano Seti",note:"8 sayfa · A4 yatay · panoya asmalık PDF",href:"sinif-kurallari-pano-A4-yatay.pdf",indir:true}
+ ],
  gunler:[
   ["📚","İlköğretim Haftası","Eylül ayının 3. haftası"],
   ["🎖️","Gaziler Günü","19 Eylül"],
@@ -1200,6 +1222,25 @@ function renderUnit(){
       </div>`;
     topicGrid.appendChild(card);
   });
+
+  /* ek materyaller */
+  const mb = document.getElementById("materyalBox");
+  const mg = document.getElementById("materyalGrid");
+  mg.innerHTML = "";
+  if (u.materyaller && u.materyaller.length){
+    u.materyaller.forEach(m=>{
+      const a = document.createElement("a");
+      a.className = "materyal-kart";
+      a.href = m.href;
+      a.style.setProperty("--mat-renk", u.color2);
+      if (m.indir) a.setAttribute("download","");
+      a.innerHTML = `<span class="mk-ikon">${m.icon}</span><span><b>${m.title}</b><span>${m.note}</span></span>`;
+      mg.appendChild(a);
+    });
+    mb.style.display = "";
+  } else {
+    mb.style.display = "none";
+  }
 
   /* doğru - yanlış davranışlar */
   document.getElementById("iyiListe").innerHTML = u.good.map(g=>`<li>${g}</li>`).join("");
