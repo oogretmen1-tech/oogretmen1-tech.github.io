@@ -560,6 +560,106 @@
       text-align: center;
     }
 
+    .bonus-banner {
+      margin: 14px 0 2px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.45;
+      text-align: center;
+      animation: bonusIn .35s ease;
+    }
+
+    .bonus-banner.hidden {
+      display: none;
+    }
+
+    .bonus-banner b {
+      font-family: "Orbitron", sans-serif;
+      letter-spacing: 1px;
+    }
+
+    .bonus-banner span {
+      display: block;
+      margin-top: 4px;
+      font-weight: 600;
+      opacity: .92;
+    }
+
+    .bonus-banner.double {
+      color: #f8fafc;
+      background: linear-gradient(135deg, rgba(226,232,240,.22), rgba(100,116,139,.12));
+      border: 2px solid rgba(226,232,240,.8);
+      box-shadow: 0 0 18px rgba(226,232,240,.3);
+    }
+
+    .bonus-banner.gift {
+      color: #fff6d5;
+      background: linear-gradient(135deg, rgba(255,226,122,.26), rgba(217,158,18,.14));
+      border: 2px solid rgba(245,179,1,.9);
+      box-shadow: 0 0 22px rgba(245,179,1,.45);
+    }
+
+    .bonus-banner.open {
+      font-size: 16px;
+      animation: bonusPop .5s ease;
+    }
+
+    @keyframes bonusIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    @keyframes bonusPop {
+      0%   { opacity: 0; transform: scale(.86); }
+      60%  { transform: scale(1.05); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .menu-legend {
+      margin: 6px 0 4px;
+    }
+
+    .menu-note {
+      margin: 10px 0 4px;
+      color: rgba(226,232,240,.62);
+      font-size: 13.5px;
+      text-align: center;
+    }
+
+    .wheel-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 14px;
+    }
+
+    .wheel-legend span {
+      padding: 6px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.05);
+      color: #cbd5f5;
+    }
+
+    .wheel-legend .lg-double {
+      color: #f1f5f9;
+      border-color: rgba(226,232,240,.75);
+      background: linear-gradient(135deg, rgba(226,232,240,.28), rgba(148,163,184,.12));
+      box-shadow: 0 0 12px rgba(226,232,240,.28);
+    }
+
+    .wheel-legend .lg-gift {
+      color: #fff3c4;
+      border-color: rgba(245,179,1,.85);
+      background: linear-gradient(135deg, rgba(255,226,122,.3), rgba(217,158,18,.14));
+      box-shadow: 0 0 14px rgba(245,179,1,.4);
+    }
+
     .question-category {
       color: var(--cyan);
       font-family: "Orbitron", sans-serif;
@@ -719,7 +819,11 @@
           <p class="eyebrow">EĞİTİCİ OYUN PLATFORMU</p>
           <h1>ÇARKIFELEK</h1>
           <p>
-            Çarkı çevir, kategoriyi belirle ve soruları cevapla.
+            Çarkı çevir, gelen soruyu cevapla, puanları topla.
+            Çarkta ayrıca <b style="color:#e2e8f0">Çift Puan (gümüş)</b> ve
+            <b style="color:#f5b301">Sürpriz Soru (altın)</b> dilimleri var:
+            çift puanda karışık soru iki kat puan,
+            sürprizde doğru cevaba hediye çıkıyor.
           </p>
         </div>
 
@@ -739,37 +843,24 @@
                   onclick="selectMode('two', this)">
             <span class="choice-icon">◈</span>
             <strong>İKİ OYUNCULU</strong>
-            <small>Arkadaşınla sırayla yarış</small>
+            <small>Arkadaşınla sırayla yarış (2 kişilik)</small>
           </button>
         </div>
 
-        <div class="section-title">02 / DERS KATEGORİSİ</div>
+        <div class="section-title">02 / ÇARKTA NELER VAR?</div>
 
-        <div class="category-grid">
-          <button class="choice category-choice"
-                  style="--choice-color:var(--red)"
-                  onclick="selectCategory('turkce', this)">
-            <span class="choice-icon">Aa</span>
-            <strong>TÜRKÇE</strong>
-            <small>Kelime ve dil bilgisi</small>
-          </button>
-
-          <button class="choice category-choice"
-                  style="--choice-color:var(--yellow)"
-                  onclick="selectCategory('matematik', this)">
-            <span class="choice-icon">∑</span>
-            <strong>MATEMATİK</strong>
-            <small>Sayılar ve işlemler</small>
-          </button>
-
-          <button class="choice category-choice"
-                  style="--choice-color:var(--green)"
-                  onclick="selectCategory('hayat', this)">
-            <span class="choice-icon">⌂</span>
-            <strong>HAYAT BİLGİSİ</strong>
-            <small>Günlük yaşam bilgileri</small>
-          </button>
+        <div class="wheel-legend menu-legend">
+          <span>Türkçe</span>
+          <span>Matematik</span>
+          <span>Hayat Bilgisi</span>
+          <span class="lg-double">Çift Puan ×2 · gümüş</span>
+          <span class="lg-gift">Sürpriz Soru · altın</span>
         </div>
+
+        <p class="menu-note">
+          Kategoriyi sen değil çark seçiyor:
+          her çevirişte hangi ders geleceği belli olmuyor.
+        </p>
 
         <button class="start-button" onclick="startGame()">
           OYUNA BAŞLA&nbsp; ›
@@ -843,6 +934,14 @@
             <div class="hint" id="hint">
               Başlamak için çarkı çevir.
             </div>
+
+            <div class="wheel-legend">
+              <span>Türkçe</span>
+              <span>Matematik</span>
+              <span>Hayat Bilgisi</span>
+              <span class="lg-double">Çift Puan ×2</span>
+              <span class="lg-gift">Sürpriz Soru</span>
+            </div>
           </div>
 
           <!-- SORU ALANI -->
@@ -850,6 +949,8 @@
             <div class="question-category" id="questionCategory">
               SORU BEKLENİYOR
             </div>
+
+            <div class="bonus-banner hidden" id="bonusBanner"></div>
 
             <div class="question-text" id="questionText">
               <span class="idle">
@@ -878,132 +979,151 @@
   <script>
     const questions = {
       turkce: [
-        {
-          q: "“Kedi” kelimesi kaç heceden oluşur?",
-          options: ["1", "2", "3", "4"],
-          answer: 1
-        },
-        {
-          q: "“Büyük” kelimesinin zıt anlamlısı hangisidir?",
-          options: ["Uzun", "Küçük", "İnce", "Hızlı"],
-          answer: 1
-        },
-        {
-          q: "Hangisi bir hayvan ismidir?",
-          options: ["Masa", "Kelebek", "Kitap", "Kalem"],
-          answer: 1
-        },
-        {
-          q: "“Anne” kelimesinde kaç harf vardır?",
-          options: ["3", "4", "5", "6"],
-          answer: 1
-        },
-        {
-          q: "Hangisi soru cümlesidir?",
-          options: [
-            "Eve gittim.",
-            "Buraya gel!",
-            "Adın ne?",
-            "Çok güzel."
-          ],
-          answer: 2
-        }
+        { q: "“Kedi” kelimesi kaç heceden oluşur?", options: ["1", "2", "3", "4"], answer: 1 },
+        { q: "“Büyük” kelimesinin zıt anlamlısı hangisidir?", options: ["Uzun", "Küçük", "İnce", "Hızlı"], answer: 1 },
+        { q: "Hangisi bir hayvan ismidir?", options: ["Masa", "Kelebek", "Kitap", "Kalem"], answer: 1 },
+        { q: "“Anne” kelimesinde kaç harf vardır?", options: ["3", "4", "5", "6"], answer: 1 },
+        { q: "Alfabemizde kaç harf vardır?", options: ["26", "28", "29", "30"], answer: 2 },
+        { q: "“Okul” kelimesi kaç hecelidir?", options: ["1", "2", "3", "4"], answer: 1 },
+        { q: "“Güzel” kelimesinin eş anlamlısı hangisidir?", options: ["Hoş", "Kötü", "Sert", "Yavaş"], answer: 0 },
+        { q: "Cümlenin sonuna hangi noktalama işareti konur?", options: ["Nokta", "Virgül", "İki nokta", "Kısa çizgi"], answer: 0 },
+        { q: "Soru cümlesinin sonuna hangi işaret gelir?", options: ["Nokta", "Soru işareti", "Ünlem", "Virgül"], answer: 1 },
+        { q: "Hangisi sesli (ünlü) harftir?", options: ["b", "k", "e", "t"], answer: 2 },
+        { q: "Özel isimler nasıl yazılır?", options: ["Büyük harfle başlar", "Küçük harfle başlar", "Hepsi büyük yazılır", "Fark etmez"], answer: 0 },
+        { q: "“Kalemler” kelimesindeki çoğul eki hangisidir?", options: ["-ler", "-im", "-de", "-den"], answer: 0 },
+        { q: "“Sıcak” kelimesinin zıt anlamlısı hangisidir?", options: ["Soğuk", "Ilık", "Yumuşak", "Islak"], answer: 0 },
+        { q: "Alfabede “b” harfinden sonra hangi harf gelir?", options: ["a", "c", "ç", "d"], answer: 1 },
+        { q: "“Ev” kelimesi kaç harflidir?", options: ["1", "2", "3", "4"], answer: 1 },
+        { q: "Hangisi bir varlığın adıdır (isim)?", options: ["Koşmak", "Masa", "Güzelce", "Ve"], answer: 1 },
+        { q: "Hangisi bir meslek adıdır?", options: ["Doktor", "Elma", "Mavi", "Koşmak"], answer: 0 },
+        { q: "“Çiçek” kelimesinin ilk harfi hangisidir?", options: ["Ç", "C", "Ş", "Ö"], answer: 0 },
+        { q: "Hangi kelime doğru yazılmıştır?", options: ["Yanlız", "Yalnız", "Yanlızz", "Yalnizz"], answer: 1 },
+        { q: "“Uzun” kelimesinin zıt anlamlısı hangisidir?", options: ["Kısa", "Geniş", "Kalın", "Ağır"], answer: 0 },
+        { q: "Hangisi bir renk adıdır?", options: ["Mavi", "Hızlı", "Sabah", "Tatlı"], answer: 0 },
+        { q: "“Öğretmen” kelimesi kaç hecelidir?", options: ["2", "3", "4", "5"], answer: 1 },
+        { q: "Başından geçen bir olayı anlatan yazıya ne denir?", options: ["Hikâye", "Şiir", "Bilmece", "Tekerleme"], answer: 0 },
+        { q: "Hangisi tekil (bir tane) anlamındadır?", options: ["Kuşlar", "Kuş", "Kuşları", "Kuşlarımız"], answer: 1 },
+        { q: "Hangisi bir iş, oluş, hareket bildirir?", options: ["Yazmak", "Defter", "Sarı", "Sessiz"], answer: 0 },
+        { q: "Ünlem işareti hangi durumda kullanılır?", options: ["Sevinç, korku, şaşkınlıkta", "Soru sorarken", "Sayı yazarken", "Hece ayırırken"], answer: 0 },
+        { q: "“Kırmızı” kelimesinde kaç sesli harf vardır?", options: ["2", "3", "4", "5"], answer: 1 },
+        { q: "Hangisi bir meyve adıdır?", options: ["Armut", "Sandalye", "Perde", "Tahta"], answer: 0 },
+        { q: "“Kapı” kelimesinin son harfi hangisidir?", options: ["ı", "i", "a", "k"], answer: 0 },
+        { q: "Bir yazının başlığı nerede bulunur?", options: ["En üstte", "En altta", "Ortada", "Sağ kenarda"], answer: 0 },
+        { q: "Hangisi bir soru kelimesidir?", options: ["Nerede", "Bugün", "Küçük", "Koşarak"], answer: 0 },
+        { q: "“Dost” kelimesinin eş anlamlısı hangisidir?", options: ["Arkadaş", "Düşman", "Komşu", "Misafir"], answer: 0 }
       ],
-
       matematik: [
-        {
-          q: "24 + 13 işleminin sonucu kaçtır?",
-          options: ["36", "37", "38", "39"],
-          answer: 1
-        },
-        {
-          q: "50 - 20 işleminin sonucu kaçtır?",
-          options: ["20", "25", "30", "40"],
-          answer: 2
-        },
-        {
-          q: "3 × 4 işleminin sonucu kaçtır?",
-          options: ["7", "10", "12", "14"],
-          answer: 2
-        },
-        {
-          q: "18 sayısının onlar basamağı kaçtır?",
-          options: ["8", "1", "18", "0"],
-          answer: 1
-        },
-        {
-          q: "Hangi şeklin 4 köşesi vardır?",
-          options: ["Üçgen", "Daire", "Kare", "Çember"],
-          answer: 2
-        }
+        { q: "5 + 7 = ?", options: ["10", "11", "12", "13"], answer: 2 },
+        { q: "9 - 4 = ?", options: ["3", "4", "5", "6"], answer: 2 },
+        { q: "6 × 3 = ?", options: ["15", "16", "18", "21"], answer: 2 },
+        { q: "20 ÷ 4 = ?", options: ["4", "5", "6", "8"], answer: 1 },
+        { q: "10 sayısından sonra gelen sayı hangisidir?", options: ["9", "11", "12", "13"], answer: 1 },
+        { q: "7 × 8 = ?", options: ["54", "56", "48", "64"], answer: 1 },
+        { q: "Bir düzine kaç tanedir?", options: ["10", "11", "12", "20"], answer: 2 },
+        { q: "30 + 25 = ?", options: ["45", "50", "55", "60"], answer: 2 },
+        { q: "6 × 2 = ?", options: ["8", "10", "12", "14"], answer: 2 },
+        { q: "45 sayısının onlar basamağındaki rakam kaçtır?", options: ["4", "5", "9", "0"], answer: 0 },
+        { q: "Hangisi en büyük sayıdır?", options: ["78", "87", "68", "79"], answer: 1 },
+        { q: "3 + 3 + 3 işleminin çarpma ile gösterimi hangisidir?", options: ["3 × 2", "3 × 3", "3 × 4", "3 × 5"], answer: 1 },
+        { q: "Bir saat kaç dakikadır?", options: ["30", "45", "60", "100"], answer: 2 },
+        { q: "2, 4, 6, 8 … Sonra hangi sayı gelir?", options: ["9", "10", "11", "12"], answer: 1 },
+        { q: "Üçgenin kaç kenarı vardır?", options: ["2", "3", "4", "5"], answer: 1 },
+        { q: "Karenin kaç köşesi vardır?", options: ["3", "4", "5", "6"], answer: 1 },
+        { q: "100 - 40 = ?", options: ["40", "50", "60", "70"], answer: 2 },
+        { q: "Hangisi çift sayıdır?", options: ["7", "9", "12", "15"], answer: 2 },
+        { q: "1 TL kaç kuruştur?", options: ["10", "50", "100", "1000"], answer: 2 },
+        { q: "25 + 25 = ?", options: ["40", "45", "50", "55"], answer: 2 },
+        { q: "8 × 5 = ?", options: ["35", "40", "45", "48"], answer: 1 },
+        { q: "Bir bütünün yarısı hangi kesirle gösterilir?", options: ["1/2", "1/3", "1/4", "2/2"], answer: 0 },
+        { q: "63 sayısının okunuşu hangisidir?", options: ["Altmış üç", "Altı üç", "Yüz altmış", "Otuz altı"], answer: 0 },
+        { q: "Hangi sayı 50’den büyüktür?", options: ["45", "49", "52", "38"], answer: 2 },
+        { q: "9 + 9 = ?", options: ["16", "17", "18", "19"], answer: 2 },
+        { q: "7 sayısının 3 fazlası kaçtır?", options: ["9", "10", "11", "4"], answer: 1 },
+        { q: "10 sayısının 4 eksiği kaçtır?", options: ["5", "6", "7", "14"], answer: 1 },
+        { q: "Bir gün kaç saattir?", options: ["12", "20", "24", "30"], answer: 2 },
+        { q: "5, 10, 15, 20 … kaçar kaçar sayılmıştır?", options: ["2", "3", "5", "10"], answer: 2 },
+        { q: "Dikdörtgenin kaç kenarı vardır?", options: ["3", "4", "5", "6"], answer: 1 },
+        { q: "40 + 30 = ?", options: ["60", "70", "80", "90"], answer: 1 },
+        { q: "Bir saatin yarısı kaç dakikadır?", options: ["15", "30", "45", "60"], answer: 1 },
+        { q: "4 × 4 = ?", options: ["8", "12", "16", "20"], answer: 2 },
+        { q: "Hangisi tek sayıdır?", options: ["14", "20", "27", "36"], answer: 2 }
       ],
-
       hayat: [
-        {
-          q: "Hangi mevsimde kar yağar?",
-          options: ["Yaz", "İlkbahar", "Sonbahar", "Kış"],
-          answer: 3
-        },
-        {
-          q: "Dişlerimizi günde kaç kez fırçalamalıyız?",
-          options: ["1", "2", "5", "10"],
-          answer: 1
-        },
-        {
-          q: "Trafik ışığında kırmızı ışık ne anlama gelir?",
-          options: ["Geç", "Dur", "Koş", "Hızlan"],
-          answer: 1
-        },
-        {
-          q: "Hangi besin daha sağlıklıdır?",
-          options: ["Cips", "Meyve", "Gazoz", "Şeker"],
-          answer: 1
-        },
-        {
-          q: "Dünyamız kaç mevsime ayrılır?",
-          options: ["2", "3", "4", "5"],
-          answer: 2
-        }
+        { q: "Trafik ışığında hangi renk “dur” anlamındadır?", options: ["Kırmızı", "Sarı", "Yeşil", "Mavi"], answer: 0 },
+        { q: "Hangi besin daha sağlıklıdır?", options: ["Cips", "Meyve", "Gazoz", "Şeker"], answer: 1 },
+        { q: "Bir haftada kaç gün vardır?", options: ["5", "6", "7", "8"], answer: 2 },
+        { q: "Bir yılda kaç ay vardır?", options: ["10", "11", "12", "13"], answer: 2 },
+        { q: "Haftanın ilk günü hangisidir?", options: ["Pazartesi", "Cuma", "Pazar", "Çarşamba"], answer: 0 },
+        { q: "Dünyamız kaç mevsime ayrılır?", options: ["2", "3", "4", "5"], answer: 2 },
+        { q: "Dişlerimizi günde en az kaç kez fırçalamalıyız?", options: ["1", "2", "5", "Hiç"], answer: 1 },
+        { q: "Karşıdan karşıya nereden geçmeliyiz?", options: ["Yaya geçidinden", "Yolun ortasından", "Koşarak", "Arabaların arasından"], answer: 0 },
+        { q: "Acil sağlık yardımı için hangi numara aranır?", options: ["110", "112", "155", "177"], answer: 1 },
+        { q: "23 Nisan hangi bayramdır?", options: ["Ulusal Egemenlik ve Çocuk Bayramı", "Zafer Bayramı", "Cumhuriyet Bayramı", "Ramazan Bayramı"], answer: 0 },
+        { q: "29 Ekim hangi bayramdır?", options: ["Cumhuriyet Bayramı", "Çocuk Bayramı", "Zafer Bayramı", "Kurban Bayramı"], answer: 0 },
+        { q: "Yemekten önce ne yapmalıyız?", options: ["Ellerimizi yıkamalıyız", "Koşmalıyız", "Televizyon açmalıyız", "Uyumalıyız"], answer: 0 },
+        { q: "Kaç duyu organımız vardır?", options: ["3", "4", "5", "6"], answer: 2 },
+        { q: "Görme duyu organımız hangisidir?", options: ["Göz", "Kulak", "Burun", "Dil"], answer: 0 },
+        { q: "Kış mevsiminde havalar nasıldır?", options: ["Çok sıcak", "Soğuk", "Ilık ve kurak", "Değişmez"], answer: 1 },
+        { q: "Bir bitkinin büyümesi için hangisi gerekli değildir?", options: ["Su", "Güneş", "Toprak", "Televizyon"], answer: 3 },
+        { q: "Çöpleri nereye atmalıyız?", options: ["Çöp kutusuna", "Yere", "Denize", "Bahçeye"], answer: 0 },
+        { q: "Hangisi bir taşıt değildir?", options: ["Otobüs", "Tren", "Uçak", "Masa"], answer: 3 },
+        { q: "Atatürk hangi şehirde doğmuştur?", options: ["Selanik", "Ankara", "İstanbul", "İzmir"], answer: 0 },
+        { q: "Ülkemizin başkenti neresidir?", options: ["Ankara", "İstanbul", "İzmir", "Bursa"], answer: 0 },
+        { q: "Deprem anında ne yapmalıyız?", options: ["Çök – Kapan – Tutun", "Asansöre binmeliyiz", "Pencereden bakmalıyız", "Koşmalıyız"], answer: 0 },
+        { q: "Suyu nasıl kullanmalıyız?", options: ["Tasarruflu kullanmalıyız", "Musluğu açık bırakmalıyız", "İstediğimiz gibi harcamalıyız", "Hiç kullanmamalıyız"], answer: 0 },
+        { q: "Hangisi kişisel eşyamızdır?", options: ["Diş fırçası", "Sınıf tahtası", "Okul kapısı", "Park salıncağı"], answer: 0 },
+        { q: "Sağlıklı olmak için günde ne kadar uyumalıyız?", options: ["4 saat", "6 saat", "9-10 saat", "2 saat"], answer: 2 },
+        { q: "Hangi mevsimde yapraklar dökülür?", options: ["İlkbahar", "Yaz", "Sonbahar", "Kış"], answer: 2 },
+        { q: "Bayrağımızda hangi şekiller bulunur?", options: ["Ay ve yıldız", "Güneş", "Yaprak", "Kalp"], answer: 0 },
+        { q: "İlk yardım çantasında hangisi bulunur?", options: ["Yara bandı", "Oyuncak", "Kalem", "Top"], answer: 0 },
+        { q: "Arkadaşımızla nasıl konuşmalıyız?", options: ["Nazikçe", "Bağırarak", "Alay ederek", "Hiç konuşmadan"], answer: 0 },
+        { q: "Hangisi doğal bir varlıktır?", options: ["Ağaç", "Bilgisayar", "Araba", "Kitap"], answer: 0 },
+        { q: "Güneş hangi yönden doğar?", options: ["Doğu", "Batı", "Kuzey", "Güney"], answer: 0 },
+        { q: "Kanı vücudumuza hangi organ pompalar?", options: ["Kalp", "Mide", "Böbrek", "Akciğer"], answer: 0 },
+        { q: "Elektriği nasıl tasarruflu kullanırız?", options: ["Gereksiz lambaları kapatarak", "Hepsini açık bırakarak", "Televizyonu hiç kapatmayarak", "Fark etmez"], answer: 0 },
+        { q: "Sırada beklerken ne yapmalıyız?", options: ["Sabırla sıramızı bekleriz", "İtişiriz", "Öne geçeriz", "Bağırırız"], answer: 0 },
+        { q: "Hangisi bir aile büyüğüdür?", options: ["Dede", "Komşu çocuğu", "Sınıf arkadaşı", "Kapı komşusu"], answer: 0 },
+        { q: "Okula giderken yanımıza ne almalıyız?", options: ["Ders araç gereçlerimizi", "Oyuncaklarımızı", "Evcil hayvanımızı", "Yastığımızı"], answer: 0 }
+      ],
+      surpriz: [
+        { q: "Türkiye’nin başkenti neresidir?", options: ["Ankara", "İstanbul", "Adana", "Bursa"], answer: 0 },
+        { q: "Bir elimizde kaç parmak vardır?", options: ["4", "5", "6", "10"], answer: 1 },
+        { q: "Gökkuşağında kaç renk vardır?", options: ["5", "6", "7", "8"], answer: 2 },
+        { q: "Balı hangi canlı yapar?", options: ["Arı", "Kelebek", "Karınca", "Kuş"], answer: 0 },
+        { q: "Karada yaşayan en büyük hayvan hangisidir?", options: ["Fil", "At", "Aslan", "İnek"], answer: 0 },
+        { q: "Kışın gökten yağan beyaz şey nedir?", options: ["Kar", "Yağmur", "Dolu", "Sis"], answer: 0 },
+        { q: "Bir ayda yaklaşık kaç hafta vardır?", options: ["2", "3", "4", "6"], answer: 2 },
+        { q: "Futbolda bir takımda sahada kaç oyuncu bulunur?", options: ["9", "10", "11", "12"], answer: 2 },
+        { q: "Hangi hayvan “miyav” der?", options: ["Kedi", "Köpek", "İnek", "Kuzu"], answer: 0 },
+        { q: "Yılın ilk ayı hangisidir?", options: ["Ocak", "Şubat", "Mart", "Aralık"], answer: 0 },
+        { q: "Maymunların çok sevdiği sarı meyve hangisidir?", options: ["Muz", "Elma", "Karpuz", "Çilek"], answer: 0 },
+        { q: "Sabah uyandığımızda ne deriz?", options: ["Günaydın", "İyi geceler", "Görüşürüz", "Hoşça kal"], answer: 0 },
+        { q: "Dünya’nın uydusu hangisidir?", options: ["Ay", "Güneş", "Mars", "Yıldız"], answer: 0 },
+        { q: "Bayrağımızın rengi nedir?", options: ["Kırmızı", "Mavi", "Yeşil", "Sarı"], answer: 0 },
+        { q: "Kitapları en çok nerede buluruz?", options: ["Kütüphanede", "Mutfakta", "Garajda", "Havuzda"], answer: 0 },
+        { q: "Hangisi bir müzik aletidir?", options: ["Davul", "Tencere", "Silgi", "Terlik"], answer: 0 }
       ]
     };
 
     const segments = [
-      {
-        name: "Türkçe",
-        key: "turkce",
-        color: "#ff6b6b",
-        icon: "📚"
-      },
-      {
-        name: "Matematik",
-        key: "matematik",
-        color: "#ffd93d",
-        icon: "🔢"
-      },
-      {
-        name: "Hayat Bilgisi",
-        key: "hayat",
-        color: "#6bcb77",
-        icon: "🌍"
-      },
-      {
-        name: "Türkçe",
-        key: "turkce",
-        color: "#ff922b",
-        icon: "📝"
-      },
-      {
-        name: "Matematik",
-        key: "matematik",
-        color: "#4d96ff",
-        icon: "➕"
-      },
-      {
-        name: "Hayat Bilgisi",
-        key: "hayat",
-        color: "#cc5de8",
-        icon: "🌱"
-      }
+      { name: "Türkçe",        key: "turkce",    type: "normal", color: "#ff6b6b", mark: "" },
+      { name: "Matematik",     key: "matematik", type: "normal", color: "#22d3ee", mark: "" },
+      { name: "Çift Puan",     key: "karisik",   type: "double", color: "#c8d2e0", metal: "silver", mark: "×2" },
+      { name: "Hayat Bilgisi", key: "hayat",     type: "normal", color: "#6bcb77", mark: "" },
+      { name: "Türkçe",        key: "turkce",    type: "normal", color: "#ff922b", mark: "" },
+      { name: "Matematik",     key: "matematik", type: "normal", color: "#4d96ff", mark: "" },
+      { name: "Sürpriz",       key: "surpriz",   type: "gift",   color: "#f5b301", metal: "gold",   mark: "?" },
+      { name: "Hayat Bilgisi", key: "hayat",     type: "normal", color: "#cc5de8", mark: "" }
+    ];
+
+    const gifts = [
+      { title: "ALTIN SORU", text: "50 puan birden kazandın!", points: 50 },
+      { title: "EKSTRA ÇEVİRME", text: "20 puan + sıra yine sende, çarkı bir daha çevir!", points: 20, extraTurn: true },
+      { title: "PUAN HIRSIZI", text: "20 puan kazandın, rakibinden de 10 puan aldın!", points: 20, steal: 10 },
+      { title: "ÖĞRETMEN HEDİYESİ", text: "20 puan + öğretmeninden küçük bir ödül (çıkartma, artı puan…)", points: 20 },
+      { title: "ALKIŞ ZAMANI", text: "30 puan! Bütün sınıf seni alkışlasın.", points: 30 },
+      { title: "ÇİFTE ŞANS", text: "20 puan + bir sonraki sorun çift puan!", points: 20, nextDouble: true },
+      { title: "SÜPER YILDIZ", text: "40 puan! Bugünün yıldızı sensin.", points: 40 }
     ];
 
     const canvas = document.getElementById("wheel");
@@ -1030,8 +1150,18 @@
     const usedQuestions = {
       turkce: [],
       matematik: [],
-      hayat: []
+      hayat: [],
+      karisik: [],
+      surpriz: []
     };
+
+    const karisikHavuzu = []
+      .concat(questions.turkce, questions.matematik, questions.hayat);
+
+    let bonusType = "normal";
+    let bonusMultiplier = 1;
+    let pendingDouble = false;
+    let keepTurn = false;
 
     let audioContext;
 
@@ -1106,8 +1236,8 @@
     }
 
     function startGame() {
-      if (!selectedMode || !selectedCategory) {
-        alert("Lütfen oyun modu ve ders kategorisi seç.");
+      if (!selectedMode) {
+        alert("Lütfen oyun modunu seç.");
         return;
       }
 
@@ -1154,12 +1284,20 @@
       document.getElementById("gameScreen")
         .classList.remove("hidden");
 
+      players[0].score = 0;
+      players[1].score = 0;
+      pendingDouble = false;
+      keepTurn = false;
+
       if (selectedMode === "single") {
         document.getElementById("gameTitle")
           .textContent = "TEK OYUNCULU ÇARKIFELEK";
 
         document.getElementById("scores")
-          .classList.add("hidden");
+          .classList.remove("hidden");
+
+        activePlayer = 0;
+        updateScores();
       } else {
         document.getElementById("gameTitle")
           .textContent = "İKİ OYUNCULU ÇARKIFELEK";
@@ -1177,6 +1315,8 @@
       answered = false;
 
       document.getElementById("options").innerHTML = "";
+
+      showBonusBanner(pendingDouble ? "double" : "");
 
       document.getElementById("questionText").innerHTML =
         '<span class="idle">Çarkı çevirerek yeni soruyu belirle.</span>';
@@ -1203,142 +1343,205 @@
           : "Başlamak için çarkı çevir.";
     }
 
+    function trUpper(text) {
+      return text
+        .replace(/i/g, "İ")
+        .replace(/ı/g, "I")
+        .toUpperCase();
+    }
+
     function drawWheel(currentRotation) {
+      const now = performance.now() / 1000;
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Çarkın arkasındaki parlama
-      const glow = ctx.createRadialGradient(
-        center,
-        center,
-        radius * .1,
-        center,
-        center,
-        radius
-      );
-
-      glow.addColorStop(0, "rgba(255,255,255,.18)");
-      glow.addColorStop(.65, "rgba(34,211,238,.04)");
-      glow.addColorStop(1, "rgba(168,85,247,.22)");
-
-      ctx.beginPath();
-      ctx.arc(center, center, radius + 2, 0, Math.PI * 2);
-      ctx.fillStyle = glow;
-      ctx.fill();
-
+      // dilimler
       segments.forEach((segment, index) => {
         const start =
-          -Math.PI / 2 + currentRotation + index * segmentAngle;
+          -Math.PI / 2 - segmentAngle / 2
+          + currentRotation + index * segmentAngle;
 
         const end = start + segmentAngle;
         const middle = start + segmentAngle / 2;
 
         const gradient = ctx.createRadialGradient(
-          center,
-          center,
-          30,
-          center,
-          center,
-          radius
+          center, center, radius * .16,
+          center, center, radius
         );
 
-        gradient.addColorStop(0, lighten(segment.color, 22));
-        gradient.addColorStop(.7, segment.color);
-        gradient.addColorStop(1, darken(segment.color, 22));
+        if (segment.metal === "gold") {
+          gradient.addColorStop(0, "#5a3a00");
+          gradient.addColorStop(.35, "#c98a08");
+          gradient.addColorStop(.58, "#ffd23c");
+          gradient.addColorStop(.72, "#ffeda0");
+          gradient.addColorStop(.88, "#d99a10");
+          gradient.addColorStop(1, "#7a5200");
+        } else if (segment.metal === "silver") {
+          gradient.addColorStop(0, "#39414f");
+          gradient.addColorStop(.40, "#8b95a6");
+          gradient.addColorStop(.62, "#dde5f0");
+          gradient.addColorStop(.78, "#ffffff");
+          gradient.addColorStop(.92, "#a9b3c2");
+          gradient.addColorStop(1, "#697485");
+        } else {
+          gradient.addColorStop(0, darken(segment.color, 55));
+          gradient.addColorStop(1, segment.color);
+        }
 
         ctx.beginPath();
         ctx.moveTo(center, center);
-        ctx.arc(center, center, radius, start, end);
+        ctx.arc(center, center, radius - 16, start, end);
         ctx.closePath();
-
         ctx.fillStyle = gradient;
         ctx.fill();
 
-        ctx.strokeStyle = "rgba(2,6,23,.65)";
-        ctx.lineWidth = 3;
+        ctx.strokeStyle = "rgba(6,10,26,.85)";
+        ctx.lineWidth = 4;
         ctx.stroke();
+
+        if (segment.metal) {
+          const shine = (Math.sin(now * 1.6 + index) + 1) / 2;
+
+          ctx.save();
+          ctx.clip();
+          ctx.globalAlpha = (segment.metal === "gold" ? .16 : .26) + shine * .28;
+          ctx.strokeStyle = "#ffffff";
+          ctx.lineWidth = 15;
+          ctx.beginPath();
+          ctx.arc(
+            center, center,
+            radius * (.36 + shine * .46),
+            start, end
+          );
+          ctx.stroke();
+          ctx.restore();
+
+          ctx.beginPath();
+          ctx.moveTo(center, center);
+          ctx.arc(center, center, radius - 16, start, end);
+          ctx.closePath();
+        }
 
         ctx.save();
         ctx.translate(center, center);
         ctx.rotate(middle);
         ctx.textAlign = "right";
+        ctx.textBaseline = "middle";
 
-        ctx.fillStyle = "rgba(0,0,0,.78)";
-        ctx.font = "800 14px Nunito";
-        ctx.fillText(segment.name, radius - 20, 3);
+        const label = trUpper(segment.name);
+        const size = label.length > 9 ? 12.5 : 15.5;
 
-        ctx.font = "22px serif";
-        ctx.fillText(segment.icon, radius - 105, 4);
+        ctx.font = "800 " + size + 'px "Nunito", sans-serif';
 
+        if (segment.metal) {
+          ctx.fillStyle = "rgba(255,255,255,.75)";
+          ctx.fillText(label, radius - 34 + 1.5, 2.5);
+
+          ctx.fillStyle = segment.metal === "gold" ? "#3d2a00" : "#1f2937";
+          ctx.shadowColor = "rgba(255,255,255,.5)";
+          ctx.shadowBlur = 5;
+          ctx.fillText(label, radius - 34, 1);
+          ctx.shadowBlur = 0;
+        } else {
+          ctx.fillStyle = "rgba(4,10,30,.45)";
+          ctx.fillText(label, radius - 34 + 2, 3);
+
+          ctx.fillStyle = "#ffffff";
+          ctx.shadowColor = "rgba(0,0,0,.65)";
+          ctx.shadowBlur = 8;
+          ctx.fillText(label, radius - 34, 1);
+          ctx.shadowBlur = 0;
+        }
+
+        if (segment.mark) {
+          ctx.font = '800 20px "Nunito", sans-serif';
+          ctx.fillStyle = segment.metal === "gold" ? "#3d2a00" : "#1f2937";
+          ctx.fillText(segment.mark, radius - 128, 2);
+        }
         ctx.restore();
       });
 
-      // İç hologram halkaları
+      // neon çemberler
+      ctx.save();
+      ctx.shadowColor = "#22d3ee";
+      ctx.shadowBlur = 18;
+      ctx.strokeStyle = "rgba(34,211,238,.9)";
+      ctx.lineWidth = 5;
       ctx.beginPath();
-      ctx.arc(center, center, radius * .72, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(255,255,255,.16)";
-      ctx.lineWidth = 1;
+      ctx.arc(center, center, radius - 14, 0, Math.PI * 2);
       ctx.stroke();
+      ctx.restore();
 
+      ctx.save();
+      ctx.shadowColor = "#ec4899";
+      ctx.shadowBlur = 14;
+      ctx.strokeStyle = "rgba(236,72,153,.75)";
+      ctx.lineWidth = 3;
       ctx.beginPath();
-      ctx.arc(center, center, radius * .87, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(255,255,255,.22)";
-      ctx.setLineDash([3, 8]);
-      ctx.lineWidth = 2;
+      ctx.arc(center, center, radius - 4, 0, Math.PI * 2);
       ctx.stroke();
-      ctx.setLineDash([]);
+      ctx.restore();
 
-      // Dış LED noktaları
+      // ampuller
       for (let i = 0; i < 24; i++) {
-        const ledAngle =
-          i * (Math.PI * 2 / 24) - Math.PI / 2;
+        const angle =
+          i * (Math.PI * 2 / 24) + currentRotation * .15;
 
-        const x = center + Math.cos(ledAngle) * (radius - 10);
-        const y = center + Math.sin(ledAngle) * (radius - 10);
+        const x = center + Math.cos(angle) * (radius - 9);
+        const y = center + Math.sin(angle) * (radius - 9);
+        const on = (Math.floor(now * 6) + i) % 3 === 0;
 
         ctx.beginPath();
-        ctx.arc(x, y, 3.2, 0, Math.PI * 2);
-        ctx.fillStyle = i % 2 === 0
-          ? "#ffffff"
-          : "#22d3ee";
-
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = ctx.fillStyle;
+        ctx.arc(x, y, 4.2, 0, Math.PI * 2);
+        ctx.fillStyle = on ? "#fff3b0" : "#3b4a6b";
+        ctx.shadowColor = on ? "#fff7c2" : "#1e293b";
+        ctx.shadowBlur = on ? 14 : 3;
         ctx.fill();
         ctx.shadowBlur = 0;
       }
 
-      // Merkez göbeği
+      // göbek
       const hub = ctx.createRadialGradient(
-        center - 8,
-        center - 8,
-        4,
-        center,
-        center,
-        36
+        center, center - 6, 2,
+        center, center, 46
       );
 
-      hub.addColorStop(0, "#ffffff");
-      hub.addColorStop(.18, "#67e8f9");
-      hub.addColorStop(.5, "#2563eb");
-      hub.addColorStop(1, "#071126");
+      hub.addColorStop(0, "#1e293b");
+      hub.addColorStop(1, "#0b1226");
 
       ctx.beginPath();
-      ctx.arc(center, center, 35, 0, Math.PI * 2);
+      ctx.arc(center, center, 45, 0, Math.PI * 2);
       ctx.fillStyle = hub;
       ctx.fill();
 
-      ctx.strokeStyle = "#a5f3fc";
-      ctx.lineWidth = 3;
+      ctx.strokeStyle = "#22d3ee";
+      ctx.lineWidth = 4;
       ctx.shadowBlur = 16;
       ctx.shadowColor = "#22d3ee";
       ctx.stroke();
       ctx.shadowBlur = 0;
 
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "800 13px Orbitron";
+      ctx.save();
+      ctx.strokeStyle = "#facc15";
+      ctx.lineWidth = 3;
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = "#facc15";
+      ctx.beginPath();
+      ctx.arc(center, center, 30, .6, 2.2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(center, center, 30, 3.75, 5.35);
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.fillStyle = "#e2f7ff";
+      ctx.font = '800 15px "Nunito", sans-serif';
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText("GO", center, center);
+      ctx.shadowColor = "#22d3ee";
+      ctx.shadowBlur = 12;
+      ctx.fillText("ÇEVİR", center, center);
+      ctx.shadowBlur = 0;
     }
 
     function lighten(hex, amount) {
@@ -1368,7 +1571,7 @@
         ((-currentRotation % (Math.PI * 2))
           + Math.PI * 2) % (Math.PI * 2);
 
-      return Math.floor(normalized / segmentAngle)
+      return Math.round(normalized / segmentAngle)
         % segments.length;
     }
 
@@ -1441,7 +1644,12 @@
     }
 
     function getQuestion(category) {
-      const list = questions[category];
+      const list =
+        category === "karisik" ? karisikHavuzu : questions[category];
+
+      if (!usedQuestions[category]) {
+        usedQuestions[category] = [];
+      }
 
       if (usedQuestions[category].length >= list.length) {
         usedQuestions[category] = [];
@@ -1458,22 +1666,87 @@
       return list[index];
     }
 
+    function showBonusBanner(kind) {
+      const banner = document.getElementById("bonusBanner");
+
+      if (kind === "double") {
+        banner.className = "bonus-banner double";
+        banner.innerHTML =
+          "<b>ÇİFT PUAN ×2</b> &nbsp;·&nbsp; Karışık soru! Doğru cevap 20 puan.";
+      } else if (kind === "gift") {
+        banner.className = "bonus-banner gift";
+        banner.innerHTML =
+          "<b>SÜRPRİZ SORU</b> &nbsp;·&nbsp; Bilirsen sürpriz bir hediye seni bekliyor!";
+      } else {
+        banner.className = "bonus-banner hidden";
+        banner.innerHTML = "";
+      }
+    }
+
+    function showGift() {
+      const gift = gifts[Math.floor(Math.random() * gifts.length)];
+      const banner = document.getElementById("bonusBanner");
+
+      banner.className = "bonus-banner gift open";
+      banner.innerHTML =
+        "<b>" + gift.title + "</b><br><span>" + gift.text + "</span>";
+
+      if (gift.steal && selectedMode === "two") {
+        const rival = activePlayer === 0 ? 1 : 0;
+
+        players[rival].score =
+          Math.max(0, players[rival].score - gift.steal);
+
+        players[activePlayer].score += gift.steal;
+      }
+
+      if (gift.extraTurn) {
+        keepTurn = true;
+      }
+
+      if (gift.nextDouble) {
+        pendingDouble = true;
+      }
+
+      sound(700, .12, "sine", .08);
+      setTimeout(() => sound(950, .2, "sine", .08), 120);
+      setTimeout(() => sound(1200, .25, "sine", .08), 260);
+
+      return gift.points;
+    }
+
     function showQuestion(segment) {
+      bonusType = segment.type;
+      bonusMultiplier = segment.type === "double" ? 2 : 1;
+
+      if (pendingDouble && segment.type === "normal") {
+        bonusMultiplier = 2;
+        bonusType = "double";
+        pendingDouble = false;
+      }
+
       currentQuestion = getQuestion(segment.key);
       answered = false;
+
+      showBonusBanner(bonusType === "gift" ? "gift" : (bonusMultiplier === 2 ? "double" : ""));
 
       const badge =
         document.getElementById("currentCategory");
 
       badge.textContent =
-        segment.icon + " " + segment.name;
+        segment.type === "double" ? "ÇİFT PUAN ×2"
+        : segment.type === "gift" ? "SÜRPRİZ SORU"
+        : trUpper(segment.name);
 
       badge.style.color = "#071126";
       badge.style.background = segment.color;
       badge.style.borderColor = segment.color;
 
       document.getElementById("questionCategory")
-        .textContent = segment.name.toUpperCase();
+        .textContent =
+          segment.type === "double" ? "ÇİFT PUAN · KARIŞIK SORU"
+          : segment.type === "gift" ? "SÜRPRİZ · HEDİYELİ SORU"
+          : trUpper(segment.name);
 
       document.getElementById("hint")
         .textContent = "Cevabını seç.";
@@ -1521,18 +1794,32 @@
         selectedButton.classList.add("correct");
         correctSound();
 
-        document.getElementById("hint")
-          .textContent = "Harika! 10 puan kazandın.";
+        let earned = 10 * bonusMultiplier;
 
-        if (selectedMode === "two") {
-          players[activePlayer].score += 10;
-          updateScores();
+        if (bonusType === "gift") {
+          earned = showGift();
         }
+
+        players[activePlayer].score += earned;
+        updateScores();
+
+        document.getElementById("hint").textContent =
+          bonusType === "gift"
+            ? "Sürpriz hediye senin! " + earned + " puan kazandın."
+            : "Harika! " + earned + " puan kazandın.";
 
         createConfetti();
       } else {
         selectedButton.classList.add("wrong");
         wrongSound();
+
+        if (bonusType === "gift") {
+          const banner = document.getElementById("bonusBanner");
+
+          banner.className = "bonus-banner gift";
+          banner.innerHTML =
+            "<b>Hediye bu sefer kaçtı!</b> Doğru cevap yeşil renkte.";
+        }
 
         document.getElementById("hint")
           .textContent = "Yanlış cevap. Doğru cevap yeşil renkte.";
@@ -1544,7 +1831,12 @@
 
     function nextQuestion() {
       if (selectedMode === "two") {
-        activePlayer = activePlayer === 0 ? 1 : 0;
+        if (keepTurn) {
+          keepTurn = false;
+        } else {
+          activePlayer = activePlayer === 0 ? 1 : 0;
+        }
+
         updateScores();
       }
 
@@ -1553,7 +1845,8 @@
 
     function updateScores() {
       document.getElementById("playerName1")
-        .textContent = players[0].name;
+        .textContent =
+          selectedMode === "single" ? "PUANIN" : players[0].name;
 
       document.getElementById("playerName2")
         .textContent = players[1].name;
@@ -1565,10 +1858,15 @@
         .textContent = players[1].score;
 
       document.getElementById("scoreCard1")
-        .classList.toggle("active", activePlayer === 0);
+        .classList.toggle("active",
+          selectedMode === "single" || activePlayer === 0);
 
       document.getElementById("scoreCard2")
-        .classList.toggle("active", activePlayer === 1);
+        .classList.toggle("active",
+          selectedMode !== "single" && activePlayer === 1);
+
+      document.getElementById("scoreCard2")
+        .classList.toggle("hidden", selectedMode === "single");
     }
 
     function goMenu() {
@@ -1623,7 +1921,16 @@
         }
       });
 
+    function idleLoop() {
+      if (!spinning) {
+        drawWheel(rotation);
+      }
+
+      requestAnimationFrame(idleLoop);
+    }
+
     drawWheel(rotation);
+    idleLoop();
   </script>
 
 <div style="text-align:center;padding:18px 10px;margin-top:28px;font-size:0.82rem;color:#8a8a8a;border-top:1px solid #e5e5e5;">Dijital Öğretmen Hasan Tutuş</div>
