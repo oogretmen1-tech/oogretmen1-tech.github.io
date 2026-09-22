@@ -374,6 +374,17 @@
             body { padding: 12px; }
             .settings-grid { grid-template-columns: 1fr; }
         }
+
+        .text-row, .key-row { display:flex; gap:8px; margin-top:12px; }
+        .text-row input, .key-row input { flex:1; min-width:0; padding:12px 14px; border-radius:14px; border:2px solid var(--border); font-size:16px; background:#fff; color:#111; }
+        .send-button { padding:12px 16px; border:0; border-radius:14px; background:#2563eb; color:#fff; font-weight:700; font-size:15px; cursor:pointer; white-space:nowrap; }
+        .auto-row { display:flex; align-items:center; gap:8px; margin-top:10px; font-size:14px; color:var(--muted); cursor:pointer; }
+        .auto-row input { width:20px; height:20px; }
+        .ai-badge { margin:8px auto 0; width:fit-content; padding:5px 12px; border-radius:999px; font-size:13px; font-weight:700; background:#fef3c7; color:#92400e; }
+        .ai-badge.on { background:#dcfce7; color:#166534; }
+        .ai-badge.warn { background:#fee2e2; color:#991b1b; }
+        .key-status { font-size:13px; margin-top:6px; font-weight:600; }
+        .again-btn { margin-top:8px; border:0; background:rgba(37,99,235,.12); color:#1d4ed8; border-radius:10px; padding:5px 10px; font-size:13px; cursor:pointer; }
     </style>
 </head>
 <body>
@@ -383,7 +394,7 @@
                 <div class="brand-icon">🌟</div>
                 <div>
                     <h1>English Practice AI</h1>
-                    <p class="subtitle">Gerçek Zamanlı Akıllı İngilizce Sohbet Asistanı</p>
+                    <p class="subtitle">Robo ile İngilizce konuş — sesli ya da yazarak</p>
                 </div>
             </div>
             <button class="settings-button" id="settingsButton" title="Ayarlar">⚙️</button>
@@ -407,7 +418,15 @@
                 <button class="stop-button" id="stopButton">⏹ Durdur</button>
             </div>
 
-            <div class="status" id="status">Dinlemeye hazır</div>
+            <div class="text-row">
+                <input type="text" id="textInput" placeholder="İstersen buraya İngilizce yaz... (ör. My name is Ali)" autocomplete="off">
+                <button id="sendButton" class="send-button">Gönder ➤</button>
+            </div>
+
+            <label class="auto-row"><input type="checkbox" id="autoListen" checked> Eller serbest: robot konuşunca mikrofon kendiliğinden açılsın</label>
+
+            <div class="status" id="status">Mikrofona bas ve konuş — ya da aşağıya yaz.</div>
+            <div class="ai-badge" id="aiBadge">🍎 Öğretmen modu (internetsiz)</div>
 
             <div class="settings-panel" id="settingsPanel">
                 <div class="settings-grid">
@@ -452,21 +471,31 @@
 
                     <div class="field" style="grid-column: span 2;">
                         <label for="apiKeyInput">Gemini API Anahtarı (İsteğe Bağlı)</label>
-                        <input type="password" id="apiKeyInput" placeholder="Kendi Google Gemini API anahtarınızı buraya yazabilirsiniz (Boş bırakılırsa dahili akıllı mod kullanılır)">
+                        <div class="key-row">
+                            <input type="password" id="apiKeyInput" placeholder="AIza... ile başlayan anahtarı yapıştırın (boş = öğretmen modu)">
+                            <button type="button" id="saveKeyButton" class="send-button">Kaydet ve Dene</button>
+                        </div>
+                        <div class="key-status" id="keyStatus"></div>
+                        <p class="note" style="margin-top:8px;border:0;padding:0">Ücretsiz anahtar: aistudio.google.com → "Get API key" → "Create API key". Anahtar yalnızca bu cihazda saklanır, bir kez girmeniz yeterli.</p>
                     </div>
                 </div>
-                <p class="note">Bu sistem sabit kalıplar yerine tamamen dinamik bir dil modeli mantığıyla çalışır ve temalar, ses/ikon ayarlarıyla tamamen kişiselleştirilebilir.</p>
+                <p class="note">Anahtar yoksa robot "öğretmen modunda" çalışır: soruları anlar, cevap verir ve okul, aile, renkler, hayvanlar, yiyecekler gibi konularda sırayla soru sorarak sohbeti sürdürür. Anahtar girilirse gerçek yapay zekâ ile her konuda serbest sohbet eder.</p>
             </div>
         </section>
     </main>
 
     <script>
+        /* ===== Dijital Öğretmen — İngilizce Konuşma Botu (onarılmış sürüm) ===== */
         const chatBox = document.getElementById("chatBox");
         const welcome = document.getElementById("welcome");
         const micButton = document.getElementById("micButton");
         const stopButton = document.getElementById("stopButton");
         const statusBox = document.getElementById("status");
         const typing = document.getElementById("typing");
+        const textInput = document.getElementById("textInput");
+        const sendButton = document.getElementById("sendButton");
+        const autoListen = document.getElementById("autoListen");
+        const aiBadge = document.getElementById("aiBadge");
 
         const settingsButton = document.getElementById("settingsButton");
         const settingsPanel = document.getElementById("settingsPanel");
@@ -475,252 +504,517 @@
         const userIconSelect = document.getElementById("userIcon");
         const botIconSelect = document.getElementById("botIcon");
         const apiKeyInput = document.getElementById("apiKeyInput");
+        const saveKeyButton = document.getElementById("saveKeyButton");
+        const keyStatus = document.getElementById("keyStatus");
 
         let voices = [];
         let isListening = false;
+        let isBusy = false;
         let recognition = null;
-        let chatHistory = [];
+        let chatHistory = [];   // {role:"user"|"model", text}
 
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const synth = window.speechSynthesis;
+
+        /* ---------- Güvenli yerel kayıt ---------- */
+        function kaydet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+        function oku(k) { try { return localStorage.getItem(k) || ""; } catch (e) { return ""; } }
+
+        apiKeyInput.value = oku("dt_gemini_key");
+        if (oku("dt_auto_listen") === "0") autoListen.checked = false;
+        autoListen.addEventListener("change", () => kaydet("dt_auto_listen", autoListen.checked ? "1" : "0"));
+
+        function rozetGuncelle(durum) {
+            if (durum === "gemini") { aiBadge.textContent = "🧠 Yapay zekâ modu (Gemini)"; aiBadge.className = "ai-badge on"; }
+            else if (durum === "hata") { aiBadge.textContent = "⚠️ Gemini bağlanamadı — öğretmen modu"; aiBadge.className = "ai-badge warn"; }
+            else { aiBadge.textContent = "🍎 Öğretmen modu (internetsiz)"; aiBadge.className = "ai-badge"; }
+        }
+        rozetGuncelle(apiKeyInput.value.trim() ? "gemini" : "yerel");
+
+        saveKeyButton.addEventListener("click", async () => {
+            const k = apiKeyInput.value.trim();
+            kaydet("dt_gemini_key", k);
+            if (!k) { keyStatus.textContent = "Anahtar silindi. Öğretmen modu kullanılacak."; rozetGuncelle("yerel"); return; }
+            keyStatus.textContent = "Deneniyor...";
+            const r = await geminiCagir([{ role: "user", text: "Say hello in 3 words." }]);
+            if (r.ok) { keyStatus.textContent = "✅ Bağlandı! Bu cihaz anahtarı hatırlayacak."; rozetGuncelle("gemini"); }
+            else { keyStatus.textContent = "❌ " + r.hata; rozetGuncelle("hata"); }
+        });
 
         settingsButton.addEventListener("click", () => settingsPanel.classList.toggle("open"));
 
         themeSelect.addEventListener("change", () => {
             document.body.classList.remove("dark", "purple", "theme-space", "theme-classroom", "theme-nature", "theme-ocean");
             const val = themeSelect.value;
-            if (val.startsWith("theme-") || val === "dark" || val === "purple") {
-                document.body.classList.add(val);
-            }
+            if (val.startsWith("theme-") || val === "dark" || val === "purple") document.body.classList.add(val);
         });
 
-        function loadVoices() {
-            voices = synth.getVoices().filter(v => v.lang.toLowerCase().startsWith("en"));
-        }
+        function loadVoices() { voices = synth ? synth.getVoices().filter(v => v.lang.toLowerCase().startsWith("en")) : []; }
         loadVoices();
-        if ("onvoiceschanged" in synth) synth.onvoiceschanged = loadVoices;
+        if (synth && "onvoiceschanged" in synth) synth.onvoiceschanged = loadVoices;
 
-        function setStatus(text, type = "") {
-            statusBox.textContent = text;
-            statusBox.className = "status " + type;
-        }
+        function setStatus(text, type = "") { statusBox.textContent = text; statusBox.className = "status " + type; }
 
         function addMessage(engText, trText, isUser) {
             welcome.style.display = "none";
             const row = document.createElement("div");
             row.className = `message-row ${isUser ? "user" : "bot"}`;
-
             const avatar = document.createElement("div");
             avatar.className = "avatar";
             avatar.textContent = isUser ? userIconSelect.value : botIconSelect.value;
-
             const content = document.createElement("div");
             content.className = "message-content";
-
             const message = document.createElement("div");
             message.className = "message";
-
             const label = document.createElement("div");
             label.className = "language-label";
-            label.textContent = isUser ? "İngilizce · Siz" : "İngilizce · Yapay Zeka";
-
+            label.textContent = isUser ? "İngilizce · Sen" : "İngilizce · Robot";
             const engDiv = document.createElement("div");
             engDiv.textContent = engText;
-
             const translation = document.createElement("div");
             translation.className = "translation";
             const trLabel = document.createElement("strong");
-            trLabel.textContent = "Türkçe Çeviri";
+            trLabel.textContent = "Türkçe";
             const trSpan = document.createElement("span");
             trSpan.textContent = trText || "Çevriliyor...";
-
             translation.appendChild(trLabel);
             translation.appendChild(trSpan);
-
             message.appendChild(label);
             message.appendChild(engDiv);
             message.appendChild(translation);
+            if (!isUser) {
+                const again = document.createElement("button");
+                again.className = "again-btn";
+                again.textContent = "🔊 Tekrar dinle";
+                again.onclick = () => speak(engText, false);
+                message.appendChild(again);
+            }
             content.appendChild(message);
             row.appendChild(avatar);
             row.appendChild(content);
             chatBox.appendChild(row);
             chatBox.scrollTop = chatBox.scrollHeight;
-
             return trSpan;
         }
 
-        async function translateText(text, targetLang = "tr") {
+        async function translateText(text) {
             try {
-                const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|${targetLang}`);
+                const ctrl = new AbortController();
+                const t = setTimeout(() => ctrl.abort(), 6000);
+                const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|tr`, { signal: ctrl.signal });
+                clearTimeout(t);
                 const data = await res.json();
-                if (data?.responseData?.translatedText) return data.responseData.translatedText;
+                const tr = data?.responseData?.translatedText;
+                if (tr && !/MYMEMORY WARNING|QUERY LENGTH/i.test(tr)) return tr;
             } catch (e) {}
-            return "Çeviri alınamadı.";
+            return "(Çeviri şu an alınamadı)";
+        }
+
+        /* ---------- 1) GEMİNİ (anahtar girildiyse) ---------- */
+        const SISTEM = "You are 'Robo', a friendly English speaking partner for Turkish primary school children (age 7-10, level A1). " +
+            "Rules: Reply ONLY in simple English. Use 1-2 short sentences (max 20 words). Answer what the child said or asked first, " +
+            "then ask ONE easy question to keep talking. Topics: school, classroom, family, home, colors, animals, food, toys, weather, city. " +
+            "If the child makes a grammar mistake, gently repeat the correct sentence (e.g. 'Oh, you like cats!'). " +
+            "If the child writes in Turkish, answer in easy English and help them say it in English. Never use emojis, lists or markdown. Be warm and encouraging.";
+        const MODELLER = ["gemini-flash-latest", "gemini-2.5-flash", "gemini-flash-lite-latest", "gemini-2.0-flash"];
+
+        async function geminiCagir(gecmis) {
+            const key = apiKeyInput.value.trim();
+            if (!key) return { ok: false, hata: "Anahtar yok" };
+            const govde = JSON.stringify({
+                system_instruction: { parts: [{ text: SISTEM }] },
+                contents: gecmis.slice(-12).filter((m, i, a) => !(i === 0 && m.role === "model")).map(m => ({ role: m.role, parts: [{ text: m.text }] })),
+                generationConfig: { temperature: 0.8, maxOutputTokens: 800 }
+            });
+            let sonHata = "Bağlantı kurulamadı";
+            for (const model of MODELLER) {
+                try {
+                    const ctrl = new AbortController();
+                    const t = setTimeout(() => ctrl.abort(), 12000);
+                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json", "x-goog-api-key": key },
+                        body: govde, signal: ctrl.signal
+                    });
+                    clearTimeout(t);
+                    const data = await res.json();
+                    if (!res.ok) {
+                        const msg = data?.error?.message || ("HTTP " + res.status);
+                        if (/API key|API_KEY|permission/i.test(msg) || res.status === 403) return { ok: false, hata: "Anahtar geçersiz. Google AI Studio'dan yeni anahtar alın." };
+                        if (res.status === 429) sonHata = "Günlük/dakikalık ücretsiz sınır doldu, biraz sonra tekrar deneyin.";
+                        else sonHata = msg;
+                        continue; // model bulunamadıysa sıradakini dene
+                    }
+                    const reply = (data.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join(" ").replace(/[*_#`]/g, "").trim();
+                    if (reply) return { ok: true, text: reply };
+                } catch (e) { sonHata = "İnternet bağlantısı yok veya yavaş."; }
+            }
+            return { ok: false, hata: sonHata };
+        }
+
+        /* ---------- 2) ÖĞRETMEN MODU (internetsiz akıllı sohbet) ---------- */
+        const SOZ = {
+            color: ["red","blue","green","yellow","orange","purple","pink","black","white","brown","grey","gray"],
+            animal: ["cat","dog","bird","fish","rabbit","horse","cow","sheep","lion","tiger","elephant","monkey","bear","duck","chicken","frog","turtle","giraffe","zebra","snake","mouse","panda","dolphin","penguin","butterfly","bee","goat","donkey","owl","fox","wolf","kitten","puppy"],
+            food: ["apple","banana","orange","pizza","cake","bread","cheese","milk","water","juice","chocolate","ice cream","pasta","rice","soup","egg","eggs","chicken","meat","fish","salad","tomato","potato","potatoes","carrot","strawberry","strawberries","grapes","watermelon","cookie","cookies","sandwich","hamburger","kebab","honey","yogurt","candy","tea","lemon","pear","cherry","peach"],
+            subject: ["english","math","maths","mathematics","turkish","music","art","science","life science","pe","physical education","games","drawing"],
+            family: ["mother","mom","mum","father","dad","brother","sister","grandmother","grandma","grandfather","grandpa","baby","uncle","aunt","cousin"],
+            hobby: ["football","soccer","basketball","volleyball","swimming","dancing","singing","reading","drawing","painting","running","cycling","riding a bike","playing games","chess","tennis","skipping rope","hide and seek"],
+            toy: ["ball","doll","car","teddy bear","kite","puzzle","robot","lego","blocks","bike","yo-yo","train"],
+            weather: ["sunny","rainy","cloudy","windy","snowy","hot","cold","warm","cool","foggy","stormy"],
+            feeling: ["happy","sad","tired","hungry","thirsty","angry","sleepy","bored","excited","fine","good","great","ok","okay","scared","sick"],
+            school: ["pencil","pen","eraser","rubber","book","notebook","bag","schoolbag","ruler","desk","chair","board","sharpener","crayon","crayons","scissors","glue"],
+            room: ["kitchen","bedroom","bathroom","living room","garden","balcony","hall"],
+            place: ["park","school","hospital","zoo","library","cinema","market","shop","museum","playground","bakery","pharmacy","mosque","beach","sea"]
+        };
+        const BOT_FAV = { color: "blue", animal: "dolphin", food: "apples", subject: "English", hobby: "drawing", toy: "kite", place: "the zoo" };
+
+        const durum = { isim: "", sonSoru: null, planSira: 0, sayac: 0 };
+
+        const PLAN = [
+            { slot: "name", q: "What is your name?" },
+            { slot: "feeling", q: "How are you today?" },
+            { slot: "age", q: "How old are you?" },
+            { slot: "color", q: "What is your favourite colour?" },
+            { slot: "animal", q: "What is your favourite animal?" },
+            { slot: "food", q: "What is your favourite food?" },
+            { slot: "subject", q: "What is your favourite lesson at school?" },
+            { slot: "family", q: "Do you have a brother or a sister?" },
+            { slot: "school", q: "What is in your school bag?" },
+            { slot: "weather", q: "How is the weather today?" },
+            { slot: "hobby", q: "What do you like doing after school?" },
+            { slot: "toy", q: "What is your favourite toy?" },
+            { slot: "pet", q: "Do you have a pet?" },
+            { slot: "room", q: "What is your favourite room in your house?" },
+            { slot: "place", q: "Where do you like going in your city?" },
+            { slot: "yesno", q: "Can you swim?" },
+            { slot: "number", q: "Can you count from one to ten?" }
+        ];
+
+        const rast = a => a[Math.floor(Math.random() * a.length)];
+        const buyuk = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+        const ad = () => durum.isim ? ", " + durum.isim : "";
+
+        function bul(metin, liste) {
+            let en = null;
+            for (const w of liste) {
+                const re = new RegExp("\\b" + w.replace(/[-]/g, "\\-") + "\\b");
+                if (re.test(metin) && (!en || w.length > en.length)) en = w;
+            }
+            return en;
+        }
+        function hangiKategori(metin) {
+            for (const k of Object.keys(SOZ)) { const w = bul(metin, SOZ[k]); if (w) return { k, w }; }
+            return null;
+        }
+        const SAYI = { one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19,twenty:20 };
+        const SAYI_EN = ["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen","twenty"];
+        function sayiBul(metin) {
+            const m = metin.match(/\b(\d{1,3})\b/); if (m) return +m[1];
+            for (const w in SAYI) if (new RegExp("\\b" + w + "\\b").test(metin)) return SAYI[w];
+            return null;
+        }
+        const NOT_NAME = ["hello","hi","hey","yes","no","ok","thanks","what","fine","good","ok","okay","happy","sad","tired","hungry","from","a","an","the","not","very","so","ten","seven","eight","nine","six","student","boy","girl","here","sorry","great"];
+
+        function sonrakiSoru() {
+            for (let i = 0; i < PLAN.length; i++) {
+                const p = PLAN[(durum.planSira + i) % PLAN.length];
+                if (p.slot === "name" && durum.isim) continue;
+                durum.planSira = (durum.planSira + i + 1) % PLAN.length;
+                durum.sonSoru = p.slot;
+                return p.q;
+            }
+            durum.sonSoru = null;
+            return "What else do you want to talk about?";
+        }
+
+        // Botun sorduğu soruya verilen cevabı değerlendir
+        function soruyaCevap(m, ham) {
+            const s = durum.sonSoru;
+            if (!s) return null;
+            const evet = /\b(yes|yeah|yep|sure|of course|i do|i can|i have)\b/.test(m);
+            const hayir = /\b(no|nope|not|don't|dont|can't|cant|haven't)\b/.test(m);
+            if (s === "name" && /^(hi|hello|hey|good (morning|afternoon|evening))$/.test(m)) return null;
+            if (s === "name") {
+                const n = ham.match(/(?:my name is|my name's|i am|i'm|im|call me|it's|it is)\s+([A-Za-zÇĞİÖŞÜçğıöşü]+)/i) || (m.split(" ").length <= 2 ? ham.match(/^([A-Za-zÇĞİÖŞÜçğıöşü]+)/) : null);
+                if (n && !NOT_NAME.includes(n[1].toLowerCase())) { durum.isim = buyuk(n[1].toLowerCase()); return `Nice to meet you, ${durum.isim}! My name is Robo.`; }
+            }
+            if (s === "age") {
+                const n = sayiBul(m);
+                if (n) return n <= 12 ? `${buyuk(SAYI_EN[n] || String(n))} years old! That is a great age.` : `Wow, ${n}! You are a grown-up.`;
+            }
+            if (s === "feeling") {
+                const f = bul(m, SOZ.feeling);
+                if (f) {
+                    if (["sad","tired","angry","sick","scared","bored","sleepy"].includes(f)) return `Oh, you are ${f}. I hope you feel better soon${ad()}.`;
+                    if (["hungry","thirsty"].includes(f)) return `You are ${f}! Let's eat and drink something after our talk.`;
+                    return `I am happy to hear that${ad()}! I am fine too, thank you.`;
+                }
+            }
+            if (s === "family") {
+                const f = bul(m, SOZ.family);
+                const n = sayiBul(m);
+                if (f) return `You have a ${f}${n && n > 1 ? "s" : ""}. How nice! Family is important.`;
+                if (hayir) return "Oh, no brothers or sisters. You are the only child. That's OK!";
+                if (evet) return "That's lovely! Do you play together?";
+            }
+            if (s === "pet") {
+                const a = bul(m, SOZ.animal);
+                if (a) return `A ${a}! What a lovely pet. What is its name?`;
+                if (hayir) return "No pet? Maybe one day you can have a cat or a dog.";
+                if (evet) return "Great! Is it a cat or a dog?";
+            }
+            if (s === "yesno") {
+                if (hayir) return "That's OK. You can learn it one day!";
+                if (evet) return "Wow, well done! I can't swim, I am a robot.";
+            }
+            if (s === "number") {
+                const n = sayiBul(m);
+                if (/one.*two.*three|1.*2.*3/.test(m)) return "Excellent counting! One, two, three... ten. Well done!";
+                if (evet) return "Let's count together: one, two, three, four, five, six, seven, eight, nine, ten!";
+                if (hayir) return "Let's try together: one, two, three, four, five. Now you!";
+                if (n) return `${buyuk(SAYI_EN[n] || String(n))}! Good job.`;
+            }
+            if (s === "weather") {
+                const w = bul(m, SOZ.weather);
+                if (w) return { sunny: "Sunny! Let's go out and play.", rainy: "Rainy! Don't forget your umbrella.", snowy: "Snowy! Let's make a snowman.", cold: "Cold! Wear your coat.", hot: "Hot! Let's drink some water.", windy: "Windy! It's a good day for a kite.", cloudy: "Cloudy! Maybe it will rain." }[w] || `It's ${w} today. OK!`;
+            }
+            if (["color","animal","food","subject","school","hobby","toy","room","place"].includes(s)) {
+                const w = bul(m, SOZ[s] || []);
+                if (w) return tepki(s, w);
+            }
+            return null;
+        }
+
+        function tepki(k, w) {
+            const W = w;
+            switch (k) {
+                case "color": return rast([`${buyuk(W)} is a beautiful colour!`, `I like ${W} too. The sky is blue, the grass is green.`, `${buyuk(W)}! Nice choice${ad()}.`]);
+                case "animal": return rast([`${buyuk(W)}s are so cute!`, `I love ${W}s too! Can you make a ${W} sound?`, `A ${W}! That is a great animal.`]);
+                case "food": return rast([`Yummy! ${buyuk(W)} is delicious.`, `Mmm, ${W}! I am hungry now.`, `${buyuk(W)} is tasty. Healthy food makes us strong.`]);
+                case "subject": return `${buyuk(W === "maths" ? "maths" : W)} is a great lesson! My favourite lesson is English.`;
+                case "family": return `Your ${W}! Families are wonderful.`;
+                case "hobby": return rast([`${buyuk(W)} is fun!`, `Wow, you like ${W}. That's great${ad()}!`]);
+                case "toy": return `A ${W}! That's a fun toy.`;
+                case "weather": return `It's ${W}. OK!`;
+                case "feeling": return `You are ${W}. Thank you for telling me.`;
+                case "school": return `A ${W}! We use it at school every day.`;
+                case "room": return `The ${W} is a nice room.`;
+                case "place": return `The ${W}! That's a nice place to go.`;
+            }
+            return "That's nice!";
+        }
+
+        // Çocuğun sorduğu sorular / kendi cümleleri
+        function niyet(m, ham) {
+            if (/[çğışöü]/.test(m) || /\b(merhaba|nasılsın|evet|hayır|teşekkür|ne demek|anlamadım|türkçe)\b/.test(m))
+                return "Let's speak English! You can say: Hello! I am fine. My name is ... Try it!";
+            if (/^(hi|hello|hey|hiya|good (morning|afternoon|evening))\b/.test(m) && m.split(" ").length <= 4)
+                return rast([`Hello${ad()}! I am Robo.`, `Hi${ad()}! Nice to see you.`, `Good to see you${ad()}!`]);
+            if (/\b(bye|goodbye|see you|good night)\b/.test(m)) { durum.sonSoru = null; return `Goodbye${ad()}! You did a great job today. See you soon!`; }
+            if (/\b(thank you|thanks)\b/.test(m)) return `You're welcome${ad()}!`;
+            if (/how are you|how r u|how are u/.test(m)) return rast(["I am fine, thank you!", "I am very happy today, thank you!", "I am great, thanks for asking!"]);
+            if (/(what is|what's|whats) your name|who are you/.test(m)) return "My name is Robo. I am an English robot.";
+            if (/how old are you/.test(m)) return "I am two years old. Robots are young!";
+            if (/where are you from|where do you live/.test(m)) return "I live in this tablet! I am from Türkiye, like you.";
+            let f = m.match(/(?:what is|what's|whats) your (?:favou?rite|favorite) (colou?r|animal|food|lesson|subject|hobby|toy|place)/);
+            if (f) { const k = { colour:"color", color:"color", lesson:"subject", subject:"subject" }[f[1]] || f[1]; return `My favourite ${f[1]} is ${BOT_FAV[k]}. What about you?`; }
+            if (/do you have (a )?(pet|dog|cat)/.test(m)) return "No, I don't. Robots can't have pets. But I love cats!";
+            if (/do you have (a )?(brother|sister|family)/.test(m)) return "Yes! I have a robot sister. Her name is Robina.";
+            if (/can you (sing|dance)/.test(m)) return "Yes, I can! La la la! Can you sing too?";
+            if (/can you (swim|run|fly|jump|ride|eat)/.test(m)) return "No, I can't. I am a robot! But I can talk and help you learn English.";
+            if (/what time is it/.test(m)) { const d = new Date(); return `It is ${d.getHours()} ${String(d.getMinutes()).padStart(2, "0")}.`; }
+            if (/what day is (it|today)/.test(m)) return "Today is " + ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][new Date().getDay()] + ".";
+            if (/joke/.test(m)) return rast(["Why do cows wear bells? Because their horns don't work! Ha ha!", "What do you call a sleeping dinosaur? A dino-snore! Ha ha!"]);
+            const mat = m.match(/(\d+|\w+)\s*(plus|\+|and|minus|-|times|x)\s*(\d+|\w+)/);
+            if (mat && /what is|how much|how many|plus|minus|times/.test(m)) {
+                const a = isNaN(mat[1]) ? SAYI[mat[1]] : +mat[1], b = isNaN(mat[3]) ? SAYI[mat[3]] : +mat[3];
+                if (a != null && b != null) { const r = /plus|\+|and/.test(mat[2]) ? a + b : /minus|-/.test(mat[2]) ? a - b : a * b; return `${a} ${mat[2]} ${b} is ${r}. Good maths!`; }
+            }
+            if (/\b(i don't know|i dont know|dunno|i don't understand|i dont understand|what|sorry)\b/.test(m) && m.split(" ").length <= 4)
+                return "No problem! Let's try another question.";
+            f = ham.match(/my name is ([A-Za-zÇĞİÖŞÜçğıöşü]+)/i);
+            if (f) { durum.isim = buyuk(f[1].toLowerCase()); return `Nice to meet you, ${durum.isim}!`; }
+            f = m.match(/my (?:favou?rite|favorite) (\w+) is ([\w ]+)/);
+            if (f) return `${buyuk(f[2].trim())}? Great choice! I like it too.`;
+            if (/\bi am from\b|\bi'm from\b/.test(m)) return "That's a nice place!";
+            f = m.match(/\bi (?:don't|dont|do not) like ([\w ]+)/);
+            if (f) return `Oh, you don't like ${f[1].trim()}. That's OK!`;
+            f = m.match(/\bi (?:like|love) ([\w ]+)/);
+            if (f) return rast([`You like ${f[1].trim()}! That's great.`, `Me too! I like ${f[1].trim()}.`]);
+            f = m.match(/\bdo you like ([\w ]+)/);
+            if (f) return rast([`Yes, I like ${f[1].trim()}!`, `Yes, I do! ${buyuk(f[1].trim())} is nice.`]);
+            f = m.match(/\bi (?:have|have got) (a |an |two |three )?([\w ]+)/);
+            if (f) return `You have ${f[1] || ""}${f[2].trim()}. Nice!`;
+            f = m.match(/\bi can ([\w ]+)/);
+            if (f) return `Wow, you can ${f[1].trim()}! Well done.`;
+            f = m.match(/\bi(?: am|'m| m) (\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\b/);
+            if (f) { const n = sayiBul(f[1]); return `${buyuk(SAYI_EN[n] || String(n))} years old! That is a great age.`; }
+            f = m.match(/\bi am (happy|sad|tired|hungry|thirsty|sleepy|bored|fine|good|great|ok|okay|angry|scared|sick|excited)\b/);
+            if (f) return tepki("feeling", f[1]);
+            return null;
+        }
+
+        function ogretmenModu(ham) {
+            const m = ham.toLowerCase().replace(/[.,!?;:"]/g, " ").replace(/\s+/g, " ").trim();
+            durum.sayac++;
+            const soruydu = /\?|^(what|where|who|how|do|does|can|are|is|why|when)\b/.test(m);
+
+            // Önce çocuğun kendi sorusu / cümlesi, sonra botun sorusuna cevap
+            let cevap = soruydu ? niyet(m, ham) : (soruyaCevap(m, ham) || niyet(m, ham));
+            if (!cevap) {
+                const k = hangiKategori(m);
+                if (k) cevap = tepki(k.k, k.w);
+            }
+            if (!cevap) {
+                cevap = m.split(" ").length <= 2
+                    ? rast([`"${ham}" — good! Can you say a full sentence?`, `OK! Let's make a sentence together.`])
+                    : rast(["I see! Good speaking.", `Well done${ad()}! You speak English very well.`, "Great sentence!"]);
+            }
+            if (/goodbye/i.test(cevap)) return cevap;
+            if (soruydu && /What about you\?$/.test(cevap)) {
+                const f = m.match(/favou?rite (colou?r|animal|food|lesson|subject|hobby|toy|place)/);
+                if (f) durum.sonSoru = { colour:"color", lesson:"subject" }[f[1]] || f[1];
+                return cevap;
+            }
+            if (durum.sonSoru === "name" && !durum.isim) return cevap + " What is your name?";
+            return cevap + " " + sonrakiSoru();
         }
 
         async function getAIResponse(userMessage) {
-            chatHistory.push({ role: "user", content: userMessage });
-            const apiKey = apiKeyInput.value.trim();
-            
-            if (apiKey) {
-                try {
-                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                            contents: [{ parts: [{ text: `You are a friendly English practice partner. Keep answers short, natural, encouraging, and engaging in English. User said: "${userMessage}"` }] }]
-                        })
-                    });
-                    const data = await response.json();
-                    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                    if (reply) return reply.trim();
-                } catch (err) {
-                    console.error("API Hatası, akıllı moda geçiliyor.");
-                }
+            chatHistory.push({ role: "user", text: userMessage });
+            let reply = null;
+            if (apiKeyInput.value.trim()) {
+                const r = await geminiCagir(chatHistory);
+                if (r.ok) { reply = r.text; rozetGuncelle("gemini"); }
+                else { rozetGuncelle("hata"); setStatus("⚠️ Gemini: " + r.hata + " Öğretmen modu devrede.", "error"); }
             }
-
-            const lower = userMessage.toLowerCase();
-            let aiReply = "";
-
-            if (lower.includes("how are you")) {
-                aiReply = "I am doing fantastic today, thank you for asking! What did you do today?";
-            } else if (lower.includes("name")) {
-                aiReply = "My name is your English companion AI. What is your favorite hobby?";
-            } else if (lower.includes("weather")) {
-                aiReply = "The weather is lovely today! Do you like sunny days or rainy days?";
-            } else if (lower.includes("school") || lower.includes("teacher") || lower.includes("student")) {
-                aiReply = "School is a great place to learn new things. What is your favorite lesson?";
-            } else if (lower.includes("play") || lower.includes("game") || lower.includes("sport")) {
-                aiReply = "Playing games is so much fun! What kind of games do you enjoy playing?";
-            } else if (lower.includes("food") || lower.includes("eat") || lower.includes("hungry")) {
-                aiReply = "Talking about food makes me hungry! What is your favorite food?";
-            } else {
-                const variations = [
-                    `That is really interesting! Can you tell me more about "${userMessage}"?`,
-                    `I see! How does that make you feel?`,
-                    `That's awesome! What else would you like to talk about?`,
-                    `Fascinating! Let's practice more English sentences about this.`
-                ];
-                aiReply = variations[Math.floor(Math.random() * variations.length)];
-            }
-
-            chatHistory.push({ role: "assistant", content: aiReply });
-            return aiReply;
+            if (!reply) reply = ogretmenModu(userMessage);
+            chatHistory.push({ role: "model", text: reply });
+            return reply;
         }
 
-        function speak(text) {
-            if (!synth) return;
+        function speak(text, dinlemeyeGec = true) {
+            if (!synth) { if (dinlemeyeGec) otomatikDinle(); return; }
             synth.cancel();
-
             const utterance = new SpeechSynthesisUtterance(text);
             const gender = voiceGenderSelect.value;
-            const engVoices = voices.filter(v => v.lang.toLowerCase().startsWith("en"));
             const maleKeywords = ["male", "david", "mark", "george", "daniel", "alex", "james", "guy", "ryan"];
-            const femaleKeywords = ["female", "zira", "helen", "susan", "karen", "hazel", "aria", "jenny", "emma"];
-
-            let selectedVoice = engVoices.find(v => {
+            const femaleKeywords = ["female", "zira", "helen", "susan", "karen", "hazel", "aria", "jenny", "emma", "samantha"];
+            let selectedVoice = voices.find(v => {
                 const name = v.name.toLowerCase();
                 return gender === "male" ? maleKeywords.some(k => name.includes(k)) : femaleKeywords.some(k => name.includes(k));
-            });
-
-            if (!selectedVoice && engVoices.length > 0) {
-                selectedVoice = engVoices[0];
-            }
-
-            if (selectedVoice) {
-                utterance.voice = selectedVoice;
-                utterance.lang = selectedVoice.lang;
-            } else {
-                utterance.lang = "en-US";
-            }
-
-            utterance.rate = 0.95;
-            utterance.pitch = gender === "male" ? 0.8 : 1.15;
-            utterance.volume = 1;
-
-            utterance.onstart = () => setStatus("🔊 Yapay zeka konuşuyor...", "active");
-            utterance.onend = () => setStatus("Dinlemeye hazır");
-
+            }) || voices[0];
+            if (selectedVoice) { utterance.voice = selectedVoice; utterance.lang = selectedVoice.lang; }
+            else utterance.lang = "en-US";
+            utterance.rate = 0.9;
+            utterance.pitch = gender === "male" ? 0.85 : 1.1;
+            utterance.onstart = () => setStatus("🔊 Robot konuşuyor...", "active");
+            utterance.onend = () => { setStatus("Sıra sende!"); if (dinlemeyeGec) otomatikDinle(); };
+            utterance.onerror = () => { setStatus("Sıra sende!"); if (dinlemeyeGec) otomatikDinle(); };
             synth.speak(utterance);
         }
 
         async function processSpeech(englishText) {
+            if (isBusy || !englishText) return;
+            isBusy = true;
             const userTrSpan = addMessage(englishText, "", true);
             typing.classList.add("show");
-
-            const userTurkish = await translateText(englishText);
-            userTrSpan.textContent = userTurkish;
-
-            const aiResponseText = await getAIResponse(englishText);
-            const aiTrSpan = addMessage(aiResponseText, "", false);
-
-            const aiTurkish = await translateText(aiResponseText);
-            aiTrSpan.textContent = aiTurkish;
-
+            const [aiResponseText] = await Promise.all([
+                getAIResponse(englishText),
+                translateText(englishText).then(t => { userTrSpan.textContent = t; })
+            ]);
             typing.classList.remove("show");
-            speak(aiResponseText);
+            const aiTrSpan = addMessage(aiResponseText, "", false);
+            isBusy = false;
+            speak(aiResponseText);                       // önce konuş (beklemeden)
+            translateText(aiResponseText).then(t => { aiTrSpan.textContent = t; });
+        }
+
+        /* ---------- Yazarak gönderme ---------- */
+        function yaziGonder() {
+            const t = textInput.value.trim();
+            if (!t) return;
+            textInput.value = "";
+            processSpeech(t);
+        }
+        sendButton.addEventListener("click", yaziGonder);
+        textInput.addEventListener("keydown", e => { if (e.key === "Enter") yaziGonder(); });
+
+        /* ---------- Mikrofon ---------- */
+        let sohbetAcik = false;   // kullanıcı Durdur'a basana kadar sohbet açık
+        function otomatikDinle() {
+            if (sohbetAcik && autoListen.checked && SpeechRecognition && !isListening) setTimeout(dinlemeyiBaslat, 350);
+        }
+        function resetMic() {
+            micButton.classList.remove("listening");
+            micButton.textContent = "🎤 Konuşmaya Başla";
+            micButton.disabled = false;
+            stopButton.style.display = sohbetAcik ? "block" : "none";
+        }
+        function initRec() {
+            const rec = new SpeechRecognition();
+            rec.lang = "en-US";
+            rec.continuous = false;
+            rec.interimResults = false;
+            rec.maxAlternatives = 1;
+            let sonucGeldi = false;
+            rec.onresult = (e) => {
+                const transcript = e.results[0][0].transcript.trim();
+                if (transcript) { sonucGeldi = true; processSpeech(transcript); }
+            };
+            rec.onerror = (e) => {
+                isListening = false;
+                const mesaj = { "no-speech": "Ses duyulmadı. Mikrofona biraz daha yakın konuş.", "not-allowed": "Mikrofon izni verilmedi. Adres çubuğundaki kilit simgesinden izin verin.", "network": "Ses tanıma için internet gerekiyor.", "aborted": "Durduruldu." }[e.error] || ("Hata: " + e.error);
+                setStatus(mesaj, "error");
+                if (e.error === "not-allowed") sohbetAcik = false;
+                resetMic();
+            };
+            rec.onend = () => {
+                isListening = false;
+                resetMic();
+                if (!sonucGeldi && sohbetAcik && statusBox.className.indexOf("error") === -1) setStatus("Mikrofona bas ve konuş.");
+            };
+            return rec;
+        }
+        function dinlemeyiBaslat() {
+            if (isListening || isBusy) return;
+            if (synth) synth.cancel();
+            recognition = initRec();
+            try {
+                recognition.start();
+                isListening = true;
+                micButton.classList.add("listening");
+                micButton.textContent = "🎤 Dinliyorum...";
+                micButton.disabled = true;
+                stopButton.style.display = "block";
+                setStatus("🎤 İngilizce konuş...", "active");
+            } catch (err) { isListening = false; resetMic(); }
         }
 
         if (!SpeechRecognition) {
-            setStatus("❌ Tarayıcınız ses tanımayı desteklemiyor. Lütfen Google Chrome veya Edge kullanın.", "error");
+            setStatus("Bu tarayıcı sesle konuşmayı desteklemiyor — aşağıya yazarak konuşabilirsin. (Sesli için Chrome kullanın.)", "error");
             micButton.disabled = true;
         } else {
-            function initRec() {
-                const rec = new SpeechRecognition();
-                rec.lang = "en-US";
-                rec.continuous = false;
-                rec.interimResults = false;
-                
-                rec.onresult = (e) => {
-                    const transcript = e.results[0][0].transcript.trim();
-                    if (transcript) processSpeech(transcript);
-                };
-
-                rec.onerror = (e) => {
-                    isListening = false;
-                    setStatus("Hata: " + e.error, "error");
-                    resetMic();
-                };
-
-                rec.onend = () => {
-                    isListening = false;
-                    resetMic();
-                };
-                return rec;
-            }
-
-            micButton.addEventListener("click", () => {
-                if (isListening) return;
-                recognition = initRec();
-                try {
-                    recognition.start();
-                    isListening = true;
-                    micButton.classList.add("listening");
-                    micButton.textContent = "🎤 Dinleniyor...";
-                    micButton.disabled = true;
-                    stopButton.style.display = "block";
-                    setStatus("🎤 İngilizce konuşun...", "active");
-                } catch (err) {
-                    isListening = false;
-                    resetMic();
-                }
-            });
-
-            stopButton.addEventListener("click", () => {
-                if (recognition) recognition.stop();
-                synth.cancel();
-                isListening = false;
-                resetMic();
-                setStatus("Dinlemeye hazır");
-            });
-
-            function resetMic() {
-                micButton.classList.remove("listening");
-                micButton.textContent = "🎤 Konuşmaya Başla";
-                micButton.disabled = false;
-                stopButton.style.display = "none";
-            }
+            micButton.addEventListener("click", () => { sohbetAcik = true; dinlemeyiBaslat(); });
         }
+        stopButton.addEventListener("click", () => {
+            sohbetAcik = false;
+            if (recognition) try { recognition.abort(); } catch (e) {}
+            if (synth) synth.cancel();
+            isListening = false;
+            resetMic();
+            setStatus("Sohbet durdu. Tekrar başlamak için mikrofona bas.");
+        });
+
+        /* Robot sohbeti kendisi başlatsın */
+        window.addEventListener("load", () => {
+            setTimeout(() => {
+                const ilk = "Hello! I am Robo. " + sonrakiSoru();
+                chatHistory.push({ role: "model", text: ilk });
+                addMessage(ilk, "Merhaba! Ben Robo. Adın ne?", false);
+            }, 300);
+        });
     </script>
 
 <script src="ses.js"></script>
