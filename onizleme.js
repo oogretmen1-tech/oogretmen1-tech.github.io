@@ -15,14 +15,15 @@
   var BOLUMLER = [
     "page-baskiya", "page-pano", "page-evraklar", "page-olcme",
     "page-belirli", "page-harfatolye", "page-ogretmenrehberi",
-    "page-ihtiyac", "page-yillikplanlar", "page-cedes"
+    "page-ihtiyac", "page-yillikplanlar", "page-cedes", "page-fasikul"
   ];
 
   /* İnteraktif / hub sayfalar: ön izleme yok, doğrudan açılır */
   var HARIC = [
     "23Nisan_Uygulama.html", "1-sinif-hazirlik-donemi.html",
     "sesli-ogrenme-materyalleri.html", "mevsim-agaci-pano.html",
-    "kapi-susleme.html", "sozluk.html", "dinleme-kosesi.html"
+    "kapi-susleme.html", "sozluk.html", "dinleme-kosesi.html",
+    "1-sinif-cizgi-calismalari-interaktif.html"
   ];
 
   var PDFJS_YEDEK = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";
@@ -76,6 +77,20 @@
       "#oi-durum{padding:26px 18px;text-align:center;color:#475569;font-weight:700;font-size:.9rem}" +
       "@media(max-width:600px){#oi-kutu{height:100%;border-radius:12px}" +
         "#oi-alt button{padding:10px 13px;font-size:.8rem}}" +
+      /* Okuma Yazma Öğreniyorum: dikkat çekici ön izleme kartları */
+      "#page-fasikul .card.kapakli{position:relative;border-radius:18px;border:3px solid #fff;" +
+        "box-shadow:0 8px 22px rgba(15,40,90,.22);transition:transform .2s,box-shadow .2s}" +
+      "#page-fasikul .card.kapakli:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(15,40,90,.32)}" +
+      "#page-fasikul .card.kapakli .card-kapak{aspect-ratio:4/3;object-fit:cover;background:#dbeafe;" +
+        "border-bottom:0;transition:transform .35s}" +
+      "#page-fasikul .card.kapakli:hover .card-kapak{transform:scale(1.04)}" +
+      "#page-fasikul .card.kapakli::before{content:'\\1F441  Ön İzle';position:absolute;top:10px;left:10px;z-index:2;" +
+        "background:#fff;color:#1F5FB0;font-weight:800;font-size:.8rem;padding:6px 12px;border-radius:999px;" +
+        "box-shadow:0 3px 10px rgba(0,0,0,.25);pointer-events:none;animation:oiNabiz 2.4s ease-in-out infinite}" +
+      "#page-fasikul .card-onizle{background:linear-gradient(90deg,#f59e0b,#ef4444) !important;color:#fff}" +
+      "@keyframes oiNabiz{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}" +
+      ".card.ara-vurgu{outline:4px solid #f59e0b;outline-offset:3px}" +
+      "@media(prefers-reduced-motion:reduce){#page-fasikul .card.kapakli::before{animation:none}}" +
       "@media print{#oi-kaplama{display:none !important}}";
     var st = document.createElement("style");
     st.id = "oi-stil"; st.textContent = css;
@@ -341,6 +356,13 @@
         span.addEventListener("click", function (e) {
           e.preventDefault(); e.stopPropagation(); ac(bilgi);
         });
+        kart.__oiBilgi = bilgi;
+        if (uzanti(href) === "pdf") {
+          kart.addEventListener("click", function (e) {
+            if (e.target.closest && e.target.closest(".card-indir")) return;
+            e.preventDefault(); ac(bilgi);
+          });
+        }
         var ilk = govdeEl.querySelector(".card-indir");
         if (ilk) govdeEl.insertBefore(span, ilk); else govdeEl.appendChild(span);
       });
@@ -351,4 +373,10 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", baslat);
   else baslat();
   window.doOnizlemeTara = kartlariTara;
+  /* aramadan gelen kart için ön izlemeyi aç */
+  window.doOnizlemeKart = function (kart) {
+    if (!kart.__oiBilgi) kartlariTara();
+    if (!kart.__oiBilgi) return false;
+    ac(kart.__oiBilgi); return true;
+  };
 })();
