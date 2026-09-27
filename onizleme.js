@@ -72,7 +72,7 @@
         "padding:11px 12px;background:#f8fafc;border-top:1px solid #e2e8f0}" +
       "#oi-alt button{border:0;border-radius:999px;padding:11px 17px;font-size:.85rem;font-weight:800;" +
         "cursor:pointer;color:#fff;font-family:inherit;line-height:1}" +
-      ".oi-pdf{background:#c62828}.oi-word{background:#2b579a}.oi-yaz{background:#0f172a}" +
+      ".oi-pdf{background:#c62828}.oi-word{background:#2b579a}.oi-yaz{background:#0f172a}.oi-sec{background:#0f766e}" +
       ".oi-ac{background:#0f766e}" +
       "#oi-durum{padding:26px 18px;text-align:center;color:#475569;font-weight:700;font-size:.9rem}" +
       "@media(max-width:600px){#oi-kutu{height:100%;border-radius:12px}" +
@@ -275,13 +275,20 @@
       if (bilgi.word) dugme("oi-word", "📄 Word İndir", function () { indir(bilgi.word); });
     } else {
       htmlGoster(bilgi.hedef);
-      dugme("oi-yaz", "🖨 Yazdır", function () {
+      dugme("oi-yaz", "🖨 Tümünü Yazdır", function () {
         var f = govde.querySelector("iframe");
         try { f.contentWindow.focus(); f.contentWindow.print(); }
         catch (e) { window.open(bilgi.hedef, "_blank"); }
       });
       if (bilgi.pdf) dugme("oi-pdf", "⬇ PDF İndir", function () { location.href = bilgi.pdf; });
       if (bilgi.word) dugme("oi-word", "📄 Word İndir", function () { location.href = bilgi.word; });
+      dugme("oi-sec", "☑️ Sayfa Seç", function () {
+        var f = govde.querySelector("iframe");
+        try {
+          if (f.contentWindow.doSayfaSecici) { f.contentWindow.doSayfaSecici(); return; }
+        } catch (e) {}
+        location.href = bilgi.hedef;
+      });
       dugme("oi-ac", "↗ Sayfayı Aç", function () { location.href = bilgi.hedef; });
     }
   }

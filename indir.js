@@ -1,8 +1,12 @@
 /* ============================================================
-   Dijital Öğretmen — PDF / Word İndir (indir.js)  ·  sürüm 3
+   Dijital Öğretmen — PDF / Word İndir (indir.js)  ·  sürüm 4
    Sayfaya "Yazdır", "Word İndir" ve "PDF İndir" düğmeleri ekler.
    Dosya, yazdırma penceresi AÇILMADAN doğrudan cihaza iner.
    Adrese ?indir=1 (PDF) veya ?indir=word eklenirse indirme kendiliğinden başlar.
+
+   Sürüm 4: SAYFA SEÇEREK yazdırma / indirme. Her sayfanın üstünde
+   "Seç · Yazdır · PDF · Word" şeridi; alttaki "Sayfa Seç" ile istenen
+   sayfalar işaretlenip yalnızca onlar yazdırılır ya da indirilir.
 
    Sürüm 3'te düzeltilenler:
    · Sayfa bütünlüğü: kart / tablo satırı / başlık / yazı satırı ORTADAN BÖLÜNMEZ.
@@ -15,6 +19,16 @@
   "use strict";
   if (window.__doIndir) return;
   window.__doIndir = true;
+
+  /* Standart yazı tipi: Poppins (klasik "a"). Bütün materyallerde aynı görünüm. */
+  (function () {
+    if (document.getElementById("do-poppins")) return;
+    var s = document.querySelector('script[src*="indir.js"]');
+    var kok = s ? s.src.replace(/indir\.js.*$/, "") : "";
+    var l = document.createElement("link");
+    l.id = "do-poppins"; l.rel = "stylesheet"; l.href = kok + "poppinsa.css";
+    (document.head || document.documentElement).appendChild(l);
+  })();
 
   var A4_W = 210, A4_H = 297, KENAR = 8;            // mm
   var A4_PX = 794;                                   // A4 genişliği (96 dpi)
@@ -142,7 +156,7 @@
     var st = document.createElement("style");
     st.id = "do-indir-emul";
     st.textContent = printKurallari() +
-      "\n[data-indir-gizle],#do-indir-bar,#do-gezinme,.do-gezinme,.no-print,.noprint,.indir-arac-cubugu,.no_print,.yazdirma,.toolbar,.back-link{display:none !important}" +
+      "\n[data-indir-gizle],#do-indir-bar,#do-secici,#do-secim-bar,.do-sayfa-bar,.do-secilmedi,#do-gezinme,.do-gezinme,.no-print,.noprint,.indir-arac-cubugu,.no_print,.yazdirma,.toolbar,.back-link{display:none !important}" +
       "\nhtml,body{scroll-behavior:auto !important}" +
       "\n*{animation:none !important;transition:none !important}";
     document.head.appendChild(st);
@@ -171,7 +185,9 @@
     var cs = getComputedStyle(el);
     return cs.visibility !== "hidden" && cs.display !== "none";
   }
+  var SECILI = null, SEC_EK = "";
   function sayfalariBul() {
+    if (SECILI && SECILI.length) return SECILI.slice();
     var hepsi = Array.prototype.slice.call(document.querySelectorAll(SAYFA_SECICI));
     var liste = hepsi.filter(function (el) {
       if (!gorunur(el)) return false;
@@ -213,7 +229,7 @@
     var tr = { "ç": "c", "ğ": "g", "ı": "i", "ö": "o", "ş": "s", "ü": "u", "Ç": "C", "Ğ": "G", "İ": "I", "Ö": "O", "Ş": "S", "Ü": "U" };
     t = t.replace(/[çğıöşüÇĞİÖŞÜ]/g, function (c) { return tr[c]; })
       .replace(/[^A-Za-z0-9]+/g, "-").replace(/^-+|-+$/g, "").toLowerCase();
-    return (t || "dijital-ogretmen").slice(0, 80) + ".pdf";
+    return (t || "dijital-ogretmen").slice(0, 80) + SEC_EK + ".pdf";
   }
   function bekle(ms) { return new Promise(function (ok) { setTimeout(ok, ms); }); }
   function gorsellerHazir() {
@@ -352,7 +368,7 @@
     s = Math.min(s, 2100 / Math.max(yukseklik, 1));
     return Math.max(0.7, s);
   }
-  function yoksay(n) { return n.hasAttribute && (n.hasAttribute("data-indir-gizle") || n.id === "do-indir-bar" || n.id === "do-indir-kaplama"); }
+  function yoksay(n) { return n.hasAttribute && (n.hasAttribute("data-indir-gizle") || n.id === "do-indir-bar" || n.id === "do-indir-kaplama" || n.id === "do-secici" || n.id === "do-secim-bar" || (n.classList && n.classList.contains("do-sayfa-bar"))); }
 
   function yakalaDilim(el, ust, yukseklik) {
     var r = el.getBoundingClientRect();
@@ -666,28 +682,40 @@
   function ekranGorunumu() {
     var st = document.createElement("style");
     st.id = "do-indir-emul";
-    st.textContent = "[data-indir-gizle],#do-indir-bar,#do-gezinme,.no-print,.noprint,.indir-arac-cubugu,.modal-arka-plan,.toolbar{display:none !important}*{animation:none !important;transition:none !important}";
+    st.textContent = "[data-indir-gizle],#do-indir-bar,#do-secici,#do-secim-bar,.do-sayfa-bar,.do-secilmedi,#do-gezinme,.no-print,.noprint,.indir-arac-cubugu,.modal-arka-plan,.toolbar{display:none !important}*{animation:none !important;transition:none !important}";
     document.head.appendChild(st);
   }
 
-  function indir(bicim) {
+  /* secim: yalnızca bu sayfalar (dizi) — verilmezse bütün dosya */
+  function indir(bicim, secim) {
     if (mesgul) return;
     mesgul = true;
     BICIM = bicim === "word" ? "word" : "pdf";
+    var secimli = !!(secim && secim.length);
+    SECILI = secimli ? secim.slice() : null;
+    SEC_EK = secimli ? secimEki(secim) : "";
     ilerleme(0, "Hazırlanıyor…");
     var baslik = document.querySelector("#do-indir-kutu b");
-    if (baslik) baslik.textContent = BICIM === "word" ? "Word dosyası hazırlanıyor…" : "PDF hazırlanıyor…";
+    if (baslik) baslik.textContent = (BICIM === "word" ? "Word dosyası" : "PDF") +
+      (secimli ? " (" + secim.length + " sayfa)" : "") + " hazırlanıyor…";
     var bitir = function () {
       coz();
       emulasyonKapat();
       genislikCoz();
       kaplamaKapat();
+      SECILI = null; SEC_EK = "";
       mesgul = false;
       try { window.dispatchEvent(new Event("afterprint")); } catch (e) {}
     };
-    hazirDosyaVarMi(BICIM === "word" ? "docx" : "pdf").then(function (adres) {
+    /* Sayfa seçildiyse hazır (bütün) dosya değil, yalnız seçilenler üretilir */
+    (secimli ? Promise.resolve(null) : hazirDosyaVarMi(BICIM === "word" ? "docx" : "pdf")).then(function (adres) {
       if (adres) { hazirIndir(adres); bitir(); return null; }   // hazır dosya: anında iner
       return kutuphaneler().then(function () {
+        if (secimli) {
+          dondur();
+          emulasyonAc();
+          return bekle(300).then(pdfOlustur);
+        }
         return hazirlaVeOlustur(sayfaninYazdirDugmesi(false));
       }).then(bitir);
     }).then(null, function (e) {
@@ -696,6 +724,209 @@
       if (confirm((BICIM === "word" ? "Word" : "PDF") + " dosyası oluşturulamadı. Bunun yerine yazdırma penceresi açılsın mı?\n(Yazıcı olarak \"PDF olarak kaydet\" seçebilirsiniz.)")) asilPrint();
     });
   }
+
+  /* ================= SAYFA SEÇEREK YAZDIR / İNDİR ================= */
+  var SAYFALAR = [];          /* bu dosyadaki A4 sayfaları */
+  var SECIM = [];             /* seçili sayfa sıraları (0'dan) */
+
+  function secimEki(secim) {
+    var no = secim.map(function (el) { return SAYFALAR.indexOf(el) + 1; }).filter(function (n) { return n > 0; });
+    if (!no.length) return "-secilenler";
+    if (no.length === 1) return "-sayfa-" + no[0];
+    if (no.length <= 4) return "-sayfa-" + no.join("-");
+    return "-" + no.length + "-sayfa";
+  }
+
+  function sayfaBasligi(el, i) {
+    var aday = el.querySelector("h1,h2,h3,.baslik,.baslik-kucuk,.sayfa-baslik,.page-title,.title,[class*='baslik'],[class*='title']");
+    var t = aday ? (aday.innerText || aday.textContent || "") : "";
+    t = t.replace(/\s+/g, " ").replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF\uFE0F]/gu, "").trim();
+    if (t.length > 46) t = t.slice(0, 44).trim() + "…";
+    return t || (i + 1) + ". sayfa";
+  }
+
+  function seciliSayfalar() {
+    return SECIM.slice().sort(function (a, b) { return a - b; }).map(function (i) { return SAYFALAR[i]; });
+  }
+
+  function yalnizBunlariYazdir(liste) {
+    if (!liste.length) return;
+    liste.forEach(function (el) { el.classList.add("do-secildi"); });
+    SAYFALAR.forEach(function (el) { if (liste.indexOf(el) < 0) el.classList.add("do-secilmedi"); });
+    var temizle = function () {
+      SAYFALAR.forEach(function (el) { el.classList.remove("do-secilmedi", "do-secildi"); });
+      window.removeEventListener("afterprint", temizle);
+    };
+    window.addEventListener("afterprint", temizle);
+    setTimeout(function () { asilPrint(); setTimeout(temizle, 1500); }, 60);
+  }
+
+  function secimStilEkle() {
+    if (document.getElementById("do-secim-stil")) return;
+    var css =
+      ".do-sayfa-bar{box-sizing:border-box;width:min(210mm,100%);margin:0 auto 6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;" +
+        "justify-content:space-between;padding:7px 10px;background:#fff;border:1px solid #cbd5e1;border-radius:10px;" +
+        "font:600 13px/1.2 Poppins,Nunito,Arial,sans-serif;color:#1e293b;box-shadow:0 2px 6px rgba(0,0,0,.08)}" +
+      ".do-sayfa-bar label{display:flex;align-items:center;gap:8px;cursor:pointer;min-width:0;flex:1}" +
+      ".do-sayfa-bar label span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}" +
+      ".do-sayfa-bar input{width:20px;height:20px;accent-color:#1d4ed8;flex:none}" +
+      ".do-sayfa-bar .do-sb-dg{display:flex;gap:6px}" +
+      ".do-sayfa-bar button,#do-secici button,#do-secim-bar button{border:0;border-radius:8px;padding:7px 11px;font:700 12.5px Poppins,Nunito,Arial,sans-serif;cursor:pointer;color:#fff}" +
+      ".do-b-yaz{background:#0f172a}.do-b-pdf{background:#c62828}.do-b-word{background:#2b579a}.do-b-gri{background:#e2e8f0;color:#0f172a !important}" +
+      ".do-sayfa-bar.secili{border-color:#1d4ed8;background:#eff6ff}" +
+      "#do-secim-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:74px;z-index:2147483100;display:none;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;" +
+        "background:#0f172a;color:#fff;padding:9px 12px;border-radius:14px;font:700 14px Poppins,Nunito,Arial,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:calc(100vw - 20px)}" +
+      "#do-secim-bar.acik{display:flex}" +
+      "#do-secici{position:fixed;inset:0;z-index:2147483300;background:rgba(15,23,42,.72);display:none;align-items:center;justify-content:center;padding:12px;font-family:Poppins,Nunito,Arial,sans-serif}" +
+      "#do-secici.acik{display:flex}" +
+      "#do-secici .ds-kutu{background:#fff;border-radius:16px;width:min(560px,100%);max-height:90vh;display:flex;flex-direction:column;overflow:hidden}" +
+      "#do-secici .ds-ust{padding:14px 16px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;gap:8px}" +
+      "#do-secici .ds-ust b{font-size:17px;color:#0f172a}" +
+      "#do-secici .ds-liste{overflow:auto;padding:8px 10px;display:grid;grid-template-columns:1fr;gap:6px}" +
+      "#do-secici .ds-liste label{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e2e8f0;border-radius:10px;font-size:14px;color:#1e293b;cursor:pointer}" +
+      "#do-secici .ds-liste label.secili{border-color:#1d4ed8;background:#eff6ff}" +
+      "#do-secici .ds-liste input{width:20px;height:20px;accent-color:#1d4ed8;flex:none}" +
+      "#do-secici .ds-no{flex:none;min-width:30px;font-weight:800;color:#1d4ed8}" +
+      "#do-secici .ds-alt{padding:12px 16px;border-top:1px solid #e2e8f0;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}" +
+      "#do-secici .ds-alt .ds-bilgi{margin-right:auto;align-self:center;font-weight:700;color:#475569;font-size:14px}" +
+      "#do-sec-btn{background:#0f766e;color:#fff}" +
+      "@media print{.do-sayfa-bar,#do-secim-bar,#do-secici{display:none !important}.do-secilmedi{display:none !important}}";
+    var st = document.createElement("style");
+    st.id = "do-secim-stil";
+    st.textContent = css;
+    document.head.appendChild(st);
+  }
+
+  function secimiGuncelle() {
+    var n = SECIM.length;
+    Array.prototype.forEach.call(document.querySelectorAll(".do-sayfa-bar"), function (b) {
+      var i = +b.getAttribute("data-no");
+      var var_ = SECIM.indexOf(i) > -1;
+      b.classList.toggle("secili", var_);
+      var c = b.querySelector("input"); if (c) c.checked = var_;
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("#do-secici .ds-liste label"), function (l) {
+      var i = +l.getAttribute("data-no");
+      var var_ = SECIM.indexOf(i) > -1;
+      l.classList.toggle("secili", var_);
+      var c = l.querySelector("input"); if (c) c.checked = var_;
+    });
+    var bilgi = document.querySelector("#do-secici .ds-bilgi");
+    if (bilgi) bilgi.textContent = n ? n + " sayfa seçildi" : "Sayfa seçin";
+    var bar = document.getElementById("do-secim-bar");
+    if (bar) {
+      bar.classList.toggle("acik", n > 0 && !document.getElementById("do-secici").classList.contains("acik"));
+      var y = bar.querySelector(".dsb-yazi"); if (y) y.textContent = n + " sayfa seçildi:";
+    }
+  }
+  function secimDegistir(i, durum) {
+    var k = SECIM.indexOf(i);
+    if (durum && k < 0) SECIM.push(i);
+    if (!durum && k > -1) SECIM.splice(k, 1);
+    secimiGuncelle();
+  }
+
+  function seciciAc() {
+    var s = document.getElementById("do-secici");
+    if (!s) return;
+    s.classList.add("acik");
+    secimiGuncelle();
+  }
+  function seciciKapat() {
+    var s = document.getElementById("do-secici");
+    if (s) s.classList.remove("acik");
+    secimiGuncelle();
+  }
+  function seciliIslem(ne) {
+    var liste = seciliSayfalar();
+    if (!liste.length) { alert("Önce en az bir sayfa seçin."); return; }
+    seciciKapat();
+    if (ne === "yaz") yalnizBunlariYazdir(liste);
+    else indir(ne, liste);
+  }
+
+  function secimKur() {
+    if (document.getElementById("do-secici")) return;
+    var bulunan = sayfalariBul();
+    /* yalnızca gerçek A4 sayfa kutuları (.sayfa, .page …) olan dosyalarda */
+    bulunan = bulunan.filter(function (el) { return el.matches && el.matches(SAYFA_SECICI); });
+    if (bulunan.length < 2) return;
+    SAYFALAR = bulunan;
+    secimStilEkle();
+
+    /* 1) Her sayfanın üstüne küçük şerit */
+    SAYFALAR.forEach(function (el, i) {
+      var b = document.createElement("div");
+      b.className = "do-sayfa-bar";
+      b.setAttribute("data-no", i);
+      var ad = sayfaBasligi(el, i);
+      b.innerHTML = '<label><input type="checkbox" aria-label="Bu sayfayı seç"><span><b>' + (i + 1) + '.</b> ' +
+        ad.replace(/</g, "&lt;") + '</span></label><span class="do-sb-dg">' +
+        '<button type="button" class="do-b-yaz" title="Yalnız bu sayfayı yazdır">🖨️ Yazdır</button>' +
+        '<button type="button" class="do-b-pdf" title="Yalnız bu sayfayı PDF indir">PDF</button>' +
+        '<button type="button" class="do-b-word" title="Yalnız bu sayfayı Word indir">Word</button></span>';
+      b.querySelector("input").addEventListener("change", function (e) { secimDegistir(i, e.target.checked); });
+      b.querySelector(".do-b-yaz").onclick = function () { yalnizBunlariYazdir([el]); };
+      b.querySelector(".do-b-pdf").onclick = function () { indir("pdf", [el]); };
+      b.querySelector(".do-b-word").onclick = function () { indir("word", [el]); };
+      el.parentNode.insertBefore(b, el);
+    });
+
+    /* 2) Sayfa seçme penceresi */
+    var s = document.createElement("div");
+    s.id = "do-secici";
+    var satirlar = SAYFALAR.map(function (el, i) {
+      return '<label data-no="' + i + '"><input type="checkbox"><span class="ds-no">' + (i + 1) + '.</span><span>' +
+        sayfaBasligi(el, i).replace(/</g, "&lt;") + '</span></label>';
+    }).join("");
+    s.innerHTML = '<div class="ds-kutu"><div class="ds-ust"><b>Sayfa Seç</b>' +
+      '<span><button type="button" class="do-b-gri ds-hepsi">Tümü</button> <button type="button" class="do-b-gri ds-temiz">Temizle</button> ' +
+      '<button type="button" class="do-b-gri ds-kapat" aria-label="Kapat">✕</button></span></div>' +
+      '<div class="ds-liste">' + satirlar + '</div>' +
+      '<div class="ds-alt"><span class="ds-bilgi">Sayfa seçin</span>' +
+      '<button type="button" class="do-b-yaz ds-yaz">🖨️ Yazdır</button><button type="button" class="do-b-pdf ds-pdf">⬇️ PDF</button>' +
+      '<button type="button" class="do-b-word ds-word">📄 Word</button></div></div>';
+    document.body.appendChild(s);
+    Array.prototype.forEach.call(s.querySelectorAll(".ds-liste label"), function (l) {
+      var i = +l.getAttribute("data-no");
+      l.querySelector("input").addEventListener("change", function (e) { secimDegistir(i, e.target.checked); });
+    });
+    s.querySelector(".ds-hepsi").onclick = function () { SECIM = SAYFALAR.map(function (x, i) { return i; }); secimiGuncelle(); };
+    s.querySelector(".ds-temiz").onclick = function () { SECIM = []; secimiGuncelle(); };
+    s.querySelector(".ds-kapat").onclick = seciciKapat;
+    s.addEventListener("click", function (e) { if (e.target === s) seciciKapat(); });
+    s.querySelector(".ds-yaz").onclick = function () { seciliIslem("yaz"); };
+    s.querySelector(".ds-pdf").onclick = function () { seciliIslem("pdf"); };
+    s.querySelector(".ds-word").onclick = function () { seciliIslem("word"); };
+
+    /* 3) Seçim yapılınca alttan çıkan şerit */
+    var sb = document.createElement("div");
+    sb.id = "do-secim-bar";
+    sb.innerHTML = '<span class="dsb-yazi"></span>' +
+      '<button type="button" class="do-b-yaz" style="background:#fff;color:#0f172a">🖨️ Yazdır</button>' +
+      '<button type="button" class="do-b-pdf">PDF</button><button type="button" class="do-b-word">Word</button>' +
+      '<button type="button" class="do-b-gri" title="Seçimi temizle">✕</button>';
+    var d = sb.querySelectorAll("button");
+    d[0].onclick = function () { seciliIslem("yaz"); };
+    d[1].onclick = function () { seciliIslem("pdf"); };
+    d[2].onclick = function () { seciliIslem("word"); };
+    d[3].onclick = function () { SECIM = []; secimiGuncelle(); };
+    document.body.appendChild(sb);
+
+    /* 4) Ana çubuğa "Sayfa Seç" düğmesi */
+    var bar = document.getElementById("do-indir-bar");
+    if (bar && !document.getElementById("do-sec-btn")) {
+      var btn = document.createElement("button");
+      btn.id = "do-sec-btn"; btn.type = "button"; btn.title = "Yazdırmak / indirmek istediğiniz sayfaları seçin";
+      btn.textContent = "☑️ Sayfa Seç";
+      btn.onclick = seciciAc;
+      bar.insertBefore(btn, bar.firstChild);
+      var yz = document.getElementById("do-yazdir-btn"); if (yz) yz.textContent = "🖨️ Tümünü Yazdır";
+    }
+  }
+  window.doSayfaSecici = function () { secimKur(); seciciAc(); };
+  window.doSayfaSayisi = function () { return SAYFALAR.length; };
+
   window.doPdfIndir = indir;
   window.doWordIndir = function () { indir("word"); };
 
@@ -707,6 +938,8 @@
     window.dosyayiIndir = window.dosyayiIndir ? function () { indir("pdf"); } : window.dosyayiIndir;
     setTimeout(eskiDugmeleriCevir, 1200);
     setTimeout(eskiDugmeleriCevir, 4000);
+    var kur = function () { setTimeout(function () { try { secimKur(); } catch (e) { console.warn("sayfa seçimi kurulamadı", e); } }, 700); };
+    if (document.readyState === "complete") kur(); else window.addEventListener("load", kur);
     var m = location.search.match(/[?&]indir=(1|pdf|word)\b/);
     if (m) {
       var f = function () { indir(m[1] === "word" ? "word" : "pdf"); };
