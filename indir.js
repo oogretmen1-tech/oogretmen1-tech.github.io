@@ -1,5 +1,5 @@
 /* ============================================================
-   Dijital Öğretmen — PDF / Word İndir (indir.js)  ·  sürüm 4
+   Dijital Öğretmen — PDF / Word İndir (indir.js)  ·  sürüm 5
    Sayfaya "Yazdır", "Word İndir" ve "PDF İndir" düğmeleri ekler.
    Dosya, yazdırma penceresi AÇILMADAN doğrudan cihaza iner.
    Adrese ?indir=1 (PDF) veya ?indir=word eklenirse indirme kendiliğinden başlar.
@@ -770,7 +770,9 @@
       ".do-sayfa-bar label{display:flex;align-items:center;gap:8px;cursor:pointer;min-width:0;flex:1}" +
       ".do-sayfa-bar label span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}" +
       ".do-sayfa-bar input{width:20px;height:20px;accent-color:#1d4ed8;flex:none}" +
-      ".do-sayfa-bar .do-sb-dg{display:flex;gap:6px}" +
+      ".do-sayfa-bar .do-sb-dg{display:flex;gap:6px;align-items:center;flex-wrap:wrap}" +
+      ".do-sayfa-bar .do-sb-not{font:600 12.5px Poppins,Nunito,Arial,sans-serif;color:#64748b;margin-right:2px}" +
+      ".do-sayfa-bar button{padding:9px 13px !important;font-size:13.5px !important}" +
       ".do-sayfa-bar button,#do-secici button,#do-secim-bar button{border:0;border-radius:8px;padding:7px 11px;font:700 12.5px Poppins,Nunito,Arial,sans-serif;cursor:pointer;color:#fff}" +
       ".do-b-yaz{background:#0f172a}.do-b-pdf{background:#c62828}.do-b-word{background:#2b579a}.do-b-gri{background:#e2e8f0;color:#0f172a !important}" +
       ".do-sayfa-bar.secili{border-color:#1d4ed8;background:#eff6ff}" +
@@ -861,10 +863,10 @@
       b.setAttribute("data-no", i);
       var ad = sayfaBasligi(el, i);
       b.innerHTML = '<label><input type="checkbox" aria-label="Bu sayfayı seç"><span><b>' + (i + 1) + '.</b> ' +
-        ad.replace(/</g, "&lt;") + '</span></label><span class="do-sb-dg">' +
+        ad.replace(/</g, "&lt;") + '</span></label><span class="do-sb-dg"><span class="do-sb-not">Bu sayfa:</span>' +
         '<button type="button" class="do-b-yaz" title="Yalnız bu sayfayı yazdır">🖨️ Yazdır</button>' +
-        '<button type="button" class="do-b-pdf" title="Yalnız bu sayfayı PDF indir">PDF</button>' +
-        '<button type="button" class="do-b-word" title="Yalnız bu sayfayı Word indir">Word</button></span>';
+        '<button type="button" class="do-b-pdf" title="Yalnız bu sayfayı PDF indir">⬇️ PDF</button>' +
+        '<button type="button" class="do-b-word" title="Yalnız bu sayfayı Word indir">📄 Word</button></span>';
       b.querySelector("input").addEventListener("change", function (e) { secimDegistir(i, e.target.checked); });
       b.querySelector(".do-b-yaz").onclick = function () { yalnizBunlariYazdir([el]); };
       b.querySelector(".do-b-pdf").onclick = function () { indir("pdf", [el]); };
@@ -922,6 +924,8 @@
       btn.onclick = seciciAc;
       bar.insertBefore(btn, bar.firstChild);
       var yz = document.getElementById("do-yazdir-btn"); if (yz) yz.textContent = "🖨️ Tümünü Yazdır";
+      var wb = document.getElementById("do-word-btn"); if (wb) { wb.textContent = "📦 Tüm Paket · Word"; wb.title = "Bütün sayfaları tek Word dosyası olarak indir"; }
+      var pb = document.getElementById("do-indir-btn"); if (pb) { pb.textContent = "📦 Tüm Paket · PDF"; pb.title = "Bütün sayfaları tek PDF dosyası olarak indir"; }
     }
   }
   window.doSayfaSecici = function () { secimKur(); seciciAc(); };
