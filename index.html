@@ -693,6 +693,78 @@ footer{padding:32px 0;color:#d6cadf;background:var(--purple-dark);}
 .do-genel{--do-ic-bg:#E8EEF5;--do-ic-fg:#3E5C7E;--do-ic-dk:#22384F;--do-ic-bd:rgba(62,92,126,.30);}
 </style>
 </head>
+
+<style id="do-duzen">
+/* ===== EKRANA GÖRE DÜZEN: telefon · tablet · bilgisayar · akıllı tahta ===== */
+.navbar{flex-wrap:wrap !important;min-height:0 !important;padding:10px 0 8px;gap:8px 16px !important;}
+.logo{font-size:1.12rem !important;}
+/* arama: her ekranda belirgin */
+.nav-ara{flex:1 1 240px !important;min-width:0 !important;max-width:620px !important;margin-left:auto;order:0;}
+.nav-ara input{height:48px;padding:0 14px 0 44px;border:2.5px solid var(--cerceve);border-radius:14px;
+  font-size:.98rem;font-weight:600;box-shadow:0 3px 10px rgba(14,29,51,.16);}
+.nav-ara input::placeholder{color:#5E6E82;opacity:1;}
+.nav-ara input:focus{border-color:var(--purple);box-shadow:0 0 0 4px rgba(43,84,127,.2);}
+.nav-ara::before{left:15px;font-size:1.05rem;opacity:1;}
+/* menü: ikinci satır, tek sıra */
+nav#menu{order:3;flex:1 0 100%;display:flex;flex-wrap:nowrap !important;justify-content:center;gap:8px !important;
+  overflow-x:auto;scrollbar-width:none;padding:2px 0 4px;}
+nav#menu::-webkit-scrollbar{display:none;}
+nav#menu a{flex:0 0 auto;font-size:.88rem !important;padding:7px 13px !important;border-radius:9px;background:var(--purple-light);}
+nav#menu a.nav-fasikul{background:#F4B400;}
+nav#menu a.nav-cedes{background:var(--deger);color:#fff;}
+.menu-button{display:none;}
+
+/* yaklaşan özel gün şeridi */
+.gun-serit{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;
+  padding:8px 4%;background:#FFF6DF;border-bottom:2px solid var(--cerceve);color:var(--purple-dark);font-size:.92rem;line-height:1.25;}
+.gun-serit[hidden]{display:none;}
+.gs-ikon{width:26px;height:26px;flex:0 0 26px;}
+.gs-yazi{font-weight:600;}
+.gs-yazi b{font-weight:800;}
+.gs-kalan{padding:2px 11px;border-radius:50px;background:var(--cerceve);color:#fff;font-size:.78rem;font-weight:800;white-space:nowrap;}
+.gs-git{font-size:.8rem;font-weight:800;color:var(--cerceve-koyu);white-space:nowrap;}
+.tk-satir.linkli{cursor:pointer;}
+.tk-satir.linkli .n{text-decoration:underline;text-underline-offset:2px;}
+
+/* tablet: menü sola yaslı, yana kaydırılır */
+@media (max-width:1000px){ nav#menu{justify-content:flex-start;} }
+
+/* telefon */
+@media (max-width:599px){
+  .logo{font-size:1rem !important;}
+  .logo-mark{width:34px;height:34px;}
+  .menu-button{display:inline-flex !important;align-items:center;gap:6px;order:1;margin-left:auto;
+    padding:7px 14px;border-radius:10px;background:var(--purple);color:#fff;font-size:.92rem;font-weight:800;}
+  .nav-ara{order:2;flex:1 0 100% !important;max-width:none !important;margin-left:0;}
+  .nav-ara input{height:46px;}
+  nav#menu{display:none;flex-direction:column;align-items:stretch;gap:6px !important;overflow:visible;}
+  nav#menu.open{display:flex;}
+  nav#menu a{font-size:.95rem !important;padding:11px 14px !important;text-align:left;white-space:normal;}
+  /* saat ve yaprak takvim telefonda gizli: yalnızca yaklaşan günler listesi */
+  .saat-blok,.tk-ayirac,.ytk-yapraklar,.ytk-halka,.ytk-ipucu{display:none !important;}
+  .gunler-ic{padding:10px 0;gap:8px;}
+  .ytk{width:100%;}
+  .ytk-tahta{width:100%;margin-top:0;padding:5px;}
+  .ytk-gunler{width:100% !important;flex:1 1 auto !important;padding:8px 10px;gap:5px;}
+  .ytk-gunler-baslik{font-size:.66rem;}
+  .tk-liste{gap:6px;}
+  .tk-satir .t{flex:0 0 50px;font-size:.76rem;}
+  .tk-satir .n{font-size:.82rem;}
+  .tk-satir .k{font-size:.68rem;white-space:nowrap;}
+  .tk-tumu{font-size:.8rem;padding:7px 16px;}
+  .gun-serit{font-size:.84rem;gap:6px 8px;padding:7px 4%;}
+  .hero{padding-top:30px !important;}
+}
+
+/* akıllı tahta ve büyük ekran: her şey orantılı büyür */
+@media (min-width:1700px){
+  html{font-size:118%;}
+  .container{width:min(1400px,92%);}
+  .gunler-ic{width:min(1400px,94%);}
+}
+@media (min-width:2400px){ html{font-size:150%;} .container{width:min(1900px,92%);} }
+@media print{ .gun-serit{display:none !important;} }
+</style>
 <body>
 <svg aria-hidden="true" height="0" style="position:absolute" width="0">
 <defs>
@@ -751,19 +823,20 @@ footer{padding:32px 0;color:#d6cadf;background:var(--purple-dark);}
       Dijital Öğretmen
     </a>
 <div class="nav-ara">
-<input autocomplete="off" id="araKutu" placeholder="Materyal ara: kesirler, 23 Nisan…" type="search"/>
+<input autocomplete="off" id="araKutu" aria-label="Sitede ara" placeholder="Konu, harf, etkinlik ara…" type="search"/>
 <div class="ara-sonuc" id="araSonuc"></div>
 </div>
 <nav id="menu">
 <a href="#siniflar">Sınıflar</a>
 <a class="nav-fasikul" href="?page=fasikul" onclick="showPage('fasikul');window.scrollTo(0,0);return false;">Harf Fasikülleri</a>
 <a class="nav-fasikul nav-dz" href="?page=dz" onclick="showPage('dz');window.scrollTo(0,0);return false;">Dilimizin Zenginlikleri</a>
+<a class="nav-cedes" href="?page=cedes" onclick="showPage('cedes');window.scrollTo(0,0);return false;">ÇEDES</a>
 <a href="#etkinlikler">Etkinlikler</a>
 <a href="#ogretmen">Öğretmen Köşesi</a>
 <a href="#oyunlar">Oyunlar</a>
 <a href="#hakkimda">Hakkımda</a>
 </nav>
-<button class="menu-button" id="menuButton">☰</button>
+<button aria-label="Menüyü aç" class="menu-button" id="menuButton" type="button"><span aria-hidden="true">☰</span> Menü</button>
 </div>
 </header>
 <div class="page-section aktif do-genel" id="page-home">
@@ -2541,7 +2614,7 @@ footer{padding:32px 0;color:#d6cadf;background:var(--purple-dark);}
 /* ===== MOBİL MENÜ ===== */
 var menuButton = document.getElementById("menuButton");
 var menu = document.getElementById("menu");
-menuButton.addEventListener("click", function(){ menu.classList.toggle("open"); });
+menuButton.addEventListener("click", function(){ var a = menu.classList.toggle("open"); menuButton.setAttribute("aria-expanded", a); });
 document.querySelectorAll("nav a").forEach(function(link){
   link.addEventListener("click", function(){ menu.classList.remove("open"); });
 });
@@ -2825,29 +2898,29 @@ function araKapat(){
   function ozelGunler(y){
     return [
       { t:new Date(y,8,19),  ad:'Gaziler Günü' },
-      { t:new Date(y,9,4),   ad:'Hayvanları Koruma Günü' },
+      { t:new Date(y,9,4),   ad:'Hayvanları Koruma Günü', url:'4-ekim-hayvanlari-koruma-gunu-etkinlikleri.html' },
       { t:new Date(y,9,5),   ad:'Dünya Öğretmenler Günü' },
       { t:new Date(y,9,24),  ad:'Birleşmiş Milletler Günü' },
-      { t:new Date(y,9,29),  ad:'29 Ekim Cumhuriyet Bayramı' },
-      { t:new Date(y,10,10), ad:'Atatürk’ü Anma ve Atatürk Haftası' },
+      { t:new Date(y,9,29),  ad:'29 Ekim Cumhuriyet Bayramı', url:'29-ekim-cumhuriyet-bayrami-etkinlikleri.html' },
+      { t:new Date(y,10,10), ad:'Atatürk’ü Anma ve Atatürk Haftası', url:'10-kasim-ataturku-anma-etkinlikleri.html' },
       { t:new Date(y,10,20), ad:'Dünya Çocuk Hakları Günü' },
-      { t:new Date(y,10,24), ad:'24 Kasım Öğretmenler Günü' },
-      { t:new Date(y,11,3),  ad:'Dünya Engelliler Günü' },
+      { t:new Date(y,10,24), ad:'24 Kasım Öğretmenler Günü', url:'24-kasim-ogretmenler-gunu-etkinlikleri.html' },
+      { t:new Date(y,11,3),  ad:'Dünya Engelliler Günü', url:'3-aralik-dunya-engelliler-gunu-etkinlikleri.html' },
       { t:new Date(y,11,10), ad:'İnsan Hakları ve Demokrasi Haftası' },
-      { t:new Date(y,11,12), ad:'Tutum, Yatırım ve Türk Malları Haftası' },
+      { t:new Date(y,11,12), ad:'Tutum, Yatırım ve Türk Malları Haftası', url:'yerli-mali-haftasi-etkinlikleri.html' },
       { t:new Date(y,0,7),   ad:'Beyaz Baston Görme Engelliler Haftası' },
       { t:new Date(y,0,11),  ad:'Enerji Tasarrufu Haftası' },
       { t:new Date(y,2,1),   ad:'Yeşilay Haftası' },
       { t:new Date(y,2,8),   ad:'Bilim ve Teknoloji Haftası' },
-      { t:new Date(y,2,12),  ad:'İstiklâl Marşı’nın Kabulü' },
+      { t:new Date(y,2,12),  ad:'İstiklâl Marşı’nın Kabulü', url:'12-mart-istiklal-marsi-etkinlikleri.html' },
       { t:new Date(y,2,15),  ad:'Tüketiciyi Koruma Haftası' },
-      { t:new Date(y,2,18),  ad:'18 Mart Çanakkale Zaferi' },
+      { t:new Date(y,2,18),  ad:'18 Mart Çanakkale Zaferi', url:'18-mart-canakkale-zaferi-etkinlikleri.html' },
       { t:new Date(y,2,21),  ad:'Orman Haftası' },
-      { t:new Date(y,2,29),  ad:'Kütüphaneler Haftası' },
+      { t:new Date(y,2,29),  ad:'Kütüphaneler Haftası', url:'kutuphane-haftasi-etkinlikleri.html' },
       { t:new Date(y,3,15),  ad:'Turizm Haftası' },
-      { t:new Date(y,3,23),  ad:'23 Nisan Çocuk Bayramı' },
+      { t:new Date(y,3,23),  ad:'23 Nisan Çocuk Bayramı', url:'23-nisan-etkinlikleri.html' },
       { t:new Date(y,4,3),   ad:'Trafik ve İlk Yardım Haftası' },
-      { t:nPazar(y,4,2),     ad:'Anneler Günü' },
+      { t:nPazar(y,4,2),     ad:'Anneler Günü', url:'anneler-gunu-etkinlikleri.html' },
       { t:new Date(y,4,10),  ad:'Engelliler Haftası' },
       { t:new Date(y,4,18),  ad:'Müzeler Haftası' },
       { t:new Date(y,4,19),  ad:'19 Mayıs Gençlik ve Spor Bayramı' },
@@ -2875,8 +2948,24 @@ function araKapat(){
     s.innerHTML = '<span class="t">'+g.t.getDate()+' '+aylarKs[g.t.getMonth()]+'</span>'+
                   '<span class="n">'+g.ad+'</span>'+
                   '<span class="k">'+(fark===0 ? 'bugün' : fark+' gün')+'</span>';
+    if (g.url){ s.classList.add('linkli'); s.setAttribute('role','link'); s.tabIndex = 0;
+      s.addEventListener('click', function(){ location.href = g.url; }); }
     liste.appendChild(s);
   });
+
+  /* --- üst şerit: en yakın özel gün (kendiliğinden değişir) --- */
+  var serit = document.getElementById('gunSerit');
+  if (serit && yakin.length){
+    var g0 = yakin[0], f0 = Math.round((g0.t - bugun)/86400000);
+    var kalan = f0===0 ? 'Bugün' : (f0===1 ? 'Yarın' : f0+' gün kaldı');
+    serit.innerHTML = '<svg aria-hidden="true" class="gs-ikon"><use href="#icoBelirli"></use></svg>'+
+      '<span class="gs-yazi"><b>'+g0.t.getDate()+' '+aylarK[g0.t.getMonth()]+'</b> '+g0.ad+'</span>'+
+      '<span class="gs-kalan">'+kalan+'</span>'+
+      '<span class="gs-git">'+(g0.url ? 'Materyaller →' : 'Tüm günler →')+'</span>';
+    if (g0.url){ serit.href = g0.url; }
+    else { serit.addEventListener('click', function(e){ e.preventDefault(); showPage('belirli'); }); }
+    serit.hidden = false;
+  }
 
   /* --- güncel yaprak takvim (bugünün tarihi; dokununca yaprak kopar) --- */
   var kaydirma = 0;           /* koparılan yaprak sayısı */
