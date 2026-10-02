@@ -1302,6 +1302,18 @@
 <!-- Ziyaretçi sayacı: goatcounter.com'da ücretsiz hesap açtıktan sonra
      aşağıdaki "dijitalogretmen" kısmını kendi GoatCounter kodunuzla değiştirin. -->
 <script data-goatcounter="https://dijitalogretmen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script id="cedes-bolum">
+/* Ay sayfalarından (cedes-ekim.html vb.) gelindiğinde yalnızca istenen etkinlik bölümünü gösterir. */
+(function(){var q=new URLSearchParams(location.search),b=q.get('bolum');if(b===null)return;
+var AY={ekim:'Ekim',kasim:'Kasım',aralik:'Aralık',ocak:'Ocak',subat:'Şubat',mart:'Mart',nisan:'Nisan',mayis:'Mayıs'},ay=q.get('ay');
+function uygula(){var s=document.querySelectorAll('.activity-section'),h=s[parseInt(b,10)];if(!h)return;
+var st=document.createElement('style');st.textContent='.activity-section{display:none!important}.activity-section.cedes-tek{display:block!important}.cedes-gizle{display:none!important}#cedes-geri{display:block;max-width:900px;margin:10px auto;padding:0 12px}#cedes-geri a{display:inline-block;font-weight:700;text-decoration:none;color:#fff;background:#1f3a5f;border-radius:10px;padding:10px 16px}@media print{#cedes-geri{display:none}}';document.head.appendChild(st);
+h.classList.add('cedes-tek');
+document.querySelectorAll('header,.header,nav,.navigation,.nav-container,.nav-buttons,.nav-menu').forEach(function(e){if(!e.closest('.activity-section')&&!e.closest('#do-gezinme'))e.classList.add('cedes-gizle')});
+if(AY[ay]){var d=document.createElement('div');d.id='cedes-geri';d.innerHTML='<a href="cedes-'+ay+'.html">\u2190 '+AY[ay]+' Ayı Değerleri</a>';document.body.insertBefore(d,document.body.firstChild);}
+window.scrollTo(0,0);}
+if(document.readyState==='complete')setTimeout(uygula,0);else window.addEventListener('load',function(){setTimeout(uygula,0)});})();
+</script>
 <script src="indir.js" defer></script>
 </body>
 </html>
