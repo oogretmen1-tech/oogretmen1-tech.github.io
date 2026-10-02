@@ -575,24 +575,25 @@ const alfabe = [
     "y", "z"
 ];
 
-const heceler = [
-    "ba", "be", "bı", "bi", "bo", "bu",
-    "ca", "ce", "cı", "ci", "co", "cu",
-    "da", "de", "dı", "di", "do", "du",
-    "ka", "ke", "kı", "ki", "ko", "ku",
-    "la", "le", "lı", "li", "lo", "lu",
-    "ma", "me", "mı", "mi", "mo", "mu",
-    "na", "ne", "nı", "ni", "no", "nu",
-    "pa", "pe", "pı", "pi", "po", "pu",
-    "ra", "re", "rı", "ri", "ro", "ru",
-    "sa", "se", "sı", "si", "so", "su"
-];
+const unluler = ["a", "e", "ı", "i", "o", "ö", "u", "ü"];
+const unsuzler = ["b", "c", "ç", "d", "f", "g", "h", "k", "l", "m", "n", "p", "r", "s", "ş", "t", "v", "y", "z"];
+
+const heceler = [];
+unsuzler.forEach(c => unluler.forEach(v => heceler.push(c + v)));
+["l", "n", "t", "k", "r", "m", "s", "y", "z", "ş"].forEach(c => unluler.forEach(v => heceler.push(v + c)));
 
 const kelimeler = [
-    "elma", "armut", "masa", "kalem", "kitap",
-    "ağaç", "çiçek", "ev", "okul", "araba",
-    "güneş", "bulut", "kedi", "köpek", "top",
-    "çanta", "orman", "kuş", "bardak", "sandalye"
+    "elma", "armut", "masa", "kalem", "kitap", "ağaç", "çiçek", "ev", "okul", "araba",
+    "güneş", "bulut", "kedi", "köpek", "top", "çanta", "orman", "kuş", "bardak", "sandalye",
+    "anne", "nane", "ana", "nine", "ata", "at", "et", "ete", "ten", "tane",
+    "anten", "ela", "lale", "elti", "tel", "nail", "anı", "ilan", "ton", "not",
+    "kol", "kale", "kilo", "okan", "ekin", "ekmek", "kek", "inek", "tek", "leke",
+    "kuru", "kule", "unlu", "ulu", "tur", "tere", "nar", "kar", "arı", "ırmak",
+    "mum", "mama", "mine", "limon", "maske", "merak", "roket", "karne", "kürek", "üzüm",
+    "süt", "su", "simit", "sarı", "söz", "göz", "yol", "yaz", "ayı", "ay",
+    "dede", "dere", "deniz", "dolap", "zil", "zar", "çay", "çorap", "balon", "balık",
+    "gemi", "gül", "cam", "ceviz", "şeker", "şapka", "para", "pasta", "hava", "halı",
+    "vazo", "fare", "fil", "dağ", "yağmur", "jeton"
 ];
 
 const sayilar = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
@@ -658,6 +659,9 @@ function oyunuBaslat() {
 
     puan = 0;
     oyunAktif = true;
+    ustUsteYanlis = 0;
+    ustUsteHedef = 0;
+    sonYanlis = "";
 
     hedefYazisi.textContent = `"${hedef}"`;
     puanYazisi.textContent = puan;
@@ -696,16 +700,41 @@ function havuzSec() {
     return kelimeler;
 }
 
-function secenekleriOlustur() {
-    const havuz = havuzSec();
+/* Hedef ne sıklıkla çıksın? Yaklaşık her iki köstebekten biri hedef olur.
+   Arka arkaya en fazla 2 yanlış, en fazla 2 doğru gelir (şansa bırakılmaz). */
+const HEDEF_ORANI = 0.5;
+let ustUsteYanlis = 0;
+let ustUsteHedef = 0;
+let sonYanlis = "";
 
-    const yanlisSecenekler = havuz
-        .filter(item => kucult(item) !== hedef)
-        .sort(() => Math.random() - 0.5)
-        .slice(0, 5);
+function yanlisSec() {
+    const havuz = havuzSec().filter(item => kucult(item) !== hedef && item !== sonYanlis);
 
-    yanlisSecenekler.push(hedef);
-    return yanlisSecenekler.sort(() => Math.random() - 0.5);
+    /* Hedefe benzeyenleri (aynı harfle başlayan / aynı uzunlukta) biraz öne al */
+    const benzer = havuz.filter(item =>
+        hedef.length > 1 && (item[0] === hedef[0] || item[item.length - 1] === hedef[hedef.length - 1])
+    );
+    const kaynak = (benzer.length >= 3 && Math.random() < 0.5) ? benzer : havuz;
+
+    sonYanlis = kaynak[Math.floor(Math.random() * kaynak.length)];
+    return sonYanlis;
+}
+
+function icerikSec() {
+    let hedefGelsin = Math.random() < HEDEF_ORANI;
+
+    if (ustUsteYanlis >= 2) hedefGelsin = true;
+    if (ustUsteHedef >= 2) hedefGelsin = false;
+
+    if (hedefGelsin) {
+        ustUsteHedef++;
+        ustUsteYanlis = 0;
+        return hedef;
+    }
+
+    ustUsteYanlis++;
+    ustUsteHedef = 0;
+    return yanlisSec();
 }
 
 function kostebekCikar() {
@@ -714,8 +743,7 @@ function kostebekCikar() {
     delikleriTemizle();
 
     const rastgeleDelik = delikler[Math.floor(Math.random() * delikler.length)];
-    const secenekler = secenekleriOlustur();
-    const icerik = secenekler[Math.floor(Math.random() * secenekler.length)];
+    const icerik = icerikSec();
 
     const container = document.createElement("div");
     container.className = "kostebek-container";
