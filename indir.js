@@ -21,6 +21,16 @@
   if (window.__doIndir) return;
   window.__doIndir = true;
 
+  /* Instagram / Facebook / TikTok içinde açılınca indirme çalışmaz: uyarı + "Tarayıcıda Aç" (tarayici.js) */
+  (function () {
+    if (window.DO_TARAYICI || document.getElementById("do-tarayici-js")) return;
+    var s = document.querySelector('script[src*="indir.js"]');
+    var kok = s ? s.src.replace(/indir\.js.*$/, "") : "";
+    var t = document.createElement("script"); t.id = "do-tarayici-js"; t.src = kok + "tarayici.js";
+    (document.head || document.documentElement).appendChild(t);
+  })();
+  function uygulamaIciEngel() { return !!(window.DO_TARAYICI && window.DO_TARAYICI.engel()); }
+
   /* Standart yazı tipi: Poppins (klasik "a"). Bütün materyallerde aynı görünüm. */
   (function () {
     if (document.getElementById("do-poppins")) return;
@@ -590,7 +600,7 @@
     if (yakalamaModu) { var f = yakalamaModu; yakalamaModu = null; f(); return; }
     asilPrint();
   };
-  function gercekYazdir() { asilPrint(); }
+  function gercekYazdir() { if (uygulamaIciEngel()) return; asilPrint(); }
 
   function sayfaninYazdirDugmesi(herhangi) {
     var dugmeler = Array.prototype.slice.call(document.querySelectorAll("button,a,[onclick]")).filter(function (b) {
@@ -689,6 +699,7 @@
 
   /* secim: yalnızca bu sayfalar (dizi) — verilmezse bütün dosya */
   function indir(bicim, secim) {
+    if (uygulamaIciEngel()) return;
     if (mesgul) return;
     mesgul = true;
     BICIM = bicim === "word" ? "word" : "pdf";
@@ -751,6 +762,7 @@
   }
 
   function yalnizBunlariYazdir(liste) {
+    if (uygulamaIciEngel()) return;
     if (!liste.length) return;
     liste.forEach(function (el) { el.classList.add("do-secildi"); });
     SAYFALAR.forEach(function (el) { if (liste.indexOf(el) < 0) el.classList.add("do-secilmedi"); });
