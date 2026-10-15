@@ -116,7 +116,10 @@
 
   /* ---------- 4) Uzun metni cümlelere böl ---------- */
   function parcala(metin) {
-    var t = String(metin == null ? "" : metin).replace(/\s+/g, " ").trim();
+    var t = String(metin == null ? "" : metin)
+      .replace(/[ \t]*\n+[ \t]*/g, function () { return ". "; })
+      .replace(/([.!?…:;])\.\s/g, "$1 ")
+      .replace(/\s+/g, " ").trim();
     if (!t) return [];
     if (t.length <= 170) return [t];
     var cumleler = t.match(/[^.!?…:;]+[.!?…:;]*\s*/g) || [t];
@@ -144,7 +147,25 @@
   }
 
   /* ---------- 5) Kuyruk yönetimi ---------- */
+  var ANDROID = /android/i.test(navigator.userAgent || "");
+  var aktifler = [];          // Chrome konuşma nesnelerini çöpe atmasın diye referans tutulur
+  var nesil = 0;              // cancel sonrası eski olayları yok saymak için
+  var bekci = null, sonBaslama = 0, simdiki = null;
+
+  function bekciBaslat() {
+    if (bekci) return;
+    bekci = setInterval(function () {
+      if (!calisiyor) { clearInterval(bekci); bekci = null; return; }
+      // onend olayı gelmediyse (bazı Android sürümleri) kuyruğu kendimiz ilerletiriz
+      if (!synth.speaking && !synth.pending && Date.now() - sonBaslama > 1200) {
+        if (simdiki) simdiki.__bitti = true;
+        siradakiniSoyle();
+      }
+    }, 400);
+  }
+
   function canliTutBaslat() {
+    if (ANDROID) return;      // Android'de pause() konuşmayı bitirir, devamı gelmez
     if (canliTut) return;
     canliTut = setInterval(function () {
       if (!synth.speaking) return;
@@ -156,10 +177,16 @@
   }
 
   function siradakiniSoyle() {
-    if (!kuyruk.length) { calisiyor = false; canliTutDurdur(); return; }
+    if (!kuyruk.length) { calisiyor = false; canliTutDurdur(); aktifler = []; return; }
     calisiyor = true;
     var is = kuyruk.shift();
+    simdiki = is;
+    aktifler.push(is);
+    if (aktifler.length > 6) aktifler.shift();
+    sonBaslama = Date.now();
+    try { if (synth.paused) synth.resume(); } catch (e) {}
     orijinalSpeak(is);
+    bekciBaslat();
   }
 
   function seslendir(metin, ayar, olaylar) {
@@ -173,6 +200,7 @@
       return;
     }
 
+    var benimNesil = nesil;
     parcalar.forEach(function (p, i) {
       var u = new SpeechSynthesisUtterance(p);
       u.lang = ayar.lang || "tr-TR";
@@ -182,12 +210,17 @@
       if (typeof ayar.volume === "number" && isFinite(ayar.volume)) u.volume = ayar.volume;
       if (i === 0 && olaylar.onstart) u.onstart = olaylar.onstart;
       u.onend = function () {
+        if (u.__bitti || benimNesil !== nesil) return;
+        u.__bitti = true;
         if (i === parcalar.length - 1 && olaylar.onend) {
           try { olaylar.onend.call(u, { type: "end" }); } catch (e) {}
         }
         setTimeout(siradakiniSoyle, 0);
       };
       u.onerror = function (ev) {
+        if (u.__bitti || benimNesil !== nesil) return;
+        u.__bitti = true;
+        if (ev && (ev.error === "interrupted" || ev.error === "canceled")) return;
         if (i === parcalar.length - 1 && olaylar.onerror) {
           try { olaylar.onerror.call(u, ev); } catch (e) {}
         }
@@ -237,7 +270,9 @@
   };
 
   synth.cancel = function () {
+    nesil++;
     kuyruk.length = 0;
+    aktifler = [];
     calisiyor = false;
     canliTutDurdur();
     return orijinalCancel();
@@ -259,4 +294,12 @@
     sesler: function () { return sesler.slice(); },
     turkceVar: function () { return !!sesBul("tr-TR"); }
   };
+})();
+
+/* Gezinme çubuğu (Geri · İleri · Ana Sayfa): bu dosyayı kullanan her sayfaya otomatik eklenir */
+(function () {
+  if (window.__dijitalOgretmenNav || document.querySelector('script[src$="nav.js"]')) return;
+  var s = document.createElement("script");
+  s.src = "nav.js"; s.defer = true;
+  (document.head || document.documentElement).appendChild(s);
 })();

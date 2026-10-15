@@ -116,7 +116,7 @@
     'display:flex;align-items:center;gap:6px;padding:0 10px;box-sizing:border-box;' +
     'background:rgba(255,255,255,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);' +
     'border-bottom:1px solid #DCE3EC;box-shadow:0 2px 10px rgba(14,29,51,.07);' +
-    'font-family:"Andika","Nunito","Trebuchet MS",Arial,sans-serif;' +
+    'font-family:"Poppins","Nunito","Trebuchet MS",Arial,sans-serif;' +
     'transition:transform .25s ease;transform:translateY(0);margin:0!important;' +
     'font-size:14px;line-height:1.2}' +
     '#do-nav.do-gizli{transform:translateY(-100%)}' +
@@ -205,7 +205,13 @@
     btnGeri.addEventListener("click", geriGit);
     btnIleri.addEventListener("click", ileriGit);
     document.getElementById("do-ana").addEventListener("click", function () {
-      location.href = ANA_SAYFA;
+      // index.html içindeyken bölümden ana sayfaya dön; başka sayfadaysa ana sayfayı aç
+      if (anaSayfaMi() && typeof window.showPage === "function") {
+        window.showPage("home");
+        window.scrollTo(0, 0);
+      } else {
+        location.href = ANA_SAYFA;
+      }
     });
     btnYukari.addEventListener("click", function () {
       window.scrollTo({ top: 0, behavior: "smooth" });

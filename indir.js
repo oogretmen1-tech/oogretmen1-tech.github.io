@@ -954,3 +954,11 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", basla);
   else basla();
 })();
+
+/* Gezinme çubuğu (Geri · İleri · Ana Sayfa): bu dosyayı kullanan her sayfaya otomatik eklenir */
+(function () {
+  if (window.__dijitalOgretmenNav || document.querySelector('script[src$="nav.js"]')) return;
+  var s = document.createElement("script");
+  s.src = "nav.js"; s.defer = true;
+  (document.head || document.documentElement).appendChild(s);
+})();

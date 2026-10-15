@@ -15,7 +15,14 @@
   var BOLUMLER = [
     "page-baskiya", "page-pano", "page-evraklar", "page-olcme",
     "page-belirli", "page-harfatolye", "page-ogretmenrehberi",
-    "page-ihtiyac", "page-yillikplanlar", "page-cedes", "page-fasikul"
+    "page-ihtiyac", "page-yillikplanlar", "page-cedes", "page-fasikul",
+    "page-atolyeler", "page-dz"
+  ];
+  /* Ders bölümlerinde (ör. 3. sınıf matematik) yalnızca PDF'i olan
+     atölye kartlarına (data-onizleme) ön izleme eklenir */
+  var DERS_BOLUMLERI = [
+    "page-turkce", "page-matematik", "page-hayat", "page-turkce3",
+    "page-matematik3", "page-fen3", "page-hayat3", "page-ingilizce"
   ];
 
   /* İnteraktif / hub sayfalar: ön izleme yok, doğrudan açılır */
@@ -138,7 +145,10 @@
   function paketYukle() {
     if (paketSoz) return paketSoz;
     paketSoz = new Promise(function (ok) {
-      if (window.DO_KAPAKLAR) return ok();
+      /* Sayfa içinde birkaç kapak önceden tanımlanmış olabilir; asıl paket
+         (yüzlerce kapak) yalnızca gerçekten yüklenmişse atlanır. */
+      if (window.__doKapakPaketi) return ok();
+      window.__doKapakPaketi = true;
       var s = document.createElement("script");
       s.src = kokYol() + "onizleme-kapaklar.js";
       s.onload = function () { ok(); };
@@ -295,10 +305,11 @@
 
   /* ---------------- kartlara düğme ekle ---------------- */
   function kartlariTara() {
-    BOLUMLER.forEach(function (id) {
+    BOLUMLER.concat(DERS_BOLUMLERI).forEach(function (id) {
       var bolum = document.getElementById(id);
       if (!bolum) return;
-      var kartlar = bolum.querySelectorAll("a.card");
+      var kartlar = bolum.querySelectorAll(
+        DERS_BOLUMLERI.indexOf(id) > -1 ? "a.card[data-onizleme]" : "a.card");
       Array.prototype.forEach.call(kartlar, function (kart) {
         if (kart.classList.contains("yakinda")) return;
         if (kart.dataset.onizleme === "yok") return;
