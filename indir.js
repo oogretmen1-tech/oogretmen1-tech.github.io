@@ -3,6 +3,7 @@
    Sayfaya "Yazdır", "Word İndir" ve "PDF İndir" düğmeleri ekler.
    Dosya, yazdırma penceresi AÇILMADAN doğrudan cihaza iner.
    Adrese ?indir=1 (PDF) veya ?indir=word eklenirse indirme kendiliğinden başlar.
+   Adrese ?sec=1 eklenirse "Sayfa Seç" penceresi kendiliğinden açılır.
 
    Sürüm 4: SAYFA SEÇEREK yazdırma / indirme. Her sayfanın üstünde
    "Seç · Yazdır · PDF · Word" şeridi; alttaki "Sayfa Seç" ile istenen
@@ -942,7 +943,8 @@
     window.dosyayiIndir = window.dosyayiIndir ? function () { indir("pdf"); } : window.dosyayiIndir;
     setTimeout(eskiDugmeleriCevir, 1200);
     setTimeout(eskiDugmeleriCevir, 4000);
-    var kur = function () { setTimeout(function () { try { secimKur(); } catch (e) { console.warn("sayfa seçimi kurulamadı", e); } }, 700); };
+    var secAc = /[?&]sec=1\b/.test(location.search);   /* ?sec=1 → sayfa açılınca "Sayfa Seç" penceresi açılır */
+    var kur = function () { setTimeout(function () { try { secimKur(); if (secAc) seciciAc(); } catch (e) { console.warn("sayfa seçimi kurulamadı", e); } }, 700); };
     if (document.readyState === "complete") kur(); else window.addEventListener("load", kur);
     var m = location.search.match(/[?&]indir=(1|pdf|word)\b/);
     if (m) {
