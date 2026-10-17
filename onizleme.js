@@ -30,7 +30,7 @@
     "23Nisan_Uygulama.html", "1-sinif-hazirlik-donemi.html",
     "sesli-ogrenme-materyalleri.html", "mevsim-agaci-pano.html",
     "kapi-susleme.html", "sozluk.html", "dinleme-kosesi.html",
-    "1-sinif-cizgi-calismalari-interaktif.html"
+    "1-sinif-cizgi-calismalari-interaktif.html", "olcekler.html"
   ];
 
   var PDFJS_YEDEK = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";

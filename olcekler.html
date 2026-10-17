@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gözlem Ölçekleri · 1. Sınıf | Dijital Öğretmen</title>
+<meta name="description" content="Türkiye Yüzyılı Maarif Modeli'ne uygun 1. sınıf gözlem formları: Türkçe, Matematik, Hayat Bilgisi. Okul bilgilerini bir kez yazın, öğrenci listesini yapıştırın, puanları girin; formu yazdırın, Word ya da PDF indirin, e-Okul özetini alın.">
+<link rel="stylesheet" href="poppinsa.css">
+<style>
+:root{
+  --zemin:#EEF2F6; --kart:#FFFFFF; --cizgi:#D3DCE6; --yazi:#16263A; --soluk:#5B6B7D;
+  --ana:#1F3D5C; --ana2:#3E5C7E; --ana-acik:#E6EDF5;
+  --turkce:#F4B400; --turkce-k:#3A2A00; --turkce-a:#FFF6D6;
+  --matematik:#1E6FD9; --matematik-k:#FFFFFF; --matematik-a:#E3EEFC;
+  --hayat:#2E9D4F; --hayat-k:#FFFFFF; --hayat-a:#E2F4E7;
+  --ci:#1F8A4C; --ci-a:#DDF3E5; --i:#1E6FD9; --i-a:#E1ECFB; --y:#B7791F; --y-a:#FCF0D5; --g:#C0392B; --g-a:#FBE3E0;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--zemin);color:var(--yazi);font-family:'PoppinsA','Poppins',Arial,sans-serif;font-size:15px;line-height:1.45;-webkit-text-size-adjust:100%}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+.kap{max-width:1180px;margin:0 auto;padding:16px}
+/* Başlık */
+.ust{background:linear-gradient(135deg,#1F3D5C,#3E5C7E);color:#fff;border-radius:16px;padding:18px 20px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px}
+.ust h1{margin:0;font-size:1.45rem;font-weight:700;letter-spacing:.2px}
+.ust p{margin:2px 0 0;font-size:.9rem;opacity:.85}
+.ust .sag{margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ust select{background:#fff;color:var(--ana);border:0;border-radius:10px;padding:8px 12px;font-weight:600}
+.ust .etiket{font-size:.8rem;opacity:.85}
+/* Sekmeler */
+.sekmeler{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 12px}
+.sekme{border:2px solid var(--cizgi);background:#fff;border-radius:12px;padding:10px 16px;font-weight:600;cursor:pointer;color:var(--ana)}
+.sekme[aria-selected="true"]{background:var(--ana);border-color:var(--ana);color:#fff}
+.sekme.d-turkce[aria-selected="true"]{background:var(--turkce);border-color:var(--turkce);color:var(--turkce-k)}
+.sekme.d-matematik[aria-selected="true"]{background:var(--matematik);border-color:var(--matematik);color:#fff}
+.sekme.d-hayat[aria-selected="true"]{background:var(--hayat);border-color:var(--hayat);color:#fff}
+.sekme[aria-selected="true"] .nok{background:#fff !important}
+.sekme .nok{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px;vertical-align:1px}
+/* Kartlar */
+.kart{background:var(--kart);border:1px solid var(--cizgi);border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(20,40,70,.06)}
+.kart h2{margin:0 0 4px;font-size:1.12rem}
+.kart .aciklama{margin:0 0 14px;color:var(--soluk);font-size:.9rem}
+.izgara{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
+.izgara .tam{grid-column:1/-1}
+@media (max-width:640px){.izgara{grid-template-columns:1fr}}
+label.alan{display:block;font-size:.78rem;font-weight:600;color:var(--soluk);letter-spacing:.4px;text-transform:uppercase}
+label.alan input,label.alan select{display:block;width:100%;margin-top:5px;border:1.5px solid var(--cizgi);border-radius:10px;padding:10px 12px;background:#FAFCFE;font-size:1rem;text-transform:none;letter-spacing:0;font-weight:500;color:var(--yazi)}
+label.alan input:focus,label.alan select:focus,textarea:focus{outline:none;border-color:var(--ana2);background:#fff}
+textarea{width:100%;min-height:150px;border:1.5px solid var(--cizgi);border-radius:10px;padding:10px 12px;background:#FAFCFE;font-size:1rem;resize:vertical}
+.dugmeler{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}
+.btn{border:0;border-radius:10px;padding:10px 16px;font-weight:600;cursor:pointer;background:var(--ana);color:#fff;font-size:.95rem}
+.btn.ikincil{background:#fff;color:var(--ana);border:1.5px solid var(--cizgi)}
+.btn.word{background:#2B579A}
+.btn.pdf{background:#C62828}
+.btn.tehlike{background:#fff;color:#B42318;border:1.5px solid #F2C4BE}
+.btn.kucuk{padding:7px 12px;font-size:.85rem}
+.btn:disabled{opacity:.5;cursor:default}
+.bilgi{font-size:.85rem;color:var(--soluk);margin:8px 0 0}
+.uyari{background:#FFF8E1;border:1px solid #F3D88B;border-radius:12px;padding:12px 14px;font-size:.9rem;color:#5A4300}
+/* Sınıflar */
+.sinif-listesi{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.sinif-cip{border:2px solid var(--cizgi);border-radius:12px;padding:8px 14px;background:#fff;cursor:pointer;font-weight:600}
+.sinif-cip.secili{border-color:var(--ana);background:var(--ana-acik);color:var(--ana)}
+.sinif-cip small{font-weight:500;color:var(--soluk);margin-left:6px}
+.ogr-tablo{width:100%;border-collapse:collapse;margin-top:10px}
+.ogr-tablo td{border-bottom:1px solid #EDF1F5;padding:7px 6px;font-size:.95rem}
+.ogr-tablo td.no{width:46px;color:var(--soluk);text-align:right;padding-right:10px}
+.ogr-tablo td.okulno{width:80px;color:var(--soluk);font-size:.85rem}
+.ogr-tablo td.sil{width:44px;text-align:right}
+.x{border:0;background:#F3F5F8;border-radius:8px;width:32px;height:32px;cursor:pointer;color:#8A97A6;font-size:1.05rem;line-height:1}
+.x:hover{background:#FBE3E0;color:#B42318}
+.yan{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}
+.yan input{flex:1;min-width:180px;border:1.5px solid var(--cizgi);border-radius:10px;padding:10px 12px;background:#FAFCFE}
+/* Tema seçimi */
+.temalar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.tema{border:2px solid var(--cizgi);background:#fff;border-radius:999px;padding:8px 16px;font-weight:600;cursor:pointer;color:var(--ana);font-size:.92rem;position:relative}
+.tema .dolu{display:inline-block;min-width:8px;height:8px;border-radius:50%;background:#C9D3DE;margin-left:8px;vertical-align:1px}
+.tema .dolu.var{background:var(--ci)}
+.ders-turkce .tema[aria-selected="true"]{background:var(--turkce);border-color:var(--turkce);color:var(--turkce-k)}
+.ders-matematik .tema[aria-selected="true"]{background:var(--matematik);border-color:var(--matematik);color:#fff}
+.ders-hayat .tema[aria-selected="true"]{background:var(--hayat);border-color:var(--hayat);color:#fff}
+.form-baslik{font-size:1.08rem;font-weight:700;margin:0;line-height:1.35}
+.form-alt{color:var(--soluk);font-size:.9rem;margin:4px 0 12px}
+.form-alt b{color:var(--ana2)}
+/* Gözlem tablosu */
+.tablo-kutu{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--cizgi);border-radius:12px;margin-top:14px;background:#fff}
+table.gozlem{border-collapse:separate;border-spacing:0;min-width:100%;font-size:.95rem}
+table.gozlem th,table.gozlem td{border-bottom:1px solid #E7ECF2;border-right:1px solid #EEF2F6;text-align:center;padding:0}
+table.gozlem thead th{background:#F5F8FB;vertical-align:bottom}
+table.gozlem th.ogr-bas{position:sticky;left:0;z-index:3;background:#F5F8FB;text-align:left;padding:10px 12px;min-width:190px;font-size:.9rem;color:var(--soluk);vertical-align:middle}
+table.gozlem td.ogr{position:sticky;left:0;z-index:2;background:#fff;text-align:left;padding:0;min-width:190px;max-width:240px}
+table.gozlem td.ogr button{all:unset;box-sizing:border-box;display:block;width:100%;padding:10px 12px;cursor:pointer;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+table.gozlem td.ogr button:hover,table.gozlem td.ogr button:focus-visible{background:var(--ana-acik)}
+table.gozlem td.ogr .sira{color:#9AA7B5;font-weight:500;margin-right:6px;display:inline-block;min-width:18px}
+.dik{writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;font-weight:600;font-size:.82rem;padding:10px 6px 6px;margin:0 auto;color:var(--yazi);max-height:190px;overflow:hidden;text-overflow:ellipsis}
+.kod{display:block;font-size:.66rem;color:var(--ana2);font-weight:600;padding:0 3px 4px;white-space:nowrap}
+.olcut-no{display:block;font-size:.72rem;color:#9AA7B5;font-weight:600;padding-top:6px}
+.simsek{display:block;margin:4px auto 6px;border:1.5px solid var(--cizgi);background:#fff;border-radius:8px;width:40px;height:30px;cursor:pointer;font-weight:700;font-size:.72rem;color:var(--ana2);line-height:1}
+.simsek:hover{border-color:var(--ana2);background:var(--ana-acik)}
+table.gozlem td.hucre{min-width:52px;width:52px;height:46px}
+table.gozlem td.hucre button{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:center;width:100%;height:46px;cursor:pointer;font-weight:700;font-size:1.05rem;color:#B6C2CF}
+table.gozlem td.hucre button:focus-visible{outline:3px solid var(--ana2);outline-offset:-3px}
+table.gozlem td.hucre button.p{color:var(--yazi)}
+table.gozlem td.hucre button.p span{display:inline-flex;width:34px;height:32px;border-radius:9px;align-items:center;justify-content:center}
+.p4 span{background:var(--ci-a);color:var(--ci)}
+.p3 span{background:var(--i-a);color:var(--i)}
+.p2 span{background:var(--y-a);color:var(--y)}
+.p1 span{background:var(--g-a);color:var(--g)}
+table.gozlem th.ort-bas,table.gozlem td.ort{min-width:64px;font-weight:700;font-size:.9rem}
+table.gozlem th.deg-bas,table.gozlem td.deg{min-width:96px;padding:0 6px}
+table.gozlem th.ort-bas,table.gozlem th.deg-bas{font-size:.78rem;color:var(--soluk);padding:8px 4px;vertical-align:middle}
+.rozet{display:inline-block;border-radius:8px;padding:4px 9px;font-weight:700;font-size:.8rem;white-space:nowrap}
+.r-ci{background:var(--ci-a);color:var(--ci)} .r-i{background:var(--i-a);color:var(--i)} .r-y{background:var(--y-a);color:var(--y)} .r-g{background:var(--g-a);color:var(--g)} .r-bos{color:#B6C2CF}
+/* Ölçüt listesi */
+ol.olcutler{margin:6px 0 0;padding-left:26px}
+ol.olcutler li{margin:5px 0;font-size:.92rem}
+ol.olcutler li b{font-weight:600}
+ol.olcutler li .k{color:var(--ana2);font-size:.8rem;font-weight:600;margin-left:6px;white-space:nowrap}
+.anahtar{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;font-size:.85rem}
+.ipucu{font-size:.86rem;color:var(--soluk);margin:10px 0 0}
+/* Açılır seçici */
+.secici{position:fixed;z-index:50;background:#fff;border:1px solid var(--cizgi);border-radius:14px;box-shadow:0 12px 32px rgba(20,40,70,.22);padding:10px;width:290px}
+.secici .baslik{font-size:.8rem;color:var(--soluk);font-weight:600;margin:0 2px 8px;line-height:1.3}
+.secici .puanlar{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.secici .puanlar button{border:0;border-radius:10px;height:50px;font-size:1.25rem;font-weight:700;cursor:pointer}
+.secici .puanlar button small{display:block;font-size:.56rem;letter-spacing:-.2px;font-weight:600;margin-top:1px}
+.secici .b4{background:var(--ci-a);color:var(--ci)} .secici .b3{background:var(--i-a);color:var(--i)} .secici .b2{background:var(--y-a);color:var(--y)} .secici .b1{background:var(--g-a);color:var(--g)}
+.secici .temizle{margin-top:8px;width:100%;border:1.5px solid var(--cizgi);background:#fff;border-radius:10px;padding:8px;cursor:pointer;font-weight:600;color:var(--soluk)}
+.perde{position:fixed;inset:0;z-index:49;background:transparent}
+/* Pencere (Sayfa Seç) */
+.pencere-arka{position:fixed;inset:0;z-index:60;background:rgba(15,30,50,.45);display:flex;align-items:center;justify-content:center;padding:16px}
+.pencere{background:#fff;border-radius:18px;max-width:520px;width:100%;max-height:88vh;overflow:auto;padding:20px}
+.pencere h3{margin:0 0 4px;font-size:1.1rem}
+.pencere .liste label{display:flex;gap:10px;align-items:center;padding:10px 12px;border:1.5px solid var(--cizgi);border-radius:12px;margin:8px 0;cursor:pointer;font-weight:500}
+.pencere .liste label input{width:20px;height:20px}
+.pencere .liste label small{color:var(--soluk);margin-left:auto;white-space:nowrap}
+/* Özet */
+.ozet-filtre{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+table.ozet{border-collapse:separate;border-spacing:0;min-width:100%}
+table.ozet th,table.ozet td{border-bottom:1px solid #E7ECF2;padding:9px 10px;text-align:center;font-size:.92rem}
+table.ozet thead th{background:#F5F8FB;font-size:.82rem;color:var(--soluk);line-height:1.25}
+table.ozet thead th b{display:block;color:var(--yazi);font-size:.88rem}
+table.ozet th.ogr-bas,table.ozet td.ogr{position:sticky;left:0;background:#fff;text-align:left;min-width:180px;font-weight:600;z-index:2}
+table.ozet th.ogr-bas{background:#F5F8FB}
+table.ozet td small{display:block;color:#9AA7B5;font-size:.72rem;margin-top:2px}
+.bos-durum{text-align:center;padding:30px 12px;color:var(--soluk)}
+.bos-durum .btn{margin-top:12px}
+.imza{text-align:center;color:#8A97A6;font-size:.82rem;margin:24px 0 8px}
+.gizli{display:none !important}
+/* Gözlem notu */
+table.gozlem td.hucre{position:relative}
+.not-isaret{position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%;background:#7A4FD0;pointer-events:none}
+.secici .not-btn{margin-top:6px;width:100%;border:1.5px solid #D9CCF3;background:#F6F2FD;border-radius:10px;padding:8px;cursor:pointer;font-weight:600;color:#5B3BA8}
+.secici .not-on{margin-top:6px;font-size:.8rem;color:#5B3BA8;background:#F6F2FD;border-radius:8px;padding:6px 8px;line-height:1.35}
+.pencere textarea{min-height:110px;margin-top:8px}
+/* Görünüm seçici */
+.gorunum{display:inline-flex;border:1.5px solid var(--cizgi);border-radius:12px;overflow:hidden;margin-top:14px}
+.gorunum button{border:0;background:#fff;padding:9px 16px;font-weight:600;cursor:pointer;color:var(--ana)}
+.gorunum button[aria-pressed="true"]{background:var(--ana);color:#fff}
+/* Öğrenci kartı */
+.okart{border:1px solid var(--cizgi);border-radius:14px;margin-top:14px;overflow:hidden}
+.okart-ust{display:flex;align-items:center;gap:8px;padding:12px;background:#F5F8FB;border-bottom:1px solid var(--cizgi);flex-wrap:wrap}
+.okart-ust select{flex:1;min-width:150px;border:1.5px solid var(--cizgi);border-radius:10px;padding:10px;font-weight:700;font-size:1.05rem;background:#fff}
+.okart-ust .ilerleme{width:100%;font-size:.82rem;color:var(--soluk)}
+.osatir{padding:12px;border-bottom:1px solid #EDF1F5}
+.osatir:last-child{border-bottom:0}
+.osatir .ad{font-weight:700}
+.osatir .ad small{color:var(--ana2);font-weight:600;font-size:.72rem;margin-left:6px}
+.osatir .uz{font-size:.84rem;color:var(--soluk);margin:2px 0 8px}
+.osatir .secim{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.osatir .secim button{border:2px solid transparent;border-radius:10px;height:48px;font-weight:700;font-size:1.15rem;cursor:pointer;background:#F3F5F8;color:#8A97A6;line-height:1}
+.osatir .secim button small{display:block;font-size:.58rem;font-weight:600;margin-top:2px}
+.osatir .secim button.s4{background:var(--ci-a);color:var(--ci);border-color:var(--ci)}
+.osatir .secim button.s3{background:var(--i-a);color:var(--i);border-color:var(--i)}
+.osatir .secim button.s2{background:var(--y-a);color:var(--y);border-color:var(--y)}
+.osatir .secim button.s1{background:var(--g-a);color:var(--g);border-color:var(--g)}
+.osatir .notsatir{display:flex;gap:8px;align-items:center;margin-top:8px}
+.osatir .notsatir button{border:1.5px solid #D9CCF3;background:#F6F2FD;color:#5B3BA8;border-radius:9px;padding:6px 10px;font-weight:600;font-size:.82rem;cursor:pointer;white-space:nowrap}
+.osatir .notsatir span{font-size:.84rem;color:#5B3BA8}
+.okart-alt{display:flex;align-items:center;gap:10px;padding:12px;background:#F5F8FB;border-top:1px solid var(--cizgi);flex-wrap:wrap}
+.okart-alt .btn{margin-left:auto}
+/* Tema: bu hafta etiketi */
+.tema .bu-hafta{font-size:.62rem;font-weight:700;letter-spacing:.3px;background:var(--ana);color:#fff;border-radius:6px;padding:2px 5px;margin-left:7px;vertical-align:1px}
+.tema[aria-selected="true"] .bu-hafta{background:rgba(255,255,255,.9);color:var(--ana)}
+/* Destek listesi */
+.grup{border:1px solid var(--cizgi);border-radius:12px;padding:12px 14px;margin:10px 0}
+.grup h3{margin:0 0 2px;font-size:.98rem}
+.grup .kk{font-size:.8rem;color:var(--soluk);margin-bottom:8px}
+.cipler{display:flex;flex-wrap:wrap;gap:6px}
+.cip{border-radius:999px;padding:5px 11px;font-size:.86rem;font-weight:600;background:var(--y-a);color:#7A4F0F}
+.cip.g{background:var(--g-a);color:var(--g)}
+.ders-etiket{display:inline-block;border-radius:7px;padding:2px 8px;font-size:.75rem;font-weight:700;margin-right:6px}
+.de-turkce{background:var(--turkce-a);color:#6B4D00}.de-matematik{background:var(--matematik-a);color:#1957AD}.de-hayat{background:var(--hayat-a);color:#1E6B36}
+.ogr-destek{border-bottom:1px solid #EDF1F5;padding:10px 0}
+.ogr-destek:last-child{border-bottom:0}
+.ogr-destek b{font-size:1rem}
+.ogr-destek ul{margin:6px 0 0;padding-left:20px}
+.ogr-destek li{margin:3px 0;font-size:.9rem}
+.ogr-destek li i{color:#5B3BA8;font-style:normal}
+/* Veli karnesi */
+.karne-ogr{display:flex;gap:12px;align-items:flex-start;border-bottom:1px solid #EDF1F5;padding:12px 0;flex-wrap:wrap}
+.karne-ogr:last-child{border-bottom:0}
+.karne-ogr label.sec{display:flex;gap:8px;align-items:center;font-weight:700;min-width:200px;cursor:pointer}
+.karne-ogr label.sec input{width:20px;height:20px}
+.karne-ogr .duz{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.karne-ogr textarea{min-height:64px;flex:1;min-width:240px}
+.karne-ogr .sol{flex:0 0 230px}
+@media (max-width:640px){.karne-ogr .sol{flex:1 1 100%}}
+/* Karne kâğıdı */
+.kagit.dikey{width:794px;height:1118px;padding:46px 54px 38px}
+.karne .ust-serit{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #1F3D5C;padding-bottom:10px}
+.karne .ust-serit h2{margin:0;font-size:21px;color:#1F3D5C;letter-spacing:.3px}
+.karne .ust-serit .okl{font-size:11.5px;color:#444;text-align:right;line-height:1.45}
+.karne .kimlik{display:grid;grid-template-columns:1fr 1fr;gap:4px 24px;font-size:13px;margin:14px 0 6px}
+.karne .kimlik b{display:inline-block;min-width:66px;color:#1F3D5C}
+.karne .giris{font-size:12.5px;line-height:1.55;margin:10px 0 4px;color:#222}
+.karne .ders{border:1.5px solid #D3DCE6;border-radius:10px;margin-top:12px;overflow:hidden;break-inside:avoid}
+.karne .ders .db{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;font-weight:700;font-size:14px}
+.karne .ders.turkce .db{background:#FFF3C4}.karne .ders.matematik .db{background:#DCE9FB}.karne .ders.hayat .db{background:#DDF1E3}
+.karne .ders .db span{font-size:12.5px;background:#fff;border-radius:7px;padding:3px 10px}
+.karne .ders .govde{padding:8px 14px 10px;font-size:12px;line-height:1.5}
+.karne .ders .govde h4{margin:6px 0 2px;font-size:12px;color:#1F3D5C}
+.karne .ders .govde ul{margin:0;padding-left:18px}
+.karne .ders .govde .ev{margin-top:6px;color:#444;font-style:italic}
+.karne .ogretmen-notu{border:1.5px dashed #B9C5D2;border-radius:10px;padding:10px 14px;margin-top:14px;font-size:12.5px;line-height:1.55;min-height:70px}
+.karne .ogretmen-notu b{color:#1F3D5C}
+.karne .imzalar{margin-top:26px}
+/* Destek kâğıdı */
+.destek-kagit h2{text-align:center;font-size:15px;margin:10px 0 4px}
+.destek-kagit .alt{text-align:center;font-size:11.5px;color:#444;margin-bottom:10px}
+.destek-kagit table.resmi td{text-align:left;vertical-align:top;height:auto;padding:4px 6px}
+.destek-kagit table.resmi td.no{text-align:center;width:28px}
+.bildirim{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#16263A;color:#fff;padding:11px 18px;border-radius:12px;font-size:.92rem;z-index:80;box-shadow:0 8px 24px rgba(0,0,0,.25);max-width:90vw;text-align:center}
+/* Baskı sayfaları (ekranda gizli) */
+#baski{display:none}
+.kagit{width:1123px;height:790px;overflow:hidden;background:#fff;color:#000;padding:42px 49px 34px;font-family:'PoppinsA','Poppins',Arial,sans-serif;position:relative}
+.kagit .kafa{text-align:center;font-weight:700;font-size:13px;line-height:1.45}
+.kagit .kafa .baslik2{margin-top:8px;font-size:14px}
+.kagit table.resmi{border-collapse:collapse;width:100%;margin-top:14px}
+.kagit table.resmi th,.kagit table.resmi td{border:1px solid #333;text-align:center;font-size:11.5px;padding:3px 4px;height:22px}
+.kagit table.resmi th{background:#EDEDED;font-weight:700}
+.kagit table.resmi td.ad{text-align:left;white-space:nowrap;padding-left:7px}
+.kagit table.resmi td.dg{font-weight:600;white-space:nowrap}
+.kagit.sik table.resmi th,.kagit.sik table.resmi td{font-size:10px;height:16px;padding:1px 3px}
+.kagit.cok-sik table.resmi th,.kagit.cok-sik table.resmi td{font-size:9px;height:13px;padding:0 3px}
+.kagit .lejant{margin-top:10px;font-size:10.5px;line-height:1.45;column-count:2;column-gap:28px}
+.kagit .lejant div{break-inside:avoid}
+.kagit.sik .lejant,.kagit.cok-sik .lejant{font-size:9.5px;margin-top:6px}
+.kagit .puan-anahtari{margin-top:6px;font-size:10.5px}
+.kagit .imzalar{display:flex;justify-content:space-between;margin-top:22px;font-size:12.5px;text-align:center}
+.kagit.sik .imzalar,.kagit.cok-sik .imzalar{margin-top:12px}
+.kagit .imzalar div{min-width:220px}
+.kagit .imzalar b{display:block;font-size:13px}
+.kagit .imzalar .tarih{margin-top:4px}
+.kagit .dipnot{position:absolute;left:46px;right:46px;bottom:12px;text-align:center;font-size:8.5px;color:#888}
+@media print{
+  body{background:#fff}
+  .ekran,#do-nav,.do-nav,[id^="do-"],.bildirim,.secici,.perde,.pencere-arka{display:none !important}
+  #baski{display:block !important}
+  .kagit{width:297mm;height:209mm;min-height:0;overflow:hidden;page-break-after:always;break-after:page;padding:11mm 13mm 9mm}
+  .kagit:last-child{page-break-after:auto;break-after:auto}
+  .kagit.dikey{width:210mm;height:296mm;padding:12mm 14mm 10mm}
+}
+</style>
+</head>
+<body>
+<div class="ekran">
+<div class="kap">
+  <header class="ust">
+    <div>
+      <h1>Gözlem Ölçekleri</h1>
+      <p>Türkiye Yüzyılı Maarif Modeli · ders ve temaya göre gözlem formları</p>
+    </div>
+    <div class="sag">
+      <span class="etiket">Sınıf</span>
+      <select id="ustSinif" aria-label="Sınıf seçin"></select>
+    </div>
+  </header>
+
+  <nav class="sekmeler" id="sekmeler" role="tablist"></nav>
+
+  <main id="icerik"></main>
+
+  <div class="imza">Dijital Öğretmen · Hasan Tutuş</div>
+</div>
+</div>
+<div id="baski" aria-hidden="true"></div>
+
+<script>
+/* =====================================================================
+   Dijital Öğretmen · Gözlem Ölçekleri
+   Veriler yalnızca bu cihazda (tarayıcıda) saklanır. Yedek dosyasıyla
+   başka cihaza taşınabilir.
+   ===================================================================== */
+(function(){
+"use strict";
+
+/* ---------------- Ölçüt verileri (1. sınıf) ---------------- */
+function o(ad, uzun, kod){ return {ad:ad, uzun:uzun, kod:kod}; }
+
+function sesTemasi(sesler, yedi, on){
+  return [
+    o("Sesi hisseder", "Öğrenilen sesleri kelimenin başında, ortasında ve sonunda duyar.", "T.D.1.3"),
+    o("Sesi ayırt eder", "Öğrenilen sesleri benzer seslerden ayırt eder.", "T.D.1.3"),
+    o("Harfi tanır", "Öğrenilen seslerin büyük ve küçük harflerini tanır.", "T.O.1.1"),
+    o("Harfi doğru yazar", "Harfleri hamle sırasına ve yazım yönüne uygun yazar.", "T.Y.1.3"),
+    o("Satır düzeni", "Harfleri satır çizgilerine ve aralığına uygun yerleştirir.", "T.Y.1.3"),
+    o("Hece oluşturur", "Öğrendiği seslerle hece oluşturur ve okur.", "T.O.1.1"),
+    yedi,
+    o("Dinlediğini anlar", "Dinlediği metinle ilgili sorulara cevap verir.", "T.D.1.2"),
+    o("Konuşma kuralları", "Söz alarak konuşur; göz teması kurar, uygun ses tonu kullanır.", "T.K.1.3"),
+    on
+  ];
+}
+
+var VERI = {
+  1: {
+    dersler: [
+      { anahtar:"turkce", ad:"Türkçe", renk:"turkce", temalar: [
+        { id:"hz", kisa:"Hazırlık", ad:"İLK OKUMA YAZMAYA HAZIRLIK", donem:1, olcutler:[
+          o("Dinleme kuralları", "Dinlerken konuşanı izler, sözünü kesmez.", "T.D.1.1"),
+          o("Sesleri ayırt eder", "Doğadan, çevreden ve insandan gelen sesleri ayırt eder.", "T.D.1.3"),
+          o("Yönerge izler", "Sözlü yönergeleri sırasıyla uygular.", "T.D.1.2"),
+          o("Kendini tanıtır", "Kendini ve ailesini kısaca tanıtır.", "T.K.1.2"),
+          o("Görseli anlatır", "Görselde gördüklerini sözlü olarak anlatır.", "T.K.1.2"),
+          o("Sırasını bekler", "Söz alarak ve sırasını bekleyerek konuşur.", "T.K.1.3"),
+          o("Kalemi doğru tutar", "Kalemi doğru tutar; uygun oturuş ve kâğıt konumunu korur.", "T.Y.1.1"),
+          o("Çizgi çalışması", "Çizgi çalışmalarını yönüne ve sınırına uyarak yapar.", "T.Y.1.3"),
+          o("El-göz koordinasyonu", "Boyama, kesme ve yapıştırmada el-göz koordinasyonu sağlar.", "T.Y.1.1")
+        ]},
+        { id:"t1", kisa:"1. Tema", ad:"1. TEMA “GÜZEL DAVRANIŞLARIMIZ” – “a, n, e, t” SESLERİ", donem:1,
+          olcutler: sesTemasi("a n e t",
+            o("Kelime oluşturur", "Öğrendiği hecelerden anlamlı kelimeler oluşturur.", "T.Y.1.2"),
+            o("Hece yazar", "Söylenen heceleri doğru yazar.", "T.Y.1.2")) },
+        { id:"t2", kisa:"2. Tema", ad:"2. TEMA “MUSTAFA KEMAL’DEN ATATÜRK’E” – “i, l, o, k, u” SESLERİ", donem:1,
+          olcutler: sesTemasi("i l o k u",
+            o("Kelime okur", "Öğrendiği seslerle oluşan kelimeleri okur.", "T.O.1.1"),
+            o("Kelime yazar", "Söylenen kelimeleri doğru yazar.", "T.Y.1.2")) },
+        { id:"t3", kisa:"3. Tema", ad:"3. TEMA “ÇEVREMİZDEKİ YAŞAM” – “r, ı, m, ü, s, ö, y, d, z” SESLERİ", donem:1,
+          olcutler: sesTemasi("r ı m ü s ö y d z",
+            o("Cümle okur", "Öğrendiği seslerle oluşan kısa cümleleri okur.", "T.O.1.1"),
+            o("Cümle yazar", "Kısa ve anlamlı cümleler yazar.", "T.Y.1.2")) },
+        { id:"t4", kisa:"4. Tema", ad:"4. TEMA “YOL ARKADAŞIMIZ KİTAPLAR” – “ç, b, g, c, ş, p, h, v, ğ, f, j” SESLERİ", donem:1,
+          olcutler: sesTemasi("ç b g c ş p h v ğ f j",
+            o("Kısa metin okur", "Öğrendiği seslerle oluşan kısa metinleri okur.", "T.O.1.1"),
+            o("Büyük harf ve nokta", "Cümleye büyük harfle başlar, sonuna nokta koyar.", "T.Y.1.3")) },
+        { id:"t5", kisa:"5. Tema", ad:"5. TEMA “YETENEKLERİMİZİ KEŞFEDİYORUZ”", donem:2, olcutler:[
+          o("Bütün okur", "Kelimeleri heceleyerek değil, bütün olarak okur.", "T.O.1.1"),
+          o("Noktalamaya uyar", "Okurken noktada durur, soru cümlesini uygun tonla okur.", "T.O.1.1"),
+          o("Okuduğunu anlar", "Okuduğu metinle ilgili kim, ne, nerede, ne zaman sorularını cevaplar.", "T.O.1.2"),
+          o("Konuyu söyler", "Okuduğu metnin konusunu söyler.", "T.O.1.3"),
+          o("Olayları sıralar", "Dinlediği metindeki olayları oluş sırasına göre anlatır.", "T.D.1.3"),
+          o("Konuşmayı yönetir", "Konuşmasına uygun başlar, düşüncesini tamamlayarak bitirir.", "T.K.1.1"),
+          o("Kendini anlatır", "Yeteneklerini, duygu ve düşüncelerini anlatır.", "T.K.1.2"),
+          o("Cümle yazar", "Görsellerle ilgili anlamlı cümleler yazar.", "T.Y.1.2"),
+          o("Yazım kuralları", "Büyük harf, nokta ve kelimeler arası boşluk kurallarına uyar.", "T.Y.1.3"),
+          o("Okunaklı yazar", "Harfleri okunaklı ve dik temel harflerle yazar.", "T.Y.1.1")
+        ]},
+        { id:"t6", kisa:"6. Tema", ad:"6. TEMA “MİNİK KÂŞİFLER”", donem:2, olcutler:[
+          o("Bütün okur", "Kelimeleri bütün olarak, uygun hızda okur.", "T.O.1.1"),
+          o("Tahminde bulunur", "Başlık ve görsellerden metnin konusunu tahmin eder.", "T.O.1.2"),
+          o("Okuduğunu anlar", "Okuduğu metinle ilgili soruları cevaplar.", "T.O.1.2"),
+          o("Neden-sonuç", "Okuduğu metinde neden-sonuç ilişkisini fark eder.", "T.O.1.3"),
+          o("Yeni bilgi edinir", "Dinlediği bilgilendirici metinden öğrendiği yeni bilgiyi söyler.", "T.D.1.2"),
+          o("Dinlediğini çözümler", "Dinlediği metindeki olayları ve kişileri belirtir.", "T.D.1.3"),
+          o("Merakını sorar", "Merak ettiklerini soru cümlesiyle sorar.", "T.K.1.2"),
+          o("Konuşma kuralları", "Konuşurken sırasını bekler, dinleyiciye saygı gösterir.", "T.K.1.3"),
+          o("Gözlemini yazar", "Gözlemlerini kısa cümlelerle yazar.", "T.Y.1.2"),
+          o("Soru işareti", "Soru cümlesinin sonuna soru işareti koyar.", "T.Y.1.3")
+        ]},
+        { id:"t7", kisa:"7. Tema", ad:"7. TEMA “ATALARIMIZIN İZLERİ”", donem:2, olcutler:[
+          o("Akıcı okur", "Uygun hız, vurgu ve tonlamayla okur.", "T.O.1.1"),
+          o("Okuduğunu anlar", "Okuduğu metinle ilgili soruları cevaplar.", "T.O.1.2"),
+          o("Kelime anlamı", "Bilmediği kelimelerin anlamını cümleden tahmin eder.", "T.O.1.3"),
+          o("Tekrar okur", "Okurken zorlandığı yeri fark eder, yeniden okur.", "T.O.1.4"),
+          o("Görüş bildirir", "Okuduğu metni beğenip beğenmediğini gerekçesiyle söyler.", "T.O.1.5"),
+          o("Dinlemeyi değerlendirir", "Dinlediği ya da izlediği metin hakkında görüşünü söyler.", "T.D.1.4"),
+          o("Hikâye anlatır", "Dinlediği hikâyeyi ya da masalı kendi cümleleriyle anlatır.", "T.K.1.2"),
+          o("Konuşmasını değerlendirir", "Kendi konuşmasındaki eksikleri fark eder.", "T.K.1.4"),
+          o("Kısa metin yazar", "Duygu ve düşüncelerini iki üç cümleyle yazar.", "T.Y.1.2"),
+          o("Yazısını gözden geçirir", "Yazdıklarını okur, yazım hatalarını düzeltir.", "T.Y.1.4")
+        ]},
+        { id:"t8", kisa:"8. Tema", ad:"8. TEMA “SORUMLULUKLARIMIZIN FARKINDAYIZ”", donem:2, olcutler:[
+          o("Akıcı okur", "Uygun hız, vurgu ve tonlamayla okur.", "T.O.1.1"),
+          o("Okuduğunu anlar", "Okuduğu metinle ilgili soruları cevaplar.", "T.O.1.2"),
+          o("Görsel-metin ilişkisi", "Metin ile görsel arasındaki ilişkiyi açıklar.", "T.O.1.3"),
+          o("Okumayı değerlendirir", "Okuduğu metinden ne öğrendiğini söyler.", "T.O.1.5"),
+          o("Dinlediğini anlar", "Dinlediği metinle ilgili soruları cevaplar.", "T.D.1.2"),
+          o("Sorumluluk anlatır", "Evde ve okulda üstlendiği sorumlulukları anlatır.", "T.K.1.2"),
+          o("Konuşma kuralları", "Konuşma kurallarına uyar.", "T.K.1.3"),
+          o("Kısa metin yazar", "Bir konu hakkında birkaç cümleyle yazar.", "T.Y.1.2"),
+          o("Yazım kuralları", "Büyük harf ve noktalama kurallarına uyar.", "T.Y.1.3"),
+          o("Yazısını değerlendirir", "Yazdıklarını gözden geçirir ve düzenler.", "T.Y.1.4")
+        ]}
+      ]},
+      { anahtar:"matematik", ad:"Matematik", renk:"matematik", temalar: [
+        { id:"t1", kisa:"1. Tema", ad:"1. TEMA “NESNELERİN GEOMETRİSİ (1)”", donem:1, olcutler:[
+          o("Yön terimleri", "Sağ, sol, ön, arka, alt, üst, yanında, arasında terimlerini doğru kullanır.", "MAT.1.3.1"),
+          o("Konum belirtir", "Nesnelerin konumunu yön terimleriyle söyler.", "MAT.1.3.1"),
+          o("Yönergeyle hedefe ulaşır", "Mesafe ve yön içeren yönergeyi izleyerek hedefe ulaşır.", "MAT.1.3.1"),
+          o("Yol tarif eder", "Bir hedefe giden yolu yön terimleriyle tarif eder.", "MAT.1.3.1"),
+          o("Eş nesneleri bulur", "Rengi, biçimi ve büyüklüğü aynı olan nesneleri belirler.", "MAT.1.3.2"),
+          o("Eşi olmayanı bulur", "Bir grupta eşi olmayan nesneyi gerekçesiyle gösterir.", "MAT.1.3.2")
+        ]},
+        { id:"t2", kisa:"2. Tema", ad:"2. TEMA “SAYILAR VE NİCELİKLER (1)”", donem:1, olcutler:[
+          o("Rakamları tanır", "Rakamları okur ve doğru yazar.", "MAT.1.1.1"),
+          o("20'ye kadar sayar", "Nesneleri birer birer sayıp çokluğu söyler.", "MAT.1.1.1"),
+          o("Sayıyı çözümler", "20'ye kadar sayıları onluk ve birlik olarak gösterir.", "MAT.1.1.2"),
+          o("Sıra sayısı", "Nesnelerin sırasını sıra sayısıyla belirtir.", "MAT.1.1.3"),
+          o("Karşılaştırır", "İki çokluğu daha çok, daha az ve eşit terimleriyle karşılaştırır.", "MAT.1.1.4"),
+          o("Ritmik sayar", "İleriye ve geriye doğru ritmik sayar.", "MAT.1.1.5"),
+          o("Örüntü", "Artan ya da azalan sayı ve şekil örüntüsünü sürdürür.", "MAT.1.1.6"),
+          o("Tahmin eder", "Nesne sayısını tahmin eder, sayarak kontrol eder.", "MAT.1.1.7")
+        ]},
+        { id:"t3", kisa:"3. Tema", ad:"3. TEMA “SAYILAR VE NİCELİKLER (2)”", donem:1, olcutler:[
+          o("Uzunluk karşılaştırır", "Nesneleri uzun-kısa yönünden karşılaştırır.", "MAT.1.1.8"),
+          o("Uzunluk ölçer", "Karış, adım, kalem gibi araçlarla uzunluk ölçer.", "MAT.1.1.8"),
+          o("Sonucu ifade eder", "Ölçme sonucunu sayı ve birimiyle söyler (5 kalem boyu gibi).", "MAT.1.1.8"),
+          o("Ağırlık karşılaştırır", "Nesneleri ağır-hafif yönünden karşılaştırır.", "MAT.1.1.8"),
+          o("Terazi kullanır", "Eşit kollu terazi ile kütleleri karşılaştırır.", "MAT.1.1.8"),
+          o("Uygun araç seçer", "Ölçülecek nesneye uygun ölçme aracını seçer.", "MAT.1.1.8")
+        ]},
+        { id:"t4", kisa:"4. Tema", ad:"4. TEMA “İŞLEMLERDEN CEBİRSEL DÜŞÜNMEYE”", donem:2, olcutler:[
+          o("Toplamanın anlamı", "Birleştirme ve ekleme durumlarını çözümler.", "MAT.1.2.1"),
+          o("Çıkarmanın anlamı", "Ayırma ve eksiltme durumlarını çözümler.", "MAT.1.2.1"),
+          o("İşlemle gösterir", "Günlük yaşam durumunu toplama ya da çıkarma işlemiyle gösterir.", "MAT.1.2.1"),
+          o("Sonucu tahmin eder", "İşlem sonucunu tahmin eder, işlemle karşılaştırır.", "MAT.1.2.2"),
+          o("Zihinden işlem", "Toplama ve çıkarma işlemlerini zihinden yapar.", "MAT.1.2.2"),
+          o("Eşittir işareti", "Eşit işaretinin iki yanının denk olduğunu açıklar.", "MAT.1.2.3"),
+          o("İşlem ilişkisi", "Toplama işleminden çıkarma işlemi türetir.", "MAT.1.2.4")
+        ]},
+        { id:"t5", kisa:"5. Tema", ad:"5. TEMA “SAYILAR VE NİCELİKLER (3)” – PARALARIMIZ", donem:2, olcutler:[
+          o("Paraları tanır", "Kâğıt ve madeni paralarımızı tanır.", "MAT.1.1.9"),
+          o("Değerini söyler", "Paraların değerini söyler.", "MAT.1.1.9"),
+          o("Değer karşılaştırır", "Hangi paranın daha değerli olduğunu belirtir.", "MAT.1.1.9"),
+          o("Denk para grupları", "Aynı değeri farklı paralarla oluşturur.", "MAT.1.1.9"),
+          o("Tasarruf", "Parayı biriktirmenin ve dikkatli kullanmanın önemini açıklar.", "MAT.1.1.9")
+        ]},
+        { id:"t6", kisa:"6. Tema", ad:"6. TEMA “NESNELERİN GEOMETRİSİ (2)”", donem:2, olcutler:[
+          o("Biçime göre ayırır", "Nesneleri biçimsel özelliklerine göre ayırt eder.", "MAT.1.3.3"),
+          o("Şekilleri tanır", "Üçgen, kare, dikdörtgen ve daireyi tanır.", "MAT.1.3.4"),
+          o("Yapılarda şekil bulur", "Çevresindeki yapılarda geometrik şekilleri gösterir.", "MAT.1.3.4"),
+          o("Şekil oluşturur", "Şekilleri birleştirerek yeni yapılar oluşturur.", "MAT.1.3.4"),
+          o("Sınıflandırır", "Şekilleri köşe ve kenar sayısına göre sınıflandırır.", "MAT.1.3.5")
+        ]},
+        { id:"t7", kisa:"7. Tema", ad:"7. TEMA “VERİYE DAYALI ARAŞTIRMA”", donem:2, olcutler:[
+          o("Soru belirler", "Veri toplamak için bir soru belirler.", "MAT.1.4.1"),
+          o("Veri toplar", "Sınıfından veri toplar, çetele tutar.", "MAT.1.4.1"),
+          o("Sıklık tablosu", "Verileri sıklık tablosuna aktarır.", "MAT.1.4.1"),
+          o("Grafikle gösterir", "Verileri nesne ve şekil grafiğiyle gösterir.", "MAT.1.4.1"),
+          o("Yorumlar", "Grafiği okuyarak basit bir karar verir.", "MAT.1.4.1")
+        ]}
+      ]},
+      { anahtar:"hayat", ad:"Hayat Bilgisi", renk:"hayat", temalar: [
+        { id:"u1", kisa:"1. Ünite", ad:"1. ÜNİTE “BEN VE OKULUM”", donem:1, olcutler:[
+          o("Tanışır", "Öğretmeni ve arkadaşlarıyla tanışır, adlarını söyler.", "HB.1.1.1"),
+          o("Kendini tanıtır", "Kendini uygun biçimde tanıtır.", "HB.1.1.1"),
+          o("Okulu tanır", "Sınıf ve okuldaki bölümleri ve çalışanları tanır.", "HB.1.1.2"),
+          o("Kurallara uyar", "Sınıf ve okul kurallarına uyar.", "HB.1.1.3"),
+          o("Ortak alanları korur", "Okul eşyalarını ve ortak alanları özenle kullanır.", "HB.1.1.3"),
+          o("Kendini açıklar", "Sevdiklerini, yeteneklerini ve bireysel özelliklerini açıklar.", "HB.1.1.4"),
+          o("Farklılıklara saygı", "Arkadaşlarının farklı özelliklerine saygı gösterir.", "HB.1.1.4")
+        ]},
+        { id:"u2", kisa:"2. Ünite", ad:"2. ÜNİTE “SAĞLIĞIM VE GÜVENLİĞİM”", donem:1, olcutler:[
+          o("Sağlıklı beslenme", "Sağlıklı büyümek için doğru besinleri seçer.", "HB.1.2.1"),
+          o("Kişisel temizlik", "El yıkama gibi kişisel temizlik alışkanlıklarını uygular.", "HB.1.2.1"),
+          o("Kişisel alan", "Kişisel alan sınırlarını korur, gerektiğinde hayır der.", "HB.1.2.2"),
+          o("Yardım ister", "Kendini güvende hissetmediğinde güvendiği yetişkine haber verir.", "HB.1.2.2"),
+          o("Trafik kuralları", "Yaya olarak temel trafik kurallarına uyar.", "HB.1.2.3"),
+          o("Trafik işaretleri", "Trafik ışıklarını ve temel işaretleri tanır.", "HB.1.2.3"),
+          o("Acil durumlar", "Acil durumlarda yapılması gerekenleri ve 112'yi bilir.", "HB.1.2.4")
+        ]},
+        { id:"u3", kisa:"3. Ünite", ad:"3. ÜNİTE “AİLEM VE TOPLUM”", donem:1, olcutler:[
+          o("Ailesini tanıtır", "Ailesini ve aile bireylerini tanıtır.", "HB.1.3.1"),
+          o("Aileleri karşılaştırır", "Ailelerin farklı özellikleri olabileceğini söyler.", "HB.1.3.1"),
+          o("Nezaket sözcükleri", "Lütfen, teşekkür ederim, özür dilerim sözcüklerini kullanır.", "HB.1.3.2"),
+          o("Görgü kuralları", "Sofrada ve misafirlikte görgü kurallarına uyar.", "HB.1.3.2"),
+          o("Görevleri söyler", "Aile bireylerinin görev ve sorumluluklarını söyler.", "HB.1.3.3"),
+          o("Sorumluluk alır", "Evde kendine düşen sorumlulukları yerine getirir.", "HB.1.3.3")
+        ]},
+        { id:"u4", kisa:"4. Ünite", ad:"4. ÜNİTE “YAŞADIĞIM YER VE ÜLKEM”", donem:2, olcutler:[
+          o("Yaşadığı yer", "Yaşadığı yerin ve adresinin özelliklerini söyler.", "HB.1.4.1"),
+          o("Ülkemiz", "Başkentimizi ve ülkemizin temel özelliklerini söyler.", "HB.1.4.1"),
+          o("Bayrak ve marş", "Türk bayrağına ve İstiklâl Marşı'na saygı gösterir.", "HB.1.4.2"),
+          o("Atatürk", "Mustafa Kemal Atatürk'ün hayatıyla ilgili bilgileri anlatır.", "HB.1.4.3"),
+          o("Millî bayramlar", "Millî gün ve bayramlarda yaşadığı duyguları ifade eder.", "HB.1.4.4"),
+          o("Dinî bayramlar", "Dinî gün ve bayramlarda yaşadığı duyguları ifade eder.", "HB.1.4.5")
+        ]},
+        { id:"u5", kisa:"5. Ünite", ad:"5. ÜNİTE “DOĞA VE ÇEVRE”", donem:2, olcutler:[
+          o("Doğayı gözlemler", "Yakın çevresindeki doğal varlıkları gözlemler.", "HB.1.5.1"),
+          o("Gözlemini anlatır", "Gözlemlediği varlıkları özellikleriyle anlatır.", "HB.1.5.1"),
+          o("Gök cisimleri", "Güneş, Dünya ve Ay'ı model üzerinde karşılaştırır.", "HB.1.5.2"),
+          o("Afetleri tanır", "Deprem, sel, yangın gibi afet türlerini tanır.", "HB.1.5.3"),
+          o("Afette korunur", "Deprem anında çök-kapan-tutun hareketini uygular.", "HB.1.5.3"),
+          o("Geri dönüşüm", "Atıkları türüne göre ayırır.", "HB.1.5.4")
+        ]},
+        { id:"u6", kisa:"6. Ünite", ad:"6. ÜNİTE “BİLİM, TEKNOLOJİ VE SANAT”", donem:2, olcutler:[
+          o("Bilimsel merak", "Bilimle ilgili merak ettiklerini sorar.", "HB.1.6.1"),
+          o("Cevap arar", "Sorusunun cevabını gözlem ya da basit deneyle arar.", "HB.1.6.1"),
+          o("Teknoloji merakı", "Kullandığı teknolojik araçlarla ilgili sorular sorar.", "HB.1.6.2"),
+          o("Güvenli kullanım", "Teknolojik araçları güvenli ve sınırlı süre kullanır.", "HB.1.6.2"),
+          o("Sanat merakı", "Sanatla ilgili merak ettiklerini sorar.", "HB.1.6.3"),
+          o("Ürün oluşturur", "Duygu ve düşüncelerini bir sanat ürünüyle ifade eder.", "HB.1.6.3")
+        ]}
+      ]}
+    ]
+  }
+};
+
+var DUZEYLER = [
+  { k:"ci", ad:"Çok İyi", kisa:"Çİ" },
+  { k:"i",  ad:"İyi", kisa:"İ" },
+  { k:"y",  ad:"Yeterli", kisa:"Y" },
+  { k:"g",  ad:"Geliştirilmeli", kisa:"G" }
+];
+var PUAN_AD = {4:"Çok iyi", 3:"İyi", 2:"Yeterli", 1:"Geliştirilmeli"};
+function duzey(ort){
+  if (ort == null) return null;
+  if (ort >= 3.5) return DUZEYLER[0];
+  if (ort >= 2.5) return DUZEYLER[1];
+  if (ort >= 1.5) return DUZEYLER[2];
+  return DUZEYLER[3];
+}
+
+/* ---------------- Kayıt ---------------- */
+var ANAHTAR = "do-gozlem-olcekleri-v1";
+var durum;
+function yeniId(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function bosDurum(){
+  var s = { id:yeniId(), duzey:1, sube:"A", ogrenciler:[] };
+  return { okul:{ ilce:"", okul:"", yil:"2026-2027", donem:"1", mudur:"", ogretmen:"" },
+           siniflar:[s], aktif:s.id, puan:{}, sekme:"okul", tema:{} };
+}
+function yukle(){
+  try { var v = JSON.parse(localStorage.getItem(ANAHTAR)); if (v && v.siniflar && v.siniflar.length) return v; } catch(e){}
+  return bosDurum();
+}
+var kayitZamani = null;
+function kaydet(){
+  clearTimeout(kayitZamani);
+  kayitZamani = setTimeout(function(){
+    try { localStorage.setItem(ANAHTAR, JSON.stringify(durum)); }
+    catch(e){ bildir("Kaydedilemedi. Tarayıcı belleği dolu ya da gizli sekmedesiniz; lütfen yedeği indirin."); }
+  }, 150);
+}
+durum = yukle();
+if (!durum.tema) durum.tema = {};
+if (!durum.puan) durum.puan = {};
+if (!durum.not) durum.not = {};
+if (!durum.karneNot) durum.karneNot = {};
+
+function aktifSinif(){
+  for (var i=0;i<durum.siniflar.length;i++) if (durum.siniflar[i].id === durum.aktif) return durum.siniflar[i];
+  durum.aktif = durum.siniflar[0].id; return durum.siniflar[0];
+}
+function sinifAdi(s){ return s.duzey + ". Sınıf / " + (s.sube || "A"); }
+function dersler(){ var v = VERI[aktifSinif().duzey]; return v ? v.dersler : []; }
+function dersBul(a){ var d = dersler(); for (var i=0;i<d.length;i++) if (d[i].anahtar===a) return d[i]; return null; }
+function formAnahtar(ders, tema){ return ders.anahtar + "-" + tema.id; }
+function puanlar(ders, tema){
+  var s = aktifSinif();
+  if (!durum.puan[s.id]) durum.puan[s.id] = {};
+  var fa = formAnahtar(ders, tema);
+  if (!durum.puan[s.id][fa]) durum.puan[s.id][fa] = {};
+  return durum.puan[s.id][fa];
+}
+function puanOku(ders, tema, ogrId, i){
+  var s = aktifSinif(); var p = durum.puan[s.id] && durum.puan[s.id][formAnahtar(ders,tema)];
+  return p && p[ogrId] ? (p[ogrId][i] || null) : null;
+}
+function ortalama(ders, tema, ogrId){
+  var t=0,n=0;
+  for (var i=0;i<tema.olcutler.length;i++){ var v = puanOku(ders,tema,ogrId,i); if (v){ t+=v; n++; } }
+  return n ? t/n : null;
+}
+function formDoluMu(ders, tema){
+  var og = aktifSinif().ogrenciler;
+  for (var j=0;j<og.length;j++) if (ortalama(ders,tema,og[j].id) != null) return true;
+  return false;
+}
+function yuzdeDolu(ders, tema){
+  var og = aktifSinif().ogrenciler, top = og.length*tema.olcutler.length, n=0;
+  if (!top) return 0;
+  og.forEach(function(g){ for (var i=0;i<tema.olcutler.length;i++) if (puanOku(ders,tema,g.id,i)) n++; });
+  return Math.round(n*100/top);
+}
+
+/* ---------------- Yardımcılar ---------------- */
+function $(s, k){ return (k||document).querySelector(s); }
+function el(etiket, ozellik, icerik){
+  var e = document.createElement(etiket);
+  if (ozellik) for (var k in ozellik){
+    if (k === "class") e.className = ozellik[k];
+    else if (k === "text") e.textContent = ozellik[k];
+    else if (k === "html") e.innerHTML = ozellik[k];
+    else if (k.slice(0,2) === "on") e.addEventListener(k.slice(2), ozellik[k]);
+    else e.setAttribute(k, ozellik[k]);
+  }
+  if (icerik) (Array.isArray(icerik)?icerik:[icerik]).forEach(function(c){ if (c!=null) e.appendChild(typeof c==="string"?document.createTextNode(c):c); });
+  return e;
+}
+function kac(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+function trBuyuk(s){ return String(s||"").toLocaleUpperCase("tr-TR"); }
+function ortYaz(v){ return v==null ? "–" : v.toFixed(2).replace(".", ","); }
+var bildirimZ;
+function bildir(m){
+  var b = $(".bildirim"); if (b) b.remove();
+  b = el("div",{class:"bildirim",role:"status",text:m}); document.body.appendChild(b);
+  clearTimeout(bildirimZ); bildirimZ = setTimeout(function(){ b.remove(); }, 3200);
+}
+function dosyaAdiYap(s){
+  return trBuyuk(s).toLocaleLowerCase("tr-TR")
+    .replace(/[çÇ]/g,"c").replace(/[ğĞ]/g,"g").replace(/[ıİI]/g,"i").replace(/[öÖ]/g,"o").replace(/[şŞ]/g,"s").replace(/[üÜ]/g,"u").replace(/[âÂ]/g,"a")
+    .replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,80);
+}
+function indirBlob(blob, ad){
+  var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = ad;
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+}
+
+/* ---------------- Sekmeler ---------------- */
+function sekmeleriCiz(){
+  var n = $("#sekmeler"); n.innerHTML = "";
+  var liste = [{k:"okul", ad:"Okul ve Sınıf"}];
+  dersler().forEach(function(d){ liste.push({k:d.anahtar, ad:d.ad, renk:d.renk}); });
+  liste.push({k:"destek", ad:"Destek Listesi"});
+  liste.push({k:"karne", ad:"Veli Karnesi"});
+  liste.push({k:"ozet", ad:"Özet (e-Okul)"});
+  if (!liste.some(function(x){return x.k===durum.sekme;})) durum.sekme = "okul";
+  liste.forEach(function(x){
+    var b = el("button",{class:"sekme"+(x.renk?" d-"+x.renk:""), role:"tab", "aria-selected": String(durum.sekme===x.k), onclick:function(){ durum.sekme=x.k; kaydet(); ciz(); window.scrollTo({top:0}); }});
+    if (x.renk) b.appendChild(el("span",{class:"nok",style:"background:var(--"+x.renk+")"}));
+    b.appendChild(document.createTextNode(x.ad));
+    n.appendChild(b);
+  });
+  var us = $("#ustSinif"); us.innerHTML = "";
+  durum.siniflar.forEach(function(s){
+    us.appendChild(el("option",{value:s.id, text:sinifAdi(s) + " · " + s.ogrenciler.length + " öğrenci"}));
+  });
+  us.value = durum.aktif;
+}
+$("#ustSinif").addEventListener("change", function(){ durum.aktif = this.value; kaydet(); ciz(); });
+
+function ciz(){
+  kapatSecici();
+  sekmeleriCiz();
+  var ic = $("#icerik"); ic.innerHTML = "";
+  if (durum.sekme === "okul") okulCiz(ic);
+  else if (durum.sekme === "ozet") ozetCiz(ic);
+  else if (durum.sekme === "destek") destekCiz(ic);
+  else if (durum.sekme === "karne") karneCiz(ic);
+  else { var d = dersBul(durum.sekme); if (d) dersCiz(ic, d); else okulCiz(ic); }
+}
+
+/* ---------------- Okul ve Sınıf ---------------- */
+function okulCiz(ic){
+  var k1 = el("section",{class:"kart"});
+  k1.appendChild(el("h2",{text:"Okul bilgileri"}));
+  k1.appendChild(el("p",{class:"aciklama",text:"Bir kez yazın; bütün formların başlığına ve imza bölümüne kendiliğinden gelir."}));
+  var iz = el("div",{class:"izgara"});
+  function alan(ad, anahtar, ipucu, tam){
+    var l = el("label",{class:"alan"+(tam?" tam":"")}, ad);
+    var inp = el("input",{type:"text", value:durum.okul[anahtar]||"", placeholder:ipucu||"", autocomplete:"off"});
+    inp.addEventListener("input", function(){ durum.okul[anahtar] = this.value; kaydet(); });
+    l.appendChild(inp); iz.appendChild(l);
+  }
+  alan("İlçe","ilce","Örnek: Şahinbey");
+  alan("Okul adı","okul","Örnek: Atatürk İlkokulu");
+  alan("Öğretim yılı","yil","2026-2027");
+  var ld = el("label",{class:"alan"},"Dönem");
+  var sel = el("select");
+  [["1","1. dönem"],["2","2. dönem"]].forEach(function(x){ sel.appendChild(el("option",{value:x[0],text:x[1]})); });
+  sel.value = durum.okul.donem || "1";
+  sel.addEventListener("change", function(){ durum.okul.donem = this.value; kaydet(); });
+  ld.appendChild(sel); iz.appendChild(ld);
+  alan("Sınıf öğretmeni","ogretmen","Adı soyadı");
+  alan("Okul müdürü","mudur","Adı soyadı");
+  k1.appendChild(iz);
+  ic.appendChild(k1);
+
+  /* Sınıflarım */
+  var k2 = el("section",{class:"kart"});
+  k2.appendChild(el("h2",{text:"Sınıflarım"}));
+  k2.appendChild(el("p",{class:"aciklama",text:"Birden çok şubeniz varsa ayrı ayrı ekleyebilirsiniz. Şimdilik 1. sınıf ölçekleri hazır; 2, 3 ve 4. sınıflar sırayla ekleniyor."}));
+  var sl = el("div",{class:"sinif-listesi"});
+  durum.siniflar.forEach(function(s){
+    sl.appendChild(el("button",{class:"sinif-cip"+(s.id===durum.aktif?" secili":""), onclick:function(){ durum.aktif=s.id; kaydet(); ciz(); }},
+      [sinifAdi(s), el("small",{text:s.ogrenciler.length+" öğrenci"})]));
+  });
+  k2.appendChild(sl);
+  var s = aktifSinif();
+  var iz2 = el("div",{class:"izgara"});
+  var lD = el("label",{class:"alan"},"Sınıf düzeyi");
+  var sD = el("select");
+  [1,2,3,4].forEach(function(d){ var op = el("option",{value:d,text:d+". sınıf"+(VERI[d]?"":" (yakında)")}); if(!VERI[d]) op.disabled = true; sD.appendChild(op); });
+  sD.value = s.duzey;
+  sD.addEventListener("change", function(){ s.duzey = +this.value; kaydet(); ciz(); });
+  lD.appendChild(sD); iz2.appendChild(lD);
+  var lS = el("label",{class:"alan"},"Şube");
+  var iS = el("input",{type:"text",value:s.sube||"",maxlength:"4",placeholder:"A"});
+  iS.addEventListener("input", function(){ s.sube = trBuyuk(this.value.trim()); kaydet(); sekmeleriCiz(); });
+  lS.appendChild(iS); iz2.appendChild(lS);
+  k2.appendChild(iz2);
+  var db = el("div",{class:"dugmeler"});
+  db.appendChild(el("button",{class:"btn ikincil",text:"Yeni şube ekle",onclick:function(){
+    var y = { id:yeniId(), duzey:1, sube:String.fromCharCode(65+Math.min(durum.siniflar.length,25)), ogrenciler:[] };
+    durum.siniflar.push(y); durum.aktif = y.id; kaydet(); ciz();
+  }}));
+  if (durum.siniflar.length > 1) db.appendChild(el("button",{class:"btn tehlike",text:"Bu şubeyi sil",onclick:function(){
+    if (!confirm(sinifAdi(s)+" ve bütün puanları silinsin mi?")) return;
+    durum.siniflar = durum.siniflar.filter(function(x){return x.id!==s.id;});
+    delete durum.puan[s.id]; durum.aktif = durum.siniflar[0].id; kaydet(); ciz();
+  }}));
+  k2.appendChild(db);
+  ic.appendChild(k2);
+
+  /* Öğrenci listesi */
+  var k3 = el("section",{class:"kart"});
+  k3.appendChild(el("h2",{text:"Öğrenci listesi · " + sinifAdi(s)}));
+  k3.appendChild(el("p",{class:"aciklama",text:"Her satıra bir öğrenci yazın ya da e-Okul'daki sınıf listesini kopyalayıp yapıştırın. Sıra numaraları kendiliğinden ayrılır, okul numarası varsa ayrıca saklanır. Öğrenci sayısında sınır yoktur."}));
+  var ta = el("textarea",{placeholder:"1  245  Ahmet Toprak\n2  251  Zehra Güneş\n3  263  Yiğit Ateş\n…", "aria-label":"Öğrenci adlarını yapıştırın"});
+  k3.appendChild(ta);
+  var d3 = el("div",{class:"dugmeler"});
+  d3.appendChild(el("button",{class:"btn",text:"Listeye ekle",onclick:function(){
+    var yeni = listeyiAyikla(ta.value);
+    if (!yeni.length){ bildir("Eklenecek ad bulunamadı."); return; }
+    yeni.forEach(function(x){ s.ogrenciler.push({id:yeniId(), ad:x.ad, no:x.no}); });
+    ta.value = ""; kaydet(); ciz(); bildir(yeni.length + " öğrenci eklendi.");
+  }}));
+  if (!s.ogrenciler.length) d3.appendChild(el("button",{class:"btn ikincil",text:"Örnek sınıfla dene",onclick:function(){ ornekYukle(s); }}));
+  if (s.ogrenciler.length) d3.appendChild(el("button",{class:"btn ikincil",text:"Alfabetik sırala",onclick:function(){
+    s.ogrenciler.sort(function(a,b){ return a.ad.localeCompare(b.ad,"tr"); }); kaydet(); ciz();
+  }}));
+  if (s.ogrenciler.length) d3.appendChild(el("button",{class:"btn tehlike",text:"Listeyi temizle",onclick:function(){
+    if (!confirm("Bu şubedeki bütün öğrenciler ve puanları silinsin mi?")) return;
+    s.ogrenciler = []; delete durum.puan[s.id]; kaydet(); ciz();
+  }}));
+  k3.appendChild(d3);
+  if (s.ogrenciler.length){
+    var t = el("table",{class:"ogr-tablo"}); var tb = el("tbody");
+    s.ogrenciler.forEach(function(g, i){
+      var tr = el("tr");
+      tr.appendChild(el("td",{class:"no",text:(i+1)+"."}));
+      var adTd = el("td");
+      var adInp = el("input",{type:"text",value:g.ad,"aria-label":"Öğrenci adı",style:"width:100%;border:0;background:transparent;font-weight:600;font-size:.95rem;padding:4px 0"});
+      adInp.addEventListener("input", function(){ g.ad = this.value; kaydet(); });
+      adTd.appendChild(adInp); tr.appendChild(adTd);
+      var noInp = el("input",{type:"text",value:g.no||"",placeholder:"No","aria-label":"Okul numarası",style:"width:70px;border:1px solid #E3E9F0;border-radius:8px;padding:5px 7px;background:#FAFCFE;font-size:.85rem"});
+      noInp.addEventListener("input", function(){ g.no = this.value.trim(); kaydet(); });
+      tr.appendChild(el("td",{class:"okulno"},noInp));
+      tr.appendChild(el("td",{class:"sil"}, el("button",{class:"x",title:"Sil","aria-label":g.ad+" adlı öğrenciyi sil",text:"×",onclick:function(){
+        if (!confirm(g.ad + " listeden silinsin mi?")) return;
+        s.ogrenciler = s.ogrenciler.filter(function(x){return x.id!==g.id;}); kaydet(); ciz();
+      }})));
+      tb.appendChild(tr);
+    });
+    t.appendChild(tb); k3.appendChild(t);
+    var yan = el("div",{class:"yan",style:"margin-top:12px"});
+    var tek = el("input",{type:"text",placeholder:"Tek öğrenci ekle: adı soyadı"});
+    var ekle = function(){ var a = tek.value.trim(); if(!a) return; s.ogrenciler.push({id:yeniId(),ad:a,no:""}); kaydet(); ciz(); };
+    tek.addEventListener("keydown", function(e){ if (e.key==="Enter") ekle(); });
+    yan.appendChild(tek); yan.appendChild(el("button",{class:"btn kucuk",text:"Ekle",onclick:ekle}));
+    k3.appendChild(yan);
+  }
+  ic.appendChild(k3);
+
+  /* Yedek */
+  var k4 = el("section",{class:"kart"});
+  k4.appendChild(el("h2",{text:"Yedek"}));
+  k4.appendChild(el("p",{class:"aciklama",text:"Bilgileriniz yalnızca bu cihazda saklanır, hiçbir yere gönderilmez. Başka bir cihazda (ör. okuldaki bilgisayarda) devam etmek ya da kaybetmemek için yedeği indirin; diğer cihazda bu sayfayı açıp yedeği yükleyin."}));
+  var d4 = el("div",{class:"dugmeler"});
+  d4.appendChild(el("button",{class:"btn",text:"Yedeği indir",onclick:yedekIndir}));
+  var dosya = el("input",{type:"file",accept:".json,application/json",class:"gizli"});
+  dosya.addEventListener("change", function(){ if (this.files[0]) yedekYukle(this.files[0]); this.value=""; });
+  d4.appendChild(dosya);
+  d4.appendChild(el("button",{class:"btn ikincil",text:"Yedeği yükle",onclick:function(){ dosya.click(); }}));
+  k4.appendChild(d4);
+  ic.appendChild(k4);
+}
+
+function listeyiAyikla(metin){
+  var sonuc = [];
+  metin.split(/\r?\n/).forEach(function(satir){
+    var parca = satir.split(/\t+|\s{2,}|;/).map(function(x){return x.trim();}).filter(Boolean);
+    if (!parca.length) return;
+    var sayilar = [], adlar = [];
+    parca.forEach(function(p){
+      if (/^\d+[.)-]?$/.test(p)) sayilar.push(p.replace(/[.)-]/g,""));
+      else {
+        var m = p.match(/^(\d+)[.)-]?\s+(.*)$/);
+        if (m && !adlar.length){ sayilar.push(m[1]); adlar.push(m[2]); }
+        else adlar.push(p);
+      }
+    });
+    var ad = adlar.join(" ").replace(/\s+/g," ").trim();
+    if (!ad || /^(sıra( no)?|s\.? ?no|okul no|adı( soyadı)?|ad soyad|soyadı|öğrenci( adı( soyadı)?)?)(\s|$)/i.test(ad)) return;
+    var no = sayilar.length >= 2 ? sayilar[sayilar.length-1] : "";
+    sonuc.push({ad:ad, no:no});
+  });
+  return sonuc;
+}
+
+function ornekYukle(s){
+  var adlar = ["Ahmet Toprak","Zehra Güneş","Yiğit Ateş","Meryem Akın","Bora Erdem","Nisa Kaplan","Kuzey Bulut","Asya Tekin","Ali Rıza Uçar","Hira Doğan","Eymen Kılıç","Duru Avcı"];
+  adlar.forEach(function(a,i){ s.ogrenciler.push({id:yeniId(), ad:a, no:String(201+i)}); });
+  /* Örnek puanlar: sabit tohumla, gerçekçi dağılım */
+  var tohum = 7;
+  function rast(){ tohum = (tohum * 9301 + 49297) % 233280; return tohum / 233280; }
+  var egilim = [0.3, 0.9, 0.2, 1.4, 0.6, 1.8, 0.3, 0.8, 0.4, 1.2, 0.2, 0.5];
+  function doldur(da, tid){
+    var d = dersBul(da), t = d.temalar.filter(function(x){ return x.id===tid; })[0], p = puanlar(d,t);
+    s.ogrenciler.forEach(function(g,j){ p[g.id] = t.olcutler.map(function(){ var v = 4 - Math.round(rast()*egilim[j%12]*1.7); return Math.max(1, Math.min(4, v)); }); });
+    return [d,t];
+  }
+  doldur("turkce","hz"); var tt = doldur("turkce","t1"); doldur("turkce","t2");
+  doldur("matematik","t1"); doldur("matematik","t2"); doldur("hayat","u1"); doldur("hayat","u2");
+  notYaz(tt[0], tt[1], s.ogrenciler[5].id, 3, "n harfini ters yönden yazmaya başlıyor; hamle sırasını birlikte tekrar ettik.");
+  notYaz(tt[0], tt[1], s.ogrenciler[3].id, 1, "e ile a seslerini karıştırıyor, sesli okumada desteklenmeli.");
+  var d = dersBul("turkce"), t = d.temalar[2];
+  durum.tema.turkce = t.id; durum.sekme = "turkce";
+  kaydet(); ciz(); window.scrollTo({top:0}); bildir("Örnek sınıf yüklendi. Destek Listesi ve Veli Karnesi sekmelerine de bakın. Kendi sınıfınız için listeyi temizleyip adları yapıştırın.");
+}
+
+function yedekIndir(){
+  var veri = JSON.stringify({kaynak:"Dijital Öğretmen · Gözlem Ölçekleri", surum:1, tarih:new Date().toISOString(), durum:durum}, null, 1);
+  var t = new Date(); var g = t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0");
+  indirBlob(new Blob([veri],{type:"application/json"}), "gozlem-olcekleri-yedek-"+g+".json");
+}
+function yedekYukle(f){
+  var r = new FileReader();
+  r.onload = function(){
+    try {
+      var v = JSON.parse(r.result); var d = v.durum || v;
+      if (!d.siniflar || !d.siniflar.length) throw 0;
+      if (!confirm("Yedek yüklenirse bu cihazdaki mevcut bilgilerin yerine geçer. Devam edilsin mi?")) return;
+      durum = d; if (!durum.tema) durum.tema = {}; if (!durum.puan) durum.puan = {}; if (!durum.not) durum.not = {}; if (!durum.karneNot) durum.karneNot = {};
+      kaydet(); ciz(); bildir("Yedek yüklendi.");
+    } catch(e){ bildir("Bu dosya bir ölçek yedeği değil."); }
+  };
+  r.readAsText(f);
+}
+
+/* ---------------- Ders formları ---------------- */
+function aktifTema(d){
+  var id = durum.tema[d.anahtar];
+  for (var i=0;i<d.temalar.length;i++) if (d.temalar[i].id===id) return d.temalar[i];
+  /* Varsayılan: dönemine uygun ilk tema */
+  return d.temalar[0];
+}
+
+function dersCiz(ic, d){
+  var s = aktifSinif();
+  var t = aktifTema(d);
+  var k = el("section",{class:"kart ders-"+d.renk});
+  var tl = el("div",{class:"temalar",role:"tablist"});
+  d.temalar.forEach(function(x){
+    var b = el("button",{class:"tema",role:"tab","aria-selected":String(x.id===t.id), onclick:function(){ durum.tema[d.anahtar]=x.id; kaydet(); ciz(); }}, x.kisa);
+    if (buHaftaTema(d) === x.id) b.appendChild(el("span",{class:"bu-hafta",text:"BU HAFTA"}));
+    b.appendChild(el("span",{class:"dolu"+(formDoluMu(d,x)?" var":""), title: formDoluMu(d,x)?"Puan girilmiş":"Henüz boş"}));
+    tl.appendChild(b);
+  });
+  k.appendChild(tl);
+  k.appendChild(el("h2",{class:"form-baslik",text:t.ad + " · GÖZLEM FORMU"}));
+  var alt = el("p",{class:"form-alt",html: kac(s.duzey+". Sınıf "+d.ad) + " · <b>" + t.olcutler.length + " ölçüt</b> · " + t.donem + ". dönem" + (s.ogrenciler.length? " · %"+yuzdeDolu(d,t)+" dolu":"")});
+  k.appendChild(alt);
+  var db = el("div",{class:"dugmeler"});
+  db.appendChild(el("button",{class:"btn",text:"Bu formu yazdır",onclick:function(){ baskiYap([[d,t]]); }}));
+  db.appendChild(el("button",{class:"btn word",text:"Word indir",onclick:function(){ wordIndir([[d,t]], dosyaAdiYap(s.duzey+"-sinif-"+d.ad+"-"+t.kisa+"-gozlem-formu")); }}));
+  db.appendChild(el("button",{class:"btn pdf",text:"PDF indir",onclick:function(){ pdfIndir([[d,t]], dosyaAdiYap(s.duzey+"-sinif-"+d.ad+"-"+t.kisa+"-gozlem-formu")); }}));
+  db.appendChild(el("button",{class:"btn ikincil",text:"Dersin bütün formları",onclick:function(){ sayfaSec(d); }}));
+  k.appendChild(db);
+
+  if (!s.ogrenciler.length){
+    var b = el("div",{class:"bos-durum"},[el("div",{text:"Bu şubede henüz öğrenci yok. Önce öğrenci listesini ekleyin; boş formu yine de yazdırabilirsiniz."})]);
+    b.appendChild(el("button",{class:"btn",text:"Öğrenci listesine git",onclick:function(){ durum.sekme="okul"; kaydet(); ciz(); }}));
+    k.appendChild(b);
+  } else {
+    var gr = el("div",{class:"gorunum",role:"group","aria-label":"Görünüm"});
+    [["tablo","Sınıf tablosu"],["kart","Öğrenci öğrenci"]].forEach(function(x){
+      gr.appendChild(el("button",{"aria-pressed":String(gorunum()===x[0]),text:x[1],onclick:function(){ durum.gorunum = x[0]; kaydet(); ciz(); }}));
+    });
+    k.appendChild(gr);
+    if (gorunum() === "kart"){
+      k.appendChild(kartYap(d,t));
+      k.appendChild(el("p",{class:"ipucu",text:"Sınıfta dolaşırken kullanmak için: öğrenciyi seçin, her ölçüt için puana dokunun. Gözlediğiniz bir ayrıntıyı \u201cNot yaz\u201d ile ekleyebilirsiniz; notlar Destek Listesi'nde görünür."}));
+    } else {
+      k.appendChild(tabloYap(d,t));
+      k.appendChild(el("p",{class:"ipucu",text:"Kutuya dokunup puan seçin ya da not yazın (notlu kutularda mor nokta görünür). Sütun başındaki \u201cHepsi\u201d düğmesi o ölçütteki boş kutuların hepsine aynı puanı yazar; öğrenci adına dokununca o öğrencinin boş kutuları doldurulur. Klavyede 1-4 tuşlarıyla da puan girebilirsiniz."}));
+    }
+  }
+  ic.appendChild(k);
+
+  var k2 = el("section",{class:"kart"});
+  k2.appendChild(el("h2",{text:"Ölçütler"}));
+  var ol = el("ol",{class:"olcutler"});
+  t.olcutler.forEach(function(x){ ol.appendChild(el("li",null,[el("b",{text:x.ad+": "}), x.uzun, el("span",{class:"k",text:x.kod})])); });
+  k2.appendChild(ol);
+  var an = el("div",{class:"anahtar"});
+  [4,3,2,1].forEach(function(p){ an.appendChild(el("span",{class:"rozet r-"+["","g","y","i","ci"][p],text:p+" = "+PUAN_AD[p]})); });
+  k2.appendChild(an);
+  k2.appendChild(el("p",{class:"bilgi",text:"Değer: ortalama 3,50 ve üzeri Çok İyi · 2,50–3,49 İyi · 1,50–2,49 Yeterli · 1,49 ve altı Geliştirilmeli."}));
+  ic.appendChild(k2);
+}
+
+function tabloYap(d, t){
+  var s = aktifSinif();
+  var kutu = el("div",{class:"tablo-kutu"});
+  var tab = el("table",{class:"gozlem"});
+  var th = el("thead"); var r = el("tr");
+  r.appendChild(el("th",{class:"ogr-bas",text:"Öğrenci"}));
+  t.olcutler.forEach(function(x,i){
+    var h = el("th",{scope:"col",title:x.uzun});
+    h.appendChild(el("span",{class:"olcut-no",text:String(i+1)}));
+    h.appendChild(el("div",{class:"dik",text:x.ad}));
+    h.appendChild(el("span",{class:"kod",text:x.kod}));
+    h.appendChild(el("button",{class:"simsek",text:"Hepsi",title:"Bu sütundaki boş kutuları doldur","aria-label":x.ad+" sütununu doldur",onclick:function(e){
+      seciciAc(e.currentTarget, "“"+x.ad+"” · boş kutuların hepsine:", function(p){
+        var pt = puanlar(d,t);
+        s.ogrenciler.forEach(function(g){ if (!pt[g.id]) pt[g.id]=[]; if (p===0) pt[g.id][i]=null; else if (!pt[g.id][i]) pt[g.id][i]=p; });
+        kaydet(); tabloYenile(d,t);
+      }, "Sütunu temizle");
+    }}));
+    r.appendChild(h);
+  });
+  r.appendChild(el("th",{class:"ort-bas",text:"Ortalama"}));
+  r.appendChild(el("th",{class:"deg-bas",text:"Değer"}));
+  th.appendChild(r); tab.appendChild(th);
+  var tb = el("tbody");
+  s.ogrenciler.forEach(function(g, j){
+    var tr = el("tr");
+    var td0 = el("td",{class:"ogr"});
+    td0.appendChild(el("button",{title:"Bu öğrencinin boş kutularını doldur",onclick:function(e){
+      seciciAc(e.currentTarget, g.ad+" · boş kutuların hepsine:", function(p){
+        var pt = puanlar(d,t); if (!pt[g.id]) pt[g.id]=[];
+        t.olcutler.forEach(function(_,i){ if (p===0) pt[g.id][i]=null; else if (!pt[g.id][i]) pt[g.id][i]=p; });
+        kaydet(); tabloYenile(d,t);
+      }, "Satırı temizle");
+    }},[el("span",{class:"sira",text:String(j+1)}), g.ad]));
+    tr.appendChild(td0);
+    t.olcutler.forEach(function(x,i){
+      var v = puanOku(d,t,g.id,i);
+      var td = el("td",{class:"hucre"});
+      var b = el("button",{class: v?"p p"+v:"", "data-j":j, "data-i":i, "aria-label": g.ad+", "+x.ad+": "+(v?v+" ("+PUAN_AD[v]+")":"boş"),
+        onclick:function(e){
+          var hedef = e.currentTarget;
+          seciciAc(hedef, g.ad+" · "+x.ad, function(p){ hucreYaz(d,t,g,i,p); }, "Puanı sil", {
+            metin: notOku(d,t,g.id,i),
+            ac: function(){ notPenceresi(d,t,g,i,function(){ tabloYenile(d,t); }); }
+          });
+        },
+        onkeydown:function(e){ hucreTus(e,d,t,g,i,j); }
+      });
+      if (v) b.appendChild(el("span",{text:String(v)})); else b.textContent = "–";
+      td.appendChild(b);
+      if (notOku(d,t,g.id,i)){ td.appendChild(el("span",{class:"not-isaret",title:notOku(d,t,g.id,i)})); b.setAttribute("aria-label", b.getAttribute("aria-label")+", not: "+notOku(d,t,g.id,i)); }
+      tr.appendChild(td);
+    });
+    var ort = ortalama(d,t,g.id); var dz = duzey(ort);
+    tr.appendChild(el("td",{class:"ort",text:ortYaz(ort)}));
+    tr.appendChild(el("td",{class:"deg"}, dz ? el("span",{class:"rozet r-"+dz.k,text:dz.ad}) : el("span",{class:"rozet r-bos",text:"–"})));
+    tb.appendChild(tr);
+  });
+  tab.appendChild(tb); kutu.appendChild(tab);
+  return kutu;
+}
+function tabloYenile(d,t){
+  if (gorunum() === "kart"){ var ek = $(".okart"); if (!ek) return ciz(); var y = kartYap(d,t); ek.replaceWith(y); ustBilgiYenile(d,t); return; }
+  var eski = $(".tablo-kutu"); if (!eski) return ciz();
+  var sx = eski.scrollLeft, sy = window.scrollY;
+  var aktif = document.activeElement, aj = aktif && aktif.dataset ? aktif.dataset.j : null, ai = aktif && aktif.dataset ? aktif.dataset.i : null;
+  var yeni = tabloYap(d,t); eski.replaceWith(yeni); yeni.scrollLeft = sx; window.scrollTo(0, sy);
+  if (aj != null && ai != null){ var b = $('.hucre button[data-j="'+aj+'"][data-i="'+ai+'"]'); if (b) b.focus({preventScroll:true}); }
+  ustBilgiYenile(d,t);
+}
+function ustBilgiYenile(d,t){
+  var alt = $(".form-alt"); var s = aktifSinif();
+  if (alt) alt.innerHTML = kac(s.duzey+". Sınıf "+d.ad) + " · <b>" + t.olcutler.length + " ölçüt</b> · " + t.donem + ". dönem · %" + yuzdeDolu(d,t) + " dolu";
+  document.querySelectorAll(".tema").forEach(function(b, i){ var x = d.temalar[i]; var n = b.querySelector(".dolu"); if (n && x) n.className = "dolu"+(formDoluMu(d,x)?" var":""); });
+}
+function hucreYaz(d,t,g,i,p){
+  var pt = puanlar(d,t); if (!pt[g.id]) pt[g.id]=[];
+  pt[g.id][i] = p || null; kaydet(); tabloYenile(d,t);
+}
+function hucreTus(e,d,t,g,i,j){
+  var k = e.key;
+  if (/^[1-4]$/.test(k)){ e.preventDefault(); hucreYaz(d,t,g,i,+k); odakla(j+1,i) || odakla(j,i); return; }
+  if (k==="Backspace"||k==="Delete"||k==="0"){ e.preventDefault(); hucreYaz(d,t,g,i,0); odakla(j,i); return; }
+  var yon = {ArrowDown:[1,0],ArrowUp:[-1,0],ArrowRight:[0,1],ArrowLeft:[0,-1]}[k];
+  if (yon){ e.preventDefault(); odakla(j+yon[0], i+yon[1]); }
+}
+function odakla(j,i){ var b = $('.hucre button[data-j="'+j+'"][data-i="'+i+'"]'); if (b){ b.focus(); return true; } return false; }
+
+/* Puan seçici */
+function kapatSecici(){ var a = $(".secici"); if (a) a.remove(); var p = $(".perde"); if (p) p.remove(); }
+function seciciAc(hedef, baslik, sec, temizleAd, notSec){
+  kapatSecici();
+  var perde = el("div",{class:"perde",onclick:kapatSecici});
+  var k = el("div",{class:"secici",role:"dialog","aria-label":baslik});
+  k.appendChild(el("div",{class:"baslik",text:baslik}));
+  var g = el("div",{class:"puanlar"});
+  [4,3,2,1].forEach(function(p){
+    g.appendChild(el("button",{class:"b"+p,onclick:function(){ kapatSecici(); sec(p); hedef.focus && hedef.focus({preventScroll:true}); }},[String(p), el("small",{text:PUAN_AD[p]})]));
+  });
+  k.appendChild(g);
+  k.appendChild(el("button",{class:"temizle",text:temizleAd||"Sil",onclick:function(){ kapatSecici(); sec(0); }}));
+  if (notSec){
+    if (notSec.metin) k.appendChild(el("div",{class:"not-on",text:"Not: "+notSec.metin}));
+    k.appendChild(el("button",{class:"not-btn",text: notSec.metin ? "Notu düzenle" : "Not yaz",onclick:function(){ kapatSecici(); notSec.ac(); }}));
+  }
+  document.body.appendChild(perde); document.body.appendChild(k);
+  var r = hedef.getBoundingClientRect(); var w = 290, h = k.offsetHeight;
+  var x = Math.min(Math.max(8, r.left + r.width/2 - w/2), window.innerWidth - w - 8);
+  var y = r.bottom + 6; if (y + h > window.innerHeight - 8) y = Math.max(8, r.top - h - 6);
+  k.style.left = x+"px"; k.style.top = y+"px";
+  var ilk = k.querySelector("button"); if (ilk) ilk.focus({preventScroll:true});
+  k.addEventListener("keydown", function(e){
+    if (e.key==="Escape"){ kapatSecici(); hedef.focus && hedef.focus(); }
+    if (/^[1-4]$/.test(e.key)){ e.preventDefault(); kapatSecici(); sec(+e.key); hedef.focus && hedef.focus({preventScroll:true}); }
+  });
+}
+window.addEventListener("resize", kapatSecici);
+document.addEventListener("scroll", function(e){ if (e.target && e.target.classList && e.target.classList.contains("tablo-kutu")) kapatSecici(); }, true);
+
+/* Sayfa seç penceresi */
+function sayfaSec(d){
+  var s = aktifSinif();
+  var arka = el("div",{class:"pencere-arka",onclick:function(e){ if (e.target===arka) arka.remove(); }});
+  var p = el("div",{class:"pencere",role:"dialog","aria-label":"Sayfa seç"});
+  p.appendChild(el("h3",{text:s.duzey+". Sınıf "+d.ad+" · Sayfa Seç"}));
+  p.appendChild(el("p",{class:"bilgi",text:"Yazdırmak ya da indirmek istediğiniz formları işaretleyin. Her form ayrı bir sayfaya gelir."}));
+  var hizli = el("div",{class:"dugmeler"});
+  var liste = el("div",{class:"liste"});
+  var kutular = [];
+  d.temalar.forEach(function(t){
+    var c = el("input",{type:"checkbox"}); c.checked = true; kutular.push([c,t]);
+    liste.appendChild(el("label",null,[c, t.kisa + " · " + t.ad.replace(/^\d+\.\s*(TEMA|ÜNİTE)\s*/,"").replace(/[“”]/g,""), el("small",{text: formDoluMu(d,t) ? "dolu" : "boş"})]));
+  });
+  function hepsi(f){ kutular.forEach(function(x){ x[0].checked = f(x[1]); }); }
+  hizli.appendChild(el("button",{class:"btn ikincil kucuk",text:"Hepsi",onclick:function(){hepsi(function(){return true;});}}));
+  hizli.appendChild(el("button",{class:"btn ikincil kucuk",text:"1. dönem",onclick:function(){hepsi(function(t){return t.donem===1;});}}));
+  hizli.appendChild(el("button",{class:"btn ikincil kucuk",text:"2. dönem",onclick:function(){hepsi(function(t){return t.donem===2;});}}));
+  hizli.appendChild(el("button",{class:"btn ikincil kucuk",text:"Yalnız dolu olanlar",onclick:function(){hepsi(function(t){return formDoluMu(d,t);});}}));
+  p.appendChild(hizli); p.appendChild(liste);
+  function secilenler(){ return kutular.filter(function(x){return x[0].checked;}).map(function(x){return [d,x[1]];}); }
+  var ad = dosyaAdiYap(s.duzey+"-sinif-"+d.ad+"-gozlem-formlari");
+  var alt = el("div",{class:"dugmeler"});
+  function calis(f){ var l = secilenler(); if (!l.length){ bildir("En az bir form seçin."); return; } arka.remove(); f(l); }
+  alt.appendChild(el("button",{class:"btn",text:"Yazdır",onclick:function(){ calis(function(l){ baskiYap(l); }); }}));
+  alt.appendChild(el("button",{class:"btn word",text:"Word indir",onclick:function(){ calis(function(l){ wordIndir(l, ad); }); }}));
+  alt.appendChild(el("button",{class:"btn pdf",text:"PDF indir",onclick:function(){ calis(function(l){ pdfIndir(l, ad); }); }}));
+  alt.appendChild(el("button",{class:"btn ikincil",text:"Vazgeç",onclick:function(){ arka.remove(); }}));
+  p.appendChild(alt);
+  arka.appendChild(p); document.body.appendChild(arka);
+}
+
+/* ---------------- Özet (e-Okul) ---------------- */
+function ozetCiz(ic){
+  var s = aktifSinif();
+  var donem = durum.ozetDonem || durum.okul.donem || "1";
+  var k = el("section",{class:"kart"});
+  k.appendChild(el("h2",{text:"Özet (e-Okul) · Öğrenci düzeyleri"}));
+  k.appendChild(el("p",{class:"aciklama",text:"Her öğrencinin ders düzeyi, doldurduğunuz formlardan kendiliğinden hesaplanır (o dönemdeki bütün puanların ortalaması). e-Okul'a girerken bu tabloyu kullanabilirsiniz."}));
+  var f = el("div",{class:"ozet-filtre"});
+  [["1","1. dönem"],["2","2. dönem"],["yil","Yıl sonu"]].forEach(function(x){
+    f.appendChild(el("button",{class:"tema",style:donem===x[0]?"background:var(--ana);border-color:var(--ana);color:#fff":"","aria-pressed":String(donem===x[0]),text:x[1],onclick:function(){ durum.ozetDonem=x[0]; kaydet(); ciz(); }}));
+  });
+  k.appendChild(f);
+  var ds = dersler();
+  var formSay = 0; ds.forEach(function(d){ d.temalar.forEach(function(t){ if (formDoluMu(d,t)) formSay++; }); });
+  k.appendChild(el("p",{class:"form-alt",text: sinifAdi(s) + " · " + s.ogrenciler.length + " öğrenci · " + ds.length + " ders · " + formSay + " dolu form"}));
+  var db = el("div",{class:"dugmeler",style:"margin:0 0 4px"});
+  db.appendChild(el("button",{class:"btn",text:"Özeti yazdır",onclick:function(){ ozetBaski(donem); }}));
+  db.appendChild(el("button",{class:"btn word",text:"Word indir",onclick:function(){ wordIndir(null, dosyaAdiYap(s.duzey+"-sinif-"+s.sube+"-ogrenci-duzeyleri"), donem); }}));
+  db.appendChild(el("button",{class:"btn pdf",text:"PDF indir",onclick:function(){ pdfIndir(null, dosyaAdiYap(s.duzey+"-sinif-"+s.sube+"-ogrenci-duzeyleri"), donem); }}));
+  k.appendChild(db);
+  if (!s.ogrenciler.length){
+    k.appendChild(el("div",{class:"bos-durum",text:"Önce öğrenci listesini ekleyin."}));
+    ic.appendChild(k); return;
+  }
+  var kutu = el("div",{class:"tablo-kutu"});
+  var tab = el("table",{class:"ozet"});
+  var hr = el("tr"); hr.appendChild(el("th",{class:"ogr-bas",text:"Öğrenci"}));
+  ds.forEach(function(d){ hr.appendChild(el("th",{html:"<b>"+kac(d.ad)+"</b>"+(donem==="yil"?"Yıl sonu":donem+". dönem")})); });
+  tab.appendChild(el("thead",null,hr));
+  var tb = el("tbody");
+  s.ogrenciler.forEach(function(g,j){
+    var tr = el("tr");
+    tr.appendChild(el("td",{class:"ogr",text:(j+1)+". "+g.ad}));
+    ds.forEach(function(d){
+      var o = dersOrtalama(d, g.id, donem); var dz = duzey(o);
+      tr.appendChild(el("td",null, dz ? [el("span",{class:"rozet r-"+dz.k,text:dz.ad}), el("small",{text:ortYaz(o)})] : el("span",{class:"rozet r-bos",text:"–"})));
+    });
+    tb.appendChild(tr);
+  });
+  tab.appendChild(tb); kutu.appendChild(tab); k.appendChild(kutu);
+  var an = el("div",{class:"anahtar"});
+  DUZEYLER.forEach(function(x){ an.appendChild(el("span",{class:"rozet r-"+x.k,text:x.ad})); });
+  k.appendChild(an);
+  ic.appendChild(k);
+
+  /* Tema ayrıntısı */
+  var dolu = [];
+  ds.forEach(function(d){ d.temalar.forEach(function(t){ if (donemUygun(t,donem) && formDoluMu(d,t)) dolu.push([d,t]); }); });
+  var k2 = el("section",{class:"kart"});
+  k2.appendChild(el("h2",{text:"Tema ayrıntısı"}));
+  k2.appendChild(el("p",{class:"aciklama",text:"Doldurulmuş her formun ayrı sonucu. Bir düzeyin hangi temadan geldiğini görmek için kullanın."}));
+  if (!dolu.length){ k2.appendChild(el("div",{class:"bos-durum",text:"Bu dönem için henüz doldurulmuş form yok."})); ic.appendChild(k2); return; }
+  var kutu2 = el("div",{class:"tablo-kutu"});
+  var tab2 = el("table",{class:"ozet"});
+  var hr2 = el("tr"); hr2.appendChild(el("th",{class:"ogr-bas",text:"Öğrenci"}));
+  dolu.forEach(function(x){ hr2.appendChild(el("th",{html:"<b>"+kac(x[0].ad)+"</b>"+kac(x[1].kisa)})); });
+  tab2.appendChild(el("thead",null,hr2));
+  var tb2 = el("tbody");
+  s.ogrenciler.forEach(function(g,j){
+    var tr = el("tr"); tr.appendChild(el("td",{class:"ogr",text:(j+1)+". "+g.ad}));
+    dolu.forEach(function(x){
+      var o = ortalama(x[0],x[1],g.id); var dz = duzey(o);
+      tr.appendChild(el("td",null, dz ? el("span",{class:"rozet r-"+dz.k,text:dz.kisa}) : el("span",{class:"rozet r-bos",text:"–"})));
+    });
+    tb2.appendChild(tr);
+  });
+  tab2.appendChild(tb2); kutu2.appendChild(tab2); k2.appendChild(kutu2);
+  k2.appendChild(el("p",{class:"bilgi",text:"Çİ Çok İyi · İ İyi · Y Yeterli · G Geliştirilmeli"}));
+  ic.appendChild(k2);
+}
+function donemUygun(t, donem){ return donem==="yil" || String(t.donem)===String(donem); }
+function dersOrtalama(d, ogrId, donem){
+  var top=0,n=0;
+  d.temalar.forEach(function(t){
+    if (!donemUygun(t,donem)) return;
+    for (var i=0;i<t.olcutler.length;i++){ var v = puanOku(d,t,ogrId,i); if (v){ top+=v; n++; } }
+  });
+  return n ? top/n : null;
+}
+
+/* ---------------- Resmî sayfa (baskı / PDF / Word ortak) ---------------- */
+function kafaMetni(altBaslik1, altBaslik2){
+  var ok = durum.okul;
+  var ilce = ok.ilce ? trBuyuk(ok.ilce) : "………………";
+  var okul = ok.okul ? trBuyuk(ok.okul) : "…………………………… İLKOKULU";
+  var yil = ok.yil || "20…-20…";
+  var donem = (ok.donem||"1") + ". DÖNEM";
+  return ["T.C.", ilce + " İLÇE MİLLÎ EĞİTİM MÜDÜRLÜĞÜ", okul, yil + " EĞİTİM ÖĞRETİM YILI " + donem, altBaslik1, altBaslik2];
+}
+function formSayfasiHTML(d, t){
+  var s = aktifSinif(); var og = s.ogrenciler;
+  var noVar = og.some(function(g){return g.no;});
+  var satir = Math.max(og.length, og.length ? 0 : 20);
+  var sinifCls = satir > 30 ? " cok-sik" : (satir > 20 || t.olcutler.length > 9 ? " sik" : "");
+  var k = kafaMetni(s.duzey + ". SINIF " + trBuyuk(d.ad) + " · " + s.duzey + "/" + (s.sube||"A") + " ŞUBESİ", t.ad + " GÖZLEM FORMU");
+  var h = '<div class="kagit'+sinifCls+'"><div class="ic"><div class="kafa">'+kac(k[0])+'<br>'+kac(k[1])+'<br>'+kac(k[2])+'<br>'+kac(k[3])+'<div class="baslik2">'+kac(k[4])+'<br>'+kac(k[5])+'</div></div>';
+  h += '<table class="resmi"><thead><tr><th style="width:30px">S.No</th>'+(noVar?'<th style="width:46px">No</th>':'')+'<th style="text-align:left;padding-left:7px">Adı Soyadı</th>';
+  t.olcutler.forEach(function(_,i){ h += '<th style="width:'+(t.olcutler.length>9?34:40)+'px">'+(i+1)+'</th>'; });
+  h += '<th style="width:48px">Ort.</th><th style="width:96px">Değer</th></tr></thead><tbody>';
+  for (var j=0;j<satir;j++){
+    var g = og[j];
+    h += '<tr><td>'+(j+1)+'</td>'+(noVar?'<td>'+kac(g&&g.no||"")+'</td>':'')+'<td class="ad">'+kac(g?g.ad:"")+'</td>';
+    t.olcutler.forEach(function(_,i){ var v = g ? puanOku(d,t,g.id,i) : null; h += '<td>'+(v||"")+'</td>'; });
+    var o = g ? ortalama(d,t,g.id) : null; var dz = duzey(o);
+    h += '<td>'+(o==null?"":ortYaz(o))+'</td><td class="dg">'+(dz?dz.ad:"")+'</td></tr>';
+  }
+  h += '</tbody></table>';
+  h += '<div class="lejant">';
+  t.olcutler.forEach(function(x,i){ h += '<div><b>'+(i+1)+'.</b> '+kac(x.ad)+': '+kac(x.uzun)+' <i>('+kac(x.kod)+')</i></div>'; });
+  h += '</div><div class="puan-anahtari"><b>Puanlama:</b> 4 Çok iyi · 3 İyi · 2 Yeterli · 1 Geliştirilmeli &nbsp;|&nbsp; <b>Değer:</b> 3,50 ve üzeri Çok İyi · 2,50–3,49 İyi · 1,50–2,49 Yeterli · 1,49 ve altı Geliştirilmeli</div>';
+  h += imzaHTML() + '</div><div class="dipnot">Dijital Öğretmen · Hasan Tutuş</div></div>';
+  return h;
+}
+function imzaHTML(){
+  var ok = durum.okul;
+  return '<div class="imzalar"><div><b>'+kac(ok.ogretmen||"……………………")+'</b>Sınıf Öğretmeni<div class="tarih">……/……/20……</div></div>'+
+         '<div><b>'+kac(ok.mudur||"……………………")+'</b>Okul Müdürü<div class="tarih">Uygundur ……/……/20……</div></div></div>';
+}
+function ozetSayfasiHTML(donem){
+  var s = aktifSinif(); var og = s.ogrenciler; var ds = dersler();
+  var noVar = og.some(function(g){return g.no;});
+  var donemAd = donem==="yil" ? "YIL SONU" : donem + ". DÖNEM";
+  var sinifCls = og.length > 30 ? " cok-sik" : (og.length > 20 ? " sik" : "");
+  var k = kafaMetni(s.duzey + ". SINIF " + s.duzey + "/" + (s.sube||"A") + " ŞUBESİ", "ÖĞRENCİ GÖZLEM SONUÇLARI ÖZETİ (" + donemAd + ")");
+  var h = '<div class="kagit'+sinifCls+'"><div class="ic"><div class="kafa">'+kac(k[0])+'<br>'+kac(k[1])+'<br>'+kac(k[2])+'<br>'+kac(k[3])+'<div class="baslik2">'+kac(k[4])+'<br>'+kac(k[5])+'</div></div>';
+  h += '<table class="resmi"><thead><tr><th style="width:34px">S.No</th>'+(noVar?'<th style="width:50px">No</th>':'')+'<th style="text-align:left;padding-left:7px">Adı Soyadı</th>';
+  ds.forEach(function(d){ h += '<th>'+kac(d.ad)+'</th>'; });
+  h += '</tr></thead><tbody>';
+  og.forEach(function(g,j){
+    h += '<tr><td>'+(j+1)+'</td>'+(noVar?'<td>'+kac(g.no||"")+'</td>':'')+'<td class="ad">'+kac(g.ad)+'</td>';
+    ds.forEach(function(d){ var dz = duzey(dersOrtalama(d,g.id,donem)); h += '<td class="dg">'+(dz?dz.ad:"")+'</td>'; });
+    h += '</tr>';
+  });
+  h += '</tbody></table><div class="puan-anahtari">Düzeyler, ilgili dönemde doldurulan gözlem formlarındaki bütün puanların ortalamasından hesaplanmıştır.</div>';
+  h += imzaHTML() + '</div><div class="dipnot">Dijital Öğretmen · Hasan Tutuş</div></div>';
+  return h;
+}
+
+/* ---------------- Çıktı: yazdır / PDF ----------------
+   Her çıktı bir "iş": { yon:"yatay"|"dikey", html:"…kagit sayfaları…", word:"…docx gövdesi…" } */
+function isFormlar(liste){
+  return { yon:"yatay",
+    html: liste.map(function(x){ return formSayfasiHTML(x[0],x[1]); }).join(""),
+    word: function(){ return liste.map(function(x,i){ return wordForm(x[0],x[1],i===0); }).join(""); } };
+}
+function isOzet(donem){
+  return { yon:"yatay", html: ozetSayfasiHTML(donem), word: function(){ return wordOzet(donem); } };
+}
+function sayfaYonu(yon){
+  var st = document.getElementById("sayfaYonu");
+  if (!st){ st = document.createElement("style"); st.id = "sayfaYonu"; document.head.appendChild(st); }
+  st.textContent = "@media print{@page{size:A4 " + (yon === "dikey" ? "portrait" : "landscape") + ";margin:0}}";
+}
+function sigdir(kap){
+  [].forEach.call(kap.querySelectorAll(".kagit"), function(k){
+    var ic = k.querySelector(".ic"); if (!ic) return;
+    ic.style.transform = ""; ic.style.width = "";
+    var cs = getComputedStyle(k);
+    var yuk = k.classList.contains("dikey") ? 1118 : 790;
+    var bos = yuk - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - 6;
+    var h = ic.scrollHeight;
+    if (h > bos){ var o = Math.max(0.45, bos / h); ic.style.transformOrigin = "top left"; ic.style.transform = "scale(" + o + ")"; ic.style.width = (100 / o) + "%"; }
+  });
+}
+function baskiyaKoy(html){
+  var b = $("#baski"); b.innerHTML = html;
+  b.setAttribute("style","display:block;position:fixed;left:-20000px;top:0");
+  sigdir(b);
+  b.removeAttribute("style");
+}
+function yazdir(is){
+  sayfaYonu(is.yon);
+  baskiyaKoy(is.html);
+  setTimeout(function(){ window.print(); }, 60);
+}
+function baskiYap(liste){ yazdir(isFormlar(liste)); }
+function ozetBaski(donem){
+  if (!aktifSinif().ogrenciler.length){ bildir("Önce öğrenci listesini ekleyin."); return; }
+  yazdir(isOzet(donem));
+}
+window.addEventListener("afterprint", function(){ $("#baski").innerHTML = ""; });
+
+function betikYukle(src){
+  return new Promise(function(ok, hata){
+    if (document.querySelector('script[data-yuk="'+src+'"]')) return ok();
+    var e = document.createElement("script"); e.src = src; e.dataset.yuk = src; e.onload = ok; e.onerror = hata; document.head.appendChild(e);
+  });
+}
+function pdfYap(is, ad){
+  bildir("PDF hazırlanıyor…");
+  var dikey = is.yon === "dikey";
+  var W = dikey ? 794 : 1123, H = dikey ? 1123 : 794;
+  Promise.all([betikYukle("indir-jspdf.min.js"), betikYukle("indir-html2canvas.min.js")]).then(function(){
+    var JS = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+    if (!JS || !window.html2canvas) throw new Error("kütüphane");
+    var sahne = el("div",{style:"position:fixed;left:-20000px;top:0;width:"+W+"px;background:#fff"});
+    sahne.innerHTML = is.html;
+    document.body.appendChild(sahne); sigdir(sahne);
+    var sayfalar = [].slice.call(sahne.querySelectorAll(".kagit"));
+    sayfalar.forEach(function(p){ p.style.height = H + "px"; p.style.overflow = "hidden"; });
+    var yon = dikey ? "portrait" : "landscape";
+    var pdf = new JS({orientation:yon, unit:"mm", format:"a4"});
+    var zincir = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+    sayfalar.forEach(function(p, i){
+      zincir = zincir.then(function(){ return html2canvas(p, {scale:2, backgroundColor:"#ffffff", width:W, height:H, windowWidth:W}); })
+        .then(function(c){ if (i) pdf.addPage("a4", yon); pdf.addImage(c.toDataURL("image/jpeg",0.92), "JPEG", 0, 0, dikey?210:297, dikey?297:210); });
+    });
+    return zincir.then(function(){ sahne.remove(); pdf.save(ad + ".pdf"); bildir("PDF indirildi."); });
+  }).catch(function(){
+    if (confirm("PDF oluşturulamadı. Yazdırma penceresi açılsın mı? (Yazıcı olarak “PDF olarak kaydet” seçebilirsiniz.)")) yazdir(is);
+  });
+}
+function pdfIndir(liste, ad, ozetDonem){
+  if (!liste && !aktifSinif().ogrenciler.length){ bildir("Önce öğrenci listesini ekleyin."); return; }
+  pdfYap(liste ? isFormlar(liste) : isOzet(ozetDonem), ad);
+}
+
+/* Word (.docx) indir: düzenlenebilir gerçek tablo */
+function xk(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function wP(metin, o){
+  o = o || {};
+  var rp = '<w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/>'+(o.b?'<w:b/>':'')+(o.i?'<w:i/>':'')+'<w:sz w:val="'+(o.sz||20)+'"/>'+(o.renk?'<w:color w:val="'+o.renk+'"/>':'')+'</w:rPr>';
+  var pp = '<w:pPr><w:spacing w:before="0" w:after="'+(o.after||0)+'" w:line="240" w:lineRule="auto"/>'+(o.jc?'<w:jc w:val="'+o.jc+'"/>':'')+(o.sayfaSonu?'<w:pageBreakBefore/>':'')+'</w:pPr>';
+  var parca = Array.isArray(metin) ? metin : [[metin, o]];
+  return '<w:p>'+pp+parca.map(function(x){ var oo = x[1]||o; var r = '<w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/>'+(oo.b?'<w:b/>':'')+(oo.i?'<w:i/>':'')+'<w:sz w:val="'+(oo.sz||o.sz||20)+'"/>'+(oo.renk?'<w:color w:val="'+oo.renk+'"/>':'')+'</w:rPr>'; return '<w:r>'+r+'<w:t xml:space="preserve">'+xk(x[0])+'</w:t></w:r>'; }).join("")+'</w:p>';
+}
+function wHucre(metin, gen, o){
+  o = o || {};
+  return '<w:tc><w:tcPr><w:tcW w:w="'+gen+'" w:type="dxa"/>'+(o.zemin?'<w:shd w:val="clear" w:color="auto" w:fill="'+o.zemin+'"/>':'')+'<w:vAlign w:val="center"/></w:tcPr>'+wP(metin,{sz:o.sz||18,b:o.b,jc:o.jc||"center"})+'</w:tc>';
+}
+function wTablo(basliklar, genislikler, satirlar, sz){
+  var kenar = '<w:tblBorders><w:top w:val="single" w:sz="6" w:color="333333"/><w:left w:val="single" w:sz="6" w:color="333333"/><w:bottom w:val="single" w:sz="6" w:color="333333"/><w:right w:val="single" w:sz="6" w:color="333333"/><w:insideH w:val="single" w:sz="4" w:color="333333"/><w:insideV w:val="single" w:sz="4" w:color="333333"/></w:tblBorders>';
+  var x = '<w:tbl><w:tblPr><w:tblW w:w="'+genislikler.reduce(function(a,b){return a+b;},0)+'" w:type="dxa"/><w:jc w:val="center"/>'+kenar+'<w:tblLayout w:type="fixed"/><w:tblCellMar><w:left w:w="50" w:type="dxa"/><w:right w:w="50" w:type="dxa"/></w:tblCellMar></w:tblPr><w:tblGrid>'+genislikler.map(function(g){return '<w:gridCol w:w="'+g+'"/>';}).join("")+'</w:tblGrid>';
+  x += '<w:tr><w:trPr><w:tblHeader/></w:trPr>'+basliklar.map(function(b,i){ return wHucre(b, genislikler[i], {zemin:"EDEDED", b:true, sz:sz, jc: b==="Adı Soyadı"?"left":"center"}); }).join("")+'</w:tr>';
+  satirlar.forEach(function(r){
+    x += '<w:tr><w:trPr><w:trHeight w:val="'+(sz<=16?250:300)+'"/><w:cantSplit/></w:trPr>'+r.map(function(c,i){ return wHucre(c, genislikler[i], {sz:sz, jc: basliklar[i]==="Adı Soyadı"?"left":"center"}); }).join("")+'</w:tr>';
+  });
+  return x + '</w:tbl>';
+}
+function wKafa(k, ilk){
+  var x = wP(k[0],{b:true,jc:"center",sz:22,sayfaSonu:!ilk});
+  x += wP(k[1],{b:true,jc:"center",sz:22}) + wP(k[2],{b:true,jc:"center",sz:22}) + wP(k[3],{b:true,jc:"center",sz:22,after:80});
+  x += wP(k[4],{b:true,jc:"center",sz:22}) + wP(k[5],{b:true,jc:"center",sz:22,after:120});
+  return x;
+}
+function wImza(hucre){
+  hucre = hucre || 7400;
+  var ok = durum.okul;
+  var bos = '<w:tblBorders><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:insideH w:val="nil"/><w:insideV w:val="nil"/></w:tblBorders>';
+  function h(ad, unvan, tarih){ return '<w:tc><w:tcPr><w:tcW w:w="'+hucre+'" w:type="dxa"/></w:tcPr>'+wP(ad,{b:true,jc:"center",sz:22})+wP(unvan,{jc:"center",sz:22})+wP(tarih,{jc:"center",sz:20})+'</w:tc>'; }
+  return wP(" ",{after:200}) + '<w:tbl><w:tblPr><w:tblW w:w="'+(2*hucre)+'" w:type="dxa"/>'+bos+'<w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid><w:gridCol w:w="'+hucre+'"/><w:gridCol w:w="'+hucre+'"/></w:tblGrid><w:tr>'+
+    h(ok.ogretmen||"……………………","Sınıf Öğretmeni","……/……/20……") + h(ok.mudur||"……………………","Okul Müdürü","Uygundur ……/……/20……") + '</w:tr></w:tbl>';
+}
+function wordForm(d, t, ilk){
+  var s = aktifSinif(); var og = s.ogrenciler; var noVar = og.some(function(g){return g.no;});
+  var satir = og.length || 20;
+  var sz = satir > 30 ? 15 : (satir > 20 ? 16 : 18);
+  var k = kafaMetni(s.duzey + ". SINIF " + trBuyuk(d.ad) + " · " + s.duzey + "/" + (s.sube||"A") + " ŞUBESİ", t.ad + " GÖZLEM FORMU");
+  var bas = ["S.No"]; if (noVar) bas.push("No"); bas.push("Adı Soyadı");
+  t.olcutler.forEach(function(_,i){ bas.push(String(i+1)); }); bas.push("Ort."); bas.push("Değer");
+  var olcGen = t.olcutler.length > 9 ? 620 : 700;
+  var sabit = 520 + (noVar?680:0) + 760 + 1500 + t.olcutler.length*olcGen;
+  var adGen = Math.max(2600, 15000 - sabit);
+  var gen = [520]; if (noVar) gen.push(680); gen.push(adGen); t.olcutler.forEach(function(){ gen.push(olcGen); }); gen.push(760); gen.push(1500);
+  var rows = [];
+  for (var j=0;j<satir;j++){
+    var g = og[j]; var r = [String(j+1)]; if (noVar) r.push(g&&g.no||""); r.push(g?g.ad:"");
+    t.olcutler.forEach(function(_,i){ var v = g ? puanOku(d,t,g.id,i) : null; r.push(v?String(v):""); });
+    var o = g ? ortalama(d,t,g.id) : null; var dz = duzey(o); r.push(o==null?"":ortYaz(o)); r.push(dz?dz.ad:"");
+    rows.push(r);
+  }
+  var x = wKafa(k, ilk) + wTablo(bas, gen, rows, sz) + wP(" ",{after:60});
+  t.olcutler.forEach(function(o,i){ x += wP([[(i+1)+". ",{b:true,sz:17}],[o.ad+": ",{b:true,sz:17}],[o.uzun+" ",{sz:17}],["("+o.kod+")",{i:true,sz:17}]]); });
+  x += wP([["Puanlama: ",{b:true,sz:17}],["4 Çok iyi · 3 İyi · 2 Yeterli · 1 Geliştirilmeli   |   ",{sz:17}],["Değer: ",{b:true,sz:17}],["3,50 ve üzeri Çok İyi · 2,50–3,49 İyi · 1,50–2,49 Yeterli · 1,49 ve altı Geliştirilmeli",{sz:17}]],{after:40});
+  x += wImza();
+  return x;
+}
+function wordOzet(donem){
+  var s = aktifSinif(); var og = s.ogrenciler; var ds = dersler(); var noVar = og.some(function(g){return g.no;});
+  var donemAd = donem==="yil" ? "YIL SONU" : donem + ". DÖNEM";
+  var k = kafaMetni(s.duzey + ". SINIF " + s.duzey + "/" + (s.sube||"A") + " ŞUBESİ", "ÖĞRENCİ GÖZLEM SONUÇLARI ÖZETİ (" + donemAd + ")");
+  var bas = ["S.No"]; if (noVar) bas.push("No"); bas.push("Adı Soyadı"); ds.forEach(function(d){ bas.push(d.ad); });
+  var dGen = 2400; var adGen = Math.max(3000, 15000 - 600 - (noVar?800:0) - ds.length*dGen);
+  var gen = [600]; if (noVar) gen.push(800); gen.push(adGen); ds.forEach(function(){ gen.push(dGen); });
+  var sz = og.length > 30 ? 15 : (og.length > 20 ? 16 : 18);
+  var rows = og.map(function(g,j){ var r = [String(j+1)]; if (noVar) r.push(g.no||""); r.push(g.ad); ds.forEach(function(d){ var dz = duzey(dersOrtalama(d,g.id,donem)); r.push(dz?dz.ad:""); }); return r; });
+  return wKafa(k, true) + wTablo(bas, gen, rows, sz) + wP("Düzeyler, ilgili dönemde doldurulan gözlem formlarındaki bütün puanların ortalamasından hesaplanmıştır.",{sz:17,i:true}) + wImza();
+}
+function wordYap(is, ad){
+  var govde = is.word();
+  govde += wP("Dijital Öğretmen · Hasan Tutuş",{sz:14,jc:"center",renk:"888888"});
+  var sect = is.yon === "dikey"
+    ? '<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="680" w:right="760" w:bottom="680" w:left="760" w:header="0" w:footer="0" w:gutter="0"/></w:sectPr>'
+    : '<w:sectPr><w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/><w:pgMar w:top="567" w:right="680" w:bottom="567" w:left="680" w:header="0" w:footer="0" w:gutter="0"/></w:sectPr>';
+  var belge = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'+govde+sect+'</w:body></w:document>';
+  var dosyalar = [
+    ["[Content_Types].xml", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>'],
+    ["_rels/.rels", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>'],
+    ["word/document.xml", belge]
+  ];
+  indirBlob(zipYap(dosyalar), ad + ".docx");
+  bildir("Word dosyası indirildi.");
+}
+function wordIndir(liste, ad, ozetDonem){
+  if (!liste && !aktifSinif().ogrenciler.length){ bildir("Önce öğrenci listesini ekleyin."); return; }
+  wordYap(liste ? isFormlar(liste) : isOzet(ozetDonem), ad);
+}
+
+/* Basit ZIP (sıkıştırmasız) */
+var CRC = (function(){ var t = []; for (var n=0;n<256;n++){ var c=n; for (var k=0;k<8;k++) c = c&1 ? 0xEDB88320^(c>>>1) : c>>>1; t[n]=c>>>0; } return t; })();
+function crc32(b){ var c = 0xFFFFFFFF; for (var i=0;i<b.length;i++) c = CRC[(c^b[i])&0xFF]^(c>>>8); return (c^0xFFFFFFFF)>>>0; }
+function zipYap(dosyalar){
+  var enc = new TextEncoder(), parcalar = [], merkez = [], konum = 0;
+  function u16(v){ return [v&255,(v>>8)&255]; } function u32(v){ return [v&255,(v>>8)&255,(v>>16)&255,(v>>>24)&255]; }
+  dosyalar.forEach(function(f){
+    var ad = enc.encode(f[0]), veri = enc.encode(f[1]), c = crc32(veri);
+    var yerel = [].concat(u32(0x04034b50),u16(20),u16(0x0800),u16(0),u16(0),u16(0x21),u32(c),u32(veri.length),u32(veri.length),u16(ad.length),u16(0));
+    parcalar.push(new Uint8Array(yerel), ad, veri);
+    merkez.push(new Uint8Array([].concat(u32(0x02014b50),u16(20),u16(20),u16(0x0800),u16(0),u16(0),u16(0x21),u32(c),u32(veri.length),u32(veri.length),u16(ad.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(konum))), ad);
+    konum += yerel.length + ad.length + veri.length;
+  });
+  var mBoyut = merkez.reduce(function(a,b){return a+b.length;},0);
+  var son = new Uint8Array([].concat(u32(0x06054b50),u16(0),u16(0),u16(dosyalar.length),u16(dosyalar.length),u32(mBoyut),u32(konum),u16(0)));
+  return new Blob(parcalar.concat(merkez,[son]), {type:"application/vnd.openxmlformats-officedocument.wordprocessingml.document"});
+}
+
+/* ---------------- Gözlem notları ---------------- */
+function notOku(d,t,ogrId,i){
+  var s = aktifSinif(); var n = durum.not[s.id] && durum.not[s.id][formAnahtar(d,t)];
+  return n && n[ogrId] && n[ogrId][i] ? n[ogrId][i] : "";
+}
+function notYaz(d,t,ogrId,i,metin){
+  var s = aktifSinif(), fa = formAnahtar(d,t);
+  if (!durum.not[s.id]) durum.not[s.id] = {};
+  if (!durum.not[s.id][fa]) durum.not[s.id][fa] = {};
+  var n = durum.not[s.id][fa]; if (!n[ogrId]) n[ogrId] = {};
+  metin = (metin||"").trim();
+  if (metin) n[ogrId][i] = metin; else delete n[ogrId][i];
+  kaydet();
+}
+function notPenceresi(d,t,g,i,sonra){
+  var o = t.olcutler[i], eski = notOku(d,t,g.id,i);
+  var arka = el("div",{class:"pencere-arka",onclick:function(e){ if (e.target===arka) arka.remove(); }});
+  var p = el("div",{class:"pencere",role:"dialog","aria-label":"Gözlem notu"});
+  p.appendChild(el("h3",{text:g.ad}));
+  p.appendChild(el("p",{class:"bilgi",text:t.kisa+" · "+o.ad+" ("+o.kod+")"}));
+  var ta = el("textarea",{placeholder:"Gözlediğinizi kısaca yazın. Örnek: b ile d harflerini karıştırıyor.","aria-label":"Gözlem notu"});
+  ta.value = eski;
+  p.appendChild(ta);
+  var db = el("div",{class:"dugmeler"});
+  db.appendChild(el("button",{class:"btn",text:"Kaydet",onclick:function(){ notYaz(d,t,g.id,i,ta.value); arka.remove(); sonra(); bildir(ta.value.trim() ? "Not kaydedildi." : "Not silindi."); }}));
+  if (eski) db.appendChild(el("button",{class:"btn tehlike",text:"Notu sil",onclick:function(){ notYaz(d,t,g.id,i,""); arka.remove(); sonra(); bildir("Not silindi."); }}));
+  db.appendChild(el("button",{class:"btn ikincil",text:"Vazgeç",onclick:function(){ arka.remove(); }}));
+  p.appendChild(db);
+  arka.appendChild(p); document.body.appendChild(arka);
+  setTimeout(function(){ ta.focus(); }, 30);
+}
+
+/* ---------------- Görünüm: sınıf tablosu / öğrenci öğrenci ---------------- */
+function gorunum(){ return durum.gorunum || (window.innerWidth < 700 ? "kart" : "tablo"); }
+var kartSira = 0;
+function kartYap(d,t){
+  var s = aktifSinif(), og = s.ogrenciler;
+  if (kartSira >= og.length) kartSira = og.length - 1; if (kartSira < 0) kartSira = 0;
+  var g = og[kartSira];
+  var k = el("div",{class:"okart"});
+  var ust = el("div",{class:"okart-ust"});
+  var geri = el("button",{class:"btn ikincil kucuk",text:"‹ Önceki","aria-label":"Önceki öğrenci",onclick:function(){ kartSira--; tabloYenile(d,t); }});
+  geri.disabled = kartSira === 0;
+  var sec = el("select",{"aria-label":"Öğrenci seçin"});
+  og.forEach(function(x,j){
+    var dolu = 0; for (var i=0;i<t.olcutler.length;i++) if (puanOku(d,t,x.id,i)) dolu++;
+    sec.appendChild(el("option",{value:j,text:(j+1)+". "+x.ad+(dolu===t.olcutler.length?"  ✓":"")}));
+  });
+  sec.value = kartSira;
+  sec.addEventListener("change", function(){ kartSira = +this.value; tabloYenile(d,t); });
+  var ileri = el("button",{class:"btn ikincil kucuk",text:"Sonraki ›","aria-label":"Sonraki öğrenci",onclick:function(){ kartSira++; tabloYenile(d,t); }});
+  ileri.disabled = kartSira >= og.length - 1;
+  ust.appendChild(geri); ust.appendChild(sec); ust.appendChild(ileri);
+  var dolu = 0; for (var i=0;i<t.olcutler.length;i++) if (puanOku(d,t,g.id,i)) dolu++;
+  ust.appendChild(el("div",{class:"ilerleme",text:dolu+" / "+t.olcutler.length+" ölçüt puanlandı"}));
+  k.appendChild(ust);
+  t.olcutler.forEach(function(o,i){
+    var v = puanOku(d,t,g.id,i), n = notOku(d,t,g.id,i);
+    var sat = el("div",{class:"osatir"});
+    sat.appendChild(el("div",{class:"ad"},[(i+1)+". "+o.ad, el("small",{text:o.kod})]));
+    sat.appendChild(el("div",{class:"uz",text:o.uzun}));
+    var sc = el("div",{class:"secim",role:"group","aria-label":o.ad});
+    [4,3,2,1].forEach(function(p){
+      sc.appendChild(el("button",{class: v===p ? "s"+p : "", "aria-pressed":String(v===p), onclick:function(){ hucreYaz(d,t,g,i, v===p ? 0 : p); }},[String(p), el("small",{text:PUAN_AD[p]})]));
+    });
+    sat.appendChild(sc);
+    var ns = el("div",{class:"notsatir"});
+    ns.appendChild(el("button",{text: n ? "Notu düzenle" : "Not yaz", onclick:function(){ notPenceresi(d,t,g,i,function(){ tabloYenile(d,t); }); }}));
+    if (n) ns.appendChild(el("span",{text:n}));
+    sat.appendChild(ns);
+    k.appendChild(sat);
+  });
+  var alt = el("div",{class:"okart-alt"});
+  var ort = ortalama(d,t,g.id), dz = duzey(ort);
+  alt.appendChild(el("span",{text:"Ortalama: "+ortYaz(ort)}));
+  alt.appendChild(dz ? el("span",{class:"rozet r-"+dz.k,text:dz.ad}) : el("span",{class:"rozet r-bos",text:"–"}));
+  if (kartSira < og.length - 1) alt.appendChild(el("button",{class:"btn",text:"Sonraki öğrenci ›",onclick:function(){ kartSira++; tabloYenile(d,t); window.scrollTo({top: Math.max(0, $(".okart").getBoundingClientRect().top + window.scrollY - 70)}); }}));
+  else alt.appendChild(el("span",{class:"bilgi",style:"margin:0 0 0 auto",text:"Listenin sonuna geldiniz."}));
+  k.appendChild(alt);
+  return k;
+}
+
+/* ---------------- Haftaya göre tema (resmî yıllık plan) ---------------- */
+var TEMA_TARIH = { 1: {
+  turkce:    { hz:"2026-09-14", t1:"2026-09-21", t2:"2026-10-15", t3:"2026-11-23", t4:"2026-12-17", t5:"2027-02-15", t6:"2027-03-17", t7:"2027-04-19", t8:"2027-05-12" },
+  matematik: { t1:"2026-09-14", t2:"2026-10-05", t3:"2026-12-31", t4:"2027-02-11", t5:"2027-05-06", t6:"2027-05-12", t7:"2027-06-07" },
+  hayat:     { u1:"2026-09-14", u2:"2026-10-26", u3:"2026-12-14", u4:"2027-01-18", u5:"2027-04-05", u6:"2027-05-17" }
+}};
+function buHaftaTema(d){
+  var tb = (TEMA_TARIH[aktifSinif().duzey] || {})[d.anahtar]; if (!tb) return null;
+  var bugun = new Date(), y = null;
+  d.temalar.forEach(function(t){ var x = tb[t.id]; if (x && new Date(x+"T00:00:00") <= bugun) y = t.id; });
+  return y || d.temalar[0].id;
+}
+function temalariHaftayaGoreAc(){
+  dersler().forEach(function(d){ var id = buHaftaTema(d); if (id) durum.tema[d.anahtar] = id; });
+}
+
+/* ---------------- Ölçüt özeti (temalar arası) ---------------- */
+function olcutOzeti(d, ogrId, donem){
+  var harita = {}, sira = [];
+  d.temalar.forEach(function(t){
+    if (!donemUygun(t,donem)) return;
+    t.olcutler.forEach(function(o,i){
+      var key = o.ad+"|"+o.kod, v = puanOku(d,t,ogrId,i), n = notOku(d,t,ogrId,i);
+      if (!harita[key]){ harita[key] = {ad:o.ad, uzun:o.uzun, kod:o.kod, top:0, say:0, notlar:[]}; sira.push(key); }
+      var h = harita[key];
+      if (v){ h.top += v; h.say++; h.uzun = o.uzun; }
+      if (n) h.notlar.push(n);
+    });
+  });
+  return sira.map(function(k){ var h = harita[k]; h.ort = h.say ? h.top/h.say : null; return h; })
+             .filter(function(h){ return h.ort != null || h.notlar.length; });
+}
+function donemAdi(donem){ return donem === "yil" ? "Yıl sonu" : donem + ". dönem"; }
+function donemSecici(kap){
+  var donem = durum.ozetDonem || durum.okul.donem || "1";
+  var f = el("div",{class:"ozet-filtre"});
+  [["1","1. dönem"],["2","2. dönem"],["yil","Yıl sonu"]].forEach(function(x){
+    f.appendChild(el("button",{class:"tema",style:donem===x[0]?"background:var(--ana);border-color:var(--ana);color:#fff":"","aria-pressed":String(donem===x[0]),text:x[1],onclick:function(){ durum.ozetDonem=x[0]; kaydet(); ciz(); }}));
+  });
+  kap.appendChild(f);
+  return donem;
+}
+
+/* ---------------- Destek listesi ---------------- */
+var ESIK = 2.5;
+function destekVerisi(donem){
+  var s = aktifSinif(), gruplar = [], kisiler = [], kisiMap = {};
+  dersler().forEach(function(d){
+    var gm = {};
+    s.ogrenciler.forEach(function(g, sira){
+      olcutOzeti(d, g.id, donem).forEach(function(h){
+        var zayif = h.ort != null && h.ort < ESIK;
+        if (!zayif && !h.notlar.length) return;
+        if (zayif){
+          var key = h.ad+"|"+h.kod;
+          if (!gm[key]){ gm[key] = {ders:d, olcut:h, ogrenciler:[]}; gruplar.push(gm[key]); }
+          gm[key].ogrenciler.push({ad:g.ad, ort:h.ort});
+        }
+        if (!kisiMap[g.id]){ kisiMap[g.id] = {g:g, sira:sira, kalemler:[], zayifSay:0}; kisiler.push(kisiMap[g.id]); }
+        kisiMap[g.id].kalemler.push({ders:d, h:h, zayif:zayif});
+        if (zayif) kisiMap[g.id].zayifSay++;
+      });
+    });
+  });
+  kisiler.sort(function(a,b){ return (b.zayifSay - a.zayifSay) || (a.sira - b.sira); });
+  gruplar.sort(function(a,b){ return b.ogrenciler.length - a.ogrenciler.length; });
+  return {gruplar:gruplar, kisiler:kisiler};
+}
+function destekCiz(ic){
+  var s = aktifSinif();
+  var k = el("section",{class:"kart"});
+  k.appendChild(el("h2",{text:"Destek Listesi"}));
+  k.appendChild(el("p",{class:"aciklama",text:"Ortalaması 2,50'nin altında kalan ölçütler ve yazdığınız gözlem notları burada kendiliğinden toplanır. Küçük grup çalışması, telafi ve veli görüşmesi için kullanabilirsiniz."}));
+  var donem = donemSecici(k);
+  var v = destekVerisi(donem);
+  var ad = dosyaAdiYap(s.duzey+"-sinif-"+s.sube+"-destek-listesi");
+  var db = el("div",{class:"dugmeler",style:"margin:4px 0 0"});
+  db.appendChild(el("button",{class:"btn",text:"Yazdır",onclick:function(){ yazdir(isDestek(donem)); }}));
+  db.appendChild(el("button",{class:"btn word",text:"Word indir",onclick:function(){ wordYap(isDestek(donem), ad); }}));
+  db.appendChild(el("button",{class:"btn pdf",text:"PDF indir",onclick:function(){ pdfYap(isDestek(donem), ad); }}));
+  k.appendChild(db);
+  ic.appendChild(k);
+  if (!s.ogrenciler.length){ k.appendChild(el("div",{class:"bos-durum",text:"Önce öğrenci listesini ekleyin."})); return; }
+  if (!v.kisiler.length){ k.appendChild(el("div",{class:"bos-durum",text:"Bu dönem için desteğe ihtiyaç gösteren bir ölçüt ya da yazılmış bir not yok. Formları doldurdukça liste kendiliğinden oluşur."})); return; }
+
+  var k1 = el("section",{class:"kart"});
+  k1.appendChild(el("h2",{text:"Birlikte çalışılacak gruplar"}));
+  k1.appendChild(el("p",{class:"aciklama",text:"Aynı beceride zorlanan öğrenciler bir arada. Küçük grup çalışmasını buna göre planlayabilirsiniz."}));
+  if (!v.gruplar.length) k1.appendChild(el("p",{class:"bilgi",text:"Ortalaması 2,50'nin altında kalan ölçüt yok; aşağıda yalnızca notlar listeleniyor."}));
+  v.gruplar.forEach(function(gr){
+    var b = el("div",{class:"grup"});
+    b.appendChild(el("h3",null,[el("span",{class:"ders-etiket de-"+gr.ders.renk,text:gr.ders.ad}), gr.olcut.ad]));
+    b.appendChild(el("div",{class:"kk",text:gr.olcut.uzun+" ("+gr.olcut.kod+") · "+gr.ogrenciler.length+" öğrenci"}));
+    var c = el("div",{class:"cipler"});
+    gr.ogrenciler.forEach(function(o){ c.appendChild(el("span",{class:"cip"+(o.ort<1.5?" g":""),title:"Ortalama "+ortYaz(o.ort),text:o.ad})); });
+    b.appendChild(c); k1.appendChild(b);
+  });
+  ic.appendChild(k1);
+
+  var k2 = el("section",{class:"kart"});
+  k2.appendChild(el("h2",{text:"Öğrenci öğrenci"}));
+  k2.appendChild(el("p",{class:"aciklama",text:"En çok desteğe ihtiyacı olan öğrenciden başlayarak sıralandı."}));
+  v.kisiler.forEach(function(x){
+    var b = el("div",{class:"ogr-destek"});
+    b.appendChild(el("b",{text:x.g.ad}));
+    var ul = el("ul");
+    x.kalemler.forEach(function(kl){
+      var li = el("li",null,[el("span",{class:"ders-etiket de-"+kl.ders.renk,text:kl.ders.ad}), kl.h.ad + (kl.zayif ? " · ortalama "+ortYaz(kl.h.ort) : "")]);
+      kl.h.notlar.forEach(function(n){ li.appendChild(el("div",null,el("i",{text:"Not: "+n}))); });
+      ul.appendChild(li);
+    });
+    b.appendChild(ul); k2.appendChild(b);
+  });
+  ic.appendChild(k2);
+}
+function destekSatirlari(donem){
+  var v = destekVerisi(donem), satir = [];
+  v.kisiler.forEach(function(x){
+    var dersGrup = {}, sira = [];
+    x.kalemler.forEach(function(kl){ var a = kl.ders.anahtar; if (!dersGrup[a]){ dersGrup[a] = {ders:kl.ders, olcutler:[], notlar:[]}; sira.push(a); }
+      if (kl.zayif) dersGrup[a].olcutler.push(kl.h.ad + " (" + ortYaz(kl.h.ort) + ")");
+      kl.h.notlar.forEach(function(n){ dersGrup[a].notlar.push(n); }); });
+    sira.forEach(function(a, j){ satir.push({ad: j===0 ? x.g.ad : "", ders: dersGrup[a].ders.ad, olcutler: dersGrup[a].olcutler.join(", ") || "–", notlar: dersGrup[a].notlar.join(" · ")}); });
+  });
+  return satir;
+}
+function isDestek(donem){
+  return { yon:"dikey", html: destekSayfasiHTML(donem), word: function(){ return wordDestek(donem); } };
+}
+function destekSayfasiHTML(donem){
+  var s = aktifSinif(), satir = destekSatirlari(donem), sayfaBasi = 16, h = "";
+  var k = kafaMetni("", "");
+  var parcalar = []; for (var i=0;i<Math.max(1,satir.length);i+=sayfaBasi) parcalar.push(satir.slice(i,i+sayfaBasi));
+  var no = 0;
+  parcalar.forEach(function(par, pi){
+    h += '<div class="kagit dikey destek-kagit"><div class="ic"><div class="kafa">'+kac(k[0])+'<br>'+kac(k[1])+'<br>'+kac(k[2])+'<br>'+kac(k[3])+'</div>';
+    h += '<h2>DESTEK VE TAKİP LİSTESİ</h2><div class="alt">'+kac(s.duzey+"/"+(s.sube||"A")+" Şubesi · "+donemAdi(donem)+(parcalar.length>1?" · Sayfa "+(pi+1)+"/"+parcalar.length:""))+'</div>';
+    h += '<table class="resmi"><thead><tr><th style="width:28px">S.No</th><th style="width:120px">Öğrenci</th><th style="width:80px">Ders</th><th>Desteğe ihtiyaç duyduğu beceriler (ortalama)</th><th style="width:150px">Gözlem notları</th><th style="width:110px">Planlanan çalışma</th></tr></thead><tbody>';
+    if (!par.length) h += '<tr><td colspan="6" style="text-align:center;padding:14px">Bu dönem için desteğe ihtiyaç gösteren bir ölçüt yok.</td></tr>';
+    par.forEach(function(r){ if (r.ad) no++; h += '<tr><td class="no">'+(r.ad?no:"")+'</td><td><b>'+kac(r.ad)+'</b></td><td>'+kac(r.ders)+'</td><td>'+kac(r.olcutler)+'</td><td>'+kac(r.notlar)+'</td><td></td></tr>'; });
+    h += '</tbody></table>';
+    if (pi === parcalar.length-1) h += '<div class="puan-anahtari">Liste, ortalaması 2,50’nin altında kalan ölçütlerden ve öğretmenin gözlem notlarından oluşturulmuştur.</div>' + imzaHTML();
+    h += '</div><div class="dipnot">Dijital Öğretmen · Hasan Tutuş</div></div>';
+  });
+  return h;
+}
+function wordDestek(donem){
+  var s = aktifSinif(), satir = destekSatirlari(donem), k = kafaMetni("", "");
+  var x = wP(k[0],{b:true,jc:"center",sz:22}) + wP(k[1],{b:true,jc:"center",sz:22}) + wP(k[2],{b:true,jc:"center",sz:22}) + wP(k[3],{b:true,jc:"center",sz:22,after:120});
+  x += wP("DESTEK VE TAKİP LİSTESİ",{b:true,jc:"center",sz:26}) + wP(s.duzey+"/"+(s.sube||"A")+" Şubesi · "+donemAdi(donem),{jc:"center",sz:20,after:120});
+  var no = 0;
+  var rows = satir.length ? satir.map(function(r){ if (r.ad) no++; return [r.ad?String(no):"", r.ad, r.ders, r.olcutler, r.notlar, ""]; }) : [["","","","Bu dönem için desteğe ihtiyaç gösteren bir ölçüt yok.","",""]];
+  x += wTabloSol(["S.No","Öğrenci","Ders","Desteğe ihtiyaç duyduğu beceriler (ortalama)","Gözlem notları","Planlanan çalışma"], [560,1700,1150,3300,2200,1460], rows, 17);
+  x += wP("Liste, ortalaması 2,50’nin altında kalan ölçütlerden ve öğretmenin gözlem notlarından oluşturulmuştur.",{i:true,sz:16});
+  return x + wImza(5185);
+}
+function wTabloSol(basliklar, gen, satirlar, sz){
+  var kenar = '<w:tblBorders><w:top w:val="single" w:sz="6" w:color="333333"/><w:left w:val="single" w:sz="6" w:color="333333"/><w:bottom w:val="single" w:sz="6" w:color="333333"/><w:right w:val="single" w:sz="6" w:color="333333"/><w:insideH w:val="single" w:sz="4" w:color="333333"/><w:insideV w:val="single" w:sz="4" w:color="333333"/></w:tblBorders>';
+  var x = '<w:tbl><w:tblPr><w:tblW w:w="'+gen.reduce(function(a,b){return a+b;},0)+'" w:type="dxa"/><w:jc w:val="center"/>'+kenar+'<w:tblLayout w:type="fixed"/><w:tblCellMar><w:left w:w="70" w:type="dxa"/><w:right w:w="70" w:type="dxa"/></w:tblCellMar></w:tblPr><w:tblGrid>'+gen.map(function(g){return '<w:gridCol w:w="'+g+'"/>';}).join("")+'</w:tblGrid>';
+  x += '<w:tr><w:trPr><w:tblHeader/></w:trPr>'+basliklar.map(function(b,i){ return wHucre(b, gen[i], {zemin:"EDEDED", b:true, sz:sz}); }).join("")+'</w:tr>';
+  satirlar.forEach(function(r){ x += '<w:tr><w:trPr><w:cantSplit/></w:trPr>'+r.map(function(c,i){ return wHucre(c, gen[i], {sz:sz, jc: i===0?"center":"left", b: i===1}); }).join("")+'</w:tr>'; });
+  return x + '</w:tbl>';
+}
+
+/* ---------------- Veli karnesi ---------------- */
+var EV_ONERI = {
+  turkce: "Evde: Her akşam on dakika birlikte kitap okuyup okuduğunuz hikâyeyi ona anlattırmanız çok işe yarar.",
+  matematik: "Evde: Sofrayı kurarken, alışverişte ya da oyun oynarken saydırmak ve karşılaştırma yaptırmak matematiği günlük hayatın parçası yapar.",
+  hayat: "Evde: Ona yaşına uygun küçük sorumluluklar verin, çevresinde gördüklerini size anlatmasını isteyin."
+};
+var karneSecili = {};
+function karneNotu(g){ var s = aktifSinif(); return (durum.karneNot[s.id] && durum.karneNot[s.id][g.id]) || ""; }
+function karneVerisi(g, donem){
+  var sonuc = [];
+  dersler().forEach(function(d){
+    var ort = dersOrtalama(d, g.id, donem); if (ort == null) return;
+    var oz = olcutOzeti(d, g.id, donem).filter(function(h){ return h.ort != null; });
+    var guclu = oz.filter(function(h){ return h.ort >= 3; }).sort(function(a,b){ return b.ort - a.ort; }).slice(0,4);
+    if (!guclu.length) guclu = oz.slice().sort(function(a,b){ return b.ort - a.ort; }).slice(0,2);
+    var gelisen = oz.filter(function(h){ return h.ort < ESIK; }).sort(function(a,b){ return a.ort - b.ort; }).slice(0,3);
+    sonuc.push({ders:d, duzey:duzey(ort), guclu:guclu, gelisen:gelisen});
+  });
+  return sonuc;
+}
+var KARNE_GIRIS = "Sevgili velimiz, bu rapor çocuğunuzu bu dönem derslerde gözlemlediklerimize dayanıyor. Bir not çizelgesi değil; neleri başardığını ve hangi becerilerde biraz daha desteğe ihtiyacı olduğunu birlikte görmemiz için hazırlandı.";
+var KARNE_TAMAM = "Bu dönem bütün becerilerde beklenen düzeyde ilerliyor. Aynı ilgiyle devam edelim.";
+function karneSayfasiHTML(g, donem){
+  var s = aktifSinif(), ok = durum.okul, veri = karneVerisi(g, donem), not = karneNotu(g);
+  var h = '<div class="kagit dikey karne"><div class="ic">';
+  h += '<div class="ust-serit"><h2>ÖĞRENCİ GELİŞİM RAPORU</h2><div class="okl">'+(ok.okul?kac(ok.okul)+'<br>':'')+kac((ok.yil||"")+" Eğitim Öğretim Yılı")+'</div></div>';
+  h += '<div class="kimlik"><div><b>Öğrenci</b> '+kac(g.ad)+'</div><div><b>Sınıf</b> '+kac(s.duzey+"/"+(s.sube||"A"))+'</div><div><b>Dönem</b> '+kac(donemAdi(donem))+'</div><div><b>Öğretmen</b> '+kac(ok.ogretmen||"")+'</div></div>';
+  h += '<p class="giris">'+kac(KARNE_GIRIS)+'</p>';
+  if (!veri.length) h += '<p class="giris"><i>Bu dönem için henüz gözlem kaydı yok.</i></p>';
+  veri.forEach(function(v){
+    h += '<div class="ders '+v.ders.renk+'"><div class="db">'+kac(v.ders.ad)+'<span>'+kac(v.duzey.ad)+'</span></div><div class="govde">';
+    h += '<h4>Başarıyla yaptıkları</h4><ul>'+v.guclu.map(function(x){ return '<li>'+kac(x.uzun)+'</li>'; }).join("")+'</ul>';
+    if (v.gelisen.length) h += '<h4>Birlikte geliştireceğimiz beceriler</h4><ul>'+v.gelisen.map(function(x){ return '<li>'+kac(x.uzun)+'</li>'; }).join("")+'</ul>';
+    else h += '<h4>Genel durum</h4><div>'+kac(KARNE_TAMAM)+'</div>';
+    h += '<div class="ev">'+kac(EV_ONERI[v.ders.anahtar]||"")+'</div></div></div>';
+  });
+  h += '<div class="ogretmen-notu"><b>Öğretmenin notu:</b> '+kac(not)+'</div>';
+  h += '<div class="imzalar"><div><b>'+kac(ok.ogretmen||"……………………")+'</b>Sınıf Öğretmeni</div><div><b>……………………</b>Veli</div></div>';
+  h += '</div><div class="dipnot">Dijital Öğretmen · Hasan Tutuş</div></div>';
+  return h;
+}
+function wordKarne(g, donem, ilk){
+  var s = aktifSinif(), ok = durum.okul, veri = karneVerisi(g, donem), not = karneNotu(g);
+  var x = wP("ÖĞRENCİ GELİŞİM RAPORU",{b:true,sz:32,renk:"1F3D5C",sayfaSonu:!ilk});
+  if (ok.okul) x += wP(ok.okul,{sz:20,renk:"444444"});
+  x += wP((ok.yil||"")+" Eğitim Öğretim Yılı · "+donemAdi(donem),{sz:20,renk:"444444",after:160});
+  x += wP([["Öğrenci: ",{b:true,sz:22}],[g.ad+"     ",{sz:22}],["Sınıf: ",{b:true,sz:22}],[s.duzey+"/"+(s.sube||"A")+"     ",{sz:22}],["Öğretmen: ",{b:true,sz:22}],[ok.ogretmen||"",{sz:22}]],{after:160});
+  x += wP(KARNE_GIRIS,{sz:21,after:160});
+  if (!veri.length) x += wP("Bu dönem için henüz gözlem kaydı yok.",{i:true,sz:21});
+  veri.forEach(function(v){
+    x += wP([[v.ders.ad+"  ",{b:true,sz:24,renk:"1F3D5C"}],["("+v.duzey.ad+")",{b:true,sz:22}]],{after:40});
+    x += wP("Başarıyla yaptıkları",{b:true,sz:20,renk:"1F3D5C"});
+    v.guclu.forEach(function(h){ x += wP("•  "+h.uzun,{sz:20}); });
+    if (v.gelisen.length){ x += wP("Birlikte geliştireceğimiz beceriler",{b:true,sz:20,renk:"1F3D5C"}); v.gelisen.forEach(function(h){ x += wP("•  "+h.uzun,{sz:20}); }); }
+    else x += wP(KARNE_TAMAM,{sz:20});
+    x += wP(EV_ONERI[v.ders.anahtar]||"",{i:true,sz:19,renk:"444444",after:160});
+  });
+  x += wP([["Öğretmenin notu: ",{b:true,sz:21}],[not,{sz:21}]],{after:240});
+  var bos = '<w:tblBorders><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:insideH w:val="nil"/><w:insideV w:val="nil"/></w:tblBorders>';
+  function hc(a,b){ return '<w:tc><w:tcPr><w:tcW w:w="5190" w:type="dxa"/></w:tcPr>'+wP(a,{b:true,jc:"center",sz:22})+wP(b,{jc:"center",sz:22})+'</w:tc>'; }
+  x += '<w:tbl><w:tblPr><w:tblW w:w="10380" w:type="dxa"/>'+bos+'<w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid><w:gridCol w:w="5190"/><w:gridCol w:w="5190"/></w:tblGrid><w:tr>'+hc(ok.ogretmen||"……………………","Sınıf Öğretmeni")+hc("……………………","Veli")+'</w:tr></w:tbl>';
+  return x;
+}
+function isKarne(liste, donem){
+  return { yon:"dikey",
+    html: liste.map(function(g){ return karneSayfasiHTML(g, donem); }).join(""),
+    word: function(){ return liste.map(function(g,i){ return wordKarne(g, donem, i===0); }).join(""); } };
+}
+function karneCiz(ic){
+  var s = aktifSinif();
+  var k = el("section",{class:"kart"});
+  k.appendChild(el("h2",{text:"Veli Karnesi"}));
+  k.appendChild(el("p",{class:"aciklama",text:"Her öğrenci için veliye verilecek, notsuz ve olumlu dille yazılmış tek sayfalık gelişim raporu. Puanlardan kendiliğinden oluşur; isterseniz her öğrenciye kendi notunuzu da ekleyin."}));
+  var donem = donemSecici(k);
+  ic.appendChild(k);
+  if (!s.ogrenciler.length){ k.appendChild(el("div",{class:"bos-durum",text:"Önce öğrenci listesini ekleyin."})); return; }
+  s.ogrenciler.forEach(function(g){ if (karneSecili[g.id] === undefined) karneSecili[g.id] = true; });
+  function secilenler(){ return s.ogrenciler.filter(function(g){ return karneSecili[g.id]; }); }
+  var ad = dosyaAdiYap(s.duzey+"-sinif-"+s.sube+"-veli-karneleri");
+  function calis(f){ var l = secilenler(); if (!l.length){ bildir("En az bir öğrenci seçin."); return; } f(l); }
+  var db = el("div",{class:"dugmeler",style:"margin:4px 0 0"});
+  db.appendChild(el("button",{class:"btn",text:"Seçilenleri yazdır",onclick:function(){ calis(function(l){ yazdir(isKarne(l,donem)); }); }}));
+  db.appendChild(el("button",{class:"btn word",text:"Word indir",onclick:function(){ calis(function(l){ wordYap(isKarne(l,donem), ad); }); }}));
+  db.appendChild(el("button",{class:"btn pdf",text:"PDF indir",onclick:function(){ calis(function(l){ pdfYap(isKarne(l,donem), ad); }); }}));
+  db.appendChild(el("button",{class:"btn ikincil",text:"Hepsini seç",onclick:function(){ s.ogrenciler.forEach(function(g){ karneSecili[g.id]=true; }); ciz(); }}));
+  db.appendChild(el("button",{class:"btn ikincil",text:"Seçimi kaldır",onclick:function(){ s.ogrenciler.forEach(function(g){ karneSecili[g.id]=false; }); ciz(); }}));
+  k.appendChild(db);
+
+  var k2 = el("section",{class:"kart"});
+  k2.appendChild(el("h2",{text:"Öğrenciler"}));
+  k2.appendChild(el("p",{class:"aciklama",text:"Karnesi hazırlanacak öğrencileri işaretleyin. Öğretmen notu karnenin altında görünür."}));
+  s.ogrenciler.forEach(function(g, j){
+    var sat = el("div",{class:"karne-ogr"});
+    var sol = el("div",{class:"sol"});
+    var cb = el("input",{type:"checkbox"}); cb.checked = !!karneSecili[g.id];
+    cb.addEventListener("change", function(){ karneSecili[g.id] = this.checked; });
+    sol.appendChild(el("label",{class:"sec"},[cb, (j+1)+". "+g.ad]));
+    var duz = el("div",{class:"duz"});
+    var varMi = false;
+    dersler().forEach(function(d){ var dz = duzey(dersOrtalama(d,g.id,donem)); if (dz){ varMi = true; duz.appendChild(el("span",{class:"rozet r-"+dz.k,text:d.ad+": "+dz.kisa})); } });
+    if (!varMi) duz.appendChild(el("span",{class:"bilgi",style:"margin:0",text:"Bu dönem için puan yok"}));
+    sol.appendChild(duz);
+    var tek = el("div",{class:"dugmeler",style:"margin-top:8px"});
+    tek.appendChild(el("button",{class:"btn ikincil kucuk",text:"Yazdır",onclick:function(){ yazdir(isKarne([g],donem)); }}));
+    tek.appendChild(el("button",{class:"btn ikincil kucuk",text:"PDF",onclick:function(){ pdfYap(isKarne([g],donem), dosyaAdiYap(g.ad+"-gelisim-raporu")); }}));
+    sol.appendChild(tek);
+    sat.appendChild(sol);
+    var ta = el("textarea",{placeholder:"Öğretmenin notu (isteğe bağlı). Örnek: Bu dönem okumaya çok istekli; akşamları birlikte kitap okumanızı öneririm.","aria-label":g.ad+" için öğretmen notu"});
+    ta.value = karneNotu(g);
+    ta.addEventListener("input", function(){ if (!durum.karneNot[s.id]) durum.karneNot[s.id] = {}; durum.karneNot[s.id][g.id] = this.value; kaydet(); });
+    sat.appendChild(ta);
+    k2.appendChild(sat);
+  });
+  ic.appendChild(k2);
+}
+
+/* Başlat */
+temalariHaftayaGoreAc();
+ciz();
+})();
+</script>
+<script defer src="/nav.js"></script>
+<script data-goatcounter="https://dijitalogretmen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
