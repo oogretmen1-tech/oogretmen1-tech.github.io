@@ -15,6 +15,11 @@ body{font-family:'Dijo','Poppins',Arial,sans-serif;font-weight:500;color:var(--i
 button{font:inherit;color:inherit;border:0;cursor:pointer;background:none;padding:0}
 .wrap{max-width:860px;margin:0 auto;padding:12px 16px 90px}
 .scr{display:none}.scr.on{display:block}
+.s1{background:#0fa596}.s2{background:#2f6fe4}.s3{background:#e2531f}.s4{background:#5b5bd6}
+.cerceve{background:#fff;border:5px solid var(--mavi2);border-radius:24px;overflow:hidden;box-shadow:0 9px 0 rgba(0,40,90,.25)}
+#sframe{display:block;width:100%;border:0;height:calc(100vh - 110px);height:calc(100dvh - 110px);background:#fff}
+body.genis .wrap{max-width:1400px;padding-bottom:16px}
+body.genis footer{display:none}
 svg{display:block;width:100%;height:100%}
 .ic{display:inline-block;width:1.2em;height:1.2em;vertical-align:-.25em}
 
@@ -200,6 +205,23 @@ footer b{font-size:15px}
     <button class="kutu o2" data-a="hafiza"><i data-ic="_card"></i>Hafıza Kartları<small>Resim ve kelime</small></button>
     <button class="kutu o3" data-a="sesavi"><i data-ic="_find"></i>Ses Avı<small>İlk sesi bul</small></button>
   </div>
+  <div class="bolum">Daha Çok Oyun</div>
+  <div class="kutular">
+    <button class="kutu s1" data-site="1-sinif-cizgi-calismalari-interaktif.html"><i data-ic="kalem"></i>Çizgi Çalışmaları<small>Parmağınla çiz</small></button>
+    <button class="kutu s2" data-site="orman-kostebekleri.html"><i data-ic="orman"></i>Orman Köstebekleri<small>Harf, hece, kelime yakala</small></button>
+    <button class="kutu s3" data-site="kart-cevirmece.html"><i data-ic="yıldız"></i>Kart Çevirmece<small>Eşini bul</small></button>
+    <button class="kutu s4" data-site="orman-bulutlari.html"><i data-ic="bulut"></i>Orman Bulutları<small>Sayıyı vur</small></button>
+    <button class="kutu s1" data-site="ritmik-sayma-macerasi.html"><i data-ic="kurbağa"></i>Nilüfer Yolu<small>Ritmik say</small></button>
+    <button class="kutu s2" data-site="sekil-dedektifi.html"><i data-ic="gözlük"></i>Şekil Dedektifi<small>Şekli bul</small></button>
+    <button class="kutu s3" data-site="matematik-yolu.html"><i data-ic="zar"></i>Matematik Yolu<small>Zar at, ilerle</small></button>
+    <button class="kutu s4" data-site="abakus.html"><i data-ic="kutu"></i>Abaküs<small>Onluk ve birlik</small></button>
+    <button class="kutu s1" data-site="giyinme-oyunu.html"><i data-ic="elbise"></i>Giydirme Oyunu<small>Mevsime göre giydir</small></button>
+  </div>
+</section>
+
+<section id="siteoyun" class="scr">
+  <div class="ust"><button class="yuv" data-git="menu" aria-label="Geri"><i data-ic="_back"></i></button><h2 id="sbaslik"></h2><div class="yildiz"><i data-ic="_star"></i><span class="yn">0</span></div></div>
+  <div class="cerceve"><iframe id="sframe" title="Oyun" allow="autoplay; fullscreen"></iframe></div>
 </section>
 
 <section id="oyun" class="scr">
@@ -250,8 +272,9 @@ const tik=()=>nota(880,0,.07);
 
 /* ekranlar */
 let aktif=null,bekle=0;
-function git(id){clearTimeout(bekle);$('#alkis').classList.remove('on');$$('.scr').forEach(s=>s.classList.toggle('on',s.id===id));window.scrollTo(0,0);if(id==='menu')menuCiz();try{if(history.state!==id)history.pushState(id,'')}catch(e){}}
-window.addEventListener('popstate',e=>{const id=e.state||'kapak';$$('.scr').forEach(s=>s.classList.toggle('on',s.id===id));if(id==='menu')menuCiz()});
+function siteKapat(){const f=$('#sframe');if(f&&f.getAttribute('src')){const n=f.cloneNode(false);n.removeAttribute('src');f.replaceWith(n)}document.body.classList.remove('genis')}
+function git(id){clearTimeout(bekle);if(id!=='siteoyun')siteKapat();$('#alkis').classList.remove('on');$$('.scr').forEach(s=>s.classList.toggle('on',s.id===id));window.scrollTo(0,0);if(id==='menu')menuCiz();try{if(history.state!==id)history.pushState(id,'')}catch(e){}}
+window.addEventListener('popstate',e=>{const id=e.state||'kapak';if(id!=='siteoyun')siteKapat();$$('.scr').forEach(s=>s.classList.toggle('on',s.id===id));if(id==='menu')menuCiz()});
 function yildizYaz(){$$('.yn').forEach(e=>e.textContent=S.y)}
 const AFERIN=['Aferin!','Harika!','Süpersin!','Çok güzel!','Bravo!','Başardın!'];
 function kazan(n){S.y+=n||1;save();yildizYaz();dogruSes();$('#aferin').textContent=pick(AFERIN);$('#alkis').classList.add('on');
@@ -404,9 +427,12 @@ icons();yildizYaz();
 $('#basla').onclick=()=>{tik();say('Merhaba çocuklar! Ben Dijo. Okuma yazmayı birlikte öğreneceğiz.');git('menu')};
 $$('[data-git]').forEach(b=>b.onclick=()=>{try{speechSynthesis.cancel()}catch(e){}git(b.dataset.git)});
 $$('[data-a]').forEach(b=>b.onclick=()=>{tik();sonSecim='';ac(b.dataset.a)});
+$$('[data-site]').forEach(b=>b.onclick=()=>{tik();try{speechSynthesis.cancel()}catch(e){}const f=$('#sframe'),n=f.cloneNode(false);n.src=b.dataset.site;f.replaceWith(n);$('#sbaslik').textContent=b.firstChild.nextSibling.textContent;document.body.classList.add('genis');git('siteoyun')});
 try{history.replaceState('kapak','')}catch(e){}
 </script>
-</<script data-goatcounter="https://dijitalogretmen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-body>
-</html><script src="ses.js"></script>
+<script data-goatcounter="https://dijitalogretmen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script src="ses.js"></script>
+</body>
+</html>
+
 
