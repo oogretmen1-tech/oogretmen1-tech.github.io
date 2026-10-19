@@ -283,6 +283,7 @@
       dugme("oi-yaz", "🖨 Yazdır", function () { window.open(bilgi.hedef, "_blank"); });
       dugme("oi-pdf", "⬇ PDF İndir", function () { indir(bilgi.pdf); });
       if (bilgi.word) dugme("oi-word", "📄 Word İndir", function () { indir(bilgi.word); });
+      if (bilgi.sayfa) dugme("oi-sec", "☑️ Sayfa Seç", function () { location.href = bilgi.sayfa; });
     } else {
       htmlGoster(bilgi.hedef);
       dugme("oi-yaz", "🖨 Tümünü Yazdır", function () {
@@ -339,6 +340,7 @@
           else bilgi.pdf = hedef;
         });
         if (bilgi.tip === "pdf") {
+          if (uzanti(href) === "html" || uzanti(href) === "htm") bilgi.sayfa = href;
           if (!bilgi.pdf) bilgi.pdf = onizHedef;
           if (!bilgi.word) bilgi.word = kokAd(onizHedef) + ".docx";
         } else {
@@ -391,6 +393,8 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", baslat);
   else baslat();
   window.doOnizlemeTara = kartlariTara;
+  /* kart dışı öğelerden (ör. ÇEDES ay kartlarındaki pano kutuları) ön izleme aç */
+  window.doOnizlemeAc = function (bilgi) { stilEkle(); pencereKur(); ac(bilgi); };
   /* aramadan gelen kart için ön izlemeyi aç */
   window.doOnizlemeKart = function (kart) {
     if (!kart.__oiBilgi) kartlariTara();
