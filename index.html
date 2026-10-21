@@ -3387,6 +3387,99 @@ document.addEventListener('click',function(e){
 })();
 </script>
 
+<!-- TELEFON DÜZENİ: sınıf sekmeleri + renkli ders kutuları (yalnızca telefonda; masaüstü/tahta görünümü aynen kalır) -->
+<style id="telefon-sinif-css">
+.tel-sekme{display:none}
+@media (max-width:599px){
+  /* girişteki tıklanmayan rozetler telefonda gizli */
+  .hero-strip{display:none !important}
+  /* ince takvim bandı: tek satır yaklaşan gün + düğme */
+  .ytk-gunler-baslik{display:none !important}
+  .tk-liste .tk-satir:nth-child(n+2){display:none !important}
+  .ytk{flex-direction:row !important;align-items:center;gap:8px}
+  .ytk-tahta{flex:1;min-width:0}
+  .ytk-gunler{padding:6px 10px !important}
+  .tk-tumu{margin-top:0 !important;flex:none;padding:8px 12px !important;font-size:.74rem !important}
+  .gunler-ic{padding:6px 0 !important}
+  /* sınıf sekmeleri */
+  .tel-sekme{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0 0 14px;padding:6px;border-radius:18px;
+    background:linear-gradient(120deg,#0E1D33 0%,#16345C 55%,#2B547F 100%);box-shadow:0 5px 0 #0E1D33}
+  .tel-sekme button{border:0;background:transparent;color:#C6D3E2;font:inherit;font-weight:700;font-size:.85rem;
+    border-radius:13px;padding:9px 2px;cursor:pointer;line-height:1.1}
+  .tel-sekme button b{display:block;font-size:1.5rem;font-weight:800}
+  .tel-sekme button.secili{background:#fff;color:#16345C;box-shadow:0 3px 0 rgba(0,0,0,.3)}
+  #siniflar .classes-grid>.class-card{display:none !important}
+  #siniflar .sinif-panel{border:0;box-shadow:none;padding:0;background:transparent;animation:none}
+  #siniflar .sinif-panel .sp-ust{display:none}
+  #siniflar .sinif-panel .sb-tiles{grid-template-columns:1fr 1fr;gap:10px}
+  #siniflar .sinif-panel .sb-baslik{color:#16345C}
+  /* etkinlik kutuları: hepsi aynı sade çerçeve */
+  #siniflar .sinif-panel .subject-btn{background:#fff;border:2.5px solid #2B547F;box-shadow:0 3px 0 #9fb3c9;min-height:70px;padding:10px 10px}
+  #siniflar .sinif-panel .subject-btn .arrow{display:none}
+  #siniflar .sinif-panel .subject-btn .s-label{align-items:flex-start;flex-direction:column;gap:6px;font-size:.9rem}
+  /* ders kutuları: dolu, ders rengiyle */
+  #siniflar .sinif-panel .subject-btn.ders-kutu{background:var(--dr);border:3px solid rgba(0,0,0,.15);box-shadow:0 4px 0 rgba(0,0,0,.25);color:#fff;min-height:96px}
+  #siniflar .sinif-panel .subject-btn.ders-kutu.acik-renk{color:#2a1d00}
+  #siniflar .sinif-panel .subject-btn.ders-kutu .s-label{font-size:1.05rem;font-weight:800}
+  #siniflar .sinif-panel .subject-btn.ders-kutu .sp-ico{background:rgba(255,255,255,.95);border-color:#fff}
+  #siniflar .sinif-panel .subject-btn.ders-kutu .s-txt small{opacity:.9}
+  #siniflar .sinif-panel .subject-btn.ders-kutu .sp-no{background:#fff;color:#2a1d00}
+}
+</style>
+<script id="telefon-sinif-js">
+(function(){
+  var mq=window.matchMedia('(max-width:599px)');
+  var bolum=document.getElementById('siniflar');
+  var grid=bolum && bolum.querySelector('.classes-grid');
+  if(!grid) return;
+  var kartlar=[].slice.call(grid.querySelectorAll('.class-card'));
+  var RENK={'#e0a400':['#F2B705',1],'#2563eb':['#1E6FD9'],'#1a9b57':['#2E9E4F'],'#d62a2a':['#D93636'],'#ea7a1a':['#F07C1B'],'#7a3fd4':['#7B4FD6']};
+  var sekme=document.createElement('div'); sekme.className='tel-sekme';
+  kartlar.forEach(function(k,i){
+    var b=document.createElement('button'); b.type='button';
+    b.innerHTML='<b>'+(i+1)+'.</b>sınıf';
+    b.onclick=function(){ sec(i,true); };
+    sekme.appendChild(b);
+  });
+  grid.parentNode.insertBefore(sekme,grid);
+  function boya(){
+    var p=document.getElementById('sinifPanel'); if(!p) return;
+    p.querySelectorAll('.subject-btn').forEach(function(a){
+      var ic=a.querySelector('.sp-ico'); if(!ic) return;
+      var m=(ic.getAttribute('style')||'').match(/--ic:\s*(#[0-9a-fA-F]{6})/);
+      var r=m && RENK[m[1].toLowerCase()];
+      if(r){ a.classList.add('ders-kutu'); if(r[1]) a.classList.add('acik-renk'); a.style.setProperty('--dr',r[0]); }
+    });
+  }
+  function isaretle(i){ [].forEach.call(sekme.children,function(b,j){ b.classList.toggle('secili',j===i); }); }
+  function sec(i,kullanici){
+    if(!mq.matches) return;
+    var k=kartlar[i]; if(!k) return;
+    var y=window.scrollY;
+    if(!k.classList.contains('acik')) window.toggleClassCard(k.querySelector('.class-card-header'));
+    boya(); isaretle(i);
+    try{localStorage.setItem('telSinif',i);}catch(e){}
+    if(!kullanici) setTimeout(function(){ window.scrollTo(0,y); },90);
+  }
+  function baslat(){
+    if(!mq.matches) return;
+    var acik=kartlar.findIndex(function(k){ return k.classList.contains('acik'); });
+    var i=acik;
+    if(i<0){ i=0; try{ var s=parseInt(localStorage.getItem('telSinif'),10); if(s>=0&&s<kartlar.length) i=s; }catch(e){} }
+    if(acik>=0){ boya(); isaretle(i); } else sec(i,false);
+  }
+  /* panel her açıldığında ders kutularını boya */
+  var eski=window.toggleClassCard;
+  window.toggleClassCard=function(h){
+    var k=h && h.closest('.class-card');
+    if(mq.matches && k && grid.contains(k) && k.classList.contains('acik')) return; /* telefonda panel kapanmasın */
+    var s=eski.apply(this,arguments); boya(); return s;
+  };
+  baslat();
+  mq.addEventListener && mq.addEventListener('change',baslat);
+})();
+</script>
+
 </body>
 </html>
 <script data-goatcounter="https://dijitalogretmen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
