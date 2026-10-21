@@ -1,259 +1,189 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Detaylı İlkokul Oyun Etkinlik Rehberi</title>
-  <link href="https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-
-  <style>
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: 'Andika', 'Andika New Basic', 'Comic Neue', Arial, Helvetica, sans-serif;
-      background: #f6f7fb;
-      color: #1f2937;
-      font-size: 17px;
-      line-height: 1.7;
-    }
-
-    header {
-      padding: 45px 20px;
-      color: white;
-      text-align: center;
-      background: linear-gradient(135deg, #5b21b6, #2563eb);
-    }
-    header h1 { margin: 0; font-size: clamp(1.8rem, 4vw, 3rem); }
-    header p { max-width: 800px; margin: 12px auto 0; }
-
-    main { width: min(1050px, calc(100% - 30px)); margin: 26px auto 60px; }
-
-    .geri {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: #fff; border: 2px solid #5b21b6; color: #5b21b6;
-      font-family: inherit; font-weight: bold; font-size: 0.95rem;
-      padding: 9px 18px; border-radius: 30px; text-decoration: none;
-      margin-bottom: 20px; transition: all .2s;
-    }
-    .geri:hover { background: #5b21b6; color: #fff; }
-
-    .aciklama {
-      background: #fff7ed;
-      border-left: 6px solid #f97316;
-      padding: 16px 18px;
-      border-radius: 10px;
-      margin-bottom: 24px;
-    }
-
-    .arama {
-      width: 100%;
-      padding: 14px;
-      border: 2px solid #cbd5e1;
-      border-radius: 10px;
-      font-family: inherit;
-      font-size: 1rem;
-      margin-bottom: 18px;
-    }
-    .arama:focus { outline: 3px solid #c4b5fd; border-color: #6d28d9; }
-
-    .filtreler { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
-
-    .filtre-btn {
-      border: 1px solid #c4b5fd;
-      background: white;
-      color: #5b21b6;
-      font-family: inherit;
-      font-size: 0.95rem;
-      padding: 10px 15px;
-      border-radius: 99px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .filtre-btn.aktif, .filtre-btn:hover { color: white; background: #6d28d9; }
-    .filtre-btn:focus-visible { outline: 3px solid #a78bfa; outline-offset: 2px; }
-
-    .sayac { color: #64748b; font-size: 0.9rem; margin: 0 0 24px; }
-
-    .liste { display: flex; flex-direction: column; gap: 20px; }
-
-    .bolum {
-      margin: 36px 0 0;
-      padding: 13px 16px;
-      border-radius: 10px;
-      background: #5b21b6;
-      color: white;
-      font-size: 1.2rem;
-    }
-
-    .kart {
-      background: white;
-      border: 1px solid #e2e8f0;
-      border-radius: 15px;
-      overflow: hidden;
-      box-shadow: 0 5px 18px rgba(15, 23, 42, 0.10);
-    }
-
-    .kart-baslik {
-      color: white;
-      background: linear-gradient(135deg, #7c3aed, #2563eb);
-      padding: 18px 20px;
-    }
-    .kart-baslik h3 { margin: 0 0 7px; font-size: 1.35rem; }
-
-    .etiket {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 0.82rem;
-      font-weight: bold;
-      background: rgba(255,255,255,0.22);
-    }
-
-    .kart-icerik { padding: 20px; }
-
-    .kisa-bilgiler { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 18px; }
-    .bilgi { padding: 7px 10px; border-radius: 8px; background: #f1f5f9; font-size: 0.92rem; }
-
-    .detay-btn {
-      width: 100%;
-      border: 0;
-      padding: 12px;
-      border-radius: 8px;
-      color: #4c1d95;
-      background: #ede9fe;
-      font-family: inherit;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-    .detay-btn:hover { background: #ddd6fe; }
-    .detay-btn:focus-visible { outline: 3px solid #a78bfa; outline-offset: 2px; }
-
-    .detay { display: none; margin-top: 18px; padding-top: 8px; border-top: 1px solid #e2e8f0; }
-    .detay.acik { display: block; }
-    .detay h4 { margin: 22px 0 7px; color: #5b21b6; font-size: 1.08rem; }
-
-    /* Satır sonlarının korunması için: metinler çok satırlı yazılıyor */
-    .sozler, .hareketler, .ogretmen-notu, .duz-metin { white-space: pre-line; }
-
-    .sozler {
-      padding: 15px; border-radius: 10px;
-      background: #fffbeb; border-left: 5px solid #f59e0b;
-      font-weight: bold;
-    }
-    .hareketler {
-      padding: 15px; border-radius: 10px;
-      background: #eff6ff; border-left: 5px solid #2563eb;
-    }
-    .ogretmen-notu {
-      padding: 15px; border-radius: 10px;
-      background: #ecfdf5; border-left: 5px solid #16a34a;
-    }
-    .duz-metin { margin: 0; }
-
-    .gizli { display: none; }
-
-    #bosMesaj { display: none; text-align: center; padding: 25px; color: #64748b; }
-
-    footer { padding: 22px; text-align: center; color: white; background: #1e293b; }
-
-    @media (max-width: 520px) {
-      body { font-size: 16px; }
-      .kart-baslik h3 { font-size: 1.15rem; }
-    }
-  </style>
-<meta name="description" content="Detaylı İlkokul Oyun Etkinlik Rehberi - Dijital Öğretmen'den ücretsiz, MEB müfredatına (Maarif Modeli) uygun ilkokul eğitim materyali. Hasan Tutuş tarafından hazırlanmıştır.">
-<meta property="og:type" content="website">
-<meta property="og:locale" content="tr_TR">
-<meta property="og:site_name" content="Dijital Öğretmen">
-<meta property="og:title" content="Detaylı İlkokul Oyun Etkinlik Rehberi">
-<meta property="og:description" content="Detaylı İlkokul Oyun Etkinlik Rehberi - Dijital Öğretmen'den ücretsiz, MEB müfredatına (Maarif Modeli) uygun ilkokul eğitim materyali. Hasan Tutuş tarafından hazırlanmıştır.">
-<meta property="og:url" content="https://oogretmen1-tech.github.io/oyun-etkinlik-rehberi.html">
-<meta property="og:image" content="https://oogretmen1-tech.github.io/logo.png">
-<meta name="twitter:card" content="summary">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İlkokul Oyun Rehberi | Dijital Öğretmen</title>
+<meta name="description" content="Parmak oyunları, sayışmacalar, tekerlemeler ve bahçe oyunları: kaç kişiyle oynanır, ne kadar sürer, nasıl oynanır. Adım adım resimli anlatım ve yazdırılabilir sayfalar.">
+<link rel="stylesheet" href="poppinsa.css">
 <style>
-.indir-arac-cubugu{
-  position:fixed; top:14px; right:14px; z-index:9999;
-  display:flex; gap:8px; flex-wrap:wrap;
+:root{
+  --lacivert:#16345C; --lacivert2:#24507F; --zemin:#EEF2F7; --kart:#FFFFFF;
+  --yazi:#1E293B; --soluk:#5B6B80; --cizgi:#CBD5E1;
+  --parmak:#7C3AED; --vucut:#2563EB; --sayismaca:#E08A00; --bahce:#15803D;
 }
-.indir-arac-cubugu button{
-  font-family:inherit; font-size:.85rem; font-weight:700; cursor:pointer;
-  border:none; border-radius:24px; padding:9px 16px;
-  background:#16345C; color:#fff; box-shadow:0 3px 10px rgba(0,0,0,.25);
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:'Poppins',Arial,sans-serif;background:var(--zemin);color:var(--yazi);font-size:16px;line-height:1.6}
+button{font-family:inherit}
+
+/* ---------- Başlık ---------- */
+.ust{background:linear-gradient(135deg,var(--lacivert),var(--lacivert2));color:#fff;padding:22px 16px 26px}
+.ust-ic{max-width:1100px;margin:0 auto}
+.geri{display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:.9rem;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);border-radius:20px;padding:5px 14px;margin-bottom:12px}
+.ust h1{margin:0;font-size:clamp(1.5rem,4vw,2.3rem);line-height:1.25}
+.ust p{margin:8px 0 0;max-width:720px;opacity:.92;font-size:.98rem}
+
+main{max-width:1100px;margin:0 auto;padding:18px 16px 30px}
+
+.arac{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
+.arama{width:100%;padding:13px 16px;border:2px solid var(--cizgi);border-radius:12px;font:inherit;background:#fff}
+.arama:focus{outline:none;border-color:var(--lacivert2)}
+.filtreler{display:flex;gap:8px;flex-wrap:wrap}
+.filtre-btn{border:2px solid var(--lacivert);background:#fff;color:var(--lacivert);border-radius:22px;padding:7px 15px;font-weight:600;font-size:.9rem;cursor:pointer}
+.filtre-btn.aktif{background:var(--lacivert);color:#fff}
+.sayac{color:var(--soluk);font-size:.88rem;margin:0}
+
+/* ---------- Oyun kartları ---------- */
+.izgara{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+@media(min-width:700px){.izgara{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}}
+.kart{background:var(--kart);border-radius:16px;overflow:hidden;cursor:pointer;border:2px solid #D6DEE8;
+  box-shadow:0 4px 14px rgba(22,52,92,.10);display:flex;flex-direction:column;text-align:left;padding:0;color:inherit;
+  transition:transform .18s ease, box-shadow .18s ease}
+.kart:hover,.kart:focus-visible{transform:translateY(-3px);box-shadow:0 10px 24px rgba(22,52,92,.18);outline:none}
+.kart.gizli{display:none}
+.kapak{position:relative;aspect-ratio:1/1;background:var(--renk);overflow:hidden}
+.kapak img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s ease}
+.kapak img.gor{opacity:1}
+.kapak .yer-tutucu{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:16px;color:#fff;
+  background:linear-gradient(160deg,rgba(255,255,255,.18),rgba(0,0,0,.18))}
+.yer-tutucu .buyuk{font-size:clamp(1.05rem,4.5vw,1.45rem);font-weight:700;line-height:1.2}
+.yer-tutucu .halka{position:absolute;right:-30px;top:-30px;width:140px;height:140px;border-radius:50%;border:18px solid rgba(255,255,255,.18)}
+.etiket{position:absolute;left:10px;top:10px;background:var(--renk);color:#fff;font-size:.74rem;font-weight:700;
+  padding:4px 10px;border-radius:14px;box-shadow:0 2px 6px rgba(0,0,0,.25);border:2px solid #fff}
+.kart-govde{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.kart-govde h3{margin:0;font-size:1rem;line-height:1.3}
+.mini{display:flex;flex-wrap:wrap;gap:6px}
+.mini span{background:#EEF2F7;border-radius:8px;padding:3px 9px;font-size:.8rem;color:#334155}
+.kart-ac{margin-top:auto;font-size:.86rem;font-weight:700;color:var(--renk)}
+
+#bosMesaj{display:none;background:#fff;border-radius:12px;padding:18px;text-align:center;color:var(--soluk)}
+
+/* ---------- Oyun penceresi ---------- */
+.pencere{position:fixed;inset:0;z-index:50;background:rgba(15,23,42,.55);display:none;align-items:stretch;justify-content:center}
+.pencere.acik{display:flex}
+.sayfa-kutu{background:var(--zemin);width:100%;max-width:860px;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  animation:yuksel .28s ease}
+@keyframes yuksel{from{transform:translateY(24px);opacity:.4}to{transform:none;opacity:1}}
+body.pencere-acik{overflow:hidden}
+body.pencere-acik #do-indir-bar,body.pencere-acik .indir-arac-cubugu{display:none !important}
+
+.p-ust{position:sticky;top:0;z-index:3;background:var(--renk);color:#fff;display:flex;align-items:center;gap:8px;padding:10px 12px;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+.p-ust h2{margin:0;font-size:1.08rem;flex:1;line-height:1.25;text-align:center}
+.p-btn{border:2px solid rgba(255,255,255,.7);background:rgba(255,255,255,.15);color:#fff;border-radius:10px;padding:6px 12px;font-weight:700;font-size:.88rem;cursor:pointer;white-space:nowrap}
+.p-btn:disabled{opacity:.35;cursor:default}
+
+.p-ic{padding:16px}
+.sahne{position:relative;background:var(--renk);border-radius:16px;overflow:hidden;aspect-ratio:1/1;max-height:62vh;margin:0 auto;width:min(100%,62vh)}
+.sahne img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.04);transition:opacity .6s ease, transform 3.2s ease}
+.sahne img.gor{opacity:1;transform:scale(1)}
+.sahne .bos{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;padding:24px;text-align:center}
+.sahne .bos .no{font-size:5rem;font-weight:700;line-height:1;opacity:.95;animation:zipla .6s ease}
+.sahne .bos .yz{font-size:1.15rem;font-weight:600;margin-top:12px;max-width:420px;animation:belir .6s ease}
+@keyframes zipla{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:.95}}
+@keyframes belir{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.adim-serit{max-width:min(100%,62vh);margin:10px auto 0;background:#fff;border-radius:14px;padding:12px 14px;border:2px solid #D6DEE8;display:flex;gap:12px;align-items:center}
+.adim-no{flex:0 0 auto;width:38px;height:38px;border-radius:50%;background:var(--renk);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center}
+.adim-yazi{flex:1;font-weight:600;line-height:1.35}
+.adim-kontrol{display:flex;justify-content:center;align-items:center;gap:10px;margin-top:10px}
+.nokta{width:11px;height:11px;border-radius:50%;background:#C3CCD8;border:none;padding:0;cursor:pointer}
+.nokta.aktif{background:var(--renk);transform:scale(1.25)}
+.oynat{border:2px solid var(--renk);color:var(--renk);background:#fff;border-radius:18px;padding:4px 14px;font-weight:700;font-size:.85rem;cursor:pointer;margin-left:6px}
+
+.bilgiler{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0}
+@media(min-width:640px){.bilgiler{grid-template-columns:repeat(4,1fr)}}
+.bilgi{background:#fff;border-radius:12px;padding:10px 12px;border-left:5px solid var(--renk);box-shadow:0 2px 8px rgba(22,52,92,.06)}
+.bilgi b{display:block;font-size:.75rem;text-transform:uppercase;letter-spacing:.04em;color:var(--soluk)}
+.bilgi span{font-weight:600;font-size:.95rem;line-height:1.35;display:block;margin-top:2px}
+
+.blok{background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(22,52,92,.06)}
+.blok h3{margin:0 0 8px;font-size:1.05rem;color:var(--renk)}
+.blok ol{margin:0;padding-left:22px}
+.blok li{margin:4px 0}
+.blok p{margin:0}
+.sozler{white-space:pre-line;background:#FFFBEB;border:2px dashed #F2C14E;border-radius:12px;padding:12px 14px;font-size:1.02rem}
+.p-alt{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;margin:16px 0 8px}
+.p-alt button{flex:1;min-width:140px;border:none;border-radius:12px;padding:12px;font-weight:700;cursor:pointer;background:var(--lacivert);color:#fff;font-size:.95rem}
+.p-alt button.acik-renk{background:#fff;color:var(--lacivert);border:2px solid var(--lacivert)}
+
+.imza{text-align:center;padding:18px 10px;margin-top:28px;font-size:.82rem;color:#7a8696;border-top:1px solid #d7dee8}
+.guncel{text-align:center;font-size:.8rem;color:#7a8696;margin:20px 0 0}
+
+/* ---------- Yazdırma (tüm oyunlar ya da tek oyun) ---------- */
+#baski{display:none}
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff;font-size:12.5pt}
+  .ust,main,.pencere,.imza,.guncel{display:none !important}
+  #baski{display:block}
+  .b-oyun{break-inside:auto;page-break-after:always;padding:0}
+  .b-oyun:last-child{page-break-after:auto}
+  body.tek-yazdir .b-oyun{display:none}
+  body.tek-yazdir .b-oyun.secili{display:block}
 }
-.indir-arac-cubugu button.beyaz{ background:#fff; color:#16345C; border:1.5px solid #16345C; }
-.indir-arac-cubugu button:hover{ filter:brightness(1.1); }
-@media print{ .indir-arac-cubugu{ display:none !important; } }
-@media (max-width:520px){
-  .indir-arac-cubugu{ position:static; justify-content:center; padding:10px; }
-}
+.b-oyun h2{margin:0 0 4px;font-size:18pt;color:#16345C}
+.b-tur{font-weight:600;color:#5B6B80;margin:0 0 10px}
+.b-kareler{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0 0 10px}
+.b-kareler figure{margin:0}
+.b-kareler img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:6px;display:block}
+.b-kareler figcaption{font-size:8.5pt;line-height:1.25;margin-top:3px}
+.b-bilgi{display:grid;grid-template-columns:repeat(2,1fr);gap:4px 16px;border:1.5px solid #16345C;border-radius:8px;padding:8px 10px;margin-bottom:10px;font-size:11pt}
+.b-oyun h3{font-size:12.5pt;margin:10px 0 4px;color:#16345C}
+.b-oyun ol{margin:0;padding-left:20px}
+.b-oyun p{margin:0}
+.b-soz{white-space:pre-line;border:1.5px dashed #999;border-radius:8px;padding:8px 10px}
+.b-imza{text-align:center;font-size:9pt;color:#777;margin-top:12px}
 </style>
 </head>
-
 <body>
-<div class="indir-arac-cubugu">
-  <button onclick="window.print()">🖨 Yazdır / PDF Kaydet</button>
-  <button class="beyaz" onclick="__dosyayiIndir()">⬇ Dosyayı İndir</button>
+
+<header class="ust">
+  <div class="ust-ic">
+    <a class="geri back-link" href="index.html?page=ogretmenrehberi">← Ana Sayfa</a>
+    <h1>İlkokul Oyun Rehberi</h1>
+    <p>Bir oyuna dokunun: kaç kişiyle oynandığı, ne kadar sürdüğü ve nasıl oynandığı adım adım, resimli olarak açılır.</p>
+  </div>
+</header>
+
+<main>
+  <div class="arac">
+    <input class="arama" id="arama" type="search" placeholder="Oyun ara: parmak, yağmur, deve cüce, sayışmaca..." oninput="filtrele()">
+    <div class="filtreler" id="filtreler">
+      <button class="filtre-btn aktif" data-k="hepsi">Tümü</button>
+      <button class="filtre-btn" data-k="parmak">Parmak Oyunları</button>
+      <button class="filtre-btn" data-k="vucut">Vücut ve Taklit</button>
+      <button class="filtre-btn" data-k="sayismaca">Sayışmaca ve Tekerleme</button>
+      <button class="filtre-btn" data-k="bahce">Bahçe Oyunları</button>
+    </div>
+    <p class="sayac" id="sayac"></p>
+  </div>
+
+  <div class="izgara" id="izgara"></div>
+  <p id="bosMesaj">Aramanıza uygun oyun bulunamadı. Başka bir kelime deneyin ya da "Tümü"ne dokunun.</p>
+
+  <p class="guncel">Parmak oyunları ve tekerlemeler yöreden yöreye küçük farklarla söylenir; buradaki metinler sınıfta kullanılmak üzere seçilmiş örneklerdir.<br>Son güncelleme: 21 Ekim 2026</p>
+</main>
+
+<!-- Oyun penceresi -->
+<div class="pencere" id="pencere" role="dialog" aria-modal="true" aria-labelledby="pBaslik" data-indir-gizle>
+  <div class="sayfa-kutu" id="sayfaKutu">
+    <div class="p-ust">
+      <button class="p-btn" id="pKapat">✕ Kapat</button>
+      <h2 id="pBaslik"></h2>
+      <button class="p-btn" id="pOnceki" aria-label="Önceki oyun">‹</button>
+      <button class="p-btn" id="pSonraki" aria-label="Sonraki oyun">›</button>
+    </div>
+    <div class="p-ic" id="pIcerik"></div>
+  </div>
 </div>
 
+<div id="baski"></div>
 
-  <header>
-    <h1>🎈 Detaylı İlkokul Oyun Rehberi</h1>
-    <p>
-      Her oyunda öğretmenin sözleri, öğrencinin hareketleri,
-      uygulama basamakları, kurallar ve öğretmen notları bulunur.
-    </p>
-  </header>
+<div class="imza">Dijital Öğretmen · Hasan Tutuş</div>
 
-  <main>
-
-    <a class="geri" href="index.html?page=ogretmenrehberi">← Ana Sayfa</a>
-
-    <div class="aciklama">
-      <strong>Önemli:</strong> Parmak oyunları ve tekerlemeler yöreden yöreye
-      küçük farklılıklar gösterebilir. Buradaki metinler sınıfta rahatça
-      kullanılabilecek örnek uygulama metinleridir.
-    </div>
-
-    <input
-      class="arama"
-      id="arama"
-      type="text"
-      placeholder="Oyun ara: parmak, yağmur, deve cüce, sayışmaca..."
-      oninput="filtrele()"
-    >
-
-    <div class="filtreler">
-      <button class="filtre-btn aktif" onclick="kategoriSec('hepsi', this)">Tümü</button>
-      <button class="filtre-btn" onclick="kategoriSec('parmak', this)">Parmak Oyunları</button>
-      <button class="filtre-btn" onclick="kategoriSec('vucut', this)">Vücut ve Taklit</button>
-      <button class="filtre-btn" onclick="kategoriSec('sayismaca', this)">Sayışmaca ve Tekerleme</button>
-      <button class="filtre-btn" onclick="kategoriSec('bahce', this)">Bahçe Oyunları</button>
-    </div>
-
-    <p class="sayac" id="sayac"></p>
-
-    <div class="liste" id="liste"></div>
-
-    <p id="bosMesaj">Aramanıza uygun etkinlik bulunamadı. Farklı bir kelime deneyin veya "Tümü" filtresini seçin.</p>
-  </main>
-
-  <footer>
-    İlkokul Oyun Etkinlik Rehberi
-  <p class="site-notu" style="text-align:center;font-size:.78rem;opacity:.65;padding:6px 0 0;">Bu sayfa en son 3 Eylül 2026 tarihinde güncellendi.</p></footer>
-
-  <script>
-    let aktifKategori = "hepsi";
-
-    const kategoriAdlari = {
-      parmak: "Parmak Oyunu",
-      vucut: "Vücut ve Taklit",
-      sayismaca: "Sayışmaca ve Tekerleme",
-      bahce: "Bahçe Oyunu"
-    };
-
-    const oyunlar = [
+<script>
+/* ============ OYUNLAR (metinler) ============ */
+const oyunlar = [
 
       {
         kategori: "parmak",
@@ -526,173 +456,209 @@ Ebe boş yere oturabilirse, mendili alan öğrenci yeni ebe olur.`,
       }
     ];
 
-    /* HTML özniteliği içine güvenle yazmak için */
-    function nitelikTemizle(metin) {
-      return metin.replace(/[<>"]/g, " ").replace(/\s+/g, " ").trim();
-    }
+/* Her oyunun adım adım canlandırma kareleri (görseldeki 4 kareyle aynı sırada) */
+const ADIMLAR = {
+  "Beş Küçük Parmak": ["Eller açılır; başparmak gösterilir: “Bu parmak pazara gitmiş.”","Sırayla işaret, orta ve yüzük parmağı gösterilir.","Küçük parmak sallanır: “Bana ne, bana ne?”","“Afiyet olsun!” Parmaklar kapanır, avuç açılır."],
+  "Yağmur Yağıyor": ["İnce yağmur: iki parmak avuç içine hafifçe vurur.","Yağmur hızlandı: parmaklar dizlere hızlı hızlı vurur.","Şimşek çaktı: tek, kontrollü bir alkış.","Güneş açtı: kollar iki yana açılır, herkes gülümser."],
+  "Arı Vız Vız": ["Başparmakla işaret parmağı birleşir: arı hazır.","Arı havada küçük daireler çizerek uçar.","“Çiçeklere konar”: parmak ucu öbür avuca dokunur.","“Arı nereye kondu?” Omuza, dize ya da başa konar."],
+  "Minik Tavşan ve Havuç": ["İşaret ve orta parmak yukarıda: tavşanın kulakları.","Tavşan masada hop hop zıplar.","El gözlerin üstünde: uzakta bir havuç var!","İki el yanakta birleşir: tavşan uyudu."],
+  "Deve – Cüce": ["Herkes ayakta, gözler öğretmende.","“Deve!” Dik dur, kollar yukarı uzanır.","“Cüce!” Herkes yavaşça çömelir.","“Kalem!” Bu bir komut değil: kimse kıpırdamaz."],
+  "Ayna Oyunu": ["İkililer karşılıklı durur; biri lider, biri ayna.","Lider elini kaldırır, ayna aynı eli kaldırır.","Ayna, yavaş hareketleri konuşmadan aynı anda yapar.","Roller değişir: şimdi öbür arkadaş lider."],
+  "Sayışmaca: O Piti Piti": ["Çocuklar daire olur.","Her sözcükte sıradaki arkadaş gösterilir.","Sayışma ritimle sürer, parmak dolaşır.","Son sözcük kime gelirse ebe o olur."],
+  "Tekerleme: Şu Köşe Yaz Köşesi": ["“Şu köşe yaz köşesi”: sınıfın bir köşesi gösterilir.","“Şu köşe kış köşesi”: öbür köşe gösterilir.","“Ortada su şişesi”: sınıfın ortası gösterilir.","Ritim için dizlere hafifçe vurulur, hep birlikte söylenir."],
+  "Yağ Satarım Bal Satarım": ["Daire olunur; ebe mendille dışarıda dolaşır.","Şarkı sürerken mendil sessizce birinin arkasına bırakılır.","Mendili fark eden kalkar ve ebeyi kovalar.","Ebe boş kalan yere oturmaya çalışır."]
+};
 
-    /* Türkçe karakterlere uygun küçük harfe çevirme (İ / I sorunu) */
-    function kucult(metin) {
-      return metin.toLocaleLowerCase("tr");
-    }
+/* Görseller: her oyun için 4 kare (base64). Boşsa renkli canlandırma gösterilir. */
+const GORSELLER = {};
+/* Kartta kapak olarak hangi kare görünsün (0-3) */
+const KAPAK_KARESI = {};
 
-    function oyunlariOlustur() {
-      const liste = document.getElementById("liste");
-      let html = "";
-      let sonBolum = "";
+const KATEGORI = {
+  parmak:{ad:"Parmak Oyunu", renk:"var(--parmak)"},
+  vucut:{ad:"Vücut ve Taklit", renk:"var(--vucut)"},
+  sayismaca:{ad:"Sayışmaca ve Tekerleme", renk:"var(--sayismaca)"},
+  bahce:{ad:"Bahçe Oyunu", renk:"var(--bahce)"}
+};
 
-      oyunlar.forEach((oyun, index) => {
-        if (oyun.bolum !== sonBolum) {
-          html += `<h2 class="bolum">${oyun.bolum}</h2>`;
-          sonBolum = oyun.bolum;
-        }
+function kucult(m){return (m||"").toLocaleLowerCase("tr")}
+function kacis(m){return String(m||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function kimlik(ad){return kucult(ad).replace(/ç/g,"c").replace(/ğ/g,"g").replace(/ı/g,"i").replace(/ö/g,"o").replace(/ş/g,"s").replace(/ü/g,"u").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")}
+/* "1. ..." satırlarını listeye çevir */
+function satirlar(m){return String(m||"").split(/\n+/).map(s=>s.trim()).filter(Boolean).map(s=>s.replace(/^\d+[.)]\s*/,""))}
+function liste(m){return "<ol>"+satirlar(m).map(s=>"<li>"+kacis(s)+"</li>").join("")+"</ol>"}
 
-        /* Kapalı bölümlerdeki metin de aranabilsin diye tüm içerik
-           data-arama özniteliğinde toplanıyor. */
-        const aramaMetni = nitelikTemizle(kucult([
-          oyun.ad, kategoriAdlari[oyun.kategori] || oyun.kategori, oyun.bolum,
-          oyun.kisi, oyun.yer, oyun.sure, oyun.beceri, oyun.malzeme,
-          oyun.sozler, oyun.hareketler, oyun.nasil, oyun.kural, oyun.not
-        ].join(" ")));
+oyunlar.forEach(o=>{ o.id=kimlik(o.ad); o.adimlar=ADIMLAR[o.ad]||satirlar(o.hareketler).slice(0,4); o.kareler=GORSELLER[o.id]||[]; });
 
-        html += `
-          <article class="kart" data-kategori="${oyun.kategori}" data-arama="${aramaMetni}">
-            <div class="kart-baslik">
-              <h3>${index + 1}. ${oyun.ad}</h3>
-              <span class="etiket">${kategoriAdlari[oyun.kategori] || oyun.kategori}</span>
-            </div>
+let aktifKategori="hepsi";
 
-            <div class="kart-icerik">
-              <div class="kisa-bilgiler">
-                <span class="bilgi">👥 ${oyun.kisi}</span>
-                <span class="bilgi">📍 ${oyun.yer}</span>
-                <span class="bilgi">⏱️ ${oyun.sure}</span>
-                <span class="bilgi">🎯 ${oyun.beceri}</span>
-              </div>
-
-              <button class="detay-btn" aria-expanded="false" onclick="detayAc(this)">
-                Oyunun tüm ayrıntılarını göster
-              </button>
-
-              <div class="detay">
-                <h4>Gerekli malzemeler</h4>
-                <p class="duz-metin">${oyun.malzeme}</p>
-
-                <h4>Öğretmenin söyleyeceği sözler / şarkı / tekerleme</h4>
-                <div class="sozler">${oyun.sozler}</div>
-
-                <h4>Çocuğun yapacağı parmak veya vücut hareketleri</h4>
-                <div class="hareketler">${oyun.hareketler}</div>
-
-                <h4>Oyunun uygulanışı</h4>
-                <p class="duz-metin">${oyun.nasil}</p>
-
-                <h4>Kurallar</h4>
-                <p class="duz-metin">${oyun.kural}</p>
-
-                <h4>Öğretmen notu ve uyarlama</h4>
-                <div class="ogretmen-notu">${oyun.not}</div>
-              </div>
-            </div>
-          </article>
-        `;
-      });
-
-      liste.innerHTML = html;
-    }
-
-    function detayAc(buton) {
-      const detay = buton.nextElementSibling;
-      const acik = detay.classList.toggle("acik");
-
-      buton.setAttribute("aria-expanded", acik ? "true" : "false");
-      buton.textContent = acik
-        ? "Ayrıntıları gizle"
-        : "Oyunun tüm ayrıntılarını göster";
-    }
-
-    function kategoriSec(kategori, buton) {
-      aktifKategori = kategori;
-
-      document.querySelectorAll(".filtre-btn").forEach(btn => {
-        btn.classList.remove("aktif");
-      });
-
-      buton.classList.add("aktif");
-      filtrele();
-    }
-
-    function filtrele() {
-      const aranan = kucult(document.getElementById("arama").value).trim();
-      const kartlar = document.querySelectorAll(".kart");
-      const bolumler = document.querySelectorAll(".bolum");
-      let bulunan = 0;
-
-      kartlar.forEach(kart => {
-        const kategoriUygun =
-          aktifKategori === "hepsi" ||
-          kart.dataset.kategori === aktifKategori;
-
-        const metinUygun = kart.dataset.arama.includes(aranan);
-
-        if (kategoriUygun && metinUygun) {
-          kart.classList.remove("gizli");
-          bulunan++;
-        } else {
-          kart.classList.add("gizli");
-        }
-      });
-
-      bolumler.forEach(bolum => {
-        let sonraki = bolum.nextElementSibling;
-        let gorunenKartVar = false;
-
-        while (sonraki && !sonraki.classList.contains("bolum")) {
-          if (
-            sonraki.classList.contains("kart") &&
-            !sonraki.classList.contains("gizli")
-          ) {
-            gorunenKartVar = true;
-          }
-          sonraki = sonraki.nextElementSibling;
-        }
-
-        bolum.style.display = gorunenKartVar ? "block" : "none";
-      });
-
-      document.getElementById("bosMesaj").style.display =
-        bulunan === 0 ? "block" : "none";
-
-      document.getElementById("sayac").textContent =
-        bulunan + " etkinlik listeleniyor (toplam " + oyunlar.length + ")";
-    }
-
-    oyunlariOlustur();
-    filtrele();
-  </script>
-
-
-<div style="text-align:center;padding:18px 10px;margin-top:28px;font-size:0.82rem;color:#8a8a8a;border-top:1px solid #e5e5e5;">Dijital Öğretmen Hasan Tutuş</div>
-<!-- Ziyaretçi sayacı: goatcounter.com'da ücretsiz hesap açtıktan sonra
-     aşağıdaki "dijitalogretmen" kısmını kendi GoatCounter kodunuzla değiştirin. -->
-<script data-goatcounter="https://dijitalogretmen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-<script>
-function __dosyayiIndir(){
-  var klon = document.documentElement.cloneNode(true);
-  var arac = klon.querySelector('.indir-arac-cubugu');
-  if(arac) arac.remove();
-  var html = "<!DOCTYPE html>\n" + klon.outerHTML;
-  var blob = new Blob([html], {type:"text/html;charset=utf-8"});
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement("a");
-  a.href = url;
-  a.download = "oyun-etkinlik-rehberi.html";
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+/* ============ KARTLAR ============ */
+function kartlariOlustur(){
+  const iz=document.getElementById("izgara");
+  iz.innerHTML=oyunlar.map((o,i)=>{
+    const k=KATEGORI[o.kategori]||{ad:o.kategori,renk:"var(--lacivert)"};
+    const kapak=o.kareler.length?o.kareler[KAPAK_KARESI[o.id]||0]:"";
+    const arama=kucult([o.ad,k.ad,o.kisi,o.yer,o.sure,o.beceri,o.malzeme,o.sozler,o.hareketler,o.nasil,o.kural,o.not].join(" "));
+    return `<button class="kart" style="--renk:${k.renk}" data-i="${i}" data-kategori="${o.kategori}" data-arama="${kacis(arama)}">
+      <div class="kapak">
+        ${kapak?`<img alt="${kacis(o.ad)}" src="${kapak}" onload="this.classList.add('gor')">`:
+          `<div class="yer-tutucu"><span class="halka"></span></div>`}
+        <span class="etiket">${k.ad}</span>
+      </div>
+      <div class="kart-govde">
+        <h3>${kacis(o.ad)}</h3>
+        <div class="mini"><span>${kacis(o.kisi)}</span><span>${kacis(o.sure)}</span></div>
+        <span class="kart-ac">Nasıl oynanır →</span>
+      </div>
+    </button>`;
+  }).join("");
+  iz.querySelectorAll(".kart").forEach(b=>b.addEventListener("click",()=>pencereAc(+b.dataset.i,true)));
 }
+
+function filtrele(){
+  const ar=kucult(document.getElementById("arama").value).trim();
+  let n=0;
+  document.querySelectorAll(".kart").forEach(k=>{
+    const uy=(aktifKategori==="hepsi"||k.dataset.kategori===aktifKategori)&&(!ar||k.dataset.arama.includes(ar));
+    k.classList.toggle("gizli",!uy); if(uy) n++;
+  });
+  document.getElementById("bosMesaj").style.display=n?"none":"block";
+  document.getElementById("sayac").textContent=n+" oyun listeleniyor (toplam "+oyunlar.length+")";
+}
+document.getElementById("filtreler").addEventListener("click",e=>{
+  const b=e.target.closest(".filtre-btn"); if(!b) return;
+  document.querySelectorAll(".filtre-btn").forEach(x=>x.classList.remove("aktif"));
+  b.classList.add("aktif"); aktifKategori=b.dataset.k; filtrele();
+});
+
+/* ============ OYUN PENCERESİ ============ */
+let acikIndeks=-1, adim=0, zamanlayici=null, oynuyor=true;
+const pencere=document.getElementById("pencere");
+
+function pencereAc(i,gecmiseYaz){
+  const o=oyunlar[i]; if(!o) return;
+  const k=KATEGORI[o.kategori]||{ad:o.kategori,renk:"var(--lacivert)"};
+  acikIndeks=i;
+  pencere.style.setProperty("--renk",k.renk);
+  document.getElementById("pBaslik").textContent=o.ad;
+  document.getElementById("pOnceki").disabled=(i===0);
+  document.getElementById("pSonraki").disabled=(i===oyunlar.length-1);
+
+  const resimler=o.kareler.map((src,j)=>`<img alt="${kacis(o.ad)}, ${j+1}. adım" src="${src}">`).join("");
+  document.getElementById("pIcerik").innerHTML=`
+    <div class="sahne" id="sahne">${resimler||'<div class="bos" id="bos"></div>'}</div>
+    <div class="adim-serit"><span class="adim-no" id="adimNo">1</span><span class="adim-yazi" id="adimYazi"></span></div>
+    <div class="adim-kontrol" id="noktalar">
+      ${o.adimlar.map((_,j)=>`<button class="nokta" data-j="${j}" aria-label="${j+1}. adım"></button>`).join("")}
+      <button class="oynat" id="oynat">Durdur</button>
+    </div>
+
+    <div class="bilgiler">
+      <div class="bilgi"><b>Kaç kişi</b><span>${kacis(o.kisi)}</span></div>
+      <div class="bilgi"><b>Süre</b><span>${kacis(o.sure)}</span></div>
+      <div class="bilgi"><b>Nerede</b><span>${kacis(o.yer)}</span></div>
+      <div class="bilgi"><b>Malzeme</b><span>${kacis(o.malzeme)}</span></div>
+    </div>
+
+    <div class="blok"><h3>Nasıl oynanır?</h3>${liste(o.nasil)}</div>
+    <div class="blok"><h3>Sözler</h3><div class="sozler">${kacis(o.sozler)}</div></div>
+    <div class="blok"><h3>Hareketler</h3>${liste(o.hareketler)}</div>
+    <div class="blok"><h3>Kurallar</h3><p>${kacis(o.kural)}</p></div>
+    <div class="blok"><h3>Öğretmene not</h3><p>${kacis(o.not)}</p></div>
+    <div class="blok"><h3>Geliştirdiği beceriler</h3><p>${kacis(o.beceri)}</p></div>
+
+    <div class="p-alt">
+      <button class="acik-renk" id="pYazdir">Bu oyunu yazdır</button>
+      <button id="pSonrakiAlt"${i===oyunlar.length-1?" disabled":""}>Sonraki oyun ›</button>
+    </div>`;
+
+  document.querySelectorAll("#noktalar .nokta").forEach(n=>n.addEventListener("click",()=>{adimGoster(+n.dataset.j);yenidenBaslat();}));
+  document.getElementById("oynat").addEventListener("click",()=>{oynuyor=!oynuyor;document.getElementById("oynat").textContent=oynuyor?"Durdur":"Oynat";yenidenBaslat();});
+  document.getElementById("pYazdir").addEventListener("click",()=>tekYazdir(o.id));
+  document.getElementById("pSonrakiAlt").addEventListener("click",()=>pencereAc(i+1,false));
+
+  if(!pencere.classList.contains("acik")){
+    pencere.classList.add("acik"); document.body.classList.add("pencere-acik");
+    if(gecmiseYaz) history.pushState({oyun:o.id},"","#"+o.id);
+  } else {
+    history.replaceState({oyun:o.id},"","#"+o.id);
+  }
+  document.getElementById("sayfaKutu").scrollTop=0;
+  oynuyor=true; document.getElementById("oynat").textContent="Durdur";
+  adimGoster(0); yenidenBaslat();
+}
+
+function adimGoster(j){
+  const o=oyunlar[acikIndeks]; if(!o) return;
+  adim=(j+o.adimlar.length)%o.adimlar.length;
+  document.getElementById("adimNo").textContent=adim+1;
+  const y=document.getElementById("adimYazi"); y.textContent=o.adimlar[adim];
+  document.querySelectorAll("#noktalar .nokta").forEach((n,k)=>n.classList.toggle("aktif",k===adim));
+  const imgs=document.querySelectorAll("#sahne img");
+  if(imgs.length){ imgs.forEach((im,k)=>im.classList.toggle("gor",k===adim)); }
+  else{
+    const b=document.getElementById("bos");
+    b.innerHTML=`<span class="yz">${adim+1}. adım</span><span class="no">${adim+1}</span>`;
+  }
+}
+function yenidenBaslat(){
+  clearInterval(zamanlayici);
+  if(oynuyor) zamanlayici=setInterval(()=>adimGoster(adim+1),3200);
+}
+function pencereKapat(){
+  clearInterval(zamanlayici);
+  pencere.classList.remove("acik"); document.body.classList.remove("pencere-acik"); acikIndeks=-1;
+}
+document.getElementById("pKapat").addEventListener("click",()=>{ if(history.state&&history.state.oyun) history.back(); else {pencereKapat(); history.replaceState(null,"",location.pathname+location.search);} });
+document.getElementById("pOnceki").addEventListener("click",()=>pencereAc(acikIndeks-1,false));
+document.getElementById("pSonraki").addEventListener("click",()=>pencereAc(acikIndeks+1,false));
+pencere.addEventListener("click",e=>{ if(e.target===pencere) document.getElementById("pKapat").click(); });
+document.addEventListener("keydown",e=>{
+  if(acikIndeks<0) return;
+  if(e.key==="Escape") document.getElementById("pKapat").click();
+  if(e.key==="ArrowRight"&&acikIndeks<oyunlar.length-1) pencereAc(acikIndeks+1,false);
+  if(e.key==="ArrowLeft"&&acikIndeks>0) pencereAc(acikIndeks-1,false);
+});
+/* Tabletin "geri" tuşu pencereyi kapatır, sayfadan çıkmaz */
+window.addEventListener("popstate",e=>{
+  const id=e.state&&e.state.oyun;
+  if(id){ const i=oyunlar.findIndex(o=>o.id===id); if(i>=0){ pencereAc(i,false); return; } }
+  pencereKapat();
+});
+
+/* ============ YAZDIRMA ============ */
+function baskiOlustur(){
+  document.getElementById("baski").innerHTML=oyunlar.map(o=>{
+    const k=KATEGORI[o.kategori]||{ad:o.kategori};
+    const kareler=o.kareler.length?`<div class="b-kareler">${o.kareler.map((s,j)=>`<figure><img src="${s}" alt=""><figcaption>${j+1}. ${kacis(o.adimlar[j]||"")}</figcaption></figure>`).join("")}</div>`:"";
+    return `<section class="b-oyun" data-id="${o.id}">
+      <h2>${kacis(o.ad)}</h2><p class="b-tur">${k.ad}</p>
+      ${kareler}
+      <div class="b-bilgi"><div><b>Kaç kişi:</b> ${kacis(o.kisi)}</div><div><b>Süre:</b> ${kacis(o.sure)}</div><div><b>Nerede:</b> ${kacis(o.yer)}</div><div><b>Malzeme:</b> ${kacis(o.malzeme)}</div></div>
+      <h3>Nasıl oynanır?</h3>${liste(o.nasil)}
+      <h3>Sözler</h3><div class="b-soz">${kacis(o.sozler)}</div>
+      <h3>Hareketler</h3>${liste(o.hareketler)}
+      <h3>Kurallar</h3><p>${kacis(o.kural)}</p>
+      <h3>Öğretmene not</h3><p>${kacis(o.not)}</p>
+      <p class="b-imza">Dijital Öğretmen · Hasan Tutuş</p>
+    </section>`;
+  }).join("");
+}
+function tekYazdir(id){
+  document.querySelectorAll(".b-oyun").forEach(s=>s.classList.toggle("secili",s.dataset.id===id));
+  document.body.classList.add("tek-yazdir");
+  const bitti=()=>{document.body.classList.remove("tek-yazdir");window.removeEventListener("afterprint",bitti);};
+  window.addEventListener("afterprint",bitti);
+  window.print();
+  setTimeout(bitti,1500);
+}
+
+/* ============ BAŞLAT ============ */
+kartlariOlustur(); filtrele(); baskiOlustur();
+(function(){ const id=location.hash.slice(1); if(id){ const i=oyunlar.findIndex(o=>o.id===id); if(i>=0){ history.replaceState(null,"",location.pathname+location.search); pencereAc(i,true);} } })();
 </script>
+
+<script data-goatcounter="https://dijitalogretmen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <script src="indir.js" defer></script>
 </body>
 </html>
