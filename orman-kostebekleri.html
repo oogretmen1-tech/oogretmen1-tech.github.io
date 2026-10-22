@@ -66,6 +66,15 @@ label {
     font-weight: bold;
 }
 
+button,
+input,
+select,
+option,
+textarea,
+input::placeholder {
+    font-family: 'PoppinsA', 'Segoe UI', Arial, sans-serif;
+}
+
 input,
 select {
     width: 100%;
@@ -432,6 +441,24 @@ button:hover {
     .tabela { font-size: clamp(30px, 9vw, 42px); padding: 0 8px; border-width: 3px; border-radius: 10px; }
     .agac { font-size: 60px; }
     .agac3, .agac4 { display: none; }
+}
+
+/* Seçim düğmeleri: tabletin kendi yazı tipi (çengelli a) devreye girmesin diye açılır listeler yerine */
+.secimSakli { display: none !important; }
+.secimGrubu { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.secimGrubu button {
+    flex: 1 1 auto;
+    padding: 11px 14px;
+    background: #eef6f0;
+    color: #23452e;
+    border: 2px solid #c4dfca;
+    font-weight: 600;
+    font-size: 17px;
+}
+.secimGrubu button.secili {
+    background: #238c4b;
+    border-color: #238c4b;
+    color: #fff;
 }
 </style>
 <meta name="description" content="Orman Köstebekleri - Dijital Öğretmen'den ücretsiz, MEB müfredatına (Maarif Modeli) uygun ilkokul eğitim materyali. Hasan Tutuş tarafından hazırlanmıştır.">
@@ -864,5 +891,29 @@ function ayarlaraDon() {
 <!-- Ziyaretçi sayacı: goatcounter.com'da ücretsiz hesap açtıktan sonra
      aşağıdaki "dijitalogretmen" kısmını kendi GoatCounter kodunuzla değiştirin. -->
 <script data-goatcounter="https://dijitalogretmen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<script>
+(function(){
+  document.querySelectorAll('#ayarEkrani select').forEach(function(sel){
+    sel.classList.add('secimSakli');
+    var grup=document.createElement('div');
+    grup.className='secimGrubu';
+    Array.prototype.forEach.call(sel.options,function(opt){
+      var b=document.createElement('button');
+      b.type='button';
+      b.textContent=opt.textContent;
+      if(opt.value===sel.value) b.classList.add('secili');
+      b.addEventListener('click',function(){
+        sel.value=opt.value;
+        grup.querySelectorAll('button').forEach(function(x){x.classList.remove('secili');});
+        b.classList.add('secili');
+        sel.dispatchEvent(new Event('change',{bubbles:true}));
+      });
+      grup.appendChild(b);
+    });
+    sel.insertAdjacentElement('afterend',grup);
+  });
+})();
+</script>
 </body>
 </html>
