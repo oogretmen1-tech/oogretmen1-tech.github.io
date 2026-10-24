@@ -2070,6 +2070,13 @@
 <!-- Ziyaretçi sayacı: goatcounter.com'da ücretsiz hesap açtıktan sonra
      aşağıdaki "dijitalogretmen" kısmını kendi GoatCounter kodunuzla değiştirin. -->
 <script data-goatcounter="https://dijitalogretmen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script id="indir-sayac">(function(){var son={};function say(yol,baslik){var k=yol;if(son[k]&&Date.now()-son[k]<2000)return;son[k]=Date.now();var n=0;(function dene(){if(window.goatcounter&&window.goatcounter.count){window.goatcounter.count({path:yol,title:baslik,event:true});}else if(n++<20){setTimeout(dene,500);}})();}
+function dosyaAdi(a){var d=a.getAttribute('download');if(d)return d;try{var u=new URL(a.href,location.href);if(u.protocol==='blob:'||u.protocol==='data:')return '';return decodeURIComponent(u.pathname.split('/').pop());}catch(e){return '';}}
+function bak(a){if(!a||!a.href)return;var ad=dosyaAdi(a);var dl=a.hasAttribute('download');if(!ad&&dl)ad='dosya';if(!/\.(pdf|docx?|pptx?|xlsx?|zip)$/i.test(ad)&&!dl)return;var sayfa=location.pathname.split('/').pop()||'index.html';say('indir/'+(ad||sayfa),'İndirme: '+(ad||sayfa)+' ('+sayfa+')');}
+document.addEventListener('click',function(e){var a=e.target&&e.target.closest?e.target.closest('a'):null;bak(a);},true);
+var kc=HTMLAnchorElement.prototype.click;HTMLAnchorElement.prototype.click=function(){if(!this.isConnected)bak(this);return kc.apply(this,arguments);};
+var kd=EventTarget.prototype.dispatchEvent;EventTarget.prototype.dispatchEvent=function(ev){if(this instanceof HTMLAnchorElement&&!this.isConnected&&ev&&ev.type==='click')bak(this);return kd.apply(this,arguments);};
+window.addEventListener('beforeprint',function(){var sayfa=location.pathname.split('/').pop()||'index.html';say('yazdir/'+sayfa,'Yazdırma: '+sayfa);});})();</script>
 <script src="indirme-sayaci.js" defer></script>
 <script src="indir.js" defer></script>
 </body>
