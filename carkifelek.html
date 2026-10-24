@@ -1,0 +1,1942 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neon Çarkıfelek</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Nunito:wght@500;600;700;800&display=swap');
+
+    :root {
+      --bg: #050816;
+      --panel: rgba(12, 20, 46, .86);
+      --panel-light: rgba(25, 38, 76, .75);
+      --cyan: #22d3ee;
+      --blue: #3b82f6;
+      --purple: #a855f7;
+      --pink: #ec4899;
+      --green: #34d399;
+      --yellow: #facc15;
+      --orange: #fb923c;
+      --red: #fb7185;
+      --white: #f8fafc;
+      --muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      padding: 20px;
+      overflow-x: hidden;
+      color: var(--white);
+      font-family: "Nunito", sans-serif;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(34, 211, 238, .16), transparent 28%),
+        radial-gradient(circle at 88% 12%, rgba(168, 85, 247, .18), transparent 30%),
+        radial-gradient(circle at 50% 100%, rgba(236, 72, 153, .14), transparent 35%),
+        var(--bg);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: .12;
+      background-image:
+        linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, black, transparent);
+    }
+
+    button {
+      border: 0;
+      font-family: inherit;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-3px);
+      filter: brightness(1.12);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: .48;
+    }
+
+    .app {
+      width: min(1180px, 96%);
+      margin: auto;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: "Orbitron", sans-serif;
+      font-size: clamp(17px, 3vw, 26px);
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .logo-icon {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--cyan);
+      border-radius: 13px;
+      color: var(--cyan);
+      box-shadow:
+        0 0 12px var(--cyan),
+        inset 0 0 12px rgba(34,211,238,.25);
+    }
+
+    .system-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 14px var(--green);
+    }
+
+    .screen {
+      padding: clamp(20px, 4vw, 42px);
+      border: 1px solid rgba(148,163,184,.23);
+      border-radius: 30px;
+      background: var(--panel);
+      box-shadow:
+        0 25px 80px rgba(0,0,0,.48),
+        inset 0 1px rgba(255,255,255,.08);
+      backdrop-filter: blur(20px);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .hero {
+      max-width: 720px;
+      margin: 0 auto 35px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      margin-bottom: 13px;
+      color: var(--cyan);
+      font-family: "Orbitron", sans-serif;
+      font-size: 11px;
+      letter-spacing: 4px;
+    }
+
+    h1 {
+      font-family: "Orbitron", sans-serif;
+      font-size: clamp(28px, 6vw, 58px);
+      letter-spacing: 2px;
+      background: linear-gradient(90deg, var(--cyan), white, var(--purple));
+      -webkit-background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 18px rgba(34,211,238,.35));
+    }
+
+    .hero p:last-child {
+      margin-top: 15px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 25px 0 13px;
+      color: #e2e8f0;
+      font-family: "Orbitron", sans-serif;
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+
+    .section-title::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(148,163,184,.35), transparent);
+    }
+
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 13px;
+    }
+
+    .choice {
+      position: relative;
+      min-height: 92px;
+      padding: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(148,163,184,.25);
+      border-radius: 18px;
+      color: white;
+      text-align: left;
+      background: var(--panel-light);
+    }
+
+    .choice::after {
+      content: "";
+      position: absolute;
+      right: -25px;
+      bottom: -38px;
+      width: 105px;
+      height: 105px;
+      border-radius: 50%;
+      opacity: .23;
+      background: var(--choice-color);
+      filter: blur(14px);
+    }
+
+    .choice:hover,
+    .choice.selected {
+      border-color: var(--choice-color);
+      box-shadow: 0 0 26px color-mix(
+        in srgb,
+        var(--choice-color) 35%,
+        transparent
+      );
+    }
+
+    .choice.selected {
+      background: color-mix(
+        in srgb,
+        var(--choice-color) 15%,
+        var(--panel-light)
+      );
+    }
+
+    .choice-icon {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--choice-color);
+      font-size: 26px;
+      font-weight: 800;
+    }
+
+    .choice strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .choice small {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .start-button {
+      display: block;
+      width: min(100%, 360px);
+      margin: 32px auto 0;
+      padding: 17px 25px;
+      border-radius: 50px;
+      color: #04111b;
+      background: linear-gradient(100deg, var(--cyan), var(--blue));
+      box-shadow: 0 0 26px rgba(34,211,238,.35);
+      font-family: "Orbitron", sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .input-area {
+      max-width: 510px;
+      margin: auto;
+      text-align: center;
+    }
+
+    .input-area p {
+      margin-top: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .word-input {
+      width: 100%;
+      margin-top: 18px;
+      padding: 16px;
+      border: 1px solid var(--purple);
+      border-radius: 13px;
+      outline: none;
+      color: white;
+      background: rgba(2,6,23,.72);
+      font-family: "Orbitron", sans-serif;
+      font-size: 19px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .word-input:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 20px rgba(34,211,238,.28);
+    }
+
+    .game-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .game-title {
+      color: white;
+      font-family: "Orbitron", sans-serif;
+      font-size: clamp(18px, 4vw, 28px);
+    }
+
+    .category-badge {
+      padding: 9px 16px;
+      border: 1px solid var(--cyan);
+      border-radius: 50px;
+      color: var(--cyan);
+      background: rgba(34,211,238,.1);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .scores {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .score-card {
+      min-width: 160px;
+      padding: 12px 20px;
+      border: 1px solid rgba(148,163,184,.22);
+      border-radius: 15px;
+      color: var(--muted);
+      background: rgba(2,6,23,.42);
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .score-card.active {
+      border-color: var(--yellow);
+      box-shadow: 0 0 19px rgba(250,204,21,.28);
+    }
+
+    .score-card b {
+      display: block;
+      margin-top: 4px;
+      color: var(--cyan);
+      font-family: "Orbitron", sans-serif;
+      font-size: 23px;
+    }
+
+    .game-layout {
+      display: grid;
+      grid-template-columns: minmax(280px, .95fr) minmax(320px, 1.2fr);
+      gap: 23px;
+      align-items: center;
+    }
+
+    /* FUTURİSTİK ÇARK ALANI */
+
+    .wheel-panel {
+      position: relative;
+      padding: 25px 18px 20px;
+      overflow: hidden;
+      border: 1px solid rgba(34,211,238,.3);
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at center,
+          rgba(34,211,238,.12),
+          transparent 43%),
+        linear-gradient(145deg,
+          rgba(15,23,42,.96),
+          rgba(5,8,22,.96));
+      box-shadow:
+        inset 0 0 30px rgba(34,211,238,.08),
+        0 0 35px rgba(34,211,238,.08);
+      text-align: center;
+    }
+
+    .wheel-panel::before {
+      content: "NEON CORE // WHEEL SYSTEM";
+      position: absolute;
+      top: 13px;
+      left: 20px;
+      color: rgba(34,211,238,.55);
+      font-family: "Orbitron", sans-serif;
+      font-size: 8px;
+      letter-spacing: 2px;
+    }
+
+    .wheel-panel::after {
+      content: "● ● ●";
+      position: absolute;
+      right: 20px;
+      bottom: 17px;
+      color: var(--purple);
+      font-size: 9px;
+      letter-spacing: 4px;
+      text-shadow: 0 0 10px var(--purple);
+    }
+
+    .wheel-container {
+      position: relative;
+      width: min(100%, 410px);
+      aspect-ratio: 1;
+      margin: 17px auto 0;
+    }
+
+    .wheel-container::before {
+      content: "";
+      position: absolute;
+      inset: -12px;
+      z-index: 0;
+      border: 2px solid rgba(34,211,238,.62);
+      border-radius: 50%;
+      box-shadow:
+        0 0 12px var(--cyan),
+        0 0 33px rgba(168,85,247,.55),
+        inset 0 0 22px rgba(34,211,238,.3);
+      animation: pulseRing 2s infinite alternate;
+    }
+
+    .wheel-container::after {
+      content: "";
+      position: absolute;
+      inset: -25px;
+      z-index: 0;
+      border: 1px dashed rgba(168,85,247,.55);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: rotateRing 18s linear infinite;
+    }
+
+    @keyframes pulseRing {
+      from {
+        opacity: .45;
+        transform: scale(.98);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1.02);
+      }
+    }
+
+    @keyframes rotateRing {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    canvas {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 5px rgba(255,255,255,.1),
+        0 0 0 8px rgba(34,211,238,.32),
+        0 0 25px rgba(34,211,238,.7),
+        0 0 60px rgba(168,85,247,.36);
+    }
+
+    .wheel-pointer {
+      position: absolute;
+      top: -21px;
+      left: 50%;
+      z-index: 8;
+      width: 0;
+      height: 0;
+      transform: translateX(-50%);
+      border-right: 19px solid transparent;
+      border-left: 19px solid transparent;
+      border-top: 41px solid var(--yellow);
+      filter:
+        drop-shadow(0 0 5px var(--yellow))
+        drop-shadow(0 0 14px var(--orange));
+    }
+
+    .wheel-pointer::after {
+      content: "";
+      position: absolute;
+      top: -42px;
+      left: -5px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 0 14px white;
+    }
+
+    .spin-button {
+      margin-top: 27px;
+      padding: 16px 45px;
+      border-radius: 50px;
+      color: #17100a;
+      background: linear-gradient(135deg, var(--yellow), var(--orange));
+      box-shadow:
+        0 0 16px rgba(250,204,21,.4),
+        inset 0 1px rgba(255,255,255,.7);
+      font-family: "Orbitron", sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .spin-button.spinning {
+      animation: buttonGlow .8s infinite alternate;
+    }
+
+    @keyframes buttonGlow {
+      from {
+        box-shadow: 0 0 15px var(--yellow);
+      }
+
+      to {
+        box-shadow: 0 0 38px var(--orange);
+      }
+    }
+
+    .hint {
+      min-height: 22px;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .question-panel {
+      min-height: 365px;
+      padding: 26px;
+      border: 1px solid rgba(148,163,184,.22);
+      border-radius: 25px;
+      background: rgba(2,6,23,.42);
+      text-align: center;
+    }
+
+    .bonus-banner {
+      margin: 14px 0 2px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.45;
+      text-align: center;
+      animation: bonusIn .35s ease;
+    }
+
+    .bonus-banner.hidden {
+      display: none;
+    }
+
+    .bonus-banner b {
+      font-family: "Orbitron", sans-serif;
+      letter-spacing: 1px;
+    }
+
+    .bonus-banner span {
+      display: block;
+      margin-top: 4px;
+      font-weight: 600;
+      opacity: .92;
+    }
+
+    .bonus-banner.double {
+      color: #f8fafc;
+      background: linear-gradient(135deg, rgba(226,232,240,.22), rgba(100,116,139,.12));
+      border: 2px solid rgba(226,232,240,.8);
+      box-shadow: 0 0 18px rgba(226,232,240,.3);
+    }
+
+    .bonus-banner.gift {
+      color: #fff6d5;
+      background: linear-gradient(135deg, rgba(255,226,122,.26), rgba(217,158,18,.14));
+      border: 2px solid rgba(245,179,1,.9);
+      box-shadow: 0 0 22px rgba(245,179,1,.45);
+    }
+
+    .bonus-banner.open {
+      font-size: 16px;
+      animation: bonusPop .5s ease;
+    }
+
+    @keyframes bonusIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    @keyframes bonusPop {
+      0%   { opacity: 0; transform: scale(.86); }
+      60%  { transform: scale(1.05); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .menu-legend {
+      margin: 6px 0 4px;
+    }
+
+    .menu-note {
+      margin: 10px 0 4px;
+      color: rgba(226,232,240,.62);
+      font-size: 13.5px;
+      text-align: center;
+    }
+
+    .wheel-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 14px;
+    }
+
+    .wheel-legend span {
+      padding: 6px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.05);
+      color: #cbd5f5;
+    }
+
+    .wheel-legend .lg-double {
+      color: #f1f5f9;
+      border-color: rgba(226,232,240,.75);
+      background: linear-gradient(135deg, rgba(226,232,240,.28), rgba(148,163,184,.12));
+      box-shadow: 0 0 12px rgba(226,232,240,.28);
+    }
+
+    .wheel-legend .lg-gift {
+      color: #fff3c4;
+      border-color: rgba(245,179,1,.85);
+      background: linear-gradient(135deg, rgba(255,226,122,.3), rgba(217,158,18,.14));
+      box-shadow: 0 0 14px rgba(245,179,1,.4);
+    }
+
+    .question-category {
+      color: var(--cyan);
+      font-family: "Orbitron", sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+    }
+
+    .question-text {
+      min-height: 92px;
+      margin: 25px 0 20px;
+      color: white;
+      font-size: 21px;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .idle {
+      color: rgba(255,255,255,.34);
+      font-size: 17px;
+      font-style: italic;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 11px;
+    }
+
+    .option {
+      min-height: 58px;
+      padding: 12px;
+      border: 1px solid rgba(148,163,184,.25);
+      border-radius: 14px;
+      color: white;
+      background: rgba(255,255,255,.06);
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .option:hover:not(:disabled) {
+      border-color: var(--cyan);
+      background: rgba(34,211,238,.13);
+    }
+
+    .option.correct {
+      border-color: var(--green);
+      color: var(--green);
+      background: rgba(52,211,153,.17);
+    }
+
+    .option.wrong {
+      border-color: var(--red);
+      color: var(--red);
+      background: rgba(251,113,133,.16);
+    }
+
+    .next-button,
+    .menu-button {
+      margin-top: 21px;
+      padding: 13px 24px;
+      border-radius: 50px;
+      color: white;
+      font-weight: 800;
+    }
+
+    .next-button {
+      background: linear-gradient(100deg, var(--blue), var(--purple));
+      box-shadow: 0 0 20px rgba(59,130,246,.3);
+    }
+
+    .menu-button {
+      margin-left: 7px;
+      background: rgba(100,116,139,.55);
+    }
+
+    .confetti {
+      position: fixed;
+      top: -20px;
+      z-index: 50;
+      width: 9px;
+      height: 14px;
+      border-radius: 3px;
+      pointer-events: none;
+      animation: fall 1.7s ease-out forwards;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(105vh) rotate(800deg);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .game-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .wheel-panel {
+        width: 100%;
+        max-width: 500px;
+        margin: auto;
+      }
+    }
+
+    @media (max-width: 500px) {
+      body {
+        padding: 12px;
+      }
+
+      .mode-grid,
+      .category-grid,
+      .options {
+        grid-template-columns: 1fr;
+      }
+
+      .screen {
+        padding: 19px;
+      }
+
+      .system-status {
+        font-size: 8px;
+      }
+    }
+  </style>
+<meta name="description" content="Neon Çarkıfelek - Dijital Öğretmen'den ücretsiz, MEB müfredatına (Maarif Modeli) uygun ilkokul eğitim materyali. Hasan Tutuş tarafından hazırlanmıştır.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:site_name" content="Dijital Öğretmen">
+<meta property="og:title" content="Neon Çarkıfelek">
+<meta property="og:description" content="Neon Çarkıfelek - Dijital Öğretmen'den ücretsiz, MEB müfredatına (Maarif Modeli) uygun ilkokul eğitim materyali. Hasan Tutuş tarafından hazırlanmıştır.">
+<meta property="og:url" content="https://oogretmen1-tech.github.io/carkifelek.html">
+<meta property="og:image" content="https://oogretmen1-tech.github.io/logo.png">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body>
+  <div class="app">
+
+    <header class="topbar">
+      <div class="logo">
+        <span class="logo-icon">✦</span>
+        NEON<span style="color:var(--cyan)">ÇARK</span>
+      </div>
+
+      <div class="system-status">
+        <span class="status-dot"></span>
+        SİSTEM AKTİF
+      </div>
+    </header>
+
+    <main class="screen">
+
+      <!-- ANA MENÜ -->
+      <section id="menuScreen">
+        <div class="hero">
+          <p class="eyebrow">EĞİTİCİ OYUN PLATFORMU</p>
+          <h1>ÇARKIFELEK</h1>
+          <p>
+            Çarkı çevir, gelen soruyu cevapla, puanları topla.
+            Çarkta ayrıca <b style="color:#e2e8f0">Çift Puan (gümüş)</b> ve
+            <b style="color:#f5b301">Sürpriz Soru (altın)</b> dilimleri var:
+            çift puanda karışık soru iki kat puan,
+            sürprizde doğru cevaba hediye çıkıyor.
+          </p>
+        </div>
+
+        <div class="section-title">01 / OYUN MODU</div>
+
+        <div class="mode-grid">
+          <button class="choice mode-choice"
+                  style="--choice-color:var(--cyan)"
+                  onclick="selectMode('single', this)">
+            <span class="choice-icon">◉</span>
+            <strong>TEK OYUNCULU</strong>
+            <small>Kendi puanını toplamaya çalış</small>
+          </button>
+
+          <button class="choice mode-choice"
+                  style="--choice-color:var(--pink)"
+                  onclick="selectMode('two', this)">
+            <span class="choice-icon">◈</span>
+            <strong>İKİ OYUNCULU</strong>
+            <small>Arkadaşınla sırayla yarış (2 kişilik)</small>
+          </button>
+        </div>
+
+        <div class="section-title">02 / ÇARKTA NELER VAR?</div>
+
+        <div class="wheel-legend menu-legend">
+          <span>Türkçe</span>
+          <span>Matematik</span>
+          <span>Hayat Bilgisi</span>
+          <span class="lg-double">Çift Puan ×2 · gümüş</span>
+          <span class="lg-gift">Sürpriz Soru · altın</span>
+        </div>
+
+        <p class="menu-note">
+          Kategoriyi sen değil çark seçiyor:
+          her çevirişte hangi ders geleceği belli olmuyor.
+        </p>
+
+        <button class="start-button" onclick="startGame()">
+          OYUNA BAŞLA&nbsp; ›
+        </button>
+      </section>
+
+      <!-- İKİ OYUNCULU İSİM EKRANI -->
+      <section id="nameScreen" class="hidden">
+        <div class="hero">
+          <p class="eyebrow">İKİ OYUNCULU MOD</p>
+          <h1>OYUNCU İSİMLERİ</h1>
+          <p>Yarışacak iki oyuncunun adını yazın.</p>
+        </div>
+
+        <div class="input-area">
+          <input id="player1Input"
+                 class="word-input"
+                 maxlength="15"
+                 placeholder="1. OYUNCU">
+
+          <input id="player2Input"
+                 class="word-input"
+                 maxlength="15"
+                 placeholder="2. OYUNCU">
+
+          <button class="start-button" onclick="startTwoPlayerMode()">
+            YARIŞMAYI BAŞLAT&nbsp; ›
+          </button>
+        </div>
+      </section>
+
+      <!-- OYUN EKRANI -->
+      <section id="gameScreen" class="hidden">
+        <div class="game-header">
+          <h2 class="game-title" id="gameTitle">
+            NEON ÇARKIFELEK
+          </h2>
+
+          <div class="category-badge" id="currentCategory">
+            KATEGORİ
+          </div>
+        </div>
+
+        <div id="scores" class="scores hidden">
+          <div class="score-card" id="scoreCard1">
+            <span id="playerName1">OYUNCU 1</span>
+            <b id="score1">0</b>
+          </div>
+
+          <div class="score-card" id="scoreCard2">
+            <span id="playerName2">OYUNCU 2</span>
+            <b id="score2">0</b>
+          </div>
+        </div>
+
+        <div class="game-layout">
+
+          <!-- FÜTÜRİSTİK ÇARK -->
+          <div class="wheel-panel">
+            <div class="wheel-container">
+              <div class="wheel-pointer"></div>
+              <canvas id="wheel" width="430" height="430"></canvas>
+            </div>
+
+            <button class="spin-button"
+                    id="spinButton"
+                    onclick="spinWheel()">
+              ÇARKI ÇEVİR
+            </button>
+
+            <div class="hint" id="hint">
+              Başlamak için çarkı çevir.
+            </div>
+
+            <div class="wheel-legend">
+              <span>Türkçe</span>
+              <span>Matematik</span>
+              <span>Hayat Bilgisi</span>
+              <span class="lg-double">Çift Puan ×2</span>
+              <span class="lg-gift">Sürpriz Soru</span>
+            </div>
+          </div>
+
+          <!-- SORU ALANI -->
+          <div class="question-panel">
+            <div class="question-category" id="questionCategory">
+              SORU BEKLENİYOR
+            </div>
+
+            <div class="bonus-banner hidden" id="bonusBanner"></div>
+
+            <div class="question-text" id="questionText">
+              <span class="idle">
+                Çarkı çevirerek oyuna başla.
+              </span>
+            </div>
+
+            <div class="options" id="options"></div>
+
+            <button class="next-button hidden"
+                    id="nextButton"
+                    onclick="nextQuestion()">
+              SONRAKİ SORU&nbsp; →
+            </button>
+
+            <button class="menu-button" onclick="goMenu()">
+              ANA MENÜ
+            </button>
+          </div>
+
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const questions = {
+      turkce: [
+        { q: "“Kedi” kelimesi kaç heceden oluşur?", options: ["1", "2", "3", "4"], answer: 1 },
+        { q: "“Büyük” kelimesinin zıt anlamlısı hangisidir?", options: ["Uzun", "Küçük", "İnce", "Hızlı"], answer: 1 },
+        { q: "Hangisi bir hayvan ismidir?", options: ["Masa", "Kelebek", "Kitap", "Kalem"], answer: 1 },
+        { q: "“Anne” kelimesinde kaç harf vardır?", options: ["3", "4", "5", "6"], answer: 1 },
+        { q: "Alfabemizde kaç harf vardır?", options: ["26", "28", "29", "30"], answer: 2 },
+        { q: "“Okul” kelimesi kaç hecelidir?", options: ["1", "2", "3", "4"], answer: 1 },
+        { q: "“Güzel” kelimesinin eş anlamlısı hangisidir?", options: ["Hoş", "Kötü", "Sert", "Yavaş"], answer: 0 },
+        { q: "Cümlenin sonuna hangi noktalama işareti konur?", options: ["Nokta", "Virgül", "İki nokta", "Kısa çizgi"], answer: 0 },
+        { q: "Soru cümlesinin sonuna hangi işaret gelir?", options: ["Nokta", "Soru işareti", "Ünlem", "Virgül"], answer: 1 },
+        { q: "Hangisi sesli (ünlü) harftir?", options: ["b", "k", "e", "t"], answer: 2 },
+        { q: "Özel isimler nasıl yazılır?", options: ["Büyük harfle başlar", "Küçük harfle başlar", "Hepsi büyük yazılır", "Fark etmez"], answer: 0 },
+        { q: "“Kalemler” kelimesindeki çoğul eki hangisidir?", options: ["-ler", "-im", "-de", "-den"], answer: 0 },
+        { q: "“Sıcak” kelimesinin zıt anlamlısı hangisidir?", options: ["Soğuk", "Ilık", "Yumuşak", "Islak"], answer: 0 },
+        { q: "Alfabede “b” harfinden sonra hangi harf gelir?", options: ["a", "c", "ç", "d"], answer: 1 },
+        { q: "“Ev” kelimesi kaç harflidir?", options: ["1", "2", "3", "4"], answer: 1 },
+        { q: "Hangisi bir varlığın adıdır (isim)?", options: ["Koşmak", "Masa", "Güzelce", "Ve"], answer: 1 },
+        { q: "Hangisi bir meslek adıdır?", options: ["Doktor", "Elma", "Mavi", "Koşmak"], answer: 0 },
+        { q: "“Çiçek” kelimesinin ilk harfi hangisidir?", options: ["Ç", "C", "Ş", "Ö"], answer: 0 },
+        { q: "Hangi kelime doğru yazılmıştır?", options: ["Yanlız", "Yalnız", "Yanlızz", "Yalnizz"], answer: 1 },
+        { q: "“Uzun” kelimesinin zıt anlamlısı hangisidir?", options: ["Kısa", "Geniş", "Kalın", "Ağır"], answer: 0 },
+        { q: "Hangisi bir renk adıdır?", options: ["Mavi", "Hızlı", "Sabah", "Tatlı"], answer: 0 },
+        { q: "“Öğretmen” kelimesi kaç hecelidir?", options: ["2", "3", "4", "5"], answer: 1 },
+        { q: "Başından geçen bir olayı anlatan yazıya ne denir?", options: ["Hikâye", "Şiir", "Bilmece", "Tekerleme"], answer: 0 },
+        { q: "Hangisi tekil (bir tane) anlamındadır?", options: ["Kuşlar", "Kuş", "Kuşları", "Kuşlarımız"], answer: 1 },
+        { q: "Hangisi bir iş, oluş, hareket bildirir?", options: ["Yazmak", "Defter", "Sarı", "Sessiz"], answer: 0 },
+        { q: "Ünlem işareti hangi durumda kullanılır?", options: ["Sevinç, korku, şaşkınlıkta", "Soru sorarken", "Sayı yazarken", "Hece ayırırken"], answer: 0 },
+        { q: "“Kırmızı” kelimesinde kaç sesli harf vardır?", options: ["2", "3", "4", "5"], answer: 1 },
+        { q: "Hangisi bir meyve adıdır?", options: ["Armut", "Sandalye", "Perde", "Tahta"], answer: 0 },
+        { q: "“Kapı” kelimesinin son harfi hangisidir?", options: ["ı", "i", "a", "k"], answer: 0 },
+        { q: "Bir yazının başlığı nerede bulunur?", options: ["En üstte", "En altta", "Ortada", "Sağ kenarda"], answer: 0 },
+        { q: "Hangisi bir soru kelimesidir?", options: ["Nerede", "Bugün", "Küçük", "Koşarak"], answer: 0 },
+        { q: "“Dost” kelimesinin eş anlamlısı hangisidir?", options: ["Arkadaş", "Düşman", "Komşu", "Misafir"], answer: 0 }
+      ],
+      matematik: [
+        { q: "5 + 7 = ?", options: ["10", "11", "12", "13"], answer: 2 },
+        { q: "9 - 4 = ?", options: ["3", "4", "5", "6"], answer: 2 },
+        { q: "6 × 3 = ?", options: ["15", "16", "18", "21"], answer: 2 },
+        { q: "20 ÷ 4 = ?", options: ["4", "5", "6", "8"], answer: 1 },
+        { q: "10 sayısından sonra gelen sayı hangisidir?", options: ["9", "11", "12", "13"], answer: 1 },
+        { q: "7 × 8 = ?", options: ["54", "56", "48", "64"], answer: 1 },
+        { q: "Bir düzine kaç tanedir?", options: ["10", "11", "12", "20"], answer: 2 },
+        { q: "30 + 25 = ?", options: ["45", "50", "55", "60"], answer: 2 },
+        { q: "6 × 2 = ?", options: ["8", "10", "12", "14"], answer: 2 },
+        { q: "45 sayısının onlar basamağındaki rakam kaçtır?", options: ["4", "5", "9", "0"], answer: 0 },
+        { q: "Hangisi en büyük sayıdır?", options: ["78", "87", "68", "79"], answer: 1 },
+        { q: "3 + 3 + 3 işleminin çarpma ile gösterimi hangisidir?", options: ["3 × 2", "3 × 3", "3 × 4", "3 × 5"], answer: 1 },
+        { q: "Bir saat kaç dakikadır?", options: ["30", "45", "60", "100"], answer: 2 },
+        { q: "2, 4, 6, 8 … Sonra hangi sayı gelir?", options: ["9", "10", "11", "12"], answer: 1 },
+        { q: "Üçgenin kaç kenarı vardır?", options: ["2", "3", "4", "5"], answer: 1 },
+        { q: "Karenin kaç köşesi vardır?", options: ["3", "4", "5", "6"], answer: 1 },
+        { q: "100 - 40 = ?", options: ["40", "50", "60", "70"], answer: 2 },
+        { q: "Hangisi çift sayıdır?", options: ["7", "9", "12", "15"], answer: 2 },
+        { q: "1 TL kaç kuruştur?", options: ["10", "50", "100", "1000"], answer: 2 },
+        { q: "25 + 25 = ?", options: ["40", "45", "50", "55"], answer: 2 },
+        { q: "8 × 5 = ?", options: ["35", "40", "45", "48"], answer: 1 },
+        { q: "Bir bütünün yarısı hangi kesirle gösterilir?", options: ["1/2", "1/3", "1/4", "2/2"], answer: 0 },
+        { q: "63 sayısının okunuşu hangisidir?", options: ["Altmış üç", "Altı üç", "Yüz altmış", "Otuz altı"], answer: 0 },
+        { q: "Hangi sayı 50’den büyüktür?", options: ["45", "49", "52", "38"], answer: 2 },
+        { q: "9 + 9 = ?", options: ["16", "17", "18", "19"], answer: 2 },
+        { q: "7 sayısının 3 fazlası kaçtır?", options: ["9", "10", "11", "4"], answer: 1 },
+        { q: "10 sayısının 4 eksiği kaçtır?", options: ["5", "6", "7", "14"], answer: 1 },
+        { q: "Bir gün kaç saattir?", options: ["12", "20", "24", "30"], answer: 2 },
+        { q: "5, 10, 15, 20 … kaçar kaçar sayılmıştır?", options: ["2", "3", "5", "10"], answer: 2 },
+        { q: "Dikdörtgenin kaç kenarı vardır?", options: ["3", "4", "5", "6"], answer: 1 },
+        { q: "40 + 30 = ?", options: ["60", "70", "80", "90"], answer: 1 },
+        { q: "Bir saatin yarısı kaç dakikadır?", options: ["15", "30", "45", "60"], answer: 1 },
+        { q: "4 × 4 = ?", options: ["8", "12", "16", "20"], answer: 2 },
+        { q: "Hangisi tek sayıdır?", options: ["14", "20", "27", "36"], answer: 2 }
+      ],
+      hayat: [
+        { q: "Trafik ışığında hangi renk “dur” anlamındadır?", options: ["Kırmızı", "Sarı", "Yeşil", "Mavi"], answer: 0 },
+        { q: "Hangi besin daha sağlıklıdır?", options: ["Cips", "Meyve", "Gazoz", "Şeker"], answer: 1 },
+        { q: "Bir haftada kaç gün vardır?", options: ["5", "6", "7", "8"], answer: 2 },
+        { q: "Bir yılda kaç ay vardır?", options: ["10", "11", "12", "13"], answer: 2 },
+        { q: "Haftanın ilk günü hangisidir?", options: ["Pazartesi", "Cuma", "Pazar", "Çarşamba"], answer: 0 },
+        { q: "Dünyamız kaç mevsime ayrılır?", options: ["2", "3", "4", "5"], answer: 2 },
+        { q: "Dişlerimizi günde en az kaç kez fırçalamalıyız?", options: ["1", "2", "5", "Hiç"], answer: 1 },
+        { q: "Karşıdan karşıya nereden geçmeliyiz?", options: ["Yaya geçidinden", "Yolun ortasından", "Koşarak", "Arabaların arasından"], answer: 0 },
+        { q: "Acil sağlık yardımı için hangi numara aranır?", options: ["110", "112", "155", "177"], answer: 1 },
+        { q: "23 Nisan hangi bayramdır?", options: ["Ulusal Egemenlik ve Çocuk Bayramı", "Zafer Bayramı", "Cumhuriyet Bayramı", "Ramazan Bayramı"], answer: 0 },
+        { q: "29 Ekim hangi bayramdır?", options: ["Cumhuriyet Bayramı", "Çocuk Bayramı", "Zafer Bayramı", "Kurban Bayramı"], answer: 0 },
+        { q: "Yemekten önce ne yapmalıyız?", options: ["Ellerimizi yıkamalıyız", "Koşmalıyız", "Televizyon açmalıyız", "Uyumalıyız"], answer: 0 },
+        { q: "Kaç duyu organımız vardır?", options: ["3", "4", "5", "6"], answer: 2 },
+        { q: "Görme duyu organımız hangisidir?", options: ["Göz", "Kulak", "Burun", "Dil"], answer: 0 },
+        { q: "Kış mevsiminde havalar nasıldır?", options: ["Çok sıcak", "Soğuk", "Ilık ve kurak", "Değişmez"], answer: 1 },
+        { q: "Bir bitkinin büyümesi için hangisi gerekli değildir?", options: ["Su", "Güneş", "Toprak", "Televizyon"], answer: 3 },
+        { q: "Çöpleri nereye atmalıyız?", options: ["Çöp kutusuna", "Yere", "Denize", "Bahçeye"], answer: 0 },
+        { q: "Hangisi bir taşıt değildir?", options: ["Otobüs", "Tren", "Uçak", "Masa"], answer: 3 },
+        { q: "Atatürk hangi şehirde doğmuştur?", options: ["Selanik", "Ankara", "İstanbul", "İzmir"], answer: 0 },
+        { q: "Ülkemizin başkenti neresidir?", options: ["Ankara", "İstanbul", "İzmir", "Bursa"], answer: 0 },
+        { q: "Deprem anında ne yapmalıyız?", options: ["Çök – Kapan – Tutun", "Asansöre binmeliyiz", "Pencereden bakmalıyız", "Koşmalıyız"], answer: 0 },
+        { q: "Suyu nasıl kullanmalıyız?", options: ["Tasarruflu kullanmalıyız", "Musluğu açık bırakmalıyız", "İstediğimiz gibi harcamalıyız", "Hiç kullanmamalıyız"], answer: 0 },
+        { q: "Hangisi kişisel eşyamızdır?", options: ["Diş fırçası", "Sınıf tahtası", "Okul kapısı", "Park salıncağı"], answer: 0 },
+        { q: "Sağlıklı olmak için günde ne kadar uyumalıyız?", options: ["4 saat", "6 saat", "9-10 saat", "2 saat"], answer: 2 },
+        { q: "Hangi mevsimde yapraklar dökülür?", options: ["İlkbahar", "Yaz", "Sonbahar", "Kış"], answer: 2 },
+        { q: "Bayrağımızda hangi şekiller bulunur?", options: ["Ay ve yıldız", "Güneş", "Yaprak", "Kalp"], answer: 0 },
+        { q: "İlk yardım çantasında hangisi bulunur?", options: ["Yara bandı", "Oyuncak", "Kalem", "Top"], answer: 0 },
+        { q: "Arkadaşımızla nasıl konuşmalıyız?", options: ["Nazikçe", "Bağırarak", "Alay ederek", "Hiç konuşmadan"], answer: 0 },
+        { q: "Hangisi doğal bir varlıktır?", options: ["Ağaç", "Bilgisayar", "Araba", "Kitap"], answer: 0 },
+        { q: "Güneş hangi yönden doğar?", options: ["Doğu", "Batı", "Kuzey", "Güney"], answer: 0 },
+        { q: "Kanı vücudumuza hangi organ pompalar?", options: ["Kalp", "Mide", "Böbrek", "Akciğer"], answer: 0 },
+        { q: "Elektriği nasıl tasarruflu kullanırız?", options: ["Gereksiz lambaları kapatarak", "Hepsini açık bırakarak", "Televizyonu hiç kapatmayarak", "Fark etmez"], answer: 0 },
+        { q: "Sırada beklerken ne yapmalıyız?", options: ["Sabırla sıramızı bekleriz", "İtişiriz", "Öne geçeriz", "Bağırırız"], answer: 0 },
+        { q: "Hangisi bir aile büyüğüdür?", options: ["Dede", "Komşu çocuğu", "Sınıf arkadaşı", "Kapı komşusu"], answer: 0 },
+        { q: "Okula giderken yanımıza ne almalıyız?", options: ["Ders araç gereçlerimizi", "Oyuncaklarımızı", "Evcil hayvanımızı", "Yastığımızı"], answer: 0 }
+      ],
+      surpriz: [
+        { q: "Türkiye’nin başkenti neresidir?", options: ["Ankara", "İstanbul", "Adana", "Bursa"], answer: 0 },
+        { q: "Bir elimizde kaç parmak vardır?", options: ["4", "5", "6", "10"], answer: 1 },
+        { q: "Gökkuşağında kaç renk vardır?", options: ["5", "6", "7", "8"], answer: 2 },
+        { q: "Balı hangi canlı yapar?", options: ["Arı", "Kelebek", "Karınca", "Kuş"], answer: 0 },
+        { q: "Karada yaşayan en büyük hayvan hangisidir?", options: ["Fil", "At", "Aslan", "İnek"], answer: 0 },
+        { q: "Kışın gökten yağan beyaz şey nedir?", options: ["Kar", "Yağmur", "Dolu", "Sis"], answer: 0 },
+        { q: "Bir ayda yaklaşık kaç hafta vardır?", options: ["2", "3", "4", "6"], answer: 2 },
+        { q: "Futbolda bir takımda sahada kaç oyuncu bulunur?", options: ["9", "10", "11", "12"], answer: 2 },
+        { q: "Hangi hayvan “miyav” der?", options: ["Kedi", "Köpek", "İnek", "Kuzu"], answer: 0 },
+        { q: "Yılın ilk ayı hangisidir?", options: ["Ocak", "Şubat", "Mart", "Aralık"], answer: 0 },
+        { q: "Maymunların çok sevdiği sarı meyve hangisidir?", options: ["Muz", "Elma", "Karpuz", "Çilek"], answer: 0 },
+        { q: "Sabah uyandığımızda ne deriz?", options: ["Günaydın", "İyi geceler", "Görüşürüz", "Hoşça kal"], answer: 0 },
+        { q: "Dünya’nın uydusu hangisidir?", options: ["Ay", "Güneş", "Mars", "Yıldız"], answer: 0 },
+        { q: "Bayrağımızın rengi nedir?", options: ["Kırmızı", "Mavi", "Yeşil", "Sarı"], answer: 0 },
+        { q: "Kitapları en çok nerede buluruz?", options: ["Kütüphanede", "Mutfakta", "Garajda", "Havuzda"], answer: 0 },
+        { q: "Hangisi bir müzik aletidir?", options: ["Davul", "Tencere", "Silgi", "Terlik"], answer: 0 }
+      ]
+    };
+
+    const segments = [
+      { name: "Türkçe",        key: "turkce",    type: "normal", color: "#ff6b6b", mark: "" },
+      { name: "Matematik",     key: "matematik", type: "normal", color: "#22d3ee", mark: "" },
+      { name: "Çift Puan",     key: "karisik",   type: "double", color: "#c8d2e0", metal: "silver", mark: "×2" },
+      { name: "Hayat Bilgisi", key: "hayat",     type: "normal", color: "#6bcb77", mark: "" },
+      { name: "Türkçe",        key: "turkce",    type: "normal", color: "#ff922b", mark: "" },
+      { name: "Matematik",     key: "matematik", type: "normal", color: "#4d96ff", mark: "" },
+      { name: "Sürpriz",       key: "surpriz",   type: "gift",   color: "#f5b301", metal: "gold",   mark: "?" },
+      { name: "Hayat Bilgisi", key: "hayat",     type: "normal", color: "#cc5de8", mark: "" }
+    ];
+
+    const gifts = [
+      { title: "ALTIN SORU", text: "50 puan birden kazandın!", points: 50 },
+      { title: "EKSTRA ÇEVİRME", text: "20 puan + sıra yine sende, çarkı bir daha çevir!", points: 20, extraTurn: true },
+      { title: "PUAN HIRSIZI", text: "20 puan kazandın, rakibinden de 10 puan aldın!", points: 20, steal: 10 },
+      { title: "ÖĞRETMEN HEDİYESİ", text: "20 puan + öğretmeninden küçük bir ödül (çıkartma, artı puan…)", points: 20 },
+      { title: "ALKIŞ ZAMANI", text: "30 puan! Bütün sınıf seni alkışlasın.", points: 30 },
+      { title: "ÇİFTE ŞANS", text: "20 puan + bir sonraki sorun çift puan!", points: 20, nextDouble: true },
+      { title: "SÜPER YILDIZ", text: "40 puan! Bugünün yıldızı sensin.", points: 40 }
+    ];
+
+    const canvas = document.getElementById("wheel");
+    const ctx = canvas.getContext("2d");
+
+    const center = canvas.width / 2;
+    const radius = center - 8;
+    const segmentAngle = Math.PI * 2 / segments.length;
+
+    let rotation = 0;
+    let spinning = false;
+    let selectedMode = "";
+    let selectedCategory = "";
+    let currentQuestion = null;
+    let answered = false;
+
+    let players = [
+      { name: "Oyuncu 1", score: 0 },
+      { name: "Oyuncu 2", score: 0 }
+    ];
+
+    let activePlayer = 0;
+
+    const usedQuestions = {
+      turkce: [],
+      matematik: [],
+      hayat: [],
+      karisik: [],
+      surpriz: []
+    };
+
+    const karisikHavuzu = []
+      .concat(questions.turkce, questions.matematik, questions.hayat);
+
+    let bonusType = "normal";
+    let bonusMultiplier = 1;
+    let pendingDouble = false;
+    let keepTurn = false;
+
+    let audioContext;
+
+    function getAudio() {
+      if (!audioContext) {
+        audioContext = new (
+          window.AudioContext ||
+          window.webkitAudioContext
+        )();
+      }
+
+      if (audioContext.state === "suspended") {
+        audioContext.resume();
+      }
+
+      return audioContext;
+    }
+
+    function sound(frequency, duration, type = "sine", volume = .05) {
+      const audio = getAudio();
+      const oscillator = audio.createOscillator();
+      const gain = audio.createGain();
+
+      oscillator.type = type;
+      oscillator.frequency.value = frequency;
+
+      gain.gain.setValueAtTime(volume, audio.currentTime);
+      gain.gain.exponentialRampToValueAtTime(
+        .001,
+        audio.currentTime + duration
+      );
+
+      oscillator.connect(gain);
+      gain.connect(audio.destination);
+
+      oscillator.start();
+      oscillator.stop(audio.currentTime + duration);
+    }
+
+    function wheelTick() {
+      sound(900, .045, "square", .035);
+    }
+
+    function correctSound() {
+      sound(600, .12, "sine", .08);
+
+      setTimeout(() => {
+        sound(850, .18, "sine", .08);
+      }, 110);
+    }
+
+    function wrongSound() {
+      sound(170, .2, "sawtooth", .06);
+    }
+
+    function selectMode(mode, button) {
+      selectedMode = mode;
+
+      document.querySelectorAll(".mode-choice")
+        .forEach(item => item.classList.remove("selected"));
+
+      button.classList.add("selected");
+    }
+
+    function selectCategory(category, button) {
+      selectedCategory = category;
+
+      document.querySelectorAll(".category-choice")
+        .forEach(item => item.classList.remove("selected"));
+
+      button.classList.add("selected");
+    }
+
+    function startGame() {
+      if (!selectedMode) {
+        alert("Lütfen oyun modunu seç.");
+        return;
+      }
+
+      getAudio();
+
+      if (selectedMode === "two") {
+        document.getElementById("menuScreen")
+          .classList.add("hidden");
+
+        document.getElementById("nameScreen")
+          .classList.remove("hidden");
+
+        return;
+      }
+
+      openGame();
+    }
+
+    function startTwoPlayerMode() {
+      const firstName =
+        document.getElementById("player1Input")
+          .value.trim();
+
+      const secondName =
+        document.getElementById("player2Input")
+          .value.trim();
+
+      players[0].name = firstName || "Oyuncu 1";
+      players[1].name = secondName || "Oyuncu 2";
+      players[0].score = 0;
+      players[1].score = 0;
+      activePlayer = 0;
+
+      openGame();
+    }
+
+    function openGame() {
+      document.getElementById("menuScreen")
+        .classList.add("hidden");
+
+      document.getElementById("nameScreen")
+        .classList.add("hidden");
+
+      document.getElementById("gameScreen")
+        .classList.remove("hidden");
+
+      players[0].score = 0;
+      players[1].score = 0;
+      pendingDouble = false;
+      keepTurn = false;
+
+      if (selectedMode === "single") {
+        document.getElementById("gameTitle")
+          .textContent = "TEK OYUNCULU ÇARKIFELEK";
+
+        document.getElementById("scores")
+          .classList.remove("hidden");
+
+        activePlayer = 0;
+        updateScores();
+      } else {
+        document.getElementById("gameTitle")
+          .textContent = "İKİ OYUNCULU ÇARKIFELEK";
+
+        document.getElementById("scores")
+          .classList.remove("hidden");
+
+        updateScores();
+      }
+
+      prepareRound();
+    }
+
+    function prepareRound() {
+      answered = false;
+
+      document.getElementById("options").innerHTML = "";
+
+      showBonusBanner(pendingDouble ? "double" : "");
+
+      document.getElementById("questionText").innerHTML =
+        '<span class="idle">Çarkı çevirerek yeni soruyu belirle.</span>';
+
+      document.getElementById("questionCategory")
+        .textContent = "SORU BEKLENİYOR";
+
+      document.getElementById("currentCategory")
+        .textContent = "KATEGORİ BEKLENİYOR";
+
+      document.getElementById("nextButton")
+        .classList.add("hidden");
+
+      document.getElementById("spinButton").disabled = false;
+      document.getElementById("spinButton")
+        .classList.remove("spinning");
+
+      document.getElementById("spinButton")
+        .textContent = "ÇARKI ÇEVİR";
+
+      document.getElementById("hint").textContent =
+        selectedMode === "two"
+          ? players[activePlayer].name + " oynuyor."
+          : "Başlamak için çarkı çevir.";
+    }
+
+    function trUpper(text) {
+      return text
+        .replace(/i/g, "İ")
+        .replace(/ı/g, "I")
+        .toUpperCase();
+    }
+
+    function drawWheel(currentRotation) {
+      const now = performance.now() / 1000;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // dilimler
+      segments.forEach((segment, index) => {
+        const start =
+          -Math.PI / 2 - segmentAngle / 2
+          + currentRotation + index * segmentAngle;
+
+        const end = start + segmentAngle;
+        const middle = start + segmentAngle / 2;
+
+        const gradient = ctx.createRadialGradient(
+          center, center, radius * .16,
+          center, center, radius
+        );
+
+        if (segment.metal === "gold") {
+          gradient.addColorStop(0, "#5a3a00");
+          gradient.addColorStop(.35, "#c98a08");
+          gradient.addColorStop(.58, "#ffd23c");
+          gradient.addColorStop(.72, "#ffeda0");
+          gradient.addColorStop(.88, "#d99a10");
+          gradient.addColorStop(1, "#7a5200");
+        } else if (segment.metal === "silver") {
+          gradient.addColorStop(0, "#39414f");
+          gradient.addColorStop(.40, "#8b95a6");
+          gradient.addColorStop(.62, "#dde5f0");
+          gradient.addColorStop(.78, "#ffffff");
+          gradient.addColorStop(.92, "#a9b3c2");
+          gradient.addColorStop(1, "#697485");
+        } else {
+          gradient.addColorStop(0, darken(segment.color, 55));
+          gradient.addColorStop(1, segment.color);
+        }
+
+        ctx.beginPath();
+        ctx.moveTo(center, center);
+        ctx.arc(center, center, radius - 16, start, end);
+        ctx.closePath();
+        ctx.fillStyle = gradient;
+        ctx.fill();
+
+        ctx.strokeStyle = "rgba(6,10,26,.85)";
+        ctx.lineWidth = 4;
+        ctx.stroke();
+
+        if (segment.metal) {
+          const shine = (Math.sin(now * 1.6 + index) + 1) / 2;
+
+          ctx.save();
+          ctx.clip();
+          ctx.globalAlpha = (segment.metal === "gold" ? .16 : .26) + shine * .28;
+          ctx.strokeStyle = "#ffffff";
+          ctx.lineWidth = 15;
+          ctx.beginPath();
+          ctx.arc(
+            center, center,
+            radius * (.36 + shine * .46),
+            start, end
+          );
+          ctx.stroke();
+          ctx.restore();
+
+          ctx.beginPath();
+          ctx.moveTo(center, center);
+          ctx.arc(center, center, radius - 16, start, end);
+          ctx.closePath();
+        }
+
+        ctx.save();
+        ctx.translate(center, center);
+        ctx.rotate(middle);
+        ctx.textAlign = "right";
+        ctx.textBaseline = "middle";
+
+        const label = trUpper(segment.name);
+        const size = label.length > 9 ? 12.5 : 15.5;
+
+        ctx.font = "800 " + size + 'px "Nunito", sans-serif';
+
+        if (segment.metal) {
+          ctx.fillStyle = "rgba(255,255,255,.75)";
+          ctx.fillText(label, radius - 34 + 1.5, 2.5);
+
+          ctx.fillStyle = segment.metal === "gold" ? "#3d2a00" : "#1f2937";
+          ctx.shadowColor = "rgba(255,255,255,.5)";
+          ctx.shadowBlur = 5;
+          ctx.fillText(label, radius - 34, 1);
+          ctx.shadowBlur = 0;
+        } else {
+          ctx.fillStyle = "rgba(4,10,30,.45)";
+          ctx.fillText(label, radius - 34 + 2, 3);
+
+          ctx.fillStyle = "#ffffff";
+          ctx.shadowColor = "rgba(0,0,0,.65)";
+          ctx.shadowBlur = 8;
+          ctx.fillText(label, radius - 34, 1);
+          ctx.shadowBlur = 0;
+        }
+
+        if (segment.mark) {
+          ctx.font = '800 20px "Nunito", sans-serif';
+          ctx.fillStyle = segment.metal === "gold" ? "#3d2a00" : "#1f2937";
+          ctx.fillText(segment.mark, radius - 128, 2);
+        }
+        ctx.restore();
+      });
+
+      // neon çemberler
+      ctx.save();
+      ctx.shadowColor = "#22d3ee";
+      ctx.shadowBlur = 18;
+      ctx.strokeStyle = "rgba(34,211,238,.9)";
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.arc(center, center, radius - 14, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.save();
+      ctx.shadowColor = "#ec4899";
+      ctx.shadowBlur = 14;
+      ctx.strokeStyle = "rgba(236,72,153,.75)";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(center, center, radius - 4, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+
+      // ampuller
+      for (let i = 0; i < 24; i++) {
+        const angle =
+          i * (Math.PI * 2 / 24) + currentRotation * .15;
+
+        const x = center + Math.cos(angle) * (radius - 9);
+        const y = center + Math.sin(angle) * (radius - 9);
+        const on = (Math.floor(now * 6) + i) % 3 === 0;
+
+        ctx.beginPath();
+        ctx.arc(x, y, 4.2, 0, Math.PI * 2);
+        ctx.fillStyle = on ? "#fff3b0" : "#3b4a6b";
+        ctx.shadowColor = on ? "#fff7c2" : "#1e293b";
+        ctx.shadowBlur = on ? 14 : 3;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+
+      // göbek
+      const hub = ctx.createRadialGradient(
+        center, center - 6, 2,
+        center, center, 46
+      );
+
+      hub.addColorStop(0, "#1e293b");
+      hub.addColorStop(1, "#0b1226");
+
+      ctx.beginPath();
+      ctx.arc(center, center, 45, 0, Math.PI * 2);
+      ctx.fillStyle = hub;
+      ctx.fill();
+
+      ctx.strokeStyle = "#22d3ee";
+      ctx.lineWidth = 4;
+      ctx.shadowBlur = 16;
+      ctx.shadowColor = "#22d3ee";
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      ctx.save();
+      ctx.strokeStyle = "#facc15";
+      ctx.lineWidth = 3;
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = "#facc15";
+      ctx.beginPath();
+      ctx.arc(center, center, 30, .6, 2.2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(center, center, 30, 3.75, 5.35);
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.fillStyle = "#e2f7ff";
+      ctx.font = '800 15px "Nunito", sans-serif';
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.shadowColor = "#22d3ee";
+      ctx.shadowBlur = 12;
+      ctx.fillText("ÇEVİR", center, center);
+      ctx.shadowBlur = 0;
+    }
+
+    function lighten(hex, amount) {
+      return changeColor(hex, amount);
+    }
+
+    function darken(hex, amount) {
+      return changeColor(hex, -amount);
+    }
+
+    function changeColor(hex, amount) {
+      const num = parseInt(hex.replace("#", ""), 16);
+
+      let r = (num >> 16) + amount;
+      let g = ((num >> 8) & 255) + amount;
+      let b = (num & 255) + amount;
+
+      r = Math.max(0, Math.min(255, r));
+      g = Math.max(0, Math.min(255, g));
+      b = Math.max(0, Math.min(255, b));
+
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    function getLandedSegment(currentRotation) {
+      const normalized =
+        ((-currentRotation % (Math.PI * 2))
+          + Math.PI * 2) % (Math.PI * 2);
+
+      return Math.round(normalized / segmentAngle)
+        % segments.length;
+    }
+
+    function spinWheel() {
+      if (spinning) return;
+
+      getAudio();
+
+      spinning = true;
+
+      const button = document.getElementById("spinButton");
+
+      button.disabled = true;
+      button.classList.add("spinning");
+      button.textContent = "DÖNÜYOR...";
+
+      document.getElementById("options").innerHTML = "";
+      document.getElementById("questionText").innerHTML = "";
+      document.getElementById("nextButton")
+        .classList.add("hidden");
+
+      const startRotation = rotation;
+      const extraRotation =
+        Math.PI * 2 * (7 + Math.random() * 3);
+
+      const duration = 4300;
+      const startTime = performance.now();
+      let lastTickSegment = -1;
+
+      function easeOut(t) {
+        return 1 - Math.pow(1 - t, 4);
+      }
+
+      function animate(time) {
+        const progress = Math.min(
+          (time - startTime) / duration,
+          1
+        );
+
+        rotation =
+          startRotation + extraRotation * easeOut(progress);
+
+        drawWheel(rotation);
+
+        const tickSegment =
+          Math.floor(
+            (rotation / segmentAngle) % segments.length
+          );
+
+        if (tickSegment !== lastTickSegment) {
+          wheelTick();
+          lastTickSegment = tickSegment;
+        }
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          spinning = false;
+          button.classList.remove("spinning");
+          button.textContent = "ÇARKI ÇEVİR";
+
+          const selectedSegment =
+            segments[getLandedSegment(rotation)];
+
+          showQuestion(selectedSegment);
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    function getQuestion(category) {
+      const list =
+        category === "karisik" ? karisikHavuzu : questions[category];
+
+      if (!usedQuestions[category]) {
+        usedQuestions[category] = [];
+      }
+
+      if (usedQuestions[category].length >= list.length) {
+        usedQuestions[category] = [];
+      }
+
+      let index;
+
+      do {
+        index = Math.floor(Math.random() * list.length);
+      } while (usedQuestions[category].includes(index));
+
+      usedQuestions[category].push(index);
+
+      return list[index];
+    }
+
+    function showBonusBanner(kind) {
+      const banner = document.getElementById("bonusBanner");
+
+      if (kind === "double") {
+        banner.className = "bonus-banner double";
+        banner.innerHTML =
+          "<b>ÇİFT PUAN ×2</b> &nbsp;·&nbsp; Karışık soru! Doğru cevap 20 puan.";
+      } else if (kind === "gift") {
+        banner.className = "bonus-banner gift";
+        banner.innerHTML =
+          "<b>SÜRPRİZ SORU</b> &nbsp;·&nbsp; Bilirsen sürpriz bir hediye seni bekliyor!";
+      } else {
+        banner.className = "bonus-banner hidden";
+        banner.innerHTML = "";
+      }
+    }
+
+    function showGift() {
+      const gift = gifts[Math.floor(Math.random() * gifts.length)];
+      const banner = document.getElementById("bonusBanner");
+
+      banner.className = "bonus-banner gift open";
+      banner.innerHTML =
+        "<b>" + gift.title + "</b><br><span>" + gift.text + "</span>";
+
+      if (gift.steal && selectedMode === "two") {
+        const rival = activePlayer === 0 ? 1 : 0;
+
+        players[rival].score =
+          Math.max(0, players[rival].score - gift.steal);
+
+        players[activePlayer].score += gift.steal;
+      }
+
+      if (gift.extraTurn) {
+        keepTurn = true;
+      }
+
+      if (gift.nextDouble) {
+        pendingDouble = true;
+      }
+
+      sound(700, .12, "sine", .08);
+      setTimeout(() => sound(950, .2, "sine", .08), 120);
+      setTimeout(() => sound(1200, .25, "sine", .08), 260);
+
+      return gift.points;
+    }
+
+    function showQuestion(segment) {
+      bonusType = segment.type;
+      bonusMultiplier = segment.type === "double" ? 2 : 1;
+
+      if (pendingDouble && segment.type === "normal") {
+        bonusMultiplier = 2;
+        bonusType = "double";
+        pendingDouble = false;
+      }
+
+      currentQuestion = getQuestion(segment.key);
+      answered = false;
+
+      showBonusBanner(bonusType === "gift" ? "gift" : (bonusMultiplier === 2 ? "double" : ""));
+
+      const badge =
+        document.getElementById("currentCategory");
+
+      badge.textContent =
+        segment.type === "double" ? "ÇİFT PUAN ×2"
+        : segment.type === "gift" ? "SÜRPRİZ SORU"
+        : trUpper(segment.name);
+
+      badge.style.color = "#071126";
+      badge.style.background = segment.color;
+      badge.style.borderColor = segment.color;
+
+      document.getElementById("questionCategory")
+        .textContent =
+          segment.type === "double" ? "ÇİFT PUAN · KARIŞIK SORU"
+          : segment.type === "gift" ? "SÜRPRİZ · HEDİYELİ SORU"
+          : trUpper(segment.name);
+
+      document.getElementById("hint")
+        .textContent = "Cevabını seç.";
+
+      setTimeout(() => {
+        document.getElementById("questionText")
+          .textContent = currentQuestion.q;
+
+        const options =
+          document.getElementById("options");
+
+        options.innerHTML = "";
+
+        currentQuestion.options.forEach((option, index) => {
+          const button = document.createElement("button");
+
+          button.className = "option";
+          button.textContent = option;
+          button.onclick = () =>
+            checkAnswer(index, button);
+
+          options.appendChild(button);
+        });
+      }, 350);
+    }
+
+    function checkAnswer(selectedAnswer, selectedButton) {
+      if (answered) return;
+
+      answered = true;
+
+      const correctAnswer = currentQuestion.answer;
+      const allOptions =
+        document.querySelectorAll(".option");
+
+      allOptions.forEach((button, index) => {
+        button.disabled = true;
+
+        if (index === correctAnswer) {
+          button.classList.add("correct");
+        }
+      });
+
+      if (selectedAnswer === correctAnswer) {
+        selectedButton.classList.add("correct");
+        correctSound();
+
+        let earned = 10 * bonusMultiplier;
+
+        if (bonusType === "gift") {
+          earned = showGift();
+        }
+
+        players[activePlayer].score += earned;
+        updateScores();
+
+        document.getElementById("hint").textContent =
+          bonusType === "gift"
+            ? "Sürpriz hediye senin! " + earned + " puan kazandın."
+            : "Harika! " + earned + " puan kazandın.";
+
+        createConfetti();
+      } else {
+        selectedButton.classList.add("wrong");
+        wrongSound();
+
+        if (bonusType === "gift") {
+          const banner = document.getElementById("bonusBanner");
+
+          banner.className = "bonus-banner gift";
+          banner.innerHTML =
+            "<b>Hediye bu sefer kaçtı!</b> Doğru cevap yeşil renkte.";
+        }
+
+        document.getElementById("hint")
+          .textContent = "Yanlış cevap. Doğru cevap yeşil renkte.";
+      }
+
+      document.getElementById("nextButton")
+        .classList.remove("hidden");
+    }
+
+    function nextQuestion() {
+      if (selectedMode === "two") {
+        if (keepTurn) {
+          keepTurn = false;
+        } else {
+          activePlayer = activePlayer === 0 ? 1 : 0;
+        }
+
+        updateScores();
+      }
+
+      prepareRound();
+    }
+
+    function updateScores() {
+      document.getElementById("playerName1")
+        .textContent =
+          selectedMode === "single" ? "PUANIN" : players[0].name;
+
+      document.getElementById("playerName2")
+        .textContent = players[1].name;
+
+      document.getElementById("score1")
+        .textContent = players[0].score;
+
+      document.getElementById("score2")
+        .textContent = players[1].score;
+
+      document.getElementById("scoreCard1")
+        .classList.toggle("active",
+          selectedMode === "single" || activePlayer === 0);
+
+      document.getElementById("scoreCard2")
+        .classList.toggle("active",
+          selectedMode !== "single" && activePlayer === 1);
+
+      document.getElementById("scoreCard2")
+        .classList.toggle("hidden", selectedMode === "single");
+    }
+
+    function goMenu() {
+      document.getElementById("gameScreen")
+        .classList.add("hidden");
+
+      document.getElementById("nameScreen")
+        .classList.add("hidden");
+
+      document.getElementById("menuScreen")
+        .classList.remove("hidden");
+
+      selectedMode = "";
+      selectedCategory = "";
+      activePlayer = 0;
+
+      document.querySelectorAll(".selected")
+        .forEach(item => item.classList.remove("selected"));
+    }
+
+    function createConfetti() {
+      const colors = [
+        "#22d3ee",
+        "#a855f7",
+        "#ec4899",
+        "#facc15",
+        "#34d399",
+        "#fb923c"
+      ];
+
+      for (let i = 0; i < 32; i++) {
+        const piece = document.createElement("div");
+
+        piece.className = "confetti";
+        piece.style.left = Math.random() * 100 + "vw";
+        piece.style.background =
+          colors[Math.floor(Math.random() * colors.length)];
+
+        piece.style.animationDuration =
+          (1.2 + Math.random() * 1.1) + "s";
+
+        document.body.appendChild(piece);
+
+        setTimeout(() => piece.remove(), 2500);
+      }
+    }
+
+    document.getElementById("player2Input")
+      .addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+          startTwoPlayerMode();
+        }
+      });
+
+    function idleLoop() {
+      if (!spinning) {
+        drawWheel(rotation);
+      }
+
+      requestAnimationFrame(idleLoop);
+    }
+
+    drawWheel(rotation);
+    idleLoop();
+  </script>
+
+<div style="text-align:center;padding:18px 10px;margin-top:28px;font-size:0.82rem;color:#8a8a8a;border-top:1px solid #e5e5e5;">Dijital Öğretmen Hasan Tutuş</div>
+<!-- Ziyaretçi sayacı: goatcounter.com'da ücretsiz hesap açtıktan sonra
+     aşağıdaki "dijitalogretmen" kısmını kendi GoatCounter kodunuzla değiştirin. -->
+<script data-goatcounter="https://dijitalogretmen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script src="indirme-sayaci.js" defer></script>
+</body>
+</html>

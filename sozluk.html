@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Türkçe Sözlük</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --navy: #071827;
+      --navy-2: #0d2940;
+      --blue: #123f61;
+      --orange: #f26b21;
+      --orange-dark: #c94d0c;
+      --yellow: #ffc857;
+      --cream: #fff8eb;
+      --paper: #ffffff;
+      --ink: #17212b;
+      --muted: #566573;
+      --line: #d9e0e5;
+      --red: #c92d3d;
+      --shadow: 0 18px 45px rgba(0, 0, 0, .25);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "DM Sans", sans-serif;
+      background:
+        radial-gradient(circle at 8% 5%, #f26b21 0, transparent 23%),
+        radial-gradient(circle at 95% 90%, #174d72 0, transparent 28%),
+        linear-gradient(135deg, var(--navy), #0b304c 55%, #06131f);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 30px));
+      margin: auto;
+      padding: 25px 0 45px;
+    }
+
+    /* Üst bölüm */
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+      margin-bottom: 48px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-symbol {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      color: var(--navy);
+      background: var(--yellow);
+      border-radius: 15px;
+      font-size: 24px;
+      box-shadow: 0 5px 0 rgba(0, 0, 0, .2);
+    }
+
+    .logo strong {
+      display: block;
+      font-family: "Playfair Display", serif;
+      font-size: 21px;
+    }
+
+    .logo small {
+      color: #b9cad6;
+      font-size: 12px;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .top-actions button {
+      padding: 10px 14px;
+      border: 1px solid rgba(255, 255, 255, .35);
+      border-radius: 10px;
+      color: white;
+      background: rgba(255, 255, 255, .1);
+      font-weight: 700;
+    }
+
+    .top-actions button:hover {
+      background: var(--orange);
+      border-color: var(--orange);
+    }
+
+    /* Başlık */
+
+    .hero {
+      max-width: 800px;
+      margin: 0 auto 35px;
+      color: white;
+      text-align: center;
+    }
+
+    .hero-label {
+      display: inline-block;
+      padding: 7px 13px;
+      border: 1px solid var(--yellow);
+      border-radius: 100px;
+      color: var(--yellow);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      margin: 18px 0 10px;
+      font-family: "Playfair Display", serif;
+      font-size: clamp(40px, 7vw, 74px);
+      line-height: 1.02;
+      letter-spacing: -.05em;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, .25);
+    }
+
+    .hero p {
+      margin: 0 auto;
+      max-width: 620px;
+      color: #d8e5ed;
+      font-size: 17px;
+      line-height: 1.6;
+    }
+
+    /* Ana düzen */
+
+    .layout {
+      display: grid;
+      grid-template-columns: 245px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .card {
+      border-radius: 20px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    /* Sol panel */
+
+    .sidebar {
+      position: sticky;
+      top: 20px;
+      padding: 22px;
+    }
+
+    .sidebar h2 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 17px;
+      color: var(--navy);
+      font-family: "Playfair Display", serif;
+      font-size: 20px;
+    }
+
+    .sidebar h2 span {
+      color: var(--orange);
+    }
+
+    .alphabet {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 7px;
+    }
+
+    .letter {
+      height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--navy);
+      background: #fff;
+      font-weight: 800;
+      transition: .18s ease;
+    }
+
+    .letter:hover,
+    .letter.active {
+      color: white;
+      background: var(--orange);
+      border-color: var(--orange);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 0 var(--orange-dark);
+    }
+
+    .divider {
+      height: 1px;
+      margin: 23px 0;
+      background: var(--line);
+    }
+
+    .side-label {
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .quick-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .quick-word {
+      padding: 7px 10px;
+      border: 1px solid #ffd39e;
+      border-radius: 100px;
+      color: #a94408;
+      background: #fff4e4;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .quick-word:hover {
+      color: white;
+      background: var(--orange);
+      border-color: var(--orange);
+    }
+
+    /* İçerik */
+
+    .content {
+      overflow: hidden;
+    }
+
+    .search-area {
+      padding: 27px;
+      background:
+        linear-gradient(120deg, #fff 0%, #fff8eb 100%);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .search-title {
+      margin: 0 0 11px;
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .search-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .input-area {
+      position: relative;
+      flex: 1;
+    }
+
+    #searchInput {
+      width: 100%;
+      height: 56px;
+      padding: 0 45px 0 18px;
+      border: 2px solid #cdd6dc;
+      border-radius: 13px;
+      outline: none;
+      color: var(--ink);
+      background: white;
+      font-size: 17px;
+      transition: .2s ease;
+    }
+
+    #searchInput::placeholder {
+      color: #8a969f;
+    }
+
+    #searchInput:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 4px rgba(242, 107, 33, .18);
+    }
+
+    #clearButton {
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      display: none;
+      border: 0;
+      color: var(--muted);
+      background: transparent;
+      font-size: 22px;
+      transform: translateY(-50%);
+    }
+
+    #clearButton.show {
+      display: block;
+    }
+
+    #searchButton {
+      height: 56px;
+      padding: 0 27px;
+      border: 0;
+      border-radius: 13px;
+      color: white;
+      background: var(--orange);
+      font-weight: 800;
+      box-shadow: 0 5px 0 var(--orange-dark);
+      transition: .15s ease;
+    }
+
+    #searchButton:hover {
+      background: #ff7a2c;
+      transform: translateY(-1px);
+    }
+
+    #searchButton:disabled {
+      opacity: .65;
+      cursor: wait;
+    }
+
+    .hint {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    kbd {
+      padding: 2px 6px;
+      border: 1px solid #cbd3d8;
+      border-bottom-width: 2px;
+      border-radius: 5px;
+      color: var(--navy);
+      background: white;
+    }
+
+    .result-area {
+      min-height: 440px;
+      padding: 27px;
+    }
+
+    #status {
+      min-height: 22px;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* Hoş geldin alanı */
+
+    .welcome,
+    .message {
+      min-height: 350px;
+      display: grid;
+      place-items: center;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .welcome-icon {
+      width: 90px;
+      height: 90px;
+      display: grid;
+      place-items: center;
+      margin: auto;
+      border-radius: 25px;
+      color: white;
+      background: var(--orange);
+      font-family: "Playfair Display", serif;
+      font-size: 37px;
+      font-weight: 800;
+      box-shadow: 0 7px 0 var(--orange-dark);
+    }
+
+    .welcome h2,
+    .message h2 {
+      margin: 20px 0 8px;
+      color: var(--navy);
+      font-family: "Playfair Display", serif;
+      font-size: 28px;
+    }
+
+    .welcome p,
+    .message p {
+      max-width: 500px;
+      margin: auto;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* Sonuç */
+
+    .entry {
+      animation: showEntry .25s ease both;
+    }
+
+    @keyframes showEntry {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .entry + .entry {
+      margin-top: 28px;
+      padding-top: 27px;
+      border-top: 2px dashed var(--line);
+    }
+
+    .entry-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 15px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--navy);
+    }
+
+    .entry-word {
+      margin: 0;
+      color: var(--orange);
+      font-family: "Playfair Display", serif;
+      font-size: clamp(34px, 6vw, 52px);
+      line-height: 1;
+      word-break: break-word;
+    }
+
+    .entry-origin {
+      color: var(--muted);
+      font-size: 13px;
+      font-style: italic;
+      text-align: right;
+    }
+
+    .meanings {
+      margin: 22px 0 0;
+      padding-left: 25px;
+    }
+
+    .meaning {
+      margin-bottom: 21px;
+      padding-left: 7px;
+      line-height: 1.65;
+    }
+
+    .meaning::marker {
+      color: var(--orange);
+      font-weight: 800;
+    }
+
+    .tag {
+      display: inline-block;
+      margin: 0 8px 5px 0;
+      padding: 5px 10px;
+      border-radius: 100px;
+      color: #7a4d00;
+      background: #fff1bf;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      vertical-align: middle;
+    }
+
+    .meaning-text {
+      font-size: 16px;
+    }
+
+    .example {
+      display: block;
+      margin-top: 8px;
+      padding: 11px 14px;
+      border-left: 4px solid var(--orange);
+      color: #53626e;
+      background: #fff8eb;
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    .example::before {
+      content: "“";
+      color: var(--orange);
+      font-size: 22px;
+    }
+
+    .example::after {
+      content: "”";
+      color: var(--orange);
+      font-size: 22px;
+    }
+
+    .suggestions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 17px;
+    }
+
+    .suggestion {
+      padding: 8px 14px;
+      border: 1px solid #ffc98e;
+      border-radius: 100px;
+      color: #a94408;
+      background: #fff7eb;
+      font-weight: 700;
+    }
+
+    .suggestion:hover {
+      color: white;
+      background: var(--orange);
+    }
+
+    .offline {
+      display: inline-block;
+      margin-top: 13px;
+      color: var(--orange-dark);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    /* Alt bilgi alanı */
+
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .bottom-card {
+      padding: 22px;
+      border-radius: 20px;
+      background: var(--cream);
+      box-shadow: var(--shadow);
+    }
+
+    .bottom-card h3 {
+      margin: 0 0 14px;
+      color: var(--navy);
+      font-family: "Playfair Display", serif;
+      font-size: 20px;
+    }
+
+    .day-word {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 15px;
+      border: 1px solid #f2cc93;
+      border-radius: 13px;
+      background: white;
+    }
+
+    .day-word strong {
+      display: block;
+      color: var(--orange);
+      font-family: "Playfair Display", serif;
+      font-size: 25px;
+    }
+
+    .day-word small {
+      color: var(--muted);
+    }
+
+    .day-word button {
+      padding: 9px 12px;
+      border: 0;
+      border-radius: 9px;
+      color: white;
+      background: var(--navy);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .history {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .history-item {
+      padding: 7px 11px;
+      border: 1px solid #cbd9e0;
+      border-radius: 100px;
+      color: var(--blue);
+      background: white;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .history-item:hover {
+      color: white;
+      background: var(--orange);
+      border-color: var(--orange);
+    }
+
+    .empty-history {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    footer {
+      padding-top: 25px;
+      color: #c4d4de;
+      font-size: 12px;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    footer a {
+      color: var(--yellow);
+    }
+
+    @media (max-width: 850px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+
+      .alphabet {
+        grid-template-columns: repeat(10, 1fr);
+      }
+    }
+
+    @media (max-width: 560px) {
+      .page {
+        width: calc(100% - 18px);
+        padding-top: 15px;
+      }
+
+      .topbar {
+        margin-bottom: 30px;
+      }
+
+      .top-actions button:first-child {
+        display: none;
+      }
+
+      .search-area,
+      .result-area {
+        padding: 19px;
+      }
+
+      .search-row {
+        flex-direction: column;
+      }
+
+      #searchButton {
+        width: 100%;
+      }
+
+      .alphabet {
+        grid-template-columns: repeat(8, 1fr);
+      }
+
+      .entry-head {
+        display: block;
+      }
+
+      .entry-origin {
+        display: block;
+        margin-top: 10px;
+        text-align: left;
+      }
+
+      .bottom-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+<meta name="description" content="Türkçe Sözlük - Dijital Öğretmen'den ücretsiz, MEB müfredatına (Maarif Modeli) uygun ilkokul eğitim materyali. Hasan Tutuş tarafından hazırlanmıştır.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:site_name" content="Dijital Öğretmen">
+<meta property="og:title" content="Türkçe Sözlük">
+<meta property="og:description" content="Türkçe Sözlük - Dijital Öğretmen'den ücretsiz, MEB müfredatına (Maarif Modeli) uygun ilkokul eğitim materyali. Hasan Tutuş tarafından hazırlanmıştır.">
+<meta property="og:url" content="https://oogretmen1-tech.github.io/sozluk.html">
+<meta property="og:image" content="https://oogretmen1-tech.github.io/logo.png">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body>
+  <div class="page">
+
+    <div class="topbar">
+      <div class="logo">
+        <div class="logo-symbol">📖</div>
+        <div>
+          <strong>Sözlük Köşesi</strong>
+          <small>Türkçe kelimeleri keşfet</small>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button id="randomButton">🎲 Rastgele</button>
+        <button id="focusButton">⌕ Ara</button>
+      </div>
+    </div>
+
+    <header class="hero">
+      <div class="hero-label">Güncel Türkçe Sözlük</div>
+
+      <h1>Kelimelerin anlamına<br>yakından bak.</h1>
+
+      <p>
+        Bir kelime yaz; anlamını, türünü, kökenini ve
+        örnek kullanımını öğren.
+      </p>
+    </header>
+
+    <section class="layout">
+
+      <aside class="card sidebar">
+        <h2><span>✦</span> Alfabetik keşif</h2>
+
+        <div class="alphabet" id="alphabet"></div>
+
+        <div class="divider"></div>
+
+        <div class="side-label">Öne çıkan kelimeler</div>
+
+        <div class="quick-list">
+          <button class="quick-word">öğretmen</button>
+          <button class="quick-word">öğrenci</button>
+          <button class="quick-word">nehir</button>
+          <button class="quick-word">özgürlük</button>
+          <button class="quick-word">bilgi</button>
+          <button class="quick-word">dostluk</button>
+          <button class="quick-word">sözlük</button>
+          <button class="quick-word">umut</button>
+        </div>
+      </aside>
+
+      <main class="card content">
+
+        <section class="search-area">
+          <p class="search-title">Aramak istediğin kelime</p>
+
+          <div class="search-row">
+            <div class="input-area">
+              <input
+                id="searchInput"
+                type="text"
+                placeholder="Örneğin: öğretmen, nehir, özgürlük..."
+                autocomplete="off"
+                spellcheck="false"
+              >
+
+              <button id="clearButton" aria-label="Arama kutusunu temizle">
+                ×
+              </button>
+            </div>
+
+            <button id="searchButton">ARA</button>
+          </div>
+
+          <div class="hint">
+            Aramak için <kbd>Enter</kbd> tuşuna bas.
+          </div>
+        </section>
+
+        <section class="result-area">
+          <div id="status"></div>
+
+          <div id="result">
+            <div class="welcome">
+              <div>
+                <div class="welcome-icon">Aa</div>
+                <h2>Sözlüğe hoş geldin</h2>
+                <p>
+                  Bir kelime yazarak veya soldaki harflerden birini seçerek
+                  aramaya başlayabilirsin.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </section>
+
+    <section class="bottom-grid">
+
+      <div class="bottom-card">
+        <h3>✦ Günün kelimesi</h3>
+
+        <div class="day-word">
+          <div>
+            <strong id="wordOfDay">merak</strong>
+            <small>Bugün yeni bir kelime öğren.</small>
+          </div>
+
+          <button id="wordOfDayButton">Görüntüle</button>
+        </div>
+      </div>
+
+      <div class="bottom-card">
+        <h3>↺ Son aramalar</h3>
+        <div class="history" id="history">
+          <span class="empty-history">
+            Henüz arama yapılmadı.
+          </span>
+        </div>
+      </div>
+
+    </section>
+
+    <footer>
+      Sonuçlar mümkün olduğunda TDK Güncel Türkçe Sözlük servisinden alınır.
+      <br>
+      Ayrıntılı arama için
+      <a href="https://sozluk.gov.tr/" target="_blank" rel="noopener">
+        sozluk.gov.tr
+      </a>
+      adresini ziyaret edebilirsin.
+    <p class="site-notu" style="text-align:center;font-size:.78rem;opacity:.65;padding:6px 0 0;">Bu sayfa en son 3 Eylül 2026 tarihinde güncellendi.</p></footer>
+
+  </div>
+
+  <script>
+    const ALPHABET = [
+      "A", "B", "C", "Ç", "D", "E", "F", "G", "Ğ", "H",
+      "I", "İ", "J", "K", "L", "M", "N", "O", "Ö", "P",
+      "R", "S", "Ş", "T", "U", "Ü", "V", "Y", "Z"
+    ];
+
+    const SAMPLE_WORDS = {
+      A: "armut",
+      B: "bilgi",
+      C: "cesaret",
+      Ç: "çiçek",
+      D: "dostluk",
+      E: "emek",
+      F: "fikir",
+      G: "güneş",
+      Ğ: "değirmen",
+      H: "hayal",
+      I: "ışık",
+      İ: "iyilik",
+      J: "jimnastik",
+      K: "kitap",
+      L: "lale",
+      M: "merak",
+      N: "nehir",
+      O: "orman",
+      Ö: "özgürlük",
+      P: "pusula",
+      R: "rüzgâr",
+      S: "sevgi",
+      Ş: "şiir",
+      T: "toprak",
+      U: "umut",
+      Ü: "üzüm",
+      V: "vatan",
+      Y: "yıldız",
+      Z: "zaman"
+    };
+
+    /*
+      TDK servisine ulaşılamadığında kullanılacak
+      çevrimdışı temel sözlük.
+    */
+    const OFFLINE_DICT = {
+      "ağaç": {
+        type: "isim",
+        meaning: "Kökü, gövdesi ve dalları olan, uzun ömürlü büyük bitki.",
+        example: "Bahçedeki ağacın gölgesinde dinlendik."
+      },
+
+      "aile": {
+        type: "isim",
+        meaning: "Anne, baba ve çocuklardan oluşan topluluk; aynı soydan gelen kişiler bütünü.",
+        example: "Ailemle birlikte güzel bir akşam geçirdim."
+      },
+
+      "akıl": {
+        type: "isim",
+        meaning: "Düşünme, anlama ve kavrama yeteneği.",
+        example: "Akıl ve deneyim doğru karar vermeye yardımcı olur."
+      },
+
+      "armut": {
+        type: "isim",
+        meaning: "Bir ucu ince, diğer ucu daha geniş olan, tatlı bir meyve.",
+        example: "Bahçedeki armutlar bu yıl çok tatlıydı."
+      },
+
+      "arkadaş": {
+        type: "isim",
+        meaning: "Birbirlerine karşı sevgi ve yakınlık duyan kimselerden her biri.",
+        example: "İyi bir arkadaş zor zamanlarda yanında olur."
+      },
+
+      "başarı": {
+        type: "isim",
+        meaning: "İstenen bir sonuca ulaşma, başarılı olma durumu.",
+        example: "Başarı düzenli çalışmanın sonucudur."
+      },
+
+      "bilgi": {
+        type: "isim",
+        meaning: "Öğrenme, araştırma veya gözlem yoluyla elde edilen gerçek ve düşünceler.",
+        example: "Bilgi paylaşıldıkça çoğalır."
+      },
+
+      "bilgisayar": {
+        type: "isim",
+        meaning: "Bilgi işleyen, hesaplayan ve programları çalıştıran elektronik araç.",
+        example: "Bilgisayarda yeni bir sunum hazırladı."
+      },
+
+      "bulut": {
+        type: "isim",
+        meaning: "Gökyüzünde su buharının yoğunlaşmasıyla oluşan beyaz veya gri kütle.",
+        example: "Koyu bulutlar yağmurun habercisiydi."
+      },
+
+      "cesaret": {
+        type: "isim",
+        meaning: "Güç veya tehlikeli bir durum karşısında korkusuzca davranma durumu.",
+        example: "Bu kararı vermek büyük cesaret istiyordu."
+      },
+
+      "çiçek": {
+        type: "isim",
+        meaning: "Bitkilerin renkli ve çoğunlukla güzel kokulu üreme organı.",
+        example: "Masadaki çiçekler odaya hoş bir koku yayıyordu."
+      },
+
+      "çocuk": {
+        type: "isim",
+        meaning: "Bebeklik ile gençlik arasındaki gelişme döneminde bulunan insan.",
+        example: "Çocuk kitabın resimlerini dikkatle inceledi."
+      },
+
+      "dağ": {
+        type: "isim",
+        meaning: "Çevresine göre oldukça yüksek ve geniş yeryüzü şekli.",
+        example: "Dağın zirvesi karla kaplıydı."
+      },
+
+      "değirmen": {
+        type: "isim",
+        meaning: "Tahıl öğütmeye yarayan araç veya yapı.",
+        example: "Köyün girişinde eski bir değirmen vardı."
+      },
+
+      "deniz": {
+        type: "isim",
+        meaning: "Yeryüzünün büyük bölümünü kaplayan, genellikle tuzlu su kütlesi.",
+        example: "Akşamüstü deniz kıyısında yürüdük."
+      },
+
+      "dostluk": {
+        type: "isim",
+        meaning: "Dost olma durumu; karşılıklı sevgi, bağlılık ve güven ilişkisi.",
+        example: "Gerçek dostluk zamanla güçlenir."
+      },
+
+      "düşünce": {
+        type: "isim",
+        meaning: "Bir konu hakkında zihinde oluşan görüş, fikir veya kanaat.",
+        example: "Bu düşünce üzerinde uzun süre çalıştı."
+      },
+
+      "emek": {
+        type: "isim",
+        meaning: "Bir işin yapılması için harcanan beden veya zihin gücü.",
+        example: "Bu eser büyük bir emeğin ürünüdür."
+      },
+
+      "ev": {
+        type: "isim",
+        meaning: "İnsanların içinde yaşadığı, barındığı yapı.",
+        example: "Akşam olunca herkes evine döndü."
+      },
+
+      "fikir": {
+        type: "isim",
+        meaning: "Düşünce, görüş veya zihinde oluşan tasarı.",
+        example: "Toplantıda güzel bir fikir ortaya çıktı."
+      },
+
+      "güneş": {
+        type: "isim",
+        meaning: "Dünyaya ışık ve ısı veren, çevresindeki gezegenlerin bağlı olduğu yıldız.",
+        example: "Güneş doğunca sokaklar aydınlandı."
+      },
+
+      "hayal": {
+        type: "isim",
+        meaning: "Zihinde tasarlanan ve canlandırılan şey; düş.",
+        example: "Çocukluğundan beri büyük bir hayali vardı."
+      },
+
+      "ışık": {
+        type: "isim",
+        meaning: "Cisimleri görmeyi sağlayan fiziksel enerji.",
+        example: "Odaya giren ışık masayı aydınlattı."
+      },
+
+      "iyilik": {
+        type: "isim",
+        meaning: "İyi olma durumu; karşılık beklemeden yapılan yardım veya güzel davranış.",
+        example: "Küçük bir iyilik bile birinin gününü değiştirebilir."
+      },
+
+      "ırmak": {
+        type: "isim",
+        meaning: "Çoğunlukla denize veya göle dökülen, büyük akarsu.",
+        example: "Irmak vadinin içinden kıvrılarak akıyordu."
+      },
+
+      "jimnastik": {
+        type: "isim",
+        meaning: "Vücudu güçlendirmek, çeviklik ve esneklik kazandırmak amacıyla yapılan düzenli hareketler bütünü.",
+        example: "Sabahları jimnastik yaparak güne başlıyor."
+      },
+
+      "kitap": {
+        type: "isim",
+        meaning: "Bir konuyu anlatmak veya bilgi vermek amacıyla basılmış, sayfalardan oluşan eser.",
+        example: "Her gece yatmadan önce kitap okur."
+      },
+
+      "lale": {
+        type: "isim",
+        meaning: "Soğanlı köklere sahip, çeşitli renklerde açan süs bitkisi.",
+        example: "Bahçedeki laleler ilkbaharda açtı."
+      },
+
+      "masa": {
+        type: "isim",
+        meaning: "Üzerinde çalışılan, yemek yenilen veya eşya konulan düz yüzeyli mobilya.",
+        example: "Kitaplarını masanın üzerine bıraktı."
+      },
+
+      "merak": {
+        type: "isim",
+        meaning: "Bir şeyi öğrenme, tanıma veya araştırma isteği.",
+        example: "Merak duygusu onu araştırma yapmaya yöneltti."
+      },
+
+      "müzik": {
+        type: "isim",
+        meaning: "Sesleri ölçülü ve uyumlu biçimde düzenleme sanatı.",
+        example: "Müzik dinlemek onu rahatlattı."
+      },
+
+      "nehir": {
+        type: "isim",
+        meaning: "Sürekli veya çoğunlukla sürekli akan büyük akarsu; ırmak.",
+        example: "Nehir, şehrin kenarından ağır ağır akıyordu."
+      },
+
+      "orman": {
+        type: "isim",
+        meaning: "Ağaçlarla ve diğer bitkilerle kaplı geniş alan.",
+        example: "Ormanda kuş sesleri duyuluyordu."
+      },
+
+      "öğrenci": {
+        type: "isim",
+        meaning: "Öğrenim görmek amacıyla herhangi bir eğitim kurumuna devam eden kimse.",
+        example: "Öğrenci ders başlamadan önce sınıfa girdi."
+      },
+
+      "öğretmen": {
+        type: "isim",
+        meaning: "Bir eğitim kurumunda öğrencilere ders veren kimse.",
+        example: "Öğretmen konuyu tahtada ayrıntılı biçimde anlattı."
+      },
+
+      "özgürlük": {
+        type: "isim",
+        meaning: "Herhangi bir kısıtlamaya bağlı olmadan düşünme ve davranma durumu.",
+        example: "Özgürlük, sorumluluk bilinciyle anlam kazanır."
+      },
+
+      "sabır": {
+        type: "isim",
+        meaning: "Zorluklar karşısında sakinliğini koruma ve bekleme gücü.",
+        example: "Bu işi tamamlamak için sabır gerekiyordu."
+      },
+
+      "sağlık": {
+        type: "isim",
+        meaning: "Vücudun ve ruhun iyi olma, hastalıksız bulunma durumu.",
+        example: "Sağlık için düzenli beslenmeye dikkat ediyor."
+      },
+
+      "sevgi": {
+        type: "isim",
+        meaning: "Bir kimseye veya şeye karşı duyulan güçlü ilgi ve bağlılık.",
+        example: "Sevgi, insanları birbirine yaklaştırır."
+      },
+
+      "sözlük": {
+        type: "isim",
+        meaning: "Bir dilin kelimelerini alfabetik sırayla verip anlamlarını açıklayan eser.",
+        example: "Bilmediği kelimeleri sözlükten araştırdı."
+      },
+
+      "spor": {
+        type: "isim",
+        meaning: "Sağlığı geliştirmek veya eğlenmek amacıyla yapılan bedensel etkinlik.",
+        example: "Her sabah kısa bir süre spor yapıyor."
+      },
+
+      "şiir": {
+        type: "isim",
+        meaning: "Duygu, düşünce ve hayallerin ahenkli sözlerle anlatıldığı edebî tür.",
+        example: "Şair yeni şiirini dergide yayımladı."
+      },
+
+      "umut": {
+        type: "isim",
+        meaning: "Gerçekleşmesi beklenen veya istenen bir şey için duyulan güven ve beklenti.",
+        example: "Umut olduğu sürece yeni başlangıçlar mümkündür."
+      },
+
+      "yıldız": {
+        type: "isim",
+        meaning: "Gökyüzünde ışık saçan gök cisimlerinden her biri.",
+        example: "Gece gökyüzünde sayısız yıldız görünüyordu."
+      },
+
+      "zaman": {
+        type: "isim",
+        meaning: "Bir işin, olayın veya durumun içinde geçtiği süre.",
+        example: "Zaman birçok şeyi değiştirebilir."
+      }
+    };
+
+    const input = document.getElementById("searchInput");
+    const searchButton = document.getElementById("searchButton");
+    const clearButton = document.getElementById("clearButton");
+    const result = document.getElementById("result");
+    const status = document.getElementById("status");
+    const alphabet = document.getElementById("alphabet");
+    const historyBox = document.getElementById("history");
+    const randomButton = document.getElementById("randomButton");
+    const focusButton = document.getElementById("focusButton");
+    const wordOfDay = document.getElementById("wordOfDay");
+    const wordOfDayButton = document.getElementById("wordOfDayButton");
+
+    function normalize(value) {
+      return value
+        .trim()
+        .replace(/İ/g, "i")
+        .replace(/I/g, "ı")
+        .toLocaleLowerCase("tr-TR");
+    }
+
+    function escapeHTML(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function createAlphabet() {
+      ALPHABET.forEach(letter => {
+        const button = document.createElement("button");
+
+        button.className = "letter";
+        button.textContent = letter;
+        button.title = `${SAMPLE_WORDS[letter]} kelimesini ara`;
+
+        button.addEventListener("click", () => {
+          document.querySelectorAll(".letter")
+            .forEach(item => item.classList.remove("active"));
+
+          button.classList.add("active");
+
+          input.value = SAMPLE_WORDS[letter];
+          updateClearButton();
+          search(input.value);
+        });
+
+        alphabet.appendChild(button);
+      });
+    }
+
+    function updateClearButton() {
+      clearButton.classList.toggle(
+        "show",
+        input.value.trim().length > 0
+      );
+    }
+
+    function saveHistory(word) {
+      let history = JSON.parse(
+        localStorage.getItem("sozlukHistory") || "[]"
+      );
+
+      history = [
+        word,
+        ...history.filter(item => item !== word)
+      ].slice(0, 8);
+
+      localStorage.setItem(
+        "sozlukHistory",
+        JSON.stringify(history)
+      );
+
+      renderHistory();
+    }
+
+    function renderHistory() {
+      const history = JSON.parse(
+        localStorage.getItem("sozlukHistory") || "[]"
+      );
+
+      if (!history.length) {
+        historyBox.innerHTML =
+          `<span class="empty-history">Henüz arama yapılmadı.</span>`;
+        return;
+      }
+
+      historyBox.innerHTML = history.map(word => `
+        <button class="history-item" data-word="${escapeHTML(word)}">
+          ${escapeHTML(word)}
+        </button>
+      `).join("");
+
+      historyBox.querySelectorAll(".history-item")
+        .forEach(button => {
+          button.addEventListener("click", () => {
+            input.value = button.dataset.word;
+            updateClearButton();
+            search(input.value);
+          });
+        });
+    }
+
+    async function fetchJSON(url) {
+      try {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+          throw new Error("API bağlantısı başarısız.");
+        }
+
+        return await response.json();
+      } catch (error) {
+        const proxyURL =
+          "https://api.allorigins.win/raw?url=" +
+          encodeURIComponent(url);
+
+        const response = await fetch(proxyURL);
+
+        if (!response.ok) {
+          throw new Error("Proxy bağlantısı başarısız.");
+        }
+
+        return await response.json();
+      }
+    }
+
+    async function getSuggestions(word) {
+      try {
+        const data = await fetchJSON(
+          "https://sozluk.gov.tr/oneri?soz=" +
+          encodeURIComponent(word)
+        );
+
+        return Array.isArray(data) ? data : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function showOfflineResult(word) {
+      const data = OFFLINE_DICT[normalize(word)];
+
+      result.innerHTML = `
+        <article class="entry">
+          <div class="entry-head">
+            <h2 class="entry-word">${escapeHTML(word)}</h2>
+            <span class="entry-origin">Çevrimdışı temel kayıt</span>
+          </div>
+
+          <ol class="meanings">
+            <li class="meaning">
+              <span class="tag">${escapeHTML(data.type)}</span>
+              <span class="meaning-text">
+                ${escapeHTML(data.meaning)}
+              </span>
+              <span class="example">
+                ${escapeHTML(data.example)}
+              </span>
+            </li>
+          </ol>
+
+          <span class="offline">
+            TDK servisine ulaşılamadığı için temel kayıt gösteriliyor.
+          </span>
+        </article>
+      `;
+    }
+
+    function showSuggestions(word, suggestions) {
+      if (!suggestions.length) {
+        result.innerHTML = `
+          <div class="message">
+            <div>
+              <div class="welcome-icon">?</div>
+              <h2>Kelime bulunamadı</h2>
+              <p>
+                “${escapeHTML(word)}” için sonuç bulunamadı.
+                Yazımı kontrol edip tekrar deneyebilirsin.
+              </p>
+            </div>
+          </div>
+        `;
+
+        return;
+      }
+
+      result.innerHTML = `
+        <div class="message">
+          <div>
+            <div class="welcome-icon">✦</div>
+            <h2>Bunu mu demek istedin?</h2>
+            <p>Aramana yakın bazı kelimeler:</p>
+
+            <div class="suggestions">
+              ${suggestions.slice(0, 12).map(item => `
+                <button
+                  class="suggestion"
+                  data-word="${escapeHTML(item.madde)}"
+                >
+                  ${escapeHTML(item.madde)}
+                </button>
+              `).join("")}
+            </div>
+          </div>
+        </div>
+      `;
+
+      result.querySelectorAll(".suggestion")
+        .forEach(button => {
+          button.addEventListener("click", () => {
+            input.value = button.dataset.word;
+            updateClearButton();
+            search(input.value);
+          });
+        });
+    }
+
+    function renderEntries(entries) {
+      result.innerHTML = entries.map(entry => {
+        const meanings = (entry.anlamlarListe || [])
+          .map(item => {
+            const tags = item.ozelliklerListe || [];
+
+            const tagsHTML = tags.map(tag => `
+              <span class="tag">
+                ${escapeHTML(tag.tam_adi)}
+              </span>
+            `).join("");
+
+            const exampleHTML =
+              item.orneklerListe &&
+              item.orneklerListe.length
+                ? `
+                  <span class="example">
+                    ${escapeHTML(item.orneklerListe[0].ornek)}
+                  </span>
+                `
+                : "";
+
+            return `
+              <li class="meaning">
+                ${tagsHTML}
+                <span class="meaning-text">
+                  ${escapeHTML(item.anlam)}
+                </span>
+                ${exampleHTML}
+              </li>
+            `;
+          })
+          .join("");
+
+        return `
+          <article class="entry">
+            <div class="entry-head">
+              <h2 class="entry-word">
+                ${escapeHTML(entry.madde)}
+              </h2>
+
+              ${
+                entry.lisan
+                  ? `<span class="entry-origin">
+                       ${escapeHTML(entry.lisan)}
+                     </span>`
+                  : ""
+              }
+            </div>
+
+            <ol class="meanings">
+              ${meanings}
+            </ol>
+          </article>
+        `;
+      }).join("");
+    }
+
+    async function search(value) {
+      const word = value.trim();
+
+      if (!word) {
+        input.focus();
+        return;
+      }
+
+      const normalized = normalize(word);
+
+      searchButton.disabled = true;
+      status.textContent = "Kelime aranıyor...";
+      result.innerHTML = "";
+
+      saveHistory(normalized);
+
+      try {
+        const data = await fetchJSON(
+          "https://sozluk.gov.tr/gts?ara=" +
+          encodeURIComponent(word)
+        );
+
+        if (Array.isArray(data) && data.length && data[0].madde) {
+          renderEntries(data);
+          status.textContent =
+            "TDK Güncel Türkçe Sözlük sonucu";
+        } else {
+          const suggestions = await getSuggestions(word);
+
+          showSuggestions(word, suggestions);
+          status.textContent = "";
+        }
+      } catch {
+        if (OFFLINE_DICT[normalized]) {
+          showOfflineResult(word);
+          status.textContent =
+            "Çevrimdışı kayıt gösteriliyor.";
+        } else {
+          result.innerHTML = `
+            <div class="message">
+              <div>
+                <div class="welcome-icon">!</div>
+                <h2>Sözlüğe ulaşılamadı</h2>
+                <p>
+                  TDK servisi şu anda yanıt vermiyor ve bu kelime
+                  çevrimdışı listede bulunmuyor.
+                </p>
+              </div>
+            </div>
+          `;
+
+          status.textContent = "";
+        }
+      } finally {
+        searchButton.disabled = false;
+      }
+    }
+
+    function chooseRandomWord() {
+      const words = Object.keys(OFFLINE_DICT);
+      const word = words[Math.floor(Math.random() * words.length)];
+
+      input.value = word;
+      updateClearButton();
+      search(word);
+    }
+
+    function setWordOfDay() {
+      const words = Object.keys(OFFLINE_DICT);
+      const today = new Date();
+
+      const number =
+        today.getFullYear() * 1000 +
+        (today.getMonth() + 1) * 31 +
+        today.getDate();
+
+      wordOfDay.textContent = words[number % words.length];
+    }
+
+    searchButton.addEventListener("click", () => {
+      search(input.value);
+    });
+
+    input.addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        search(input.value);
+      }
+    });
+
+    input.addEventListener("input", updateClearButton);
+
+    clearButton.addEventListener("click", () => {
+      input.value = "";
+      updateClearButton();
+      status.textContent = "";
+
+      result.innerHTML = `
+        <div class="welcome">
+          <div>
+            <div class="welcome-icon">Aa</div>
+            <h2>Sözlüğe hoş geldin</h2>
+            <p>
+              Bir kelime yazarak veya soldaki harflerden birini
+              seçerek aramaya başlayabilirsin.
+            </p>
+          </div>
+        </div>
+      `;
+
+      input.focus();
+    });
+
+    randomButton.addEventListener("click", chooseRandomWord);
+
+    focusButton.addEventListener("click", () => {
+      input.focus();
+      input.select();
+    });
+
+    wordOfDayButton.addEventListener("click", () => {
+      input.value = wordOfDay.textContent;
+      updateClearButton();
+      search(input.value);
+    });
+
+    document.querySelectorAll(".quick-word")
+      .forEach(button => {
+        button.addEventListener("click", () => {
+          input.value = button.textContent;
+          updateClearButton();
+          search(input.value);
+        });
+      });
+
+    document.addEventListener("keydown", event => {
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        event.key.toLowerCase() === "k"
+      ) {
+        event.preventDefault();
+        input.focus();
+      }
+    });
+
+    createAlphabet();
+    renderHistory();
+    setWordOfDay();
+  </script>
+
+<div style="text-align:center;padding:18px 10px;margin-top:28px;font-size:0.82rem;color:#8a8a8a;border-top:1px solid #e5e5e5;">Dijital Öğretmen Hasan Tutuş</div>
+<!-- Ziyaretçi sayacı: goatcounter.com'da ücretsiz hesap açtıktan sonra
+     aşağıdaki "dijitalogretmen" kısmını kendi GoatCounter kodunuzla değiştirin. -->
+<script data-goatcounter="https://dijitalogretmen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script src="indirme-sayaci.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sihirli Hikâye Çarkı 🎡</title>
+    <style>
+        :root { 
+            --bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card: rgba(255, 255, 255, 0.1);
+            --accent: #ffd700;
+            --text: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { text-align: center; font-size: 3em; margin: 20px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .subtitle { text-align: center; font-size: 1.2em; margin-bottom: 40px; opacity: 0.9; }
+        
+        .wheels-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .wheel-card {
+            background: var(--card);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.18);
+            transition: transform 0.3s;
+        }
+        .wheel-card:hover { transform: translateY(-5px); }
+        
+        .wheel-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .wheel-display {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 30px 20px;
+            margin: 20px 0;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            text-align: center;
+            border: 2px solid var(--accent);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255,215,0,0.3); }
+            50% { box-shadow: 0 0 40px rgba(255,215,0,0.6); }
+        }
+        
+        .spinning {
+            animation: spin 0.5s linear;
+        }
+        
+        @keyframes spin {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
+        
+        .btn {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255,215,0,0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(255,215,0,0.6);
+        }
+        
+        .wheel-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 12px 30px;
+            font-size: 1em;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        
+        #storyOutput {
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 50px;
+            margin-top: 50px;
+            line-height: 2;
+            font-size: 1.1em;
+            border: 2px solid var(--accent);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            display: none;
+        }
+        
+        #storyOutput h2 {
+            color: var(--accent);
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .story-text {
+            text-align: justify;
+            text-indent: 2em;
+            margin-bottom: 20px;
+        }
+        
+        .story-meta {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,215,0,0.3);
+            font-style: italic;
+            opacity: 0.8;
+            text-align: center;
+        }
+    </style>
+<meta name="description" content="Sihirli Hikaye Çarkı 🎡 - Dijital Öğretmen'den ücretsiz, MEB müfredatına (Maarif Modeli) uygun ilkokul eğitim materyali. Hasan Tutuş tarafından hazırlanmıştır.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:site_name" content="Dijital Öğretmen">
+<meta property="og:title" content="Sihirli Hikaye Çarkı 🎡">
+<meta property="og:description" content="Sihirli Hikaye Çarkı 🎡 - Dijital Öğretmen'den ücretsiz, MEB müfredatına (Maarif Modeli) uygun ilkokul eğitim materyali. Hasan Tutuş tarafından hazırlanmıştır.">
+<meta property="og:url" content="https://oogretmen1-tech.github.io/hikaye-olusturucu.html">
+<meta property="og:image" content="https://oogretmen1-tech.github.io/logo.png">
+<meta name="twitter:card" content="summary">
+</head>
+<body>
+    <div class="container">
+        <h1>🎡 Sihirli Hikâye Çarkı</h1>
+        <p class="subtitle">Her çevirişte yeni bir destan doğar... Çarkları döndür ve kaderini yaz!</p>
+
+        <div class="wheels-grid" id="wheelsContainer"></div>
+
+        <div class="controls">
+            <button class="btn" onclick="spinAll()">🎡 TÜM ÇARKLARI ÇEVİR</button>
+            <button class="btn" onclick="createStory()" id="generateBtn" style="background:#4CAF50; display:none;">
+                ✨ HİKÂYEYİ OLUŞTUR
+            </button>
+        </div>
+
+        <div id="storyOutput"></div>
+    </div>
+
+<script>
+    // Çark verileri - Her öğeye benzersiz ID verdim
+    const wheelData = {
+        Karakter: [
+            { id: 'k1', text: '👦 Yetim Çocuk', name: 'Emir' },
+            { id: 'k2', text: '🧙‍♂️ Bilge İhtiyar', name: 'Üstat Kemal' },
+            { id: 'k3', text: '🔍 Meraklı Kaşif', name: 'Zeynep' },
+            { id: 'k4', text: '🤖 Zaman Yolcusu', name: 'Kronos' },
+            { id: 'k5', text: '⚔️ Cesur Savaşçı', name: 'Ayşe' },
+            { id: 'k6', text: '📚 Unutkan Kütüphaneci', name: 'Mehmet Bey' }
+        ],
+        Mekan: [
+            { id: 'm1', text: '🏝️ Kayıp Ada', desc: 'bulutların arasında saklanan gizemli ada' },
+            { id: 'm2', text: '🏰 Buz Kalesi', desc: 'kristal duvarlarıyla parıldayan antik kale' },
+            { id: 'm3', text: '☁️ Bulut Şehri', desc: 'gökyüzünde süzülen büyülü şehir' },
+            { id: 'm4', text: '📖 Yeraltı Kütüphanesi', desc: 'dünyanın tüm bilgisini saklayan dev kütüphane' },
+            { id: 'm5', text: '🌲 Fısıldayan Orman', desc: 'ağaçların konuştuğu kadim orman' },
+            { id: 'm6', text: '🌊 Su Altı Sarayı', desc: 'okyanusun derinliklerindeki unutulmuş saray' }
+        ],
+        Zaman: [
+            { id: 'z1', text: '🌙 Gece Yarısı', when: 'gecenin en karanlık saatinde' },
+            { id: 'z2', text: '☀️ Şafak Vakti', when: 'güneşin ilk ışıklarıyla' },
+            { id: 'z3', text: '⏰ Zamanın Durduğu An', when: 'zamanın akmayı unuttuğu gizemli anda' },
+            { id: 'z4', text: '🍂 Sonbahar Akşamı', when: 'yaprakların dans ettiği bir sonbahar akşamında' },
+            { id: 'z5', text: '⚡ Fırtına Gecesi', when: 'gök gürültüsünün yankılandığı korkunç bir fırtına gecesinde' },
+            { id: 'z6', text: '❄️ Kış Sabahı', when: 'karların her yeri bembeyaz bürüdüğü soğuk bir kış sabahında' }
+        ],
+        Olay: [
+            { id: 'o1', text: '💎 Hazine Bulma', action: 'gizemli bir harita buldu' },
+            { id: 'o2', text: '🧩 Bulmaca Çözme', action: 'çözmesi gereken antik bir bulmacayla karşılaştı' },
+            { id: 'o3', text: '📜 Mesaj Alma', action: 'geçmişten gelen gizemli bir mesaj aldı' },
+            { id: 'o4', text: '🔮 Büyü Bozma', action: 'dünyayı yok edecek karanlık bir büyüyü keşfetti' },
+            { id: 'o5', text: '👻 Hayalet Görme', action: 'kendisine yardım isteyen bir ruhla karşılaştı' },
+            { id: 'o6', text: '🗝️ Portal Açma', action: 'başka bir boyuta açılan bir portal keşfetti' }
+        ]
+    };
+
+    // Hikaye şablonları - Her kombinasyon için özel hikaye
+    const storyTemplates = {
+        default: function(k, m, z, o) {
+            return `
+                <h2>📖 ${k.name} ve ${m.desc.split(' ').pop().charAt(0).toUpperCase() + m.desc.split(' ').pop().slice(1)}</h2>
+                
+                <p class="story-text">
+                    ${z.when.charAt(0).toUpperCase() + z.when.slice(1)}, ${m.desc}, ${k.name} adında ${k.text.split(' ')[1].toLowerCase()} ${o.action}. 
+                    Bu olay, onun hayatını sonsuza dek değiştirecek bir maceranın başlangıcıydı.
+                </p>
+
+                <p class="story-text">
+                    ${k.name}, yıllardır ${m.desc}'nde yaşıyordu. Sakin ve monoton günleri, o anki keşfiyle birlikte aniden sona erdi. 
+                    Elindeki gizemli işaret, onu daha önce hiç görmediği bir yolculuğa çağırıyordu. Korkuyla heyecan arasında gidip gelirken, 
+                    içindeki merak duygusu galip geldi ve yola koyuldu.
+                </p>
+
+                <p class="story-text">
+                    İlk engellerle karşılaştığında ${k.name}, vazgeçmeyi düşündü. Ama bir ses, bir iç his ona devam etmesi gerektiğini 
+                    fısıldıyordu. ${m.desc}'nın derinliklerinde, kayıp efsanelerin izlerini takip etti. Her adım, onu gerçeğe biraz 
+                    daha yaklaştırıyordu.
+                </p>
+
+                <p class="story-text">
+                    Günler geçtikçe ${k.name}, sadece bir hazine arayanmış gibi görünse de aslında bambaşka bir şey bulmuştu: cesaret. 
+                    Karşısına çıkan her zorluk, onu daha güçlü yapıyordu. Ve sonunda, ${m.desc}'nın kalbinde, herkesin aradığı ama 
+                    kimsenin bulamadığı o efsanevi yere ulaştı.
+                </p>
+
+                <p class="story-text">
+                    Karşısında duran kapıyı açtığında ${k.name}, gördükleriyle şaşkına döndü. İçeride sadece altınlar ve mücevherler 
+                    yoktu. Orada, tüm dünyayı değiştirebilecek bir güç ve bilgi saklıydı. Ama bu gücü kullanmak, büyük bir sorumluluk 
+                    gerektiriyordu.
+                </p>
+
+                <p class="story-text">
+                    ${k.name}, uzun bir düşüncenin ardından kararını verdi. Bu gücü kötüye kullanmak yerine, insanlara iyilik getirmek 
+                    için harcayacaktı. Ve böylece ${m.desc}, artık sadece kayıp bir efsane değil, umudun ve cesaretin simgesi haline geldi.
+                </p>
+
+                <p class="story-text">
+                    Yıllar sonra, ${k.name}'in hikâyesi nesiller boyu anlatıldı. İnsanlar ona "Efsane ${k.text.split(' ')[1]}" demeye 
+                    başladılar. Çünkü o, sıradan biri olmasına rağmen, olağanüstü bir şey başarmıştı: korkularını yenmişti.
+                </p>
+
+                <div class="story-meta">
+                    🎭 Kahraman: ${k.text} • 📍 Mekan: ${m.text} • ⏰ Zaman: ${z.text} • ⚡ Olay: ${o.text}
+                </div>
+            `;
+        }
+    };
+
+    // Çarkları oluştur
+    const container = document.getElementById('wheelsContainer');
+    Object.keys(wheelData).forEach(category => {
+        container.innerHTML += `
+            <div class="wheel-card">
+                <h3>${category}</h3>
+                <div class="wheel-display" id="display-${category}">?</div>
+                <button class="btn wheel-btn" onclick="spinWheel('${category}')">🎲 Çevir</button>
+            </div>
+        `;
+    });
+
+    // Çark çevirme fonksiyonu
+    function spinWheel(category) {
+        const display = document.getElementById(`display-${category}`);
+        display.classList.add('spinning');
+        
+        setTimeout(() => {
+            const items = wheelData[category];
+            const selected = items[Math.floor(Math.random() * items.length)];
+            display.textContent = selected.text;
+            display.dataset.id = selected.id;
+            display.dataset.full = JSON.stringify(selected);
+            display.classList.remove('spinning');
+            checkAllSpun();
+        }, 500);
+    }
+
+    // Tüm çarkları çevir
+    function spinAll() {
+        Object.keys(wheelData).forEach((category, index) => {
+            setTimeout(() => spinWheel(category), index * 200);
+        });
+    }
+
+    // Tüm çarklar çevrildi mi kontrol et
+    function checkAllSpun() {
+        const allDisplays = document.querySelectorAll('.wheel-display');
+        const allSpun = Array.from(allDisplays).every(d => d.dataset.id);
+        if (allSpun) {
+            document.getElementById('generateBtn').style.display = 'inline-block';
+        }
+    }
+
+    // Hikaye oluştur
+    function createStory() {
+        const k = JSON.parse(document.getElementById('display-Karakter').dataset.full);
+        const m = JSON.parse(document.getElementById('display-Mekan').dataset.full);
+        const z = JSON.parse(document.getElementById('display-Zaman').dataset.full);
+        const o = JSON.parse(document.getElementById('display-Olay').dataset.full);
+
+        const output = document.getElementById('storyOutput');
+        output.innerHTML = storyTemplates.default(k, m, z, o);
+        output.style.display = 'block';
+        
+        setTimeout(() => {
+            output.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+    }
+</script>
+
+<div style="text-align:center;padding:18px 10px;margin-top:28px;font-size:0.82rem;color:#8a8a8a;border-top:1px solid #e5e5e5;">Dijital Öğretmen Hasan Tutuş</div>
+<!-- Ziyaretçi sayacı: goatcounter.com'da ücretsiz hesap açtıktan sonra
+     aşağıdaki "dijitalogretmen" kısmını kendi GoatCounter kodunuzla değiştirin. -->
+<script data-goatcounter="https://dijitalogretmen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script src="indirme-sayaci.js" defer></script>
+</body>
+</html>

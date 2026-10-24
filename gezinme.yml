@@ -1,0 +1,65 @@
+name: Gezinme çubuğunu tüm sayfalara ekle
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gezinme-ekle
+  cancel-in-progress: false
+
+jobs:
+  ekle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: nav.js etiketini eksik HTML dosyalarına ekle
+        run: |
+          python3 - <<'PY'
+          import os, re
+
+          ETIKET = '<script src="/nav.js" defer></script>'
+          eklendi = []
+
+          for kok, klasorler, dosyalar in os.walk('.'):
+              klasorler[:] = [k for k in klasorler if k not in ('.git', '.github', 'node_modules')]
+              for ad in dosyalar:
+                  if not ad.lower().endswith(('.html', '.htm')):
+                      continue
+                  yol = os.path.join(kok, ad)
+                  try:
+                      with open(yol, encoding='utf-8') as f:
+                          icerik = f.read()
+                  except (UnicodeDecodeError, OSError):
+                      continue
+                  if 'nav.js' in icerik:
+                      continue
+                  if re.search(r'</body\s*>', icerik, re.I):
+                      yeni = re.sub(r'</body\s*>', ETIKET + '\n</body>', icerik, count=1, flags=re.I)
+                  else:
+                      yeni = icerik.rstrip() + '\n' + ETIKET + '\n'
+                  with open(yol, 'w', encoding='utf-8') as f:
+                      f.write(yeni)
+                  eklendi.append(yol)
+
+          print(f'Gezinme çubuğu eklenen dosya sayısı: {len(eklendi)}')
+          for y in eklendi:
+              print(' +', y)
+          PY
+
+      - name: Değişiklikleri kaydet
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "Gezinme çubuğu eklendi (otomatik)"
+            git push
+          else
+            echo "Değişiklik yok, her sayfada zaten var."
+          fi

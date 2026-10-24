@@ -1,0 +1,2077 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kesirler - Konu Anlatımı ve Sorular</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        /* SEKMELER */
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 4px solid #667eea;
+            overflow-x: auto;
+            flex-wrap: wrap;
+        }
+        
+        .tab-button {
+            flex: 1;
+            min-width: 160px;
+            padding: 20px 15px;
+            background: #e9ecef;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            color: #495057;
+            transition: all 0.3s ease;
+            border-right: 1px solid #dee2e6;
+            position: relative;
+        }
+        
+        .tab-button:hover {
+            background: #dee2e6;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        .tab-button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #ffc107;
+        }
+        
+        /* SEKME İÇERİKLERİ */
+        .tab-content {
+            display: none;
+            padding: 40px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* KONU ANLATIMI BÖLÜMÜ */
+        .topic-section {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border: 3px solid #2196f3;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .topic-title {
+            color: #1565c0;
+            font-size: 2em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .topic-title::before {
+            content: "📘";
+            margin-right: 15px;
+            font-size: 1.3em;
+        }
+        
+        .topic-content {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            line-height: 1.8;
+            font-size: 1.1em;
+            margin: 20px 0;
+        }
+        
+        .topic-content p {
+            margin: 15px 0;
+        }
+        
+        .topic-content ul, .topic-content ol {
+            margin: 15px 0 15px 30px;
+        }
+        
+        .topic-content li {
+            margin: 10px 0;
+        }
+        
+        /* ÖRNEK KUTUSU */
+        .example-box {
+            background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%);
+            border: 3px solid #fbc02d;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        
+        .example-box h3 {
+            color: #f57f17;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+        }
+        
+        .example-box h3::before {
+            content: "💡";
+            margin-right: 10px;
+        }
+        
+        .calculation {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 1.1em;
+            border-left: 5px solid #667eea;
+            line-height: 2;
+        }
+        
+        /* SORULAR BÖLÜMÜ */
+        .questions-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 3px dashed #667eea;
+        }
+        
+        .questions-title {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .questions-title::before {
+            content: "✏️";
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+        
+        .question {
+            background: #f8f9fa;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 12px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .question:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .question-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-bottom: 15px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .question p {
+            font-size: 1.15em;
+            line-height: 1.8;
+            margin: 15px 0;
+            color: #333;
+        }
+        
+        /* KESİR */
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 8px;
+            vertical-align: middle;
+        }
+        
+        .fraction-numerator {
+            border-bottom: 2px solid #333;
+            padding: 0 10px 3px 10px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .fraction-denominator {
+            padding: 3px 10px 0 10px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        /* GÖRSEL GRİD */
+        .visual-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin: 25px 0;
+        }
+        
+        .visual-item {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .visual-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .visual-item p {
+            margin-bottom: 15px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        /* ŞEKİLLER */
+        .circle-fraction {
+            width: 140px;
+            height: 140px;
+            border: 4px solid #333;
+            border-radius: 50%;
+            margin: 15px auto;
+            position: relative;
+            overflow: hidden;
+            background: white;
+        }
+        
+        .circle-half {
+            width: 50%;
+            height: 100%;
+            background: #667eea;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        
+        .circle-third {
+            width: 33.33%;
+            height: 100%;
+            background: #667eea;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        
+        .circle-quarter {
+            width: 50%;
+            height: 50%;
+            background: #667eea;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        
+        .rectangle-fraction {
+            height: 90px;
+            border: 4px solid #333;
+            margin: 15px auto;
+            display: flex;
+            max-width: 400px;
+        }
+        
+        .rect-part {
+            flex: 1;
+            border-right: 3px solid #333;
+        }
+        
+        .rect-part:last-child {
+            border-right: none;
+        }
+        
+        .filled {
+            background: #667eea;
+        }
+        
+        .empty {
+            background: white;
+        }
+        
+        /* SEÇENEKLER */
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .option {
+            padding: 20px;
+            background: white;
+            border: 3px solid #dee2e6;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .option:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+        
+        /* TABLO */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        th, td {
+            border: 2px solid #667eea;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        tr:hover {
+            background: #e9ecef;
+        }
+        
+        /* SAYI DOĞRUSU */
+        .number-line {
+            position: relative;
+            height: 100px;
+            margin: 40px 20px;
+        }
+        
+        .line {
+            position: absolute;
+            top: 50px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #333;
+        }
+        
+        .tick {
+            position: absolute;
+            top: 38px;
+            width: 3px;
+            height: 24px;
+            background: #333;
+        }
+        
+        .tick-label {
+            position: absolute;
+            top: 68px;
+            transform: translateX(-50%);
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .fraction-point {
+            position: absolute;
+            top: 42px;
+            width: 18px;
+            height: 18px;
+            background: #e74c3c;
+            border-radius: 50%;
+            transform: translateX(-9px);
+            border: 3px solid #c0392b;
+            box-shadow: 0 0 15px rgba(231, 76, 60, 0.6);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: translateX(-9px) scale(1);
+            }
+            50% {
+                transform: translateX(-9px) scale(1.2);
+            }
+        }
+        
+        .fraction-label {
+            position: absolute;
+            top: 18px;
+            transform: translateX(-50%);
+            font-weight: bold;
+            color: #e74c3c;
+            background: white;
+            padding: 5px 12px;
+            border-radius: 8px;
+            border: 2px solid #e74c3c;
+            font-size: 1.1em;
+        }
+        
+        /* ELMA GRİDİ */
+        .apple-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 45px);
+            gap: 10px;
+            margin: 25px auto;
+            width: fit-content;
+        }
+        
+        .apple {
+            width: 45px;
+            height: 45px;
+            font-size: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .apple.selected {
+            background: #ffffcc;
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.9);
+            transform: scale(1.1);
+        }
+        
+        .highlight {
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        
+        .important-note {
+            background: #ffebee;
+            border-left: 5px solid #f44336;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .important-note strong {
+            color: #c62828;
+        }
+        
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab-button {
+                min-width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #dee2e6;
+            }
+            
+            .tab-content {
+                padding: 20px;
+            }
+            
+            .visual-grid, .options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+<meta name="description" content="Kesirler - Konu Anlatımı ve Sorular - Dijital Öğretmen'den ücretsiz, MEB müfredatına (Maarif Modeli) uygun ilkokul eğitim materyali. Hasan Tutuş tarafından hazırlanmıştır.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:site_name" content="Dijital Öğretmen">
+<meta property="og:title" content="Kesirler - Konu Anlatımı ve Sorular">
+<meta property="og:description" content="Kesirler - Konu Anlatımı ve Sorular - Dijital Öğretmen'den ücretsiz, MEB müfredatına (Maarif Modeli) uygun ilkokul eğitim materyali. Hasan Tutuş tarafından hazırlanmıştır.">
+<meta property="og:url" content="https://oogretmen1-tech.github.io/kesirler_etkinlik.html">
+<meta property="og:image" content="https://oogretmen1-tech.github.io/logo.png">
+<meta name="twitter:card" content="summary">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 KESİRLER - KONU ANLATIMI VE SORULAR</h1>
+            <p>Her Konu: Anlatım + Örnekler + Sorular</p>
+        </div>
+        
+        <!-- SEKMELER -->
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab(event, 'tab1')">🔢 Birim Kesirler</button>
+            <button class="tab-button" onclick="openTab(event, 'tab2')">📖 Kesirlerin Okunuşu</button>
+            <button class="tab-button" onclick="openTab(event, 'tab3')">🧮 Birçokluğun Kesri</button>
+            <button class="tab-button" onclick="openTab(event, 'tab4')">📏 Sayı Doğrusu</button>
+            <button class="tab-button" onclick="openTab(event, 'tab5')">🔍 Pay ve Payda</button>
+            <button class="tab-button" onclick="openTab(event, 'tab6')">⚖️ Karşılaştırma</button>
+        </div>
+        
+        <!-- SEKME 1: BİRİM KESİRLER -->
+        <div id="tab1" class="tab-content active">
+            <div class="topic-section">
+                <h2 class="topic-title">Birim Kesirler</h2>
+                
+                <div class="topic-content">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">📌 Birim Kesir Nedir?</h3>
+                    <p><strong>Birim kesir:</strong> Payı 1 olan kesirlerdir. Bir bütünü eş parçalara böldüğümüzde, bir parçayı ifade eden kesirdir.</p>
+                    
+                    <h3 style="color: #667eea; margin: 25px 0 15px 0;">📝 Birim Kesir Örnekleri:</h3>
+                    <ul>
+                        <li><strong>1/2 (Yarım):</strong> Bir bütünün 2 eş parçasından 1 tanesi</li>
+                        <li><strong>1/3 (Üçte bir):</strong> Bir bütünün 3 eş parçasından 1 tanesi</li>
+                        <li><strong>1/4 (Dörtte bir - Çeyrek):</strong> Bir bütünün 4 eş parçasından 1 tanesi</li>
+                        <li><strong>1/5 (Beşte bir):</strong> Bir bütünün 5 eş parçasından 1 tanesi</li>
+                        <li><strong>1/6 (Altıda bir):</strong> Bir bütünün 6 eş parçasından 1 tanesi</li>
+                        <li><strong>1/8 (Sekizde bir):</strong> Bir bütünün 8 eş parçasından 1 tanesi</li>
+                        <li><strong>1/10 (Onda bir):</strong> Bir bütünün 10 eş parçasından 1 tanesi</li>
+                    </ul>
+                    
+                    <div class="important-note">
+                        <strong>⚠️ Önemli:</strong> Birim kesrin payı her zaman 1'dir. Payda ise bütünün kaç parçaya bölündüğünü gösterir.
+                    </div>
+                </div>
+                
+                <div class="example-box">
+                    <h3>Görsel Örnekler</h3>
+                    
+                    <div class="visual-grid">
+                        <div class="visual-item">
+                            <p><strong>1/2 (Yarım)</strong></p>
+                            <div class="rectangle-fraction" style="width: 180px;">
+                                <div class="rect-part filled"></div>
+                                <div class="rect-part empty"></div>
+                            </div>
+                            <p style="font-size: 0.95em; color: #666;">2 parçadan 1 tanesi</p>
+                        </div>
+                        
+                        <div class="visual-item">
+                            <p><strong>1/3 (Üçte bir)</strong></p>
+                            <div class="rectangle-fraction" style="width: 210px;">
+                                <div class="rect-part filled"></div>
+                                <div class="rect-part empty"></div>
+                                <div class="rect-part empty"></div>
+                            </div>
+                            <p style="font-size: 0.95em; color: #666;">3 parçadan 1 tanesi</p>
+                        </div>
+                        
+                        <div class="visual-item">
+                            <p><strong>1/4 (Çeyrek)</strong></p>
+                            <div class="rectangle-fraction" style="width: 240px;">
+                                <div class="rect-part filled"></div>
+                                <div class="rect-part empty"></div>
+                                <div class="rect-part empty"></div>
+                                <div class="rect-part empty"></div>
+                            </div>
+                            <p style="font-size: 0.95em; color: #666;">4 parçadan 1 tanesi</p>
+                        </div>
+                        
+                        <div class="visual-item">
+                            <p><strong>1/5 (Beşte bir)</strong></p>
+                            <div class="rectangle-fraction" style="width: 300px;">
+                                <div class="rect-part filled"></div>
+                                <div class="rect-part empty"></div>
+                                <div class="rect-part empty"></div>
+                                <div class="rect-part empty"></div>
+                                <div class="rect-part empty"></div>
+                            </div>
+                            <p style="font-size: 0.95em; color: #666;">5 parçadan 1 tanesi</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SORULAR -->
+            <div class="questions-section">
+                <h2 class="questions-title">Alıştırma Soruları</h2>
+                
+                <div class="question">
+                    <div class="question-number">Soru 1</div>
+                    <p>Aşağıdaki kesirlerden hangileri birim kesirdir?</p>
+                    <div class="options">
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">1</div>
+                                <div class="fraction-denominator">2</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">2</div>
+                                <div class="fraction-denominator">3</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">1</div>
+                                <div class="fraction-denominator">5</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">3</div>
+                                <div class="fraction-denominator">4</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 2</div>
+                    <p>Aşağıdaki görsellerden hangisi birim kesri göstermez?</p>
+                    <div class="visual-grid">
+                        <div class="visual-item">
+                            <p><strong>A)</strong> <span class="fraction"><span class="fraction-numerator">1</span><span class="fraction-denominator">2</span></span></p>
+                            <div class="rectangle-fraction" style="width: 180px;">
+                                <div class="rect-part filled"></div>
+                                <div class="rect-part empty"></div>
+                            </div>
+                        </div>
+                        <div class="visual-item">
+                            <p><strong>B)</strong> <span class="fraction"><span class="fraction-numerator">3</span><span class="fraction-denominator">4</span></span></p>
+                            <div class="rectangle-fraction" style="width: 240px;">
+                                <div class="rect-part filled"></div>
+                                <div class="rect-part filled"></div>
+                                <div class="rect-part filled"></div>
+                                <div class="rect-part empty"></div>
+                            </div>
+                        </div>
+                        <div class="visual-item">
+                            <p><strong>C)</strong> <span class="fraction"><span class="fraction-numerator">1</span><span class="fraction-denominator">4</span></span></p>
+                            <div class="rectangle-fraction" style="width: 240px;">
+                                <div class="rect-part filled"></div>
+                                <div class="rect-part empty"></div>
+                                <div class="rect-part empty"></div>
+                                <div class="rect-part empty"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 3</div>
+                    <p>Bir bütünün 6 eş parçasından her birini ifade eden kesir aşağıdakilerden hangisidir?</p>
+                    <div class="options">
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">1</div>
+                                <div class="fraction-denominator">6</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">6</div>
+                                <div class="fraction-denominator">1</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">1</div>
+                                <div class="fraction-denominator">5</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">6</div>
+                                <div class="fraction-denominator">6</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 4</div>
+                    <p>Aşağıdaki ifadelerden hangisi yanlıştır?</p>
+                    <div class="options">
+                        <div class="option">Birim kesirlerin payı 1'dir</div>
+                        <div class="option">1/8 bir birim kesirdir</div>
+                        <div class="option">Birim kesirlerin paydası 1'dir</div>
+                        <div class="option">1/10 bir birim kesirdir</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 5</div>
+                    <p>Bir çikolatayı 8 eş parçaya bölüp 1 parçasını aldık. Bu durumu ifade eden kesir hangisidir?</p>
+                    <div class="options">
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">1</div>
+                                <div class="fraction-denominator">8</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">8</div>
+                                <div class="fraction-denominator">1</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">7</div>
+                                <div class="fraction-denominator">8</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">8</div>
+                                <div class="fraction-denominator">8</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SEKME 2: KESİRLERİN OKUNUŞU -->
+        <div id="tab2" class="tab-content">
+            <div class="topic-section">
+                <h2 class="topic-title">Kesirlerin Okunuşu ve Yazılışı</h2>
+                
+                <div class="topic-content">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">📌 Kesir Nasıl Okunur?</h3>
+                    <p>Kesirler iki farklı şekilde okunabilir:</p>
+                    
+                    <ul>
+                        <li><strong>1. Yöntem:</strong> "Pay bölü Payda" şeklinde (Örnek: 3/4 → Üç bölü dört)</li>
+                        <li><strong>2. Yöntem:</strong> "Paydada Pay" şeklinde (Örnek: 3/4 → Dörtte üç)</li>
+                    </ul>
+                    
+                    <div class="important-note">
+                        <strong>⚠️ Hatırla:</strong> Kesirde üstteki sayıya PAY, alttaki sayıya PAYDA denir.
+                    </div>
+                    
+                    <h3 style="color: #667eea; margin: 25px 0 15px 0;">📝 Kesir Parçaları:</h3>
+                    <div style="text-align: center; font-size: 2.5em; margin: 30px 0;">
+                        <div class="fraction">
+                            <div class="fraction-numerator" style="color: #e74c3c;">3 ← Pay (üstteki sayı)</div>
+                            <div class="fraction-denominator" style="color: #3498db;">4 ← Payda (alttaki sayı)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="example-box">
+                    <h3>Kesir Okuma Örnekleri</h3>
+                    <table>
+                        <tr>
+                            <th>Kesir</th>
+                            <th>1. Okuma Yöntemi</th>
+                            <th>2. Okuma Yöntemi</th>
+                        </tr>
+                        <tr>
+                            <td><div class="fraction"><div class="fraction-numerator">2</div><div class="fraction-denominator">3</div></div></td>
+                            <td>İki bölü üç</td>
+                            <td>Üçte iki</td>
+                        </tr>
+                        <tr>
+                            <td><div class="fraction"><div class="fraction-numerator">4</div><div class="fraction-denominator">5</div></div></td>
+                            <td>Dört bölü beş</td>
+                            <td>Beşte dört</td>
+                        </tr>
+                        <tr>
+                            <td><div class="fraction"><div class="fraction-numerator">3</div><div class="fraction-denominator">8</div></div></td>
+                            <td>Üç bölü sekiz</td>
+                            <td>Sekizde üç</td>
+                        </tr>
+                        <tr>
+                            <td><div class="fraction"><div class="fraction-numerator">5</div><div class="fraction-denominator">6</div></div></td>
+                            <td>Beş bölü altı</td>
+                            <td>Altıda beş</td>
+                        </tr>
+                        <tr>
+                            <td><div class="fraction"><div class="fraction-numerator">7</div><div class="fraction-denominator">10</div></div></td>
+                            <td>Yedi bölü on</td>
+                            <td>Onda yedi</td>
+                        </tr>
+                        <tr>
+                            <td><div class="fraction"><div class="fraction-numerator">2</div><div class="fraction-denominator">9</div></div></td>
+                            <td>İki bölü dokuz</td>
+                            <td>Dokuzda iki</td>
+                        </tr>
+                        <tr>
+                            <td><div class="fraction"><div class="fraction-numerator">6</div><div class="fraction-denominator">7</div></div></td>
+                            <td>Altı bölü yedi</td>
+                            <td>Yedide altı</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- SORULAR -->
+            <div class="questions-section">
+                <h2 class="questions-title">Alıştırma Soruları</h2>
+                
+                <div class="question">
+                    <div class="question-number">Soru 1</div>
+                    <p>"Altı bölü yedi" kesri nasıl yazılır?</p>
+                    <div class="options">
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">6</div>
+                                <div class="fraction-denominator">7</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">7</div>
+                                <div class="fraction-denominator">6</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">6</div>
+                                <div class="fraction-denominator">6</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">7</div>
+                                <div class="fraction-denominator">7</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 2</div>
+                    <p>Aşağıdaki kesir nasıl okunur?</p>
+                    <div style="text-align: center; font-size: 3em; margin: 20px 0;">
+                        <div class="fraction">
+                            <div class="fraction-numerator">5</div>
+                            <div class="fraction-denominator">8</div>
+                        </div>
+                    </div>
+                    <div class="options">
+                        <div class="option">Beş bölü sekiz</div>
+                        <div class="option">Sekiz bölü beş</div>
+                        <div class="option">Beşte sekiz</div>
+                        <div class="option">Sekiz bölü üç</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 3</div>
+                    <p>"Dokuzda yedi" kesri hangisidir?</p>
+                    <div class="options">
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">7</div>
+                                <div class="fraction-denominator">9</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">9</div>
+                                <div class="fraction-denominator">7</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">2</div>
+                                <div class="fraction-denominator">9</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">9</div>
+                                <div class="fraction-denominator">2</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 4</div>
+                    <p>Hangi kesir "üç bölü on bir" şeklinde okunur?</p>
+                    <div class="options">
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">3</div>
+                                <div class="fraction-denominator">11</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">11</div>
+                                <div class="fraction-denominator">3</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">3</div>
+                                <div class="fraction-denominator">10</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">10</div>
+                                <div class="fraction-denominator">3</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 5</div>
+                    <p><span class="fraction"><span class="fraction-numerator">4</span><span class="fraction-denominator">12</span></span> kesri "onikide dört" şeklinde mi okunur?</p>
+                    <div class="options">
+                        <div class="option">Evet, doğru okunur</div>
+                        <div class="option">Hayır, "dört bölü oniki" okunur</div>
+                        <div class="option">Hayır, "dörtte oniki" okunur</div>
+                        <div class="option">A ve B doğru</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SEKME 3: BİRÇOKLUĞUN KESRİ -->
+        <div id="tab3" class="tab-content">
+            <div class="topic-section">
+                <h2 class="topic-title">Birçokluğun Kesrini Bulma</h2>
+                
+                <div class="topic-content">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">📌 Birçokluğun Kesri Nedir?</h3>
+                    <p>Bir grup nesneden, belirli bir kesir kadarını bulmaya <strong>"Birçokluğun kesrini bulma"</strong> denir.</p>
+                    
+                    <p><strong>Örnek:</strong> 24 elmanın 1/3'ü kaç tanedir? Bu soruyu çözmek için birçokluğun kesrini buluruz.</p>
+                    
+                    <h3 style="color: #667eea; margin: 25px 0 15px 0;">🔢 Nasıl Hesaplanır?</h3>
+                    <div class="important-note">
+                        <strong>📐 Formül:</strong><br>
+                        <strong>1. ADIM:</strong> Toplam miktarı PAYDAYA böl → Bir parçanın değerini bul<br>
+                        <strong>2. ADIM:</strong> Bulunan değeri PAY ile çarp
+                    </div>
+                    
+                    <p style="font-size: 1.2em; margin-top: 20px; text-align: center; background: #fff3cd; padding: 15px; border-radius: 10px;">
+                        <strong>Birçokluk ÷ Payda × Pay = Sonuç</strong>
+                    </p>
+                </div>
+                
+                <div class="example-box">
+                    <h3>Detaylı Örnekler</h3>
+                    
+                    <div class="calculation">
+                        <strong>Örnek 1:</strong> 24 elmanın <span class="fraction"><span class="fraction-numerator">1</span><span class="fraction-denominator">3</span></span>'ü kaç tanedir?
+                        <br><br>
+                        <span class="highlight">Çözüm:</span>
+                        <br>1. Adım: 24 ÷ 3 = 8 (Bir parça 8 elmadır)
+                        <br>2. Adım: 8 × 1 = <strong>8 elma</strong>
+                        <br><br>
+                        <div class="apple-grid">
+                            <div class="apple selected">🍎</div>
+                            <div class="apple selected">🍎</div>
+                            <div class="apple selected">🍎</div>
+                            <div class="apple selected">🍎</div>
+                            <div class="apple selected">🍎</div>
+                            <div class="apple selected">🍎</div>
+                            <div class="apple selected">🍎</div>
+                            <div class="apple selected">🍎</div>
+                            <div class="apple">🍎</div>
+                            <div class="apple">🍎</div>
+                            <div class="apple">🍎</div>
+                            <div class="apple">🍎</div>
+                            <div class="apple">🍎</div>
+                            <div class="apple">🍎</div>
+                            <div class="apple">🍎</div>
+                            <div class="apple">🍎</div>
+                            <div class="apple">🍎</div>
+                            <div class="apple">🍎</div>
+                            <div class="apple">🍎</div>
+                            <div class="apple">🍎</div>
+                            <div class="apple">🍎</div>
+                            <div class="apple">🍎</div>
+                            <div class="apple">🍎</div>
+                            <div class="apple">🍎</div>
+                        </div>
+                    </div>
+
+                    <div class="calculation">
+                        <strong>Örnek 2:</strong> 30 şekerin <span class="fraction"><span class="fraction-numerator">2</span><span class="fraction-denominator">5</span></span>'i kaç tanedir?
+                        <br><br>
+                        <span class="highlight">Çözüm:</span>
+                        <br>1. Adım: 30 ÷ 5 = 6 (Bir parça 6 şekerdir)
+                        <br>2. Adım: 6 × 2 = <strong>12 şeker</strong>
+                    </div>
+
+                    <div class="calculation">
+                        <strong>Örnek 3:</strong> 40 öğrencinin <span class="fraction"><span class="fraction-numerator">3</span><span class="fraction-denominator">8</span></span>'i kaç kişidir?
+                        <br><br>
+                        <span class="highlight">Çözüm:</span>
+                        <br>1. Adım: 40 ÷ 8 = 5 (Bir parça 5 öğrencidir)
+                        <br>2. Adım: 5 × 3 = <strong>15 öğrenci</strong>
+                    </div>
+
+                    <div class="calculation">
+                        <strong>Örnek 4:</strong> 50 liranın <span class="fraction"><span class="fraction-numerator">4</span><span class="fraction-denominator">10</span></span>'u kaç liradır?
+                        <br><br>
+                        <span class="highlight">Çözüm:</span>
+                        <br>1. Adım: 50 ÷ 10 = 5 (Bir parça 5 liradır)
+                        <br>2. Adım: 5 × 4 = <strong>20 lira</strong>
+                    </div>
+
+                    <div class="calculation">
+                        <strong>Örnek 5:</strong> 63 sayfalık kitabın <span class="fraction"><span class="fraction-numerator">2</span><span class="fraction-denominator">7</span></span>'si kaç sayfadır?
+                        <br><br>
+                        <span class="highlight">Çözüm:</span>
+                        <br>1. Adım: 63 ÷ 7 = 9 (Bir parça 9 sayfadır)
+                        <br>2. Adım: 9 × 2 = <strong>18 sayfa</strong>
+                    </div>
+
+                    <div class="calculation">
+                        <strong>Örnek 6:</strong> 72 kalemin <span class="fraction"><span class="fraction-numerator">5</span><span class="fraction-denominator">9</span></span>'u kaç tanedir?
+                        <br><br>
+                        <span class="highlight">Çözüm:</span>
+                        <br>1. Adım: 72 ÷ 9 = 8 (Bir parça 8 kalemdir)
+                        <br>2. Adım: 8 × 5 = <strong>40 kalem</strong>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SORULAR -->
+            <div class="questions-section">
+                <h2 class="questions-title">Alıştırma Soruları</h2>
+                
+                <div class="question">
+                    <div class="question-number">Soru 1</div>
+                    <p>48 çikolatanın <span class="fraction"><span class="fraction-numerator">1</span><span class="fraction-denominator">4</span></span>'ü kaç tanedir?</p>
+                    <div class="options">
+                        <div class="option">8 tane</div>
+                        <div class="option">12 tane</div>
+                        <div class="option">16 tane</div>
+                        <div class="option">24 tane</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 2</div>
+                    <p>60 sayfalık bir kitabın <span class="fraction"><span class="fraction-numerator">3</span><span class="fraction-denominator">5</span></span>'i kaç sayfadır?</p>
+                    <div class="calculation" style="margin: 15px 0;">
+                        <span class="highlight">İpucu:</span> Önce 60'ı 5'e böl, sonra sonucu 3 ile çarp!
+                    </div>
+                    <div class="options">
+                        <div class="option">24 sayfa</div>
+                        <div class="option">30 sayfa</div>
+                        <div class="option">36 sayfa</div>
+                        <div class="option">40 sayfa</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 3</div>
+                    <p>72 tane top var. Bunların <span class="fraction"><span class="fraction-numerator">5</span><span class="fraction-denominator">8</span></span>'i kırmızı, geri kalanı mavidir. Kaç tane mavi top vardır?</p>
+                    <div class="options">
+                        <div class="option">18 tane</div>
+                        <div class="option">27 tane</div>
+                        <div class="option">36 tane</div>
+                        <div class="option">45 tane</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 4</div>
+                    <p>Bir sınıfta 35 öğrenci vardır. Öğrencilerin <span class="fraction"><span class="fraction-numerator">2</span><span class="fraction-denominator">7</span></span>'si kız öğrencidir. Sınıfta kaç erkek öğrenci vardır?</p>
+                    <div class="options">
+                        <div class="option">10 erkek</div>
+                        <div class="option">15 erkek</div>
+                        <div class="option">20 erkek</div>
+                        <div class="option">25 erkek</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 5</div>
+                    <p>80 liralık bir oyuncağın fiyatına <span class="fraction"><span class="fraction-numerator">3</span><span class="fraction-denominator">10</span></span> oranında indirim yapılıyor. İndirim tutarı kaç liradır?</p>
+                    <div class="options">
+                        <div class="option">16 lira</div>
+                        <div class="option">20 lira</div>
+                        <div class="option">24 lira</div>
+                        <div class="option">30 lira</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 6</div>
+                    <p>54 kuruşun <span class="fraction"><span class="fraction-numerator">2</span><span class="fraction-denominator">9</span></span>'i kaç kuruştur?</p>
+                    <div class="options">
+                        <div class="option">6 kuruş</div>
+                        <div class="option">12 kuruş</div>
+                        <div class="option">18 kuruş</div>
+                        <div class="option">27 kuruş</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 7</div>
+                    <p>Ayşe'nin 45 kuruşu vardır. Bu paranın <span class="fraction"><span class="fraction-numerator">2</span><span class="fraction-denominator">9</span></span>'u ile kalem alıyor. Ayşe kalem için kaç kuruş ödemiştir?</p>
+                    <div class="options">
+                        <div class="option">5 kuruş</div>
+                        <div class="option">10 kuruş</div>
+                        <div class="option">15 kuruş</div>
+                        <div class="option">20 kuruş</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 8</div>
+                    <p>Bir bahçede 56 ağaç vardır. Ağaçların <span class="fraction"><span class="fraction-numerator">3</span><span class="fraction-denominator">7</span></span>'si elma ağacıdır. Bahçede kaç elma ağacı vardır?</p>
+                    <div class="options">
+                        <div class="option">16 ağaç</div>
+                        <div class="option">18 ağaç</div>
+                        <div class="option">21 ağaç</div>
+                        <div class="option">24 ağaç</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SEKME 4: SAYI DOĞRUSU -->
+        <div id="tab4" class="tab-content">
+            <div class="topic-section">
+                <h2 class="topic-title">Sayı Doğrusunda Kesirler</h2>
+                
+                <div class="topic-content">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">📌 Sayı Doğrusu Nedir?</h3>
+                    <p>Sayı doğrusu, sayıları sıralı bir şekilde gösteren bir doğrudur. Kesirler de sayı doğrusu üzerinde gösterilebilir.</p>
+                    
+                    <h3 style="color: #667eea; margin: 25px 0 15px 0;">📏 Kesirler Sayı Doğrusunda Nasıl Gösterilir?</h3>
+                    <ul>
+                        <li><strong>0 ile 1 arasını</strong> paydaya göre eş parçalara böleriz</li>
+                        <li>Her bir parça, o kesirin birim kesrini gösterir</li>
+                        <li>Pay kadar ilerlediğimizde kesri buluruz</li>
+                    </ul>
+                    
+                    <div class="important-note">
+                        <strong>⚠️ Önemli:</strong> Payda kaç ise, 0 ile 1 arasını o kadar eş parçaya böleriz.
+                    </div>
+                </div>
+                
+                <div class="example-box">
+                    <h3>Örnek 1: Dörtte Parçalar (1/4, 2/4, 3/4)</h3>
+                    <p>0 ile 1 arasını 4 eş parçaya böldük:</p>
+                    <div class="number-line">
+                        <div class="line"></div>
+                        <div class="tick" style="left: 0%;"></div>
+                        <div class="tick-label" style="left: 0%;">0</div>
+                        
+                        <div class="tick" style="left: 25%;"></div>
+                        <div class="tick-label" style="left: 25%;">
+                            <div class="fraction">
+                                <div class="fraction-numerator">1</div>
+                                <div class="fraction-denominator">4</div>
+                            </div>
+                        </div>
+                        
+                        <div class="tick" style="left: 50%;"></div>
+                        <div class="tick-label" style="left: 50%;">
+                            <div class="fraction">
+                                <div class="fraction-numerator">2</div>
+                                <div class="fraction-denominator">4</div>
+                            </div>
+                        </div>
+                        
+                        <div class="tick" style="left: 75%;"></div>
+                        <div class="tick-label" style="left: 75%;">
+                            <div class="fraction">
+                                <div class="fraction-numerator">3</div>
+                                <div class="fraction-denominator">4</div>
+                            </div>
+                        </div>
+                        
+                        <div class="tick" style="left: 100%;"></div>
+                        <div class="tick-label" style="left: 100%;">1</div>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>Örnek 2: Beşte Parçalar (1/5, 2/5, 3/5, 4/5)</h3>
+                    <p>0 ile 1 arasını 5 eş parçaya böldük:</p>
+                    <div class="number-line">
+                        <div class="line"></div>
+                        <div class="tick" style="left: 0%;"></div>
+                        <div class="tick-label" style="left: 0%;">0</div>
+                        
+                        <div class="tick" style="left: 20%;"></div>
+                        <div class="tick-label" style="left: 20%;">
+                            <div class="fraction">
+                                <div class="fraction-numerator">1</div>
+                                <div class="fraction-denominator">5</div>
+                            </div>
+                        </div>
+                        
+                        <div class="tick" style="left: 40%;"></div>
+                        <div class="tick-label" style="left: 40%;">
+                            <div class="fraction">
+                                <div class="fraction-numerator">2</div>
+                                <div class="fraction-denominator">5</div>
+                            </div>
+                        </div>
+                        
+                        <div class="tick" style="left: 60%;"></div>
+                        <div class="tick-label" style="left: 60%;">
+                            <div class="fraction">
+                                <div class="fraction-numerator">3</div>
+                                <div class="fraction-denominator">5</div>
+                            </div>
+                        </div>
+                        
+                        <div class="tick" style="left: 80%;"></div>
+                        <div class="tick-label" style="left: 80%;">
+                            <div class="fraction">
+                                <div class="fraction-numerator">4</div>
+                                <div class="fraction-denominator">5</div>
+                            </div>
+                        </div>
+                        
+                        <div class="tick" style="left: 100%;"></div>
+                        <div class="tick-label" style="left: 100%;">1</div>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>Örnek 3: Üçte Parçalar (1/3, 2/3)</h3>
+                    <p>0 ile 1 arasını 3 eş parçaya böldük:</p>
+                    <div class="number-line">
+                        <div class="line"></div>
+                        <div class="tick" style="left: 0%;"></div>
+                        <div class="tick-label" style="left: 0%;">0</div>
+                        
+                        <div class="tick" style="left: 33.33%;"></div>
+                        <div class="tick-label" style="left: 33.33%;">
+                            <div class="fraction">
+                                <div class="fraction-numerator">1</div>
+                                <div class="fraction-denominator">3</div>
+                            </div>
+                        </div>
+                        
+                        <div class="tick" style="left: 66.66%;"></div>
+                        <div class="tick-label" style="left: 66.66%;">
+                            <div class="fraction">
+                                <div class="fraction-numerator">2</div>
+                                <div class="fraction-denominator">3</div>
+                            </div>
+                        </div>
+                        
+                        <div class="tick" style="left: 100%;"></div>
+                        <div class="tick-label" style="left: 100%;">1</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SORULAR -->
+            <div class="questions-section">
+                <h2 class="questions-title">Alıştırma Soruları</h2>
+                
+                <div class="question">
+                    <div class="question-number">Soru 1</div>
+                    <p>Aşağıdaki sayı doğrusunda kırmızı nokta hangi kesri göstermektedir?</p>
+                    <div class="number-line">
+                        <div class="line"></div>
+                        <div class="tick" style="left: 0%;"></div>
+                        <div class="tick-label" style="left: 0%;">0</div>
+                        
+                        <div class="tick" style="left: 33.33%;"></div>
+                        <div class="tick-label" style="left: 33.33%;">
+                            <div class="fraction">
+                                <div
+                                <div class="fraction-numerator">1</div>
+                                <div class="fraction-denominator">3</div>
+                            </div>
+                        </div>
+                        
+                        <div class="tick" style="left: 66.66%;"></div>
+                        <div class="tick-label" style="left: 66.66%;">
+                            <div class="fraction">
+                                <div class="fraction-numerator">2</div>
+                                <div class="fraction-denominator">3</div>
+                            </div>
+                        </div>
+                        
+                        <div class="fraction-point" style="left: 66.66%;"></div>
+                        <div class="fraction-label" style="left: 66.66%;">?</div>
+                        
+                        <div class="tick" style="left: 100%;"></div>
+                        <div class="tick-label" style="left: 100%;">1</div>
+                    </div>
+                    <div class="options">
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">1</div>
+                                <div class="fraction-denominator">3</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">2</div>
+                                <div class="fraction-denominator">3</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">1</div>
+                                <div class="fraction-denominator">2</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">3</div>
+                                <div class="fraction-denominator">3</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 2</div>
+                    <p>Aşağıdaki sayı doğrusunda <span class="fraction"><span class="fraction-numerator">3</span><span class="fraction-denominator">8</span></span> kesri hangi noktada olmalıdır?</p>
+                    <div class="number-line">
+                        <div class="line"></div>
+                        <div class="tick" style="left: 0%;"></div>
+                        <div class="tick-label" style="left: 0%;">0</div>
+                        
+                        <div class="tick" style="left: 12.5%;"></div>
+                        <div class="tick-label" style="left: 12.5%;">A</div>
+                        
+                        <div class="tick" style="left: 25%;"></div>
+                        <div class="tick-label" style="left: 25%;">B</div>
+                        
+                        <div class="tick" style="left: 37.5%;"></div>
+                        <div class="tick-label" style="left: 37.5%;">C</div>
+                        
+                        <div class="tick" style="left: 50%;"></div>
+                        <div class="tick-label" style="left: 50%;">D</div>
+                        
+                        <div class="tick" style="left: 100%;"></div>
+                        <div class="tick-label" style="left: 100%;">1</div>
+                    </div>
+                    <div class="options">
+                        <div class="option">A noktası</div>
+                        <div class="option">B noktası</div>
+                        <div class="option">C noktası</div>
+                        <div class="option">D noktası</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 3</div>
+                    <p>Sayı doğrusunda 0 ile <span class="fraction"><span class="fraction-numerator">1</span><span class="fraction-denominator">2</span></span> arasında kaç tane <span class="fraction"><span class="fraction-numerator">1</span><span class="fraction-denominator">6</span></span> kesri vardır?</p>
+                    <div class="options">
+                        <div class="option">1 tane</div>
+                        <div class="option">2 tane</div>
+                        <div class="option">3 tane</div>
+                        <div class="option">4 tane</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 4</div>
+                    <p>0 ile 1 arasını 10 eş parçaya böldüğümüzde <span class="fraction"><span class="fraction-numerator">7</span><span class="fraction-denominator">10</span></span> kesri hangi sırada yer alır?</p>
+                    <div class="options">
+                        <div class="option">5. sırada</div>
+                        <div class="option">6. sırada</div>
+                        <div class="option">7. sırada</div>
+                        <div class="option">8. sırada</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 5</div>
+                    <p>Sayı doğrusunda <span class="fraction"><span class="fraction-numerator">2</span><span class="fraction-denominator">5</span></span> ile <span class="fraction"><span class="fraction-numerator">4</span><span class="fraction-denominator">5</span></span> arasında kaç tane beşte kesir vardır?</p>
+                    <div class="options">
+                        <div class="option">1 tane</div>
+                        <div class="option">2 tane</div>
+                        <div class="option">3 tane</div>
+                        <div class="option">4 tane</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SEKME 5: PAY VE PAYDA -->
+        <div id="tab5" class="tab-content">
+            <div class="topic-section">
+                <h2 class="topic-title">Pay ve Payda Kavramları</h2>
+                
+                <div class="topic-content">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">📌 Pay ve Payda Nedir?</h3>
+                    <p>Kesir iki kısımdan oluşur:</p>
+                    
+                    <div style="text-align: center; font-size: 3em; margin: 30px 0;">
+                        <div class="fraction">
+                            <div class="fraction-numerator" style="color: #e74c3c;">3 ← PAY</div>
+                            <div class="fraction-denominator" style="color: #3498db;">5 ← PAYDA</div>
+                        </div>
+                    </div>
+                    
+                    <h3 style="color: #e74c3c; margin: 25px 0 15px 0;">🔺 PAY (Üstteki Sayı)</h3>
+                    <ul>
+                        <li>Bütünden <strong>alınan parça sayısını</strong> gösterir</li>
+                        <li>Kesrin <strong>üst kısmında</strong> yer alır</li>
+                        <li>Kaç parça aldığımızı belirtir</li>
+                    </ul>
+                    
+                    <h3 style="color: #3498db; margin: 25px 0 15px 0;">🔻 PAYDA (Alttaki Sayı)</h3>
+                    <ul>
+                        <li>Bütünün <strong>kaç eş parçaya bölündüğünü</strong> gösterir</li>
+                        <li>Kesrin <strong>alt kısmında</strong> yer alır</li>
+                        <li>Toplam parça sayısını belirtir</li>
+                    </ul>
+                    
+                    <div class="important-note">
+                        <strong>⚠️ Unutma:</strong><br>
+                        ✓ PAY = Alınan parça sayısı (ÜST)<br>
+                        ✓ PAYDA = Toplam parça sayısı (ALT)<br>
+                        ✓ PAYDA asla sıfır olamaz!
+                    </div>
+                </div>
+                
+                <div class="example-box">
+                    <h3>Görsel Örnekler</h3>
+                    
+                    <div class="visual-grid">
+                        <div class="visual-item">
+                            <p style="font-size: 2em; margin-bottom: 20px;">
+                                <div class="fraction">
+                                    <div class="fraction-numerator" style="color: #e74c3c;">2</div>
+                                    <div class="fraction-denominator" style="color: #3498db;">5</div>
+                                </div>
+                            </p>
+                            <div class="rectangle-fraction" style="width: 300px;">
+                                <div class="rect-part filled"></div>
+                                <div class="rect-part filled"></div>
+                                <div class="rect-part empty"></div>
+                                <div class="rect-part empty"></div>
+                                <div class="rect-part empty"></div>
+                            </div>
+                            <p style="color: #e74c3c; margin-top: 15px;"><strong>Pay = 2</strong> (Boyalı parça)</p>
+                            <p style="color: #3498db;"><strong>Payda = 5</strong> (Toplam parça)</p>
+                        </div>
+                        
+                        <div class="visual-item">
+                            <p style="font-size: 2em; margin-bottom: 20px;">
+                                <div class="fraction">
+                                    <div class="fraction-numerator" style="color: #e74c3c;">3</div>
+                                    <div class="fraction-denominator" style="color: #3498db;">4</div>
+                                </div>
+                            </p>
+                            <div class="rectangle-fraction" style="width: 240px;">
+                                <div class="rect-part filled"></div>
+                                <div class="rect-part filled"></div>
+                                <div class="rect-part filled"></div>
+                                <div class="rect-part empty"></div>
+                            </div>
+                            <p style="color: #e74c3c; margin-top: 15px;"><strong>Pay = 3</strong> (Boyalı parça)</p>
+                            <p style="color: #3498db;"><strong>Payda = 4</strong> (Toplam parça)</p>
+                        </div>
+                        
+                        <div class="visual-item">
+                            <p style="font-size: 2em; margin-bottom: 20px;">
+                                <div class="fraction">
+                                    <div class="fraction-numerator" style="color: #e74c3c;">5</div>
+                                    <div class="fraction-denominator" style="color: #3498db;">6</div>
+                                </div>
+                            </p>
+                            <div class="rectangle-fraction" style="width: 360px;">
+                                <div class="rect-part filled"></div>
+                                <div class="rect-part filled"></div>
+                                <div class="rect-part filled"></div>
+                                <div class="rect-part filled"></div>
+                                <div class="rect-part filled"></div>
+                                <div class="rect-part empty"></div>
+                            </div>
+                            <p style="color: #e74c3c; margin-top: 15px;"><strong>Pay = 5</strong> (Boyalı parça)</p>
+                            <p style="color: #3498db;"><strong>Payda = 6</strong> (Toplam parça)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>Örneklerle Pekiştirme</h3>
+                    
+                    <table>
+                        <tr>
+                            <th>Kesir</th>
+                            <th>Pay</th>
+                            <th>Payda</th>
+                            <th>Anlamı</th>
+                        </tr>
+                        <tr>
+                            <td><div class="fraction"><div class="fraction-numerator">7</div><div class="fraction-denominator">9</div></div></td>
+                            <td style="color: #e74c3c; font-weight: bold;">7</td>
+                            <td style="color: #3498db; font-weight: bold;">9</td>
+                            <td>9 parçadan 7'si alındı</td>
+                        </tr>
+                        <tr>
+                            <td><div class="fraction"><div class="fraction-numerator">4</div><div class="fraction-denominator">11</div></div></td>
+                            <td style="color: #e74c3c; font-weight: bold;">4</td>
+                            <td style="color: #3498db; font-weight: bold;">11</td>
+                            <td>11 parçadan 4'ü alındı</td>
+                        </tr>
+                        <tr>
+                            <td><div class="fraction"><div class="fraction-numerator">2</div><div class="fraction-denominator">3</div></div></td>
+                            <td style="color: #e74c3c; font-weight: bold;">2</td>
+                            <td style="color: #3498db; font-weight: bold;">3</td>
+                            <td>3 parçadan 2'si alındı</td>
+                        </tr>
+                        <tr>
+                            <td><div class="fraction"><div class="fraction-numerator">8</div><div class="fraction-denominator">10</div></div></td>
+                            <td style="color: #e74c3c; font-weight: bold;">8</td>
+                            <td style="color: #3498db; font-weight: bold;">10</td>
+                            <td>10 parçadan 8'i alındı</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- SORULAR -->
+            <div class="questions-section">
+                <h2 class="questions-title">Alıştırma Soruları</h2>
+                
+                <div class="question">
+                    <div class="question-number">Soru 1</div>
+                    <p><span class="fraction"><span class="fraction-numerator">7</span><span class="fraction-denominator">9</span></span> kesrinin payı kaçtır?</p>
+                    <div class="options">
+                        <div class="option">7</div>
+                        <div class="option">9</div>
+                        <div class="option">2</div>
+                        <div class="option">16</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 2</div>
+                    <p>Payı 4, paydası 11 olan kesir hangisidir?</p>
+                    <div class="options">
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">11</div>
+                                <div class="fraction-denominator">4</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">4</div>
+                                <div class="fraction-denominator">11</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">4</div>
+                                <div class="fraction-denominator">4</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">11</div>
+                                <div class="fraction-denominator">11</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 3</div>
+                    <p>Aşağıdaki kesrin paydası kaçtır?</p>
+                    <div style="text-align: center; font-size: 3em; margin: 20px 0;">
+                        <div class="fraction">
+                            <div class="fraction-numerator">5</div>
+                            <div class="fraction-denominator">12</div>
+                        </div>
+                    </div>
+                    <div class="options">
+                        <div class="option">5</div>
+                        <div class="option">12</div>
+                        <div class="option">7</div>
+                        <div class="option">17</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 4</div>
+                    <p>Paydası 8, payı 3 olan kesir gösteriminde kaç parça boyalı olmalıdır?</p>
+                    <div class="options">
+                        <div class="option">3 parça</div>
+                        <div class="option">5 parça</div>
+                        <div class="option">8 parça</div>
+                        <div class="option">11 parça</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 5</div>
+                    <p>Bir bütün 15 eş parçaya bölünmüş ve 7 parçası alınmıştır. Bu durumu gösteren kesrin payı ve paydası toplamı kaçtır?</p>
+                    <div class="options">
+                        <div class="option">8</div>
+                        <div class="option">15</div>
+                        <div class="option">22</div>
+                        <div class="option">105</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 6</div>
+                    <p>Aşağıdaki ifadelerden hangisi yanlıştır?</p>
+                    <div class="options">
+                        <div class="option">Pay üstte, payda altta yer alır</div>
+                        <div class="option">Payda sıfır olamaz</div>
+                        <div class="option">Pay, alınan parçayı gösterir</div>
+                        <div class="option">Payda her zaman paydan küçüktür</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SEKME 6: KARŞILAŞTıRMA -->
+        <div id="tab6" class="tab-content">
+            <div class="topic-section">
+                <h2 class="topic-title">Kesirleri Karşılaştırma</h2>
+                
+                <div class="topic-content">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">📌 Kesirler Nasıl Karşılaştırılır?</h3>
+                    <p>İki kesrin hangisinin daha büyük veya küçük olduğunu bulmak için farklı yöntemler kullanırız.</p>
+                    
+                    <h3 style="color: #667eea; margin: 25px 0 15px 0;">📝 Karşılaştırma Kuralları:</h3>
+                    
+                    <div class="calculation">
+                        <strong style="color: #e74c3c;">1. KURAL: Paydalar Eşitse</strong>
+                        <br><br>
+                        Paydaları eşit olan kesirlerde <span class="highlight">PAYI BÜYÜK OLAN KESİR DAHA BÜYÜKTÜR</span>
+                        <br><br>
+                        <strong>Örnek:</strong> 
+                        <span style="font-size: 1.3em;">
+                            <span class="fraction"><span class="fraction-numerator">5</span><span class="fraction-denominator">8</span></span>
+                            ve
+                            <span class="fraction"><span class="fraction-numerator">3</span><span class="fraction-denominator">8</span></span>
+                        </span>
+                        <br><br>
+                        Paydalar eşit (8 = 8), paylar: 5 > 3
+                        <br>
+                        <strong>Sonuç:</strong> <span class="highlight">5/8 > 3/8</span>
+                    </div>
+
+                    <div class="calculation">
+                        <strong style="color: #e74c3c;">2. KURAL: Paylar Eşitse</strong>
+                        <br><br>
+                        Payları eşit olan kesirlerde <span class="highlight">PAYDASI KÜÇÜK OLAN KESİR DAHA BÜYÜKTÜR</span>
+                        <br><br>
+                        <strong>Örnek:</strong> 
+                        <span style="font-size: 1.3em;">
+                            <span class="fraction"><span class="fraction-numerator">3</span><span class="fraction-denominator">4</span></span>
+                            ve
+                            <span class="fraction"><span class="fraction-numerator">3</span><span class="fraction-denominator">7</span></span>
+                        </span>
+                        <br><br>
+                        Paylar eşit (3 = 3), paydalar: 4 < 7
+                        <br>
+                        <strong>Sonuç:</strong> <span class="highlight">3/4 > 3/7</span>
+                        <br><br>
+                        <em style="color: #666;">Çünkü: 4 parça, 7 parçadan daha büyüktür. Aynı miktarı daha az parçaya böldüğümüzde her parça daha büyük olur.</em>
+                    </div>
+
+                    <div class="calculation">
+                        <strong style="color: #e74c3c;">3. KURAL: Birim Kesirler</strong>
+                        <br><br>
+                        Birim kesirlerde <span class="highlight">PAYDASI KÜÇÜK OLAN DAHA BÜYÜKTÜR</span>
+                        <br><br>
+                        <strong>Örnek:</strong> 
+                        <span style="font-size: 1.3em;">
+                            <span class="fraction"><span class="fraction-numerator">1</span><span class="fraction-denominator">3</span></span>
+                            ve
+                            <span class="fraction"><span class="fraction-numerator">1</span><span class="fraction-denominator">5</span></span>
+                        </span>
+                        <br><br>
+                        Paydalar: 3 < 5
+                        <br>
+                        <strong>Sonuç:</strong> <span class="highlight">1/3 > 1/5</span>
+                    </div>
+                    
+                    <div class="important-note">
+                        <strong>⚠️ Önemli Hatırlatma:</strong><br>
+                        ✓ Paydalar eşit → Payı büyük olan büyük<br>
+                        ✓ Paylar eşit → Paydası küçük olan büyük<br>
+                        ✓ Birim kesirlerde → Paydası küçük olan büyük
+                    </div>
+                </div>
+                
+                <div class="example-box">
+                    <h3>Görsel Karşılaştırma Örnekleri</h3>
+                    
+                    <div class="calculation">
+                        <strong>Örnek 1: Paydalar Eşit</strong>
+                        <br>
+                        <span style="font-size: 1.5em;">
+                            <span class="fraction"><span class="fraction-numerator">2</span><span class="fraction-denominator">5</span></span>
+                            ......
+                            <span class="fraction"><span class="fraction-numerator">4</span><span class="fraction-denominator">5</span></span>
+                        </span>
+                        
+                        <div class="visual-grid" style="grid-template-columns: 1fr 1fr;">
+                            <div class="visual-item">
+                                <p style="font-size: 1.3em;"><strong>2/5</strong></p>
+                                <div class="rectangle-fraction" style="width: 300px;">
+                                    <div class="rect-part filled"></div>
+                                    <div class="rect-part filled"></div>
+                                    <div class="rect-part empty"></div>
+                                    <div class="rect-part empty"></div>
+                                    <div class="rect-part empty"></div>
+                                </div>
+                            </div>
+                            <div class="visual-item">
+                                <p style="font-size: 1.3em;"><strong>4/5</strong></p>
+                                <div class="rectangle-fraction" style="width: 300px;">
+                                    <div class="rect-part filled"></div>
+                                    <div class="rect-part filled"></div>
+                                    <div class="rect-part filled"></div>
+                                    <div class="rect-part filled"></div>
+                                    <div class="rect-part empty"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <p style="text-align: center; font-size: 1.3em; margin-top: 20px;">
+                            <span class="highlight">2/5 < 4/5</span>
+                        </p>
+                    </div>
+
+                    <div class="calculation">
+                        <strong>Örnek 2: Paylar Eşit</strong>
+                        <br>
+                        <span style="font-size: 1.5em;">
+                            <span class="fraction"><span class="fraction-numerator">2</span><span class="fraction-denominator">3</span></span>
+                            ......
+                            <span class="fraction"><span class="fraction-numerator">2</span><span class="fraction-denominator">5</span></span>
+                        </span>
+                        
+                        <div class="visual-grid" style="grid-template-columns: 1fr 1fr;">
+                            <div class="visual-item">
+                                <p style="font-size: 1.3em;"><strong>2/3</strong></p>
+                                <div class="rectangle-fraction" style="width: 210px;">
+                                    <div class="rect-part filled"></div>
+                                    <div class="rect-part filled"></div>
+                                    <div class="rect-part empty"></div>
+                                </div>
+                                <p style="color: #666; margin-top: 10px;">3 parçadan 2'si</p>
+                            </div>
+                            <div class="visual-item">
+                                <p style="font-size: 1.3em;"><strong>2/5</strong></p>
+                                <div class="rectangle-fraction" style="width: 300px;">
+                                    <div class="rect-part filled"></div>
+                                    <div class="rect-part filled"></div>
+                                    <div class="rect-part empty"></div>
+                                    <div class="rect-part empty"></div>
+                                    <div class="rect-part empty"></div>
+                                </div>
+                                <p style="color: #666; margin-top: 10px;">5 parçadan 2'si</p>
+                            </div>
+                        </div>
+                        <p style="text-align: center; font-size: 1.3em; margin-top: 20px;">
+                            <span class="highlight">2/3 > 2/5</span> (Çünkü 3 < 5)
+                        </p>
+                    </div>
+
+                    <div class="calculation">
+                        <strong>Örnek 3: Birim Kesirler</strong>
+                        <br>
+                        <span style="font-size: 1.5em;">
+                            <span class="fraction"><span class="fraction-numerator">1</span><span class="fraction-denominator">2</span></span>
+                            ......
+                            <span class="fraction"><span class="fraction-numerator">1</span><span class="fraction-denominator">4</span></span>
+                        </span>
+                        
+                        <div class="visual-grid" style="grid-template-columns: 1fr 1fr;">
+                            <div class="visual-item">
+                                <p style="font-size: 1.3em;"><strong>1/2 (Yarım)</strong></p>
+                                <div class="rectangle-fraction" style="width: 180px;">
+                                    <div class="rect-part filled"></div>
+                                    <div class="rect-part empty"></div>
+                                </div>
+                            </div>
+                            <div class="visual-item">
+                                <p style="font-size: 1.3em;"><strong>1/4 (Çeyrek)</strong></p>
+                                <div class="rectangle-fraction" style="width: 240px;">
+                                    <div class="rect-part filled"></div>
+                                    <div class="rect-part empty"></div>
+                                    <div class="rect-part empty"></div>
+                                    <div class="rect-part empty"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <p style="text-align: center; font-size: 1.3em; margin-top: 20px;">
+                            <span class="highlight">1/2 > 1/4</span> (Çünkü 2 < 4)
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SORULAR -->
+            <div class="questions-section">
+                <h2 class="questions-title">Alıştırma Soruları</h2>
+                
+                <div class="question">
+                    <div class="question-number">Soru 1</div>
+                    <p>Aşağıdaki kesirlerden hangisi en büyüktür?</p>
+                    <div class="options">
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">3</div>
+                                <div class="fraction-denominator">7</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">5</div>
+                                <div class="fraction-denominator">7</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">2</div>
+                                <div class="fraction-denominator">7</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">1</div>
+                                <div class="fraction-denominator">7</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 2</div>
+                    <p>
+                        <span style="font-size: 1.5em;">
+                            <span class="fraction"><span class="fraction-numerator">4</span><span class="fraction-denominator">5</span></span>
+                            ......
+                            <span class="fraction"><span class="fraction-numerator">4</span><span class="fraction-denominator">9</span></span>
+                        </span>
+                        <br><br>
+                        Yukarıdaki karşılaştırmada noktalı yere hangi işaret gelmelidir?
+                    </p>
+                    <div class="options">
+                        <div class="option">&gt; (büyüktür)</div>
+                        <div class="option">&lt; (küçüktür)</div>
+                        <div class="option">= (eşittir)</div>
+                        <div class="option">Karşılaştırılamaz</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 3</div>
+                    <p>Aşağıdaki birim kesirlerden hangisi en küçüktür?</p>
+                    <div class="options">
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">1</div>
+                                <div class="fraction-denominator">3</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">1</div>
+                                <div class="fraction-denominator">5</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">1</div>
+                                <div class="fraction-denominator">8</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">1</div>
+                                <div class="fraction-denominator">2</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 4</div>
+                    <p>
+                        <span style="font-size: 1.5em;">
+                            <span class="fraction"><span class="fraction-numerator">7</span><span class="fraction-denominator">10</span></span>
+                            ......
+                            <span class="fraction"><span class="fraction-numerator">3</span><span class="fraction-denominator">10</span></span>
+                        </span>
+                        <br><br>
+                        Yukarıdaki karşılaştırmayı tamamlayınız.
+                    </p>
+                    <div class="options">
+                        <div class="option">7/10 &gt; 3/10</div>
+                        <div class="option">7/10 &lt; 3/10</div>
+                        <div class="option">7/10 = 3/10</div>
+                        <div class="option">Karşılaştırılamaz</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 5</div>
+                    <p>Aşağıdaki kesirlerden hangisi <span class="fraction"><span class="fraction-numerator">1</span><span class="fraction-denominator">2</span></span> kesrinden büyüktür?</p>
+                    <div class="options">
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">1</div>
+                                <div class="fraction-denominator">4</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">1</div>
+                                <div class="fraction-denominator">3</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">1</div>
+                                <div class="fraction-denominator">5</div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="fraction">
+                                <div class="fraction-numerator">1</div>
+                                <div class="fraction-denominator">8</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 6</div>
+                    <p>Küçükten büyüğe doğru sıralama hangisinde doğru yapılmıştır?</p>
+                    <div class="options">
+                        <div class="option">2/9 &lt; 5/9 &lt; 7/9</div>
+                        <div class="option">7/9 &lt; 5/9 &lt; 2/9</div>
+                        <div class="option">5/9 &lt; 2/9 &lt; 7/9</div>
+                        <div class="option">2/9 &lt; 7/9 &lt; 5/9</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 7</div>
+                    <p>
+                        <span style="font-size: 1.5em;">
+                            <span class="fraction"><span class="fraction-numerator">3</span><span class="fraction-denominator">6</span></span>
+                            ......
+                            <span class="fraction"><span class="fraction-numerator">3</span><span class="fraction-denominator">4</span></span>
+                        </span>
+                        <br><br>
+                        Yukarıdaki karşılaştırmada noktalı yere hangi işaret gelir?
+                    </p>
+                    <div class="options">
+                        <div class="option">&gt; (büyüktür)</div>
+                        <div class="option">&lt; (küçüktür)</div>
+                        <div class="option">= (eşittir)</div>
+                        <div class="option">Hiçbiri</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-number">Soru 8</div>
+                    <p>Ali bir pizzanın <span class="fraction"><span class="fraction-numerator">3</span><span class="fraction-denominator">8</span></span>'ini, Ayşe aynı büyüklükteki başka bir pizzanın <span class="fraction"><span class="fraction-numerator">5</span><span class="fraction-denominator">8</span></span>'ini yemiştir. Hangisi daha fazla pizza yemiştir?</p>
+                    <div class="options">
+                        <div class="option">Ali</div>
+                        <div class="option">Ayşe</div>
+                        <div class="option">İkisi eşit yedi</div>
+                        <div class="option">Karşılaştırılamaz</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            // Tüm sekme içeriklerini gizle
+            var tabcontent = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            
+            // Tüm sekme butonlarından active class'ını kaldır
+            var tabbuttons = document.getElementsByClassName("tab-button");
+            for (var i = 0; i < tabbuttons.length; i++) {
+                tabbuttons[i].classList.remove("active");
+            }
+            
+            // Seçilen sekmeyi göster ve butonunu aktif yap
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+
+<div style="text-align:center;padding:18px 10px;margin-top:28px;font-size:0.82rem;color:#8a8a8a;border-top:1px solid #e5e5e5;">Dijital Öğretmen Hasan Tutuş</div>
+<!-- Ziyaretçi sayacı: goatcounter.com'da ücretsiz hesap açtıktan sonra
+     aşağıdaki "dijitalogretmen" kısmını kendi GoatCounter kodunuzla değiştirin. -->
+<script data-goatcounter="https://dijitalogretmen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script src="indirme-sayaci.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neon Adam Asmaca</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Quicksand:wght@500;600;700&display=swap');
+
+    :root {
+      --bg: #070b18;
+      --panel: rgba(15, 23, 42, 0.78);
+      --panel-light: rgba(30, 41, 72, 0.75);
+      --line: rgba(148, 163, 184, 0.2);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --cyan: #22d3ee;
+      --blue: #3b82f6;
+      --purple: #a855f7;
+      --pink: #ec4899;
+      --green: #34d399;
+      --orange: #fb923c;
+      --red: #fb7185;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--text);
+      font-family: "Quicksand", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(34, 211, 238, .16), transparent 28%),
+        radial-gradient(circle at 85% 20%, rgba(168, 85, 247, .18), transparent 30%),
+        radial-gradient(circle at 50% 100%, rgba(236, 72, 153, .12), transparent 35%),
+        var(--bg);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .12;
+      background-image:
+        linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
+      background-size: 45px 45px;
+      mask-image: linear-gradient(to bottom, black, transparent);
+    }
+
+    .app {
+      width: min(1100px, 94%);
+      margin: 32px auto;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+      padding: 5px 8px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: "Orbitron", sans-serif;
+      font-size: clamp(17px, 3vw, 25px);
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .logo-icon {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--cyan);
+      border-radius: 12px;
+      color: var(--cyan);
+      box-shadow: 0 0 20px rgba(34, 211, 238, .45);
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: 1px;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 12px var(--green);
+    }
+
+    .screen {
+      padding: clamp(20px, 4vw, 42px);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: var(--panel);
+      box-shadow:
+        0 25px 80px rgba(0, 0, 0, .42),
+        inset 0 1px rgba(255,255,255,.08);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero {
+      max-width: 680px;
+      margin: 0 auto 35px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: var(--cyan);
+      font-family: "Orbitron", sans-serif;
+      font-size: 12px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Orbitron", sans-serif;
+      font-size: clamp(28px, 6vw, 56px);
+      line-height: 1.15;
+      letter-spacing: 2px;
+      background: linear-gradient(90deg, var(--cyan), #fff, var(--purple));
+      -webkit-background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 16px rgba(34, 211, 238, .28));
+    }
+
+    .hero p {
+      margin: 16px auto 0;
+      max-width: 550px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 28px 0 14px;
+      color: #e2e8f0;
+      font-family: "Orbitron", sans-serif;
+      font-size: 15px;
+      letter-spacing: 1px;
+    }
+
+    .section-title::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--line), transparent);
+    }
+
+    .choice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+
+    .choice {
+      position: relative;
+      min-height: 86px;
+      padding: 15px;
+      overflow: hidden;
+      color: var(--text);
+      text-align: left;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: var(--panel-light);
+    }
+
+    .choice::after {
+      content: "";
+      position: absolute;
+      right: -25px;
+      bottom: -35px;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      opacity: .2;
+      background: var(--choice-color, var(--cyan));
+      filter: blur(12px);
+    }
+
+    .choice:hover {
+      border-color: var(--choice-color, var(--cyan));
+      box-shadow: 0 0 22px color-mix(in srgb, var(--choice-color, var(--cyan)) 28%, transparent);
+    }
+
+    .choice.selected {
+      border-color: var(--choice-color, var(--cyan));
+      background: color-mix(in srgb, var(--choice-color, var(--cyan)) 15%, var(--panel-light));
+      box-shadow:
+        0 0 0 1px var(--choice-color, var(--cyan)),
+        0 0 24px color-mix(in srgb, var(--choice-color, var(--cyan)) 35%, transparent);
+    }
+
+    .choice-icon {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--choice-color, var(--cyan));
+      font-size: 25px;
+    }
+
+    .choice strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .choice small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .start-button,
+    .action-button {
+      border: 0;
+      color: #04111b;
+      font-family: "Orbitron", sans-serif;
+      font-weight: 800;
+      letter-spacing: 1px;
+      background: linear-gradient(100deg, var(--cyan), var(--blue));
+      box-shadow: 0 0 24px rgba(34, 211, 238, .3);
+    }
+
+    .start-button {
+      display: block;
+      width: min(100%, 360px);
+      margin: 32px auto 0;
+      padding: 17px 25px;
+      font-size: 15px;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: inherit;
+      transition: .2s ease;
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-3px);
+      filter: brightness(1.12);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: .42;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .game-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .game-title {
+      margin: 0;
+      font-family: "Orbitron", sans-serif;
+      font-size: clamp(18px, 4vw, 27px);
+    }
+
+    .badge {
+      padding: 9px 13px;
+      border: 1px solid var(--cyan);
+      border-radius: 30px;
+      color: var(--cyan);
+      background: rgba(34, 211, 238, .08);
+      font-size: 12px;
+    }
+
+    .game-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.25fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .hangman-card,
+    .word-card,
+    .score-card {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(2, 6, 23, .38);
+    }
+
+    .hangman-card {
+      padding: 15px;
+      text-align: center;
+    }
+
+    svg {
+      width: 100%;
+      max-width: 330px;
+      height: 310px;
+    }
+
+    .stand {
+      stroke: #64748b;
+      stroke-width: 8;
+      stroke-linecap: round;
+    }
+
+    .body-part {
+      display: none;
+      stroke: var(--pink);
+      stroke-width: 6;
+      stroke-linecap: round;
+      fill: none;
+      filter: drop-shadow(0 0 5px var(--pink));
+    }
+
+    #head {
+      fill: rgba(251, 146, 60, .8);
+      stroke: var(--pink);
+    }
+
+    .attempts {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: -8px;
+    }
+
+    .attempt {
+      width: 28px;
+      height: 7px;
+      border-radius: 10px;
+      background: #334155;
+    }
+
+    .attempt.used {
+      background: var(--pink);
+      box-shadow: 0 0 8px var(--pink);
+    }
+
+    .word-card {
+      padding: 24px;
+      text-align: center;
+    }
+
+    .category-label {
+      color: var(--cyan);
+      font-family: "Orbitron", sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .word {
+      min-height: 65px;
+      margin: 28px 0 20px;
+      color: #fff;
+      font-family: "Orbitron", sans-serif;
+      font-size: clamp(25px, 6vw, 43px);
+      letter-spacing: 9px;
+      text-shadow: 0 0 15px rgba(34, 211, 238, .7);
+    }
+
+    .message {
+      min-height: 27px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .letters {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 23px;
+    }
+
+    .letter {
+      width: 43px;
+      height: 43px;
+      padding: 0;
+      border: 1px solid rgba(34, 211, 238, .55);
+      border-radius: 10px;
+      color: #dffaff;
+      background: rgba(34, 211, 238, .12);
+      font-family: "Orbitron", sans-serif;
+      font-size: 14px;
+    }
+
+    .letter:hover:not(:disabled) {
+      background: var(--cyan);
+      color: #082f49;
+      box-shadow: 0 0 18px var(--cyan);
+    }
+
+    .scores {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+
+    .score-card {
+      min-width: 145px;
+      padding: 12px 18px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .score-card b {
+      display: block;
+      margin-top: 4px;
+      color: var(--cyan);
+      font-family: "Orbitron", sans-serif;
+      font-size: 22px;
+    }
+
+    .input-area {
+      max-width: 500px;
+      margin: 35px auto 0;
+      text-align: center;
+    }
+
+    .input-area p {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .word-input {
+      width: 100%;
+      padding: 16px;
+      border: 1px solid var(--purple);
+      border-radius: 13px;
+      outline: none;
+      color: white;
+      background: rgba(2, 6, 23, .7);
+      font-family: "Orbitron", sans-serif;
+      font-size: 20px;
+      text-align: center;
+      text-transform: uppercase;
+      box-shadow: 0 0 18px rgba(168, 85, 247, .18);
+    }
+
+    .word-input:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 20px rgba(34, 211, 238, .25);
+    }
+
+    .action-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 25px;
+    }
+
+    .action-button {
+      padding: 13px 19px;
+      font-size: 12px;
+    }
+
+    .secondary-button {
+      padding: 13px 19px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: #cbd5e1;
+      background: rgba(51, 65, 85, .65);
+      font-weight: bold;
+    }
+
+    @media (max-width: 720px) {
+      .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .game-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .hangman-card {
+        max-width: 390px;
+        width: 100%;
+        margin: auto;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .screen {
+        padding: 18px;
+      }
+
+      .category-grid,
+      .choice-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .letter {
+        width: 38px;
+        height: 38px;
+      }
+    }
+  </style>
+<meta name="description" content="Neon Adam Asmaca - Dijital Öğretmen'den ücretsiz, MEB müfredatına (Maarif Modeli) uygun ilkokul eğitim materyali. Hasan Tutuş tarafından hazırlanmıştır.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:site_name" content="Dijital Öğretmen">
+<meta property="og:title" content="Neon Adam Asmaca">
+<meta property="og:description" content="Neon Adam Asmaca - Dijital Öğretmen'den ücretsiz, MEB müfredatına (Maarif Modeli) uygun ilkokul eğitim materyali. Hasan Tutuş tarafından hazırlanmıştır.">
+<meta property="og:url" content="https://oogretmen1-tech.github.io/adam-asmaca.html">
+<meta property="og:image" content="https://oogretmen1-tech.github.io/logo.png">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="logo">
+        <span class="logo-icon">✦</span>
+        HANG<span style="color: var(--cyan)">ZONE</span>
+      </div>
+
+      <div class="status">
+        <span class="status-dot"></span>
+        SİSTEM HAZIR
+      </div>
+    </header>
+
+    <main class="screen">
+
+      <!-- ANA MENÜ -->
+      <section id="menuScreen">
+        <div class="hero">
+          <p class="eyebrow">EĞİTİCİ OYUN SİSTEMİ</p>
+          <h1>ADAM ASMACA</h1>
+          <p>
+            Ders kategorini ve oyun modunu seç.
+            Harfleri doğru tahmin ederek kelimeyi tamamla.
+          </p>
+        </div>
+
+        <div class="section-title">01 / OYUN MODU</div>
+
+        <div class="choice-grid">
+          <button class="choice mode-choice"
+                  style="--choice-color: var(--cyan)"
+                  onclick="selectMode('single', this)">
+            <span class="choice-icon">◉</span>
+            <strong>TEK OYUNCU</strong>
+            <small>Sistemin seçtiği kelimeyi bul</small>
+          </button>
+
+          <button class="choice mode-choice"
+                  style="--choice-color: var(--pink)"
+                  onclick="selectMode('two', this)">
+            <span class="choice-icon">◈</span>
+            <strong>İKİ OYUNCU</strong>
+            <small>Arkadaşının yazdığı kelimeyi bul</small>
+          </button>
+        </div>
+
+        <div class="section-title">02 / DERS KATEGORİSİ</div>
+
+        <div class="category-grid">
+          <button class="choice category-choice"
+                  style="--choice-color: var(--red)"
+                  onclick="selectCategory('turkce', this)">
+            <span class="choice-icon">Aa</span>
+            <strong>TÜRKÇE</strong>
+          </button>
+
+          <button class="choice category-choice"
+                  style="--choice-color: var(--blue)"
+                  onclick="selectCategory('matematik', this)">
+            <span class="choice-icon">∑</span>
+            <strong>MATEMATİK</strong>
+          </button>
+
+          <button class="choice category-choice"
+                  style="--choice-color: var(--green)"
+                  onclick="selectCategory('hayat', this)">
+            <span class="choice-icon">⌂</span>
+            <strong>HAYAT BİLGİSİ</strong>
+          </button>
+
+          <button class="choice category-choice"
+                  style="--choice-color: var(--orange)"
+                  onclick="selectCategory('fen', this)">
+            <span class="choice-icon">⚗</span>
+            <strong>FEN BİLGİSİ</strong>
+          </button>
+
+          <button class="choice category-choice"
+                  style="--choice-color: var(--purple)"
+                  onclick="selectCategory('sosyal', this)">
+            <span class="choice-icon">⌖</span>
+            <strong>SOSYAL BİLGİLER</strong>
+          </button>
+        </div>
+
+        <button class="start-button" onclick="prepareGame()">
+          OYUNU BAŞLAT&nbsp; ›
+        </button>
+      </section>
+
+      <!-- İKİ OYUNCULU KELİME EKRANI -->
+      <section id="inputScreen" class="hidden">
+        <div class="hero">
+          <p class="eyebrow">İKİ OYUNCULU MOD</p>
+          <h1>KELİME GİRİŞİ</h1>
+          <p>
+            Kelimeyi yazan oyuncu ekrana bakmadan kelimesini girsin.
+          </p>
+        </div>
+
+        <div class="input-area">
+          <h2 id="inputTitle">1. OYUNCU KELİME GİRSİN</h2>
+
+          <input
+            id="wordInput"
+            class="word-input"
+            type="password"
+            maxlength="15"
+            placeholder="KELİME YAZ"
+            autocomplete="off"
+          >
+
+          <p>
+            En az 2 harf kullan. Boşluk ve özel karakter kullanma.
+          </p>
+
+          <button class="start-button" onclick="startTwoPlayerGame()">
+            TAHMİN EKRANINA GEÇ&nbsp; ›
+          </button>
+        </div>
+      </section>
+
+      <!-- OYUN EKRANI -->
+      <section id="gameScreen" class="hidden">
+        <div class="game-header">
+          <h2 class="game-title" id="gameTitle">ADAM ASMACA</h2>
+          <div class="badge" id="categoryBadge">TÜRKÇE</div>
+        </div>
+
+        <div id="scores" class="scores hidden">
+          <div class="score-card">
+            1. OYUNCU
+            <b id="score1">0</b>
+          </div>
+
+          <div class="score-card">
+            2. OYUNCU
+            <b id="score2">0</b>
+          </div>
+        </div>
+
+        <div class="game-layout">
+          <div class="hangman-card">
+            <svg viewBox="0 0 280 310">
+              <line class="stand" x1="25" y1="285" x2="215" y2="285"/>
+              <line class="stand" x1="75" y1="285" x2="75" y2="22"/>
+              <line class="stand" x1="75" y1="22" x2="200" y2="22"/>
+              <line class="stand" x1="200" y1="22" x2="200" y2="62"/>
+
+              <circle id="head" class="body-part"
+                      cx="200" cy="88" r="26"/>
+
+              <line id="body" class="body-part"
+                    x1="200" y1="114" x2="200" y2="190"/>
+
+              <line id="leftArm" class="body-part"
+                    x1="200" y1="135" x2="157" y2="168"/>
+
+              <line id="rightArm" class="body-part"
+                    x1="200" y1="135" x2="243" y2="168"/>
+
+              <line id="leftLeg" class="body-part"
+                    x1="200" y1="190" x2="163" y2="250"/>
+
+              <line id="rightLeg" class="body-part"
+                    x1="200" y1="190" x2="237" y2="250"/>
+            </svg>
+
+            <div class="attempts">
+              <span class="attempt"></span>
+              <span class="attempt"></span>
+              <span class="attempt"></span>
+              <span class="attempt"></span>
+              <span class="attempt"></span>
+              <span class="attempt"></span>
+            </div>
+          </div>
+
+          <div class="word-card">
+            <div class="category-label" id="categoryName">
+              KATEGORİ
+            </div>
+
+            <div class="word" id="wordDisplay"></div>
+
+            <div class="message" id="message">
+              Bir harf seçerek başla.
+            </div>
+
+            <p>
+              Kalan hak:
+              <strong id="remaining">6</strong>
+            </p>
+
+            <div class="letters" id="letters"></div>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button id="newRound" class="action-button hidden"
+                  onclick="newRound()">
+            YENİ TUR
+          </button>
+
+          <button class="secondary-button" onclick="goToMenu()">
+            ANA MENÜ
+          </button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const wordLists = {
+      turkce: [
+        "KİTAP", "KALEM", "HİKAYE", "ŞİİR", "CÜMLE",
+        "KELİME", "MASAL", "HARF", "OKUMA", "DEYİM"
+      ],
+
+      matematik: [
+        "TOPLAMA", "ÇIKARMA", "ÇARPMA", "BÖLME", "SAYI",
+        "ÜÇGEN", "KARE", "DAİRE", "CETVEL", "İŞLEM"
+      ],
+
+      hayat: [
+        "AİLE", "OKUL", "SAĞLIK", "TEMİZLİK", "SEVGİ",
+        "SAYGI", "YARDIM", "ARKADAŞ", "GÜVENLİK", "EV"
+      ],
+
+      fen: [
+        "GÜNEŞ", "DÜNYA", "GEZEGEN", "BİTKİ", "HAYVAN",
+        "TOPRAK", "MIKNATIS", "IŞIK", "SU", "AY"
+      ],
+
+      sosyal: [
+        "HARİTA", "ŞEHİR", "KÖY", "VATAN", "BAYRAK",
+        "TARİH", "MÜZE", "MEVSİM", "ULAŞIM", "YÖN"
+      ]
+    };
+
+    const categoryNames = {
+      turkce: "Türkçe",
+      matematik: "Matematik",
+      hayat: "Hayat Bilgisi",
+      fen: "Fen Bilgisi",
+      sosyal: "Sosyal Bilgiler"
+    };
+
+    const alphabet =
+      "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
+
+    const parts = [
+      "head",
+      "body",
+      "leftArm",
+      "rightArm",
+      "leftLeg",
+      "rightLeg"
+    ];
+
+    let mode = "";
+    let category = "";
+    let secretWord = "";
+    let guessedLetters = [];
+    let wrongCount = 0;
+    let gameOver = false;
+
+    let score1 = 0;
+    let score2 = 0;
+    let wordWriter = 1;
+
+    function selectMode(selectedMode, button) {
+      mode = selectedMode;
+
+      document.querySelectorAll(".mode-choice").forEach(item => {
+        item.classList.remove("selected");
+      });
+
+      button.classList.add("selected");
+    }
+
+    function selectCategory(selectedCategory, button) {
+      category = selectedCategory;
+
+      document.querySelectorAll(".category-choice").forEach(item => {
+        item.classList.remove("selected");
+      });
+
+      button.classList.add("selected");
+    }
+
+    function prepareGame() {
+      if (!mode || !category) {
+        alert("Lütfen oyun modunu ve ders kategorisini seç.");
+        return;
+      }
+
+      if (mode === "single") {
+        const list = wordLists[category];
+        secretWord = list[Math.floor(Math.random() * list.length)];
+        openGame();
+      } else {
+        document.getElementById("menuScreen")
+          .classList.add("hidden");
+
+        document.getElementById("inputScreen")
+          .classList.remove("hidden");
+
+        document.getElementById("inputTitle").textContent =
+          wordWriter + ". OYUNCU KELİME GİRSİN";
+
+        document.getElementById("wordInput").value = "";
+        document.getElementById("wordInput").focus();
+      }
+    }
+
+    function startTwoPlayerGame() {
+      let input = document.getElementById("wordInput")
+        .value
+        .toLocaleUpperCase("tr-TR")
+        .trim();
+
+      input = input.replace(/[^A-ZÇĞİÖŞÜ]/g, "");
+
+      if (input.length < 2) {
+        alert("Lütfen en az iki harfli bir kelime yaz.");
+        return;
+      }
+
+      secretWord = input;
+      openGame();
+    }
+
+    function openGame() {
+      document.getElementById("menuScreen")
+        .classList.add("hidden");
+
+      document.getElementById("inputScreen")
+        .classList.add("hidden");
+
+      document.getElementById("gameScreen")
+        .classList.remove("hidden");
+
+      document.getElementById("categoryBadge").textContent =
+        categoryNames[category].toUpperCase();
+
+      document.getElementById("categoryName").textContent =
+        categoryNames[category].toUpperCase();
+
+      if (mode === "single") {
+        document.getElementById("gameTitle").textContent =
+          "TEK OYUNCULU ADAM ASMACA";
+
+        document.getElementById("scores")
+          .classList.add("hidden");
+      } else {
+        const guesser = wordWriter === 1 ? 2 : 1;
+
+        document.getElementById("gameTitle").textContent =
+          guesser + ". OYUNCU TAHMİN EDİYOR";
+
+        document.getElementById("scores")
+          .classList.remove("hidden");
+      }
+
+      resetGame();
+    }
+
+    function resetGame() {
+      guessedLetters = [];
+      wrongCount = 0;
+      gameOver = false;
+
+      document.getElementById("remaining").textContent = "6";
+      document.getElementById("message").textContent =
+        "Bir harf seçerek başla.";
+
+      document.getElementById("newRound")
+        .classList.add("hidden");
+
+      parts.forEach(part => {
+        document.getElementById(part).style.display = "none";
+      });
+
+      document.querySelectorAll(".attempt")
+        .forEach(item => item.classList.remove("used"));
+
+      createLetterButtons();
+      showWord();
+      updateScores();
+    }
+
+    function createLetterButtons() {
+      const letters = document.getElementById("letters");
+      letters.innerHTML = "";
+
+      alphabet.forEach(letter => {
+        const button = document.createElement("button");
+
+        button.className = "letter";
+        button.textContent = letter;
+        button.onclick = () => checkLetter(letter, button);
+
+        letters.appendChild(button);
+      });
+    }
+
+    function showWord() {
+      let result = "";
+
+      for (const letter of secretWord) {
+        result += guessedLetters.includes(letter)
+          ? letter + " "
+          : "_ ";
+      }
+
+      document.getElementById("wordDisplay")
+        .textContent = result.trim();
+    }
+
+    function checkLetter(letter, button) {
+      if (gameOver) return;
+
+      button.disabled = true;
+
+      if (secretWord.includes(letter)) {
+        guessedLetters.push(letter);
+
+        document.getElementById("message").textContent =
+          "Doğru harf! Çok iyi gidiyorsun.";
+
+        showWord();
+        checkWin();
+      } else {
+        document.getElementById(parts[wrongCount])
+          .style.display = "block";
+
+        document.querySelectorAll(".attempt")[wrongCount]
+          .classList.add("used");
+
+        wrongCount++;
+
+        document.getElementById("remaining")
+          .textContent = 6 - wrongCount;
+
+        document.getElementById("message").textContent =
+          "Bu harf kelimede yok.";
+
+        if (wrongCount === 6) {
+          finishGame(false);
+        }
+      }
+    }
+
+    function checkWin() {
+      const win = [...secretWord].every(letter =>
+        guessedLetters.includes(letter)
+      );
+
+      if (win) {
+        finishGame(true);
+      }
+    }
+
+    function finishGame(won) {
+      gameOver = true;
+
+      document.querySelectorAll(".letter")
+        .forEach(button => button.disabled = true);
+
+      if (won) {
+        document.getElementById("message").textContent =
+          "Tebrikler! Kelimeyi buldun: " + secretWord;
+
+        if (mode === "two") {
+          const guesser = wordWriter === 1 ? 2 : 1;
+
+          if (guesser === 1) {
+            score1++;
+          } else {
+            score2++;
+          }
+
+          updateScores();
+        }
+      } else {
+        document.getElementById("message").textContent =
+          "Oyun bitti! Doğru kelime: " + secretWord;
+      }
+
+      document.getElementById("newRound")
+        .classList.remove("hidden");
+    }
+
+    function updateScores() {
+      document.getElementById("score1").textContent = score1;
+      document.getElementById("score2").textContent = score2;
+    }
+
+    function newRound() {
+      if (mode === "single") {
+        const list = wordLists[category];
+        secretWord = list[Math.floor(Math.random() * list.length)];
+        openGame();
+      } else {
+        wordWriter = wordWriter === 1 ? 2 : 1;
+
+        document.getElementById("gameScreen")
+          .classList.add("hidden");
+
+        document.getElementById("inputScreen")
+          .classList.remove("hidden");
+
+        document.getElementById("inputTitle").textContent =
+          wordWriter + ". OYUNCU KELİME GİRSİN";
+
+        document.getElementById("wordInput").value = "";
+        document.getElementById("wordInput").focus();
+      }
+    }
+
+    function goToMenu() {
+      document.getElementById("gameScreen")
+        .classList.add("hidden");
+
+      document.getElementById("inputScreen")
+        .classList.add("hidden");
+
+      document.getElementById("menuScreen")
+        .classList.remove("hidden");
+
+      mode = "";
+      category = "";
+      score1 = 0;
+      score2 = 0;
+      wordWriter = 1;
+
+      document.querySelectorAll(".selected")
+        .forEach(item => item.classList.remove("selected"));
+    }
+
+    document.getElementById("wordInput").addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        startTwoPlayerGame();
+      }
+    });
+  </script>
+
+<div style="text-align:center;padding:18px 10px;margin-top:28px;font-size:0.82rem;color:#8a8a8a;border-top:1px solid #e5e5e5;">Dijital Öğretmen Hasan Tutuş</div>
+<!-- Ziyaretçi sayacı: goatcounter.com'da ücretsiz hesap açtıktan sonra
+     aşağıdaki "dijitalogretmen" kısmını kendi GoatCounter kodunuzla değiştirin. -->
+<script data-goatcounter="https://dijitalogretmen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script src="indirme-sayaci.js" defer></script>
+</body>
+</html>
