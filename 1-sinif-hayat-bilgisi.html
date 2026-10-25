@@ -174,6 +174,8 @@ main{max-width:1080px;margin:0 auto;padding:16px 14px 40px}
 .gun-kart .gun-emoji{font-size:29px}
 .gun-kart b{display:block;font-size:14.5px;line-height:1.25}
 .gun-kart span{font-size:12.5px;opacity:.72}
+a.gun-kart{color:inherit;text-decoration:none;cursor:pointer;border-color:var(--gun-renk,#ffb74d)}
+a.gun-kart .gun-git{display:block;margin-top:4px;font-size:12px;font-weight:700;opacity:1;color:var(--gun-renk,#e65100)}
 
 /* KONU KARTLARI */
 .topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:16px}
@@ -897,7 +899,8 @@ const units = [
  materyaller:[
   {icon:"✂️",title:"Sağlığım İçin Ne Yaparım? · Kes-Yapıştır",note:"Sağlıklı Hayat Ne Güzel · 3 sayfa · Yazdır / PDF / Word",href:"kes-yapistir-atolyesi.html#sagligim-icin"},
   {icon:"✂️",title:"Büyüyorum, Güçleniyorum! · Kes-Yapıştır",note:"Sağlıklı büyüme ve gelişme · 3 sayfa · Yazdır / PDF / Word",href:"kes-yapistir-atolyesi.html#buyuyorum"},
-  {icon:"✂️",title:"Sağlıklı Beslenelim · Kes-Yapıştır",note:"Sağlıklı beslenme · 2 sayfa · Yazdır / PDF / Word",href:"kes-yapistir-atolyesi.html#saglikli-beslenme"}
+  {icon:"✂️",title:"Sağlıklı Beslenelim · Kes-Yapıştır",note:"Sağlıklı beslenme · 2 sayfa · Yazdır / PDF / Word",href:"kes-yapistir-atolyesi.html#saglikli-beslenme"},
+  {icon:"🖼️",title:"Kızılay Haftası · İyilik Kervanı Panosu",note:"Kan bağışı, organ bağışı, afetlerde Kızılay · bilgi kartları, tır, çadır · PDF / Word",href:"kizilay-haftasi-etkinlikleri.html"}
  ],
  gunler:[
   ["🩹","Kızılay Haftası","29 Ekim - 4 Kasım"],
@@ -1220,11 +1223,26 @@ function renderUnit(){
   /* belirli gün ve haftalar */
   const gg = document.getElementById("gunlerGrid");
   gg.innerHTML = "";
+  const GUN_SAYFA = {
+    "Kızılay Haftası":"kizilay-haftasi-etkinlikleri.html",
+    "Cumhuriyet Bayramı":"29-ekim-cumhuriyet-bayrami-etkinlikleri.html",
+    "Hayvanları Koruma Günü":"4-ekim-hayvanlari-koruma-gunu-etkinlikleri.html",
+    "Atatürk Haftası":"10-kasim-ataturku-anma-etkinlikleri.html",
+    "Öğretmenler Günü":"24-kasim-ogretmenler-gunu-etkinlikleri.html",
+    "Yerli Malı ve Tutum Haftası":"yerli-mali-haftasi-etkinlikleri.html",
+    "Kütüphaneler Haftası":"kutuphane-haftasi-etkinlikleri.html",
+    "İstiklâl Marşı'nın Kabulü ve M. Âkif Ersoy'u Anma Günü":"12-mart-istiklal-marsi-etkinlikleri.html",
+    "Çanakkale Zaferi ve Şehitleri Anma Günü":"18-mart-canakkale-zaferi-etkinlikleri.html",
+    "Ulusal Egemenlik ve Çocuk Bayramı":"23-nisan-etkinlikleri.html",
+    "Anneler Günü":"anneler-gunu-etkinlikleri.html"
+  };
   u.gunler.forEach(g=>{
-    const d = document.createElement("div");
+    const href = GUN_SAYFA[g[1]];
+    const d = document.createElement(href ? "a" : "div");
     d.className = "gun-kart";
+    if(href) d.href = href;
     d.style.setProperty("--gun-renk", u.color);
-    d.innerHTML = `<div class="gun-emoji">${g[0]}</div><div><b>${g[1]}</b><span>${g[2]}</span></div>`;
+    d.innerHTML = `<div class="gun-emoji">${g[0]}</div><div><b>${g[1]}</b><span>${g[2]}</span>${href ? '<span class="gun-git">Etkinliklere git →</span>' : ''}</div>`;
     gg.appendChild(d);
   });
 
