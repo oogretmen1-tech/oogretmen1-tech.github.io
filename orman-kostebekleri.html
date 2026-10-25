@@ -348,7 +348,6 @@ button:hover {
     white-space: nowrap;
     max-width: 96%;
     overflow: hidden;
-    text-overflow: ellipsis;
     text-align: center;
     pointer-events: none;
 }
@@ -824,6 +823,7 @@ function kostebekCikar() {
     });
 
     rastgeleDelik.appendChild(container);
+    tabelaSigdir(container.querySelector(".tabela"));
 
     setTimeout(() => {
         container.classList.add("yukari");
@@ -842,6 +842,27 @@ function kostebekCikar() {
         kostebekCikar();
     }, 2100);
 }
+
+/* Uzun kelimeler kesilmesin: yazı tabelaya sığana kadar küçültülür */
+function tabelaSigdir(tabela) {
+    if (!tabela) return;
+    tabela.style.fontSize = "";
+    tabela.style.paddingLeft = "";
+    tabela.style.paddingRight = "";
+    let boyut = parseFloat(getComputedStyle(tabela).fontSize);
+    if (tabela.scrollWidth > tabela.clientWidth) {
+        tabela.style.paddingLeft = "6px";
+        tabela.style.paddingRight = "6px";
+    }
+    while (tabela.scrollWidth > tabela.clientWidth && boyut > 12) {
+        boyut -= 1;
+        tabela.style.fontSize = boyut + "px";
+    }
+}
+
+window.addEventListener("resize", () => {
+    document.querySelectorAll(".tabela").forEach(tabelaSigdir);
+});
 
 function delikleriTemizle() {
     delikler.forEach(delik => {
