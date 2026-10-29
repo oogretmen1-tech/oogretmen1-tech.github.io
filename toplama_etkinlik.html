@@ -681,7 +681,12 @@
                 font-size: 2.5em;
             }
         }
-    </style>
+            /* Alt alta işlem hizası: işaret basamak sütunlarını kaydırmasın */
+        .digit-row{position:relative;--cw:80px;--gp:20px;width:fit-content;max-width:100%;margin-left:auto!important;margin-right:auto!important}
+        .plus-sign,.minus-sign{position:absolute;right:100%;margin-right:12px!important;top:50%;transform:translateY(-50%);line-height:1;margin:0}
+        .carry-slot{width:var(--cw);flex:0 1 var(--cw);min-width:0;display:flex;justify-content:center}
+        @media (max-width: 768px){.digit-row{--cw:60px}}
+</style>
 <meta name="description" content="3. Sınıf Toplama İşlemi - İnteraktif Matematik - Dijital Öğretmen'den ücretsiz, MEB müfredatına (Maarif Modeli) uygun ilkokul eğitim materyali. Hasan Tutuş tarafından hazırlanmıştır.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="tr_TR">
@@ -1586,21 +1591,19 @@
             const carryIndicators = document.getElementById('carry-indicators');
             carryIndicators.innerHTML = '';
 
-            if (tensCarry > 0) {
-                const carry = document.createElement('div');
-                carry.className = 'digit-cell';
-                carry.style.cssText = 'background: #ffd93d; color: #2d3436; font-size: 1.5em; width: 50px; height: 50px;';
-                carry.textContent = tensCarry;
-                carryIndicators.appendChild(carry);
-            }
-
-            if (onesCarry > 0) {
-                const carry = document.createElement('div');
-                carry.className = 'digit-cell';
-                carry.style.cssText = 'background: #ffd93d; color: #2d3436; font-size: 1.5em; width: 50px; height: 50px;';
-                carry.textContent = onesCarry;
-                carryIndicators.appendChild(carry);
-            }
+            // Elde, ait olduğu basamağın tam üstünde: yüzler | onlar | birler
+            [tensCarry, onesCarry, 0].forEach(val => {
+                const slot = document.createElement('div');
+                slot.className = 'carry-slot';
+                if (val > 0) {
+                    const carry = document.createElement('div');
+                    carry.className = 'digit-cell';
+                    carry.style.cssText = 'background: #ffd93d; color: #2d3436; font-size: 1.5em; width: 50px; height: 50px;';
+                    carry.textContent = val;
+                    slot.appendChild(carry);
+                }
+                carryIndicators.appendChild(slot);
+            });
 
             // Explanation
             let explanation = '<h3 style="color: #667eea;">📝 Adım Adım Çözüm:</h3>';
