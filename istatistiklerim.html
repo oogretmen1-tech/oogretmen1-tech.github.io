@@ -65,6 +65,11 @@
     color:#5E6E82;
     padding:10px 4px 0;
   }
+  .suz{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px;}
+  .suz button{font:inherit;font-size:.85rem;font-weight:600;padding:8px 14px;border-radius:20px;border:2px solid var(--purple);background:#fff;color:var(--purple);cursor:pointer;}
+  .suz button.secili{background:var(--purple);color:#fff;}
+  .acikla{font-size:.85rem;line-height:1.55;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 12px;}
+  .acikla b{color:var(--purple);}
 </style>
 </head>
 <body>
@@ -75,11 +80,45 @@
 </header>
 
 <div class="wrap">
+  <div class="acikla">Listede her satır ayrı bir kayıttır. <b>Bölüm ›</b> ana sayfada açılan bölümü, <b>İndirme ›</b> indirilen dosyayı, <b>Ön İzleme ›</b> ön izlemesi açılan dosyayı, <b>Yazdırma ›</b> yazdırılan sayfayı gösterir. Aşağıdaki düğmelerle istediğin konuya göre süzebilirsin.</div>
+  <div class="suz" id="suz">
+    <button class="secili" data-f="">Tümü</button>
+    <button data-f="İndirme">Bütün indirmeler</button>
+    <button data-f="Bölüm">Açılan bölümler</button>
+    <button data-f="Pano">Pano</button>
+    <button data-f="Belirli Gün">Belirli Gün ve Haftalar</button>
+    <button data-f="ÇEDES">ÇEDES</button>
+    <button data-f="Hayat Bilgisi">Hayat Bilgisi</button>
+    <button data-f="Matematik">Matematik</button>
+    <button data-f="Türkçe">Türkçe</button>
+    <button data-f="Fen">Fen Bilimleri</button>
+    <button data-f="fasikul">Fasiküller</button>
+    <button data-f="Atölye">Atölyeler</button>
+    <button data-f="Değerlendir">Değerlendirme</button>
+    <button data-f="Baskıya Hazır">Baskıya Hazır</button>
+    <button data-f="Öğretmen Dosyaları">Öğretmen Dosyaları</button>
+    <button data-f="Ön İzleme">Ön izlemeler</button>
+    <button data-f="Yazdırma">Yazdırmalar</button>
+  </div>
   <div class="kart">
-    <iframe src="https://dijitalogretmen.goatcounter.com/" title="Ziyaretçi istatistikleri" loading="lazy"></iframe>
+    <iframe id="panel" src="https://dijitalogretmen.goatcounter.com/" title="Ziyaretçi istatistikleri" loading="lazy"></iframe>
   </div>
   <p class="not">Bu sayfa gizlidir, menüde ve sitemap'te yer almaz; sadece bu adresi bilenler (sen) görebilir. Veriler görünmüyorsa GoatCounter hesabına giriş yapmış olman gerekir.</p>
 </div>
 
+<p class="not">Not: 1 Kasım 2026'dan önceki kayıtlarda ana sayfadaki bütün indirmeler tek satırda ("Çalışma Kâğıtları ve Pano Setleri – PDF") toplanıyordu. O eski satırlar ayrıştırılamaz; yeni kayıtlar isim isim gelir.</p>
+<script>
+(function(){
+  var kok="https://dijitalogretmen.goatcounter.com/";
+  var p=document.getElementById("panel");
+  document.getElementById("suz").addEventListener("click",function(e){
+    var b=e.target.closest("button"); if(!b) return;
+    Array.prototype.forEach.call(this.querySelectorAll("button"),function(x){x.classList.remove("secili");});
+    b.classList.add("secili");
+    var f=b.getAttribute("data-f");
+    p.src=kok+(f?"?filter="+encodeURIComponent(f):"");
+  });
+})();
+</script>
 </body>
 </html>

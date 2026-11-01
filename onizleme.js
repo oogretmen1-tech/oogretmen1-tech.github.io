@@ -278,11 +278,14 @@
     kaplama.classList.add("acik");
     document.body.style.overflow = "hidden";
 
+    var S = window.doSayac;
+    if (S) S.onizleme(bilgi);
+    function say(h, t) { if (S) S.onizlemeIndir(bilgi, h, t); }
     if (bilgi.tip === "pdf") {
       pdfGoster(bilgi.hedef);
       dugme("oi-yaz", "🖨 Yazdır", function () { window.open(bilgi.hedef, "_blank"); });
-      dugme("oi-pdf", "⬇ PDF İndir", function () { indir(bilgi.pdf); });
-      if (bilgi.word) dugme("oi-word", "📄 Word İndir", function () { indir(bilgi.word); });
+      dugme("oi-pdf", "⬇ PDF İndir", function () { say(bilgi.pdf, "PDF"); indir(bilgi.pdf); });
+      if (bilgi.word) dugme("oi-word", "📄 Word İndir", function () { say(bilgi.word, "Word"); indir(bilgi.word); });
       if (bilgi.sayfa) dugme("oi-sec", "☑️ Sayfa Seç", function () { location.href = bilgi.sayfa; });
     } else {
       htmlGoster(bilgi.hedef);
@@ -291,8 +294,8 @@
         try { f.contentWindow.focus(); f.contentWindow.print(); }
         catch (e) { window.open(bilgi.hedef, "_blank"); }
       });
-      if (bilgi.pdf) dugme("oi-pdf", "⬇ PDF İndir", function () { location.href = bilgi.pdf; });
-      if (bilgi.word) dugme("oi-word", "📄 Word İndir", function () { location.href = bilgi.word; });
+      if (bilgi.pdf) dugme("oi-pdf", "⬇ PDF İndir", function () { say(bilgi.pdf, "PDF"); location.href = bilgi.pdf; });
+      if (bilgi.word) dugme("oi-word", "📄 Word İndir", function () { say(bilgi.word, "Word"); location.href = bilgi.word; });
       dugme("oi-sec", "☑️ Sayfa Seç", function () {
         var f = govde.querySelector("iframe");
         try {
@@ -376,6 +379,7 @@
         span.addEventListener("click", function (e) {
           e.preventDefault(); e.stopPropagation(); ac(bilgi);
         });
+        bilgi.__kart = kart;
         kart.__oiBilgi = bilgi;
         if (uzanti(href) === "pdf") {
           kart.addEventListener("click", function (e) {
