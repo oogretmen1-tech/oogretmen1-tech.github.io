@@ -507,7 +507,7 @@
     var adres = hazirDosyaAdresi(uzanti);
     if (!adres || !window.fetch) return Promise.resolve(null);
     /* Word/PDF dosyaları "dosyalar" deposunda (…/dosyalar/) olabilir: önce orada, sonra ana depoda ara */
-    var adlar = ["diger", "kes-yapistir", "fasikul", "harf-atolyesi", "okuma-kitapcigi", "degerlendirme", "dilimizin-zenginlikleri", "pano", "cedes", "ogretmen-dosyalari"];
+    var adlar = ["diger", "kes-yapistir", "fasikul", "harf-atolyesi", "okuma-kitapcigi", "degerlendirme", "dilimizin-zenginlikleri", "pano", "cedes", "ogretmen-dosyalari", "tatil-odevleri"];
     var adaylar = adlar.map(function (k) { return adres.replace(/\/([^\/]*)$/, "/dosyalar/" + k + "/$1"); });
     adaylar.push(adres);
     var i = 0;
