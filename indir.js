@@ -506,6 +506,18 @@
   function hazirDosyaVarMi(uzanti) {
     var adres = hazirDosyaAdresi(uzanti);
     if (!adres || !window.fetch) return Promise.resolve(null);
+    /* Word/PDF dosyaları "dosyalar" deposunda (…/dosyalar/) olabilir: önce orada, sonra ana depoda ara */
+    var adlar = ["diger", "kes-yapistir", "fasikul", "harf-atolyesi", "okuma-kitapcigi", "degerlendirme", "dilimizin-zenginlikleri", "pano", "cedes", "ogretmen-dosyalari"];
+    var adaylar = adlar.map(function (k) { return adres.replace(/\/([^\/]*)$/, "/dosyalar/" + k + "/$1"); });
+    adaylar.push(adres);
+    var i = 0;
+    function sira() {
+      if (i >= adaylar.length) return Promise.resolve(null);
+      return hazirDosyaDene(adaylar[i++]).then(function (v) { return v || sira(); });
+    }
+    return sira();
+  }
+  function hazirDosyaDene(adres) {
     return fetch(adres, { method: "HEAD" }).then(function (c) {
       if (!c.ok) return null;
       var tur = (c.headers.get("content-type") || "").toLowerCase();
