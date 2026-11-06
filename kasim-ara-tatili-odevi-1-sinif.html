@@ -288,6 +288,23 @@ body.kitapModu .do-sayfa-bar:has(+ section.a4.aktif){display:flex !important}
   window.addEventListener('load',function(){setTimeout(function(){modDegistir(true);},1700);});   /* sayfa seçimi kurulduktan sonra kitap modu */
 })();
 </script>
-<script src="indir.js" defer></script>
+<script>
+(function(){
+  var kapali=false;
+  function sigdir(){
+    if(kapali) return;
+    var s=Math.min(1,(document.documentElement.clientWidth-14)/794);
+    [].forEach.call(document.querySelectorAll('section.a4'),function(e){e.style.zoom=s<0.999?s:'';});
+  }
+  function birak(){kapali=true;[].forEach.call(document.querySelectorAll('section.a4'),function(e){e.style.zoom='';});}
+  window.addEventListener('resize',sigdir); window.addEventListener('load',sigdir); sigdir();
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('#do-indir-btn,#do-word-btn,#do-yazdir-btn,.do-sayfa-bar button,#do-secici button,#do-secim-bar button,#do-sec-btn');
+    if(b){birak();setTimeout(function(){kapali=false;},60000);}
+  },true);
+  window.addEventListener('beforeprint',birak);
+  window.addEventListener('afterprint',function(){kapali=false;sigdir();});
+})();
+</script><script src="indir.js" defer></script>
 <script data-goatcounter="https://dijitalogretmen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <script src="indirme-sayaci.js" defer></script></body></html>
