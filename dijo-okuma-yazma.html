@@ -89,14 +89,14 @@ img.foto{display:block;width:100%;height:100%;object-fit:contain;-webkit-user-dr
 .tile{touch-action:none;min-width:58px;height:62px;padding:0 14px;border-radius:16px;font-size:34px;font-weight:700;background:#fff;border:4px solid var(--mavi);color:var(--mavi2);box-shadow:0 5px 0 var(--mavi2);position:relative;z-index:2;line-height:1}
 .tile.unlu{border-color:var(--kirmizi);color:var(--kirmizi);box-shadow:0 5px 0 #a81f1b}
 .tile.hece{background:var(--sari);border-color:var(--sari2);color:#3a2500;box-shadow:0 5px 0 #c97800}
-.tile.soz{background:#19b46b;border-color:#0f8a50;color:#fff;box-shadow:0 5px 0 #0b6b3e;font-size:28px}
+.tile.soz{background:#fff;border-color:var(--yesil);color:var(--ink);box-shadow:0 5px 0 #0f8a50;font-size:28px}
 .tile.sayi{background:var(--mavi);border-color:var(--mavi2);color:#fff}
 .tile.drag{z-index:50;box-shadow:0 14px 18px rgba(0,0,0,.3);transition:none}
 .tile.done{box-shadow:none;height:54px;min-width:46px}
 .salla{animation:hayir .4s}
 @keyframes hayir{20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
 .sonuc{font-size:clamp(34px,10vw,56px);font-weight:700;color:var(--yesil);min-height:1.2em;margin-top:8px}
-.unl{color:var(--kirmizi)}.uns{color:var(--mavi2)}
+.unl{color:var(--kirmizi)}.uns{color:var(--mavi2)}.hc1{color:var(--mavi2)}.hc2{color:var(--kirmizi)}.sonuc:has(.hc1){color:var(--ink)}
 
 /* harfler */
 .hgrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin-top:14px}
@@ -319,6 +319,9 @@ const uygun=t=>[...lo(t)].filter(c=>/[a-zçğıöşü]/.test(c)).every(c=>known(
 const yeniMi=t=>lo(t).includes(cur());
 function hecele(w){const c=[...w],r=[];let k='';for(let i=0;i<c.length;i++){k+=c[i];if(isV(c[i])){const a=c[i+1],b=c[i+2],d=c[i+3];if(a===undefined)break;if(isV(a)){r.push(k);k=''}else if(b===undefined){}else if(isV(b)){r.push(k);k=''}else if(d===undefined){}else if(isV(d)){k+=a;i++;r.push(k);k=''}else{k+=a+b;i+=2;r.push(k);k=''}}}if(k)r.push(k);return r}
 const renkli=w=>[...w].map(c=>`<span class="${isV(lo(c))?'unl':'uns'}">${c}</span>`).join('');
+/* hece renklendirme: her kelimede heceler sırayla mavi-kırmızı; tek heceli kelime tek renk */
+function sloRenk(w){const ts=$$('#stage .slot .tile');let j=0;hecele(lo(w)).forEach((h,k)=>[...h].forEach(()=>{const t=ts[j++];if(t){t.classList.remove('unlu');t.style.color=k%2?'var(--kirmizi)':'var(--mavi2)';t.style.borderColor='currentColor'}}))}
+function heceRenkli(t){return String(t).replace(/[a-zçğıöşüâîûA-ZÇĞIİÖŞÜÂÎÛ]+/g,w=>{const c=[...w],L=[...w].map(x=>lo(x)[0]||x).join('');const hs=hecele(L);let i=0;return hs.map((h,j)=>{const n=[...h].length,parca=c.slice(i,i+n).join('');i+=n;return `<span class="${j%2?'hc2':'hc1'}">${parca}</span>`}).join('')+(i<c.length?`<span class="hc1">${c.slice(i).join('')}</span>`:'')})}
 /* son gruptan olanlara öncelik ver */
 function sec(list,gi){const yeni=list.filter(x=>yeniMi(x[0])),eski=list.filter(x=>!yeniMi(x[0]));if(!eski.length||(yeni.length&&Math.random()<.65))return pick(yeni.length?yeni:eski);return pick(eski)}
 const words=()=>D.W.filter(x=>uygun(x[0]));
@@ -386,20 +389,20 @@ harfler(){const all=D.G.join('');let secili=A._h&&known().includes(A._h)?A._h:cu
 
 hece(){const havuz=heceHavuzu();if(!havuz.length)return kur(yon('Bu etkinlik için biraz daha ses öğrenelim. Menüden son öğrendiğiniz sesi seçin.'));const yeni=havuz.filter(h=>[...h].some(c=>cur().includes(c)));
   const h=farkli(()=>pick(yeni.length&&Math.random()<.7?yeni:havuz));const harf=[...h];
-  kur(yon('Harfleri sürükle, heceyi oluştur.',1)+`<div class="model">${renkli(h)}</div>`+slotlar(harf)+`<div class="havuz" id="havuz"></div><div class="sonuc" id="sonuc"></div>`);
+  kur(yon('Harfleri sürükle, heceyi oluştur.',1)+`<div class="model">${heceRenkli(h)}</div>`+slotlar(harf)+`<div class="havuz" id="havuz"></div><div class="sonuc" id="sonuc"></div>`);
   const k=[...known()].filter(c=>!harf.includes(c));havuzDoldur([...harf,...shuf(k).slice(0,2)].map(harfTile));
-  $('#dinle').onclick=()=>say(h);tile.bitti=()=>{say(h);kazan()}},
+  $('#dinle').onclick=()=>say(h);tile.bitti=()=>{sloRenk(h);say(h);kazan()}},
 
 kelime(){if(!words().length)return kur(yon('Bu etkinlik için biraz daha ses öğrenelim. Menüden son öğrendiğiniz sesi seçin.'));const mod=A._km||'hece';const w=farkli(()=>sec(words(),1)[0]);let p=hecele(w);const harfMod=mod==='harf'||p.length<2;if(harfMod)p=[...w];
   kur(`<div class="secenek"><button data-m="hece" class="${mod==='hece'?'on':''}">Hecelerle</button><button data-m="harf" class="${mod==='harf'?'on':''}">Harflerle</button></div>`+yon(harfMod?'Harfleri sürükle, kelimeyi oluştur.':'Heceleri sürükle, kelimeyi oluştur.',1)+`<div class="resim" id="res">${pic(w)}</div>`+slotlar(p)+`<div class="havuz" id="havuz"></div><div class="sonuc" id="sonuc"></div>`);
   $$('.secenek button').forEach(b=>b.onclick=()=>{A._km=b.dataset.m;sonSecim='';A.kelime()});
   let ek;if(harfMod)ek=shuf([...known()].filter(c=>!p.includes(c))).slice(0,2);else ek=shuf(heceHavuzu().filter(x=>!p.includes(x))).slice(0,2);
   havuzDoldur([...p,...ek].map(x=>harfMod?harfTile(x):tile(x,'hece')));
-  $('#dinle').onclick=$('#res').onclick=()=>say(w);tile.bitti=()=>{$('#sonuc').innerHTML=harfMod?renkli(w):hecele(w).join(' · ');say(w);kazan()}},
+  $('#dinle').onclick=$('#res').onclick=()=>say(w);tile.bitti=()=>{if(harfMod)sloRenk(w);$('#sonuc').innerHTML=heceRenkli(w);say(w);kazan()}},
 
 cumle(){if(!D.S.some(x=>uygun(x[0])))return kur(yon('Bu etkinlik için biraz daha ses öğrenelim. Menüden son öğrendiğiniz sesi seçin.'));const c=farkli(()=>sec(D.S.filter(x=>uygun(x[0])),2));const p=c[0].split(' ');
   kur(yon('Sözcükleri sırala, cümleyi oluştur.',1)+`<div class="resim" id="res">${pic(c[1])}</div>`+slotlar(p)+`<div class="havuz" id="havuz"></div><div class="sonuc" id="sonuc" style="font-size:clamp(22px,6vw,34px)"></div>`);
-  havuzDoldur(p.map(x=>tile(x,'soz')));$('#dinle').onclick=$('#res').onclick=()=>say(c[0]);tile.bitti=()=>{$('#sonuc').textContent=c[0];say(c[0]);kazan(2)}},
+  havuzDoldur(p.map(x=>tile(x,'soz',heceRenkli(x))));$('#dinle').onclick=$('#res').onclick=()=>say(c[0]);tile.bitti=()=>{$('#sonuc').innerHTML=heceRenkli(c[0]);say(c[0]);kazan(2)}},
 
 _seviye(fn){return `<div class="secenek"><button data-x="10" class="${S.max==10?'on':''}">10'a kadar</button><button data-x="20" class="${S.max==20?'on':''}">20'ye kadar</button></div>`},
 _sevBag(fn){$$('.secenek button').forEach(b=>b.onclick=()=>{S.max=+b.dataset.x;save();fn()})},
@@ -428,12 +431,12 @@ balon(){const hedef=farkli(()=>pick([...cur()]));const diger=[...known()].filter
 
 hafiza(){const ws=shuf(words().filter(w=>[...w[0]].length<=7)).slice(0,6).map(w=>w[0]);const kartlar=shuf([...ws.map(w=>({w,t:'r'})),...ws.map(w=>({w,t:'y'}))]);let acik=[],kilit=false,tam=0;
   kur(yon('Resmi kelimesiyle eşleştir.')+`<div class="hafiza"></div>`);
-  kartlar.forEach(k=>{const b=el('button','hk',k.t==='r'?`<div style="width:100%;height:100%">${pic(k.w)}</div>`:`<span>${k.w}</span>`);b.onclick=()=>{if(kilit||b.classList.contains('ac')||b.classList.contains('tam'))return;b.classList.add('ac');tik();acik.push([b,k]);if(k.t==='y')say(k.w);
+  kartlar.forEach(k=>{const b=el('button','hk',k.t==='r'?`<div style="width:100%;height:100%">${pic(k.w)}</div>`:`<span>${heceRenkli(k.w)}</span>`);b.onclick=()=>{if(kilit||b.classList.contains('ac')||b.classList.contains('tam'))return;b.classList.add('ac');tik();acik.push([b,k]);if(k.t==='y')say(k.w);
     if(acik.length===2){const [x,y]=acik;acik=[];if(x[1].w===y[1].w){[x[0],y[0]].forEach(e=>{e.classList.remove('ac');e.classList.add('tam')});if(++tam===ws.length)kazan(3);else dogruSes()}else{kilit=true;setTimeout(()=>{x[0].classList.remove('ac');y[0].classList.remove('ac');kilit=false},900)}}};$('.hafiza').appendChild(b)})},
 
 sesavi(){const hedef=farkli(()=>pick([...cur()].filter(c=>c!=='ğ')));const tum=D.W.map(w=>w[0]);const d=pick(tum.filter(w=>w[0]===hedef));const y=shuf(tum.filter(w=>w[0]!==hedef)).slice(0,2);
   kur(yon(`Hangisi <span class="${isV(hedef)?'unl':'uns'}" style="font-size:1.6em">${hedef}</span> sesiyle başlar?`,1)+`<div class="uclu"></div><div class="sonuc" id="sonuc"></div>`);$('#dinle').onclick=()=>say(d+'. '+y.join('. '));
-  shuf([d,...y]).forEach(w=>{const b=el('button','sec',pic(w));b.onclick=()=>{if(w===d){b.classList.add('dogru');$('#sonuc').innerHTML=renkli(w);say(w);kazan()}else{say(w);olmadi(b)}};$('.uclu').appendChild(b)})}
+  shuf([d,...y]).forEach(w=>{const b=el('button','sec',pic(w));b.onclick=()=>{if(w===d){b.classList.add('dogru');$('#sonuc').innerHTML=heceRenkli(w);say(w);kazan()}else{say(w);olmadi(b)}};$('.uclu').appendChild(b)})}
 };
 
 
