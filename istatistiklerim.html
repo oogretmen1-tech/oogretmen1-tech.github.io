@@ -70,6 +70,12 @@
   .suz button.secili{background:var(--purple);color:#fff;}
   .acikla{font-size:.85rem;line-height:1.55;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 12px;}
   .acikla b{color:var(--purple);}
+  .tek{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px 2px;margin:0 0 12px;}
+  .tek-baslik{font-size:.8rem;font-weight:700;color:#5E6E82;margin:0 0 6px;text-transform:uppercase;letter-spacing:.03em;}
+  .tek .suz button{font-size:.8rem;padding:6px 12px;}
+  .tek-grup:has(.suz:empty){display:none;}
+  .secim{font-size:.85rem;margin:0 0 10px;color:#5E6E82;}
+  .secim b{color:var(--purple);}
 </style>
 </head>
 <body>
@@ -80,7 +86,7 @@
 </header>
 
 <div class="wrap">
-  <div class="acikla">Listede her satır ayrı bir kayıttır. <b>Bölüm ›</b> ana sayfada açılan bölümü, <b>İndirme ›</b> indirilen dosyayı, <b>Ön İzleme ›</b> ön izlemesi açılan dosyayı, <b>Yazdırma ›</b> yazdırılan sayfayı gösterir. Aşağıdaki düğmelerle istediğin konuya göre süzebilirsin.</div>
+  <div class="acikla">Listede her satır ayrı bir kayıttır. <b>Bölüm ›</b> ana sayfada açılan bölümü, <b>İndirme ›</b> indirilen dosyayı, <b>Ön İzleme ›</b> ön izlemesi açılan dosyayı, <b>Yazdırma ›</b> yazdırılan sayfayı gösterir. Aşağıdaki düğmelerle istediğin konuya göre süzebilirsin. Fasikül, okuma kitapçığı ve tatil ödevlerinin her birinin kendi düğmesi vardır; birine basınca o dosyanın açılması, ön izlemesi, PDF ve Word indirmeleri ayrı ayrı görünür. Siteye yeni bir fasikül ya da kitapçık eklendiğinde düğmesi burada kendiliğinden çıkar.</div>
   <div class="suz" id="suz">
     <button class="secili" data-f="">Tümü</button>
     <button data-f="İndirme">Bütün indirmeler</button>
@@ -92,7 +98,8 @@
     <button data-f="Matematik">Matematik</button>
     <button data-f="Türkçe">Türkçe</button>
     <button data-f="Fen">Fen Bilimleri</button>
-    <button data-f="fasikul">Fasiküller</button>
+    <button data-f="sesi-fasikul">Fasiküller (hepsi)</button>
+    <button data-f="okuma-kitapcigi">Okuma Kitapçıkları (hepsi)</button>
     <button data-f="Tatil">Tatil Ödevleri</button>
     <button data-f="Atölye">Atölyeler</button>
     <button data-f="Değerlendir">Değerlendirme</button>
@@ -101,6 +108,12 @@
     <button data-f="Ön İzleme">Ön izlemeler</button>
     <button data-f="Yazdırma">Yazdırmalar</button>
   </div>
+  <div class="tek" id="tek">
+    <div class="tek-grup"><div class="tek-baslik">Fasiküller · tek tek</div><div class="suz" data-tur="fasikul"></div></div>
+    <div class="tek-grup"><div class="tek-baslik">Okuma Kitapçıkları · tek tek</div><div class="suz" data-tur="kitapcik"></div></div>
+    <div class="tek-grup"><div class="tek-baslik">Tatil Ödevleri · tek tek</div><div class="suz" data-tur="tatil"></div></div>
+  </div>
+  <div class="secim" id="secim">Gösterilen: <b>Tümü</b></div>
   <div class="kart">
     <iframe id="panel" src="https://dijitalogretmen.goatcounter.com/" title="Ziyaretçi istatistikleri" loading="lazy"></iframe>
   </div>
@@ -112,13 +125,56 @@
 (function(){
   var kok="https://dijitalogretmen.goatcounter.com/";
   var p=document.getElementById("panel");
-  document.getElementById("suz").addEventListener("click",function(e){
-    var b=e.target.closest("button"); if(!b) return;
-    Array.prototype.forEach.call(this.querySelectorAll("button"),function(x){x.classList.remove("secili");});
+  var secim=document.getElementById("secim");
+  function sec(b){
+    Array.prototype.forEach.call(document.querySelectorAll(".suz button"),function(x){x.classList.remove("secili");});
     b.classList.add("secili");
     var f=b.getAttribute("data-f");
+    secim.innerHTML="Gösterilen: <b>"+b.textContent+"</b>";
     p.src=kok+(f?"?filter="+encodeURIComponent(f):"");
+  }
+  document.addEventListener("click",function(e){
+    var b=e.target.closest(".suz button"); if(!b) return;
+    sec(b);
   });
+
+  /* Fasikül, okuma kitapçığı ve tatil ödevi düğmeleri ana sayfadan kendiliğinden okunur:
+     yeni bir fasikül eklenince burada da kendi adıyla görünür. */
+  var YEDEK=[
+    ["a-sesi-fasikul","A Sesi Fasikülü"],["n-sesi-fasikul","N Sesi Fasikülü"],["e-sesi-fasikul","E Sesi Fasikülü"],
+    ["t-sesi-fasikul","T Sesi Fasikülü"],["i-sesi-fasikul","İ Sesi Fasikülü"],["l-sesi-fasikul","L Sesi Fasikülü"],
+    ["o-sesi-fasikul","O Sesi Fasikülü"],
+    ["okuma-kitapcigi-1-a-n-e","Okuma Kitapçığım 1 · a n e"],["okuma-kitapcigi-2-a-n-e-t","Okuma Kitapçığım 2 · a n e t"],
+    ["okuma-kitapcigi-3-a-n-e-t-i","Okuma Kitapçığım 3 · a n e t i"],["okuma-kitapcigi-4-a-n-e-t-i-l","Okuma Kitapçığım 4 · a n e t i l"],
+    ["okuma-kitapcigi-5-a-n-e-t-i-l-o","Okuma Kitapçığım 5 · a n e t i l o"],
+    ["kasim-ara-tatili-odevi","Kasım Ara Tatili Ödevim"]
+  ];
+  function tur(k){
+    if(/sesi-fasikul/.test(k)) return "fasikul";
+    if(/okuma-kitapcigi/.test(k)) return "kitapcik";
+    if(/tatil/.test(k)) return "tatil";
+    return "";
+  }
+  function diz(liste){
+    var gorulen={};
+    liste.forEach(function(x){
+      var k=x[0], t=tur(k); if(!t||gorulen[k]) return; gorulen[k]=1;
+      var kutu=document.querySelector('.tek .suz[data-tur="'+t+'"]'); if(!kutu) return;
+      var b=document.createElement("button");
+      b.setAttribute("data-f",k); b.textContent=x[1];
+      kutu.appendChild(b);
+    });
+  }
+  fetch("index.html",{cache:"no-store"}).then(function(r){return r.text();}).then(function(h){
+    var d=new DOMParser().parseFromString(h,"text/html");
+    var liste=[];
+    Array.prototype.forEach.call(d.querySelectorAll('#page-fasikul a.card[href$=".html"]'),function(a){
+      var k=a.getAttribute("href").replace(/\.html$/,"").replace(/-1-sinif$/,"");
+      var h3=a.querySelector("h3");
+      liste.push([k,h3?h3.textContent.replace(/\s+/g," ").trim():k]);
+    });
+    diz(liste.length?liste:YEDEK);
+  }).catch(function(){ diz(YEDEK); });
 })();
 </script>
 </body>
