@@ -345,7 +345,7 @@
         if (bilgi.tip === "pdf") {
           if (uzanti(href) === "html" || uzanti(href) === "htm") bilgi.sayfa = href;
           if (!bilgi.pdf) bilgi.pdf = onizHedef;
-          if (!bilgi.word) bilgi.word = onizHedef.split("?")[0].split("#")[0].replace(/\.[^.\/]+$/, "") + ".docx";
+          if (!bilgi.word && !/-tum-set\./.test(onizHedef)) bilgi.word = onizHedef.split("?")[0].split("#")[0].replace(/\.[^.\/]+$/, "") + ".docx";
         } else {
           if (!bilgi.pdf) bilgi.pdf = href + "?indir=1";
           if (!bilgi.word) bilgi.word = href + "?indir=word";
