@@ -180,4 +180,27 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bolumKancasi);
   else bolumKancasi();
+
+  /* ---------- oyunlar ---------- */
+  /* Her oyun açıldığında "Oyun › Spor › Gol Kralı 2026" diye ayrıca kaydedilir.
+     Oyun sayfalarının başlıkları birbirine benzemediği için (Neon Adam Asmaca, Kozmik Bayrak Protokolü …)
+     istatistikte ana sayfadaki kart adıyla görünsün diye. Yeni oyun eklenince bu listeye de eklenir. */
+  var OYUNLAR = {
+    spor: { 'gol-krali-2026': 'Gol Kralı 2026', 'milletler-voleybolu': 'Milletler Voleybolu', 'masa-hokeyi': 'Masa Hokeyi', 'masa-tenisi': 'Masa Tenisi' },
+    matematik: { 'orman-bulutlari': 'Orman Bulutları', 'abakus': 'Abaküs', 'satodan-kacis': 'Şatodan Kaçış', 'macera-adasi': 'Macera Adası', 'sekil-dedektifi': 'Şekil Dedektifi', 'galaxy-sudoku': 'Galaxy Sudoku', 'matematik-yolu': 'Matematik Yolu', 'ritmik-sayma-macerasi': "Zıpzıp'ın Nilüfer Yolu" },
+    turkce: { '1-sinif-cizgi-calismalari-interaktif': 'Çizgi Çalışmaları · İnteraktif', 'orman-kostebekleri': 'Orman Köstebekleri', 'deyimler-sozlugu': 'Emoji Bilmecesi', 'adam-asmaca': 'Adam Asmaca', 'hikaye-olusturucu': 'Hikâye Oluşturucu', 'turkce_oyunlar': 'Türkçe Oyunları', 'dinleme-kosesi': 'Dinleme Köşesi', 'pasaparola': 'Pasaparola', 'lingo-turkiye': 'Lingo Türkiye' },
+    ingilizce: { 'ingilizce-kelime-avi': 'Kelime Avı: Uzay Operasyonu', 'ingilizce-hafiza-oyunu': 'English Flashcard Memory', 'ingilizce-cark-oyunu': 'Spin & Speak' },
+    genel: { 'kim-yanlis': 'Kim Yanlış Söylüyor', 'bayrak-oyunu': 'Bayrak Oyunu', 'kart-cevirmece': 'Kart Çevirmece', 'giyinme-oyunu': 'Kız Giydirme', 'pasta-sefi-yarismasi': 'Pasta Şefi Yarışması' },
+    quiz: { 'kim-kazanmak-ister': 'Kim Kazanmak İster?', 'carkifelek': 'Çarkıfelek' }
+  };
+  var TUR_ADI = { spor: 'Spor', matematik: 'Matematik', turkce: 'Türkçe', ingilizce: 'İngilizce', genel: 'Genel Kültür', quiz: 'Quiz' };
+  (function oyunSay() {
+    var kok = sayfaDosyasi().replace(/\.html?$/i, '');
+    for (var t in OYUNLAR) {
+      if (OYUNLAR[t][kok]) {
+        gonder({ path: 'oyun/' + t + '/' + kok, title: 'Oyun › ' + TUR_ADI[t] + ' › ' + OYUNLAR[t][kok], event: true });
+        return;
+      }
+    }
+  })();
 })();

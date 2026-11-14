@@ -86,7 +86,7 @@
 </header>
 
 <div class="wrap">
-  <div class="acikla">Listede her satır ayrı bir kayıttır. <b>Bölüm ›</b> ana sayfada açılan bölümü, <b>İndirme ›</b> indirilen dosyayı, <b>Ön İzleme ›</b> ön izlemesi açılan dosyayı, <b>Yazdırma ›</b> yazdırılan sayfayı gösterir. Aşağıdaki düğmelerle istediğin konuya göre süzebilirsin. Fasikül, okuma kitapçığı ve tatil ödevlerinin her birinin kendi düğmesi vardır; birine basınca o dosyanın açılması, ön izlemesi, PDF ve Word indirmeleri ayrı ayrı görünür. Siteye yeni bir fasikül ya da kitapçık eklendiğinde düğmesi burada kendiliğinden çıkar.</div>
+  <div class="acikla">Listede her satır ayrı bir kayıttır. <b>Bölüm ›</b> ana sayfada açılan bölümü, <b>İndirme ›</b> indirilen dosyayı, <b>Ön İzleme ›</b> ön izlemesi açılan dosyayı, <b>Yazdırma ›</b> yazdırılan sayfayı gösterir. Aşağıdaki düğmelerle istediğin konuya göre süzebilirsin. Fasikül, okuma kitapçığı ve tatil ödevlerinin her birinin kendi düğmesi vardır; birine basınca o dosyanın açılması, ön izlemesi, PDF ve Word indirmeleri ayrı ayrı görünür. Siteye yeni bir fasikül ya da kitapçık eklendiğinde düğmesi burada kendiliğinden çıkar. <b>Oyun ›</b> satırları açılan oyunu gösterir; bir oyunun düğmesine basınca o oyunun bütün açılışları görünür.</div>
   <div class="suz" id="suz">
     <button class="secili" data-f="">Tümü</button>
     <button data-f="İndirme">Bütün indirmeler</button>
@@ -112,7 +112,17 @@
     <div class="tek-grup"><div class="tek-baslik">Fasiküller · tek tek</div><div class="suz" data-tur="fasikul"></div></div>
     <div class="tek-grup"><div class="tek-baslik">Okuma Kitapçıkları · tek tek</div><div class="suz" data-tur="kitapcik"></div></div>
     <div class="tek-grup"><div class="tek-baslik">Tatil Ödevleri · tek tek</div><div class="suz" data-tur="tatil"></div></div>
-    <div class="tek-grup"><div class="tek-baslik">Spor Oyunları · tek tek</div><div class="suz"><button data-f="gol-krali-2026">Futbol · Gol Kralı</button><button data-f="milletler-voleybolu">Voleybol</button><button data-f="masa-hokeyi">Masa Hokeyi</button><button data-f="masa-tenisi">Masa Tenisi</button></div></div>
+  </div>
+  <div class="tek" id="oyunlar">
+    <div class="tek-grup"><div class="tek-baslik">Oyunlar · türe göre</div><div class="suz">
+      <button data-f="oyun/">Bütün oyunlar</button><button data-f="oyun/spor/">Spor</button><button data-f="oyun/matematik/">Matematik</button><button data-f="oyun/turkce/">Türkçe</button><button data-f="oyun/ingilizce/">İngilizce</button><button data-f="oyun/genel/">Genel Kültür</button><button data-f="oyun/quiz/">Quiz</button>
+    </div></div>
+    <div class="tek-grup"><div class="tek-baslik">Spor Oyunları · tek tek</div><div class="suz" data-oyun="spor"></div></div>
+    <div class="tek-grup"><div class="tek-baslik">Matematik Oyunları · tek tek</div><div class="suz" data-oyun="matematik"></div></div>
+    <div class="tek-grup"><div class="tek-baslik">Türkçe Oyunları · tek tek</div><div class="suz" data-oyun="turkce"></div></div>
+    <div class="tek-grup"><div class="tek-baslik">İngilizce Oyunları · tek tek</div><div class="suz" data-oyun="ingilizce"></div></div>
+    <div class="tek-grup"><div class="tek-baslik">Genel Kültür ve Beceri · tek tek</div><div class="suz" data-oyun="genel"></div></div>
+    <div class="tek-grup"><div class="tek-baslik">Quiz Yarışması · tek tek</div><div class="suz" data-oyun="quiz"></div></div>
   </div>
   <div class="secim" id="secim">Gösterilen: <b>Tümü</b></div>
   <div class="kart">
@@ -166,8 +176,43 @@
       kutu.appendChild(b);
     });
   }
+  /* Oyun düğmeleri de ana sayfanın Oyun Zamanı bölümünden okunur: yeni oyun eklenince burada da çıkar. */
+  var OYUN_YEDEK={
+    spor:[["gol-krali-2026","Gol Kralı 2026"],["milletler-voleybolu","Milletler Voleybolu"],["masa-hokeyi","Masa Hokeyi"],["masa-tenisi","Masa Tenisi"]],
+    matematik:[["orman-bulutlari","Orman Bulutları"],["abakus","Abaküs"],["satodan-kacis","Şatodan Kaçış"],["macera-adasi","Macera Adası"],["sekil-dedektifi","Şekil Dedektifi"],["galaxy-sudoku","Galaxy Sudoku"],["matematik-yolu","Matematik Yolu"],["ritmik-sayma-macerasi","Zıpzıp'ın Nilüfer Yolu"]],
+    turkce:[["1-sinif-cizgi-calismalari-interaktif","Çizgi Çalışmaları"],["orman-kostebekleri","Orman Köstebekleri"],["deyimler-sozlugu","Emoji Bilmecesi"],["adam-asmaca","Adam Asmaca"],["hikaye-olusturucu","Hikâye Oluşturucu"],["turkce_oyunlar","Türkçe Oyunları"],["dinleme-kosesi","Dinleme Köşesi"],["pasaparola","Pasaparola"],["lingo-turkiye","Lingo Türkiye"]],
+    ingilizce:[["ingilizce-kelime-avi","Kelime Avı"],["ingilizce-hafiza-oyunu","English Flashcard Memory"],["ingilizce-cark-oyunu","Spin & Speak"]],
+    genel:[["kim-yanlis","Kim Yanlış Söylüyor"],["bayrak-oyunu","Bayrak Oyunu"],["kart-cevirmece","Kart Çevirmece"],["giyinme-oyunu","Kız Giydirme"],["pasta-sefi-yarismasi","Pasta Şefi Yarışması"]],
+    quiz:[["kim-kazanmak-ister","Kim Kazanmak İster?"],["carkifelek","Çarkıfelek"]]
+  };
+  function oyunDiz(liste){
+    for(var t in liste){
+      var kutu=document.querySelector('#oyunlar .suz[data-oyun="'+t+'"]'); if(!kutu) continue;
+      kutu.innerHTML="";
+      liste[t].forEach(function(x){
+        var b=document.createElement("button");
+        b.setAttribute("data-f",x[0]); b.textContent=x[1];
+        kutu.appendChild(b);
+      });
+    }
+  }
+  function oyunOku(d){
+    var sec=d.getElementById("page-oyun"); if(!sec) return null;
+    var liste={}, tur=null, say=0;
+    Array.prototype.forEach.call(sec.querySelectorAll(".alt-baslik, a[href]"),function(el){
+      if(el.classList.contains("alt-baslik")){ tur=(el.id||"").replace(/^oyun-/,""); return; }
+      var k=(el.getAttribute("href")||"").split("?")[0].split("#")[0];
+      if(!tur||!/\.html$/.test(k)) return;
+      k=k.replace(/\.html$/,"");
+      var h=el.querySelector("h3, h4");
+      (liste[tur]=liste[tur]||[]).push([k,h?h.textContent.replace(/\s+/g," ").trim():k]); say++;
+    });
+    return say?liste:null;
+  }
+  oyunDiz(OYUN_YEDEK);
   fetch("index.html",{cache:"no-store"}).then(function(r){return r.text();}).then(function(h){
     var d=new DOMParser().parseFromString(h,"text/html");
+    var oy=oyunOku(d); if(oy) oyunDiz(oy);
     var liste=[];
     Array.prototype.forEach.call(d.querySelectorAll('#page-fasikul a.card[href$=".html"]'),function(a){
       var k=a.getAttribute("href").replace(/\.html$/,"").replace(/-1-sinif$/,"");
