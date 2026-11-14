@@ -864,6 +864,7 @@ function teamCtx(){
 function offLine(t){ const fs=opp(t).players.map(q=>fxOf(t,q.x)).sort((a,b)=>b-a); return Math.max(fs[1]||0.5, fxOf(t,ball.x), 0.5); }
 function shapeTarget(p,att){
   const t=p.team, bf=fxOf(t,ball.x), by=ball.y/FWD;
+  if(p.isGK) return {x:wx(t,0.012), y:clamp(CY+(ball.y-CY)*0.08,CY-2.5,CY+2.5)};
   let fx=p.fx+(bf-0.5)*0.62+(att?0.08:-0.05);
   if(p.role==='DF') fx=clamp(fx,0.06,att?0.58:0.42);
   else if(p.role==='MF') fx=clamp(fx,0.14,att?0.8:0.6);
