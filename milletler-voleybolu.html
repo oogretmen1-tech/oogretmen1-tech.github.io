@@ -242,7 +242,7 @@ canvas#tuval{
   <ul class="yardim">
     <li><b>Servis:</b> <span class="tus">SMAÇ</span> tuşuna bas, oyuncu topu havaya atar. Top inerken halka küçülüp yeşile döndüğü anda yeniden <span class="tus">SMAÇ</span>'a bas. Zamanlama ne kadar iyiyse servis o kadar sert ve derin olur. Servis atarken <span class="tus">▶</span> basılı tutarsan top daha derine, <span class="tus">◀</span> basılı tutarsan fileye yakın düşer.</li>
     <li><b>Manşet (karşılama):</b> Topun düşeceği yere koş, top yaklaşınca <span class="tus">MANŞET</span>'e bas.</li>
-    <li><b>Pas:</b> İkinci dokunuşta <span class="tus">MANŞET</span>'e basarsan top smaç için filenin önüne yükselir.</li>
+    <li><b>Pas:</b> Karşıladıktan sonra oyuncun topun ineceği yere kendisi koşar ve pası verir; istersen <span class="tus">MANŞET</span>'e kendin de basabilirsin. Top filenin önüne yükselir.</li>
     <li><b>Smaç:</b> Fileye yaklaş, <span class="tus">ZIPLA</span> ile sıçra, havadayken <span class="tus">SMAÇ</span>'a bas. Sağa-sola basılı tutarak smacı yönlendirebilirsin.</li>
     <li><b>Blok:</b> Rakip smaç yaparken filenin dibinde zıpla ve havadayken <span class="tus">SMAÇ</span>'a bas.</li>
     <li><b>Klavye:</b> <span class="tus">←</span> <span class="tus">→</span> hareket, <span class="tus">↑</span> zıpla, <span class="tus">S</span> manşet, <span class="tus">Boşluk</span> smaç/servis, <span class="tus">F</span> tam ekran.</li>
@@ -1204,6 +1204,7 @@ function vur(p,tur){
     t.vx=v.vx; t.vy=Math.max(-15.5,Math.min(v.vy,-9.2)); t.don=0.1;
     p.durum= dok>=2? "pas":"manset"; O.sonVurusTur= dok>=2? "pas":"manset";
     if(dok>=2) sesPas(); else sesManset();
+    if(dok===2 && insanTakimi(p) && (O.ipucu||0)<3){ O.ipucu=(O.ipucu||0)+1; mesajVer("Zıpla ve SMAÇ'a bas!",55); }
     if(dok>=3){ // üçüncü dokunuş: top mutlaka karşıya gönderilir (plase)
       const hx = FILE_X + p.yon*(110+Math.random()*230);
       hucumAt(p,hx,false);
@@ -1366,6 +1367,17 @@ function insanKontrol(p){
   const servisAninda = (O.durum==="servisHazir"||O.durum==="servisAtildi");
   if(bas.sol) p.vx=-hiz;
   if(bas.sag) p.vx=hiz;
+  // Yardımlı koşu: takım topa bir kez dokunduktan sonra (pas ve hücum için)
+  // yön tuşuna basılmıyorsa oyuncu topun ineceği yere kendiliğinden gider.
+  if(O.durum==="oyunda" && !bas.sol && !bas.sag && O.ucus!==p.taraf){
+    const dokY = O.sonVuran===p.taraf? O.dokunus[p.taraf] : 0;
+    if(dokY>=1 && (topTarafi()===p.taraf || Math.abs(O.top.x-FILE_X)<60)){
+      const s=hareketSiniri(p);
+      const hx=Math.max(s[0],Math.min(s[1], tahminEt(dokY>=2? ZEMIN-130 : ZEMIN-80).x - p.yon*10));
+      const fark=hx-p.x;
+      if(Math.abs(fark)>5) p.vx=Math.sign(fark)*Math.min(hiz,Math.abs(fark)*0.5+1.5);
+    }
+  }
   if(bas.zipla){ if(p.yerde && !servisAninda) ziplat(p,0, p.x*p.yon > (FILE_X-120)*p.yon && O.sonVuran!=="sol" ? "blok" : "smac"); bas.zipla=false; }
 
   if(O.durum==="servisHazir"){
@@ -1395,7 +1407,8 @@ function insanKontrol(p){
         vur(p,"manset"); bas.manset=false;
       } else if(tem==="govde"){
         const dok = O.sonVuran===p.taraf? O.dokunus[p.taraf] : 0;
-        vur(p, dok>=2? "manset":"otomatik");
+        // ikinci ve üçüncü dokunuşta tuşa basılmasa da top kontrollü oynanır (pas / plase)
+        vur(p, dok>=1? "manset":"otomatik");
       }
     }
   }
