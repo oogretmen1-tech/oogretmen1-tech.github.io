@@ -490,9 +490,14 @@ function mesaj(t){
   const m=document.getElementById('mesaj'); m.textContent=t; m.classList.add('gor');
   clearTimeout(mesajZ); mesajZ=setTimeout(()=>m.classList.remove('gor'),1500);
 }
+let sonucZ;
 function sonuc(cls){
-  yazilanCiz(cls);
-  setTimeout(()=>{ secim=[]; yazilanCiz(); cizgiCiz(); },cls==='hata'?600:700);
+  // kontrol edilen kelime kısa süre renkli görünür, seçim hemen boşalır (yeni kelimeye hemen başlanabilir)
+  const goster=secim.slice(); secim=[]; cizgiCiz();
+  document.querySelectorAll('.harf').forEach(e=>e.classList.remove('secili'));
+  const y=document.getElementById('yazilan'); y.className='yazilan '+cls;
+  y.innerHTML=goster.map(i=>'<b>'+BUYUK(harfler[i])+'</b>').join('');
+  clearTimeout(sonucZ); sonucZ=setTimeout(()=>{ if(!secim.length) yazilanCiz(); },cls==='hata'?600:700);
 }
 function kontrol(){
   if(bul.cevap||!secim.length) return;
