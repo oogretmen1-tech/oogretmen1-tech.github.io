@@ -134,6 +134,7 @@ body.fs .small-btn{padding:5px 11px;font-size:.78rem;opacity:.72;background:rgba
       <button class="btn-option" data-diff="easy">Kolay</button>
       <button class="btn-option selected" data-diff="medium">Orta</button>
       <button class="btn-option" data-diff="hard">Zor</button>
+      <button class="btn-option" data-diff="vip">VIP</button>
     </div>
   </div>
 
@@ -501,36 +502,145 @@ function centerServe(){
 }
 
 /* ================= Yapay zekâ ================= */
+/* Seviyeler: hız (adım), vuruş hızı, tepki gecikmesi (kare), tahmin hatası (px),
+   nişan hatası (px), boşluğa nişan alma, bant (duvardan) vuruşu olasılığı */
+const AI_SEVIYE = {
+  easy:   {adim:3.8,  vurus:6.5,  tepki:14, tahmin:false, hata:55, nisan:70, bosluk:0.0, bant:0.0,  savunmaY:70},
+  medium: {adim:5.6,  vurus:9.5,  tepki:9,  tahmin:true,  hata:34, nisan:45, bosluk:0.4, bant:0.1,  savunmaY:66},
+  hard:   {adim:7.0,  vurus:12.0, tepki:6,  tahmin:true,  hata:24, nisan:28, bosluk:0.7, bant:0.25, savunmaY:64},
+  vip:    {adim:12.0, vurus:15.0, tepki:1,  tahmin:true,  hata:3,  nisan:10, bosluk:1.0, bant:0.5,  savunmaY:58}
+};
+const aiDurum = {tx:0, ty:80, sayac:0, hedefX:0, hedefNisan:0, nisanSayac:0};
+
+/* Diskin verilen y çizgisine geldiğinde nerede olacağını yan duvar sekmeleriyle hesapla */
+function diskTahmin(yCizgi){
+  if(puck.vy >= -0.05) return null;
+  const t = (puck.y - yCizgi) / (-puck.vy);
+  if(t < 0 || t > 400) return null;
+  let x = puck.x + puck.vx * t;
+  const sol = puck.r, gen = W - 2*puck.r;
+  x -= sol;
+  const per = 2*gen;
+  x = ((x % per) + per) % per;
+  if(x > gen) x = per - x;
+  return {x: x + sol, t: t};
+}
+
+/* Bilgisayarın hedeflediği nokta (rakip kalesi) */
+function nisanSec(sv){
+  const kaleOrta = (GOAL_L + GOAL_R) / 2, yari = (GOAL_R - GOAL_L) / 2 - puck.r - 4;
+  let gx;
+  if(Math.random() < sv.bosluk){
+    // rakip tokacın uzak tarafındaki boşluğa
+    gx = p1.x > kaleOrta ? kaleOrta - yari*0.8 : kaleOrta + yari*0.8;
+  }else{
+    gx = kaleOrta + (Math.random()*2-1) * yari;
+  }
+  gx += (Math.random()*2-1) * sv.nisan;
+  let gy = H + 30;
+  // bant vuruşu: hedefi duvarın arkasına yansıt
+  if(Math.random() < sv.bant && puck.y > 140){
+    const sag = p1.x < W/2;
+    const duvarX = sag ? W - puck.r : puck.r;
+    gx = 2*duvarX - gx;
+  }
+  return {x: gx, y: gy};
+}
+
 function updateAI(){
   if(gameMode !== 1) return;
-  let maxStep = 3.2, aggression = 0.55;
-  if(aiDifficulty === 'medium'){ maxStep = 5.0; aggression = 0.75; }
-  if(aiDifficulty === 'hard'){   maxStep = 7.5; aggression = 0.95; }
+  const sv = AI_SEVIYE[aiDifficulty] || AI_SEVIYE.medium;
+  const toplamR = puck.r + p2.r;
+  const hiz = Math.hypot(puck.vx, puck.vy);
+  let adim = sv.adim;
 
-  const slow = Math.hypot(puck.vx, puck.vy) < 2;
+  aiDurum.sayac--;
+  if(aiDurum.sayac <= 0){
+    aiDurum.sayac = sv.tepki;
+    aiDurum.hedefX = (Math.random()*2-1) * sv.hata;
+  }
+  if(aiDurum.nisanSayac-- <= 0 || !aiDurum.nisan){
+    aiDurum.nisan = nisanSec(sv);
+    aiDurum.nisanSayac = 40;
+  }
+
   let tx, ty;
+  const kendiSaha = puck.y < H/2 - 4;
+  const bizeGeliyor = puck.vy < -1.2;
+  const kaleOrta = W/2;
 
-  if(puck.y < H/2){
+  if(kendiSaha){
+    const slow = hiz < 2;
     if(slow && (puck.y < p2.r + puck.r + 6 || puck.x < 55 || puck.x > W-55)){
       // Disk duvara/köşeye yapışmış: arkasına geçip sahanın ortasına doğru it
       const cx = W/2 - puck.x, cy = (H*0.40) - puck.y;
       const d = Math.hypot(cx,cy) || 1;
-      tx = puck.x - (cx/d) * (puck.r + p2.r) * 0.95;
-      ty = puck.y - (cy/d) * (puck.r + p2.r) * 0.95;
+      tx = puck.x - (cx/d) * toplamR * 0.95;
+      ty = puck.y - (cy/d) * toplamR * 0.95;
+    }else if(bizeGeliyor && puck.y < 150 && sv.tahmin){
+      // Disk hızla kaleye geliyor: önüne geç
+      const t = diskTahmin(sv.savunmaY + 20);
+      tx = t ? t.x + aiDurum.hedefX : puck.x;
+      ty = sv.savunmaY;
+      adim = sv.adim * 1.2;
     }else{
-      // Disk kendi sahasında: vurmaya git
-      tx = puck.x;
-      ty = Math.min(puck.y + puck.r + p2.r*0.6, H/2 - p2.r);
-      tx = p2.x + (tx - p2.x) * aggression;
+      // Hücum: diskin arkasına geç, sonra hedefe doğru sert vur
+      // hızlı gelen diskin birkaç kare sonraki yerini kullan
+      const ileri = sv.tahmin ? Math.min(8, hiz) : 0;
+      const dx0 = puck.x + puck.vx*ileri, dy0 = puck.y + puck.vy*ileri;
+      const n = aiDurum.nisan;
+      let ax = n.x - dx0, ay = n.y - dy0;
+      const ad = Math.hypot(ax, ay) || 1; ax /= ad; ay /= ad;
+      // konum noktası: diskin hedefe göre tam arkası
+      const kx = dx0 - ax * (toplamR + 6), ky = dy0 - ay * (toplamR + 6);
+      const arkada = (p2.y < dy0 - 6);
+      // tokaç → disk yönü ile nişan yönü arasındaki açı (kosinüs)
+      const ux = dx0 - p2.x, uy = dy0 - p2.y, ud = Math.hypot(ux, uy) || 1;
+      const hizali = (ux*ax + uy*ay) / ud;
+      const esik = aiDifficulty === 'easy' ? 0.97 : (aiDifficulty === 'medium' ? 0.93 : 0.88);
+      if(arkada && hizali > esik && ud < toplamR + 90){
+        // vuruş: diskin içinden geç
+        tx = dx0 + ax * 40;
+        ty = dy0 + ay * 40;
+        adim = sv.vurus;
+      }else if(!arkada){
+        // diskin önündeyiz: yandan dolaşıp arkasına geç
+        const yanYon = p2.x < dx0 ? -1 : 1;
+        tx = dx0 + yanYon * (toplamR + 12);
+        ty = dy0 - toplamR - 10;
+        if(sv.tahmin && bizeGeliyor){ tx = dx0 + yanYon*(toplamR+4); }
+      }else{
+        tx = kx + aiDurum.hedefX*0.3;
+        ty = ky;
+      }
+      if(aiDifficulty === 'easy'){
+        // kolay: kararsız, yarı yolda kalan rakip
+        tx = p2.x + (tx - p2.x) * 0.7;
+      }
     }
   }else{
-    // Savunma pozisyonu: kaleyi kapat
-    tx = W/2 + (puck.x - W/2) * 0.45;
-    ty = 80;
+    // Savunma: diskin kaleye çizdiği doğrunun üstünde dur
+    let gx;
+    if(sv.tahmin && bizeGeliyor){
+      const t = diskTahmin(sv.savunmaY);
+      gx = t ? t.x : puck.x;
+    }else{
+      gx = puck.x;
+    }
+    // kale ağzı ile disk arasındaki çizgi üzerinde, kaleye yakın
+    const oran = aiDifficulty === 'easy' ? 0.45 : 0.75;
+    tx = kaleOrta + (gx - kaleOrta) * oran + aiDurum.hedefX * 0.5;
+    ty = sv.savunmaY + (aiDifficulty === 'vip' || aiDifficulty === 'hard' ? 10 : 0);
+    // disk yavaşça orta çizgiye gelirken öne çık
+    if(!bizeGeliyor && puck.y < H/2 + 90 && aiDifficulty !== 'easy'){
+      ty = Math.max(ty, H/2 - 150);
+      tx = kaleOrta + (puck.x - kaleOrta) * 0.6;
+    }
   }
+
   const dx = tx - p2.x, dy = ty - p2.y;
   const d = Math.hypot(dx, dy) || 1;
-  const step = Math.min(maxStep, d);
+  const step = Math.min(adim, d);
   p2.x += (dx/d) * step;
   p2.y += (dy/d) * step;
   p2.x = Math.max(p2.r, Math.min(W-p2.r, p2.x));
