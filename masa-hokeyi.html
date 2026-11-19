@@ -186,7 +186,7 @@ let targetGoals = 5;
 /* ================= Saha (artık dinamik) ================= */
 let W = 400, H = 650;                    // mantıksal ölçüler (W ekrana göre değişir)
 let GOAL_W = 150, GOAL_L = 125, GOAL_R = 275;
-const MAX_SPEED = 15;
+let MAX_SPEED = 15;               // seviyeye göre değişir (bkz. AI_SEVIYE.disk)
 
 const canvas = document.getElementById('board');
 const ctx = canvas.getContext('2d');
@@ -354,7 +354,14 @@ function initGame(){
   restartGame();
 }
 
+function seviyeAyarla(){
+  const sv = (gameMode === 1 ? AI_SEVIYE[aiDifficulty] : null) || AI_SEVIYE.medium;
+  MAX_SPEED = gameMode === 1 ? sv.disk : 15;
+  SERVIS_HIZ = gameMode === 1 ? sv.servis : 5;
+}
+let SERVIS_HIZ = 5;
 function restartGame(){
+  seviyeAyarla();
   document.getElementById('overlay').style.display = 'none';
   scoreP1 = 0; scoreP2 = 0;
   gameOver = false; isPaused = false;
@@ -425,7 +432,7 @@ function gameLoop(){
       if(goalPause === 0){
         const d = puck._dir || 1;
         puck.vx = (Math.random()-0.5)*3;
-        puck.vy = d * 5;
+        puck.vy = d * SERVIS_HIZ;
       }
     }else{
       updateAI();
@@ -505,10 +512,10 @@ function centerServe(){
 /* Seviyeler: hız (adım), vuruş hızı, tepki gecikmesi (kare), tahmin hatası (px),
    nişan hatası (px), boşluğa nişan alma, bant (duvardan) vuruşu olasılığı */
 const AI_SEVIYE = {
-  easy:   {adim:3.8,  vurus:6.5,  tepki:14, tahmin:false, hata:55, nisan:70, bosluk:0.0, bant:0.0,  savunmaY:70},
-  medium: {adim:5.6,  vurus:9.5,  tepki:9,  tahmin:true,  hata:34, nisan:45, bosluk:0.4, bant:0.1,  savunmaY:66},
-  hard:   {adim:7.0,  vurus:12.0, tepki:6,  tahmin:true,  hata:24, nisan:28, bosluk:0.7, bant:0.25, savunmaY:64},
-  vip:    {adim:12.0, vurus:15.0, tepki:1,  tahmin:true,  hata:3,  nisan:10, bosluk:1.0, bant:0.5,  savunmaY:58}
+  easy:   {adim:3.8,  vurus:6.5,  tepki:14, tahmin:false, hata:55, nisan:70, bosluk:0.0, bant:0.0,  savunmaY:70, disk:13, esik:0.97, menzil:90,  servis:5},
+  medium: {adim:5.6,  vurus:9.5,  tepki:9,  tahmin:true,  hata:34, nisan:45, bosluk:0.4, bant:0.1,  savunmaY:66, disk:15, esik:0.93, menzil:90,  servis:5},
+  hard:   {adim:7.5,  vurus:15.0, tepki:5,  tahmin:true,  hata:20, nisan:24, bosluk:0.7, bant:0.25, savunmaY:68, disk:18, esik:0.86, menzil:120, servis:6.5},
+  vip:    {adim:13.0, vurus:26.0, tepki:1,  tahmin:true,  hata:3,  nisan:8,  bosluk:1.0, bant:0.35, savunmaY:74, disk:23, esik:0.80, menzil:170, servis:8.5}
 };
 const aiDurum = {tx:0, ty:80, sayac:0, hedefX:0, hedefNisan:0, nisanSayac:0};
 
@@ -559,7 +566,7 @@ function updateAI(){
     aiDurum.sayac = sv.tepki;
     aiDurum.hedefX = (Math.random()*2-1) * sv.hata;
   }
-  if(aiDurum.nisanSayac-- <= 0 || !aiDurum.nisan){
+  if((aiDurum.nisanSayac-- <= 0 && !(puck.y < H/2 && sv.disk >= 18)) || !aiDurum.nisan || aiDurum.nisanSayac < -150){
     aiDurum.nisan = nisanSec(sv);
     aiDurum.nisanSayac = 40;
   }
@@ -597,8 +604,7 @@ function updateAI(){
       // tokaç → disk yönü ile nişan yönü arasındaki açı (kosinüs)
       const ux = dx0 - p2.x, uy = dy0 - p2.y, ud = Math.hypot(ux, uy) || 1;
       const hizali = (ux*ax + uy*ay) / ud;
-      const esik = aiDifficulty === 'easy' ? 0.97 : (aiDifficulty === 'medium' ? 0.93 : 0.88);
-      if(arkada && hizali > esik && ud < toplamR + 90){
+      if(arkada && hizali > sv.esik && ud < toplamR + sv.menzil){
         // vuruş: diskin içinden geç
         tx = dx0 + ax * 40;
         ty = dy0 + ay * 40;
