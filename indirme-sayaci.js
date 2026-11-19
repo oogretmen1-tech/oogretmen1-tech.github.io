@@ -188,7 +188,7 @@
   var OYUNLAR = {
     spor: { 'gol-krali-2026': 'Gol Kralı 2026', 'milletler-voleybolu': 'Milletler Voleybolu', 'masa-hokeyi': 'Masa Hokeyi', 'masa-tenisi': 'Masa Tenisi' },
     matematik: { 'orman-bulutlari': 'Orman Bulutları', 'abakus': 'Abaküs', 'satodan-kacis': 'Şatodan Kaçış', 'macera-adasi': 'Macera Adası', 'sekil-dedektifi': 'Şekil Dedektifi', 'galaxy-sudoku': 'Galaxy Sudoku', 'matematik-yolu': 'Matematik Yolu', 'ritmik-sayma-macerasi': "Zıpzıp'ın Nilüfer Yolu" },
-    turkce: { '1-sinif-cizgi-calismalari-interaktif': 'Çizgi Çalışmaları · İnteraktif', 'orman-kostebekleri': 'Orman Köstebekleri', 'deyimler-sozlugu': 'Emoji Bilmecesi', 'adam-asmaca': 'Adam Asmaca', 'hikaye-olusturucu': 'Hikâye Oluşturucu', 'turkce_oyunlar': 'Türkçe Oyunları', 'dinleme-kosesi': 'Dinleme Köşesi', 'pasaparola': 'Pasaparola', 'lingo-turkiye': 'Lingo Türkiye' },
+    turkce: { '1-sinif-cizgi-calismalari-interaktif': 'Çizgi Çalışmaları · İnteraktif', 'orman-kostebekleri': 'Orman Köstebekleri', 'deyimler-sozlugu': 'Emoji Bilmecesi', 'adam-asmaca': 'Adam Asmaca', 'hikaye-olusturucu': 'Hikâye Oluşturucu', 'turkce_oyunlar': 'Türkçe Oyunları', 'dinleme-kosesi': 'Dinleme Köşesi', 'pasaparola': 'Pasaparola', 'lingo-turkiye': 'Lingo Türkiye', 'kelime-sandigi': 'Kelime Sandığı' },
     ingilizce: { 'ingilizce-kelime-avi': 'Kelime Avı: Uzay Operasyonu', 'ingilizce-hafiza-oyunu': 'English Flashcard Memory', 'ingilizce-cark-oyunu': 'Spin & Speak' },
     genel: { 'kim-yanlis': 'Kim Yanlış Söylüyor', 'bayrak-oyunu': 'Bayrak Oyunu', 'kart-cevirmece': 'Kart Çevirmece', 'giyinme-oyunu': 'Kız Giydirme', 'pasta-sefi-yarismasi': 'Pasta Şefi Yarışması' },
     quiz: { 'kim-kazanmak-ister': 'Kim Kazanmak İster?', 'carkifelek': 'Çarkıfelek' }
