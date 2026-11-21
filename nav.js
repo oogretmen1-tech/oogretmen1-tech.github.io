@@ -340,6 +340,54 @@
     window.addEventListener("pageshow", function () { ciz(); });
   }
 
+  /* ---------- Telefonda geniş sayfa düzeltmesi ----------
+     Sayfa içeriği telefon ekranından genişse (A4 fotokopi sayfaları gibi)
+     sabit çubuklar görünen ekranın dışına taşıyordu: Ana Sayfa, Word/PDF İndir
+     ve Yukarı düğmeleri görünmüyordu. Çubukları görünen alana sabitler. */
+  function ekranaSabitle() {
+    var vv = window.visualViewport;
+    if (!vv) return;
+    var tasma = document.documentElement.scrollWidth > vv.width + 5 && window.innerWidth > vv.width + 5;
+    var sol = vv.offsetLeft, gen = vv.width;
+    function ayar(el, ozellik, deger) {
+      if (!el) return;
+      if (deger === null) el.style.removeProperty(ozellik);
+      else el.style.setProperty(ozellik, deger, "important");
+    }
+    var bar = document.getElementById("do-indir-bar");
+    var secim = document.getElementById("do-secim-bar");
+    if (tasma) {
+      ayar(cubuk, "left", sol + "px"); ayar(cubuk, "right", "auto"); ayar(cubuk, "width", gen + "px");
+      ayar(btnYukari, "left", (sol + gen - 58) + "px"); ayar(btnYukari, "right", "auto");
+      if (bar) {
+        ayar(bar, "max-width", (gen - 28) + "px"); ayar(bar, "right", "auto");
+        ayar(bar, "left", (sol + gen - 14 - bar.offsetWidth) + "px");
+      }
+      if (secim) ayar(secim, "left", (sol + gen / 2) + "px");
+    } else {
+      ["left", "right", "width"].forEach(function (o) { ayar(cubuk, o, null); });
+      ["left", "right"].forEach(function (o) { ayar(btnYukari, o, null); });
+      ["left", "right", "max-width"].forEach(function (o) { ayar(bar, o, null); });
+      ayar(secim, "left", null);
+    }
+  }
+
+  function sabitlemeKur() {
+    var bekle = false;
+    function tetikle() {
+      if (bekle) return;
+      bekle = true;
+      window.requestAnimationFrame(function () { bekle = false; ekranaSabitle(); });
+    }
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", tetikle);
+      window.visualViewport.addEventListener("scroll", tetikle);
+    }
+    window.addEventListener("resize", tetikle);
+    window.addEventListener("load", tetikle);
+    [300, 1200, 3000].forEach(function (ms) { setTimeout(ekranaSabitle, ms); });
+  }
+
   /* ---------- Başlat ---------- */
   function basla() {
     if (!document.body) { setTimeout(basla, 30); return; }
@@ -350,6 +398,7 @@
     kaydirmaKur();
     klavyeKur();
     tarihceKur();
+    sabitlemeKur();
   }
 
   if (document.readyState === "loading") {
