@@ -372,20 +372,76 @@
     }
   }
 
+  /* ---------- Telefonda A4 sayfaları ekrana sığdır ----------
+     Fotokopi, fasikül, el işi gibi A4 genişliğindeki sayfalar telefonda yana
+     kaydırılarak okunuyordu. Ekrandan geniş kutular ekran genişliğine küçültülür.
+     Yalnızca ekranda geçerlidir: yazdırma ve Word/PDF indirme asıl boyutla çalışır. */
+  var SIGDIR_ESIK = 820, sonGenislik = 0;
+  function sigdirStilEkle() {
+    if (document.getElementById("do-sigdir-stil")) return;
+    var s = document.createElement("style");
+    s.id = "do-sigdir-stil";
+    s.textContent = "@media screen{html:not(:has(#do-indir-emul,#do-indir-genislik)) .do-sigdir{zoom:var(--do-z,1)}html:not(:has(#do-indir-emul,#do-indir-genislik)) .do-kaydir{overflow-x:auto;-webkit-overflow-scrolling:touch}}";
+    (document.head || document.documentElement).appendChild(s);
+  }
+  function indirmeSuruyor() {
+    return !!(document.getElementById("do-indir-emul") || document.getElementById("do-indir-genislik"));
+  }
+  function sigdir(zorla) {
+    if (indirmeSuruyor() || !document.body || document.querySelector(".reveal")) return;
+    var W = document.documentElement.clientWidth;
+    if (W === sonGenislik && !zorla) return;
+    sonGenislik = W;
+    var eski = document.querySelectorAll(".do-sigdir,.do-kaydir");
+    for (var e = 0; e < eski.length; e++) eski[e].classList.remove("do-sigdir", "do-kaydir");
+    if (W >= SIGDIR_ESIK) return;
+    var hepsi = document.body.getElementsByTagName("*");
+    for (var i = 0; i < hepsi.length && i < 6000; i++) {
+      var el = hepsi[i];
+      if (el.id === "do-nav" || el.id === "do-yukari" || el.id === "do-indir-bar" ||
+          el.closest("#do-nav,#do-indir-bar,#do-secici,#do-secim-bar,.do-sigdir,.do-kaydir,svg,script,style")) continue;
+      var r = el.getBoundingClientRect();
+      if (r.width <= W + 4) {
+        /* kutu ekrana sığıyor ama içi taşıyor (sabit sütunlu tablo/ızgara):
+           küçültmek yerine kutunun kendi içinde yana kaydırılmasını sağla */
+        if (el.scrollWidth <= el.clientWidth + 4 || r.left + el.scrollWidth <= W + 4) continue;
+        var csT = getComputedStyle(el);
+        if (csT.overflowX !== "visible" || !/grid|flex|table/.test(csT.display)) continue;
+        el.classList.add("do-kaydir");
+        continue;
+      }
+      if (r.width > 4000) continue;
+      var cs = getComputedStyle(el);
+      if (cs.position === "fixed" || cs.display === "inline") continue;
+      var z = (W - Math.max(0, r.left) - 6) / r.width;
+      if (z >= 0.98) continue;
+      el.style.setProperty("--do-z", Math.max(0.3, z).toFixed(3));
+      el.classList.add("do-sigdir");
+    }
+  }
+
   function sabitlemeKur() {
     var bekle = false;
     function tetikle() {
       if (bekle) return;
       bekle = true;
-      window.requestAnimationFrame(function () { bekle = false; ekranaSabitle(); });
+      window.requestAnimationFrame(function () { bekle = false; sigdir(); ekranaSabitle(); });
     }
+    sigdirStilEkle();
+    /* sekme/bölüm açılınca yeni görünen geniş kutuları da sığdır */
+    var tikBekle = null;
+    document.addEventListener("click", function () {
+      if (document.documentElement.clientWidth >= SIGDIR_ESIK) return;
+      clearTimeout(tikBekle);
+      tikBekle = setTimeout(function () { sigdir(true); ekranaSabitle(); }, 400);
+    }, true);
     if (window.visualViewport) {
       window.visualViewport.addEventListener("resize", tetikle);
       window.visualViewport.addEventListener("scroll", tetikle);
     }
     window.addEventListener("resize", tetikle);
     window.addEventListener("load", tetikle);
-    [300, 1200, 3000].forEach(function (ms) { setTimeout(ekranaSabitle, ms); });
+    [300, 1200, 3000].forEach(function (ms) { setTimeout(function () { sigdir(true); ekranaSabitle(); }, ms); });
   }
 
   /* ---------- Başlat ---------- */
