@@ -99,9 +99,9 @@
     bar.id = "do-indir-bar";
     bar.setAttribute("data-indir-gizle", "");
     bar.innerHTML =
-      '<button id="do-yazdir-btn" type="button" title="Yazdır">🖨️ Yazdır</button>' +
-      '<button id="do-word-btn" type="button" title="Word dosyası olarak indir">📄 Word İndir</button>' +
-      '<button id="do-indir-btn" type="button" title="PDF dosyası olarak indir">⬇️ PDF İndir</button>';
+      '<button id="do-yazdir-btn" type="button" title="Yazdır">Yazdır</button>' +
+      '<button id="do-word-btn" type="button" title="Word dosyası olarak indir">Word İndir</button>' +
+      '<button id="do-indir-btn" type="button" title="PDF dosyası olarak indir">↓ PDF İndir</button>';
     document.body.appendChild(bar);
     document.getElementById("do-indir-btn").onclick = function () { indir("pdf"); };
     document.getElementById("do-word-btn").onclick = function () { indir("word"); };
@@ -117,7 +117,7 @@
       if (d.getAttribute("data-do-cevrildi")) continue;
       d.setAttribute("data-do-cevrildi", "1");
       d.removeAttribute("onclick");
-      if (/dosya/i.test(d.textContent || "")) d.textContent = "⬇ PDF İndir";
+      if (/dosya/i.test(d.textContent || "")) d.textContent = "↓ PDF İndir";
       d.addEventListener("click", function (e) { e.preventDefault(); indir("pdf"); });
     }
   }
@@ -889,9 +889,9 @@
       var ad = sayfaBasligi(el, i);
       b.innerHTML = '<label><input type="checkbox" aria-label="Bu sayfayı seç"><span><b>' + (i + 1) + '.</b> ' +
         ad.replace(/</g, "&lt;") + '</span></label><span class="do-sb-dg"><span class="do-sb-not">Bu sayfa:</span>' +
-        '<button type="button" class="do-b-yaz" title="Yalnız bu sayfayı yazdır">🖨️ Yazdır</button>' +
-        '<button type="button" class="do-b-pdf" title="Yalnız bu sayfayı PDF indir">⬇️ PDF</button>' +
-        '<button type="button" class="do-b-word" title="Yalnız bu sayfayı Word indir">📄 Word</button></span>';
+        '<button type="button" class="do-b-yaz" title="Yalnız bu sayfayı yazdır">Yazdır</button>' +
+        '<button type="button" class="do-b-pdf" title="Yalnız bu sayfayı PDF indir">↓ PDF</button>' +
+        '<button type="button" class="do-b-word" title="Yalnız bu sayfayı Word indir">Word</button></span>';
       b.querySelector("input").addEventListener("change", function (e) { secimDegistir(i, e.target.checked); });
       b.querySelector(".do-b-yaz").onclick = function () { yalnizBunlariYazdir([el]); };
       b.querySelector(".do-b-pdf").onclick = function () { indir("pdf", [el]); };
@@ -911,8 +911,8 @@
       '<button type="button" class="do-b-gri ds-kapat" aria-label="Kapat">✕</button></span></div>' +
       '<div class="ds-liste">' + satirlar + '</div>' +
       '<div class="ds-alt"><span class="ds-bilgi">Sayfa seçin</span>' +
-      '<button type="button" class="do-b-yaz ds-yaz">🖨️ Yazdır</button><button type="button" class="do-b-pdf ds-pdf">⬇️ PDF</button>' +
-      '<button type="button" class="do-b-word ds-word">📄 Word</button></div></div>';
+      '<button type="button" class="do-b-yaz ds-yaz">Yazdır</button><button type="button" class="do-b-pdf ds-pdf">↓ PDF</button>' +
+      '<button type="button" class="do-b-word ds-word">Word</button></div></div>';
     document.body.appendChild(s);
     Array.prototype.forEach.call(s.querySelectorAll(".ds-liste label"), function (l) {
       var i = +l.getAttribute("data-no");
@@ -930,7 +930,7 @@
     var sb = document.createElement("div");
     sb.id = "do-secim-bar";
     sb.innerHTML = '<span class="dsb-yazi"></span>' +
-      '<button type="button" class="do-b-yaz" style="background:#fff;color:#0f172a">🖨️ Yazdır</button>' +
+      '<button type="button" class="do-b-yaz" style="background:#fff;color:#0f172a">Yazdır</button>' +
       '<button type="button" class="do-b-pdf">PDF</button><button type="button" class="do-b-word">Word</button>' +
       '<button type="button" class="do-b-gri" title="Seçimi temizle">✕</button>';
     var d = sb.querySelectorAll("button");
@@ -945,12 +945,12 @@
     if (bar && !document.getElementById("do-sec-btn")) {
       var btn = document.createElement("button");
       btn.id = "do-sec-btn"; btn.type = "button"; btn.title = "Yazdırmak / indirmek istediğiniz sayfaları seçin";
-      btn.textContent = "☑️ Sayfa Seç";
+      btn.textContent = "✓ Sayfa Seç";
       btn.onclick = seciciAc;
       bar.insertBefore(btn, bar.firstChild);
-      var yz = document.getElementById("do-yazdir-btn"); if (yz) yz.textContent = "🖨️ Tümünü Yazdır";
-      var wb = document.getElementById("do-word-btn"); if (wb) { wb.textContent = "📦 Tüm Paket · Word"; wb.title = "Bütün sayfaları tek Word dosyası olarak indir"; }
-      var pb = document.getElementById("do-indir-btn"); if (pb) { pb.textContent = "📦 Tüm Paket · PDF"; pb.title = "Bütün sayfaları tek PDF dosyası olarak indir"; }
+      var yz = document.getElementById("do-yazdir-btn"); if (yz) yz.textContent = "Tümünü Yazdır";
+      var wb = document.getElementById("do-word-btn"); if (wb) { wb.textContent = "Tüm Paket · Word"; wb.title = "Bütün sayfaları tek Word dosyası olarak indir"; }
+      var pb = document.getElementById("do-indir-btn"); if (pb) { pb.textContent = "Tüm Paket · PDF"; pb.title = "Bütün sayfaları tek PDF dosyası olarak indir"; }
     }
   }
   window.doSayfaSecici = function () { secimKur(); seciciAc(); };
