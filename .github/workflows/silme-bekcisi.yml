@@ -1,0 +1,54 @@
+name: Silme bekçisi
+# Hasan açıkça istemedikçe bu depodan hiçbir dosya silinmez.
+# Bir yükleme dosya silerse bu iş silinen dosyaları birkaç dakika içinde geri koyar.
+# Bilerek silmek için commit mesajına [silme-onayli] yazılır (yalnızca Hasan isterse).
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+concurrency:
+  group: silme-bekcisi
+  cancel-in-progress: false
+jobs:
+  geri-koy:
+    if: ${{ !contains(github.event.head_commit.message, '[silme-onayli]') && !contains(github.event.head_commit.message, '[silme-bekcisi]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Silinen dosyaları bul ve geri koy
+        env:
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.sha }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -e
+          if [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then echo "ilk yükleme"; exit 0; fi
+          git init -q d && cd d
+          git remote add origin "https://x-access-token:${TOKEN}@github.com/${REPO}.git"
+          git config remote.origin.promisor true
+          git config remote.origin.partialclonefilter blob:none
+          git fetch -q --filter=blob:none --depth=50 origin main "$BEFORE"
+          git diff --name-only --diff-filter=D "$BEFORE" "$AFTER" > /tmp/silinen.txt || true
+          N=$(grep -c . /tmp/silinen.txt || true)
+          echo "Silinen dosya sayısı: $N"
+          if [ "$N" = "0" ]; then exit 0; fi
+          head -50 /tmp/silinen.txt
+          git config user.name "Silme bekçisi"
+          git config user.email "silme-bekcisi@users.noreply.github.com"
+          HEAD_NOW=$(git ls-remote origin refs/heads/main | cut -f1)
+          git fetch -q --filter=blob:none --depth=50 origin "$HEAD_NOW"
+          export GIT_INDEX_FILE=/tmp/idx
+          git read-tree "$HEAD_NOW"
+          while IFS= read -r f; do
+            [ -z "$f" ] && continue
+            if git cat-file -e "$HEAD_NOW:$f" 2>/dev/null; then continue; fi
+            line=$(git ls-tree "$BEFORE" -- "$f")
+            mode=$(echo "$line" | awk '{print $1}'); sha=$(echo "$line" | awk '{print $3}')
+            if [ -n "$sha" ]; then git update-index --add --cacheinfo "$mode,$sha,$f"; fi
+          done < /tmp/silinen.txt
+          T=$(git write-tree)
+          if [ "$T" = "$(git rev-parse "$HEAD_NOW^{tree}")" ]; then echo "geri konacak dosya yok"; exit 0; fi
+          C=$(git commit-tree "$T" -p "$HEAD_NOW" -m "[silme-bekcisi] Yanlışlıkla silinen $N dosya geri konuldu")
+          git push origin "$C:refs/heads/main"
+          echo "Geri konuldu: $N dosya"
