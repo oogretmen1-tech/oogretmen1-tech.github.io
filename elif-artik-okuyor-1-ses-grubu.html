@@ -119,12 +119,16 @@ body{font-family:DORakam,'OkulYazi',sans-serif;color:var(--koyu);background:#E9E
  .cevirBar>*{pointer-events:auto}
  .cevirBar button{width:52px;height:52px;border-radius:50%;background:rgba(91,63,168,.92);color:#fff;border:3px solid #fff;font:700 28px/1 DORakam,'OkulYazi',sans-serif;cursor:pointer;box-shadow:0 4px 12px rgba(46,35,80,.3);display:flex;align-items:center;justify-content:center;padding-bottom:4px}
  .cevirBar button:disabled{opacity:0;pointer-events:none}
+ @media (max-width:600px){.cevirBar button{width:40px;height:40px;font-size:22px;border-width:2px;background:rgba(91,63,168,.8)}}
  .sayac{display:none}
  body.kitapModu .sayac{display:inline-block;background:#F5C33B;color:#2E2350;border-radius:20px;padding:5px 11px;font-weight:700;font-size:13px;white-space:nowrap}
  body.kitapModu .bilgi{display:none}
  body.kitapModu .do-sayfa-bar{display:none!important}
- body.kitapModu .do-sayfa-bar:has(+ section.sayfa.aktif){display:flex!important}
+ body.kitapModu .ustBar{justify-content:center;gap:14px}
+ body.kitapModu .ustBar>a,body.kitapModu .ustBar>b{display:none}
+ body.kitapModu .sayfa.aktif{margin-bottom:0}
  body{padding-bottom:180px!important}
+ body.kitapModu{padding-bottom:0!important;overflow-x:hidden}
  .sayfa.cevirIleri{animation:ileri .45s ease}
  .sayfa.cevirGeri{animation:geri .45s ease}
  @keyframes ileri{from{transform:perspective(1400px) rotateY(-55deg);transform-origin:left center;opacity:.2}to{transform:none;opacity:1}}
@@ -136,7 +140,7 @@ body{font-family:DORakam,'OkulYazi',sans-serif;color:var(--koyu);background:#E9E
 <div class="ustBar ekran" data-indir-gizle>
   <a href="index.html">← Ana Sayfa</a>
   <b>Elif Artık Okuyor · 1. Ses Grubu</b>
-  <span class="sayac" id="sayac">1 / 16</span>
+  <span class="sayac" id="sayac">Sayfa 1 / 16</span>
   <button class="modBtn" id="modBtn" type="button">Kitap gibi oku</button>
 </div>
 <div class="bilgi ekran" data-indir-gizle><b>Nasıl basılır?</b> PDF dosyası A4 kâğıda <b>arkalı önlü</b> (kısa kenardan çevirerek) basılır. Kâğıtları sırasıyla üst üste koyup ortadan katlayın, sırtından zımbalayın. 16 sayfalık A5 hikâye kitabınız hazır. Word dosyası da Word'ün kitapçık baskısı ayarıyla gelir.</div>
@@ -227,18 +231,34 @@ body{font-family:DORakam,'OkulYazi',sans-serif;color:var(--koyu);background:#E9E
 </div>
 <script>
 (function(){
-  function olcek(){ var w=Math.min(window.innerWidth,document.documentElement.clientWidth)-16; var z=Math.min(1.35,w/560); if(window.innerWidth>900) z=Math.min(1.25,(window.innerHeight-150)/794); document.documentElement.style.setProperty('--z',Math.max(.4,z).toFixed(3)); }
+  var kitap=false;
+  function sayfalarTemizle(){ [].forEach.call(document.querySelectorAll('section.sayfa'),function(x){ x.style.marginTop=''; }); }
+  function olcek(){
+    var w=Math.min(window.innerWidth,document.documentElement.clientWidth)-16; var z=Math.min(1.35,w/560);
+    if(window.innerWidth>900) z=Math.min(1.25,(window.innerHeight-150)/794);
+    if(kitap){
+      /* Kitap modunda sayfa, üst şerit ile alttaki indirme düğmeleri arasına tam sığsın; hiçbir yeri düğmelerin altında kalmasın */
+      var s=document.querySelector('section.sayfa.aktif'), ust=s?s.offsetTop:120;
+      var bar=document.getElementById('do-indir-bar'), alt=window.innerHeight;
+      if(bar&&bar.offsetHeight) alt=bar.getBoundingClientRect().top;
+      var genis=window.innerWidth<600?window.innerWidth-16:Math.min(window.innerWidth-120,window.innerWidth*.86);
+      if(s) s.style.marginTop='0px';
+      z=Math.max(.35,Math.min(1.35,(alt-ust-14)/794,genis/560));
+      if(s) s.style.marginTop=Math.max(0,Math.floor((alt-ust-14-794*z)/2/z))+'px';
+    } else sayfalarTemizle();
+    document.documentElement.style.setProperty('--z',Math.max(.35,z).toFixed(3));
+  }
   olcek(); window.addEventListener('resize',olcek);
   var sayfalar=[].slice.call(document.querySelectorAll('section.sayfa'));
-  var i=0,kitap=false,modBtn=document.getElementById('modBtn'),sayac=document.getElementById('sayac'),geri=document.getElementById('geriBtn'),ileri=document.getElementById('ileriBtn');
+  var i=0,modBtn=document.getElementById('modBtn'),sayac=document.getElementById('sayac'),geri=document.getElementById('geriBtn'),ileri=document.getElementById('ileriBtn');
   function ciz(yon){
-    sayfalar.forEach(function(s){ s.classList.remove('aktif','cevirIleri','cevirGeri'); });
+    sayfalar.forEach(function(s){ s.classList.remove('aktif','cevirIleri','cevirGeri'); s.style.marginTop=''; });
     var s=sayfalar[i]; s.classList.add('aktif'); if(yon) s.classList.add(yon>0?'cevirIleri':'cevirGeri');
-    sayac.textContent=(i+1)+' / '+sayfalar.length; geri.disabled=(i===0); ileri.disabled=(i===sayfalar.length-1);
-    window.scrollTo({top:0,behavior:'smooth'});
+    sayac.textContent='Sayfa '+(i+1)+' / '+sayfalar.length; geri.disabled=(i===0); ileri.disabled=(i===sayfalar.length-1);
+    window.scrollTo({top:0}); olcek();
   }
   function git(a){ var y=i+a; if(y<0||y>=sayfalar.length) return; i=y; ciz(a); }
-  function mod(k){ kitap=k; document.body.classList.toggle('kitapModu',k); modBtn.textContent=k?'Tüm sayfalar':'Kitap gibi oku'; if(k) ciz(0); else sayfalar.forEach(function(s){ s.classList.remove('aktif','cevirIleri','cevirGeri'); }); }
+  function mod(k){ kitap=k; document.body.classList.toggle('kitapModu',k); modBtn.textContent=k?'Tüm sayfalar':'Kitap gibi oku'; if(k) ciz(0); else { sayfalar.forEach(function(s){ s.classList.remove('aktif','cevirIleri','cevirGeri'); }); olcek(); } }
   modBtn.addEventListener('click',function(){ mod(!kitap); });
   geri.addEventListener('click',function(){ git(-1); });
   ileri.addEventListener('click',function(){ git(1); });
