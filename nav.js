@@ -401,7 +401,10 @@
       if (el.id === "do-nav" || el.id === "do-yukari" || el.id === "do-indir-bar" ||
           el.closest("#do-nav,#do-indir-bar,#do-secici,#do-secim-bar,.do-sigdir,.do-kaydir,svg,script,style")) continue;
       var r = el.getBoundingClientRect();
-      if (r.width <= W + 4) {
+      /* kutu genişliği ekrana sığsa da soldaki boşluk yüzünden sağdan taşıyorsa o da küçültülür
+         (yalnızca ekranın solundan başlayan kutular; kaydırmalı/sağa itilmiş parçalar hariç) */
+      var sagTasma = r.right > W + 4 && r.left >= 0 && r.left < W * 0.25 && r.width > W * 0.6;
+      if (r.width <= W + 4 && !sagTasma) {
         /* kutu ekrana sığıyor ama içi taşıyor (sabit sütunlu tablo/ızgara):
            küçültmek yerine kutunun kendi içinde yana kaydırılmasını sağla */
         if (el.scrollWidth <= el.clientWidth + 4 || r.left + el.scrollWidth <= W + 4) continue;

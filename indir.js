@@ -103,10 +103,37 @@
       '<button id="do-word-btn" type="button" title="Word dosyası olarak indir">Word İndir</button>' +
       '<button id="do-indir-btn" type="button" title="PDF dosyası olarak indir">↓ PDF İndir</button>';
     document.body.appendChild(bar);
+    altBoslukEkle(bar);
     document.getElementById("do-indir-btn").onclick = function () { indir("pdf"); };
     document.getElementById("do-word-btn").onclick = function () { indir("word"); };
     document.getElementById("do-yazdir-btn").onclick = function () { gercekYazdir(); };
     eskiDugmeleriCevir();
+  }
+
+  /* Sayfanın en altındaki imza ve son satırlar sabit indirme düğmelerinin arkasında kalmasın:
+     düğmeler kadar boşluk bırakılır. Yazdırmada, indirmede ve kitap modunda görünmez. */
+  function altBoslukEkle(bar) {
+    var b = document.getElementById("do-alt-bosluk");
+    if (!b) {
+      b = document.createElement("div");
+      b.id = "do-alt-bosluk";
+      b.setAttribute("data-indir-gizle", "");
+      b.setAttribute("aria-hidden", "true");
+      var st = document.createElement("style");
+      st.textContent = "#do-alt-bosluk{display:block;width:100%;pointer-events:none}body.kitapModu #do-alt-bosluk{display:none}@media print{#do-alt-bosluk{display:none !important}}";
+      (document.head || document.documentElement).appendChild(st);
+    }
+    document.body.insertBefore(b, bar);
+    function ayarla() {
+      if (!bar.offsetHeight) { b.style.height = "0px"; return; }
+      var r = bar.getBoundingClientRect();
+      b.style.height = Math.ceil(window.innerHeight - r.top + 16) + "px";
+    }
+    ayarla();
+    window.addEventListener("resize", ayarla);
+    window.addEventListener("load", ayarla);
+    setTimeout(ayarla, 1500);
+    if (window.ResizeObserver) new ResizeObserver(ayarla).observe(bar);
   }
 
   /* Eski "Dosyayı İndir" (sayfayı HTML kaydeden) düğmeleri artık PDF indirir */
