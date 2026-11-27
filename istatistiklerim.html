@@ -328,13 +328,30 @@
     }
     ara();
   }
+  /* Esnek arama: kelimeler ayrı ayrı ve kökünden aranır ("engeller haftası" → engelliler günü kayıtlarını da bulur),
+     hafta/gün gibi genel kelimeler eşleşmeyi bozmaz, grup ya da bölüm başlığı eşleşirse altındaki her şey görünür. */
+  var ATLA={"hafta":1,"haftası":1,"haftasi":1,"gün":1,"günü":1,"gunu":1,"günü̇":1,"ve":1,"ile":1,"için":1,"etkinlik":1,"etkinlikleri":1,"etkinliği":1};
+  function sade(t){return String(t||"").toLocaleLowerCase("tr").replace(/[âà]/g,"a").replace(/[îì]/g,"i").replace(/[ûù]/g,"u").replace(/ç/g,"c").replace(/ğ/g,"g").replace(/ı/g,"i").replace(/ö/g,"o").replace(/ş/g,"s").replace(/ü/g,"u").replace(/[^a-z0-9]+/g," ");}
+  function kokler(q){
+    return sade(q).split(" ").filter(function(w){return w&&!ATLA[w]&&!ATLA[q.toLocaleLowerCase("tr")];}).map(function(w){
+      return w.length>5?w.slice(0,Math.max(4,w.length-3)):w;
+    });
+  }
+  function uyar(metin,k){var m=" "+sade(metin)+" ";for(var i=0;i<k.length;i++){if(m.indexOf(" "+k[i])<0&&m.indexOf(k[i])<0)return false;}return true;}
   function ara(){
-    var q=(document.getElementById("hepsiAra").value||"").toLocaleLowerCase("tr").trim();
-    Array.prototype.forEach.call(liste.querySelectorAll(".suz button"),function(b){
-      b.classList.toggle("gizli",!!q&&b.textContent.toLocaleLowerCase("tr").indexOf(q)<0);
+    var q=(document.getElementById("hepsiAra").value||"").trim();
+    var k=q?kokler(q):[];
+    if(q&&!k.length) k=[sade(q).trim()];
+    Array.prototype.forEach.call(liste.querySelectorAll(".suz"),function(kutu){
+      var grup=kutu.previousElementSibling, gad=(grup&&grup.classList.contains("hb-grup"))?grup.textContent:"";
+      var bl=kutu.parentNode.querySelector(".hb-bolum"), bad=bl?bl.textContent:"";
+      Array.prototype.forEach.call(kutu.querySelectorAll("button"),function(b){
+        var gor=!k.length||uyar(b.textContent+" "+gad+" "+bad+" "+(b.getAttribute("data-f")||"").replace(/[-_]/g," "),k);
+        b.classList.toggle("gizli",!gor);
+      });
     });
     Array.prototype.forEach.call(liste.querySelectorAll(".hb-grup, .hb-bolum"),function(g){
-      if(!q){g.classList.remove("gizli");return;}
+      if(!k.length){g.classList.remove("gizli");return;}
       var n=g.nextElementSibling, var_=false;
       if(g.classList.contains("hb-grup")) var_=n&&n.querySelector("button:not(.gizli)");
       else { var x=g.parentNode.querySelector("button:not(.gizli)"); var_=!!x; }
